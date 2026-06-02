@@ -177,6 +177,50 @@ Build documentation with:
 cargo doc --no-deps --document-private-items
 ```
 
+### Keeping Documentation Updated
+
+**IMPORTANT**: This project uses living documentation that must be updated as features are implemented. When you make significant changes to the codebase, you must update the relevant documentation.
+
+#### When to Update Documentation
+
+Update the following documents when making changes:
+
+**docs/architecture/ARCHITECTURE.md**
+- After implementing core components (game state, zones, events, etc.)
+- When adding new major components or changing architecture
+- After completing each implementation phase
+- When architectural decisions differ from initial design
+
+**docs/planning/IMPLEMENTATION_PLAN.md**
+- When completing tasks (mark them as done)
+- When discovering new tasks during implementation
+- When time estimates need adjustment
+- When dependencies between tasks change
+
+**docs/development/CONTRIBUTING.md**
+- When new development patterns emerge
+- When adding new tools or processes
+- When contribution guidelines change
+
+#### What to Include
+
+When updating documentation:
+- Add actual struct definitions and types used (not just planned ones)
+- Document implementation decisions and trade-offs
+- Include real examples from the implementation (card definitions, etc.)
+- Note any deviations from the original architecture
+- Add lessons learned and discovered patterns
+
+#### Documentation Updates in Commits
+
+When your changes include documentation updates:
+- Use the `docs` commit type for documentation-only changes
+- Include documentation updates in the same commit as the code changes when related
+- Reference the specific documentation files in your commit message
+- Ensure documentation changes pass the same quality checks as code
+
+This ensures our documentation stays synchronized with the actual implementation and remains useful for future development.
+
 ## Project Structure
 
 ```
@@ -235,7 +279,7 @@ fn process_card(input: &str) -> Result<Card, ParseError> {
 1. Ensure all tests pass: `cargo test`
 2. Ensure code is formatted: `cargo fmt --all -- --check`
 3. Ensure no linter warnings: `cargo clippy --all-targets --all-features -- -D warnings`
-4. Update documentation if needed
+4. Update relevant documentation as per the [Keeping Documentation Updated](#keeping-documentation-updated) section
 5. Push your branch and create a pull request
 
 ## Getting Help
