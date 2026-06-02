@@ -135,6 +135,21 @@ pub struct StaticAbility {
     pub delta: i32,
 }
 
+/// A static ability that modifies a **game rule** while the card is in play (the
+/// win/loss modification layer, §1.2.1).
+///
+/// TODO(modification layer — Slice 5g+): only the lore-to-win override exists so
+/// far. The add / remove-suppress space ("you can't lose", "opponents can't
+/// win", added alternate wins) is enumerated in the `win_loss.rs` test TODO and
+/// lands as more cards need it. See `docs/planning/IMPLEMENTATION_PLAN.md`
+/// ("Slice 5g").
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum GameRuleStatic {
+    /// "Opponents need `threshold` lore to win the game" (Donald Duck –
+    /// Flustered Sorcerer).
+    OpponentsLoreToWin(u32),
+}
+
 impl StaticAbility {
     /// Create a self static modifier ("this character gets +delta {stat}").
     #[must_use]

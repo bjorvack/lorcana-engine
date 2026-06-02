@@ -1,11 +1,11 @@
 //! The reducer: `start` sets a game up, `apply` advances it by one input.
 
 use super::input::{Decision, Input, Rejected};
-use crate::domain::cards::{CardKind, CardRegistry, StaticAbility, StaticTarget};
+use crate::domain::cards::{CardKind, CardRegistry, GameRuleStatic, StaticAbility, StaticTarget};
 use crate::domain::effects::{Effect, TriggerCondition};
 use crate::domain::game::{
     CardInstance, CharacterStats, Conditions, GameEvent, GameState, GameStatus, ModifierDuration,
-    ModifierTarget, PendingDecision, StatModifier, TriggerId,
+    ModifierTarget, PendingDecision, RuleModifier, StatModifier, TriggerId,
 };
 use crate::domain::rules::game_state_check;
 use crate::domain::types::ids::{CardId, PlayerId};
@@ -217,6 +217,7 @@ fn apply_play_card(
         return Err(Rejected::InsufficientInk(card));
     }
     let statics = definition.static_abilities().to_vec();
+    let rule_statics = definition.rule_statics().to_vec();
     let classifications = definition.classifications().to_vec();
 
     // --- mutate ---
@@ -231,6 +232,7 @@ fn apply_play_card(
     }
     // Static abilities apply as the card enters play (§7.6.2).
     apply_enter_statics(state, active, card, &statics);
+    apply_enter_rule_statics(state, active, card, &rule_statics);
 
     let mut events = vec![GameEvent::CardPlayed {
         player: active,
@@ -734,6 +736,36 @@ fn apply_enter_statics(
             ability.delta,
             ModifierDuration::WhileSourceInPlay,
         ));
+    }
+}
+
+/// Apply a card's game-rule static abilities as it enters play (the win/loss
+/// modification layer, §1.2.1): each becomes a [`RuleModifier`] lasting while the
+/// source is in play, removed on leave.
+fn apply_enter_rule_statics(
+    state: &mut GameState,
+    controller: PlayerId,
+    card: CardId,
+    rule_statics: &[GameRuleStatic],
+) {
+    let opponents: Vec<PlayerId> = state
+        .players()
+        .iter()
+        .map(super::super::game::PlayerState::id)
+        .filter(|id| *id != controller)
+        .collect();
+    for rule in rule_statics {
+        match rule {
+            GameRuleStatic::OpponentsLoreToWin(threshold) => {
+                for opponent in &opponents {
+                    state.add_rule_modifier(RuleModifier::LoreToWin {
+                        source: card,
+                        player: *opponent,
+                        threshold: *threshold,
+                    });
+                }
+            }
+        }
     }
 }
 

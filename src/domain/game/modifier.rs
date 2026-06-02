@@ -58,6 +58,38 @@ pub enum ModifierTarget {
     },
 }
 
+/// A continuous modifier to a **game rule** contributed by a static ability in
+/// play (the win/loss modification layer, §1.2.1). Removed when its source
+/// leaves play.
+///
+/// TODO(modification layer — Slice 5g+): only the lore-to-win override exists so
+/// far (Donald Duck). The fuller add / remove-suppress space ("you can't lose",
+/// "opponents can't win", added alternate win conditions) is enumerated in the
+/// `win_loss.rs` test TODO and lands as more cards need it.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum RuleModifier {
+    /// `player` must reach `threshold` lore to win instead of the base 20
+    /// (§1.9.1.1) — e.g. Donald Duck – Flustered Sorcerer.
+    LoreToWin {
+        /// The card whose ability generates this modifier.
+        source: CardId,
+        /// The affected player.
+        player: PlayerId,
+        /// The lore threshold this player needs.
+        threshold: u32,
+    },
+}
+
+impl RuleModifier {
+    /// The card whose ability generates this modifier.
+    #[must_use]
+    pub const fn source(self) -> CardId {
+        match self {
+            Self::LoreToWin { source, .. } => source,
+        }
+    }
+}
+
 /// A continuous modifier to a characteristic of one or more in-play cards.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct StatModifier {

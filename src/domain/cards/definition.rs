@@ -7,7 +7,7 @@
 //!
 //! [`CardInstance`]: crate::domain::game::CardInstance
 
-use super::ability::{ActivatedAbility, StaticAbility, TriggeredAbility};
+use super::ability::{ActivatedAbility, GameRuleStatic, StaticAbility, TriggeredAbility};
 use super::card_kind::CardKind;
 use crate::domain::types::card::{CardType, Classification};
 use crate::domain::types::ids::CardDefId;
@@ -35,6 +35,8 @@ pub struct CardDefinition {
     classifications: Vec<Classification>,
     /// The card's static abilities (§7.6).
     static_abilities: Vec<StaticAbility>,
+    /// The card's game-rule static abilities (e.g. win-condition overrides).
+    rule_statics: Vec<GameRuleStatic>,
 }
 
 impl CardDefinition {
@@ -50,6 +52,7 @@ impl CardDefinition {
             activated: Vec::new(),
             classifications: Vec::new(),
             static_abilities: Vec::new(),
+            rule_statics: Vec::new(),
         }
     }
 
@@ -100,6 +103,13 @@ impl CardDefinition {
     #[must_use]
     pub fn with_static(mut self, static_abilities: Vec<StaticAbility>) -> Self {
         self.static_abilities = static_abilities;
+        self
+    }
+
+    /// Replace this definition's game-rule static abilities (builder style).
+    #[must_use]
+    pub fn with_rule_statics(mut self, rule_statics: Vec<GameRuleStatic>) -> Self {
+        self.rule_statics = rule_statics;
         self
     }
 
@@ -161,6 +171,12 @@ impl CardDefinition {
     #[must_use]
     pub fn static_abilities(&self) -> &[StaticAbility] {
         &self.static_abilities
+    }
+
+    /// This card's game-rule static abilities.
+    #[must_use]
+    pub fn rule_statics(&self) -> &[GameRuleStatic] {
+        &self.rule_statics
     }
 }
 

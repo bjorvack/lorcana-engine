@@ -23,12 +23,12 @@ use crate::domain::types::ids::PlayerId;
 
 /// The amount of lore `player` must reach to win the game.
 ///
-/// The base requirement is 20 lore (§1.9.1.1). Once static abilities exist, this
-/// is where threshold modifiers (e.g. "opponents need 25 lore to win") apply, so
-/// it takes the full game state and the player rather than being a constant.
+/// The base requirement is 20 lore (§1.9.1.1); a static ability can override it
+/// (e.g. Donald Duck – Flustered Sorcerer, "opponents need 25 lore to win"), so
+/// the effective threshold is read from the game state's rule modifiers.
 #[must_use]
-pub const fn lore_to_win(_state: &GameState, _player: PlayerId) -> u32 {
-    20
+pub fn lore_to_win(state: &GameState, player: PlayerId) -> u32 {
+    state.lore_to_win(player)
 }
 
 /// Evaluate all win/loss conditions for the current state and return the
@@ -79,19 +79,18 @@ mod tests {
     use crate::domain::rules::RequiredAction;
     use crate::domain::types::ids::{CardDefId, PlayerId};
 
-    // TODO(modification layer / Slice 5+): once static abilities and the effect
-    // DSL can add / remove / override win-loss conditions, add tests for the
-    // following edge cases. The active condition set is derived from the base
-    // layer plus effect modifications, with prevention beating permission
-    // (§1.2.2) and a card superseding a game rule (§1.2.1).
+    // The lore-to-win **override** layer is implemented (Slice 5g): the Donald
+    // Duck case and the threshold reverting when his static leaves play are
+    // covered in `tests/win_loss_modifiers.rs`.
     //
-    // Tracked by Slice 5 in docs/planning/IMPLEMENTATION_PLAN.md ("Win/loss
-    // modification layer"), which converts these bullets into real tests.
+    // TODO(modification layer / Slice 5g+): the **add** and **remove/suppress**
+    // parts still need their ability kinds (and the effect DSL). The active
+    // condition set is the base layer plus effect modifications, with prevention
+    // beating permission (§1.2.2) and a card superseding a game rule (§1.2.1).
+    // Tracked by Slice 5 in docs/planning/IMPLEMENTATION_PLAN.md ("Slice 5g").
+    // Remaining edge cases to turn into tests as those land:
     //
-    // Override (tune an existing condition's parameters):
-    //   - "Opponents need 25 lore to win" (Donald Duck – Flustered Sorcerer):
-    //     opponent at 24 does not win, at 25 wins; the controller's own
-    //     threshold stays 20.
+    // Override (done for lore-to-win; remaining variants):
     //   - Stacking threshold modifiers (e.g. two +5 effects => 30).
     //   - A hypothetical lowering override (e.g. "you win at 15 lore") works too.
     //

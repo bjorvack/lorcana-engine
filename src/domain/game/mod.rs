@@ -21,7 +21,7 @@ pub use card_instance::CardInstance;
 pub use character_stats::CharacterStats;
 pub use conditions::Conditions;
 pub use events::GameEvent;
-pub use modifier::{ModifierDuration, ModifierTarget, Stat, StatModifier};
+pub use modifier::{ModifierDuration, ModifierTarget, RuleModifier, Stat, StatModifier};
 pub use pending::PendingDecision;
 pub use player_state::PlayerState;
 pub use rng::SeededRng;

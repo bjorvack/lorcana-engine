@@ -277,15 +277,17 @@ selectors over 42 classifications.
   that method, lands with the effect DSL in Slice 8.)
 - [x] Acceptance: a `this turn` modifier ends at end of turn (`tests/modifiers.rs`).
 
-### Slice 5g — Win/loss & game-rule static modifiers
-- Wire static abilities into the win/loss seam (Slice 1) so effects **add /
-  remove-suppress / override** conditions (Golden Rules §1.2.1/§1.2.2). Realizes
-  the `TODO(modification layer / Slice 5+)` block in
-  [`src/domain/rules/win_loss.rs`](../../src/domain/rules/win_loss.rs) — e.g.
-  Donald Duck – Flustered Sorcerer ("Opponents need 25 lore to win") overriding
-  `lore_to_win`. Convert those TODO bullets into real tests here.
-- [ ] Acceptance: Donald Duck overrides the win threshold; the `win_loss.rs` TODO
-      cases are tested.
+### Slice 5g — Win/loss & game-rule static modifiers ✅ (override layer)
+- `GameRuleStatic` on `CardDefinition` + `RuleModifier` in `GameState`;
+  `lore_to_win(state, player)` now reads the effective threshold. Donald Duck –
+  Flustered Sorcerer ("Opponents need 25 lore to win") adds a `LoreToWin`
+  override for each opponent on enter; it's removed when he leaves play (§7.6.4),
+  and the game-state check applies the now-eligible win on the next pass (§1.9.2).
+- [x] Acceptance: Donald raises opponents' threshold to 25 (own stays 20); when
+      Donald leaves play a pending 20-lore win resolves (`tests/win_loss_modifiers.rs`).
+- Remaining (deferred, back-linked in `win_loss.rs`): the **add** and
+  **remove/suppress** condition kinds ("you can't lose", added alternate wins)
+  need their ability kinds + the effect DSL (Slice 5g+/8).
 
 ### Slice 5h — Trigger additions (see [Trigger taxonomy rollout](#trigger-taxonomy-rollout-when-the-triggercondition-todo-gets-done))
 - Start/End-of-turn and play-a-[type/classification] `TriggerCondition` variants.
