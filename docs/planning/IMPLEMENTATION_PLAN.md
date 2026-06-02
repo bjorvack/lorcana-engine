@@ -330,17 +330,21 @@ see the TODO there). Split smallest-first like Slice 5.
 - [ ] Acceptance: each of the six alters challenge legality/damage per its §10
       definition (`tests/keywords.rs`).
 
-### Slice 6b+ — remaining keywords (deferred, back-linked from `keyword.rs`)
+### Slice 6b — shared challenge-legality authority + Reckless ✅
+- [x] Single legality authority `can_challenge` (with `target_legal_basic` and
+      `character_has_keyword`) in `src/domain/engine/reducer.rs` — used by
+      `apply_challenge`, the Bodyguard "if able" check, and Reckless. It carries
+      back-linked TODOs for the **effect-driven** challenge legality (see Slice 8:
+      can't-challenge / can't-be-challenged / can-challenge-ready / granted
+      keywords) and **locations** as targets (Slice 7).
+- [x] **Reckless** (§10.7): (a) can't quest; (b) can't end the turn while a ready
+      Reckless character can legally challenge (`reckless_must_challenge`, reusing
+      `can_challenge`). Locations-as-targets still TODO (Slice 7). Tested in
+      `tests/keywords.rs`.
+
+### Slice 6c+ — remaining keywords (deferred, back-linked from `keyword.rs`)
 - **Bodyguard "may enter play exerted"** (§10.3.2): a play-time choice — needs a
   small decision at play (deferred from 6a).
-- **Reckless** (§10.7): (a) can't quest (the `apply_quest` TODO already notes
-  this); (b) can't end the turn while a ready Reckless character *can legally
-  challenge* an opposing exerted character or location. (b) needs a **shared
-  "can this character legally challenge anything?" predicate** extracted from
-  `apply_challenge` (so it respects Evasive/Bodyguard/Rush/exerted + locations);
-  that same predicate should back a fully-correct Bodyguard "if able" check. See
-  the TODO in `apply_end_turn` (`src/domain/engine/reducer.rs`). Locations as
-  challenge targets arrive in Slice 7.
 - **Support** (§10.13): quest trigger adding `{S}` to a chosen character (quest
   trigger + target choice + timed modifier).
 - **Vanish** (§10.14) / **Ward** (§10.15): effect-targeting interactions (need
@@ -371,7 +375,10 @@ character is banished", plus the §1.9.1.3 "banished by that character" attribut
 - **Locations**: play, move cost to move a character there (§4.3.7), willpower &
   banishment, start-of-turn lore (§6.5). Location characteristics (move cost,
   willpower, lore) become modifiable `Stat` variants in the continuous-effects
-  layer — see the TODO on `Stat` in `src/domain/game/modifier.rs`.
+  layer — see the TODO on `Stat` in `src/domain/game/modifier.rs`. Locations are
+  also **challenge targets** — extend the legality authority (`can_challenge` /
+  `can_legally_challenge_anything` in `src/domain/engine/reducer.rs`, which carry
+  Slice 7 TODOs) to allow challenging opposing locations.
 - **Triggers** (see [Trigger taxonomy rollout](#trigger-taxonomy-rollout-when-the-triggercondition-todo-gets-done)):
   add sing-a-song and move-to-location / "while here" `TriggerCondition` variants
   with these mechanics.
@@ -405,6 +412,15 @@ character is banished", plus the §1.9.1.3 "banished by that character" attribut
   `remove_modifiers_from_source` and the `banish` comment in
   `src/domain/rules/game_state_check.rs`). Also: timed selector effects must
   **snapshot** their targets (§7.6.3 — TODO on `expire_end_of_turn_modifiers`).
+- **Effect-driven challenge legality** plugs into the single legality authority
+  in `src/domain/engine/reducer.rs` (carries the back-linked TODOs):
+  - challenger "can't challenge" effects (Frying Pan, Cobra Bubbles, Gantu) →
+    `can_challenge` challenger side;
+  - target "can't be challenged" (Tiana's Palace, The Wall, Panic) and the
+    challenger's "can challenge ready characters" permission (Pick a Fight) →
+    `target_legal_basic`;
+  - **effect-granted keywords** ("gains Alert/Challenger…", Cri-Kee, Inkrunner,
+    But I'm Much Faster) → `character_has_keyword` must OR in granted keywords.
 
 **Acceptance**
 - [ ] A worked replacement example from §7.7 reproduces exactly (ordering included).

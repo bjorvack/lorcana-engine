@@ -304,6 +304,64 @@ fn evasive_bodyguard_does_not_trap_a_non_evasive_challenger() {
 }
 
 #[test]
+fn reckless_cannot_quest() {
+    let mut registry = CardRegistry::new();
+    registry.insert(char_def(70).with_keywords(vec![Keyword::Reckless]));
+    let mut state = started(&registry);
+    let active = state.active_player();
+
+    let reckless = place(&mut state, active, 100, 70, 3, 9, true, false);
+    assert!(
+        apply(
+            &mut state,
+            &registry,
+            Input::Quest {
+                character: reckless
+            }
+        )
+        .is_err(),
+        "a Reckless character can't quest (§10.7.2)"
+    );
+}
+
+#[test]
+fn reckless_blocks_ending_the_turn_while_it_can_challenge() {
+    let mut registry = CardRegistry::new();
+    registry.insert(char_def(70).with_keywords(vec![Keyword::Reckless]));
+    registry.insert(char_def(41)); // plain
+    let mut state = started(&registry);
+    let active = state.active_player();
+    let foe = opponent_of(&state, active);
+
+    let _reckless = place(&mut state, active, 100, 70, 3, 9, true, false); // ready Reckless
+    let _exerted_foe = place(&mut state, foe, 200, 41, 1, 9, false, false); // a legal target
+
+    assert!(
+        apply(&mut state, &registry, Input::EndTurn).is_err(),
+        "can't end the turn while a ready Reckless character can challenge (§10.7.3)"
+    );
+}
+
+#[test]
+fn reckless_allows_ending_the_turn_with_no_legal_challenge() {
+    let mut registry = CardRegistry::new();
+    registry.insert(char_def(70).with_keywords(vec![Keyword::Reckless]));
+    registry.insert(char_def(41)); // plain
+    let mut state = started(&registry);
+    let active = state.active_player();
+    let foe = opponent_of(&state, active);
+
+    let _reckless = place(&mut state, active, 100, 70, 3, 9, true, false); // ready Reckless
+    // The only opposing character is ready, so it can't be challenged.
+    let _ready_foe = place(&mut state, foe, 200, 41, 1, 9, true, false);
+
+    assert!(
+        apply(&mut state, &registry, Input::EndTurn).is_ok(),
+        "a Reckless character with no legal challenge doesn't block ending the turn"
+    );
+}
+
+#[test]
 fn with_multiple_bodyguards_either_one_may_be_challenged() {
     let mut registry = CardRegistry::new();
     registry.insert(char_def(40).with_keywords(vec![Keyword::Bodyguard]));

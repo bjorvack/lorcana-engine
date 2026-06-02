@@ -148,4 +148,11 @@ pub enum Rejected {
     /// The card has no activated ability at the given index.
     #[error("card {0:?} has no activated ability at the given index")]
     NoSuchAbility(CardId),
+    /// A Reckless character can't quest (§10.7.2).
+    #[error("Reckless character {0:?} can't quest")]
+    RecklessCannotQuest(CardId),
+    /// The turn can't end while Reckless character {0:?} can still challenge
+    /// (§10.7.3).
+    #[error("Reckless character {0:?} must challenge before the turn can end")]
+    RecklessMustChallenge(CardId),
 }

@@ -80,7 +80,7 @@ pub fn apply(
             apply_challenge(state, registry, challenger, target)
         }
         Input::UseAbility { card, ability } => apply_use_ability(state, registry, card, ability),
-        Input::EndTurn => apply_end_turn(state),
+        Input::EndTurn => apply_end_turn(state, registry),
         Input::Decide(_) => unreachable!("handled above"),
     }
 }
@@ -277,9 +277,14 @@ fn apply_quest(
     if !instance.is_character() {
         return Err(Rejected::NotACharacter(character));
     }
+    // Reckless characters can't quest (§10.7.2).
+    if character_has_keyword(state, registry, character, Keyword::Reckless) {
+        return Err(Rejected::RecklessCannotQuest(character));
+    }
     // Questing requires a dry, ready character (§4.3.5.5).
-    // TODO(keywords/effects): Reckless prevents questing (Slice 6); effects can
-    // also forbid a specific character from questing (Slice 4/8).
+    // TODO(effects — Slice 8): effects can also forbid a specific character from
+    // questing (e.g. Cobra Bubbles "...must quest during their next turn" forces
+    // it; others may prevent it).
     if instance.conditions().drying {
         return Err(Rejected::CharacterStillDrying(character));
     }
@@ -369,62 +374,25 @@ fn apply_challenge(
     }
     let active = state.active_player();
 
-    // Challenger: the active player's ready character (§4.3.6.6). It must be dry
-    // unless it has Rush (§10.9).
-    let challenger_instance = find_in_play(state, active, challenger)?;
-    if !challenger_instance.is_character() {
-        return Err(Rejected::NotACharacter(challenger));
-    }
-    let challenger_keywords = registry.get(challenger_instance.definition());
-    let challenger_has = |k: Keyword| challenger_keywords.is_some_and(|d| d.has_keyword(k));
-    if challenger_instance.conditions().drying && !challenger_has(Keyword::Rush) {
-        return Err(Rejected::CharacterStillDrying(challenger));
-    }
-    if !challenger_instance.conditions().ready {
-        return Err(Rejected::CharacterExerted(challenger));
-    }
+    // All challenge legality lives in one authority (§4.3.6 + keyword and effect
+    // interactions): see `can_challenge`.
+    can_challenge(state, registry, active, challenger, target)?;
 
-    // Target: an exerted character belonging to another player (§4.3.6.7).
+    // Legality passed; derive what's needed to resolve the challenge.
     let target_owner =
-        opposing_owner_of(state, active, target).ok_or(Rejected::TargetNotInPlay(target))?;
-    let target_instance = find_in_play(state, target_owner, target)?;
-    if !target_instance.is_character() {
-        return Err(Rejected::TargetNotACharacter(target));
-    }
-    if target_instance.conditions().ready {
-        return Err(Rejected::TargetNotExerted(target));
-    }
-    let target_def = registry.get(target_instance.definition());
-
-    // Evasive: an Evasive target can only be challenged by an Evasive challenger
-    // (or one with Alert) (§10.6, §10.2).
-    if target_def.is_some_and(|d| d.has_keyword(Keyword::Evasive))
-        && !challenger_has(Keyword::Evasive)
-        && !challenger_has(Keyword::Alert)
-    {
-        return Err(Rejected::TargetEvasive(target));
-    }
-    // Bodyguard: if the defender has a Bodyguard this challenger could legally
-    // challenge, the challenger must choose one (§10.3.3). With several such
-    // Bodyguards the challenger may pick any of them. A Bodyguard the challenger
-    // can't legally challenge (e.g. an Evasive Bodyguard vs a non-Evasive
-    // challenger) doesn't make the restriction apply.
-    let challenger_evades_evasive =
-        challenger_has(Keyword::Evasive) || challenger_has(Keyword::Alert);
-    if !target_def.is_some_and(|d| d.has_keyword(Keyword::Bodyguard))
-        && defender_has_challengeable_bodyguard(
-            state,
-            registry,
-            target_owner,
-            challenger_evades_evasive,
-        )
-    {
-        return Err(Rejected::MustChallengeBodyguard(target));
-    }
+        opposing_owner_of(state, active, target).expect("legality validated the target owner");
+    let challenger_def_id = find_in_play(state, active, challenger)
+        .expect("legality validated the challenger")
+        .definition();
+    let target_def_id = find_in_play(state, target_owner, target)
+        .expect("legality validated the target")
+        .definition();
 
     // Current Strength includes continuous modifiers, clamped at 0 (§4.3.6.14,
-    // §7.8.2). The challenger also gets Challenger +N while challenging (§10.5).
-    let challenger_bonus = challenger_keywords.map_or(0, CardDefinition::challenger_bonus);
+    // §7.8.2); the challenger also gets Challenger +N while challenging (§10.5).
+    let challenger_bonus = registry
+        .get(challenger_def_id)
+        .map_or(0, CardDefinition::challenger_bonus);
     let challenger_strength = state
         .current_character_stats(challenger)
         .map_or(0, |s| s.strength)
@@ -433,11 +401,14 @@ fn apply_challenge(
         .current_character_stats(target)
         .map_or(0, |s| s.strength);
 
-    // Resist +N reduces the damage each takes (§10.8). (Resist is really a
-    // general damage-replacement effect; the full replacement framework — and
-    // damage outside challenges — is Slice 8. Here it's applied inline.)
-    let challenger_resist = challenger_keywords.map_or(0, CardDefinition::resist);
-    let target_resist = target_def.map_or(0, CardDefinition::resist);
+    // Resist +N reduces the damage each takes (§10.8); applied inline (the general
+    // damage-replacement framework is Slice 8).
+    let challenger_resist = registry
+        .get(challenger_def_id)
+        .map_or(0, CardDefinition::resist);
+    let target_resist = registry
+        .get(target_def_id)
+        .map_or(0, CardDefinition::resist);
     let damage_to_target = challenger_strength.saturating_sub(target_resist);
     let damage_to_challenger = target_strength.saturating_sub(challenger_resist);
 
@@ -490,31 +461,144 @@ fn find_in_play(
         .ok_or(Rejected::CharacterNotInPlay(card))
 }
 
-/// Whether `defender` has a Bodyguard the challenger could legally challenge
-/// (§10.3.3): exerted, with Bodyguard, and not blocked from this challenger by
-/// Evasive (§10.6). `challenger_evades_evasive` is true if the challenger has
-/// Evasive or Alert.
+/// Whether an in-play card currently has a keyword.
 ///
-/// TODO(shared legality — Slice 6b): this inlines the exerted + Evasive checks;
-/// once other "can't be challenged" effects and locations exist, replace it with
-/// the shared `can this challenger legally challenge X?` predicate (see the
-/// `apply_end_turn` Reckless TODO).
-fn defender_has_challengeable_bodyguard(
+/// Reads the **printed** keywords. TODO(effect-granted keywords — Slice 8): cards
+/// can *grant* keywords ("gains Alert and Challenger +2" — But I'm Much Faster /
+/// Inkrunner; Cri-Kee's Alert), so once such effects exist they must be OR'd in
+/// here, so every keyword check (and the whole `can_challenge` authority) sees
+/// granted keywords too.
+fn character_has_keyword(
     state: &GameState,
     registry: &CardRegistry,
-    defender: PlayerId,
-    challenger_evades_evasive: bool,
+    card: CardId,
+    keyword: Keyword,
 ) -> bool {
-    state.player(defender).is_some_and(|p| {
-        p.play().iter().any(|c| {
-            if c.conditions().ready {
-                return false; // only exerted characters are challengeable
-            }
-            registry.get(c.definition()).is_some_and(|d| {
-                d.has_keyword(Keyword::Bodyguard)
-                    && (challenger_evades_evasive || !d.has_keyword(Keyword::Evasive))
+    state
+        .instance_in_play(card)
+        .and_then(|i| registry.get(i.definition()))
+        .is_some_and(|d| d.has_keyword(keyword))
+}
+
+/// Target-side challenge legality **excluding** the Bodyguard must-choose rule:
+/// the target must be an opposing in-play character, exerted, and not blocked by
+/// Evasive (§4.3.6.7, §10.6/§10.2). Split out so the Bodyguard rule can test
+/// candidate Bodyguards without recursing.
+///
+/// TODO(effect challenge-legality — Slice 8): plug in here —
+///   - "can't be challenged" target restrictions (Tiana's Palace "while here",
+///     The Wall, Panic) → reject;
+///   - the challenger's "can challenge ready characters" permission (Pick a
+///     Fight) → skip the exerted requirement.
+fn target_legal_basic(
+    state: &GameState,
+    registry: &CardRegistry,
+    active: PlayerId,
+    challenger: CardId,
+    target: CardId,
+) -> Result<(), Rejected> {
+    let owner =
+        opposing_owner_of(state, active, target).ok_or(Rejected::TargetNotInPlay(target))?;
+    let instance = find_in_play(state, owner, target)?;
+    if !instance.is_character() {
+        return Err(Rejected::TargetNotACharacter(target));
+    }
+    if instance.conditions().ready {
+        return Err(Rejected::TargetNotExerted(target));
+    }
+    if character_has_keyword(state, registry, target, Keyword::Evasive)
+        && !character_has_keyword(state, registry, challenger, Keyword::Evasive)
+        && !character_has_keyword(state, registry, challenger, Keyword::Alert)
+    {
+        return Err(Rejected::TargetEvasive(target));
+    }
+    Ok(())
+}
+
+/// The single authority for whether `challenger` may legally challenge `target`
+/// (§4.3.6 plus keyword and effect interactions). Used by `apply_challenge`, the
+/// Bodyguard "if able" rule, and Reckless's "must challenge if able".
+///
+/// TODO(effect challenge-legality — Slice 8): the challenger side must also honor
+/// "can't challenge" effects (Frying Pan, Cobra Bubbles, Gantu's "characters with
+/// cost ≤2 can't challenge your characters"); the target side is handled in
+/// `target_legal_basic`. Locations as targets arrive in Slice 7.
+fn can_challenge(
+    state: &GameState,
+    registry: &CardRegistry,
+    active: PlayerId,
+    challenger: CardId,
+    target: CardId,
+) -> Result<(), Rejected> {
+    // Challenger side: a ready character, dry unless it has Rush (§4.3.6.6, §10.9).
+    let challenger_instance = find_in_play(state, active, challenger)?;
+    if !challenger_instance.is_character() {
+        return Err(Rejected::NotACharacter(challenger));
+    }
+    if challenger_instance.conditions().drying
+        && !character_has_keyword(state, registry, challenger, Keyword::Rush)
+    {
+        return Err(Rejected::CharacterStillDrying(challenger));
+    }
+    if !challenger_instance.conditions().ready {
+        return Err(Rejected::CharacterExerted(challenger));
+    }
+
+    // Target side (basics).
+    target_legal_basic(state, registry, active, challenger, target)?;
+
+    // Bodyguard must-choose (§10.3.3): if the target isn't a Bodyguard and the
+    // defender has a Bodyguard this challenger could *legally* challenge (basics
+    // pass), one of those must be chosen instead.
+    if !character_has_keyword(state, registry, target, Keyword::Bodyguard) {
+        let owner =
+            opposing_owner_of(state, active, target).expect("validated by target_legal_basic");
+        let forced = state.player(owner).is_some_and(|p| {
+            p.play().iter().any(|c| {
+                character_has_keyword(state, registry, c.id(), Keyword::Bodyguard)
+                    && target_legal_basic(state, registry, active, challenger, c.id()).is_ok()
             })
+        });
+        if forced {
+            return Err(Rejected::MustChallengeBodyguard(target));
+        }
+    }
+    Ok(())
+}
+
+/// Whether `challenger` could legally challenge **any** opposing character right
+/// now (used by Reckless and Bodyguard "if able"). TODO(locations — Slice 7):
+/// also consider opposing locations as challenge targets.
+fn can_legally_challenge_anything(
+    state: &GameState,
+    registry: &CardRegistry,
+    active: PlayerId,
+    challenger: CardId,
+) -> bool {
+    state
+        .players()
+        .iter()
+        .filter(|p| p.id() != active)
+        .any(|p| {
+            p.play()
+                .iter()
+                .any(|c| can_challenge(state, registry, active, challenger, c.id()).is_ok())
         })
+}
+
+/// A ready Reckless character of `active` that can still legally challenge,
+/// which blocks ending the turn (§10.7.3), if any.
+fn reckless_must_challenge(
+    state: &GameState,
+    registry: &CardRegistry,
+    active: PlayerId,
+) -> Option<CardId> {
+    state.player(active)?.play().iter().find_map(|c| {
+        let id = c.id();
+        (c.conditions().ready
+            && character_has_keyword(state, registry, id, Keyword::Reckless)
+            && can_legally_challenge_anything(state, registry, active, id))
+        .then_some(id)
     })
 }
 
@@ -609,21 +693,24 @@ fn apply_use_ability(
     Ok(events)
 }
 
-fn apply_end_turn(state: &mut GameState) -> Result<Vec<GameEvent>, Rejected> {
+fn apply_end_turn(
+    state: &mut GameState,
+    registry: &CardRegistry,
+) -> Result<Vec<GameEvent>, Rejected> {
     if !matches!(state.status(), GameStatus::Playing) {
         return Err(Rejected::NotPlaying);
     }
     if state.phase() != Phase::Main {
         return Err(Rejected::NotMainPhase);
     }
-    // TODO(Reckless — Slice 6b, see "Slice 6" in docs/planning/IMPLEMENTATION_PLAN.md):
-    // reject ending the turn if the active player has a ready Reckless character
-    // that *can legally challenge* an opposing exerted character or location
-    // (§10.7.3). "Can legally challenge" must reuse the same challenge-legality
-    // rules as `apply_challenge` (Evasive/Bodyguard/Rush/exerted, and locations
-    // from Slice 7), so that logic should be extracted into a shared predicate
-    // — which a fully-correct Bodyguard "if able" check should also use.
     let active = state.active_player();
+
+    // Reckless (§10.7.3): can't end the turn while a ready Reckless character can
+    // still legally challenge something (reuses the `can_challenge` authority, so
+    // it respects Evasive/Bodyguard/Rush/etc.). Locations as targets: Slice 7.
+    if let Some(reckless) = reckless_must_challenge(state, registry, active) {
+        return Err(Rejected::RecklessMustChallenge(reckless));
+    }
 
     let mut events = Vec::new();
     state.set_phase(Phase::End);
