@@ -369,14 +369,17 @@ see the TODO there). Split smallest-first like Slice 5.
 ### Slice 6e+ — remaining keywords (deferred, back-linked from `keyword.rs`)
 - **Bodyguard "may enter play exerted"** (§10.3.2): a play-time choice — needs a
   small decision at play (deferred from 6a).
-- **Support** (§10.13): quest trigger adding `{S}` to a chosen character (quest
-  trigger + target choice + timed modifier).
+- **Support** (§10.13): on quest, "may add this character's `{S}` to another
+  chosen character's `{S}` this turn" — quest trigger + target choice + timed
+  modifier. The added amount is the Support character's **current** `{S}` (base
+  **plus** modifiers, via `GameState::current_character_stats`), **not** its
+  printed strength — so a buffed/debuffed Support character contributes its
+  modified value. Snapshot that value at resolution as a flat `+N`
+  `ModifierDuration::UntilEndOfTurn` on the chosen character (not a live link to
+  the Support character's `{S}`).
 - **Vanish** (§10.14) / **Ward** (§10.15): effect-targeting interactions (need
   targeted effects / choices — overlaps Slice 8).
 - **Singer / Sing Together** (§10.11–12): songs — **Slice 7**.
-- **Boost** (§10.4): put-card-under mechanic (and its trigger — see the bag
-  rollout). **Shift** (§10.10): introduces the in-Play **card-stack** model
-  (top/under/in-a-stack, §5.1.6–5.1.7).
 
 Also still pending here: the **challenge/banish triggers** into the bag (see
 [Trigger taxonomy rollout](#trigger-taxonomy-rollout-when-the-triggercondition-todo-gets-done)
