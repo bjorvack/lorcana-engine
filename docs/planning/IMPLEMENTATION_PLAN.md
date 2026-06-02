@@ -487,10 +487,15 @@ Challenge/banish triggers into the bag (see
     `execute_effect`/`apply_effect_to`): dissolve to discard, end modifiers, emit
     `Banished`, enqueue `WhenBanished` (so move-zone banish effects compose).
     Tested in `tests/targeted_effects.rs`.
+  - [x] **8b-3 — filter dimensions:** `CharacterFilter` gained **cost**/`{S}`
+    numeric comparisons (`NumericFilter` / `Comparison` — "N or less/more/exactly")
+    and **damaged**/**exerted** booleans; matched in `character_matches_filter`
+    (cost from the printed def, `{S}` from current stats). Tested in
+    `tests/targeted_effects.rs`.
   - **8b+ —** replacement effects (§7.7), "up to N" / no-duplicates / ordering,
-    the remaining `CharacterFilter` dimensions, item/location/player targets,
-    floating & delayed triggers, turn-progression-with-suspension (start/end-of-
-    turn triggers), and multi-effect-sequence-with-suspension.
+    **item/location/player** targets + name filter + group-"other", floating &
+    delayed triggers, turn-progression-with-suspension (start/end-of-turn
+    triggers), and multi-effect-sequence-with-suspension.
 
 ### Slice 8b+ — harder resolution rules
 - Replacement effects (§7.7): "instead"/"skip"/"enter"; self-replacement applied

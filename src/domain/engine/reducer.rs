@@ -1823,7 +1823,8 @@ fn execute_effect(
         | Effect::Banish(target) => match target {
             Target::SelfCard => apply_effect_to(state, registry, source, source, effect, events),
             Target::ChosenCharacter { filter, another } => {
-                let options = chosen_character_options(state, controller, source, filter, *another);
+                let options =
+                    chosen_character_options(state, registry, controller, source, filter, *another);
                 if !options.is_empty() {
                     state.set_pending(PendingDecision::ChooseTarget {
                         player: controller,
@@ -1834,7 +1835,8 @@ fn execute_effect(
                 }
             }
             Target::AllCharacters(filter) => {
-                let targets = chosen_character_options(state, controller, source, filter, false);
+                let targets =
+                    chosen_character_options(state, registry, controller, source, filter, false);
                 for card in targets {
                     apply_effect_to(state, registry, source, card, effect, events);
                 }
@@ -1988,9 +1990,11 @@ fn banish_by_effect(
 }
 
 /// The in-play characters eligible for a [`CharacterFilter`] from `controller`'s
-/// perspective (side + classifications), optionally excluding the `source`.
+/// perspective (side, classifications, cost/`{S}`, damaged/exerted), optionally
+/// excluding the `source`.
 fn chosen_character_options(
     state: &GameState,
+    registry: &CardRegistry,
     controller: PlayerId,
     source: CardId,
     filter: &CharacterFilter,
@@ -2008,22 +2012,59 @@ fn chosen_character_options(
             continue;
         }
         for card in player.play().iter() {
-            if !card.is_character() {
-                continue;
-            }
-            if exclude_source && card.id() == source {
-                continue;
-            }
-            if filter
-                .classifications
-                .iter()
-                .all(|c| card.has_classification(c))
+            if card.is_character()
+                && !(exclude_source && card.id() == source)
+                && character_matches_filter(state, registry, card, filter)
             {
                 out.push(card.id());
             }
         }
     }
     out
+}
+
+/// Whether an in-play character matches every set dimension of a filter.
+fn character_matches_filter(
+    state: &GameState,
+    registry: &CardRegistry,
+    card: &CardInstance,
+    filter: &CharacterFilter,
+) -> bool {
+    if !filter
+        .classifications
+        .iter()
+        .all(|c| card.has_classification(c))
+    {
+        return false;
+    }
+    if let Some(nf) = filter.cost {
+        let cost = registry
+            .get(card.definition())
+            .map_or(0, CardDefinition::cost);
+        if !nf.matches(cost) {
+            return false;
+        }
+    }
+    if let Some(nf) = filter.strength {
+        let strength = state
+            .current_character_stats(card.id())
+            .map_or(0, |s| s.strength);
+        if !nf.matches(strength) {
+            return false;
+        }
+    }
+    if let Some(want_damaged) = filter.damaged
+        && (card.conditions().damage > 0) != want_damaged
+    {
+        return false;
+    }
+    // exerted == !ready, so "exerted != want" simplifies to "ready == want".
+    if let Some(want_exerted) = filter.exerted
+        && card.conditions().ready == want_exerted
+    {
+        return false;
+    }
+    true
 }
 
 /// The player whose play area or discard currently holds `card`.

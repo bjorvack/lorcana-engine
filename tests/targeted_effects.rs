@@ -4,8 +4,8 @@
 
 use lorcana_engine::{
     CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterFilter, CharacterStats,
-    Conditions, Decision, Effect, GameState, GameStatus, Input, PlayerId, Target, TargetSide,
-    TriggerCondition, TriggeredAbility, apply, start,
+    Conditions, Decision, Effect, GameState, GameStatus, Input, NumericFilter, PlayerId, Target,
+    TargetSide, TriggerCondition, TriggeredAbility, apply, start,
 };
 
 fn started(reg: &CardRegistry) -> GameState {
@@ -254,4 +254,72 @@ fn a_trigger_banishes_a_chosen_character_and_fires_when_banished() {
         3,
         "its when-banished trigger fired"
     );
+}
+
+#[test]
+fn a_cost_filter_restricts_the_choosable_targets() {
+    let mut reg = CardRegistry::new();
+    // Quester: "whenever this quests, deal 2 damage to chosen opposing character
+    // with cost 2 or less."
+    reg.insert(
+        CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 5, 1).with_abilities(vec![
+            TriggeredAbility::new(
+                TriggerCondition::WhenThisQuests,
+                Effect::DealDamage {
+                    target: Target::ChosenCharacter {
+                        filter: CharacterFilter {
+                            cost: Some(NumericFilter::at_most(2)),
+                            ..CharacterFilter::any(TargetSide::Opposing)
+                        },
+                        another: false,
+                    },
+                    amount: 2,
+                },
+            ),
+        ]),
+    );
+    reg.insert(CardDefinition::character(
+        CardDefId::from_raw(300),
+        2,
+        true,
+        2,
+        5,
+        1,
+    )); // cheap
+    reg.insert(CardDefinition::character(
+        CardDefId::from_raw(400),
+        5,
+        true,
+        2,
+        5,
+        1,
+    )); // pricey
+    let mut state = started(&reg);
+    let active = state.active_player();
+    let foe = opponent_of(&state, active);
+    let quester = place(&mut state, active, 1000, 100, 5, 0);
+    let cheap = place(&mut state, foe, 3000, 300, 5, 0);
+    let pricey = place(&mut state, foe, 4000, 400, 5, 0);
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+    // The cost-5 character is not an eligible target.
+    assert!(
+        apply(
+            &mut state,
+            &reg,
+            Input::Decide(Decision::ChooseTarget(pricey))
+        )
+        .is_err(),
+        "cost-5 character is filtered out"
+    );
+    // The cost-2 character is.
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(Decision::ChooseTarget(cheap)),
+    )
+    .expect("choose the eligible target");
+
+    assert_eq!(damage_on(&state, foe, cheap), Some(2));
+    assert_eq!(damage_on(&state, foe, pricey), Some(0));
 }
