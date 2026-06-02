@@ -1,7 +1,7 @@
 //! A decision the engine is waiting on before it can continue resolving.
 
 use super::bag::TriggerId;
-use crate::domain::types::ids::PlayerId;
+use crate::domain::types::ids::{CardId, PlayerId};
 use serde::{Deserialize, Serialize};
 
 /// A point in bag resolution that requires a player's input before the engine
@@ -25,6 +25,14 @@ pub enum PendingDecision {
         /// The optional trigger awaiting a yes/no.
         trigger: TriggerId,
     },
+    /// A Bodyguard character just entered play; its controller chooses whether it
+    /// enters exerted instead of ready (§10.3.2).
+    EnterPlayExerted {
+        /// The player who must choose.
+        player: PlayerId,
+        /// The Bodyguard character that just entered play.
+        card: CardId,
+    },
 }
 
 impl PendingDecision {
@@ -32,7 +40,9 @@ impl PendingDecision {
     #[must_use]
     pub const fn player(&self) -> PlayerId {
         match self {
-            Self::OrderTriggers { player, .. } | Self::MayResolve { player, .. } => *player,
+            Self::OrderTriggers { player, .. }
+            | Self::MayResolve { player, .. }
+            | Self::EnterPlayExerted { player, .. } => *player,
         }
     }
 }

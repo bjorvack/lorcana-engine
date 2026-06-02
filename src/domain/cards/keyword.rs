@@ -55,17 +55,17 @@ impl ShiftAbility {
 /// (keywords are a closed, rules-defined vocabulary); behaviour is wired in
 /// incrementally per sub-slice.
 ///
-/// Implemented so far: `Rush`, `Evasive`, `Alert`, `Bodyguard` (challenge
-/// restriction), `Resist`, `Challenger` (Slice 6a); `Reckless` (Slice 6b);
-/// `Shift` — standard same-name + Universal + [Classification] (Slice 6c);
-/// `Boost` (Slice 6d); `Singer` / `SingTogether` (songs, Slice 7a).
+/// Implemented so far: `Rush`, `Evasive`, `Alert`, `Bodyguard` — incl. its
+/// challenge restriction and "may enter play exerted" (§10.3.2) — `Resist`,
+/// `Challenger` (Slice 6a); `Reckless` (Slice 6b); `Shift` — standard same-name +
+/// Universal + [Classification] (Slice 6c); `Boost`, incl. its "card put under"
+/// trigger (Slice 6d); `Singer` / `SingTogether` (songs, Slice 7a).
 ///
-/// TODO(remaining keywords): `Bodyguard` "may enter play exerted" (a play-time
-/// choice); `Shift` alternate costs / cost reducers / granted-name + Morph
-/// targeting / shift-conditional triggers (Slice 8 — see `ShiftCost` and the
-/// reducer TODOs); `Boost`'s "card put under" watcher trigger; `Support`/`Vanish`
-/// (triggers/targeting); `Ward` (effect-targeting restriction). See "Slice 6"/
-/// "Slice 7" in `docs/planning/IMPLEMENTATION_PLAN.md`.
+/// TODO(remaining keywords): `Shift` alternate costs / cost reducers / granted-
+/// name + Morph targeting / shift-conditional triggers (Slice 8 — see `ShiftCost`
+/// and the reducer TODOs); `Support`/`Vanish` (triggers/targeting); `Ward`
+/// (effect-targeting restriction). See "Slice 6"/"Slice 7"/"Slice 8" in
+/// `docs/planning/IMPLEMENTATION_PLAN.md`.
 //
 // Not `Copy`: `Shift` carries a `ShiftAbility` (which can hold a `Classification`
 // string). Keyword checks take it by value/ref as needed.

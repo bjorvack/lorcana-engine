@@ -257,29 +257,48 @@ fn apply_play_card(
         card,
     }];
     events.extend(game_state_check(state));
-    if !state.is_finished() {
-        // Shift *is* playing the card (§10.10.1), so these enters-play / "whenever
-        // you play a [category]" triggers fire whether or not Shift was used.
-        // "When you play this character" triggers go to the bag (§4.3.4.8).
-        enqueue_self_triggers(
-            state,
-            registry,
-            active,
-            card,
-            &TriggerCondition::WhenYouPlayThis,
-        );
-        // "Whenever you play a [category]" triggers on the controller's other
-        // in-play cards (the cross-scope event→trigger matcher).
-        enqueue_play_a_card_triggers(state, registry, active, card, definition_id);
-        // TODO(shift-conditional triggers — Slice 8): 23 cards gate a play
-        // trigger on "if you used Shift to play them" (Mulan, Pegasus, Mickey,
-        // Basil; watchers Bucky, Honey Lemon, Chem Purse). Thread a was-shifted
-        // play-context flag (= `shift_onto.is_some()`) into the enqueued triggers
-        // so conditional effects (Slice 8 DSL) can gate on it. See "Slice 6c"/
-        // "Slice 8" in docs/planning/IMPLEMENTATION_PLAN.md.
-        events.extend(resolve_bag(state, registry));
+    if state.is_finished() {
+        return Ok(events);
     }
+    // Bodyguard may enter play exerted (§10.3.2): ask the controller before its
+    // enters-play triggers resolve. The choice is answered with `Decide`, which
+    // then runs the enters-play triggers (`enqueue_enter_play_triggers`).
+    if character_has_keyword(state, registry, card, &Keyword::Bodyguard) {
+        state.set_pending(PendingDecision::EnterPlayExerted {
+            player: active,
+            card,
+        });
+        return Ok(events);
+    }
+    enqueue_enter_play_triggers(state, registry, active, card, definition_id);
+    events.extend(resolve_bag(state, registry));
     Ok(events)
+}
+
+/// Enqueue a just-entered card's "when you play this" and the cross-scope
+/// "whenever you play a [category]" triggers (§4.3.4.8). Shift *is* playing the
+/// card (§10.10.1), so these fire whether or not Shift was used.
+///
+/// TODO(shift-conditional triggers — Slice 8): 23 cards gate a play trigger on
+/// "if you used Shift to play them" (Mulan, Pegasus, Mickey, Basil; watchers
+/// Bucky, Honey Lemon, Chem Purse). Thread a was-shifted play-context flag so
+/// conditional effects (Slice 8 DSL) can gate on it. See "Slice 6c"/"Slice 8" in
+/// `docs/planning/IMPLEMENTATION_PLAN.md`.
+fn enqueue_enter_play_triggers(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    controller: PlayerId,
+    card: CardId,
+    definition_id: CardDefId,
+) {
+    enqueue_self_triggers(
+        state,
+        registry,
+        controller,
+        card,
+        &TriggerCondition::WhenYouPlayThis,
+    );
+    enqueue_play_a_card_triggers(state, registry, controller, card, definition_id);
 }
 
 /// Place a permanent (character or location) into play, paying its cost. Routes
@@ -804,12 +823,12 @@ fn apply_quest(
 ///   - Evasive: only Evasive may challenge it (§10.6); Alert ignores that
 ///     (§10.2); Bodyguard must be chosen if able (§10.3) — Slice 6.
 ///
-/// Resolution hooks (absent for vanilla):
-///   - "Whenever this character challenges / is challenged / banishes another in
-///     a challenge" triggers (Scar, Mulan, Captain Hook, Cheshire Cat,
-///     Marshmallow) go to the bag — Slice 4.
-///   - Damage modification (Resist, "takes no damage from the challenge") —
-///     Slice 6 / replacement effects Slice 8.
+/// Resolution hooks:
+///   - "Whenever this character challenges / is challenged" triggers go to the
+///     bag (done — enqueued below). "Banishes another in a challenge" and "when
+///     this is banished" ride the banishment path (`game_state_check`).
+///   - Resist damage reduction is applied (Slice 6a); "takes no damage from the
+///     challenge" and other damage replacement is Slice 8.
 fn apply_challenge(
     state: &mut GameState,
     registry: &CardRegistry,
@@ -1633,6 +1652,21 @@ fn apply_decision(
                 execute_trigger(state, registry, &mut events, trigger);
             } else {
                 let _ = state.remove_trigger(trigger);
+            }
+        }
+        (PendingDecision::EnterPlayExerted { player, card }, Decision::EnterExerted(exert)) => {
+            let _ = state.take_pending();
+            if exert
+                && let Some(p) = state.player_mut(player)
+                && let Some(c) = p.play_mut().iter_mut().find(|c| c.id() == card)
+            {
+                c.conditions_mut().ready = false;
+            }
+            // Now that it has entered (ready or exerted), run its enters-play
+            // triggers (§10.3.2 resolves before the enters-play trigger window).
+            if let Some(definition_id) = state.instance_in_play(card).map(CardInstance::definition)
+            {
+                enqueue_enter_play_triggers(state, registry, player, card, definition_id);
             }
         }
         _ => return Err(Rejected::InvalidDecision),

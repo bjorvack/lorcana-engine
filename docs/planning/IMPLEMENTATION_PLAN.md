@@ -363,12 +363,13 @@ see the TODO there). Split smallest-first like Slice 5.
       top deck card **facedown** under it (`CardInstance::push_under`) — the same
       stack model as Shift, so it dissolves out on leave-play (§5.1.7). Tested in
       `tests/keywords.rs`.
-- Deferred (back-linked): Boost's "**card put under this**" watcher trigger rides
-  the trigger taxonomy rollout / Slice 8.
+- [x] Boost's "**card put under this**" watcher trigger
+      (`TriggerCondition::WhenCardPutUnder`, enqueued in `apply_boost`).
 
 ### Slice 6e+ — remaining keywords (deferred, back-linked from `keyword.rs`)
-- **Bodyguard "may enter play exerted"** (§10.3.2): a play-time choice — needs a
-  small decision at play (deferred from 6a).
+- [x] **Bodyguard "may enter play exerted"** (§10.3.2): a play-time choice —
+      `PendingDecision::EnterPlayExerted` / `Decision::EnterExerted`, answered with
+      `Decide` after the Bodyguard enters play; tested in `tests/keywords.rs`.
 - **Support** (§10.13): on quest, "may add this character's `{S}` to another
   chosen character's `{S}` this turn" — quest trigger + target choice + timed
   modifier. The added amount is the Support character's **current** `{S}` (base
@@ -381,11 +382,13 @@ see the TODO there). Split smallest-first like Slice 5.
   targeted effects / choices — overlaps Slice 8).
 - **Singer / Sing Together** (§10.11–12): songs — **Slice 7**.
 
-Also still pending here: the **challenge/banish triggers** into the bag (see
-[Trigger taxonomy rollout](#trigger-taxonomy-rollout-when-the-triggercondition-todo-gets-done)
-and the `apply_challenge` / `game_state_check` hooks): "whenever this character
-challenges / is challenged / banishes another in a challenge" / "when this
-character is banished", plus the §1.9.1.3 "banished by that character" attribution.
+Challenge/banish triggers into the bag (see
+[Trigger taxonomy rollout](#trigger-taxonomy-rollout-when-the-triggercondition-todo-gets-done)):
+- [x] "whenever this character challenges / is challenged"
+      (`WhenThisChallenges` / `WhenChallenged`, enqueued in `apply_challenge`).
+- "banishes another in a challenge" (`WhenBanishesInChallenge`) / "when this is
+  banished" (`WhenBanished`), plus the §1.9.1.3 "banished by that character"
+  attribution — ride the `game_state_check` banishment path (next deferred item).
 
 **Acceptance (whole slice)**
 - [ ] Each keyword has a passing scenario matching its §10 definition/example.

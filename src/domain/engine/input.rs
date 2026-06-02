@@ -88,6 +88,8 @@ pub enum Decision {
     ResolveNext(TriggerId),
     /// For `MayResolve`: whether to apply an optional ("you may") trigger.
     May(bool),
+    /// For `EnterPlayExerted`: whether a Bodyguard enters play exerted (§10.3.2).
+    EnterExerted(bool),
 }
 
 /// Why an [`Input`] was rejected. When an input is rejected the game state is

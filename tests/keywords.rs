@@ -4,8 +4,8 @@
 
 use lorcana_engine::{
     CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterStats, Conditions,
-    Effect, GameState, GameStatus, Input, Keyword, LocationStats, PlayerId, TriggerCondition,
-    TriggeredAbility, apply, start,
+    Decision, Effect, GameState, GameStatus, Input, Keyword, LocationStats, PlayerId,
+    TriggerCondition, TriggeredAbility, apply, start,
 };
 
 fn started(registry: &CardRegistry) -> GameState {
@@ -516,5 +516,97 @@ fn boosting_fires_a_card_put_under_trigger() {
         state.player(active).unwrap().lore(),
         1,
         "the card-put-under trigger fired (§10.4)"
+    );
+}
+
+/// A cost-0 Bodyguard character (so it can be played without ink).
+fn bodyguard_def(id: u32) -> CardDefinition {
+    CardDefinition::character(CardDefId::from_raw(id), 0, true, 3, 4, 2)
+        .with_keywords(vec![Keyword::Bodyguard])
+}
+
+fn ready_in_play(state: &GameState, owner: PlayerId, card: CardId) -> bool {
+    state
+        .player(owner)
+        .unwrap()
+        .play()
+        .iter()
+        .find(|c| c.id() == card)
+        .unwrap()
+        .conditions()
+        .ready
+}
+
+#[test]
+fn bodyguard_may_enter_play_exerted() {
+    let reg: CardRegistry = (0..30).map(bodyguard_def).collect();
+    let mut state = started(&reg);
+    let active = state.active_player();
+    let card = state
+        .player(active)
+        .unwrap()
+        .hand()
+        .iter()
+        .next()
+        .unwrap()
+        .id();
+
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::PlayCard {
+            card,
+            shift_onto: None,
+        },
+    )
+    .expect("play bodyguard");
+    assert!(
+        state.is_awaiting_decision(),
+        "asked whether to enter exerted (§10.3.2)"
+    );
+
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(Decision::EnterExerted(true)),
+    )
+    .expect("decide");
+    assert!(!ready_in_play(&state, active, card), "entered exerted");
+    assert!(!state.is_awaiting_decision());
+}
+
+#[test]
+fn bodyguard_may_decline_to_enter_exerted() {
+    let reg: CardRegistry = (0..30).map(bodyguard_def).collect();
+    let mut state = started(&reg);
+    let active = state.active_player();
+    let card = state
+        .player(active)
+        .unwrap()
+        .hand()
+        .iter()
+        .next()
+        .unwrap()
+        .id();
+
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::PlayCard {
+            card,
+            shift_onto: None,
+        },
+    )
+    .expect("play bodyguard");
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(Decision::EnterExerted(false)),
+    )
+    .expect("decide");
+
+    assert!(
+        ready_in_play(&state, active, card),
+        "stayed ready when declined"
     );
 }
