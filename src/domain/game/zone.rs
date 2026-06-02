@@ -1,6 +1,7 @@
 //! An ordered collection of card instances in a single zone.
 
 use super::{CardInstance, SeededRng};
+use crate::domain::types::ids::CardId;
 use serde::{Deserialize, Serialize};
 
 /// An ordered pile of [`CardInstance`]s. Order is significant (e.g. the deck is
@@ -40,9 +41,36 @@ impl Zone {
         self.cards.iter()
     }
 
+    /// Mutably iterate over the cards in order (e.g. to ready them).
+    pub fn iter_mut(&mut self) -> impl Iterator<Item = &mut CardInstance> {
+        self.cards.iter_mut()
+    }
+
+    /// `true` if a card with the given id is in this zone.
+    #[must_use]
+    pub fn contains(&self, id: CardId) -> bool {
+        self.cards.iter().any(|c| c.id() == id)
+    }
+
     /// Add a card to the top of the zone.
     pub fn push(&mut self, card: CardInstance) {
         self.cards.push(card);
+    }
+
+    /// Remove and return the top card, if any.
+    pub fn pop_top(&mut self) -> Option<CardInstance> {
+        self.cards.pop()
+    }
+
+    /// Add a card to the bottom of the zone (e.g. mulligan put-back, §3.1.6.1).
+    pub fn insert_bottom(&mut self, card: CardInstance) {
+        self.cards.insert(0, card);
+    }
+
+    /// Remove and return the card with the given id, if present.
+    pub fn take(&mut self, id: CardId) -> Option<CardInstance> {
+        let index = self.cards.iter().position(|c| c.id() == id)?;
+        Some(self.cards.remove(index))
     }
 
     /// Shuffle the zone in place using the game's deterministic RNG.

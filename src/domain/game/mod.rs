@@ -6,6 +6,7 @@ pub mod events;
 pub mod player_state;
 pub mod rng;
 pub mod state;
+pub mod status;
 pub mod turn;
 pub mod zone;
 pub mod zone_kind;
@@ -13,8 +14,10 @@ pub mod zone_kind;
 // Re-export for convenience
 pub use card_instance::CardInstance;
 pub use conditions::Conditions;
+pub use events::GameEvent;
 pub use player_state::PlayerState;
 pub use rng::SeededRng;
 pub use state::GameState;
+pub use status::GameStatus;
 pub use zone::Zone;
 pub use zone_kind::ZoneKind;

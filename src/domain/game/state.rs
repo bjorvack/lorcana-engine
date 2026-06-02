@@ -1,6 +1,6 @@
 //! The authoritative game state.
 
-use super::{CardInstance, Conditions, PlayerState, SeededRng, Zone};
+use super::{CardInstance, Conditions, GameStatus, PlayerState, SeededRng, Zone};
 use crate::domain::types::ids::{CardDefId, CardId, PlayerId};
 use crate::domain::types::turn::{Phase, Step};
 use serde::{Deserialize, Serialize};
@@ -15,20 +15,25 @@ pub struct GameState {
     seed: u64,
     rng: SeededRng,
     players: Vec<PlayerState>,
+    status: GameStatus,
     active_player: PlayerId,
     turn_number: u32,
     phase: Phase,
     step: Step,
+    /// Whether the active player has used their once-per-turn inkwell action
+    /// (§4.3.3). Reset at the start of each turn.
+    inked_this_turn: bool,
     next_card_id: u32,
 }
 
 impl GameState {
-    /// Create a new game from one deck per player (each deck is an ordered list
-    /// of printed-card ids) and a seed.
+    /// Build a new, **not yet started** game from one deck per player (each deck
+    /// is an ordered list of printed-card ids) and a seed.
     ///
-    /// Each deck is populated with freshly allocated, facedown card instances
-    /// and then shuffled deterministically using the seed. The first turn
-    /// begins for the player in seat 0, at the Beginning phase's Ready step.
+    /// Each deck is populated with freshly allocated, facedown card instances and
+    /// shuffled deterministically using the seed. No hands are dealt and no
+    /// starting player is chosen yet; call the engine's `start` to do that. The
+    /// turn fields hold placeholder values until the game is `Playing`.
     ///
     /// # Panics
     ///
@@ -60,10 +65,12 @@ impl GameState {
             seed,
             rng,
             players,
+            status: GameStatus::NotStarted,
             active_player: PlayerId::from_index(0),
             turn_number: 1,
             phase: Phase::Beginning,
             step: Step::Ready,
+            inked_this_turn: false,
             next_card_id,
         }
     }
@@ -74,10 +81,38 @@ impl GameState {
         self.seed
     }
 
+    /// The game's lifecycle status.
+    #[must_use]
+    pub const fn status(&self) -> &GameStatus {
+        &self.status
+    }
+
+    /// `true` once the game has finished.
+    #[must_use]
+    pub const fn is_finished(&self) -> bool {
+        matches!(self.status, GameStatus::Finished { .. })
+    }
+
+    /// Set the game's status (used by the engine as it advances the game).
+    pub fn set_status(&mut self, status: GameStatus) {
+        self.status = status;
+    }
+
     /// All player states, indexed by seat.
     #[must_use]
     pub fn players(&self) -> &[PlayerState] {
         &self.players
+    }
+
+    /// Mutable access to all player states.
+    pub fn players_mut(&mut self) -> &mut [PlayerState] {
+        &mut self.players
+    }
+
+    /// The number of players in the game.
+    #[must_use]
+    pub const fn player_count(&self) -> usize {
+        self.players.len()
     }
 
     /// The state of a specific player, if present.
@@ -91,10 +126,27 @@ impl GameState {
         self.players.get_mut(usize::from(id.index()))
     }
 
+    /// Mutable access to the deterministic RNG (for shuffles and choices).
+    pub const fn rng_mut(&mut self) -> &mut SeededRng {
+        &mut self.rng
+    }
+
+    /// Deterministically shuffle a player's deck using the game RNG.
+    pub fn shuffle_deck(&mut self, id: PlayerId) {
+        if let Some(player) = self.players.get_mut(usize::from(id.index())) {
+            player.deck_mut().shuffle(&mut self.rng);
+        }
+    }
+
     /// The player whose turn it currently is.
     #[must_use]
     pub const fn active_player(&self) -> PlayerId {
         self.active_player
+    }
+
+    /// Set the active player.
+    pub const fn set_active_player(&mut self, player: PlayerId) {
+        self.active_player = player;
     }
 
     /// The current turn number (1-based).
@@ -103,15 +155,41 @@ impl GameState {
         self.turn_number
     }
 
+    /// Advance to the next turn number.
+    pub const fn increment_turn_number(&mut self) {
+        self.turn_number += 1;
+    }
+
     /// The current phase.
     #[must_use]
     pub const fn phase(&self) -> Phase {
         self.phase
     }
 
+    /// Set the current phase.
+    pub const fn set_phase(&mut self, phase: Phase) {
+        self.phase = phase;
+    }
+
     /// The current step.
     #[must_use]
     pub const fn step(&self) -> Step {
         self.step
+    }
+
+    /// Set the current step.
+    pub const fn set_step(&mut self, step: Step) {
+        self.step = step;
+    }
+
+    /// Whether the active player has taken their once-per-turn inkwell action.
+    #[must_use]
+    pub const fn inked_this_turn(&self) -> bool {
+        self.inked_this_turn
+    }
+
+    /// Record whether the active player has used their inkwell action this turn.
+    pub const fn set_inked_this_turn(&mut self, value: bool) {
+        self.inked_this_turn = value;
     }
 }

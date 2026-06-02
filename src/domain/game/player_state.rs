@@ -104,16 +104,31 @@ impl PlayerState {
         &self.hand
     }
 
+    /// Mutable access to this player's hand.
+    pub const fn hand_mut(&mut self) -> &mut Zone {
+        &mut self.hand
+    }
+
     /// This player's inkwell.
     #[must_use]
     pub const fn inkwell(&self) -> &Zone {
         &self.inkwell
     }
 
+    /// Mutable access to this player's inkwell.
+    pub const fn inkwell_mut(&mut self) -> &mut Zone {
+        &mut self.inkwell
+    }
+
     /// This player's play area.
     #[must_use]
     pub const fn play(&self) -> &Zone {
         &self.play
+    }
+
+    /// Mutable access to this player's play area.
+    pub const fn play_mut(&mut self) -> &mut Zone {
+        &mut self.play
     }
 
     /// This player's discard.

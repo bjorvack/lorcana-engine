@@ -33,6 +33,18 @@ impl Conditions {
         }
     }
 
+    /// Conditions for a card placed in the inkwell: facedown and ready
+    /// (§8.5.2). Identical in shape to a deck card today, but named for intent.
+    #[must_use]
+    pub const fn in_inkwell() -> Self {
+        Self {
+            ready: true,
+            damage: 0,
+            drying: false,
+            facedown: true,
+        }
+    }
+
     /// Conditions for a character as it enters play: ready, undamaged, drying,
     /// and faceup (§5.1.13.1).
     #[must_use]

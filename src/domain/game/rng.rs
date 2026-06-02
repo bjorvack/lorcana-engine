@@ -6,8 +6,8 @@
 //! algorithm whose output is stable across crate versions — `StdRng` makes no
 //! such guarantee and could silently change between releases.
 
-use rand::SeedableRng;
 use rand::seq::SliceRandom;
+use rand::{Rng, SeedableRng};
 use rand_chacha::ChaCha8Rng;
 use serde::{Deserialize, Serialize};
 
@@ -29,6 +29,15 @@ impl SeededRng {
     /// Shuffle a slice in place deterministically, advancing the generator.
     pub fn shuffle<T>(&mut self, slice: &mut [T]) {
         slice.shuffle(&mut self.inner);
+    }
+
+    /// Return a value in `0..exclusive_max`, advancing the generator.
+    ///
+    /// # Panics
+    ///
+    /// Panics if `exclusive_max` is 0.
+    pub fn below(&mut self, exclusive_max: usize) -> usize {
+        self.inner.gen_range(0..exclusive_max)
     }
 }
 
