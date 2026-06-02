@@ -15,11 +15,12 @@ use crate::domain::types::ids::{CardId, PlayerId};
 /// their counters (§9.4, §8.6.2). The empty-deck-draw flag is "since the last game
 /// state check" (§1.9.1.2), so it is cleared once the check completes.
 ///
-/// TODO(triggers/replacement): banishment is a hook point — "when this character
-/// is banished" / "whenever this character banishes another in a challenge"
-/// triggers go to the bag (Slice 4), and banishment can be replaced/prevented
-/// (Slice 8). §1.9.1.3's "banished by that character" attribution is needed for
-/// those triggers and isn't tracked yet.
+/// Banishment "when this is banished" / "...in a challenge" / "banishes another
+/// in a challenge" triggers are enqueued by the reducer (`enqueue_banish_triggers`
+/// for the events this returns, and `apply_challenge` for the challenge variants).
+///
+/// TODO(Slice 8b+): banishment can still be replaced/prevented (§7.7), and
+/// §1.9.1.3's "banished by that character" attribution isn't tracked yet.
 pub fn game_state_check(state: &mut GameState) -> Vec<GameEvent> {
     let mut events = Vec::new();
 

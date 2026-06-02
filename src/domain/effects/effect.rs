@@ -3,21 +3,20 @@
 use super::target::Target;
 use serde::{Deserialize, Serialize};
 
-/// A built-in effect an ability can produce.
+/// A built-in effect an ability or action can produce.
 ///
-/// Kept minimal for Slice 4 — just enough to make triggered abilities
-/// observable and testable. These are the no-target effects common on
-/// enters-play and quest triggers (e.g. "draw a card", "each opponent loses 1
-/// lore").
+/// The structured effect / target / condition DSL (Slice 8): untargeted effects
+/// (draw, lore), and `Target`-based effects (`SelfCard` / `ChosenCharacter` /
+/// `AllCharacters` / `UpToCharacters` / `ChosenItem` / `ChosenLocation`, filtered
+/// by side / classification / name / cost / `{S}` / damaged / exerted) resolved
+/// via the `ChooseTarget` / `ChooseUpToN` pending decisions, "[A] then [B]"
+/// sequencing, and a board-condition guard (`IfControl`).
 ///
-/// TODO(effect DSL — Slice 8): grow this into the structured effect / target /
-/// condition DSL described in the architecture. Targeted effects ("deal N damage
-/// to chosen character", "return chosen character to hand"), conditional and
-/// "up to N" effects, modifiers, and replacement effects need a `Target`
-/// selector and player choices (which is why those are deferred until the
-/// `PendingDecision` machinery is fully in place). An `Effect::Custom(name)`
-/// escape hatch (compiled-in handler) remains the plan for the rare card the DSL
-/// can't express.
+/// TODO(remaining — Slice 8b+): replacement effects (§7.7, e.g. "takes no damage
+/// from the challenge"), conditional-on-the-chosen-target ("if a Villain is
+/// chosen, … instead"), player targets, and effect-granted keywords. An
+/// `Effect::Custom(name)` escape hatch (compiled-in handler) remains the plan for
+/// the rare card the DSL can't express.
 // Not `Copy`: targeted variants carry a `Target`, which can hold a
 // `CharacterFilter` with classification strings.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]

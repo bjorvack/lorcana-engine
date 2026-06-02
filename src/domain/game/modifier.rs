@@ -13,11 +13,10 @@ use serde::{Deserialize, Serialize};
 
 /// A modifiable characteristic.
 ///
-/// TODO(locations — Slice 7): locations add further modifiable characteristics —
-/// **move cost** (the cost to move a character to the location, §4.3.7), plus
-/// location willpower and start-of-turn lore. Add the corresponding `Stat`
-/// variants when locations land. See `docs/planning/IMPLEMENTATION_PLAN.md`
-/// ("Slice 7").
+/// TODO(modifiable location stats — Slice 8b+): locations are in play (Slice 7b)
+/// but their characteristics aren't yet modifiable — add `Stat` variants for
+/// **move cost** (§4.3.7), location willpower, and start-of-turn lore when a card
+/// needs to modify them. See `docs/planning/IMPLEMENTATION_PLAN.md`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum Stat {
     /// Strength `{S}`.
