@@ -511,9 +511,13 @@ Challenge/banish triggers into the bag (see
     controller submits 0..max **distinct** eligible targets; the effect applies to
     each, then `rest` resolves. Unblocks Painting the Roses Red, Double Trouble,
     Gumbo Pot, … `Decision` is now non-`Copy`. Tested in `tests/targeted_effects.rs`.
-  - **8b+ —** replacement effects (§7.7), **player** targets + name filter +
-    group-"other", floating & delayed triggers, and turn-progression-with-
-    suspension (start/end-of-turn triggers).
+  - [x] **8b-8 — name filter + group-"other":** `CharacterFilter.names` ("chosen
+    character named X", matched via the def's `has_name`) and `AllCharacters {
+    filter, another }` so "your *other* characters" excludes the source. Tested in
+    `tests/targeted_effects.rs`.
+  - **8b+ —** replacement effects (§7.7), **player** targets (a separate axis —
+    "chosen player draws/discards"), floating & delayed triggers, and turn-
+    progression-with-suspension (start/end-of-turn triggers).
 
 ### Slice 8b+ — harder resolution rules
 - Replacement effects (§7.7): "instead"/"skip"/"enter"; self-replacement applied

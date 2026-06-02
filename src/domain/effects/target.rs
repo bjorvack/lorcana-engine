@@ -65,20 +65,21 @@ impl NumericFilter {
 /// Which characters an effect may apply to / choose from (§7.1, §6.2.6).
 ///
 /// A character matches when it is on the allowed `side`, has every classification
-/// in `classifications`, and satisfies any set numeric / state filters. Cost is
-/// the printed cost (cost-modifier interaction on in-play characters is deferred);
-/// strength is the **current** `{S}` (modifiers count).
+/// in `classifications`, has one of `names` (if any), and satisfies any set
+/// numeric / state filters. Cost is the printed cost (cost-modifier interaction
+/// on in-play characters is deferred); strength is the **current** `{S}`.
 ///
-/// TODO(filter dimensions — grow as cards need them): name ("named X", 327);
-/// and beyond characters, **item** / **location** targets (49 / 59), **player**
-/// targets (12), and an "exclude self" flag for **group** targets ("your *other*
-/// characters", 61). See "Slice 8" in `docs/planning/IMPLEMENTATION_PLAN.md`.
+/// TODO(filter dimensions — grow as cards need them): **player** targets (12) are
+/// a separate axis; see "Slice 8" in `docs/planning/IMPLEMENTATION_PLAN.md`.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct CharacterFilter {
     /// Which side the character may be on.
     pub side: TargetSide,
     /// Required classifications (all must be present); empty means no filter.
     pub classifications: Vec<Classification>,
+    /// Accepted names ("named X"); empty means no name filter, otherwise the
+    /// character must count as one of them.
+    pub names: Vec<String>,
     /// Constrain the (printed) ink cost.
     pub cost: Option<NumericFilter>,
     /// Constrain the current `{S}`.
@@ -96,6 +97,7 @@ impl CharacterFilter {
         Self {
             side,
             classifications: Vec::new(),
+            names: Vec::new(),
             cost: None,
             strength: None,
             damaged: None,
@@ -118,7 +120,12 @@ pub enum Target {
     },
     /// **Every** character matching the filter, with no choice ("your Pirate
     /// characters", "all opposing characters").
-    AllCharacters(CharacterFilter),
+    AllCharacters {
+        /// Which characters are affected.
+        filter: CharacterFilter,
+        /// If `true`, the source card itself is excluded ("your *other* …").
+        another: bool,
+    },
     /// **Up to `max`** distinct chosen characters matching the filter (§7.1.8);
     /// the effect applies to each. 0 is a legal choice ("Up to 2 chosen
     /// characters get -1 {S}").

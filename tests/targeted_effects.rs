@@ -465,3 +465,92 @@ fn up_to_n_rejects_too_many_or_duplicate_targets() {
         .is_err()
     );
 }
+
+#[test]
+fn a_name_filter_restricts_the_choosable_targets() {
+    let mut reg = CardRegistry::new();
+    // Quester: "whenever this quests, deal 2 damage to chosen character named Stitch."
+    reg.insert(
+        CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 5, 1).with_abilities(vec![
+            TriggeredAbility::new(
+                TriggerCondition::WhenThisQuests,
+                Effect::DealDamage {
+                    target: Target::ChosenCharacter {
+                        filter: CharacterFilter {
+                            names: vec!["Stitch".to_string()],
+                            ..CharacterFilter::any(TargetSide::Opposing)
+                        },
+                        another: false,
+                    },
+                    amount: 2,
+                },
+            ),
+        ]),
+    );
+    reg.insert(
+        CardDefinition::character(CardDefId::from_raw(200), 1, true, 2, 5, 1)
+            .with_names(vec!["Stitch".to_string()]),
+    );
+    reg.insert(
+        CardDefinition::character(CardDefId::from_raw(300), 1, true, 2, 5, 1)
+            .with_names(vec!["Scar".to_string()]),
+    );
+    let mut state = started(&reg);
+    let active = state.active_player();
+    let foe = opponent_of(&state, active);
+    let quester = place(&mut state, active, 1000, 100, 5, 0);
+    let stitch = place(&mut state, foe, 2000, 200, 5, 0);
+    let scar = place(&mut state, foe, 3000, 300, 5, 0);
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+    assert!(
+        apply(
+            &mut state,
+            &reg,
+            Input::Decide(Decision::ChooseTarget(scar))
+        )
+        .is_err(),
+        "the non-Stitch character is not a legal target"
+    );
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(Decision::ChooseTarget(stitch)),
+    )
+    .expect("choose Stitch");
+    assert_eq!(damage_on(&state, foe, stitch), Some(2));
+    assert_eq!(damage_on(&state, foe, scar), Some(0));
+}
+
+#[test]
+fn all_your_other_characters_excludes_the_source() {
+    let mut reg = CardRegistry::new();
+    // Quester: "whenever this quests, your other characters get +1 {S} this turn."
+    reg.insert(
+        CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 5, 1).with_abilities(vec![
+            TriggeredAbility::new(
+                TriggerCondition::WhenThisQuests,
+                Effect::GiveStrengthThisTurn {
+                    target: Target::AllCharacters {
+                        filter: CharacterFilter::any(TargetSide::Yours),
+                        another: true,
+                    },
+                    amount: 1,
+                },
+            ),
+        ]),
+    );
+    let mut state = started(&reg);
+    let active = state.active_player();
+    let quester = place(&mut state, active, 1000, 100, 5, 0); // {S} 2
+    let ally = place(&mut state, active, 1001, 200, 5, 0); // {S} 2
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+
+    assert_eq!(strength(&state, ally), 3, "the other character is buffed");
+    assert_eq!(
+        strength(&state, quester),
+        2,
+        "the source itself is excluded"
+    );
+}

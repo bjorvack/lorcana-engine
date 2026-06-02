@@ -1892,9 +1892,9 @@ fn execute_effect(
                     });
                 }
             }
-            Target::AllCharacters(filter) => {
+            Target::AllCharacters { filter, another } => {
                 let targets =
-                    chosen_character_options(state, registry, controller, source, filter, false);
+                    chosen_character_options(state, registry, controller, source, filter, *another);
                 for card in targets {
                     apply_effect_to(state, registry, source, card, effect, events);
                 }
@@ -2165,6 +2165,14 @@ fn character_matches_filter(
         .all(|c| card.has_classification(c))
     {
         return false;
+    }
+    if !filter.names.is_empty() {
+        let matches_name = registry
+            .get(card.definition())
+            .is_some_and(|d| filter.names.iter().any(|n| d.has_name(n)));
+        if !matches_name {
+            return false;
+        }
     }
     if let Some(nf) = filter.cost {
         let cost = registry
