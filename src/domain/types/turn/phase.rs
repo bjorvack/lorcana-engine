@@ -21,7 +21,7 @@ impl Phase {
         match self {
             Self::Beginning => vec![Step::Ready, Step::Set, Step::Draw],
             Self::Main => vec![Step::Main],
-            Self::End => vec![Step::End, Step::Cleanup],
+            Self::End => vec![Step::End],
         }
     }
 }

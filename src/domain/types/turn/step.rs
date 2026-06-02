@@ -6,20 +6,18 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum Step {
     // Beginning Phase Steps
-    /// Ready step - ready all cards
+    /// Ready step - "during your turn" effects begin and all your cards ready (§4.2.1)
     Ready,
-    /// Set step - set ink
+    /// Set step - drying characters become dry and you gain lore from locations (§4.2.2)
     Set,
-    /// Draw step - draw a card
+    /// Draw step - draw a card (the starting player skips this on turn 1) (§4.2.3)
     Draw,
 
     // Main Phase Steps
-    /// Main step - main actions
+    /// Main step - main actions (play cards, quest, challenge, etc.)
     Main,
 
-    // End Phase Steps
-    /// End step - end of turn effects
+    // End of Turn Phase Steps
+    /// End step - end-of-turn triggers resolve and "this turn" effects end (§4.4)
     End,
-    /// Cleanup step - cleanup and end turn
-    Cleanup,
 }
