@@ -43,6 +43,19 @@ lefthook install
 
 ## Development Workflow
 
+### Slice workflow: clear deferrals before moving on
+
+When a slice (or sub-slice) is finished, **before starting the next slice**,
+review the deferred items / back-linked `TODO`s it left behind (see the slice's
+entry in `docs/planning/IMPLEMENTATION_PLAN.md` and the `TODO(...)` comments it
+references). For each deferral, check whether it can now be implemented with the
+machinery that already exists — i.e. it does **not** require a not-yet-built
+system (e.g. the Slice 8 effect/choice DSL or the turn-progression-with-
+suspension model). If it can be done now, implement it (test-first, its own
+atomic commit) and tick it off before continuing. Only genuinely blocked items
+stay deferred. This keeps the back-link TODOs honest and prevents doable work
+from silently accumulating.
+
 ### Making Changes
 
 1. Create a new branch for your changes:
