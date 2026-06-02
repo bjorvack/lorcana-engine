@@ -2,8 +2,7 @@
 //! drying), drying → dry across turns, questing for lore, and winning at 20.
 
 use lorcana_engine::{
-    CardDefId, CardDefinition, CardKind, CardRegistry, GameEvent, GameState, GameStatus, Input,
-    apply, start,
+    CardDefId, CardDefinition, CardRegistry, GameEvent, GameState, GameStatus, Input, apply, start,
 };
 
 /// A registry of inkable cost-1 characters with the given lore (and 1/1 stats).
@@ -227,28 +226,4 @@ fn quest_for_a_character_not_in_play_is_rejected() {
         },
     );
     assert!(result.is_err());
-}
-
-#[test]
-fn non_character_cards_cannot_be_played_yet() {
-    let mut state = GameState::new(two_decks(30), 7);
-    // All ids map to Item cards (items/locations aren't playable yet; actions are).
-    let registry: CardRegistry = (0..30)
-        .map(|n| CardDefinition::new(CardDefId::from_raw(n), 1, true, CardKind::Item))
-        .collect();
-    start_to_play(&mut state, &registry);
-
-    let ink = active_hand_card(&state, 0);
-    let subject = active_hand_card(&state, 1);
-    let _ = apply(&mut state, &registry, Input::PutCardInInkwell { card: ink }).expect("ink");
-    let result = apply(
-        &mut state,
-        &registry,
-        Input::PlayCard {
-            card: subject,
-            shift_onto: None,
-        },
-    );
-    assert!(result.is_err());
-    assert_eq!(state.player(state.active_player()).unwrap().play().len(), 0);
 }

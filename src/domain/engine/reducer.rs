@@ -346,9 +346,34 @@ fn place_permanent(
                 LocationStats::new(willpower, lore, move_cost),
             )
         }
-        CardKind::Item => Err(Rejected::CardTypeNotPlayableYet(card)),
+        CardKind::Item => place_item(state, active, card, ink_cost),
         CardKind::Action => unreachable!("actions are handled before placement"),
     }
+}
+
+/// Pay an item's ink cost and put it into play (§6.4): faceup and in play, with no
+/// strength/willpower/drying. Its abilities can be used the turn it's played
+/// (§6.4.3) — `apply_use_ability` works on any in-play card.
+fn place_item(
+    state: &mut GameState,
+    active: PlayerId,
+    card: CardId,
+    ink_cost: u32,
+) -> Result<(), Rejected> {
+    if state
+        .player(active)
+        .expect("active player exists")
+        .ready_ink()
+        < ink_cost
+    {
+        return Err(Rejected::InsufficientInk(card));
+    }
+    let p = state.player_mut(active).expect("active player exists");
+    p.exert_ink(ink_cost);
+    let mut instance = p.hand_mut().take(card).expect("validated present");
+    *instance.conditions_mut() = Conditions::faceup_idle();
+    p.play_mut().push(instance);
+    Ok(())
 }
 
 /// Pay a character's ink cost and put it into play drying (the normal play path).

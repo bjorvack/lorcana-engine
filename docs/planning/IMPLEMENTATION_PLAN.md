@@ -425,10 +425,12 @@ character is banished", plus the §1.9.1.3 "banished by that character" attribut
   (the `Stat` TODO in `src/domain/game/modifier.rs`); location **abilities** and
   move / "while here" **triggers** (the `apply_move` TODO + trigger rollout).
 
-### Slice 7c — Items
-- **Items** (§6.4): in-play permanents whose activated abilities (already modeled,
-  Slice 5a) can be used the turn played. Currently `CardKind::Item` is rejected by
-  `place_permanent` — make it enter play and allow `UseAbility` on it.
+### Slice 7c — Items ✅
+- [x] **Items** (§6.4): `CardKind::Item` is playable — enters play faceup/in play
+      (no strength/willpower/drying) via `place_item`. Its activated abilities work
+      the turn it's played (§6.4.3) since `apply_use_ability` accepts any in-play
+      card. Tested in `tests/items.rs`. (Item static/triggered abilities ride the
+      shared enter-play tail.)
 
 **Acceptance**
 - [x] A song can be sung by exerting an eligible character (Slice 7a).
