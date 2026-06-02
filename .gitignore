@@ -3,3 +3,4 @@ Cargo.lock
 **/*.rs.bk
 .lefthook/
 .DS_Store
+.devin/
