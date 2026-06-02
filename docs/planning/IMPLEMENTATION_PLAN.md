@@ -53,22 +53,40 @@ something to act on.
 
 ---
 
-## Slice 1 — Game setup & turn loop
+## Slice 1 — Game setup & turn loop ✅
 
 **Goal**: start a game and pass turns.
 
-- Starting player selection; draw opening hand of 7; alter-hand/mulligan (§3.1).
-- Turn loop: Beginning(Ready→Set→Draw) → Main → End of Turn (§4); starting player
-  skips the first Draw.
-- Action: put a card into the inkwell (once per turn, requires inkwell symbol, §4.3.3).
-- Action: end turn → pass to next player.
-- Loss on drawing from an empty deck (§3.2); game-state check wiring.
+- [x] `GameStatus` (NotStarted → AwaitingMulligan → Playing → Finished{winners}).
+- [x] `engine::start` — seed-derived starting player, deal opening hand of 7,
+      enter mulligan (§3.1). `GameState::new` stays a raw builder.
+- [x] Mulligan/alter-hand as turn-ordered `Input`s (put-back to bottom, redraw to
+      7, reshuffle, §3.1.6).
+- [x] `Input`/`apply` reducer: rejects illegal inputs without mutating; `GameEvent`
+      output log.
+- [x] Turn loop: auto-run Beginning(Ready→Set→Draw) → Main → End of Turn → next
+      player (§4); the game's first turn skips Draw (§4.2.3.2).
+- [x] Action: put a card into the inkwell — once per turn **and** inkwell-symbol
+      enforced via a minimal `CardDefinition { inkwell }` + `CardRegistry`
+      (§4.3.3, §6.2.8).
+- [x] Action: end turn → pass to next non-eliminated player.
+- [x] Loss on drawing from an empty deck wired through the game-state check
+      (§1.9, §3.2.1.2).
 
 **Acceptance**
-- [ ] A game runs N turns alternating players with correct phase/step transitions.
-- [ ] Inkwell action enforces once-per-turn and the inkwell-symbol requirement.
-- [ ] Emptying the deck and being forced to draw loses the game.
-- [ ] Events emitted for each phase/step/turn transition.
+- [x] A game runs turns alternating players with correct phase/step transitions
+      (`tests/turn_flow.rs`).
+- [x] Inkwell action enforces once-per-turn and the inkwell-symbol requirement.
+- [x] Emptying the deck and being forced to draw loses the game.
+- [x] Events emitted for each phase/step/turn transition.
+- [x] Same seed + same inputs ⇒ identical state and event log.
+
+**Notes**
+- The win/loss check is the seam from the previous commit; the game-state-check
+  driver (`game_state_check`) applies its required actions in turn order, with the
+  win-beats-lose tie-break and last-player-standing.
+- Full mid-resolution decisions (`PendingDecision`) are still deferred to Slice 8;
+  mulligan only needs sequential, turn-ordered inputs.
 
 ---
 
