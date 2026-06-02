@@ -30,8 +30,8 @@ impl CardRegistry {
 
     /// Look up a definition by id.
     #[must_use]
-    pub fn get(&self, id: CardDefId) -> Option<CardDefinition> {
-        self.definitions.get(&id).copied()
+    pub fn get(&self, id: CardDefId) -> Option<&CardDefinition> {
+        self.definitions.get(&id)
     }
 }
 

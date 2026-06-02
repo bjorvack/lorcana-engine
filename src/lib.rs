@@ -15,7 +15,8 @@ pub mod application;
 pub mod shared;
 
 // Re-export commonly used types for convenience
-pub use domain::cards::{CardDefinition, CardKind, CardRegistry};
+pub use domain::cards::{CardDefinition, CardKind, CardRegistry, TriggeredAbility};
+pub use domain::effects::{Effect, TriggerCondition};
 pub use domain::engine::{Input, Rejected, apply, start};
 pub use domain::game::{
     CardInstance, CharacterStats, Conditions, GameEvent, GameState, GameStatus, PlayerState,

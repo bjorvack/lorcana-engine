@@ -2,18 +2,22 @@
 //!
 //! A `CardDefinition` is the static, printed data for a card (reference data),
 //! as opposed to a [`CardInstance`] which is a specific copy in a game. Only the
-//! fields needed by the current slice are modeled; this grows as later slices
-//! need name, abilities, classifications, etc.
+//! fields needed so far are modeled; this grows as later slices need name,
+//! classifications, more ability kinds, etc.
 //!
 //! [`CardInstance`]: crate::domain::game::CardInstance
 
+use super::ability::TriggeredAbility;
 use super::card_kind::CardKind;
 use crate::domain::types::card::CardType;
 use crate::domain::types::ids::CardDefId;
 use serde::{Deserialize, Serialize};
 
 /// The printed data for a card.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+///
+/// Not `Copy`: it owns a `Vec` of abilities. Look it up by reference via
+/// [`CardRegistry::get`](super::registry::CardRegistry::get).
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct CardDefinition {
     id: CardDefId,
     /// Ink cost to play the card (§6.2.7).
@@ -23,10 +27,12 @@ pub struct CardDefinition {
     inkwell: bool,
     /// Type-specific characteristics.
     kind: CardKind,
+    /// The card's triggered abilities (§7.4).
+    abilities: Vec<TriggeredAbility>,
 }
 
 impl CardDefinition {
-    /// Create a card definition.
+    /// Create a card definition with no abilities.
     #[must_use]
     pub const fn new(id: CardDefId, cost: u32, inkwell: bool, kind: CardKind) -> Self {
         Self {
@@ -34,10 +40,11 @@ impl CardDefinition {
             cost,
             inkwell,
             kind,
+            abilities: Vec::new(),
         }
     }
 
-    /// Convenience constructor for a character card.
+    /// Convenience constructor for a character card with no abilities.
     #[must_use]
     pub const fn character(
         id: CardDefId,
@@ -59,33 +66,82 @@ impl CardDefinition {
         )
     }
 
+    /// Replace this definition's abilities (builder style).
+    #[must_use]
+    pub fn with_abilities(mut self, abilities: Vec<TriggeredAbility>) -> Self {
+        self.abilities = abilities;
+        self
+    }
+
     /// The printed-card id.
     #[must_use]
-    pub const fn id(self) -> CardDefId {
+    pub const fn id(&self) -> CardDefId {
         self.id
     }
 
     /// The ink cost to play this card.
     #[must_use]
-    pub const fn cost(self) -> u32 {
+    pub const fn cost(&self) -> u32 {
         self.cost
     }
 
     /// Whether this card has the inkwell symbol.
     #[must_use]
-    pub const fn has_inkwell_symbol(self) -> bool {
+    pub const fn has_inkwell_symbol(&self) -> bool {
         self.inkwell
     }
 
     /// The type-specific characteristics.
     #[must_use]
-    pub const fn kind(self) -> CardKind {
+    pub const fn kind(&self) -> CardKind {
         self.kind
     }
 
     /// The card-type tag.
     #[must_use]
-    pub const fn card_type(self) -> CardType {
+    pub const fn card_type(&self) -> CardType {
         self.kind.card_type()
+    }
+
+    /// This card's triggered abilities.
+    #[must_use]
+    pub fn abilities(&self) -> &[TriggeredAbility] {
+        &self.abilities
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::CardDefinition;
+    use crate::domain::effects::{Effect, TriggerCondition};
+    use crate::domain::types::ids::CardDefId;
+
+    #[test]
+    fn new_card_has_no_abilities() {
+        let def = CardDefinition::character(CardDefId::from_raw(1), 3, true, 2, 2, 1);
+        assert!(def.abilities().is_empty());
+        assert_eq!(def.cost(), 3);
+        assert!(def.has_inkwell_symbol());
+    }
+
+    #[test]
+    fn with_abilities_attaches_triggers() {
+        use crate::domain::cards::TriggeredAbility;
+        let def = CardDefinition::character(CardDefId::from_raw(2), 1, true, 1, 1, 1)
+            .with_abilities(vec![
+                TriggeredAbility::new(TriggerCondition::WhenYouPlayThis, Effect::DrawCards(1)),
+                TriggeredAbility::optional(
+                    TriggerCondition::WhenThisQuests,
+                    Effect::EachOpponentLosesLore(1),
+                ),
+            ]);
+
+        assert_eq!(def.abilities().len(), 2);
+        assert_eq!(
+            def.abilities()[0].condition,
+            TriggerCondition::WhenYouPlayThis
+        );
+        assert!(!def.abilities()[0].optional);
+        assert!(def.abilities()[1].optional);
     }
 }
