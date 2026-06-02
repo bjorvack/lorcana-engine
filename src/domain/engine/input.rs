@@ -21,6 +21,16 @@ pub enum Input {
         /// The hand card to ink.
         card: CardId,
     },
+    /// Play a card from the active player's hand, paying its ink cost (§4.3.4).
+    PlayCard {
+        /// The hand card to play.
+        card: CardId,
+    },
+    /// Send one of the active player's characters on a quest (§4.3.5).
+    Quest {
+        /// The character to quest with.
+        character: CardId,
+    },
     /// End the active player's turn (§4.4).
     EndTurn,
 }
@@ -59,4 +69,23 @@ pub enum Rejected {
     /// The once-per-turn inkwell action has already been used (§4.3.3).
     #[error("a card has already been put into the inkwell this turn")]
     AlreadyInkedThisTurn,
+    /// There is not enough ready ink to pay the card's cost (§4.3.4.6).
+    #[error("not enough ready ink to play card {0:?}")]
+    InsufficientInk(CardId),
+    /// This card type cannot be played yet (only characters are supported so
+    /// far; items, locations, and actions arrive in later slices).
+    #[error("card {0:?} is of a type that cannot be played yet")]
+    CardTypeNotPlayableYet(CardId),
+    /// The named character is not in the active player's play area.
+    #[error("character {0:?} is not in play")]
+    CharacterNotInPlay(CardId),
+    /// The named card in play is not a character and so cannot quest (§6.1.3).
+    #[error("card {0:?} is not a character")]
+    NotACharacter(CardId),
+    /// The character is still drying and cannot quest this turn (§4.3.5.5).
+    #[error("character {0:?} is still drying and cannot quest")]
+    CharacterStillDrying(CardId),
+    /// The character is exerted and so cannot be declared as questing (§4.3.5).
+    #[error("character {0:?} is exerted and cannot quest")]
+    CharacterExerted(CardId),
 }

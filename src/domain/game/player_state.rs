@@ -59,6 +59,30 @@ impl PlayerState {
         self.lore += amount;
     }
 
+    /// The number of ready ink cards available to pay costs (§8.5, §4.3.4.6).
+    #[must_use]
+    pub fn ready_ink(&self) -> u32 {
+        let count = self.inkwell.iter().filter(|c| c.conditions().ready).count();
+        u32::try_from(count).unwrap_or(u32::MAX)
+    }
+
+    /// Exert `amount` ready ink cards to pay a cost (§4.3.4.6). Ink is fungible
+    /// (§8.5.1), so the specific cards chosen don't matter; the first ready ones
+    /// are used. The caller must have verified enough ready ink via
+    /// [`ready_ink`](Self::ready_ink).
+    pub fn exert_ink(&mut self, amount: u32) {
+        let mut remaining = amount;
+        for card in self.inkwell.iter_mut() {
+            if remaining == 0 {
+                break;
+            }
+            if card.conditions().ready {
+                card.conditions_mut().ready = false;
+                remaining -= 1;
+            }
+        }
+    }
+
     /// `true` if this player has lost or left the game.
     #[must_use]
     pub const fn is_eliminated(&self) -> bool {

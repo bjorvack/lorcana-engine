@@ -6,10 +6,10 @@ use lorcana_engine::{
     PlayerId, Step, apply, start,
 };
 
-/// A registry where every card id used in tests has the inkwell symbol.
+/// A registry where every card id used in tests is an inkable cost-1 character.
 fn inkable_registry(max_def: u32) -> CardRegistry {
     (0..max_def)
-        .map(|n| CardDefinition::new(CardDefId::from_raw(n), true))
+        .map(|n| CardDefinition::character(CardDefId::from_raw(n), 1, true, 1, 1, 1))
         .collect()
 }
 
@@ -265,7 +265,7 @@ fn inkwell_rejects_card_without_symbol() {
     let mut state = GameState::new(two_decks(30), 7);
     // Registry where nothing is inkable.
     let registry: CardRegistry = (0..30)
-        .map(|n| CardDefinition::new(CardDefId::from_raw(n), false))
+        .map(|n| CardDefinition::character(CardDefId::from_raw(n), 1, false, 1, 1, 1))
         .collect();
     let _ = start_and_skip_mulligans(&mut state, &registry);
 

@@ -51,6 +51,27 @@ pub enum GameEvent {
         /// The card moved to the inkwell.
         card: CardId,
     },
+    /// A player played a card into their play area (§4.3.4).
+    CardPlayed {
+        /// The player who played the card.
+        player: PlayerId,
+        /// The card now in play.
+        card: CardId,
+    },
+    /// A character was sent on a quest (§4.3.5).
+    Quested {
+        /// The questing player.
+        player: PlayerId,
+        /// The questing character.
+        character: CardId,
+    },
+    /// A player gained lore.
+    LoreGained {
+        /// The player who gained lore.
+        player: PlayerId,
+        /// How much lore was gained.
+        amount: u32,
+    },
     /// A player ended their turn (§4.4).
     TurnEnded {
         /// The player whose turn ended.

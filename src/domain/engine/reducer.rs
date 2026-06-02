@@ -1,10 +1,10 @@
 //! The reducer: `start` sets a game up, `apply` advances it by one input.
 
 use super::input::{Input, Rejected};
-use crate::domain::cards::CardRegistry;
+use crate::domain::cards::{CardKind, CardRegistry};
 use crate::domain::game::{Conditions, GameEvent, GameState, GameStatus};
 use crate::domain::rules::game_state_check;
-use crate::domain::types::ids::PlayerId;
+use crate::domain::types::ids::{CardId, PlayerId};
 use crate::domain::types::turn::{Phase, Step};
 
 /// The opening hand size (§3.1.5).
@@ -60,6 +60,8 @@ pub fn apply(
     match input {
         Input::Mulligan { player, put_back } => apply_mulligan(state, player, &put_back),
         Input::PutCardInInkwell { card } => apply_put_in_inkwell(state, registry, card),
+        Input::PlayCard { card } => apply_play_card(state, registry, card),
+        Input::Quest { character } => apply_quest(state, registry, character),
         Input::EndTurn => apply_end_turn(state),
     }
 }
@@ -67,7 +69,7 @@ pub fn apply(
 fn apply_mulligan(
     state: &mut GameState,
     player: PlayerId,
-    put_back: &[crate::domain::types::ids::CardId],
+    put_back: &[CardId],
 ) -> Result<Vec<GameEvent>, Rejected> {
     // --- validate (no mutation yet) ---
     let GameStatus::AwaitingMulligan(expected) = *state.status() else {
@@ -127,7 +129,7 @@ fn advance_after_mulligan(state: &mut GameState, just_resolved: PlayerId) -> Vec
 fn apply_put_in_inkwell(
     state: &mut GameState,
     registry: &CardRegistry,
-    card: crate::domain::types::ids::CardId,
+    card: CardId,
 ) -> Result<Vec<GameEvent>, Rejected> {
     // --- validate (no mutation yet) ---
     if !matches!(state.status(), GameStatus::Playing) {
@@ -137,14 +139,7 @@ fn apply_put_in_inkwell(
         return Err(Rejected::NotMainPhase);
     }
     let active = state.active_player();
-    let definition_id = state
-        .player(active)
-        .expect("active player exists")
-        .hand()
-        .iter()
-        .find(|c| c.id() == card)
-        .map(|c| c.definition())
-        .ok_or(Rejected::CardNotInHand(card))?;
+    let definition_id = hand_card_definition(state, active, card)?;
     let definition = registry
         .get(definition_id)
         .ok_or(Rejected::UnknownCard(card))?;
@@ -170,6 +165,127 @@ fn apply_put_in_inkwell(
     }];
     events.extend(game_state_check(state));
     Ok(events)
+}
+
+fn apply_play_card(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    card: CardId,
+) -> Result<Vec<GameEvent>, Rejected> {
+    // --- validate (no mutation yet) ---
+    if !matches!(state.status(), GameStatus::Playing) {
+        return Err(Rejected::NotPlaying);
+    }
+    if state.phase() != Phase::Main {
+        return Err(Rejected::NotMainPhase);
+    }
+    let active = state.active_player();
+    let definition_id = hand_card_definition(state, active, card)?;
+    let definition = registry
+        .get(definition_id)
+        .ok_or(Rejected::UnknownCard(card))?;
+    // Only characters can be played so far (items/locations/actions: later slices).
+    if !matches!(definition.kind(), CardKind::Character { .. }) {
+        return Err(Rejected::CardTypeNotPlayableYet(card));
+    }
+    if state
+        .player(active)
+        .expect("active player exists")
+        .ready_ink()
+        < definition.cost()
+    {
+        return Err(Rejected::InsufficientInk(card));
+    }
+
+    // --- mutate ---
+    {
+        let p = state.player_mut(active).expect("active player exists");
+        p.exert_ink(definition.cost());
+        let mut instance = p.hand_mut().take(card).expect("validated present");
+        *instance.conditions_mut() = Conditions::entering_play();
+        p.play_mut().push(instance);
+    }
+
+    let mut events = vec![GameEvent::CardPlayed {
+        player: active,
+        card,
+    }];
+    events.extend(game_state_check(state));
+    Ok(events)
+}
+
+fn apply_quest(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    character: CardId,
+) -> Result<Vec<GameEvent>, Rejected> {
+    // --- validate (no mutation yet) ---
+    if !matches!(state.status(), GameStatus::Playing) {
+        return Err(Rejected::NotPlaying);
+    }
+    if state.phase() != Phase::Main {
+        return Err(Rejected::NotMainPhase);
+    }
+    let active = state.active_player();
+    let instance = state
+        .player(active)
+        .expect("active player exists")
+        .play()
+        .iter()
+        .find(|c| c.id() == character)
+        .copied()
+        .ok_or(Rejected::CharacterNotInPlay(character))?;
+    let CardKind::Character { lore, .. } = registry
+        .get(instance.definition())
+        .ok_or(Rejected::UnknownCard(character))?
+        .kind()
+    else {
+        return Err(Rejected::NotACharacter(character));
+    };
+    if instance.conditions().drying {
+        return Err(Rejected::CharacterStillDrying(character));
+    }
+    if !instance.conditions().ready {
+        return Err(Rejected::CharacterExerted(character));
+    }
+
+    // --- mutate ---
+    {
+        let p = state.player_mut(active).expect("active player exists");
+        if let Some(c) = p.play_mut().iter_mut().find(|c| c.id() == character) {
+            c.conditions_mut().ready = false;
+        }
+        p.add_lore(lore);
+    }
+
+    let mut events = vec![
+        GameEvent::Quested {
+            player: active,
+            character,
+        },
+        GameEvent::LoreGained {
+            player: active,
+            amount: lore,
+        },
+    ];
+    events.extend(game_state_check(state));
+    Ok(events)
+}
+
+/// Find the definition id of a card in the active player's hand, or reject.
+fn hand_card_definition(
+    state: &GameState,
+    player: PlayerId,
+    card: CardId,
+) -> Result<crate::domain::types::ids::CardDefId, Rejected> {
+    state
+        .player(player)
+        .expect("active player exists")
+        .hand()
+        .iter()
+        .find(|c| c.id() == card)
+        .map(|c| c.definition())
+        .ok_or(Rejected::CardNotInHand(card))
 }
 
 fn apply_end_turn(state: &mut GameState) -> Result<Vec<GameEvent>, Rejected> {
