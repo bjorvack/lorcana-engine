@@ -61,6 +61,10 @@ pub enum Effect {
     },
     /// Banish the target directly (not via damage) — "banish chosen character".
     Banish(Target),
+    /// Exert the target ("exert chosen opposing character").
+    Exert(Target),
+    /// Ready the target ("ready this character" / "ready chosen character").
+    Ready(Target),
     /// Resolve `then` only if the controller has at least one in-play character
     /// matching `filter` ("if you have a character named X in play, …", §7.1).
     IfControl {

@@ -608,3 +608,73 @@ fn a_conditional_effect_is_skipped_when_the_condition_fails() {
         "condition failed -> no bonus"
     );
 }
+
+fn is_ready(state: &GameState, owner: PlayerId, card: CardId) -> bool {
+    state
+        .player(owner)
+        .unwrap()
+        .play()
+        .iter()
+        .find(|c| c.id() == card)
+        .unwrap()
+        .conditions()
+        .ready
+}
+
+#[test]
+fn exert_effect_exerts_a_chosen_character() {
+    let mut reg = CardRegistry::new();
+    reg.insert(
+        CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 5, 1).with_abilities(vec![
+            TriggeredAbility::new(
+                TriggerCondition::WhenThisQuests,
+                Effect::Exert(Target::ChosenCharacter {
+                    filter: CharacterFilter::any(TargetSide::Opposing),
+                    another: false,
+                }),
+            ),
+        ]),
+    );
+    let mut state = started(&reg);
+    let active = state.active_player();
+    let foe = opponent_of(&state, active);
+    let quester = place(&mut state, active, 1000, 100, 5, 0);
+    let victim = place(&mut state, foe, 2000, 200, 5, 0); // ready
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(Decision::ChooseTarget(victim)),
+    )
+    .expect("choose");
+
+    assert!(
+        !is_ready(&state, foe, victim),
+        "the chosen character was exerted"
+    );
+}
+
+#[test]
+fn ready_effect_readies_the_source() {
+    let mut reg = CardRegistry::new();
+    // "Whenever this quests, ready this character." (quest exerts it, then re-ready)
+    reg.insert(
+        CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 5, 1).with_abilities(vec![
+            TriggeredAbility::new(
+                TriggerCondition::WhenThisQuests,
+                Effect::Ready(Target::SelfCard),
+            ),
+        ]),
+    );
+    let mut state = started(&reg);
+    let active = state.active_player();
+    let quester = place(&mut state, active, 1000, 100, 5, 0);
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+
+    assert!(
+        is_ready(&state, active, quester),
+        "questing exerted it, then it readied itself"
+    );
+}

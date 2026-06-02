@@ -1948,7 +1948,9 @@ fn execute_effect(
         | Effect::GiveStrengthThisTurn { target, .. }
         | Effect::DealDamage { target, .. }
         | Effect::RemoveDamage { target, .. }
-        | Effect::Banish(target) => match target {
+        | Effect::Banish(target)
+        | Effect::Exert(target)
+        | Effect::Ready(target) => match target {
             Target::SelfCard => apply_effect_to(state, registry, source, source, effect, events),
             Target::ChosenCharacter { filter, another } => {
                 let options =
@@ -2137,6 +2139,16 @@ fn apply_effect_to(
         }
         Effect::Banish(_) => {
             banish_by_effect(state, registry, target_card, events);
+        }
+        Effect::Exert(_) | Effect::Ready(_) => {
+            let ready = matches!(effect, Effect::Ready(_));
+            if let Some(owner) = owner_holding(state, target_card)
+                && let Some(c) = state
+                    .player_mut(owner)
+                    .and_then(|p| p.play_mut().iter_mut().find(|c| c.id() == target_card))
+            {
+                c.conditions_mut().ready = ready;
+            }
         }
         // Never reach here: these are resolved in `execute_effect`, not applied to
         // a concrete target.

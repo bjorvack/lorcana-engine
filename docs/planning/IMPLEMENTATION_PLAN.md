@@ -524,6 +524,10 @@ Challenge/banish triggers into the bag (see
     character matching `filter` ("if you have a character named X in play, …").
     `then` may itself be targeted (delegates through `execute_effect`). Tested in
     `tests/targeted_effects.rs`.
+  - [x] **8b-11 — exert / ready effects:** `Effect::Exert(Target)` /
+    `Ready(Target)` ("exert chosen opposing character" — 49; "ready this/chosen" —
+    67) toggle the target's `ready` condition, composing with all target shapes.
+    Tested in `tests/targeted_effects.rs`.
   - **8b+ —** the card survey shows true §7.7 **replacement** effects are rare
     (~16, mostly "takes no damage"); higher-value remaining: **conditional on the
     chosen target** ("if a Villain is chosen, +3 instead"), **effect-driven "can't
