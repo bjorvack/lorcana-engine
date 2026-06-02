@@ -13,3 +13,10 @@ pub mod application;
 
 // Shared utilities
 pub mod shared;
+
+// Re-export commonly used types for convenience
+pub use domain::types::{
+    card::{CardType, InkType, Rarity, SetInfo},
+    ids::{CardId, GameId, PlayerId, ZoneId},
+    turn::{Phase, Step},
+};
