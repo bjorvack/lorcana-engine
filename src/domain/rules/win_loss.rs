@@ -85,6 +85,9 @@ mod tests {
     // layer plus effect modifications, with prevention beating permission
     // (§1.2.2) and a card superseding a game rule (§1.2.1).
     //
+    // Tracked by Slice 5 in docs/planning/IMPLEMENTATION_PLAN.md ("Win/loss
+    // modification layer"), which converts these bullets into real tests.
+    //
     // Override (tune an existing condition's parameters):
     //   - "Opponents need 25 lore to win" (Donald Duck – Flustered Sorcerer):
     //     opponent at 24 does not win, at 25 wins; the controller's own

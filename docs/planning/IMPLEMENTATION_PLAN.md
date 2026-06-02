@@ -153,6 +153,13 @@ something to act on.
 - `Ability::Static`: continuous stat/permission modifiers while in play (§7.6).
 - Modifier combination (§7.8); negative `{S}`/`{L}` clamp to 0 while retaining true
   value.
+- **Win/loss modification layer**: wire static abilities into the win/loss seam
+  from Slice 1 so effects can **add / remove-suppress / override** conditions
+  (Golden Rules §1.2.1/§1.2.2). This realizes the edge cases enumerated in the
+  `TODO(modification layer / Slice 5+)` block in
+  [`src/domain/rules/win_loss.rs`](../../src/domain/rules/win_loss.rs) — e.g.
+  Donald Duck – Flustered Sorcerer ("Opponents need 25 lore to win") overriding
+  `lore_to_win`. Convert those TODO bullets into real tests here.
 
 **Acceptance**
 - [ ] An activated ability pays its cost and applies its effect; illegal if cost
@@ -160,6 +167,8 @@ something to act on.
 - [ ] A static `+N {S}` applies to existing and newly-played matching characters and
       ends when its source leaves play.
 - [ ] Stacking positive/negative modifiers clamps for use but not for further math.
+- [ ] A static ability can override the win threshold (Donald Duck: opponents need
+      25 lore), and the `win_loss.rs` modification-layer TODO cases are now tested.
 
 ---
 
