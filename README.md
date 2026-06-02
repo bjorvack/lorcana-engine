@@ -4,7 +4,13 @@ A game engine for the Lorcana trading card game.
 
 ## Development
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and guidelines.
+See [docs/development/CONTRIBUTING.md](docs/development/CONTRIBUTING.md) for development setup and guidelines.
+
+## Documentation
+
+- [Architecture](docs/architecture/ARCHITECTURE.md) - Engine architecture and design principles
+- [Implementation Plan](docs/planning/IMPLEMENTATION_PLAN.md) - Detailed implementation roadmap
+- [Contributing Guide](docs/development/CONTRIBUTING.md) - Development guidelines and best practices
 
 ## License
 
