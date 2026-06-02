@@ -18,8 +18,8 @@ pub mod shared;
 pub use domain::cards::{CardDefinition, CardKind, CardRegistry};
 pub use domain::engine::{Input, Rejected, apply, start};
 pub use domain::game::{
-    CardInstance, Conditions, GameEvent, GameState, GameStatus, PlayerState, SeededRng, Zone,
-    ZoneKind,
+    CardInstance, CharacterStats, Conditions, GameEvent, GameState, GameStatus, PlayerState,
+    SeededRng, Zone, ZoneKind,
 };
 pub use domain::rules::{RequiredAction, check_win_loss, game_state_check, lore_to_win};
 pub use domain::types::{

@@ -31,6 +31,14 @@ pub enum Input {
         /// The character to quest with.
         character: CardId,
     },
+    /// Challenge an exerted opposing character with one of the active player's
+    /// characters (§4.3.6).
+    Challenge {
+        /// The active player's challenging character.
+        challenger: CardId,
+        /// The opposing character being challenged.
+        target: CardId,
+    },
     /// End the active player's turn (§4.4).
     EndTurn,
 }
@@ -85,7 +93,18 @@ pub enum Rejected {
     /// The character is still drying and cannot quest this turn (§4.3.5.5).
     #[error("character {0:?} is still drying and cannot quest")]
     CharacterStillDrying(CardId),
-    /// The character is exerted and so cannot be declared as questing (§4.3.5).
-    #[error("character {0:?} is exerted and cannot quest")]
+    /// The character is exerted and so cannot be declared as questing or
+    /// challenging (§4.3.5, §4.3.6.6).
+    #[error("character {0:?} is exerted")]
     CharacterExerted(CardId),
+    /// The challenge target is not an opposing card in play.
+    #[error("challenge target {0:?} is not an opposing card in play")]
+    TargetNotInPlay(CardId),
+    /// The challenge target is not a character.
+    #[error("challenge target {0:?} is not a character")]
+    TargetNotACharacter(CardId),
+    /// The challenge target is ready; only exerted characters can be challenged
+    /// (§4.3.6.7).
+    #[error("challenge target {0:?} is not exerted")]
+    TargetNotExerted(CardId),
 }

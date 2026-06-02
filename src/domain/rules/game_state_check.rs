@@ -2,50 +2,46 @@
 
 use super::{RequiredAction, check_win_loss};
 use crate::domain::game::{GameEvent, GameState, GameStatus, PlayerState};
-use crate::domain::types::ids::PlayerId;
+use crate::domain::types::ids::{CardId, PlayerId};
 
-/// Run the game-state check to completion (§1.9.2): repeatedly evaluate win/loss
+/// Run the game-state check to completion (§1.9.2): repeatedly evaluate the
 /// conditions and apply the resulting required actions until none remain.
 ///
-/// Win/loss is resolved before any other required action (§1.9.2); other
-/// required actions (e.g. banishment) are added in later slices. Losers are
-/// eliminated (emitting [`GameEvent::PlayerLost`]); when a win is detected the
-/// game finishes (emitting [`GameEvent::GameEnded`]). The empty-deck-draw flag is
-/// "since the last game state check" (§1.9.1.2), so it is cleared once the check
-/// completes. Returns the events produced.
+/// Win/loss is resolved **before** any other required action each pass (§1.9.2):
+/// losers are eliminated (emitting [`GameEvent::PlayerLost`]) and a win finishes
+/// the game (emitting [`GameEvent::GameEnded`]). Only when no win/loss applies are
+/// other required actions taken — currently banishment of characters whose damage
+/// has reached their willpower (§1.9.1.3), moving them to discard and clearing
+/// their counters (§9.4, §8.6.2). The empty-deck-draw flag is "since the last game
+/// state check" (§1.9.1.2), so it is cleared once the check completes.
+///
+/// TODO(triggers/replacement): banishment is a hook point — "when this character
+/// is banished" / "whenever this character banishes another in a challenge"
+/// triggers go to the bag (Slice 4), and banishment can be replaced/prevented
+/// (Slice 8). §1.9.1.3's "banished by that character" attribution is needed for
+/// those triggers and isn't tracked yet.
 pub fn game_state_check(state: &mut GameState) -> Vec<GameEvent> {
     let mut events = Vec::new();
 
-    while !state.is_finished() {
-        let actions = check_win_loss(state);
-        if actions.is_empty() {
+    loop {
+        if state.is_finished() {
             break;
         }
 
-        let mut winners: Vec<PlayerId> = Vec::new();
-        for action in actions {
-            match action {
-                RequiredAction::PlayerWins(player) => {
-                    if !winners.contains(&player) {
-                        winners.push(player);
-                    }
-                }
-                RequiredAction::PlayerLoses(player) => {
-                    if let Some(p) = state.player_mut(player)
-                        && !p.is_eliminated()
-                    {
-                        p.eliminate();
-                        events.push(GameEvent::PlayerLost { player });
-                    }
-                }
-            }
+        // Win/loss first (§1.9.2).
+        let win_loss = check_win_loss(state);
+        if !win_loss.is_empty() {
+            apply_win_loss(state, &win_loss, &mut events);
+            continue;
         }
 
-        if !winners.is_empty() {
-            state.set_status(GameStatus::Finished {
-                winners: winners.clone(),
-            });
-            events.push(GameEvent::GameEnded { winners });
+        // Then other required actions: banishment.
+        let banishable = banishable_cards(state);
+        if banishable.is_empty() {
+            break;
+        }
+        for (player, card) in banishable {
+            banish(state, player, card, &mut events);
         }
     }
 
@@ -67,4 +63,63 @@ pub fn game_state_check(state: &mut GameState) -> Vec<GameEvent> {
     }
 
     events
+}
+
+/// Apply the win/loss required actions from a single check pass.
+fn apply_win_loss(state: &mut GameState, actions: &[RequiredAction], events: &mut Vec<GameEvent>) {
+    let mut winners: Vec<PlayerId> = Vec::new();
+    for action in actions {
+        match action {
+            RequiredAction::PlayerWins(player) => {
+                if !winners.contains(player) {
+                    winners.push(*player);
+                }
+            }
+            RequiredAction::PlayerLoses(player) => {
+                if let Some(p) = state.player_mut(*player)
+                    && !p.is_eliminated()
+                {
+                    p.eliminate();
+                    events.push(GameEvent::PlayerLost { player: *player });
+                }
+            }
+            // check_win_loss only produces win/loss actions.
+            RequiredAction::Banish { .. } => {}
+        }
+    }
+
+    if !winners.is_empty() {
+        state.set_status(GameStatus::Finished {
+            winners: winners.clone(),
+        });
+        events.push(GameEvent::GameEnded { winners });
+    }
+}
+
+/// Collect the in-play characters whose damage has reached their willpower.
+fn banishable_cards(state: &GameState) -> Vec<(PlayerId, CardId)> {
+    let mut out = Vec::new();
+    for player in state.players() {
+        for card in player.play().iter() {
+            if let Some(stats) = card.stats()
+                && card.conditions().damage >= stats.willpower
+            {
+                out.push((player.id(), card.id()));
+            }
+        }
+    }
+    out
+}
+
+/// Banish a card: move it from play to its owner's discard, clearing its damage
+/// counters (§9.4) and in-play stats.
+fn banish(state: &mut GameState, player: PlayerId, card: CardId, events: &mut Vec<GameEvent>) {
+    if let Some(p) = state.player_mut(player)
+        && let Some(mut instance) = p.play_mut().take(card)
+    {
+        instance.conditions_mut().damage = 0;
+        instance.set_stats(None);
+        p.discard_mut().push(instance);
+        events.push(GameEvent::Banished { player, card });
+    }
 }

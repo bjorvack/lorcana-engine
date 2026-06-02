@@ -160,4 +160,9 @@ impl PlayerState {
     pub const fn discard(&self) -> &Zone {
         &self.discard
     }
+
+    /// Mutable access to this player's discard.
+    pub const fn discard_mut(&mut self) -> &mut Zone {
+        &mut self.discard
+    }
 }

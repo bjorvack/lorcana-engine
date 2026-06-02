@@ -72,6 +72,22 @@ pub enum GameEvent {
         /// How much lore was gained.
         amount: u32,
     },
+    /// A character challenged an opposing character (§4.3.6).
+    Challenged {
+        /// The challenging player.
+        player: PlayerId,
+        /// The challenging character.
+        challenger: CardId,
+        /// The character being challenged.
+        target: CardId,
+    },
+    /// A card was banished from play to its owner's discard (§1.9.1.3, §8.6.2).
+    Banished {
+        /// The owner of the banished card.
+        player: PlayerId,
+        /// The banished card.
+        card: CardId,
+    },
     /// A player ended their turn (§4.4).
     TurnEnded {
         /// The player whose turn ended.

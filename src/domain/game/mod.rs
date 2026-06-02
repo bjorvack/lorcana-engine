@@ -1,6 +1,7 @@
 //! Game state, turn structure, zones, and events
 
 pub mod card_instance;
+pub mod character_stats;
 pub mod conditions;
 pub mod events;
 pub mod player_state;
@@ -13,6 +14,7 @@ pub mod zone_kind;
 
 // Re-export for convenience
 pub use card_instance::CardInstance;
+pub use character_stats::CharacterStats;
 pub use conditions::Conditions;
 pub use events::GameEvent;
 pub use player_state::PlayerState;

@@ -2,7 +2,7 @@
 
 use super::input::{Input, Rejected};
 use crate::domain::cards::{CardKind, CardRegistry};
-use crate::domain::game::{Conditions, GameEvent, GameState, GameStatus};
+use crate::domain::game::{CharacterStats, Conditions, GameEvent, GameState, GameStatus};
 use crate::domain::rules::game_state_check;
 use crate::domain::types::ids::{CardId, PlayerId};
 use crate::domain::types::turn::{Phase, Step};
@@ -61,7 +61,8 @@ pub fn apply(
         Input::Mulligan { player, put_back } => apply_mulligan(state, player, &put_back),
         Input::PutCardInInkwell { card } => apply_put_in_inkwell(state, registry, card),
         Input::PlayCard { card } => apply_play_card(state, registry, card),
-        Input::Quest { character } => apply_quest(state, registry, character),
+        Input::Quest { character } => apply_quest(state, character),
+        Input::Challenge { challenger, target } => apply_challenge(state, challenger, target),
         Input::EndTurn => apply_end_turn(state),
     }
 }
@@ -185,9 +186,14 @@ fn apply_play_card(
         .get(definition_id)
         .ok_or(Rejected::UnknownCard(card))?;
     // Only characters can be played so far (items/locations/actions: later slices).
-    if !matches!(definition.kind(), CardKind::Character { .. }) {
+    let CardKind::Character {
+        strength,
+        willpower,
+        lore,
+    } = definition.kind()
+    else {
         return Err(Rejected::CardTypeNotPlayableYet(card));
-    }
+    };
     if state
         .player(active)
         .expect("active player exists")
@@ -203,6 +209,7 @@ fn apply_play_card(
         p.exert_ink(definition.cost());
         let mut instance = p.hand_mut().take(card).expect("validated present");
         *instance.conditions_mut() = Conditions::entering_play();
+        instance.set_stats(Some(CharacterStats::new(strength, willpower, lore)));
         p.play_mut().push(instance);
     }
 
@@ -214,11 +221,7 @@ fn apply_play_card(
     Ok(events)
 }
 
-fn apply_quest(
-    state: &mut GameState,
-    registry: &CardRegistry,
-    character: CardId,
-) -> Result<Vec<GameEvent>, Rejected> {
+fn apply_quest(state: &mut GameState, character: CardId) -> Result<Vec<GameEvent>, Rejected> {
     // --- validate (no mutation yet) ---
     if !matches!(state.status(), GameStatus::Playing) {
         return Err(Rejected::NotPlaying);
@@ -227,21 +230,11 @@ fn apply_quest(
         return Err(Rejected::NotMainPhase);
     }
     let active = state.active_player();
-    let instance = state
-        .player(active)
-        .expect("active player exists")
-        .play()
-        .iter()
-        .find(|c| c.id() == character)
-        .copied()
-        .ok_or(Rejected::CharacterNotInPlay(character))?;
-    let CardKind::Character { lore, .. } = registry
-        .get(instance.definition())
-        .ok_or(Rejected::UnknownCard(character))?
-        .kind()
-    else {
-        return Err(Rejected::NotACharacter(character));
-    };
+    let instance = find_in_play(state, active, character)?;
+    let character_stats = instance.stats().ok_or(Rejected::NotACharacter(character))?;
+    // Questing requires a dry, ready character (§4.3.5.5).
+    // TODO(keywords/effects): Reckless prevents questing (Slice 6); effects can
+    // also forbid a specific character from questing (Slice 4/8).
     if instance.conditions().drying {
         return Err(Rejected::CharacterStillDrying(character));
     }
@@ -255,7 +248,7 @@ fn apply_quest(
         if let Some(c) = p.play_mut().iter_mut().find(|c| c.id() == character) {
             c.conditions_mut().ready = false;
         }
-        p.add_lore(lore);
+        p.add_lore(character_stats.lore);
     }
 
     let mut events = vec![
@@ -265,11 +258,136 @@ fn apply_quest(
         },
         GameEvent::LoreGained {
             player: active,
-            amount: lore,
+            amount: character_stats.lore,
         },
     ];
     events.extend(game_state_check(state));
     Ok(events)
+}
+
+/// Resolve a challenge (§4.3.6): the active player's dry, ready character
+/// challenges an exerted opposing character; both deal damage equal to their
+/// Strength simultaneously. The game-state check then banishes any character
+/// whose damage has reached its Willpower (§1.9.1.3).
+///
+/// Slice 3 implements the **vanilla** rules. Challenge legality and resolution
+/// are heavy hook points for card text; the base checks here are written so the
+/// following can be layered in later (Golden Rules §1.2.1/§1.2.2), each linked
+/// to the slice that delivers the machinery:
+///
+/// Challenger eligibility (now: dry + ready + character):
+///   - Rush lets a drying character challenge (§10.9) — Slice 6.
+///   - Effects can forbid a character from challenging, e.g. Cobra Bubbles –
+///     Dedicated Official "...can't challenge..." — Slice 4 (triggers) + Slice 8
+///     (durations).
+///
+/// Target eligibility (now: opposing in-play character + exerted):
+///   - "can challenge ready characters" effects drop the exerted requirement,
+///     e.g. Arthur – King Victorious / Cinderella – Stouthearted (and the §1.2.1
+///     example) — Slice 5/8.
+///   - Evasive: only Evasive may challenge it (§10.6); Alert ignores that
+///     (§10.2); Bodyguard must be chosen if able (§10.3) — Slice 6.
+///
+/// Resolution hooks (absent for vanilla):
+///   - "Whenever this character challenges / is challenged / banishes another in
+///     a challenge" triggers (Scar, Mulan, Captain Hook, Cheshire Cat,
+///     Marshmallow) go to the bag — Slice 4.
+///   - Damage modification (Resist, "takes no damage from the challenge") —
+///     Slice 6 / replacement effects Slice 8.
+fn apply_challenge(
+    state: &mut GameState,
+    challenger: CardId,
+    target: CardId,
+) -> Result<Vec<GameEvent>, Rejected> {
+    // --- validate (no mutation yet) ---
+    if !matches!(state.status(), GameStatus::Playing) {
+        return Err(Rejected::NotPlaying);
+    }
+    if state.phase() != Phase::Main {
+        return Err(Rejected::NotMainPhase);
+    }
+    let active = state.active_player();
+
+    // Challenger: the active player's dry, ready character (§4.3.6.6).
+    let challenger_instance = find_in_play(state, active, challenger)?;
+    let challenger_stats = challenger_instance
+        .stats()
+        .ok_or(Rejected::NotACharacter(challenger))?;
+    if challenger_instance.conditions().drying {
+        return Err(Rejected::CharacterStillDrying(challenger));
+    }
+    if !challenger_instance.conditions().ready {
+        return Err(Rejected::CharacterExerted(challenger));
+    }
+
+    // Target: an exerted character belonging to another player (§4.3.6.7).
+    let target_owner =
+        opposing_owner_of(state, active, target).ok_or(Rejected::TargetNotInPlay(target))?;
+    let target_instance = find_in_play(state, target_owner, target)?;
+    let target_stats = target_instance
+        .stats()
+        .ok_or(Rejected::TargetNotACharacter(target))?;
+    if target_instance.conditions().ready {
+        return Err(Rejected::TargetNotExerted(target));
+    }
+
+    // --- mutate ---
+    // Exert the challenger (§4.3.6.9), then both deal damage simultaneously
+    // (§4.3.6.13). Negative Strength counts as 0 (§4.3.6.14); stats are u32.
+    if let Some(c) = state
+        .player_mut(active)
+        .expect("active player exists")
+        .play_mut()
+        .iter_mut()
+        .find(|c| c.id() == challenger)
+    {
+        c.conditions_mut().ready = false;
+    }
+    add_damage(state, active, challenger, target_stats.strength);
+    add_damage(state, target_owner, target, challenger_stats.strength);
+
+    let mut events = vec![GameEvent::Challenged {
+        player: active,
+        challenger,
+        target,
+    }];
+    events.extend(game_state_check(state));
+    Ok(events)
+}
+
+/// Add damage counters to an in-play card (§4.3.6.16).
+fn add_damage(state: &mut GameState, owner: PlayerId, card: CardId, amount: u32) {
+    if let Some(c) = state
+        .player_mut(owner)
+        .expect("owner exists")
+        .play_mut()
+        .iter_mut()
+        .find(|c| c.id() == card)
+    {
+        c.conditions_mut().damage += amount;
+    }
+}
+
+/// Find an instance in a specific player's play area, or reject.
+fn find_in_play(
+    state: &GameState,
+    owner: PlayerId,
+    card: CardId,
+) -> Result<crate::domain::game::CardInstance, Rejected> {
+    state
+        .player(owner)
+        .and_then(|p| p.play().iter().find(|c| c.id() == card).copied())
+        .ok_or(Rejected::CharacterNotInPlay(card))
+}
+
+/// The non-active player whose play area contains `card`, if any.
+fn opposing_owner_of(state: &GameState, active: PlayerId, card: CardId) -> Option<PlayerId> {
+    state
+        .players()
+        .iter()
+        .filter(|p| p.id() != active)
+        .find(|p| p.play().contains(card))
+        .map(super::super::game::PlayerState::id)
 }
 
 /// Find the definition id of a card in the active player's hand, or reject.
