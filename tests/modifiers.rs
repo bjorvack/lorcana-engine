@@ -3,9 +3,9 @@
 //! while retaining the true total (§7.8).
 
 use lorcana_engine::{
-    CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterStats, Conditions,
-    GameState, GameStatus, Input, ModifierDuration, ModifierTarget, PlayerId, Stat, StatModifier,
-    StaticAbility, apply, start,
+    CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterStats, Classification,
+    Conditions, GameState, GameStatus, Input, ModifierDuration, ModifierTarget, PlayerId, Stat,
+    StatModifier, StaticAbility, apply, start,
 };
 
 fn started_with(registry: &CardRegistry) -> GameState {
@@ -118,7 +118,7 @@ fn self_static_modifier_applies_when_played() {
         .unwrap()
         .hand()
         .iter()
-        .map(|c| c.id())
+        .map(CardInstance::id)
         .collect();
     let _ = apply(
         &mut state,
@@ -130,4 +130,105 @@ fn self_static_modifier_applies_when_played() {
 
     // Base 2 + static 2 = current 4 the moment it enters play (§7.6.2).
     assert_eq!(state.current_character_stats(hand[1]).unwrap().strength, 4);
+}
+
+/// Place an in-play character with the given strength and classifications.
+fn place_classed(
+    state: &mut GameState,
+    owner: PlayerId,
+    raw: u32,
+    strength: u32,
+    classes: &[&str],
+) -> CardId {
+    let id = CardId::from_raw(raw);
+    let mut instance = CardInstance::new(
+        id,
+        CardDefId::from_raw(raw),
+        Conditions {
+            ready: true,
+            damage: 0,
+            drying: false,
+            facedown: false,
+        },
+    );
+    instance.set_stats(Some(CharacterStats::new(strength, 3, 1)));
+    instance.set_classifications(classes.iter().map(|c| Classification::new(*c)).collect());
+    state.player_mut(owner).unwrap().play_mut().push(instance);
+    id
+}
+
+#[test]
+fn selector_static_buffs_only_matching_owned_characters() {
+    let mut state = started();
+    let active = state.active_player();
+    let foe = state
+        .players()
+        .iter()
+        .map(lorcana_engine::PlayerState::id)
+        .find(|p| *p != active)
+        .unwrap();
+
+    let villain = place_classed(&mut state, active, 200, 2, &["Villain"]);
+    let hero = place_classed(&mut state, active, 201, 2, &["Hero"]);
+    let foe_villain = place_classed(&mut state, foe, 300, 2, &["Villain"]);
+
+    // "Your Villain characters get +2 {S}."
+    state.add_modifier(StatModifier::new(
+        CardId::from_raw(999),
+        ModifierTarget::OwnedCharacters {
+            owner: active,
+            classifications: vec![Classification::new("Villain")],
+            except: None,
+        },
+        Stat::Strength,
+        2,
+        ModifierDuration::WhileSourceInPlay,
+    ));
+
+    assert_eq!(state.current_character_stats(villain).unwrap().strength, 4);
+    assert_eq!(
+        state.current_character_stats(hero).unwrap().strength,
+        2,
+        "wrong classification"
+    );
+    assert_eq!(
+        state.current_character_stats(foe_villain).unwrap().strength,
+        2,
+        "opponent's characters are not 'your' characters"
+    );
+
+    // A Villain that enters later is also affected (§7.6.2, dynamic set).
+    let late = place_classed(&mut state, active, 202, 2, &["Villain"]);
+    assert_eq!(state.current_character_stats(late).unwrap().strength, 4);
+}
+
+#[test]
+fn selector_static_can_exclude_the_source() {
+    // Two characters, each with "your OTHER characters get +1 {S}", buff each
+    // other but not themselves, played through the normal flow (cost 0).
+    let registry: CardRegistry = (0..30)
+        .map(|n| {
+            CardDefinition::character(CardDefId::from_raw(n), 0, true, 2, 3, 1).with_static(vec![
+                StaticAbility::owned_characters(Vec::new(), false, Stat::Strength, 1),
+            ])
+        })
+        .collect();
+    let mut state = started_with(&registry);
+    let active = state.active_player();
+    let hand: Vec<CardId> = state
+        .player(active)
+        .unwrap()
+        .hand()
+        .iter()
+        .map(CardInstance::id)
+        .collect();
+
+    let _ = apply(&mut state, &registry, Input::PlayCard { card: hand[0] }).expect("play 1");
+    // Only itself in play and it excludes itself → no buff yet.
+    assert_eq!(state.current_character_stats(hand[0]).unwrap().strength, 2);
+
+    let _ = apply(&mut state, &registry, Input::PlayCard { card: hand[1] }).expect("play 2");
+    // Each buffs the other (not itself): both at base 2 + 1 = 3.
+    assert_eq!(state.current_character_stats(hand[0]).unwrap().strength, 3);
+    assert_eq!(state.current_character_stats(hand[1]).unwrap().strength, 3);
 }

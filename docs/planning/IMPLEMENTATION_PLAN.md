@@ -258,12 +258,17 @@ selectors over 42 classifications.
       enter (and thus in challenge damage, which reads current stats);
       `tests/modifiers.rs`.
 
-### Slice 5e — Selector static modifiers (needs 5b)
-- Selectors: your / your-other / a / opposing characters with a classification
-  filter ("your Villain characters get +1 {S}"). Apply to the dynamic matching
-  set incl. characters that enter later (§7.6.2).
-- [ ] Acceptance: §7.8 Example A (Grand Duke) reproduces; ±combine retains true
-      value (§7.8 Example B, Heihei).
+### Slice 5e — Selector static modifiers (needs 5b) ✅
+- Classifications denormalized onto `CardInstance` (so matching is state-only);
+  `ModifierTarget::OwnedCharacters { owner, classifications (any-of), except }`
+  and `StaticAbility::owned_characters(...)`. `GameState::target_matches` resolves
+  selectors against in-play owner + classifications, evaluated on demand so the
+  set is dynamic (later-entering cards are affected, §7.6.2).
+- [x] Acceptance: "your Villain characters get +N" buffs only matching owned
+      characters incl. later-entering ones; `except` gives "your other
+      characters"; ±combine retains true value (§7.8); `tests/modifiers.rs`.
+
+  Note: `CardInstance` is now `Clone` (not `Copy`) since it owns classifications.
 
 ### Slice 5f — Timed modifiers
 - "until end of turn" duration; expire at cleanup.

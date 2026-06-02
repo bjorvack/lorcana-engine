@@ -311,9 +311,46 @@ impl GameState {
     pub fn stat_delta(&self, card: CardId, stat: Stat) -> i32 {
         self.modifiers
             .iter()
-            .filter(|m| m.applies_to(card, stat))
-            .map(|m| m.delta())
+            .filter(|m| m.stat() == stat && self.target_matches(m.target(), card))
+            .map(StatModifier::delta)
             .sum()
+    }
+
+    /// The player whose play area contains `card`, if any.
+    #[must_use]
+    pub fn card_owner_in_play(&self, card: CardId) -> Option<PlayerId> {
+        self.players
+            .iter()
+            .find(|p| p.play().iter().any(|c| c.id() == card))
+            .map(PlayerState::id)
+    }
+
+    /// Whether a modifier target applies to `card` (an in-play card).
+    #[must_use]
+    pub fn target_matches(&self, target: &super::ModifierTarget, card: CardId) -> bool {
+        use super::ModifierTarget;
+        match target {
+            ModifierTarget::Card(c) => *c == card,
+            ModifierTarget::OwnedCharacters {
+                owner,
+                classifications,
+                except,
+            } => {
+                if *except == Some(card) {
+                    return false;
+                }
+                let Some(instance) = self.instance_in_play(card) else {
+                    return false;
+                };
+                if !instance.is_character() || self.card_owner_in_play(card) != Some(*owner) {
+                    return false;
+                }
+                classifications.is_empty()
+                    || classifications
+                        .iter()
+                        .any(|c| instance.has_classification(c))
+            }
+        }
     }
 }
 

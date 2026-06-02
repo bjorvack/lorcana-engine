@@ -2,8 +2,8 @@
 //! once-per-turn inkwell action, first-turn draw skip, and deck-out loss.
 
 use lorcana_engine::{
-    CardDefId, CardDefinition, CardRegistry, GameEvent, GameState, GameStatus, Input, Phase,
-    PlayerId, Step, apply, start,
+    CardDefId, CardDefinition, CardInstance, CardRegistry, GameEvent, GameState, GameStatus, Input,
+    Phase, PlayerId, Step, apply, start,
 };
 
 /// A registry where every card id used in tests is an inkable cost-1 character.
@@ -63,7 +63,7 @@ fn mulligan_returns_cards_and_redraws_to_seven() {
         .hand()
         .iter()
         .take(3)
-        .map(|c| c.id())
+        .map(CardInstance::id)
         .collect();
 
     let events = apply(
@@ -133,7 +133,7 @@ fn inkwell_action_is_once_per_turn() {
         .hand()
         .iter()
         .take(2)
-        .map(|c| c.id())
+        .map(CardInstance::id)
         .collect();
 
     let _ = apply(

@@ -7,7 +7,8 @@
 //! damage, a negative `{L}` grants none), while the true value is retained for
 //! combining further modifiers (§7.8.1.2/§7.8.2/§7.8.3).
 
-use crate::domain::types::ids::CardId;
+use crate::domain::types::card::Classification;
+use crate::domain::types::ids::{CardId, PlayerId};
 use serde::{Deserialize, Serialize};
 
 /// A modifiable characteristic.
@@ -36,31 +37,29 @@ pub enum ModifierDuration {
     UntilEndOfTurn,
 }
 
-/// Which cards a modifier applies to.
-///
-/// Only the single-card target exists so far (self modifiers, Slice 5d).
-/// Selector targets — "your [classification] characters" etc. — are added in
-/// Slice 5e (see `docs/planning/IMPLEMENTATION_PLAN.md`, "Slice 5e"), which will
-/// also denormalize the data a selector needs onto the instance so matching
-/// stays state-only.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+/// Which cards a modifier applies to. Matching against a card is done by
+/// [`GameState`](super::GameState), which knows each in-play card's owner and
+/// classifications (denormalized onto the instance).
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum ModifierTarget {
-    /// Applies to exactly one card.
+    /// Applies to exactly one card (e.g. a self modifier).
     Card(CardId),
-}
-
-impl ModifierTarget {
-    /// Whether this target applies to `card`.
-    #[must_use]
-    pub fn matches(self, card: CardId) -> bool {
-        match self {
-            Self::Card(c) => c == card,
-        }
-    }
+    /// Applies to all of `owner`'s in-play characters that have any of
+    /// `classifications` (empty ⇒ all of the owner's characters), optionally
+    /// excluding one card (for "your **other** characters"). Models selector
+    /// statics like "your Villain characters get +1 {S}" (§7.8 Example A).
+    OwnedCharacters {
+        /// The player whose characters are affected.
+        owner: PlayerId,
+        /// Required classifications (any-of); empty matches every character.
+        classifications: Vec<Classification>,
+        /// A card to exclude (the source, for "your other characters").
+        except: Option<CardId>,
+    },
 }
 
 /// A continuous modifier to a characteristic of one or more in-play cards.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct StatModifier {
     source: CardId,
     target: ModifierTarget,
@@ -90,25 +89,31 @@ impl StatModifier {
 
     /// The card whose ability generates this modifier.
     #[must_use]
-    pub const fn source(self) -> CardId {
+    pub const fn source(&self) -> CardId {
         self.source
     }
 
-    /// Whether this modifier applies to `card`'s `stat`.
+    /// The target this modifier applies to.
     #[must_use]
-    pub fn applies_to(self, card: CardId, stat: Stat) -> bool {
-        self.stat == stat && self.target.matches(card)
+    pub const fn target(&self) -> &ModifierTarget {
+        &self.target
+    }
+
+    /// The characteristic this modifier affects.
+    #[must_use]
+    pub const fn stat(&self) -> Stat {
+        self.stat
     }
 
     /// The signed delta.
     #[must_use]
-    pub const fn delta(self) -> i32 {
+    pub const fn delta(&self) -> i32 {
         self.delta
     }
 
     /// The duration.
     #[must_use]
-    pub const fn duration(self) -> ModifierDuration {
+    pub const fn duration(&self) -> ModifierDuration {
         self.duration
     }
 }

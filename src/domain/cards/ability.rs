@@ -2,6 +2,7 @@
 
 use crate::domain::effects::{Effect, TriggerCondition};
 use crate::domain::game::Stat;
+use crate::domain::types::card::Classification;
 use serde::{Deserialize, Serialize};
 
 /// A triggered ability (§7.4): when its `condition` is met its `effect` is added
@@ -101,18 +102,33 @@ impl ActivatedAbility {
     }
 }
 
+/// Which cards a static ability's modifier applies to.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub enum StaticTarget {
+    /// The source card itself ("this character gets +N {S}").
+    SelfCard,
+    /// The controller's characters with any of the given classifications (empty
+    /// ⇒ all of the controller's characters), optionally including the source
+    /// ("your [other] [classification] characters get +N {S}").
+    OwnedCharacters {
+        /// Required classifications (any-of); empty matches every character.
+        classifications: Vec<Classification>,
+        /// Whether the source itself is included.
+        include_self: bool,
+    },
+}
+
 /// A static ability that continuously modifies a characteristic while the card
 /// is in play (§7.6).
 ///
-/// Only the **self** modifier ("this character gets +N {S}") is modeled so far:
-/// it applies to the source card for as long as it's in play.
-///
-/// TODO(selectors — Slice 5e): add a `selector` so a static ability can affect
-/// other cards ("your Villain characters get +1 {S}"); TODO(duration — Slice
-/// 5f): add timed statics ("until end of turn"). See
-/// `docs/planning/IMPLEMENTATION_PLAN.md` ("Slice 5e"/"Slice 5f").
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+/// TODO(duration — Slice 5f): add timed statics ("until end of turn"); a resolved
+/// timed effect must snapshot its targets and not affect later-entering cards
+/// (§7.6.3), unlike the continuous statics here. See
+/// `docs/planning/IMPLEMENTATION_PLAN.md` ("Slice 5f").
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct StaticAbility {
+    /// Which cards the modifier applies to.
+    pub target: StaticTarget,
     /// The characteristic modified.
     pub stat: Stat,
     /// The signed amount (e.g. `+2` or `-1`).
@@ -120,9 +136,31 @@ pub struct StaticAbility {
 }
 
 impl StaticAbility {
-    /// Create a self static modifier.
+    /// Create a self static modifier ("this character gets +delta {stat}").
     #[must_use]
     pub const fn self_modifier(stat: Stat, delta: i32) -> Self {
-        Self { stat, delta }
+        Self {
+            target: StaticTarget::SelfCard,
+            stat,
+            delta,
+        }
+    }
+
+    /// Create a selector static modifier over the controller's characters.
+    #[must_use]
+    pub const fn owned_characters(
+        classifications: Vec<Classification>,
+        include_self: bool,
+        stat: Stat,
+        delta: i32,
+    ) -> Self {
+        Self {
+            target: StaticTarget::OwnedCharacters {
+                classifications,
+                include_self,
+            },
+            stat,
+            delta,
+        }
     }
 }

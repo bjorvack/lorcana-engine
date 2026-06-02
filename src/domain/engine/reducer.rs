@@ -1,11 +1,11 @@
 //! The reducer: `start` sets a game up, `apply` advances it by one input.
 
 use super::input::{Decision, Input, Rejected};
-use crate::domain::cards::{CardKind, CardRegistry, StaticAbility};
+use crate::domain::cards::{CardKind, CardRegistry, StaticAbility, StaticTarget};
 use crate::domain::effects::{Effect, TriggerCondition};
 use crate::domain::game::{
-    CharacterStats, Conditions, GameEvent, GameState, GameStatus, ModifierDuration, ModifierTarget,
-    PendingDecision, StatModifier, TriggerId,
+    CardInstance, CharacterStats, Conditions, GameEvent, GameState, GameStatus, ModifierDuration,
+    ModifierTarget, PendingDecision, StatModifier, TriggerId,
 };
 use crate::domain::rules::game_state_check;
 use crate::domain::types::ids::{CardId, PlayerId};
@@ -217,6 +217,7 @@ fn apply_play_card(
         return Err(Rejected::InsufficientInk(card));
     }
     let statics = definition.static_abilities().to_vec();
+    let classifications = definition.classifications().to_vec();
 
     // --- mutate ---
     {
@@ -225,10 +226,11 @@ fn apply_play_card(
         let mut instance = p.hand_mut().take(card).expect("validated present");
         *instance.conditions_mut() = Conditions::entering_play();
         instance.set_stats(Some(CharacterStats::new(strength, willpower, lore)));
+        instance.set_classifications(classifications);
         p.play_mut().push(instance);
     }
     // Static abilities apply as the card enters play (§7.6.2).
-    apply_enter_statics(state, card, &statics);
+    apply_enter_statics(state, active, card, &statics);
 
     let mut events = vec![GameEvent::CardPlayed {
         player: active,
@@ -431,10 +433,10 @@ fn find_in_play(
     state: &GameState,
     owner: PlayerId,
     card: CardId,
-) -> Result<crate::domain::game::CardInstance, Rejected> {
+) -> Result<CardInstance, Rejected> {
     state
         .player(owner)
-        .and_then(|p| p.play().iter().find(|c| c.id() == card).copied())
+        .and_then(|p| p.play().iter().find(|c| c.id() == card).cloned())
         .ok_or(Rejected::CharacterNotInPlay(card))
 }
 
@@ -460,7 +462,7 @@ fn hand_card_definition(
         .hand()
         .iter()
         .find(|c| c.id() == card)
-        .map(|c| c.definition())
+        .map(CardInstance::definition)
         .ok_or(Rejected::CardNotInHand(card))
 }
 
@@ -703,14 +705,30 @@ fn enqueue_self_triggers(
     }
 }
 
-/// Apply a card's self static abilities as it enters play (§7.6.2): each becomes
-/// a continuous modifier on the source itself, lasting while it's in play. The
-/// modifiers are removed when the card leaves play (see `game_state_check`).
-fn apply_enter_statics(state: &mut GameState, card: CardId, statics: &[StaticAbility]) {
+/// Apply a card's static abilities as it enters play (§7.6.2): each becomes a
+/// continuous modifier lasting while the source is in play. The modifiers are
+/// removed when the source leaves play (see `game_state_check`).
+fn apply_enter_statics(
+    state: &mut GameState,
+    controller: PlayerId,
+    card: CardId,
+    statics: &[StaticAbility],
+) {
     for ability in statics {
+        let target = match &ability.target {
+            StaticTarget::SelfCard => ModifierTarget::Card(card),
+            StaticTarget::OwnedCharacters {
+                classifications,
+                include_self,
+            } => ModifierTarget::OwnedCharacters {
+                owner: controller,
+                classifications: classifications.clone(),
+                except: if *include_self { None } else { Some(card) },
+            },
+        };
         state.add_modifier(StatModifier::new(
             card,
-            ModifierTarget::Card(card),
+            target,
             ability.stat,
             ability.delta,
             ModifierDuration::WhileSourceInPlay,
