@@ -10,3 +10,6 @@ type-complexity-threshold = 250
 
 # Suppress lints in specific files or paths
 # allow-expect-in-tests = true
+
+# Allow multiple crate versions (common in dependency ecosystem)
+allowed-duplicate-crates = ["getrandom", "hashbrown", "r-efi", "wit-bindgen"]

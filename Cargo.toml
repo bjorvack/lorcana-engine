@@ -10,6 +10,12 @@ keywords = ["lorcana", "game", "engine", "trading-card-game"]
 categories = ["game-development"]
 
 [dependencies]
+serde = { version = "1.0", features = ["derive"] }
+toml = "0.8"
+rhai = "1.18"
+rand = "0.8"
+thiserror = "1.0"
+uuid = { version = "1.8", features = ["v4", "serde"] }
 
 [lints.rust]
 dead_code = "warn"

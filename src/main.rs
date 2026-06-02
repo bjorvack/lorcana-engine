@@ -1,5 +1,5 @@
 fn main() {
-    println!("Hello, world!");
+    println!("Lorcana Engine - A game engine for the Lorcana trading card game");
 }
 
 #[cfg(test)]
