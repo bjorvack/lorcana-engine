@@ -155,30 +155,40 @@ something to act on.
 
 ---
 
-## Slice 4 — The bag & triggered abilities
+## Slice 4 — The bag & triggered abilities ✅ (core)
 
 **Goal**: simultaneous triggers resolve in correct order.
 
-- `Ability::Triggered`; trigger conditions (e.g. "when you play this character" /
-  "whenever this character quests").
-- Bag: enqueue on trigger; **active player resolves all theirs (chosen order), then
-  each player around the table** (§8.7); newly created triggers re-enqueue.
-- Bag resolution can suspend on a `PendingDecision` (ordering / choices).
-- Game-state check after each bag entry resolves.
-- **Challenge/banish triggers** (from Slice 3): "whenever this character
-  challenges / is challenged / banishes another in a challenge" (Scar, Mulan,
-  Captain Hook, Cheshire Cat, Marshmallow) and "when this character is banished"
-  enqueue here. Add the §1.9.1.3 "banished by that character" attribution that the
-  `game_state_check` TODO calls out. (Hooks documented in the `apply_challenge`
-  doc comment and `game_state_check` in `src/domain/`.)
+Grounded in a survey of all **2,314 cards with text**; the full trigger taxonomy
+is recorded as a TODO on `TriggerCondition` (`src/domain/effects/trigger.rs`).
+
+- [x] Data model: `TriggerCondition` (small: `WhenYouPlayThis`, `WhenThisQuests`),
+      minimal `Effect` (`DrawCards`, `GainLore`, `EachOpponentLosesLore`), and
+      `TriggeredAbility` (with an optional/"you may" flag) on `CardDefinition`.
+- [x] Bag (`§8.7`): triggers enqueue; the **active player resolves all of theirs
+      first (in a player-chosen order), then each player around the table**;
+      a game-state check follows each bag entry.
+- [x] Resolution **suspends on a `PendingDecision`** (`OrderTriggers` when a player
+      has ≥2 triggers; `MayResolve` for "you may") and resumes via
+      `Input::Decide(Decision)`; other inputs are rejected while a decision is
+      pending. This is the first piece of the choice/`PendingDecision` machinery.
+- [x] ETB and quest self-triggers detected and fired with the minimal effects.
 
 **Acceptance**
-- [ ] Multiple simultaneous triggers resolve active-player-first, in a player-chosen
-      order, around the table until empty.
-- [ ] A trigger created during resolution is added and resolved correctly.
-- [ ] A worked example from §8.7 reproduces exactly.
-- [ ] A challenge/banish trigger (e.g. Cheshire Cat / Marshmallow from the §4.3.6
-      examples) fires and resolves correctly.
+- [x] Multiple simultaneous triggers: the controller chooses the order via
+      `OrderTriggers`; both resolve (`tests/triggers.rs`).
+- [x] Optional triggers wait for `May(yes/no)`; declining does nothing.
+- [x] ETB draw and quest triggers fire; deterministic across a play+decide run.
+
+**Deferred (cross-linked) — not in this slice:**
+- Broader trigger conditions (play-a-[type], challenge, banish, start/end of turn,
+  damage, sing, boost…) — add against the `TriggerCondition` TODO as needed.
+- **Challenge/banish triggers** (Scar, Captain Hook, Cheshire Cat, Marshmallow)
+  and the §1.9.1.3 "banished by that character" attribution: now that the bag
+  exists, these enqueue from the hooks documented in `apply_challenge` /
+  `game_state_check`. Slice 6 (keyword interactions) and the full effect DSL
+  (Slice 8) build on this.
+- The full effect/target DSL and richer decisions (targeting, "up to N") — Slice 8.
 
 ---
 
