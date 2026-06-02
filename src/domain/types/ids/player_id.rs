@@ -1,34 +1,25 @@
 //! Unique identifier for a player
 
 use serde::{Deserialize, Serialize};
-use uuid::Uuid;
 
-/// Unique identifier for a player
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
-pub struct PlayerId(Uuid);
+/// Identifies a player by their seat index (0-based).
+///
+/// Player ids are deterministic: the player in seat 0 always has
+/// `PlayerId::from_index(0)`. This keeps game state reproducible for replays,
+/// unlike a randomly generated identifier.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
+pub struct PlayerId(u8);
 
 impl PlayerId {
-    /// Create a new `PlayerId` with a random UUID
+    /// Create a `PlayerId` from a 0-based seat index.
     #[must_use]
-    pub fn new() -> Self {
-        Self(Uuid::new_v4())
+    pub const fn from_index(index: u8) -> Self {
+        Self(index)
     }
 
-    /// Create a `PlayerId` from a UUID
+    /// Get the 0-based seat index.
     #[must_use]
-    pub const fn from_uuid(uuid: Uuid) -> Self {
-        Self(uuid)
-    }
-
-    /// Get the underlying UUID
-    #[must_use]
-    pub const fn as_uuid(&self) -> Uuid {
+    pub const fn index(self) -> u8 {
         self.0
-    }
-}
-
-impl Default for PlayerId {
-    fn default() -> Self {
-        Self::new()
     }
 }

@@ -15,8 +15,11 @@ pub mod application;
 pub mod shared;
 
 // Re-export commonly used types for convenience
+pub use domain::game::{
+    CardInstance, Conditions, GameState, PlayerState, SeededRng, Zone, ZoneKind,
+};
 pub use domain::types::{
     card::{CardType, InkType, Rarity, SetInfo},
-    ids::{CardId, GameId, PlayerId, ZoneId},
+    ids::{CardDefId, CardId, GameId, PlayerId, ZoneId},
     turn::{Phase, Step},
 };

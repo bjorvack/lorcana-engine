@@ -1,34 +1,27 @@
 //! Unique identifier for a card instance
 
 use serde::{Deserialize, Serialize};
-use uuid::Uuid;
 
-/// Unique identifier for a card instance
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
-pub struct CardId(Uuid);
+/// Identifies a specific card *instance* within a game (a physical card),
+/// distinct from the printed card it represents (see [`CardDefId`]).
+///
+/// Instance ids are allocated sequentially by the game so that the same seed
+/// and inputs always produce the same ids, keeping replays reproducible.
+///
+/// [`CardDefId`]: super::CardDefId
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
+pub struct CardId(u32);
 
 impl CardId {
-    /// Create a new `CardId` with a random UUID
+    /// Create a `CardId` from a raw sequential value.
     #[must_use]
-    pub fn new() -> Self {
-        Self(Uuid::new_v4())
+    pub const fn from_raw(raw: u32) -> Self {
+        Self(raw)
     }
 
-    /// Create a `CardId` from a UUID
+    /// Get the underlying raw value.
     #[must_use]
-    pub const fn from_uuid(uuid: Uuid) -> Self {
-        Self(uuid)
-    }
-
-    /// Get the underlying UUID
-    #[must_use]
-    pub const fn as_uuid(&self) -> Uuid {
+    pub const fn as_raw(self) -> u32 {
         self.0
-    }
-}
-
-impl Default for CardId {
-    fn default() -> Self {
-        Self::new()
     }
 }
