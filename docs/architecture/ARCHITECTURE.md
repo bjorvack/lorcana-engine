@@ -257,8 +257,22 @@ lorcana-engine/
 │   │   │   └── trigger.rs       # Trigger system
 │   │   └── types/                # Shared domain types
 │   │       ├── mod.rs
-│   │       ├── ids.rs            # Type-safe IDs
-│   │       └── common.rs         # Common domain types
+│   │       ├── ids/              # Type-safe IDs
+│   │       │   ├── mod.rs
+│   │       │   ├── card_id.rs
+│   │       │   ├── game_id.rs
+│   │       │   ├── player_id.rs
+│   │       │   └── zone_id.rs
+│   │       ├── turn/             # Turn structure types
+│   │       │   ├── mod.rs
+│   │       │   ├── phase.rs
+│   │       │   └── step.rs
+│   │       └── card/             # Card-related types
+│   │           ├── mod.rs
+│   │           ├── card_type.rs
+│   │           ├── ink_type.rs
+│   │           ├── rarity.rs
+│   │           └── set_info.rs
 │   ├── infrastructure/           # External dependencies and adapters
 │   │   ├── mod.rs
 │   │   ├── parsing/              # TOML parsing
@@ -316,6 +330,45 @@ lorcana-engine/
 │   └── development/              # Development guides
 │       └── CONTRIBUTING.md       # Contributing guidelines
 ```
+
+## Code Organization Conventions
+
+### One Module Per File
+
+This project follows the Rust convention of **one module per file**. Each `.rs` file should contain:
+
+- **Either** a single module declaration (typically `mod.rs` files)
+- **Or** a single primary type/struct/enum with its implementation
+- **Type aliases** and simple helper functions are acceptable in the same file
+- **Enum variants** are part of the enum type and do not need separate files
+
+**Examples:**
+- ✅ `card_type.rs` contains only the `CardType` enum
+- ✅ `game_id.rs` contains only the `GameId` struct and its impl
+- ✅ `mod.rs` files declare sub-modules and provide re-exports
+- ❌ Avoid putting multiple unrelated types in a single file
+- ❌ Avoid putting a module declaration and type definitions in the same file
+
+**Module Structure:**
+```rust
+// src/domain/types/ids/mod.rs
+pub mod card_id;
+pub mod game_id;
+pub mod player_id;
+pub mod zone_id;
+
+// Re-export for convenience
+pub use card_id::CardId;
+pub use game_id::GameId;
+pub use player_id::PlayerId;
+pub use zone_id::ZoneId;
+```
+
+This convention ensures:
+- Clear separation of concerns
+- Easier navigation and code discovery
+- Better compile times (changes are more localized)
+- Consistent project structure
 
 ## Implementation Phases
 

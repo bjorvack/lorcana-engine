@@ -77,6 +77,41 @@ If you have Lefthook installed, these hooks will run automatically. If not, you 
 
 This project follows conventional commits and requires atomic commits. All commits must pass linting and tests before being committed.
 
+#### Atomic Commits
+
+Make atomic, focused commits that contain a single logical unit of work. Each commit should:
+
+- **Be self-contained** - Can be built and tested independently
+- **Have a single purpose** - One feature, fix, or refactoring per commit
+- **Be small** - Easier to review and understand
+- **Pass all checks** - Build, test, and lint successfully
+
+**Examples of good atomic commits:**
+- ✅ `feat(types): add CardId and PlayerId types` - Single feature
+- ✅ `fix(error): resolve IO error handling in file loading` - Single fix
+- ✅ `refactor(types): split common.rs into separate modules` - Single refactoring
+- ✅ `docs(readme): update installation instructions` - Single documentation change
+
+**Examples of poor atomic commits:**
+- ❌ "Big changes" - Multiple unrelated features together
+- ❌ "Fix bugs and add features" - Multiple purposes
+- ❌ "WIP" or "Work in progress" - Incomplete changes
+- ❌ Commits that don't build or pass tests
+
+**How to split changes into atomic commits:**
+1. Group related files by purpose (types, tests, docs, etc.)
+2. Commit refactors before features that depend on them
+3. Commit documentation with related code changes
+4. Use `git add -p` to stage specific hunks when needed
+5. Review each commit with `git diff --staged` before committing
+
+**Benefits of atomic commits:**
+- Easier code review (smaller, focused changes)
+- Simpler git bisect for debugging
+- Cleaner git history
+- Easier cherry-picking and reverting
+- Better understanding of project evolution
+
 Commit message format:
 ```
 <type>(<scope>): <description>
@@ -105,6 +140,47 @@ This includes parsing card name, cost, ink, and abilities.
 ```
 
 ## Code Style and Quality
+
+### Code Organization
+
+#### One Module Per File
+
+This project follows the Rust convention of **one module per file**. Each `.rs` file should contain:
+
+- **Either** a single module declaration (typically `mod.rs` files)
+- **Or** a single primary type/struct/enum with its implementation
+- **Type aliases** and simple helper functions are acceptable in the same file
+- **Enum variants** are part of the enum type and do not need separate files
+
+**Examples:**
+- ✅ `card_type.rs` contains only the `CardType` enum
+- ✅ `game_id.rs` contains only the `GameId` struct and its impl
+- ✅ `mod.rs` files declare sub-modules and provide re-exports
+- ❌ Avoid putting multiple unrelated types in a single file
+- ❌ Avoid putting a module declaration and type definitions in the same file
+
+**Module Structure:**
+```rust
+// src/domain/types/ids/mod.rs
+pub mod card_id;
+pub mod game_id;
+pub mod player_id;
+pub mod zone_id;
+
+// Re-export for convenience
+pub use card_id::CardId;
+pub use game_id::GameId;
+pub use player_id::PlayerId;
+pub use zone_id::ZoneId;
+```
+
+This convention ensures:
+- Clear separation of concerns
+- Easier navigation and code discovery
+- Better compile times (changes are more localized)
+- Consistent project structure
+
+For more details, see the [Architecture documentation](../architecture/ARCHITECTURE.md#code-organization-conventions).
 
 ### Formatting
 
@@ -238,6 +314,79 @@ lorcana-engine/
 
 ## Best Practices
 
+### Development Philosophy
+
+#### YAGNI (You Aren't Gonna Need It)
+
+This project follows **YAGNI principles** - we only implement features, types, and error handling when we actually need them.
+
+**What YAGNI Means:**
+- Don't add code "just in case" we might need it later
+- Don't create error variants for problems we haven't encountered yet
+- Don't implement abstractions without a clear use case
+- Don't add dependencies without immediate need
+- Build the simplest thing that works for the current requirement
+
+**Examples:**
+
+✅ **Good YAGNI Practice:**
+```rust
+// Start with a generic error
+pub enum LorcanaError {
+    Generic(String),
+    IoError(#[from] std::io::Error),
+}
+
+// Add specific errors only when you encounter them
+// during implementation
+```
+
+❌ **Anti-Pattern (Premature Abstraction):**
+```rust
+// Don't add errors for problems you haven't encountered
+pub enum LorcanaError {
+    InvalidGameState(String),    // Not needed yet
+    CardNotFound(String),        // Not needed yet
+    RuleViolation(String),       // Not needed yet
+    // ... 10 more error variants that might never be used
+}
+```
+
+✅ **Good YAGNI Practice:**
+```rust
+// Start with simple types
+pub struct Card {
+    pub name: String,
+    pub cost: u32,
+}
+
+// Add fields only when you need them
+```
+
+❌ **Anti-Pattern (Future-Proofing):**
+```rust
+// Don't add fields "for future features"
+pub struct Card {
+    pub name: String,
+    pub cost: u32,
+    pub future_ability_system: Option<Box<dyn Ability>>, // Not needed yet
+    pub planned_keywords: Vec<String>, // Not needed yet
+}
+```
+
+**Benefits of YAGNI:**
+- Faster development - no time spent on unused code
+- Simpler codebase - easier to understand and maintain
+- Less technical debt - less code to refactor later
+- Better focus on actual requirements vs. speculation
+- Easier testing - less code to test
+
+**When to Break YAGNI:**
+- When you have a clear, immediate requirement
+- When the implementation plan explicitly calls for it
+- When you're implementing a well-defined phase with specific deliverables
+- When adding it now prevents significant refactoring later
+
 ### General Rust Guidelines
 
 - Use Rust 2024 edition features where appropriate
@@ -250,10 +399,12 @@ lorcana-engine/
 
 ### Error Handling
 
+Follow YAGNI principles for error types - only add specific error variants when you actually encounter them during implementation. Start with generic errors and add specific ones as needed.
+
 Use the `?` operator for error propagation:
 
 ```rust
-fn process_card(input: &str) -> Result<Card, ParseError> {
+fn process_card(input: &str) -> Result<Card, LorcanaError> {
     let data = parse_input(input)?;
     let card = build_card(data)?;
     Ok(card)
