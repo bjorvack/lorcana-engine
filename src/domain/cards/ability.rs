@@ -46,3 +46,56 @@ impl TriggeredAbility {
         }
     }
 }
+
+/// The cost to use an activated ability (§7.5, written `[Cost] — [Effect]`).
+///
+/// Models the dominant shapes from the card pool: `{E}` (exert the source) and
+/// `N {I}` (pay ink), alone or combined.
+///
+/// TODO(cost atoms — Slice 5a): add the remaining activation-cost atoms found in
+/// the survey — banish-this (items, ~34 abilities) and discard-a-card — as
+/// fields/variants when a card needs them. See `docs/planning/IMPLEMENTATION_PLAN.md`
+/// ("Slice 5a").
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub struct AbilityCost {
+    /// Exert the source card (`{E}`). The source must be ready and not drying
+    /// (§4.2.2.1).
+    pub exert_self: bool,
+    /// Ink to pay (`N {I}`), exerted from the inkwell like a card's cost.
+    pub ink: u32,
+}
+
+impl AbilityCost {
+    /// A cost of exerting the source and paying `ink`.
+    #[must_use]
+    pub const fn new(exert_self: bool, ink: u32) -> Self {
+        Self { exert_self, ink }
+    }
+
+    /// The `{E}` cost (exert the source only).
+    #[must_use]
+    pub const fn exert() -> Self {
+        Self::new(true, 0)
+    }
+}
+
+/// An activated ability: a cost the active player may pay to resolve an effect
+/// immediately (§7.5).
+// Not `Copy` on purpose: `Effect` will gain non-`Copy` variants (effect DSL,
+// Slice 8), so deriving `Copy` now would be churn to undo later.
+#[allow(missing_copy_implementations)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct ActivatedAbility {
+    /// The cost to use the ability.
+    pub cost: AbilityCost,
+    /// The effect produced when the ability is used.
+    pub effect: Effect,
+}
+
+impl ActivatedAbility {
+    /// Create an activated ability.
+    #[must_use]
+    pub const fn new(cost: AbilityCost, effect: Effect) -> Self {
+        Self { cost, effect }
+    }
+}

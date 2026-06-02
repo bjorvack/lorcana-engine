@@ -74,6 +74,7 @@ pub fn apply(
         Input::PlayCard { card } => apply_play_card(state, registry, card),
         Input::Quest { character } => apply_quest(state, registry, character),
         Input::Challenge { challenger, target } => apply_challenge(state, challenger, target),
+        Input::UseAbility { card, ability } => apply_use_ability(state, registry, card, ability),
         Input::EndTurn => apply_end_turn(state),
         Input::Decide(_) => unreachable!("handled above"),
     }
@@ -442,6 +443,71 @@ fn hand_card_definition(
         .find(|c| c.id() == card)
         .map(|c| c.definition())
         .ok_or(Rejected::CardNotInHand(card))
+}
+
+/// Use an activated ability (§7.5): pay the cost, then resolve the effect
+/// **immediately** — activated abilities do not go to the bag (§7.5.3.3).
+fn apply_use_ability(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    card: CardId,
+    ability_index: usize,
+) -> Result<Vec<GameEvent>, Rejected> {
+    // --- validate (no mutation yet) ---
+    if !matches!(state.status(), GameStatus::Playing) {
+        return Err(Rejected::NotPlaying);
+    }
+    if state.phase() != Phase::Main {
+        return Err(Rejected::NotMainPhase);
+    }
+    let active = state.active_player();
+    let instance = find_in_play(state, active, card)?;
+    let ability = registry
+        .get(instance.definition())
+        .ok_or(Rejected::UnknownCard(card))?
+        .activated_abilities()
+        .get(ability_index)
+        .ok_or(Rejected::NoSuchAbility(card))?;
+    let cost = ability.cost;
+    let effect = ability.effect;
+
+    // Cost legality. Drying characters can't pay an exert cost (§4.2.2.1).
+    if cost.exert_self {
+        if instance.conditions().drying {
+            return Err(Rejected::CharacterStillDrying(card));
+        }
+        if !instance.conditions().ready {
+            return Err(Rejected::CharacterExerted(card));
+        }
+    }
+    if state
+        .player(active)
+        .expect("active player exists")
+        .ready_ink()
+        < cost.ink
+    {
+        return Err(Rejected::InsufficientInk(card));
+    }
+
+    // --- pay the cost ---
+    {
+        let p = state.player_mut(active).expect("active player exists");
+        p.exert_ink(cost.ink);
+        if cost.exert_self
+            && let Some(c) = p.play_mut().iter_mut().find(|c| c.id() == card)
+        {
+            c.conditions_mut().ready = false;
+        }
+    }
+
+    // --- resolve the effect immediately (§7.5.3.3) ---
+    let mut events = vec![GameEvent::AbilityActivated {
+        player: active,
+        card,
+    }];
+    execute_effect(state, active, effect, &mut events);
+    events.extend(game_state_check(state));
+    Ok(events)
 }
 
 fn apply_end_turn(state: &mut GameState) -> Result<Vec<GameEvent>, Rejected> {

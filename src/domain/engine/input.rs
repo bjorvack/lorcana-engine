@@ -40,6 +40,14 @@ pub enum Input {
         /// The opposing character being challenged.
         target: CardId,
     },
+    /// Use an activated ability of one of the active player's in-play cards
+    /// (§7.5). `ability` indexes the source's activated abilities.
+    UseAbility {
+        /// The in-play card whose ability is being used.
+        card: CardId,
+        /// The index of the activated ability on that card.
+        ability: usize,
+    },
     /// End the active player's turn (§4.4).
     EndTurn,
     /// Answer the engine's currently pending decision (bag resolution, §8.7).
@@ -129,4 +137,7 @@ pub enum Rejected {
     /// The `Decide` answer doesn't match the pending decision.
     #[error("that answer does not match the pending decision")]
     InvalidDecision,
+    /// The card has no activated ability at the given index.
+    #[error("card {0:?} has no activated ability at the given index")]
+    NoSuchAbility(CardId),
 }

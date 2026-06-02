@@ -7,7 +7,7 @@ pub mod loader;
 pub mod registry;
 
 // Re-export for convenience
-pub use ability::TriggeredAbility;
+pub use ability::{AbilityCost, ActivatedAbility, TriggeredAbility};
 pub use card_kind::CardKind;
 pub use definition::CardDefinition;
 pub use registry::CardRegistry;

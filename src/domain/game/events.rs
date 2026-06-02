@@ -95,6 +95,13 @@ pub enum GameEvent {
         /// The banished card.
         card: CardId,
     },
+    /// A player used an activated ability (§7.5).
+    AbilityActivated {
+        /// The player who used the ability.
+        player: PlayerId,
+        /// The source card whose ability was used.
+        card: CardId,
+    },
     /// A player ended their turn (§4.4).
     TurnEnded {
         /// The player whose turn ended.

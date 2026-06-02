@@ -7,7 +7,7 @@
 //!
 //! [`CardInstance`]: crate::domain::game::CardInstance
 
-use super::ability::TriggeredAbility;
+use super::ability::{ActivatedAbility, TriggeredAbility};
 use super::card_kind::CardKind;
 use crate::domain::types::card::CardType;
 use crate::domain::types::ids::CardDefId;
@@ -29,6 +29,8 @@ pub struct CardDefinition {
     kind: CardKind,
     /// The card's triggered abilities (§7.4).
     abilities: Vec<TriggeredAbility>,
+    /// The card's activated abilities (§7.5).
+    activated: Vec<ActivatedAbility>,
 }
 
 impl CardDefinition {
@@ -41,6 +43,7 @@ impl CardDefinition {
             inkwell,
             kind,
             abilities: Vec::new(),
+            activated: Vec::new(),
         }
     }
 
@@ -66,10 +69,17 @@ impl CardDefinition {
         )
     }
 
-    /// Replace this definition's abilities (builder style).
+    /// Replace this definition's triggered abilities (builder style).
     #[must_use]
     pub fn with_abilities(mut self, abilities: Vec<TriggeredAbility>) -> Self {
         self.abilities = abilities;
+        self
+    }
+
+    /// Replace this definition's activated abilities (builder style).
+    #[must_use]
+    pub fn with_activated(mut self, activated: Vec<ActivatedAbility>) -> Self {
+        self.activated = activated;
         self
     }
 
@@ -107,6 +117,12 @@ impl CardDefinition {
     #[must_use]
     pub fn abilities(&self) -> &[TriggeredAbility] {
         &self.abilities
+    }
+
+    /// This card's activated abilities.
+    #[must_use]
+    pub fn activated_abilities(&self) -> &[ActivatedAbility] {
+        &self.activated
     }
 }
 
