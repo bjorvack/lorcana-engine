@@ -216,34 +216,69 @@ back-links here.
 
 ## Slice 5 — Activated & static abilities, modifiers
 
-**Goal**: costs and continuous effects.
+**Goal**: costs and continuous effects. Split into the smallest shippable
+sub-slices; each is independently tested and committed.
 
-- `Ability::Activated` (`[Cost] — [Effect]`): costs incl. exert, pay ink, banish-self.
-  Activated abilities resolve immediately (not via the bag, §7.5).
-- `Ability::Static`: continuous stat/permission modifiers while in play (§7.6).
-- Modifier combination (§7.8); negative `{S}`/`{L}` clamp to 0 while retaining true
-  value.
-- **Win/loss modification layer**: wire static abilities into the win/loss seam
-  from Slice 1 so effects can **add / remove-suppress / override** conditions
-  (Golden Rules §1.2.1/§1.2.2). This realizes the edge cases enumerated in the
-  `TODO(modification layer / Slice 5+)` block in
+**Decision — modifier model (recorded):** continuous-effects list, computed on
+demand. Printed base stats stay on the `CardInstance`; `GameState` holds active
+modifiers `{source, selector, stat, delta, duration}`; a current value is
+`base + Σ matching deltas`, clamped to 0 only at point of use while the true
+value is retained for further modifier math (§7.8.1.2/§7.8.2/§7.8.3). Effects are
+added when their source enters play and removed when it leaves (§7.6.4); timed
+("until end of turn") ones expire at cleanup. Keeps the game-state check
+state-only (consistent with Slice 3). Grounded in the card pool: `-N{S}` ×71,
+selectors over 42 classifications.
+
+### Slice 5a — Activated abilities
+- `ActivatedAbility { cost, effect }` on `CardDefinition`; `Input::UseAbility`.
+- Costs: exert-self + pay-ink now (the dominant `{E}` / `{E}+N{I}` shapes);
+  banish-self / discard deferred (TODO with back-link). Drying characters can't
+  pay an `{E}` cost (§4.2.2.1).
+- Resolve **immediately**, not via the bag (§7.5.3.3); reuse the minimal effects.
+- [ ] Acceptance: an activated ability pays its cost and applies its effect;
+      illegal if the cost is unpayable or the source is drying/exerted.
+
+### Slice 5b — Classifications (data)
+- `Classification` (open vocabulary; newtype over a symbol) + `classifications`
+  on `CardDefinition`. Unblocks selectors (5e) and play-a-classification triggers.
+- [ ] Acceptance: classifications round-trip and are queryable.
+
+### Slice 5c — Continuous-effects layer (refactor, no behaviour change)
+- `GameState` modifier list + `current_stats(card)` = base + Σ deltas (clamped at
+  use). Wire challenge/quest/banishment to current stats with an empty list.
+- [ ] Acceptance: all existing tests still pass; current == base when no modifiers.
+
+### Slice 5d — Self static modifiers
+- `StaticAbility` that emits a self modifier ("this character gets +N {S}");
+  applied on enter, removed on leave (§7.6.4).
+- [ ] Acceptance: a self `+N{S}` shows in challenge damage and ends on leave.
+
+### Slice 5e — Selector static modifiers (needs 5b)
+- Selectors: your / your-other / a / opposing characters with a classification
+  filter ("your Villain characters get +1 {S}"). Apply to the dynamic matching
+  set incl. characters that enter later (§7.6.2).
+- [ ] Acceptance: §7.8 Example A (Grand Duke) reproduces; ±combine retains true
+      value (§7.8 Example B, Heihei).
+
+### Slice 5f — Timed modifiers
+- "until end of turn" duration; expire at cleanup.
+- [ ] Acceptance: a `this turn` modifier ends at the right moment.
+
+### Slice 5g — Win/loss & game-rule static modifiers
+- Wire static abilities into the win/loss seam (Slice 1) so effects **add /
+  remove-suppress / override** conditions (Golden Rules §1.2.1/§1.2.2). Realizes
+  the `TODO(modification layer / Slice 5+)` block in
   [`src/domain/rules/win_loss.rs`](../../src/domain/rules/win_loss.rs) — e.g.
   Donald Duck – Flustered Sorcerer ("Opponents need 25 lore to win") overriding
   `lore_to_win`. Convert those TODO bullets into real tests here.
-- **Triggers** (see [Trigger taxonomy rollout](#trigger-taxonomy-rollout-when-the-triggercondition-todo-gets-done)):
-  add Start/End-of-turn and play-a-[type/classification] `TriggerCondition`
-  variants (the latter needs classifications, added this slice). If a card here
-  watches another card's events, build the general **event → trigger matcher**
-  now rather than per-card hacks.
+- [ ] Acceptance: Donald Duck overrides the win threshold; the `win_loss.rs` TODO
+      cases are tested.
 
-**Acceptance**
-- [ ] An activated ability pays its cost and applies its effect; illegal if cost
-      unpayable.
-- [ ] A static `+N {S}` applies to existing and newly-played matching characters and
-      ends when its source leaves play.
-- [ ] Stacking positive/negative modifiers clamps for use but not for further math.
-- [ ] A static ability can override the win threshold (Donald Duck: opponents need
-      25 lore), and the `win_loss.rs` modification-layer TODO cases are now tested.
+### Slice 5h — Trigger additions (see [Trigger taxonomy rollout](#trigger-taxonomy-rollout-when-the-triggercondition-todo-gets-done))
+- Start/End-of-turn and play-a-[type/classification] `TriggerCondition` variants.
+- If a card watches another card's events, build the general **event → trigger
+  matcher** here rather than per-card hacks.
+- [ ] Acceptance: a start-of-turn and a play-a-classification trigger fire.
 
 ---
 
