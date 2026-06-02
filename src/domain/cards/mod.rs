@@ -3,6 +3,7 @@
 pub mod ability;
 pub mod card_kind;
 pub mod definition;
+pub mod keyword;
 pub mod loader;
 pub mod registry;
 
@@ -12,4 +13,5 @@ pub use ability::{
 };
 pub use card_kind::CardKind;
 pub use definition::CardDefinition;
+pub use keyword::Keyword;
 pub use registry::CardRegistry;

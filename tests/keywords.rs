@@ -1,0 +1,298 @@
+//! Integration tests for Slice 6a: the challenge-cluster keywords (Rush,
+//! Evasive, Alert, Bodyguard, Resist, Challenger) plugged into the Slice 3
+//! challenge legality/damage seam.
+
+use lorcana_engine::{
+    CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterStats, Conditions,
+    GameState, GameStatus, Input, Keyword, PlayerId, apply, start,
+};
+
+fn started(registry: &CardRegistry) -> GameState {
+    let mut state = GameState::new(
+        vec![
+            (0..30).map(CardDefId::from_raw).collect(),
+            (0..30).map(CardDefId::from_raw).collect(),
+        ],
+        7,
+    );
+    let _ = start(&mut state).expect("start");
+    while let GameStatus::AwaitingMulligan(player) = *state.status() {
+        let _ = apply(
+            &mut state,
+            registry,
+            Input::Mulligan {
+                player,
+                put_back: Vec::new(),
+            },
+        )
+        .expect("mulligan");
+    }
+    state
+}
+
+fn opponent_of(state: &GameState, player: PlayerId) -> PlayerId {
+    state
+        .players()
+        .iter()
+        .map(lorcana_engine::PlayerState::id)
+        .find(|p| *p != player)
+        .unwrap()
+}
+
+/// Place a character in play referencing `def`, with the given stats/state.
+#[allow(clippy::too_many_arguments)]
+fn place(
+    state: &mut GameState,
+    owner: PlayerId,
+    raw: u32,
+    def: u32,
+    strength: u32,
+    willpower: u32,
+    ready: bool,
+    drying: bool,
+) -> CardId {
+    let id = CardId::from_raw(raw);
+    let mut instance = CardInstance::new(
+        id,
+        CardDefId::from_raw(def),
+        Conditions {
+            ready,
+            damage: 0,
+            drying,
+            facedown: false,
+        },
+    );
+    instance.set_stats(Some(CharacterStats::new(strength, willpower, 1)));
+    state.player_mut(owner).unwrap().play_mut().push(instance);
+    id
+}
+
+fn damage(state: &GameState, owner: PlayerId, card: CardId) -> Option<u32> {
+    state
+        .player(owner)
+        .unwrap()
+        .play()
+        .iter()
+        .find(|c| c.id() == card)
+        .map(|c| c.conditions().damage)
+}
+
+const fn char_def(id: u32) -> CardDefinition {
+    CardDefinition::character(CardDefId::from_raw(id), 1, true, 3, 3, 1)
+}
+
+#[test]
+fn evasive_target_only_challengeable_by_evasive_or_alert() {
+    let mut registry = CardRegistry::new();
+    registry.insert(char_def(10).with_keywords(vec![Keyword::Evasive])); // target
+    registry.insert(char_def(11)); // plain challenger
+    registry.insert(char_def(12).with_keywords(vec![Keyword::Evasive])); // evasive challenger
+    registry.insert(char_def(13).with_keywords(vec![Keyword::Alert])); // alert challenger
+    let mut state = started(&registry);
+    let active = state.active_player();
+    let foe = opponent_of(&state, active);
+
+    let target = place(&mut state, foe, 200, 10, 1, 9, false, false);
+    let plain = place(&mut state, active, 100, 11, 3, 9, true, false);
+    let evasive = place(&mut state, active, 101, 12, 3, 9, true, false);
+    let alert = place(&mut state, active, 102, 13, 3, 9, true, false);
+
+    assert!(
+        apply(
+            &mut state,
+            &registry,
+            Input::Challenge {
+                challenger: plain,
+                target
+            }
+        )
+        .is_err(),
+        "a non-Evasive character can't challenge an Evasive target"
+    );
+    assert!(
+        apply(
+            &mut state,
+            &registry,
+            Input::Challenge {
+                challenger: evasive,
+                target
+            }
+        )
+        .is_ok()
+    );
+    // Fresh target (the previous one took damage / may be exerted-as-is): use alert.
+    let target2 = place(&mut state, foe, 201, 10, 1, 9, false, false);
+    assert!(
+        apply(
+            &mut state,
+            &registry,
+            Input::Challenge {
+                challenger: alert,
+                target: target2
+            }
+        )
+        .is_ok(),
+        "Alert ignores Evasive's restriction"
+    );
+}
+
+#[test]
+fn rush_lets_a_drying_character_challenge() {
+    let mut registry = CardRegistry::new();
+    registry.insert(char_def(50).with_keywords(vec![Keyword::Rush]));
+    registry.insert(char_def(51));
+    let mut state = started(&registry);
+    let active = state.active_player();
+    let foe = opponent_of(&state, active);
+
+    let target = place(&mut state, foe, 200, 51, 1, 9, false, false);
+    // Challenger is drying (just played) but has Rush.
+    let rusher = place(&mut state, active, 100, 50, 3, 9, true, true);
+
+    assert!(
+        apply(
+            &mut state,
+            &registry,
+            Input::Challenge {
+                challenger: rusher,
+                target
+            }
+        )
+        .is_ok()
+    );
+}
+
+#[test]
+fn resist_reduces_challenge_damage() {
+    let mut registry = CardRegistry::new();
+    registry.insert(char_def(20)); // challenger, strength 3
+    registry.insert(char_def(21).with_keywords(vec![Keyword::Resist(2)])); // target
+    let mut state = started(&registry);
+    let active = state.active_player();
+    let foe = opponent_of(&state, active);
+
+    let challenger = place(&mut state, active, 100, 20, 3, 9, true, false);
+    let target = place(&mut state, foe, 200, 21, 1, 9, false, false);
+
+    let _ = apply(
+        &mut state,
+        &registry,
+        Input::Challenge { challenger, target },
+    )
+    .expect("challenge");
+    // 3 strength minus Resist 2 = 1 damage.
+    assert_eq!(damage(&state, foe, target), Some(1));
+}
+
+#[test]
+fn challenger_adds_strength_while_challenging() {
+    let mut registry = CardRegistry::new();
+    registry.insert(char_def(30).with_keywords(vec![Keyword::Challenger(2)])); // challenger
+    registry.insert(char_def(31)); // target
+    let mut state = started(&registry);
+    let active = state.active_player();
+    let foe = opponent_of(&state, active);
+
+    let challenger = place(&mut state, active, 100, 30, 3, 9, true, false);
+    let target = place(&mut state, foe, 200, 31, 1, 9, false, false);
+
+    let _ = apply(
+        &mut state,
+        &registry,
+        Input::Challenge { challenger, target },
+    )
+    .expect("challenge");
+    // 3 base + Challenger 2 = 5 damage dealt to the target.
+    assert_eq!(damage(&state, foe, target), Some(5));
+}
+
+#[test]
+fn bodyguard_must_be_challenged_if_able() {
+    let mut registry = CardRegistry::new();
+    registry.insert(char_def(40).with_keywords(vec![Keyword::Bodyguard]));
+    registry.insert(char_def(41)); // plain
+    let mut state = started(&registry);
+    let active = state.active_player();
+    let foe = opponent_of(&state, active);
+
+    let challenger = place(&mut state, active, 100, 41, 3, 9, true, false);
+    let guard = place(&mut state, foe, 200, 40, 1, 9, false, false); // exerted Bodyguard
+    let plain = place(&mut state, foe, 201, 41, 1, 9, false, false); // exerted non-guard
+
+    assert!(
+        apply(
+            &mut state,
+            &registry,
+            Input::Challenge {
+                challenger,
+                target: plain
+            }
+        )
+        .is_err(),
+        "must choose the Bodyguard while it's a legal target"
+    );
+    assert!(
+        apply(
+            &mut state,
+            &registry,
+            Input::Challenge {
+                challenger,
+                target: guard
+            }
+        )
+        .is_ok(),
+        "challenging the Bodyguard itself is allowed"
+    );
+}
+
+#[test]
+fn with_multiple_bodyguards_either_one_may_be_challenged() {
+    let mut registry = CardRegistry::new();
+    registry.insert(char_def(40).with_keywords(vec![Keyword::Bodyguard]));
+    registry.insert(char_def(41)); // plain
+    let mut state = started(&registry);
+    let active = state.active_player();
+    let foe = opponent_of(&state, active);
+
+    let c1 = place(&mut state, active, 100, 41, 3, 9, true, false);
+    let c2 = place(&mut state, active, 101, 41, 3, 9, true, false);
+    let guard_a = place(&mut state, foe, 200, 40, 1, 9, false, false);
+    let guard_b = place(&mut state, foe, 201, 40, 1, 9, false, false);
+    let plain = place(&mut state, foe, 202, 41, 1, 9, false, false);
+
+    // A non-Bodyguard is off-limits while any exerted Bodyguard is present.
+    assert!(
+        apply(
+            &mut state,
+            &registry,
+            Input::Challenge {
+                challenger: c1,
+                target: plain
+            }
+        )
+        .is_err()
+    );
+    // Either Bodyguard is a legal choice.
+    assert!(
+        apply(
+            &mut state,
+            &registry,
+            Input::Challenge {
+                challenger: c1,
+                target: guard_a
+            }
+        )
+        .is_ok()
+    );
+    assert!(
+        apply(
+            &mut state,
+            &registry,
+            Input::Challenge {
+                challenger: c2,
+                target: guard_b
+            }
+        )
+        .is_ok()
+    );
+}

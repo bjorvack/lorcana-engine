@@ -9,6 +9,7 @@
 
 use super::ability::{ActivatedAbility, GameRuleStatic, StaticAbility, TriggeredAbility};
 use super::card_kind::CardKind;
+use super::keyword::Keyword;
 use crate::domain::types::card::{CardType, Classification};
 use crate::domain::types::ids::CardDefId;
 use serde::{Deserialize, Serialize};
@@ -37,6 +38,8 @@ pub struct CardDefinition {
     static_abilities: Vec<StaticAbility>,
     /// The card's game-rule static abilities (e.g. win-condition overrides).
     rule_statics: Vec<GameRuleStatic>,
+    /// The card's keyword abilities (§10).
+    keywords: Vec<Keyword>,
 }
 
 impl CardDefinition {
@@ -53,6 +56,7 @@ impl CardDefinition {
             classifications: Vec::new(),
             static_abilities: Vec::new(),
             rule_statics: Vec::new(),
+            keywords: Vec::new(),
         }
     }
 
@@ -110,6 +114,13 @@ impl CardDefinition {
     #[must_use]
     pub fn with_rule_statics(mut self, rule_statics: Vec<GameRuleStatic>) -> Self {
         self.rule_statics = rule_statics;
+        self
+    }
+
+    /// Replace this definition's keyword abilities (builder style).
+    #[must_use]
+    pub fn with_keywords(mut self, keywords: Vec<Keyword>) -> Self {
+        self.keywords = keywords;
         self
     }
 
@@ -177,6 +188,42 @@ impl CardDefinition {
     #[must_use]
     pub fn rule_statics(&self) -> &[GameRuleStatic] {
         &self.rule_statics
+    }
+
+    /// This card's keyword abilities (§10).
+    #[must_use]
+    pub fn keywords(&self) -> &[Keyword] {
+        &self.keywords
+    }
+
+    /// Whether this card has the given (unit) keyword, e.g. `Keyword::Evasive`.
+    #[must_use]
+    pub fn has_keyword(&self, keyword: Keyword) -> bool {
+        self.keywords.contains(&keyword)
+    }
+
+    /// Total Resist `+N` (damage reduction) on this card (§10.8, stacks).
+    #[must_use]
+    pub fn resist(&self) -> u32 {
+        self.keywords
+            .iter()
+            .filter_map(|k| match k {
+                Keyword::Resist(n) => Some(*n),
+                _ => None,
+            })
+            .sum()
+    }
+
+    /// Total Challenger `+N` (`{S}` while challenging) on this card (§10.5, stacks).
+    #[must_use]
+    pub fn challenger_bonus(&self) -> u32 {
+        self.keywords
+            .iter()
+            .filter_map(|k| match k {
+                Keyword::Challenger(n) => Some(*n),
+                _ => None,
+            })
+            .sum()
     }
 }
 

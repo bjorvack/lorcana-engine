@@ -127,6 +127,14 @@ pub enum Rejected {
     /// (§4.3.6.7).
     #[error("challenge target {0:?} is not exerted")]
     TargetNotExerted(CardId),
+    /// The target has Evasive and the challenger is neither Evasive nor Alert
+    /// (§10.6, §10.2).
+    #[error("challenge target {0:?} is Evasive and can't be challenged by this character")]
+    TargetEvasive(CardId),
+    /// The defender has a challengeable Bodyguard, so the challenger must choose
+    /// a Bodyguard (§10.3.3).
+    #[error("must challenge a Bodyguard instead of {0:?}")]
+    MustChallengeBodyguard(CardId),
     /// A turn action was submitted while the engine is awaiting a decision; the
     /// pending decision must be answered first (§8.7).
     #[error("the engine is awaiting a decision; answer it before acting")]

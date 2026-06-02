@@ -1,7 +1,9 @@
 //! The reducer: `start` sets a game up, `apply` advances it by one input.
 
 use super::input::{Decision, Input, Rejected};
-use crate::domain::cards::{CardKind, CardRegistry, GameRuleStatic, StaticAbility, StaticTarget};
+use crate::domain::cards::{
+    CardDefinition, CardKind, CardRegistry, GameRuleStatic, Keyword, StaticAbility, StaticTarget,
+};
 use crate::domain::effects::{CardCategory, Effect, TriggerCondition};
 use crate::domain::game::{
     CardInstance, CharacterStats, Conditions, GameEvent, GameState, GameStatus, ModifierDuration,
@@ -74,7 +76,9 @@ pub fn apply(
         Input::PutCardInInkwell { card } => apply_put_in_inkwell(state, registry, card),
         Input::PlayCard { card } => apply_play_card(state, registry, card),
         Input::Quest { character } => apply_quest(state, registry, character),
-        Input::Challenge { challenger, target } => apply_challenge(state, challenger, target),
+        Input::Challenge { challenger, target } => {
+            apply_challenge(state, registry, challenger, target)
+        }
         Input::UseAbility { card, ability } => apply_use_ability(state, registry, card, ability),
         Input::EndTurn => apply_end_turn(state),
         Input::Decide(_) => unreachable!("handled above"),
@@ -352,6 +356,7 @@ fn apply_quest(
 ///     Slice 6 / replacement effects Slice 8.
 fn apply_challenge(
     state: &mut GameState,
+    registry: &CardRegistry,
     challenger: CardId,
     target: CardId,
 ) -> Result<Vec<GameEvent>, Rejected> {
@@ -364,12 +369,15 @@ fn apply_challenge(
     }
     let active = state.active_player();
 
-    // Challenger: the active player's dry, ready character (§4.3.6.6).
+    // Challenger: the active player's ready character (§4.3.6.6). It must be dry
+    // unless it has Rush (§10.9).
     let challenger_instance = find_in_play(state, active, challenger)?;
     if !challenger_instance.is_character() {
         return Err(Rejected::NotACharacter(challenger));
     }
-    if challenger_instance.conditions().drying {
+    let challenger_keywords = registry.get(challenger_instance.definition());
+    let challenger_has = |k: Keyword| challenger_keywords.is_some_and(|d| d.has_keyword(k));
+    if challenger_instance.conditions().drying && !challenger_has(Keyword::Rush) {
         return Err(Rejected::CharacterStillDrying(challenger));
     }
     if !challenger_instance.conditions().ready {
@@ -386,15 +394,50 @@ fn apply_challenge(
     if target_instance.conditions().ready {
         return Err(Rejected::TargetNotExerted(target));
     }
+    let target_def = registry.get(target_instance.definition());
+
+    // Evasive: an Evasive target can only be challenged by an Evasive challenger
+    // (or one with Alert) (§10.6, §10.2).
+    if target_def.is_some_and(|d| d.has_keyword(Keyword::Evasive))
+        && !challenger_has(Keyword::Evasive)
+        && !challenger_has(Keyword::Alert)
+    {
+        return Err(Rejected::TargetEvasive(target));
+    }
+    // Bodyguard: if the defender has a challengeable Bodyguard, the challenger
+    // must choose one (§10.3.3). With several Bodyguards the challenger may pick
+    // any of them (each passes this check by being a Bodyguard).
+    //
+    // TODO(Bodyguard "if able" — Slice 6b): this treats "able" as "an exerted
+    // Bodyguard exists", but a Bodyguard the challenger *can't legally challenge*
+    // (e.g. an Evasive Bodyguard vs a non-Evasive challenger) shouldn't force the
+    // restriction. The correct check is "does a Bodyguard exist that THIS
+    // challenger can legally challenge?", which needs the shared challenge-
+    // legality predicate noted in the `apply_end_turn` Reckless TODO.
+    if !target_def.is_some_and(|d| d.has_keyword(Keyword::Bodyguard))
+        && defender_has_challengeable_bodyguard(state, registry, target_owner)
+    {
+        return Err(Rejected::MustChallengeBodyguard(target));
+    }
 
     // Current Strength includes continuous modifiers, clamped at 0 (§4.3.6.14,
-    // §7.8.2).
+    // §7.8.2). The challenger also gets Challenger +N while challenging (§10.5).
+    let challenger_bonus = challenger_keywords.map_or(0, CardDefinition::challenger_bonus);
     let challenger_strength = state
         .current_character_stats(challenger)
-        .map_or(0, |s| s.strength);
+        .map_or(0, |s| s.strength)
+        + challenger_bonus;
     let target_strength = state
         .current_character_stats(target)
         .map_or(0, |s| s.strength);
+
+    // Resist +N reduces the damage each takes (§10.8). (Resist is really a
+    // general damage-replacement effect; the full replacement framework — and
+    // damage outside challenges — is Slice 8. Here it's applied inline.)
+    let challenger_resist = challenger_keywords.map_or(0, CardDefinition::resist);
+    let target_resist = target_def.map_or(0, CardDefinition::resist);
+    let damage_to_target = challenger_strength.saturating_sub(target_resist);
+    let damage_to_challenger = target_strength.saturating_sub(challenger_resist);
 
     // --- mutate ---
     // Exert the challenger (§4.3.6.9), then both deal damage simultaneously
@@ -408,8 +451,8 @@ fn apply_challenge(
     {
         c.conditions_mut().ready = false;
     }
-    add_damage(state, active, challenger, target_strength);
-    add_damage(state, target_owner, target, challenger_strength);
+    add_damage(state, target_owner, target, damage_to_target);
+    add_damage(state, active, challenger, damage_to_challenger);
 
     let mut events = vec![GameEvent::Challenged {
         player: active,
@@ -443,6 +486,23 @@ fn find_in_play(
         .player(owner)
         .and_then(|p| p.play().iter().find(|c| c.id() == card).cloned())
         .ok_or(Rejected::CharacterNotInPlay(card))
+}
+
+/// Whether `defender` has a challengeable (exerted) character with Bodyguard
+/// (§10.3.3). Used to enforce "must challenge a Bodyguard if able".
+fn defender_has_challengeable_bodyguard(
+    state: &GameState,
+    registry: &CardRegistry,
+    defender: PlayerId,
+) -> bool {
+    state.player(defender).is_some_and(|p| {
+        p.play().iter().any(|c| {
+            !c.conditions().ready
+                && registry
+                    .get(c.definition())
+                    .is_some_and(|d| d.has_keyword(Keyword::Bodyguard))
+        })
+    })
 }
 
 /// The non-active player whose play area contains `card`, if any.
@@ -543,6 +603,13 @@ fn apply_end_turn(state: &mut GameState) -> Result<Vec<GameEvent>, Rejected> {
     if state.phase() != Phase::Main {
         return Err(Rejected::NotMainPhase);
     }
+    // TODO(Reckless — Slice 6b, see "Slice 6" in docs/planning/IMPLEMENTATION_PLAN.md):
+    // reject ending the turn if the active player has a ready Reckless character
+    // that *can legally challenge* an opposing exerted character or location
+    // (§10.7.3). "Can legally challenge" must reuse the same challenge-legality
+    // rules as `apply_challenge` (Evasive/Bodyguard/Rush/exerted, and locations
+    // from Slice 7), so that logic should be extracted into a shared predicate
+    // — which a fully-correct Bodyguard "if able" check should also use.
     let active = state.active_player();
 
     let mut events = Vec::new();

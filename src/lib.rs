@@ -16,7 +16,7 @@ pub mod shared;
 
 // Re-export commonly used types for convenience
 pub use domain::cards::{
-    AbilityCost, ActivatedAbility, CardDefinition, CardKind, CardRegistry, GameRuleStatic,
+    AbilityCost, ActivatedAbility, CardDefinition, CardKind, CardRegistry, GameRuleStatic, Keyword,
     StaticAbility, StaticTarget, TriggeredAbility,
 };
 pub use domain::effects::{CardCategory, Effect, TriggerCondition};

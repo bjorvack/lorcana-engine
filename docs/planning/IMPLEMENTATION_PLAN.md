@@ -315,34 +315,50 @@ selectors over 42 classifications.
 
 ## Slice 6 — Keywords (incremental)
 
-**Goal**: implement the keyword set (§10), simplest first.
+**Goal**: implement the keyword set (§10), simplest first. Modeled as a `Keyword`
+enum (`src/domain/cards/keyword.rs`, full §10 set; behaviour wired per sub-slice —
+see the TODO there). Split smallest-first like Slice 5.
 
-1. Static/“simple”: **Evasive, Bodyguard, Rush, Resist, Challenger, Ward, Support,
-   Singer**.
-2. Complex: **Shift** (card stacks!), **Sing Together**, **Boost**, **Vanish**,
-   **Reckless**, **Alert**.
+### Slice 6a — Challenge-cluster keywords
+- **Rush** (§10.9): challenger needn't be dry. **Evasive** (§10.6) / **Alert**
+  (§10.2): only Evasive (or an Alert challenger) may challenge an Evasive target.
+  **Bodyguard** (§10.3.3): an opponent must challenge a Bodyguard if able.
+  **Resist +N** (§10.8): reduces challenge damage taken. **Challenger +N**
+  (§10.5): +N `{S}` while challenging.
+- All wired into the Slice 3 challenge legality/damage seam (see the
+  `apply_challenge` doc comment in `src/domain/engine/reducer.rs`).
+- [ ] Acceptance: each of the six alters challenge legality/damage per its §10
+      definition (`tests/keywords.rs`).
 
-Each keyword gets reminder-text-accurate behaviour and a focused scenario test. Shift
-introduces the in-Play card-stack model (top/under/in-a-stack, §5.1.6–5.1.7, §10.10).
+### Slice 6b+ — remaining keywords (deferred, back-linked from `keyword.rs`)
+- **Bodyguard "may enter play exerted"** (§10.3.2): a play-time choice — needs a
+  small decision at play (deferred from 6a).
+- **Reckless** (§10.7): (a) can't quest (the `apply_quest` TODO already notes
+  this); (b) can't end the turn while a ready Reckless character *can legally
+  challenge* an opposing exerted character or location. (b) needs a **shared
+  "can this character legally challenge anything?" predicate** extracted from
+  `apply_challenge` (so it respects Evasive/Bodyguard/Rush/exerted + locations);
+  that same predicate should back a fully-correct Bodyguard "if able" check. See
+  the TODO in `apply_end_turn` (`src/domain/engine/reducer.rs`). Locations as
+  challenge targets arrive in Slice 7.
+- **Support** (§10.13): quest trigger adding `{S}` to a chosen character (quest
+  trigger + target choice + timed modifier).
+- **Vanish** (§10.14) / **Ward** (§10.15): effect-targeting interactions (need
+  targeted effects / choices — overlaps Slice 8).
+- **Singer / Sing Together** (§10.11–12): songs — **Slice 7**.
+- **Boost** (§10.4): put-card-under mechanic (and its trigger — see the bag
+  rollout). **Shift** (§10.10): introduces the in-Play **card-stack** model
+  (top/under/in-a-stack, §5.1.6–5.1.7).
 
-Several of these modify the **challenge legality** built in Slice 3 (see the
-`apply_challenge` doc comment in `src/domain/engine/reducer.rs`): **Rush** lifts
-the dry requirement for challenging, **Evasive**/**Alert** gate/ungate who may
-challenge an Evasive character, **Bodyguard** forces target choice, and
-**Resist** modifies challenge damage. Wire these into that legality/damage seam.
-
-This slice also adds the **challenge/banish triggers** to the bag (see
+Also still pending here: the **challenge/banish triggers** into the bag (see
 [Trigger taxonomy rollout](#trigger-taxonomy-rollout-when-the-triggercondition-todo-gets-done)
 and the `apply_challenge` / `game_state_check` hooks): "whenever this character
-challenges / is challenged / banishes another in a challenge" and "when this
-character is banished", plus the §1.9.1.3 "banished by that character"
-attribution, and the **Boost** trigger ("card put under this character").
+challenges / is challenged / banishes another in a challenge" / "when this
+character is banished", plus the §1.9.1.3 "banished by that character" attribution.
 
-**Acceptance**
+**Acceptance (whole slice)**
 - [ ] Each keyword has a passing scenario matching its §10 definition/example.
 - [ ] Shift forms/moves stacks correctly; the stack moves with its top card on leave.
-- [ ] Rush/Evasive/Alert/Bodyguard correctly alter challenge legality from Slice 3;
-      Resist reduces challenge damage.
 
 ---
 
