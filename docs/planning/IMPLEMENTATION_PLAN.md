@@ -501,10 +501,14 @@ Challenge/banish triggers into the bag (see
     effect-resolution sites (triggers, abilities, actions) route through it.
     Unblocks "[A] then [B]" cards — Improvise, Energy Blast, Distract, Glean, …
     (30+). Tested in `tests/actions.rs`.
+  - [x] **8b-6 — item & location targets:** `Target::ChosenItem { side }` /
+    `ChosenLocation { side }` ("banish chosen item", §6.4/§6.5) — eligible sets
+    via `chosen_permanent_options` (an item is an in-play card that is neither a
+    character nor a location). Compose with `Banish`/`ReturnToHand`/`DealDamage`.
+    Tested in `tests/targeted_effects.rs`.
   - **8b+ —** replacement effects (§7.7), "up to N" / no-duplicates / ordering,
-    **item/location/player** targets + name filter + group-"other", floating &
-    delayed triggers, and turn-progression-with-suspension (start/end-of-turn
-    triggers).
+    **player** targets + name filter + group-"other", floating & delayed triggers,
+    and turn-progression-with-suspension (start/end-of-turn triggers).
 
 ### Slice 8b+ — harder resolution rules
 - Replacement effects (§7.7): "instead"/"skip"/"enter"; self-replacement applied

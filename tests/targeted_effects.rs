@@ -323,3 +323,51 @@ fn a_cost_filter_restricts_the_choosable_targets() {
     assert_eq!(damage_on(&state, foe, cheap), Some(2));
     assert_eq!(damage_on(&state, foe, pricey), Some(0));
 }
+
+#[test]
+fn an_item_can_be_chosen_and_banished() {
+    let mut reg = CardRegistry::new();
+    // Quester: "whenever this quests, banish chosen item."
+    reg.insert(
+        CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 5, 1).with_abilities(vec![
+            TriggeredAbility::new(
+                TriggerCondition::WhenThisQuests,
+                Effect::Banish(Target::ChosenItem {
+                    side: TargetSide::Any,
+                }),
+            ),
+        ]),
+    );
+    let mut state = started(&reg);
+    let active = state.active_player();
+    let foe = opponent_of(&state, active);
+    let quester = place(&mut state, active, 1000, 100, 5, 0);
+    // Inject an item (neither character nor location) for the opponent.
+    let item = CardId::from_raw(2000);
+    let item_inst = CardInstance::new(
+        item,
+        CardDefId::from_raw(500),
+        Conditions {
+            ready: true,
+            damage: 0,
+            drying: false,
+            facedown: false,
+        },
+    );
+    state.player_mut(foe).unwrap().play_mut().push(item_inst);
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+    assert!(state.is_awaiting_decision(), "must choose the item");
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(Decision::ChooseTarget(item)),
+    )
+    .expect("choose");
+
+    assert!(
+        !state.player(foe).unwrap().play().contains(item),
+        "item banished"
+    );
+    assert!(state.player(foe).unwrap().discard().contains(item));
+}

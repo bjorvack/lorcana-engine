@@ -1867,9 +1867,62 @@ fn execute_effect(
                     apply_effect_to(state, registry, source, card, effect, events);
                 }
             }
+            Target::ChosenItem { side } => {
+                let options =
+                    chosen_permanent_options(state, controller, *side, PermanentKind::Item);
+                if !options.is_empty() {
+                    return Some((options, effect.clone()));
+                }
+            }
+            Target::ChosenLocation { side } => {
+                let options =
+                    chosen_permanent_options(state, controller, *side, PermanentKind::Location);
+                if !options.is_empty() {
+                    return Some((options, effect.clone()));
+                }
+            }
         },
     }
     None
+}
+
+/// A non-character permanent kind that can be a target.
+#[derive(Clone, Copy)]
+enum PermanentKind {
+    Item,
+    Location,
+}
+
+/// The in-play items / locations on the given `side` (relative to `controller`).
+fn chosen_permanent_options(
+    state: &GameState,
+    controller: PlayerId,
+    side: TargetSide,
+    kind: PermanentKind,
+) -> Vec<CardId> {
+    let mut out = Vec::new();
+    for player in state.players() {
+        let is_yours = player.id() == controller;
+        let side_ok = match side {
+            TargetSide::Any => true,
+            TargetSide::Yours => is_yours,
+            TargetSide::Opposing => !is_yours,
+        };
+        if !side_ok {
+            continue;
+        }
+        for card in player.play().iter() {
+            let matches = match kind {
+                // An item is an in-play card that is neither a character nor a location.
+                PermanentKind::Item => !card.is_character() && !card.is_location(),
+                PermanentKind::Location => card.is_location(),
+            };
+            if matches {
+                out.push(card.id());
+            }
+        }
+    }
+    out
 }
 
 /// A zone an effect can move the source card to.

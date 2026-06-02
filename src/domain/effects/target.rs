@@ -119,4 +119,14 @@ pub enum Target {
     /// **Every** character matching the filter, with no choice ("your Pirate
     /// characters", "all opposing characters").
     AllCharacters(CharacterFilter),
+    /// A single in-play item the controller chooses ("banish chosen item", §6.4).
+    ChosenItem {
+        /// Which side the item may be on.
+        side: TargetSide,
+    },
+    /// A single in-play location the controller chooses ("chosen location", §6.5).
+    ChosenLocation {
+        /// Which side the location may be on.
+        side: TargetSide,
+    },
 }
