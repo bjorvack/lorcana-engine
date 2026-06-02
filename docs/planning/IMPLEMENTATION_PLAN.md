@@ -28,21 +28,28 @@ progress is measured by passing acceptance scenarios.
 
 ---
 
-## Slice 0 — Deterministic core skeleton
+## Slice 0 — Deterministic core skeleton ✅
 
-**Goal**: a `GameState` you can construct, clone, serialize, and step deterministically
-(even if it does almost nothing yet).
+**Goal**: a `GameState` you can construct, clone, and serialize deterministically.
 
-- `GameState`, `PlayerState`, `CardInstance`, `Conditions`.
-- Zone model: deck/hand/inkwell/play/discard (+ bag placeholder).
-- Seeded PRNG stored in `GameState`; deterministic shuffle.
-- Reducer skeleton: `apply(state, Input) -> (state, Vec<GameEvent>)`.
-- serde round-trip; deep clone for tests.
+- [x] `GameState`, `PlayerState`, `CardInstance`, `Conditions`.
+- [x] Zone model: deck/hand/inkwell/play/discard (`ZoneKind`); ordered `Zone`.
+- [x] Seeded PRNG (`SeededRng` over `ChaCha8Rng`) stored in `GameState`;
+      deterministic shuffle.
+- [x] Deterministic identifiers (`PlayerId` by seat, sequential `CardId`,
+      `CardDefId`) replacing the earlier random-UUID ids.
+- [x] serde round-trip; clone.
+
+The reducer (`apply(state, Input) -> (state, Vec<GameEvent>)`), the `Input`
+type, and `GameEvent` move to Slice 1, where actions and the turn loop give them
+something to act on.
 
 **Acceptance**
-- [ ] Construct a game from two decks + seed; serialize → deserialize → identical.
-- [ ] Two engines with the same seed + inputs produce identical state + event logs
-      (the core determinism property test, even on a trivial input).
+- [x] Construct a game from two decks + seed; serialize → deserialize → identical
+      (`tests/serialization.rs`).
+- [x] Same seed ⇒ identical state; different seeds ⇒ different shuffles
+      (`tests/determinism.rs`).
+- [x] `SeededRng` shuffle determinism (inline unit test in `rng.rs`).
 
 ---
 

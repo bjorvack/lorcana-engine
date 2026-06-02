@@ -28,8 +28,14 @@ abilities, and effects resolve at "sorcery speed" only.
 - **Authoritative**: a single `GameState` is the source of truth.
 
 To preserve determinism:
-- The random seed and PRNG state live **inside** `GameState`; all randomness
-  (shuffles, random discards) flows through it. No global RNG.
+- The seeded PRNG is **domain state**: a `SeededRng` (wrapping
+  `rand_chacha::ChaCha8Rng`) lives **inside** `GameState` and is serialized with
+  it, so all randomness (shuffles, random discards) is part of the reproducible
+  state. No global RNG. `ChaCha8Rng` is chosen because its output is stable
+  across crate versions, unlike `StdRng`.
+- Identifiers are deterministic: players are identified by seat index
+  (`PlayerId`) and card instances by a sequentially allocated `CardId` — never
+  by random UUIDs, which would break replays.
 - Game logic avoids iteration-order-dependent containers. Use ordered collections
   (`BTreeMap`, `Vec`, index-keyed maps) wherever iteration order can affect outcomes.
 
@@ -204,40 +210,53 @@ All **game logic lives in `domain`**. `infrastructure` is IO/adapters only.
                      ▼
 ┌───────────────────────────────────────────────┐
 │ infrastructure  (IO/adapters)                  │
-│  parsing(TOML) · random(seeded PRNG) ·         │
-│  serialization(serde) · card-data loader       │
+│  parsing(TOML) · serialization(serde) ·        │
+│  card-data loader                              │
 └───────────────────────────────────────────────┘
 ```
 
-## Proposed module layout
+Note: the seeded PRNG is **not** an infrastructure adapter — because it is part
+of the serialized, reproducible game state it lives in the domain
+(`domain/game/rng.rs`), keeping the dependency direction (domain → nothing)
+clean.
+
+## Module layout
+
+The domain groups its game-state types under `domain/game/`. Modules marked
+*(planned)* will be added by later slices.
 
 ```
 src/
 ├── main.rs                     # CLI entry point
 ├── lib.rs                      # library exports / public prelude
-├── domain/                     # ALL game logic; no IO
-│   ├── state/                  # GameState, PlayerState, CardInstance, Conditions
-│   ├── zones/                  # zone model incl. card stacks (Shift)
-│   ├── turn/                   # phase/step progression, start/end hooks
-│   ├── cards/                  # CardDefinition, Registry, classifications, keywords
-│   ├── effects/                # Effect/Target/Condition DSL + resolver
-│   ├── bag/                    # trigger collection + ordered resolution
-│   ├── rules/                  # legality (cost/timing/targeting), game-state checks
-│   ├── resolution/             # PendingDecision / Choice request-response
-│   └── events/                 # output GameEvent log
+├── domain/
+│   ├── game/                   # game state and the engine core
+│   │   ├── state.rs            # GameState (owns the seed + SeededRng)
+│   │   ├── player_state.rs     # PlayerState + its zones
+│   │   ├── card_instance.rs    # CardInstance (CardId + CardDefId + Conditions)
+│   │   ├── conditions.rs       # Conditions (ready/exerted, damage, drying, …)
+│   │   ├── zone.rs             # Zone: ordered pile of CardInstance
+│   │   ├── zone_kind.rs        # ZoneKind: deck/hand/inkwell/play/discard
+│   │   ├── rng.rs              # SeededRng (ChaCha8Rng) — domain state
+│   │   ├── turn.rs             # turn progression (planned)
+│   │   └── events.rs           # output GameEvent log (planned)
+│   ├── types/                  # leaf types: ids, card enums, phase/step
+│   ├── cards/                  # CardDefinition, Registry, keywords (planned)
+│   ├── effects/                # Effect/Target/Condition DSL + resolver (planned)
+│   ├── bag/                    # trigger collection + ordered resolution (planned)
+│   ├── rules/                  # legality + game-state checks (planned)
+│   └── resolution/             # PendingDecision / Choice (planned)
 ├── infrastructure/
-│   ├── parsing/                # TOML → CardDefinition
-│   ├── random/                 # seeded PRNG implementation
-│   ├── serialization/          # serde helpers
-│   └── carddata/               # bulk card-data loader (e.g. community dataset → DSL)
+│   ├── parsing/                # TOML → CardDefinition (planned)
+│   ├── serialization/          # serde helpers (planned)
+│   └── carddata/               # bulk card-data loader (planned)
 ├── application/
-│   └── api/                    # thin facade: actions, choices, queries, events
+│   └── api/                    # thin facade: actions, choices, queries, events (planned)
 └── shared/                     # error & result types
 ```
 
-Type-safe IDs (`CardId`, `PlayerId`, `ZoneId`, `GameId`) and core enums
-(`CardType`, `InkType`, `Rarity`, `Phase`, `Step`) already exist under
-`domain/types/` and will be folded into the layout above as slices land.
+Type-safe IDs (`CardId`, `CardDefId`, `PlayerId`, `GameId`) and core enums
+(`CardType`, `InkType`, `Rarity`, `Phase`, `Step`) live under `domain/types/`.
 
 ## Data flow
 
@@ -261,8 +280,9 @@ Choice ──▶ api.submit (must match the outstanding PendingDecision)
 
 ## Technology stack
 
-**Core**: `serde` (state + definitions), `toml` (definitions), `rand` (seeded PRNG),
-`thiserror` (errors), `uuid` (ids).
+**Core**: `serde` (state + definitions), `toml` (definitions),
+`rand` + `rand_chacha` (deterministic `ChaCha8Rng` seeded PRNG), `thiserror`
+(errors), `uuid` (the external `GameId` handle).
 
 **Intentionally excluded from the core**: a general-purpose embedded script engine.
 Effects use the structured DSL + compiled-in custom handlers instead.
