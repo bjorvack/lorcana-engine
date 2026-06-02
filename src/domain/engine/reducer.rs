@@ -1931,6 +1931,16 @@ fn execute_effect(
                 });
             }
         }
+        // Conditional: resolve `then` only if the controller has a matching
+        // in-play character. `then` may itself be targeted (delegated).
+        Effect::IfControl { filter, then } => {
+            let controls =
+                !chosen_character_options(state, registry, controller, source, filter, false)
+                    .is_empty();
+            if controls {
+                return execute_effect(state, registry, controller, source, then, events);
+            }
+        }
         // Targeted effects: resolve the target now (self / all) or report that a
         // choice is needed (§7.1).
         Effect::ReturnToHand(target)
@@ -2128,7 +2138,12 @@ fn apply_effect_to(
         Effect::Banish(_) => {
             banish_by_effect(state, registry, target_card, events);
         }
-        Effect::DrawCards(_) | Effect::GainLore(_) | Effect::EachOpponentLosesLore(_) => {}
+        // Never reach here: these are resolved in `execute_effect`, not applied to
+        // a concrete target.
+        Effect::DrawCards(_)
+        | Effect::GainLore(_)
+        | Effect::EachOpponentLosesLore(_)
+        | Effect::IfControl { .. } => {}
     }
 }
 

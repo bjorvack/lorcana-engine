@@ -554,3 +554,57 @@ fn all_your_other_characters_excludes_the_source() {
         "the source itself is excluded"
     );
 }
+
+fn conditional_quester(def: u32) -> CardDefinition {
+    CardDefinition::character(CardDefId::from_raw(def), 1, true, 2, 5, 1).with_abilities(vec![
+        TriggeredAbility::new(
+            TriggerCondition::WhenThisQuests,
+            Effect::IfControl {
+                filter: CharacterFilter {
+                    names: vec!["Elsa".to_string()],
+                    ..CharacterFilter::any(TargetSide::Yours)
+                },
+                then: Box::new(Effect::GainLore(3)),
+            },
+        ),
+    ])
+}
+
+#[test]
+fn a_conditional_effect_resolves_when_the_board_condition_holds() {
+    let mut reg = CardRegistry::new();
+    reg.insert(conditional_quester(100));
+    reg.insert(
+        CardDefinition::character(CardDefId::from_raw(200), 1, true, 1, 5, 1)
+            .with_names(vec!["Elsa".to_string()]),
+    );
+    let mut state = started(&reg);
+    let active = state.active_player();
+    let quester = place(&mut state, active, 1000, 100, 5, 0);
+    let _elsa = place(&mut state, active, 1001, 200, 5, 0);
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+
+    assert_eq!(
+        state.player(active).unwrap().lore(),
+        4,
+        "condition held -> bonus applied"
+    );
+}
+
+#[test]
+fn a_conditional_effect_is_skipped_when_the_condition_fails() {
+    let mut reg = CardRegistry::new();
+    reg.insert(conditional_quester(100));
+    let mut state = started(&reg);
+    let active = state.active_player();
+    let quester = place(&mut state, active, 1000, 100, 5, 0); // no Elsa in play
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+
+    assert_eq!(
+        state.player(active).unwrap().lore(),
+        1,
+        "condition failed -> no bonus"
+    );
+}

@@ -519,8 +519,17 @@ Challenge/banish triggers into the bag (see
     threaded through `apply_mulligan`/`begin_turn`/`apply_end_turn`. Tested in
     `tests/turn_triggers.rs` (start, end, and a "may" trigger that pauses then
     resumes the turn into Main).
-  - **8b+ —** replacement effects (§7.7), **player** targets (a separate axis —
-    "chosen player draws/discards"), and floating & delayed triggers.
+  - [x] **8b-10 — conditional effects (board guard):** `Effect::IfControl {
+    filter, then }` resolves `then` only if the controller has an in-play
+    character matching `filter` ("if you have a character named X in play, …").
+    `then` may itself be targeted (delegates through `execute_effect`). Tested in
+    `tests/targeted_effects.rs`.
+  - **8b+ —** the card survey shows true §7.7 **replacement** effects are rare
+    (~16, mostly "takes no damage"); higher-value remaining: **conditional on the
+    chosen target** ("if a Villain is chosen, +3 instead"), **effect-driven "can't
+    be challenged"** (25 — Tiana's Palace/The Wall, the `can_challenge` TODO),
+    **damage prevention** ("takes no damage"), **player** targets, and floating &
+    delayed triggers.
 
 ### Slice 8b+ — harder resolution rules
 - Replacement effects (§7.7): "instead"/"skip"/"enter"; self-replacement applied

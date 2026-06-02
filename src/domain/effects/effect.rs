@@ -61,4 +61,12 @@ pub enum Effect {
     },
     /// Banish the target directly (not via damage) — "banish chosen character".
     Banish(Target),
+    /// Resolve `then` only if the controller has at least one in-play character
+    /// matching `filter` ("if you have a character named X in play, …", §7.1).
+    IfControl {
+        /// The board condition: the controller must have a matching character.
+        filter: super::target::CharacterFilter,
+        /// The effect to resolve when the condition holds.
+        then: Box<Self>,
+    },
 }
