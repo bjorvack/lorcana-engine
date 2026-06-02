@@ -342,9 +342,28 @@ see the TODO there). Split smallest-first like Slice 5.
       `can_challenge`). Locations-as-targets still TODO (Slice 7). Tested in
       `tests/keywords.rs`.
 
-### Slice 6c+ — remaining keywords (deferred, back-linked from `keyword.rs`)
+### Slice 6c — Shift ✅ (standard + variants)
+- [x] **Shift** (§10.10): an alternate **play** cost (`PlayCard { shift_onto }`)
+      that puts the card on top of a valid in-play character, forming a **stack**
+      (`CardInstance.under`). Same-name (via `CardDefinition.names`, multi-name
+      ready), **Universal**, and **[Classification]** variants
+      (`Keyword::Shift(ShiftAbility { cost, kind })`). The top inherits the
+      underlying character's exerted/dry/**drying** state (§10.10.3–5) and damage
+      (§10.10.7); shift *is* playing, so enters-play / play-a-category triggers
+      fire. Leaving play **dissolves** the stack into separate cards in the
+      destination zone (`CardInstance::dissolve`, §5.1.7). Tested in `tests/shift.rs`.
+- Deferred (Slice 8, back-linked in `keyword.rs` / `ShiftCost` / reducer TODOs):
+  alternate Shift costs (discard / free-from-discard) + cost reducers (Yokai),
+  effect-granted names + Morph wildcard targeting, the §10.10.6 modifier-transfer,
+  and shift-conditional triggers ("if you used Shift", 23 cards).
+
+### Slice 6d+ — remaining keywords (deferred, back-linked from `keyword.rs`)
 - **Bodyguard "may enter play exerted"** (§10.3.2): a play-time choice — needs a
   small decision at play (deferred from 6a).
+- **Boost** (§10.4): an activated-style "put the top deck card facedown under
+  this" — shares the stack/under-pile model already built for Shift
+  (`CardInstance.under`, see its doc); the facedown card dissolves out with the
+  stack on leave-play (§5.1.7). Plus its "card put under" trigger.
 - **Support** (§10.13): quest trigger adding `{S}` to a chosen character (quest
   trigger + target choice + timed modifier).
 - **Vanish** (§10.14) / **Ward** (§10.15): effect-targeting interactions (need
@@ -405,13 +424,19 @@ character is banished", plus the §1.9.1.3 "banished by that character" attribut
   the back-linked TODOs in `begin_turn` / `apply_end_turn`
   (`src/domain/engine/reducer.rs`) and "Slice 5h" above. Likely also threads the
   registry through `start` / `apply_end_turn` / `begin_turn`.
-- **Effect-driven leave-play removals** (return-to-hand, banish-by-effect, etc.):
-  each MUST call `GameState::remove_modifiers_from_source` and then run a
-  game-state check, exactly like the banishment path — otherwise the static /
-  win-loss modification layers go stale (see the caveat on
-  `remove_modifiers_from_source` and the `banish` comment in
-  `src/domain/rules/game_state_check.rs`). Also: timed selector effects must
-  **snapshot** their targets (§7.6.3 — TODO on `expire_end_of_turn_modifiers`).
+- **Effect-driven leave-play removals** (return-to-hand, banish-by-effect,
+  return to **top or bottom of deck**, etc.): each MUST
+  (a) **dissolve any stack** via `CardInstance::dissolve(<destination zone
+  default conditions>)` so a Shift/Boost stack becomes separate cards in the
+  destination — faceup for hand/discard, **facedown** (`Conditions::in_deck()`)
+  for the deck, using `Zone::insert_bottom` for deck-bottom; §8.2.4.1 lets a
+  shuffled-in stack's cards be freely ordered (RNG via the seeded rng);
+  (b) call `GameState::remove_modifiers_from_source` and then run a game-state
+  check, exactly like the banishment path — otherwise the static / win-loss
+  modification layers go stale (see the caveat on `remove_modifiers_from_source`
+  and the `banish` comment in `src/domain/rules/game_state_check.rs`). Also:
+  timed selector effects must **snapshot** their targets (§7.6.3 — TODO on
+  `expire_end_of_turn_modifiers`).
 - **Effect-driven challenge legality** plugs into the single legality authority
   in `src/domain/engine/reducer.rs` (carries the back-linked TODOs):
   - challenger "can't challenge" effects (Frying Pan, Cobra Bubbles, Gantu) →

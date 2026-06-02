@@ -22,10 +22,14 @@ pub enum Input {
         /// The hand card to ink.
         card: CardId,
     },
-    /// Play a card from the active player's hand, paying its ink cost (§4.3.4).
+    /// Play a card from the active player's hand (§4.3.4). Normally pays the ink
+    /// cost; if `shift_onto` is `Some`, plays via **Shift** onto that in-play
+    /// character instead, paying the shift cost (§10.10).
     PlayCard {
         /// The hand card to play.
         card: CardId,
+        /// If set, the in-play character to Shift onto.
+        shift_onto: Option<CardId>,
     },
     /// Send one of the active player's characters on a quest (§4.3.5).
     Quest {
@@ -148,6 +152,13 @@ pub enum Rejected {
     /// The card has no activated ability at the given index.
     #[error("card {0:?} has no activated ability at the given index")]
     NoSuchAbility(CardId),
+    /// The card has no Shift ability, so it can't be played via Shift (§10.10).
+    #[error("card {0:?} has no Shift ability")]
+    CannotShift(CardId),
+    /// The Shift target isn't a valid character to shift onto (wrong owner,
+    /// name, or classification) (§10.10).
+    #[error("{0:?} is not a valid Shift target")]
+    InvalidShiftTarget(CardId),
     /// A Reckless character can't quest (§10.7.2).
     #[error("Reckless character {0:?} can't quest")]
     RecklessCannotQuest(CardId),

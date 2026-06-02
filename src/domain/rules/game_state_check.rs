@@ -1,7 +1,7 @@
 //! The game-state check (§1.9): apply required actions until the state is stable.
 
 use super::{RequiredAction, check_win_loss};
-use crate::domain::game::{GameEvent, GameState, GameStatus, PlayerState};
+use crate::domain::game::{Conditions, GameEvent, GameState, GameStatus, PlayerState};
 use crate::domain::types::ids::{CardId, PlayerId};
 
 /// Run the game-state check to completion (§1.9.2): repeatedly evaluate the
@@ -116,11 +116,13 @@ fn banishable_cards(state: &GameState) -> Vec<(PlayerId, CardId)> {
 /// counters (§9.4) and in-play stats.
 fn banish(state: &mut GameState, player: PlayerId, card: CardId, events: &mut Vec<GameEvent>) {
     if let Some(p) = state.player_mut(player)
-        && let Some(mut instance) = p.play_mut().take(card)
+        && let Some(instance) = p.play_mut().take(card)
     {
-        instance.conditions_mut().damage = 0;
-        instance.set_stats(None);
-        p.discard_mut().push(instance);
+        // A stack (Shift / Boost) dissolves into separate cards in the discard,
+        // each reset to the discard's default conditions (§5.1.7, §10.10.8).
+        for c in instance.dissolve(Conditions::faceup_idle()) {
+            p.discard_mut().push(c);
+        }
         events.push(GameEvent::Banished { player, card });
         // The card left play: any continuous modifiers it generated end (§7.6.4).
         // This is the model every leave-play path must follow (remove modifiers,

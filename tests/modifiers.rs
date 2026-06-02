@@ -126,7 +126,15 @@ fn self_static_modifier_applies_when_played() {
         Input::PutCardInInkwell { card: hand[0] },
     )
     .expect("ink");
-    let _ = apply(&mut state, &registry, Input::PlayCard { card: hand[1] }).expect("play");
+    let _ = apply(
+        &mut state,
+        &registry,
+        Input::PlayCard {
+            card: hand[1],
+            shift_onto: None,
+        },
+    )
+    .expect("play");
 
     // Base 2 + static 2 = current 4 the moment it enters play (§7.6.2).
     assert_eq!(state.current_character_stats(hand[1]).unwrap().strength, 4);
@@ -245,11 +253,27 @@ fn selector_static_can_exclude_the_source() {
         .map(CardInstance::id)
         .collect();
 
-    let _ = apply(&mut state, &registry, Input::PlayCard { card: hand[0] }).expect("play 1");
+    let _ = apply(
+        &mut state,
+        &registry,
+        Input::PlayCard {
+            card: hand[0],
+            shift_onto: None,
+        },
+    )
+    .expect("play 1");
     // Only itself in play and it excludes itself → no buff yet.
     assert_eq!(state.current_character_stats(hand[0]).unwrap().strength, 2);
 
-    let _ = apply(&mut state, &registry, Input::PlayCard { card: hand[1] }).expect("play 2");
+    let _ = apply(
+        &mut state,
+        &registry,
+        Input::PlayCard {
+            card: hand[1],
+            shift_onto: None,
+        },
+    )
+    .expect("play 2");
     // Each buffs the other (not itself): both at base 2 + 1 = 3.
     assert_eq!(state.current_character_stats(hand[0]).unwrap().strength, 3);
     assert_eq!(state.current_character_stats(hand[1]).unwrap().strength, 3);

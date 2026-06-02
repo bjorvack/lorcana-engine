@@ -58,7 +58,15 @@ fn playing_a_character_pays_ink_and_enters_drying() {
     let subject = active_hand_card(&state, 1);
 
     let _ = apply(&mut state, &registry, Input::PutCardInInkwell { card: ink }).expect("ink");
-    let events = apply(&mut state, &registry, Input::PlayCard { card: subject }).expect("play");
+    let events = apply(
+        &mut state,
+        &registry,
+        Input::PlayCard {
+            card: subject,
+            shift_onto: None,
+        },
+    )
+    .expect("play");
 
     assert!(events.contains(&GameEvent::CardPlayed {
         player: active,
@@ -84,7 +92,14 @@ fn insufficient_ink_is_rejected_without_mutation() {
     let hand_before = state.player(active).unwrap().hand().len();
 
     // No ink put down this turn, so a cost-1 character cannot be paid for.
-    let result = apply(&mut state, &registry, Input::PlayCard { card: subject });
+    let result = apply(
+        &mut state,
+        &registry,
+        Input::PlayCard {
+            card: subject,
+            shift_onto: None,
+        },
+    );
     assert!(result.is_err());
     assert_eq!(state.player(active).unwrap().play().len(), 0);
     assert_eq!(state.player(active).unwrap().hand().len(), hand_before);
@@ -99,7 +114,15 @@ fn cannot_quest_a_drying_character() {
     let ink = active_hand_card(&state, 0);
     let subject = active_hand_card(&state, 1);
     let _ = apply(&mut state, &registry, Input::PutCardInInkwell { card: ink }).expect("ink");
-    let _ = apply(&mut state, &registry, Input::PlayCard { card: subject }).expect("play");
+    let _ = apply(
+        &mut state,
+        &registry,
+        Input::PlayCard {
+            card: subject,
+            shift_onto: None,
+        },
+    )
+    .expect("play");
 
     let result = apply(&mut state, &registry, Input::Quest { character: subject });
     assert!(result.is_err(), "a drying character cannot quest");
@@ -115,7 +138,15 @@ fn character_dries_next_turn_and_quests_for_lore() {
     let ink = active_hand_card(&state, 0);
     let subject = active_hand_card(&state, 1);
     let _ = apply(&mut state, &registry, Input::PutCardInInkwell { card: ink }).expect("ink");
-    let _ = apply(&mut state, &registry, Input::PlayCard { card: subject }).expect("play");
+    let _ = apply(
+        &mut state,
+        &registry,
+        Input::PlayCard {
+            card: subject,
+            shift_onto: None,
+        },
+    )
+    .expect("play");
 
     // Pass back to the starter (2 player): T1 end → opponent → end → starter T3.
     let _ = apply(&mut state, &registry, Input::EndTurn).expect("end t1");
@@ -155,7 +186,15 @@ fn questing_can_win_the_game_at_twenty_lore() {
     let ink = active_hand_card(&state, 0);
     let subject = active_hand_card(&state, 1);
     let _ = apply(&mut state, &registry, Input::PutCardInInkwell { card: ink }).expect("ink");
-    let _ = apply(&mut state, &registry, Input::PlayCard { card: subject }).expect("play");
+    let _ = apply(
+        &mut state,
+        &registry,
+        Input::PlayCard {
+            card: subject,
+            shift_onto: None,
+        },
+    )
+    .expect("play");
     let _ = apply(&mut state, &registry, Input::EndTurn).expect("end t1");
     let _ = apply(&mut state, &registry, Input::EndTurn).expect("end t2");
 
@@ -202,7 +241,14 @@ fn non_character_cards_cannot_be_played_yet() {
     let ink = active_hand_card(&state, 0);
     let subject = active_hand_card(&state, 1);
     let _ = apply(&mut state, &registry, Input::PutCardInInkwell { card: ink }).expect("ink");
-    let result = apply(&mut state, &registry, Input::PlayCard { card: subject });
+    let result = apply(
+        &mut state,
+        &registry,
+        Input::PlayCard {
+            card: subject,
+            shift_onto: None,
+        },
+    );
     assert!(result.is_err());
     assert_eq!(state.player(state.active_player()).unwrap().play().len(), 0);
 }

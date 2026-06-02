@@ -45,6 +45,18 @@ impl Conditions {
         }
     }
 
+    /// Default conditions for a card in a faceup public pile (discard / hand):
+    /// faceup and undamaged. Used when a card (or a dissolved stack) moves there.
+    #[must_use]
+    pub const fn faceup_idle() -> Self {
+        Self {
+            ready: true,
+            damage: 0,
+            drying: false,
+            facedown: false,
+        }
+    }
+
     /// Conditions for a character as it enters play: ready, undamaged, drying,
     /// and faceup (§5.1.13.1).
     #[must_use]

@@ -2,7 +2,8 @@
 
 use super::input::{Decision, Input, Rejected};
 use crate::domain::cards::{
-    CardDefinition, CardKind, CardRegistry, GameRuleStatic, Keyword, StaticAbility, StaticTarget,
+    CardDefinition, CardKind, CardRegistry, GameRuleStatic, Keyword, ShiftAbility, ShiftCost,
+    ShiftKind, StaticAbility, StaticTarget,
 };
 use crate::domain::effects::{CardCategory, Effect, TriggerCondition};
 use crate::domain::game::{
@@ -10,6 +11,7 @@ use crate::domain::game::{
     ModifierTarget, PendingDecision, RuleModifier, StatModifier, TriggerId,
 };
 use crate::domain::rules::game_state_check;
+use crate::domain::types::card::Classification;
 use crate::domain::types::ids::{CardId, PlayerId};
 use crate::domain::types::turn::{Phase, Step};
 
@@ -74,7 +76,7 @@ pub fn apply(
     match input {
         Input::Mulligan { player, put_back } => apply_mulligan(state, player, &put_back),
         Input::PutCardInInkwell { card } => apply_put_in_inkwell(state, registry, card),
-        Input::PlayCard { card } => apply_play_card(state, registry, card),
+        Input::PlayCard { card, shift_onto } => apply_play_card(state, registry, card, shift_onto),
         Input::Quest { character } => apply_quest(state, registry, character),
         Input::Challenge { challenger, target } => {
             apply_challenge(state, registry, challenger, target)
@@ -186,10 +188,14 @@ fn apply_put_in_inkwell(
     Ok(events)
 }
 
+/// Play a character from hand, either normally (paying ink) or via **Shift**
+/// (`shift_onto = Some(target)`), which is an alternate cost that puts the card
+/// on top of a valid in-play character, forming a stack (§10.10).
 fn apply_play_card(
     state: &mut GameState,
     registry: &CardRegistry,
     card: CardId,
+    shift_onto: Option<CardId>,
 ) -> Result<Vec<GameEvent>, Rejected> {
     // --- validate (no mutation yet) ---
     if !matches!(state.status(), GameStatus::Playing) {
@@ -212,27 +218,37 @@ fn apply_play_card(
     else {
         return Err(Rejected::CardTypeNotPlayableYet(card));
     };
-    if state
-        .player(active)
-        .expect("active player exists")
-        .ready_ink()
-        < definition.cost()
-    {
-        return Err(Rejected::InsufficientInk(card));
-    }
+    let character_stats = CharacterStats::new(strength, willpower, lore);
     let statics = definition.static_abilities().to_vec();
     let rule_statics = definition.rule_statics().to_vec();
     let classifications = definition.classifications().to_vec();
+    let ink_cost = definition.cost();
+    let shift_ability = definition.shift().cloned();
+    let shift_names = definition.names().to_vec();
 
-    // --- mutate ---
-    {
-        let p = state.player_mut(active).expect("active player exists");
-        p.exert_ink(definition.cost());
-        let mut instance = p.hand_mut().take(card).expect("validated present");
-        *instance.conditions_mut() = Conditions::entering_play();
-        instance.set_stats(Some(CharacterStats::new(strength, willpower, lore)));
-        instance.set_classifications(classifications);
-        p.play_mut().push(instance);
+    // --- pay the cost and place the card ---
+    if let Some(target) = shift_onto {
+        let ability = shift_ability.ok_or(Rejected::CannotShift(card))?;
+        place_via_shift(
+            state,
+            registry,
+            active,
+            card,
+            target,
+            &ability,
+            &shift_names,
+            character_stats,
+            classifications,
+        )?;
+    } else {
+        place_normally(
+            state,
+            active,
+            card,
+            ink_cost,
+            character_stats,
+            classifications,
+        )?;
     }
     // Static abilities apply as the card enters play (§7.6.2).
     apply_enter_statics(state, active, card, &statics);
@@ -244,6 +260,8 @@ fn apply_play_card(
     }];
     events.extend(game_state_check(state));
     if !state.is_finished() {
+        // Shift *is* playing the card (§10.10.1), so these enters-play / "whenever
+        // you play a [category]" triggers fire whether or not Shift was used.
         // "When you play this character" triggers go to the bag (§4.3.4.8).
         enqueue_self_triggers(
             state,
@@ -255,9 +273,109 @@ fn apply_play_card(
         // "Whenever you play a [category]" triggers on the controller's other
         // in-play cards (the cross-scope event→trigger matcher).
         enqueue_play_a_card_triggers(state, registry, active, card);
+        // TODO(shift-conditional triggers — Slice 8): 23 cards gate a play
+        // trigger on "if you used Shift to play them" (Mulan, Pegasus, Mickey,
+        // Basil; watchers Bucky, Honey Lemon, Chem Purse). Thread a was-shifted
+        // play-context flag (= `shift_onto.is_some()`) into the enqueued triggers
+        // so conditional effects (Slice 8 DSL) can gate on it. See "Slice 6c"/
+        // "Slice 8" in docs/planning/IMPLEMENTATION_PLAN.md.
         events.extend(resolve_bag(state, registry));
     }
     Ok(events)
+}
+
+/// Pay a character's ink cost and put it into play drying (the normal play path).
+fn place_normally(
+    state: &mut GameState,
+    active: PlayerId,
+    card: CardId,
+    ink_cost: u32,
+    character_stats: CharacterStats,
+    classifications: Vec<Classification>,
+) -> Result<(), Rejected> {
+    if state
+        .player(active)
+        .expect("active player exists")
+        .ready_ink()
+        < ink_cost
+    {
+        return Err(Rejected::InsufficientInk(card));
+    }
+    let p = state.player_mut(active).expect("active player exists");
+    p.exert_ink(ink_cost);
+    let mut instance = p.hand_mut().take(card).expect("validated present");
+    *instance.conditions_mut() = Conditions::entering_play();
+    instance.set_stats(Some(character_stats));
+    instance.set_classifications(classifications);
+    p.play_mut().push(instance);
+    Ok(())
+}
+
+/// Play `card` via Shift (§10.10): validate the target/cost, then put the card on
+/// top of `target`, inheriting its exerted/dry/drying state (§10.10.3–5) and
+/// damage (§10.10.7) and forming a stack.
+#[allow(clippy::too_many_arguments)]
+fn place_via_shift(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    active: PlayerId,
+    card: CardId,
+    target: CardId,
+    ability: &ShiftAbility,
+    shift_names: &[String],
+    character_stats: CharacterStats,
+    classifications: Vec<Classification>,
+) -> Result<(), Rejected> {
+    let target_instance =
+        find_in_play(state, active, target).map_err(|_| Rejected::InvalidShiftTarget(target))?;
+    if !target_instance.is_character() {
+        return Err(Rejected::InvalidShiftTarget(target));
+    }
+    let onto_ok = match &ability.kind {
+        ShiftKind::Any => true,
+        ShiftKind::SameName => registry
+            .get(target_instance.definition())
+            .is_some_and(|td| td.names().iter().any(|n| shift_names.contains(n))),
+        ShiftKind::Classification(class) => registry
+            .get(target_instance.definition())
+            .is_some_and(|td| td.has_classification(class)),
+    };
+    if !onto_ok {
+        return Err(Rejected::InvalidShiftTarget(target));
+    }
+    let ShiftCost::Ink(ink) = ability.cost;
+    if state
+        .player(active)
+        .expect("active player exists")
+        .ready_ink()
+        < ink
+    {
+        return Err(Rejected::InsufficientInk(card));
+    }
+    let inherited = Conditions {
+        ready: target_instance.conditions().ready,
+        damage: target_instance.conditions().damage,
+        drying: target_instance.conditions().drying,
+        facedown: false,
+    };
+    {
+        let p = state.player_mut(active).expect("active player exists");
+        p.exert_ink(ink);
+        let underlying = p.play_mut().take(target).expect("validated present");
+        let mut top = p.hand_mut().take(card).expect("validated present");
+        *top.conditions_mut() = inherited;
+        top.set_stats(Some(character_stats));
+        top.set_classifications(classifications);
+        top.stack_onto(underlying);
+        p.play_mut().push(top);
+    }
+    // The underlying character is now under the top and left play, so its
+    // continuous modifiers end (§7.6.4).
+    // TODO(§10.10.6 — Slice 8): the shifted character should *keep* effects that
+    // applied to the underlying character when it entered; `Card`-scoped modifiers
+    // don't transfer to the new top yet.
+    state.remove_modifiers_from_source(target);
+    Ok(())
 }
 
 fn apply_quest(
@@ -278,7 +396,7 @@ fn apply_quest(
         return Err(Rejected::NotACharacter(character));
     }
     // Reckless characters can't quest (§10.7.2).
-    if character_has_keyword(state, registry, character, Keyword::Reckless) {
+    if character_has_keyword(state, registry, character, &Keyword::Reckless) {
         return Err(Rejected::RecklessCannotQuest(character));
     }
     // Questing requires a dry, ready character (§4.3.5.5).
@@ -472,7 +590,7 @@ fn character_has_keyword(
     state: &GameState,
     registry: &CardRegistry,
     card: CardId,
-    keyword: Keyword,
+    keyword: &Keyword,
 ) -> bool {
     state
         .instance_in_play(card)
@@ -506,9 +624,9 @@ fn target_legal_basic(
     if instance.conditions().ready {
         return Err(Rejected::TargetNotExerted(target));
     }
-    if character_has_keyword(state, registry, target, Keyword::Evasive)
-        && !character_has_keyword(state, registry, challenger, Keyword::Evasive)
-        && !character_has_keyword(state, registry, challenger, Keyword::Alert)
+    if character_has_keyword(state, registry, target, &Keyword::Evasive)
+        && !character_has_keyword(state, registry, challenger, &Keyword::Evasive)
+        && !character_has_keyword(state, registry, challenger, &Keyword::Alert)
     {
         return Err(Rejected::TargetEvasive(target));
     }
@@ -536,7 +654,7 @@ fn can_challenge(
         return Err(Rejected::NotACharacter(challenger));
     }
     if challenger_instance.conditions().drying
-        && !character_has_keyword(state, registry, challenger, Keyword::Rush)
+        && !character_has_keyword(state, registry, challenger, &Keyword::Rush)
     {
         return Err(Rejected::CharacterStillDrying(challenger));
     }
@@ -550,12 +668,12 @@ fn can_challenge(
     // Bodyguard must-choose (§10.3.3): if the target isn't a Bodyguard and the
     // defender has a Bodyguard this challenger could *legally* challenge (basics
     // pass), one of those must be chosen instead.
-    if !character_has_keyword(state, registry, target, Keyword::Bodyguard) {
+    if !character_has_keyword(state, registry, target, &Keyword::Bodyguard) {
         let owner =
             opposing_owner_of(state, active, target).expect("validated by target_legal_basic");
         let forced = state.player(owner).is_some_and(|p| {
             p.play().iter().any(|c| {
-                character_has_keyword(state, registry, c.id(), Keyword::Bodyguard)
+                character_has_keyword(state, registry, c.id(), &Keyword::Bodyguard)
                     && target_legal_basic(state, registry, active, challenger, c.id()).is_ok()
             })
         });
@@ -596,7 +714,7 @@ fn reckless_must_challenge(
     state.player(active)?.play().iter().find_map(|c| {
         let id = c.id();
         (c.conditions().ready
-            && character_has_keyword(state, registry, id, Keyword::Reckless)
+            && character_has_keyword(state, registry, id, &Keyword::Reckless)
             && can_legally_challenge_anything(state, registry, active, id))
         .then_some(id)
     })

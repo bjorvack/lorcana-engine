@@ -9,7 +9,7 @@
 
 use super::ability::{ActivatedAbility, GameRuleStatic, StaticAbility, TriggeredAbility};
 use super::card_kind::CardKind;
-use super::keyword::Keyword;
+use super::keyword::{Keyword, ShiftAbility};
 use crate::domain::types::card::{CardType, Classification};
 use crate::domain::types::ids::CardDefId;
 use serde::{Deserialize, Serialize};
@@ -40,6 +40,10 @@ pub struct CardDefinition {
     rule_statics: Vec<GameRuleStatic>,
     /// The card's keyword abilities (§10).
     keywords: Vec<Keyword>,
+    /// The names this card counts as (§6.2.1). Usually one; some count as several
+    /// (e.g. Flotsam & Jetsam counts as `Flotsam` and `Jetsam`; Chip 'n' Dale as
+    /// `Chip` and `Dale`). Used by Shift's same-name rule and "named X" effects.
+    names: Vec<String>,
 }
 
 impl CardDefinition {
@@ -57,6 +61,7 @@ impl CardDefinition {
             static_abilities: Vec::new(),
             rule_statics: Vec::new(),
             keywords: Vec::new(),
+            names: Vec::new(),
         }
     }
 
@@ -121,6 +126,13 @@ impl CardDefinition {
     #[must_use]
     pub fn with_keywords(mut self, keywords: Vec<Keyword>) -> Self {
         self.keywords = keywords;
+        self
+    }
+
+    /// Set the names this card counts as (builder style).
+    #[must_use]
+    pub fn with_names(mut self, names: Vec<String>) -> Self {
+        self.names = names;
         self
     }
 
@@ -196,10 +208,10 @@ impl CardDefinition {
         &self.keywords
     }
 
-    /// Whether this card has the given (unit) keyword, e.g. `Keyword::Evasive`.
+    /// Whether this card has the given keyword, e.g. `&Keyword::Evasive`.
     #[must_use]
-    pub fn has_keyword(&self, keyword: Keyword) -> bool {
-        self.keywords.contains(&keyword)
+    pub fn has_keyword(&self, keyword: &Keyword) -> bool {
+        self.keywords.contains(keyword)
     }
 
     /// Total Resist `+N` (damage reduction) on this card (§10.8, stacks).
@@ -224,6 +236,27 @@ impl CardDefinition {
                 _ => None,
             })
             .sum()
+    }
+
+    /// The names this card counts as (§6.2.1).
+    #[must_use]
+    pub fn names(&self) -> &[String] {
+        &self.names
+    }
+
+    /// Whether this card counts as the given name.
+    #[must_use]
+    pub fn has_name(&self, name: &str) -> bool {
+        self.names.iter().any(|n| n == name)
+    }
+
+    /// This card's Shift ability (cost + target restriction), if any (§10.10).
+    #[must_use]
+    pub fn shift(&self) -> Option<&ShiftAbility> {
+        self.keywords.iter().find_map(|k| match k {
+            Keyword::Shift(ability) => Some(ability),
+            _ => None,
+        })
     }
 }
 

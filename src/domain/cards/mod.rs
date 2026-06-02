@@ -13,5 +13,5 @@ pub use ability::{
 };
 pub use card_kind::CardKind;
 pub use definition::CardDefinition;
-pub use keyword::Keyword;
+pub use keyword::{Keyword, ShiftAbility, ShiftCost, ShiftKind};
 pub use registry::CardRegistry;

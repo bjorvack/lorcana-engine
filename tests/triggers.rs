@@ -59,7 +59,15 @@ fn ink_then_play(state: &mut GameState, registry: &CardRegistry) -> Vec<GameEven
     let ink = active_hand_card(state, 0);
     let subject = active_hand_card(state, 1);
     let _ = apply(state, registry, Input::PutCardInInkwell { card: ink }).expect("ink");
-    apply(state, registry, Input::PlayCard { card: subject }).expect("play")
+    apply(
+        state,
+        registry,
+        Input::PlayCard {
+            card: subject,
+            shift_onto: None,
+        },
+    )
+    .expect("play")
 }
 
 #[test]
@@ -202,7 +210,15 @@ fn whenever_you_play_a_classification_trigger_fires() {
 
     // Playing a Villain character fires the watcher's trigger.
     let subject = active_hand_card(&state, 0);
-    let _ = apply(&mut state, &registry, Input::PlayCard { card: subject }).expect("play villain");
+    let _ = apply(
+        &mut state,
+        &registry,
+        Input::PlayCard {
+            card: subject,
+            shift_onto: None,
+        },
+    )
+    .expect("play villain");
 
     assert_eq!(state.player(active).unwrap().lore(), 1);
 }
