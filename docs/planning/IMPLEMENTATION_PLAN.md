@@ -506,9 +506,14 @@ Challenge/banish triggers into the bag (see
     via `chosen_permanent_options` (an item is an in-play card that is neither a
     character nor a location). Compose with `Banish`/`ReturnToHand`/`DealDamage`.
     Tested in `tests/targeted_effects.rs`.
-  - **8b+ —** replacement effects (§7.7), "up to N" / no-duplicates / ordering,
-    **player** targets + name filter + group-"other", floating & delayed triggers,
-    and turn-progression-with-suspension (start/end-of-turn triggers).
+  - [x] **8b-7 — "up to N" (§7.1.8):** `Target::UpToCharacters { filter, max }` +
+    `PendingDecision::ChooseUpToN` + `Decision::ChooseTargets(Vec<CardId>)`. The
+    controller submits 0..max **distinct** eligible targets; the effect applies to
+    each, then `rest` resolves. Unblocks Painting the Roses Red, Double Trouble,
+    Gumbo Pot, … `Decision` is now non-`Copy`. Tested in `tests/targeted_effects.rs`.
+  - **8b+ —** replacement effects (§7.7), **player** targets + name filter +
+    group-"other", floating & delayed triggers, and turn-progression-with-
+    suspension (start/end-of-turn triggers).
 
 ### Slice 8b+ — harder resolution rules
 - Replacement effects (§7.7): "instead"/"skip"/"enter"; self-replacement applied

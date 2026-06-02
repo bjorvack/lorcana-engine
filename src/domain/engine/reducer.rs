@@ -1786,23 +1786,52 @@ fn resolve_effects(
 ) {
     let mut iter = effects.into_iter();
     while let Some(effect) = iter.next() {
-        if let Some((options, effect)) =
-            execute_effect(state, registry, controller, source, &effect, events)
-        {
-            state.set_pending(PendingDecision::ChooseTarget {
-                player: controller,
-                source,
-                options,
-                effect,
-                rest: iter.collect(),
-            });
+        if let Some(choice) = execute_effect(state, registry, controller, source, &effect, events) {
+            let rest: Vec<Effect> = iter.collect();
+            let pending = match choice {
+                Choice::One { options, effect } => PendingDecision::ChooseTarget {
+                    player: controller,
+                    source,
+                    options,
+                    effect,
+                    rest,
+                },
+                Choice::UpTo {
+                    options,
+                    max,
+                    effect,
+                } => PendingDecision::ChooseUpToN {
+                    player: controller,
+                    source,
+                    options,
+                    max,
+                    effect,
+                    rest,
+                },
+            };
+            state.set_pending(pending);
             return;
         }
     }
 }
 
-/// Apply a built-in effect for `controller`. Returns `Some((options, effect))`
-/// when the effect needs the controller to choose a target (nothing applied yet);
+/// A target choice an effect needs the controller to make at resolution.
+enum Choice {
+    /// Choose exactly one of `options`.
+    One {
+        options: Vec<CardId>,
+        effect: Effect,
+    },
+    /// Choose up to `max` distinct of `options` (§7.1.8).
+    UpTo {
+        options: Vec<CardId>,
+        max: u32,
+        effect: Effect,
+    },
+}
+
+/// Apply a built-in effect for `controller`. Returns `Some(Choice)` when the
+/// effect needs the controller to choose target(s) (nothing applied yet);
 /// otherwise applies the effect and returns `None`.
 fn execute_effect(
     state: &mut GameState,
@@ -1811,7 +1840,7 @@ fn execute_effect(
     source: CardId,
     effect: &Effect,
     events: &mut Vec<GameEvent>,
-) -> Option<(Vec<CardId>, Effect)> {
+) -> Option<Choice> {
     match effect {
         Effect::DrawCards(n) => {
             for _ in 0..*n {
@@ -1857,7 +1886,10 @@ fn execute_effect(
                 let options =
                     chosen_character_options(state, registry, controller, source, filter, *another);
                 if !options.is_empty() {
-                    return Some((options, effect.clone()));
+                    return Some(Choice::One {
+                        options,
+                        effect: effect.clone(),
+                    });
                 }
             }
             Target::AllCharacters(filter) => {
@@ -1867,18 +1899,35 @@ fn execute_effect(
                     apply_effect_to(state, registry, source, card, effect, events);
                 }
             }
+            Target::UpToCharacters { filter, max } => {
+                let options =
+                    chosen_character_options(state, registry, controller, source, filter, false);
+                if !options.is_empty() {
+                    return Some(Choice::UpTo {
+                        options,
+                        max: *max,
+                        effect: effect.clone(),
+                    });
+                }
+            }
             Target::ChosenItem { side } => {
                 let options =
                     chosen_permanent_options(state, controller, *side, PermanentKind::Item);
                 if !options.is_empty() {
-                    return Some((options, effect.clone()));
+                    return Some(Choice::One {
+                        options,
+                        effect: effect.clone(),
+                    });
                 }
             }
             Target::ChosenLocation { side } => {
                 let options =
                     chosen_permanent_options(state, controller, *side, PermanentKind::Location);
                 if !options.is_empty() {
-                    return Some((options, effect.clone()));
+                    return Some(Choice::One {
+                        options,
+                        effect: effect.clone(),
+                    });
                 }
             }
         },
@@ -2213,6 +2262,35 @@ fn apply_decision(
             let _ = state.take_pending();
             apply_effect_to(state, registry, source, chosen, &effect, &mut events);
             // Resume the remaining "[A] then [B]" effects (may suspend again).
+            resolve_effects(state, registry, player, source, rest, &mut events);
+            events.extend(game_state_check_with_triggers(state, registry));
+        }
+        (
+            PendingDecision::ChooseUpToN {
+                player,
+                source,
+                options,
+                max,
+                effect,
+                rest,
+            },
+            Decision::ChooseTargets(chosen),
+        ) => {
+            // §7.1.8: 0..max distinct targets, all eligible.
+            let distinct = chosen
+                .iter()
+                .collect::<std::collections::HashSet<_>>()
+                .len();
+            if chosen.len() > max as usize
+                || distinct != chosen.len()
+                || !chosen.iter().all(|c| options.contains(c))
+            {
+                return Err(Rejected::InvalidDecision);
+            }
+            let _ = state.take_pending();
+            for target in chosen {
+                apply_effect_to(state, registry, source, target, &effect, &mut events);
+            }
             resolve_effects(state, registry, player, source, rest, &mut events);
             events.extend(game_state_check_with_triggers(state, registry));
         }

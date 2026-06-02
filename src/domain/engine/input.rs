@@ -82,7 +82,8 @@ pub enum Input {
 }
 
 /// A player's answer to a [`PendingDecision`](crate::domain::game::PendingDecision).
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+// Not `Copy`: `ChooseTargets` carries a `Vec`.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum Decision {
     /// For `OrderTriggers`: the next of your bag triggers to resolve (§8.7.4).
     ResolveNext(TriggerId),
@@ -92,6 +93,8 @@ pub enum Decision {
     EnterExerted(bool),
     /// For `ChooseTarget`: the target card chosen for the resolving effect (§7.1).
     ChooseTarget(CardId),
+    /// For `ChooseUpToN`: the 0..N distinct targets chosen (§7.1.8).
+    ChooseTargets(Vec<CardId>),
 }
 
 /// Why an [`Input`] was rejected. When an input is rejected the game state is

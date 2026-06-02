@@ -119,6 +119,15 @@ pub enum Target {
     /// **Every** character matching the filter, with no choice ("your Pirate
     /// characters", "all opposing characters").
     AllCharacters(CharacterFilter),
+    /// **Up to `max`** distinct chosen characters matching the filter (§7.1.8);
+    /// the effect applies to each. 0 is a legal choice ("Up to 2 chosen
+    /// characters get -1 {S}").
+    UpToCharacters {
+        /// Which characters are eligible.
+        filter: CharacterFilter,
+        /// The maximum number that may be chosen.
+        max: u32,
+    },
     /// A single in-play item the controller chooses ("banish chosen item", §6.4).
     ChosenItem {
         /// Which side the item may be on.

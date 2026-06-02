@@ -371,3 +371,97 @@ fn an_item_can_be_chosen_and_banished() {
     );
     assert!(state.player(foe).unwrap().discard().contains(item));
 }
+
+fn strength(state: &GameState, card: CardId) -> u32 {
+    state.current_character_stats(card).unwrap().strength
+}
+
+fn up_to_two_debuffer(def: u32) -> CardDefinition {
+    CardDefinition::character(CardDefId::from_raw(def), 1, true, 2, 5, 1).with_abilities(vec![
+        TriggeredAbility::new(
+            TriggerCondition::WhenThisQuests,
+            Effect::GiveStrengthThisTurn {
+                target: Target::UpToCharacters {
+                    filter: CharacterFilter::any(TargetSide::Opposing),
+                    max: 2,
+                },
+                amount: -1,
+            },
+        ),
+    ])
+}
+
+#[test]
+fn up_to_n_applies_the_effect_to_each_chosen_target() {
+    let mut reg = CardRegistry::new();
+    reg.insert(up_to_two_debuffer(100));
+    let mut state = started(&reg);
+    let active = state.active_player();
+    let foe = opponent_of(&state, active);
+    let quester = place(&mut state, active, 1000, 100, 5, 0);
+    let a = place(&mut state, foe, 2000, 200, 5, 0); // {S} 2
+    let b = place(&mut state, foe, 2001, 200, 5, 0); // {S} 2
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+    assert!(state.is_awaiting_decision());
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(Decision::ChooseTargets(vec![a, b])),
+    )
+    .expect("choose two targets");
+
+    assert_eq!(strength(&state, a), 1, "first target debuffed");
+    assert_eq!(strength(&state, b), 1, "second target debuffed");
+    assert!(!state.is_awaiting_decision());
+}
+
+#[test]
+fn up_to_n_allows_choosing_fewer_than_the_maximum() {
+    let mut reg = CardRegistry::new();
+    reg.insert(up_to_two_debuffer(100));
+    let mut state = started(&reg);
+    let active = state.active_player();
+    let foe = opponent_of(&state, active);
+    let quester = place(&mut state, active, 1000, 100, 5, 0);
+    let a = place(&mut state, foe, 2000, 200, 5, 0);
+    let b = place(&mut state, foe, 2001, 200, 5, 0);
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+    // Choosing just one of the two is allowed (0..max).
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(Decision::ChooseTargets(vec![a])),
+    )
+    .expect("choose one target");
+
+    assert_eq!(strength(&state, a), 1);
+    assert_eq!(
+        strength(&state, b),
+        2,
+        "the unchosen character is unaffected"
+    );
+}
+
+#[test]
+fn up_to_n_rejects_too_many_or_duplicate_targets() {
+    let mut reg = CardRegistry::new();
+    reg.insert(up_to_two_debuffer(100));
+    let mut state = started(&reg);
+    let active = state.active_player();
+    let foe = opponent_of(&state, active);
+    let quester = place(&mut state, active, 1000, 100, 5, 0);
+    let a = place(&mut state, foe, 2000, 200, 5, 0);
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+    // The same character can't be chosen twice (§7.1.8).
+    assert!(
+        apply(
+            &mut state,
+            &reg,
+            Input::Decide(Decision::ChooseTargets(vec![a, a]))
+        )
+        .is_err()
+    );
+}

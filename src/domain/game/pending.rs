@@ -50,6 +50,22 @@ pub enum PendingDecision {
         /// after this one (the "[A] then [B]" continuation).
         rest: Vec<Effect>,
     },
+    /// "Up to N" — the controller chooses 0..`max` distinct targets from
+    /// `options`; `effect` applies to each, then `rest` resolves (§7.1.8).
+    ChooseUpToN {
+        /// The player who must choose.
+        player: PlayerId,
+        /// The effect's source card.
+        source: CardId,
+        /// The eligible targets.
+        options: Vec<CardId>,
+        /// The maximum number of distinct targets that may be chosen.
+        max: u32,
+        /// The effect applied to each chosen target.
+        effect: Effect,
+        /// The remaining effects of the ability/action, resolved in order after.
+        rest: Vec<Effect>,
+    },
 }
 
 impl PendingDecision {
@@ -60,7 +76,8 @@ impl PendingDecision {
             Self::OrderTriggers { player, .. }
             | Self::MayResolve { player, .. }
             | Self::EnterPlayExerted { player, .. }
-            | Self::ChooseTarget { player, .. } => *player,
+            | Self::ChooseTarget { player, .. }
+            | Self::ChooseUpToN { player, .. } => *player,
         }
     }
 }
