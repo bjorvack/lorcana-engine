@@ -76,7 +76,7 @@ pub fn apply(
     }
 
     match input {
-        Input::Mulligan { player, put_back } => apply_mulligan(state, player, &put_back),
+        Input::Mulligan { player, put_back } => apply_mulligan(state, registry, player, &put_back),
         Input::PutCardInInkwell { card } => apply_put_in_inkwell(state, registry, card),
         Input::PlayCard { card, shift_onto } => apply_play_card(state, registry, card, shift_onto),
         Input::Quest { character } => apply_quest(state, registry, character),
@@ -97,6 +97,7 @@ pub fn apply(
 
 fn apply_mulligan(
     state: &mut GameState,
+    registry: &CardRegistry,
     player: PlayerId,
     put_back: &[CardId],
 ) -> Result<Vec<GameEvent>, Rejected> {
@@ -135,19 +136,23 @@ fn apply_mulligan(
     }
 
     let mut events = vec![GameEvent::MulliganResolved { player, returned }];
-    events.extend(advance_after_mulligan(state, player));
+    events.extend(advance_after_mulligan(state, registry, player));
     Ok(events)
 }
 
 /// Move mulligan to the next player in turn order, or start the first turn.
-fn advance_after_mulligan(state: &mut GameState, just_resolved: PlayerId) -> Vec<GameEvent> {
+fn advance_after_mulligan(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    just_resolved: PlayerId,
+) -> Vec<GameEvent> {
     let player_count = state.player_count();
     let starting = usize::from(state.active_player().index());
     let offset = (usize::from(just_resolved.index()) + player_count - starting) % player_count;
 
     if offset + 1 >= player_count {
         state.set_status(GameStatus::Playing);
-        begin_turn(state, true)
+        begin_turn(state, registry, true)
     } else {
         let next = (starting + offset + 1) % player_count;
         state.set_status(GameStatus::AwaitingMulligan(seat(next)));
@@ -1308,30 +1313,26 @@ fn apply_end_turn(
     state.set_phase(Phase::End);
     state.set_step(Step::End);
     events.push(GameEvent::StepEntered { step: Step::End });
-    // "Until end of turn" effects end here (§7.6.1).
+    // "Until end of turn" effects end here (§7.6.1). (Done before the end-of-turn
+    // triggers; ordering vs §4.4.1.3 is immaterial for the current effect set.)
     state.expire_end_of_turn_modifiers();
-    // TODO(Slice 5h — start/end-of-turn triggers): "at the end of your turn"
-    // triggers would be enqueued here, but resolving them can suspend on a
-    // decision, and the engine can't yet resume the turn transition afterward.
-    // Needs the turn-progression-with-suspension machinery — see "Slice 5h" in
-    // docs/planning/IMPLEMENTATION_PLAN.md.
-    events.push(GameEvent::TurnEnded { player: active });
-    events.extend(game_state_check(state));
-    if state.is_finished() {
+    // "At the end of your turn" triggers (§4.4.1.1) go to the bag and resolve;
+    // this may suspend on a decision.
+    enqueue_turn_triggers(state, registry, active, &TriggerCondition::AtEndOfTurn);
+    events.extend(resolve_bag(state, registry));
+    // If an end-of-turn trigger is awaiting a decision, ending the turn and
+    // starting the next one resumes from `resume_turn_progression`.
+    if state.is_awaiting_decision() || state.is_finished() {
         return Ok(events);
     }
-
-    let next = next_active_player(state, active);
-    state.set_active_player(next);
-    state.increment_turn_number();
-    events.extend(begin_turn(state, false));
+    events.extend(continue_after_end_phase(state, registry));
     Ok(events)
 }
 
 /// Run a player's Beginning phase (Ready → Set → Draw) and stop in the Main
 /// phase, the next point that needs input (§4.2). The very first turn of the
 /// game skips the Draw step (§4.2.3.2).
-fn begin_turn(state: &mut GameState, first_turn: bool) -> Vec<GameEvent> {
+fn begin_turn(state: &mut GameState, registry: &CardRegistry, first_turn: bool) -> Vec<GameEvent> {
     let active = state.active_player();
     state.set_inked_this_turn(false);
     state.clear_boosted_this_turn();
@@ -1340,11 +1341,6 @@ fn begin_turn(state: &mut GameState, first_turn: bool) -> Vec<GameEvent> {
         player: active,
         turn: state.turn_number(),
     }];
-    // TODO(Slice 5h — start/end-of-turn triggers): "at the start of your turn"
-    // triggers would be enqueued around here, pending the
-    // turn-progression-with-suspension machinery (see "Slice 5h" in
-    // docs/planning/IMPLEMENTATION_PLAN.md). begin_turn would also need the
-    // registry threaded through start/apply_end_turn.
 
     // Ready step (§4.2.1).
     state.set_phase(Phase::Beginning);
@@ -1356,8 +1352,8 @@ fn begin_turn(state: &mut GameState, first_turn: bool) -> Vec<GameEvent> {
         return events;
     }
 
-    // Set step (§4.2.2): dry characters, gain lore from locations (§6.5.6). (Resolve
-    // start-of-turn triggers — none yet; see the Slice 5h TODO above.)
+    // Set step (§4.2.2): dry characters, gain location lore (§6.5.6), then resolve
+    // "at the start of your turn" triggers (§4.2.2.3) — which may suspend.
     state.set_step(Step::Set);
     events.push(GameEvent::StepEntered { step: Step::Set });
     dry_characters(state, active);
@@ -1380,8 +1376,23 @@ fn begin_turn(state: &mut GameState, first_turn: bool) -> Vec<GameEvent> {
     if state.is_finished() {
         return events;
     }
+    enqueue_turn_triggers(state, registry, active, &TriggerCondition::AtStartOfTurn);
+    events.extend(resolve_bag(state, registry));
+    // If a start-of-turn trigger is awaiting a decision, the Draw/Main steps
+    // resume from `resume_turn_progression` once it's answered.
+    if state.is_awaiting_decision() || state.is_finished() {
+        return events;
+    }
+    events.extend(finish_beginning_phase(state, first_turn));
+    events
+}
 
-    // Draw step (§4.2.3).
+/// The Draw step (§4.2.3) and the move into the Main phase (§4.3). Split out so it
+/// can run inline in `begin_turn` or resume after a start-of-turn trigger suspends.
+fn finish_beginning_phase(state: &mut GameState, first_turn: bool) -> Vec<GameEvent> {
+    let active = state.active_player();
+    let mut events = Vec::new();
+
     state.set_step(Step::Draw);
     events.push(GameEvent::StepEntered { step: Step::Draw });
     if !first_turn {
@@ -1392,12 +1403,59 @@ fn begin_turn(state: &mut GameState, first_turn: bool) -> Vec<GameEvent> {
         return events;
     }
 
-    // Main phase (§4.3).
     state.set_phase(Phase::Main);
     state.set_step(Step::Main);
     events.push(GameEvent::StepEntered { step: Step::Main });
     events.extend(game_state_check(state));
     events
+}
+
+/// Enqueue "at the start/end of your turn" triggers on the active player's
+/// in-play cards (§4.2.2.3 / §4.4.1.1).
+fn enqueue_turn_triggers(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    active: PlayerId,
+    condition: &TriggerCondition,
+) {
+    let cards: Vec<CardId> = state
+        .player(active)
+        .map(|p| p.play().iter().map(CardInstance::id).collect())
+        .unwrap_or_default();
+    for card in cards {
+        enqueue_self_triggers(state, registry, active, card, condition);
+    }
+}
+
+/// Continue the turn after the End-phase bag has drained: end the turn and start
+/// the next player's turn (§4.4.1.4). Used inline by `apply_end_turn` and on
+/// resume by `resume_turn_progression`.
+fn continue_after_end_phase(state: &mut GameState, registry: &CardRegistry) -> Vec<GameEvent> {
+    let active = state.active_player();
+    let mut events = vec![GameEvent::TurnEnded { player: active }];
+    events.extend(game_state_check(state));
+    if state.is_finished() {
+        return events;
+    }
+    let next = next_active_player(state, active);
+    state.set_active_player(next);
+    state.increment_turn_number();
+    events.extend(begin_turn(state, registry, false));
+    events
+}
+
+/// After a bag decision drains the bag, resume an in-progress turn transition
+/// (§4.2.2.3 / §4.4.1) that suspended on a start/end-of-turn trigger. A no-op
+/// during normal Main-phase play.
+fn resume_turn_progression(state: &mut GameState, registry: &CardRegistry) -> Vec<GameEvent> {
+    if state.is_awaiting_decision() || state.is_finished() {
+        return Vec::new();
+    }
+    match (state.phase(), state.step()) {
+        (Phase::End, _) => continue_after_end_phase(state, registry),
+        (Phase::Beginning, Step::Set) => finish_beginning_phase(state, false),
+        _ => Vec::new(),
+    }
 }
 
 /// Deal one card from a player's deck to their hand during setup (does not flag
@@ -2307,5 +2365,7 @@ fn apply_decision(
     if !state.is_awaiting_decision() {
         events.extend(resolve_bag(state, registry));
     }
+    // Resume a turn transition that suspended on a start/end-of-turn trigger.
+    events.extend(resume_turn_progression(state, registry));
     Ok(events)
 }

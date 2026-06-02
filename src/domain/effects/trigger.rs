@@ -81,4 +81,10 @@ pub enum TriggerCondition {
     /// "Whenever a card is put under this character" — fires when a card is placed
     /// under this one (e.g. via Boost, §10.4).
     WhenCardPutUnder,
+    /// "At the start of your turn" — fires for the active player's cards and
+    /// resolves in the Set step (§4.2.2.3).
+    AtStartOfTurn,
+    /// "At the end of your turn" — fires for the active player's cards and
+    /// resolves in the End of Turn phase (§4.4.1).
+    AtEndOfTurn,
 }

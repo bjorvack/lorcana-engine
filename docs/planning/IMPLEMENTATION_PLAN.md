@@ -296,20 +296,14 @@ selectors over 42 classifications.
       Only characters are playable, so character categories are exercised;
       action/song/item/location categories are wired but unreachable until those
       types are playable (Slice 7). Tested in `tests/triggers.rs`.
-- [ ] **Start/End-of-turn triggers — DEFERRED (needs a design decision).** These
-      fire during the turn's Beginning/End, where resolving the bag can **suspend**
-      on a `PendingDecision` (ordering / "may"). The current engine resolves the
-      bag and returns; it has no way to **resume the rest of a turn transition**
-      after a suspension (e.g. finish the End step and pass the turn once an
-      end-of-turn trigger's decision is answered). Implementing these correctly
-      needs a **turn-progression state machine that survives suspension** (a
-      "what to do after the bag empties" continuation), which also requires
-      threading the registry through `start` / `apply_end_turn` / `begin_turn`.
-      This overlaps the resolution work in Slice 8 and should be designed
-      deliberately. Until then `WhenYouPlayThis`/`WhenThisQuests`/`WhenYouPlay`
-      (which fire at input sites that already resolve the bag) are sufficient.
-- [ ] Acceptance (remaining): a start-of-turn trigger fires (after the
-      turn-progression-with-suspension machinery lands).
+- [x] **Start/End-of-turn triggers** — done in Slice 8b-9. `AtStartOfTurn`
+      resolves in the Set step (§4.2.2.3), `AtEndOfTurn` in the End phase
+      (§4.4.1). The turn transition is now resumable: if a trigger suspends on a
+      `PendingDecision`, `begin_turn`/`apply_end_turn` return and
+      `resume_turn_progression` finishes the remaining steps from the current
+      `(phase, step)` once the decision is answered. Registry is threaded through
+      `apply_mulligan`/`begin_turn`/`apply_end_turn`. Tested in
+      `tests/turn_triggers.rs`.
 
 ---
 
@@ -515,9 +509,18 @@ Challenge/banish triggers into the bag (see
     character named X", matched via the def's `has_name`) and `AllCharacters {
     filter, another }` so "your *other* characters" excludes the source. Tested in
     `tests/targeted_effects.rs`.
+  - [x] **8b-9 — start/end-of-turn triggers + turn-progression-with-suspension**
+    (clears the Slice 5h deferral): `TriggerCondition::AtStartOfTurn` resolves in
+    the Set step (§4.2.2.3), `AtEndOfTurn` in the End phase (§4.4.1), both via
+    `enqueue_turn_triggers`. The turn transition is now **resumable** — if a
+    trigger suspends on a decision, `begin_turn` / `apply_end_turn` return, and
+    `resume_turn_progression` (called after `apply_decision` drains the bag)
+    finishes the remaining steps from the current `(phase, step)`. `registry` is
+    threaded through `apply_mulligan`/`begin_turn`/`apply_end_turn`. Tested in
+    `tests/turn_triggers.rs` (start, end, and a "may" trigger that pauses then
+    resumes the turn into Main).
   - **8b+ —** replacement effects (§7.7), **player** targets (a separate axis —
-    "chosen player draws/discards"), floating & delayed triggers, and turn-
-    progression-with-suspension (start/end-of-turn triggers).
+    "chosen player draws/discards"), and floating & delayed triggers.
 
 ### Slice 8b+ — harder resolution rules
 - Replacement effects (§7.7): "instead"/"skip"/"enter"; self-replacement applied
@@ -525,13 +528,10 @@ Challenge/banish triggers into the bag (see
 - Choice machinery completeness: "may" (§7.1.3), "up to N" (§7.1.8, no duplicates),
   ordering simultaneous discards/destinations, "that [game term]" resolution (§7.1.9).
 - Floating & delayed triggered abilities (§7.4.7).
-- **Turn-progression-with-suspension** (carried over from Slice 5h): the engine
-  needs a "what to do after the bag empties" continuation so a turn transition
-  can resume after bag resolution suspends on a decision. This unblocks
-  **start/end-of-turn triggers** (`TriggerCondition` Start/EndOfYourTurn) — see
-  the back-linked TODOs in `begin_turn` / `apply_end_turn`
-  (`src/domain/engine/reducer.rs`) and "Slice 5h" above. Likely also threads the
-  registry through `start` / `apply_end_turn` / `begin_turn`.
+- [x] **Turn-progression-with-suspension** (was carried over from Slice 5h) — done
+  in Slice 8b-9: `resume_turn_progression` finishes a turn transition that
+  suspended on a start/end-of-turn trigger, and `AtStartOfTurn`/`AtEndOfTurn` are
+  wired (registry threaded through `apply_mulligan`/`begin_turn`/`apply_end_turn`).
 - **Effect-driven leave-play removals** (return-to-hand, banish-by-effect,
   return to **top or bottom of deck**, etc.): each MUST
   (a) **dissolve any stack** via `CardInstance::dissolve(<destination zone
@@ -561,8 +561,8 @@ Challenge/banish triggers into the bag (see
 - [ ] A delayed trigger ("at the end of your turn, …") fires at the right moment.
 - [ ] An effect that returns/banishes a card removes its modifiers and a pending
       win/loss/banishment resolves on the next check (parallels the Donald case).
-- [ ] A turn transition resumes correctly after a bag suspension, and a
-      start/end-of-turn trigger fires (completes the deferred Slice 5h piece).
+- [x] A turn transition resumes correctly after a bag suspension, and a
+      start/end-of-turn trigger fires (Slice 8b-9, `tests/turn_triggers.rs`).
 
 ---
 
