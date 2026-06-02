@@ -450,10 +450,33 @@ Challenge/banish triggers into the bag (see
 
 ---
 
-## Slice 8 — Replacement effects & choices
+## Slice 8 — Effects, targeting & choices
 
-**Goal**: the trickiest resolution rules.
+**Goal**: the effect/choice DSL and the trickiest resolution rules.
 
+**Design decisions (scoping):**
+- **Target model:** a `Target` enum carried by targeted `Effect` variants
+  (`SelfCard`, `ChosenCharacter { side: Any/Opposing/Yours, another }`, …;
+  classification/cost filters and "up to N" added incrementally).
+- **Choosing:** targets are picked **at resolution** — a targeted effect sets
+  `PendingDecision::ChooseTarget { player, options, effect }` and suspends;
+  `Decision::ChooseTarget(card)` applies the stashed effect to the pick. Reuses
+  the bag suspend/resume (as triggers / Bodyguard-enter-exerted already do) and
+  fits triggered abilities (targets chosen as they resolve).
+- **Sub-slices (smallest-first):**
+  - **8a-1 — self move-zone effects** (no choice): `Effect::ReturnToHand` /
+    `IntoInkwell` with `Target::SelfCard`, threading the effect **source** into
+    `execute_effect`. Unblocks the banish-trigger effects (Marshmallow / HeiHei
+    "return this card to hand", Gramma Tala "into your inkwell") — relocating the
+    card from the **discard** where banishment left it.
+  - **8a-2 — targeting + Support:** extend `Target` with `ChosenCharacter` +
+    `PendingDecision::ChooseTarget`; wire **Support** (§10.13: may, choose another
+    character, snapshot the source's current `{S}` as a `+{S}` until-end-of-turn).
+  - **8b+ —** replacement effects (§7.7), "up to N" / no-duplicates / ordering,
+    floating & delayed triggers, turn-progression-with-suspension (start/end-of-
+    turn triggers), and the multi-effect-sequence-with-suspension case.
+
+### Slice 8b+ — harder resolution rules
 - Replacement effects (§7.7): "instead"/"skip"/"enter"; self-replacement applied
   first; "same replacement can't apply twice"; replacement of steps/phases.
 - Choice machinery completeness: "may" (§7.1.3), "up to N" (§7.1.8, no duplicates),

@@ -19,7 +19,7 @@ pub use domain::cards::{
     AbilityCost, ActivatedAbility, CardDefinition, CardKind, CardRegistry, GameRuleStatic, Keyword,
     ShiftAbility, ShiftCost, ShiftKind, StaticAbility, StaticTarget, TriggeredAbility,
 };
-pub use domain::effects::{CardCategory, Effect, TriggerCondition};
+pub use domain::effects::{CardCategory, Effect, Target, TriggerCondition};
 pub use domain::engine::{Decision, Input, Rejected, apply, start};
 pub use domain::game::{
     BagEntry, CardInstance, CharacterStats, Conditions, GameEvent, GameState, GameStatus,

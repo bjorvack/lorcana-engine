@@ -5,7 +5,7 @@ use crate::domain::cards::{
     CardDefinition, CardKind, CardRegistry, GameRuleStatic, Keyword, ShiftAbility, ShiftCost,
     ShiftKind, StaticAbility, StaticTarget,
 };
-use crate::domain::effects::{CardCategory, Effect, TriggerCondition};
+use crate::domain::effects::{CardCategory, Effect, Target, TriggerCondition};
 use crate::domain::game::{
     CardInstance, CharacterStats, Conditions, GameEvent, GameState, GameStatus, LocationStats,
     ModifierDuration, ModifierTarget, PendingDecision, RuleModifier, StatModifier, TriggerId,
@@ -659,7 +659,7 @@ fn resolve_action_play(
         card,
     }];
     for effect in effects {
-        execute_effect(state, active, effect, &mut events);
+        execute_effect(state, active, card, effect, &mut events);
     }
     events.extend(game_state_check(state));
     if !state.is_finished() {
@@ -1239,7 +1239,7 @@ fn apply_use_ability(
         player: active,
         card,
     }];
-    execute_effect(state, active, effect, &mut events);
+    execute_effect(state, active, card, effect, &mut events);
     events.extend(game_state_check(state));
     Ok(events)
 }
@@ -1707,7 +1707,13 @@ fn execute_trigger(
     let Some(entry) = state.remove_trigger(trigger) else {
         return;
     };
-    execute_effect(state, entry.controller(), entry.effect(), events);
+    execute_effect(
+        state,
+        entry.controller(),
+        entry.source(),
+        entry.effect(),
+        events,
+    );
     let _ = registry; // effects don't consult the registry yet
     events.extend(game_state_check(state));
 }
@@ -1716,6 +1722,7 @@ fn execute_trigger(
 fn execute_effect(
     state: &mut GameState,
     controller: PlayerId,
+    source: CardId,
     effect: Effect,
     events: &mut Vec<GameEvent>,
 ) {
@@ -1751,6 +1758,59 @@ fn execute_effect(
                 });
             }
         }
+        Effect::ReturnToHand(Target::SelfCard) => {
+            move_self_card(state, controller, source, SelfDestination::Hand);
+        }
+        Effect::IntoInkwell(Target::SelfCard) => {
+            move_self_card(state, controller, source, SelfDestination::Inkwell);
+        }
+    }
+}
+
+/// A zone an effect can move the source card to.
+#[derive(Clone, Copy)]
+enum SelfDestination {
+    Hand,
+    Inkwell,
+}
+
+/// Move `card` (the effect's source) from play or the discard to `owner`'s hand
+/// or inkwell, dissolving any stack into the destination (§5.1.7). If it was in
+/// play, its continuous modifiers end (§7.6.4).
+fn move_self_card(state: &mut GameState, owner: PlayerId, card: CardId, dest: SelfDestination) {
+    let was_in_play;
+    {
+        let Some(p) = state.player_mut(owner) else {
+            return;
+        };
+        was_in_play = p.play().contains(card);
+        let taken = if was_in_play {
+            p.play_mut().take(card)
+        } else {
+            p.discard_mut().take(card)
+        };
+        let Some(instance) = taken else {
+            return;
+        };
+        let conditions = match dest {
+            SelfDestination::Hand => Conditions::faceup_idle(),
+            // Facedown and exerted (Gramma Tala "facedown and exerted").
+            SelfDestination::Inkwell => Conditions {
+                ready: false,
+                damage: 0,
+                drying: false,
+                facedown: true,
+            },
+        };
+        for moved in instance.dissolve(conditions) {
+            match dest {
+                SelfDestination::Hand => p.hand_mut().push(moved),
+                SelfDestination::Inkwell => p.inkwell_mut().push(moved),
+            }
+        }
+    }
+    if was_in_play {
+        state.remove_modifiers_from_source(card);
     }
 }
 

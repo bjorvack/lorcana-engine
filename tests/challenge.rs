@@ -6,8 +6,8 @@
 
 use lorcana_engine::{
     CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterStats, Conditions,
-    Effect, GameEvent, GameState, GameStatus, Input, PlayerId, TriggerCondition, TriggeredAbility,
-    apply, start,
+    Effect, GameEvent, GameState, GameStatus, Input, PlayerId, Target, TriggerCondition,
+    TriggeredAbility, apply, start,
 };
 
 /// Start a game (skipping mulligans) using the given registry.
@@ -362,5 +362,92 @@ fn banish_triggers_fire_for_both_banisher_and_banished() {
         state.player(foe).unwrap().lore(),
         2,
         "banished target's when-banished-in-challenge trigger"
+    );
+}
+
+#[test]
+fn a_card_banished_in_a_challenge_can_return_itself_to_hand() {
+    let mut registry = CardRegistry::new();
+    // Plain lethal challenger.
+    registry.insert(CardDefinition::character(
+        CardDefId::from_raw(100),
+        1,
+        true,
+        5,
+        9,
+        1,
+    ));
+    // Marshmallow-style: "when banished in a challenge, return this card to hand."
+    registry.insert(
+        CardDefinition::character(CardDefId::from_raw(200), 1, true, 1, 2, 1).with_abilities(vec![
+            TriggeredAbility::new(
+                TriggerCondition::WhenBanishedInChallenge,
+                Effect::ReturnToHand(Target::SelfCard),
+            ),
+        ]),
+    );
+    let mut state = started_with(&registry);
+    let active = state.active_player();
+    let foe = opponent_of(&state, active);
+    let challenger = place_character(&mut state, active, 100, 5, 9, true);
+    let target = place_character(&mut state, foe, 200, 1, 2, false);
+
+    let _ = apply(
+        &mut state,
+        &registry,
+        Input::Challenge { challenger, target },
+    )
+    .expect("challenge");
+
+    assert!(
+        !state.player(foe).unwrap().play().contains(target),
+        "left play"
+    );
+    assert!(
+        !state.player(foe).unwrap().discard().contains(target),
+        "did not stay in the discard"
+    );
+    assert!(
+        state.player(foe).unwrap().hand().contains(target),
+        "returned itself to hand from the discard (Marshmallow/HeiHei)"
+    );
+}
+
+#[test]
+fn a_banished_card_can_put_itself_into_the_inkwell() {
+    let mut registry = CardRegistry::new();
+    registry.insert(CardDefinition::character(
+        CardDefId::from_raw(100),
+        1,
+        true,
+        5,
+        9,
+        1,
+    ));
+    // Gramma Tala-style: "when banished, into your inkwell facedown and exerted."
+    registry.insert(
+        CardDefinition::character(CardDefId::from_raw(200), 1, true, 1, 2, 1).with_abilities(vec![
+            TriggeredAbility::new(
+                TriggerCondition::WhenBanished,
+                Effect::IntoInkwell(Target::SelfCard),
+            ),
+        ]),
+    );
+    let mut state = started_with(&registry);
+    let active = state.active_player();
+    let foe = opponent_of(&state, active);
+    let challenger = place_character(&mut state, active, 100, 5, 9, true);
+    let target = place_character(&mut state, foe, 200, 1, 2, false);
+
+    let _ = apply(
+        &mut state,
+        &registry,
+        Input::Challenge { challenger, target },
+    )
+    .expect("challenge");
+
+    assert!(
+        state.player(foe).unwrap().inkwell().contains(target),
+        "the banished card went into the inkwell (Gramma Tala)"
     );
 }

@@ -1,5 +1,6 @@
 //! Effects produced by abilities.
 
+use super::target::Target;
 use serde::{Deserialize, Serialize};
 
 /// A built-in effect an ability can produce.
@@ -25,4 +26,11 @@ pub enum Effect {
     GainLore(u32),
     /// Each opponent of the controller loses this much lore (clamped at 0).
     EachOpponentLosesLore(u32),
+    /// Move the target card to its owner's hand (§7; e.g. Marshmallow "return
+    /// this card to your hand"). For `Target::SelfCard` the source returns itself
+    /// — including from the discard, where banishment leaves it.
+    ReturnToHand(Target),
+    /// Put the target card into its owner's inkwell facedown and exerted (Gramma
+    /// Tala "into your inkwell facedown and exerted").
+    IntoInkwell(Target),
 }
