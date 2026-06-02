@@ -204,3 +204,54 @@ fn remove_damage_heals_a_chosen_character() {
         "healed 2 of 3 damage"
     );
 }
+
+#[test]
+fn a_trigger_banishes_a_chosen_character_and_fires_when_banished() {
+    let mut reg = CardRegistry::new();
+    // Quester: "whenever this quests, banish chosen opposing character."
+    reg.insert(
+        CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 5, 1).with_abilities(vec![
+            TriggeredAbility::new(
+                TriggerCondition::WhenThisQuests,
+                Effect::Banish(Target::ChosenCharacter {
+                    filter: CharacterFilter::any(TargetSide::Opposing),
+                    another: false,
+                }),
+            ),
+        ]),
+    );
+    // Victim with high willpower (so it can't be banished by damage) + "when
+    // banished, gain 3 lore".
+    reg.insert(
+        CardDefinition::character(CardDefId::from_raw(200), 1, true, 2, 9, 1).with_abilities(vec![
+            TriggeredAbility::new(TriggerCondition::WhenBanished, Effect::GainLore(3)),
+        ]),
+    );
+    let mut state = started(&reg);
+    let active = state.active_player();
+    let foe = opponent_of(&state, active);
+    let quester = place(&mut state, active, 1000, 100, 5, 0);
+    let victim = place(&mut state, foe, 2000, 200, 9, 0);
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(Decision::ChooseTarget(victim)),
+    )
+    .expect("choose target");
+
+    assert!(
+        !state.player(foe).unwrap().play().contains(victim),
+        "banished out of play"
+    );
+    assert!(
+        state.player(foe).unwrap().discard().contains(victim),
+        "went to the discard"
+    );
+    assert_eq!(
+        state.player(foe).unwrap().lore(),
+        3,
+        "its when-banished trigger fired"
+    );
+}

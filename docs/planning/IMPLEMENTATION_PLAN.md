@@ -482,11 +482,15 @@ Challenge/banish triggers into the bag (see
     (clearing the centralization deferral). `ReturnToHand`/`IntoInkwell` to a
     *chosen* target also work now (move to the target's owner's zone). Tested in
     `tests/targeted_effects.rs`.
-  - **8b+ —** `Effect::Banish(Target)` (direct banish — needs registry/events in
-    the apply path), replacement effects (§7.7), "up to N" / no-duplicates /
-    ordering, the remaining `CharacterFilter` dimensions, item/location/player
-    targets, floating & delayed triggers, turn-progression-with-suspension
-    (start/end-of-turn triggers), and multi-effect-sequence-with-suspension.
+  - [x] **8b-2 — direct banish:** `Effect::Banish(Target)` ("banish chosen
+    character") via `banish_by_effect` (registry/events threaded through
+    `execute_effect`/`apply_effect_to`): dissolve to discard, end modifiers, emit
+    `Banished`, enqueue `WhenBanished` (so move-zone banish effects compose).
+    Tested in `tests/targeted_effects.rs`.
+  - **8b+ —** replacement effects (§7.7), "up to N" / no-duplicates / ordering,
+    the remaining `CharacterFilter` dimensions, item/location/player targets,
+    floating & delayed triggers, turn-progression-with-suspension (start/end-of-
+    turn triggers), and multi-effect-sequence-with-suspension.
 
 ### Slice 8b+ — harder resolution rules
 - Replacement effects (§7.7): "instead"/"skip"/"enter"; self-replacement applied

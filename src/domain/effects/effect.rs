@@ -59,4 +59,6 @@ pub enum Effect {
         /// How much damage to remove (clamped at 0).
         amount: u32,
     },
+    /// Banish the target directly (not via damage) — "banish chosen character".
+    Banish(Target),
 }

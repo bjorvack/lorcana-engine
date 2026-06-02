@@ -661,7 +661,7 @@ fn resolve_action_play(
         card,
     }];
     for effect in effects {
-        execute_effect(state, active, card, &effect, &mut events);
+        execute_effect(state, registry, active, card, &effect, &mut events);
     }
     events.extend(game_state_check_with_triggers(state, registry));
     if !state.is_finished() {
@@ -1275,7 +1275,7 @@ fn apply_use_ability(
         player: active,
         card,
     }];
-    execute_effect(state, active, card, &effect, &mut events);
+    execute_effect(state, registry, active, card, &effect, &mut events);
     events.extend(game_state_check_with_triggers(state, registry));
     // Resolve any triggers the effect produced (e.g. a banished card's "when
     // banished"), unless the effect itself is awaiting a target choice.
@@ -1763,18 +1763,19 @@ fn execute_trigger(
     };
     execute_effect(
         state,
+        registry,
         entry.controller(),
         entry.source(),
         &entry.effect(),
         events,
     );
-    let _ = registry; // effects don't consult the registry yet
     events.extend(game_state_check_with_triggers(state, registry));
 }
 
 /// Apply a built-in effect for `controller`.
 fn execute_effect(
     state: &mut GameState,
+    registry: &CardRegistry,
     controller: PlayerId,
     source: CardId,
     effect: &Effect,
@@ -1818,8 +1819,9 @@ fn execute_effect(
         | Effect::IntoInkwell(target)
         | Effect::GiveStrengthThisTurn { target, .. }
         | Effect::DealDamage { target, .. }
-        | Effect::RemoveDamage { target, .. } => match target {
-            Target::SelfCard => apply_effect_to(state, source, source, effect),
+        | Effect::RemoveDamage { target, .. }
+        | Effect::Banish(target) => match target {
+            Target::SelfCard => apply_effect_to(state, registry, source, source, effect, events),
             Target::ChosenCharacter { filter, another } => {
                 let options = chosen_character_options(state, controller, source, filter, *another);
                 if !options.is_empty() {
@@ -1834,7 +1836,7 @@ fn execute_effect(
             Target::AllCharacters(filter) => {
                 let targets = chosen_character_options(state, controller, source, filter, false);
                 for card in targets {
-                    apply_effect_to(state, source, card, effect);
+                    apply_effect_to(state, registry, source, card, effect, events);
                 }
             }
         },
@@ -1891,7 +1893,14 @@ fn move_self_card(state: &mut GameState, owner: PlayerId, card: CardId, dest: Se
 /// Apply a targeted effect to an already-resolved `target_card` (after a
 /// `SelfCard`/`AllCharacters` resolution or a `ChooseTarget` decision). The
 /// untargeted variants never reach here.
-fn apply_effect_to(state: &mut GameState, source: CardId, target_card: CardId, effect: &Effect) {
+fn apply_effect_to(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    source: CardId,
+    target_card: CardId,
+    effect: &Effect,
+    events: &mut Vec<GameEvent>,
+) {
     match effect {
         Effect::ReturnToHand(_) => {
             if let Some(owner) = owner_holding(state, target_card) {
@@ -1927,7 +1936,54 @@ fn apply_effect_to(state: &mut GameState, source: CardId, target_card: CardId, e
                 conditions.damage = conditions.damage.saturating_sub(*amount);
             }
         }
+        Effect::Banish(_) => {
+            banish_by_effect(state, registry, target_card, events);
+        }
         Effect::DrawCards(_) | Effect::GainLore(_) | Effect::EachOpponentLosesLore(_) => {}
+    }
+}
+
+/// Banish `card` directly by an effect (not via damage, not in a challenge):
+/// dissolve its stack into the owner's discard (§5.1.7), end its continuous
+/// modifiers (§7.6.4), emit `Banished`, and enqueue its "when banished" trigger.
+/// Mirrors the game-state-check banishment but is registry-aware so the trigger
+/// can be read (the move-zone variants — e.g. Marshmallow — then relocate it).
+fn banish_by_effect(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    card: CardId,
+    events: &mut Vec<GameEvent>,
+) {
+    let Some(owner) = owner_holding(state, card) else {
+        return;
+    };
+    if let Some(p) = state.player_mut(owner)
+        && let Some(instance) = p.play_mut().take(card)
+    {
+        for c in instance.dissolve(Conditions::faceup_idle()) {
+            p.discard_mut().push(c);
+        }
+    } else {
+        return; // not in play (e.g. already gone)
+    }
+    state.remove_modifiers_from_source(card);
+    events.push(GameEvent::Banished {
+        player: owner,
+        card,
+    });
+    if let Some(def_id) = state
+        .player(owner)
+        .and_then(|p| p.discard().iter().find(|c| c.id() == card))
+        .map(CardInstance::definition)
+    {
+        enqueue_triggers_for_def(
+            state,
+            registry,
+            owner,
+            card,
+            def_id,
+            &TriggerCondition::WhenBanished,
+        );
     }
 }
 
@@ -2033,7 +2089,7 @@ fn apply_decision(
                 return Err(Rejected::InvalidDecision);
             }
             let _ = state.take_pending();
-            apply_effect_to(state, source, chosen, &effect);
+            apply_effect_to(state, registry, source, chosen, &effect, &mut events);
             events.extend(game_state_check_with_triggers(state, registry));
         }
         _ => return Err(Rejected::InvalidDecision),
