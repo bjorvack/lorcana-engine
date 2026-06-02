@@ -386,9 +386,14 @@ Challenge/banish triggers into the bag (see
 [Trigger taxonomy rollout](#trigger-taxonomy-rollout-when-the-triggercondition-todo-gets-done)):
 - [x] "whenever this character challenges / is challenged"
       (`WhenThisChallenges` / `WhenChallenged`, enqueued in `apply_challenge`).
-- "banishes another in a challenge" (`WhenBanishesInChallenge`) / "when this is
-  banished" (`WhenBanished`), plus the §1.9.1.3 "banished by that character"
-  attribution — ride the `game_state_check` banishment path (next deferred item).
+- [x] "when this is banished" (`WhenBanished`) / "...in a challenge"
+      (`WhenBanishedInChallenge`, Marshmallow/HeiHei) / "banishes another in a
+      challenge" (`WhenBanishesInChallenge`) — enqueued in `apply_challenge` from
+      the `game_state_check` banishment events (`enqueue_banish_triggers`). Still
+      Slice 8: the matching **effects** (return-to-hand, to-inkwell) — which must
+      move the card **from the discard** — the §1.9.1.3 "banished by that
+      character" attribution, and centralizing `WhenBanished` for effect-driven
+      (non-challenge) banishment.
 
 **Acceptance (whole slice)**
 - [ ] Each keyword has a passing scenario matching its §10 definition/example.

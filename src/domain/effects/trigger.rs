@@ -75,6 +75,9 @@ pub enum TriggerCondition {
     /// "When this character/location is banished" — fires for a card as it leaves
     /// play to the discard (§1.9.1.1, §9.4).
     WhenBanished,
+    /// "When this character is banished **in a challenge**" — the banished-side
+    /// counterpart of `WhenBanishesInChallenge` (Marshmallow, `HeiHei`).
+    WhenBanishedInChallenge,
     /// "Whenever a card is put under this character" — fires when a card is placed
     /// under this one (e.g. via Boost, §10.4).
     WhenCardPutUnder,

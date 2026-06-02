@@ -919,11 +919,63 @@ fn apply_challenge(
         target,
         &TriggerCondition::WhenChallenged,
     );
-    events.extend(game_state_check(state));
+    let check_events = game_state_check(state);
+    let banished_in_check = |id: CardId| {
+        check_events
+            .iter()
+            .any(|e| matches!(e, GameEvent::Banished { card, .. } if *card == id))
+    };
+    // "When this is banished" / "...in a challenge" for each card the challenge
+    // banished (the cards are now in the discard).
+    enqueue_banish_triggers(state, registry, &check_events, true);
+    // "Whenever this character banishes another in a challenge" for each side that
+    // banished the other (read from play or discard, since the banisher may itself
+    // have been banished simultaneously).
+    if banished_in_check(target)
+        && let Some(def) = def_in_play_or_discard(state, active, challenger)
+    {
+        enqueue_triggers_for_def(
+            state,
+            registry,
+            active,
+            challenger,
+            def,
+            &TriggerCondition::WhenBanishesInChallenge,
+        );
+    }
+    if banished_in_check(challenger)
+        && let Some(def) = def_in_play_or_discard(state, target_owner, target)
+    {
+        enqueue_triggers_for_def(
+            state,
+            registry,
+            target_owner,
+            target,
+            def,
+            &TriggerCondition::WhenBanishesInChallenge,
+        );
+    }
+    events.extend(check_events);
     if !state.is_finished() {
         events.extend(resolve_bag(state, registry));
     }
     Ok(events)
+}
+
+/// A card's definition id whether it is in play or in `owner`'s discard (e.g. a
+/// card that may have just been banished).
+fn def_in_play_or_discard(state: &GameState, owner: PlayerId, card: CardId) -> Option<CardDefId> {
+    state
+        .instance_in_play(card)
+        .map(CardInstance::definition)
+        .or_else(|| {
+            state
+                .player(owner)?
+                .discard()
+                .iter()
+                .find(|c| c.id() == card)
+                .map(CardInstance::definition)
+        })
 }
 
 /// Add damage counters to an in-play card (§4.3.6.16).
@@ -1389,7 +1441,28 @@ fn enqueue_self_triggers(
     let Ok(instance) = find_in_play(state, controller, source) else {
         return;
     };
-    let Some(definition) = registry.get(instance.definition()) else {
+    enqueue_triggers_for_def(
+        state,
+        registry,
+        controller,
+        source,
+        instance.definition(),
+        condition,
+    );
+}
+
+/// Enqueue triggers matching `condition` from `source`'s definition. Works for a
+/// `source` that is no longer in play (e.g. a just-banished card now in the
+/// discard) since it reads abilities from the definition, not the instance.
+fn enqueue_triggers_for_def(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    controller: PlayerId,
+    source: CardId,
+    definition_id: CardDefId,
+    condition: &TriggerCondition,
+) {
+    let Some(definition) = registry.get(definition_id) else {
         return;
     };
     let matches: Vec<(bool, Effect)> = definition
@@ -1400,6 +1473,59 @@ fn enqueue_self_triggers(
         .collect();
     for (optional, effect) in matches {
         let _ = state.enqueue_trigger(controller, source, optional, effect);
+    }
+}
+
+/// Enqueue "when this is banished" / "...in a challenge" triggers for each card
+/// banished by the just-run game-state check (the `Banished` events). The card is
+/// already in the discard (dissolved), so its triggers are read from its def.
+///
+/// TODO(Slice 8): (a) the matching **effects** (e.g. Marshmallow / `HeiHei` "return
+/// this card to your hand", Gramma Tala "into your inkwell") need the move-zone
+/// effect DSL — and must relocate the card *from the discard* (where it now is),
+/// not from play; (b) when banishment can happen outside a challenge (effect-
+/// driven, Slice 8), enqueue `WhenBanished` centrally (a `game_state_check`
+/// wrapper) rather than only here; (c) §1.9.1.3 "banished by that character"
+/// attribution for who-banished-whom effects.
+fn enqueue_banish_triggers(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    check_events: &[GameEvent],
+    in_challenge: bool,
+) {
+    let banished: Vec<(PlayerId, CardId)> = check_events
+        .iter()
+        .filter_map(|e| match e {
+            GameEvent::Banished { player, card } => Some((*player, *card)),
+            _ => None,
+        })
+        .collect();
+    for (owner, card) in banished {
+        let Some(def_id) = state
+            .player(owner)
+            .and_then(|p| p.discard().iter().find(|c| c.id() == card))
+            .map(CardInstance::definition)
+        else {
+            continue;
+        };
+        enqueue_triggers_for_def(
+            state,
+            registry,
+            owner,
+            card,
+            def_id,
+            &TriggerCondition::WhenBanished,
+        );
+        if in_challenge {
+            enqueue_triggers_for_def(
+                state,
+                registry,
+                owner,
+                card,
+                def_id,
+                &TriggerCondition::WhenBanishedInChallenge,
+            );
+        }
     }
 }
 

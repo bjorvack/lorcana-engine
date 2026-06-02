@@ -314,3 +314,53 @@ fn challenge_triggers_fire_for_challenger_and_target() {
         "challenged character's trigger fired"
     );
 }
+
+#[test]
+fn banish_triggers_fire_for_both_banisher_and_banished() {
+    let mut registry = CardRegistry::new();
+    // Challenger (5/9): "whenever this banishes another in a challenge, gain 1 lore."
+    registry.insert(
+        CardDefinition::character(CardDefId::from_raw(100), 1, true, 5, 9, 1).with_abilities(vec![
+            TriggeredAbility::new(
+                TriggerCondition::WhenBanishesInChallenge,
+                Effect::GainLore(1),
+            ),
+        ]),
+    );
+    // Target (1/2): "when banished in a challenge, gain 2 lore" (Marshmallow-style).
+    registry.insert(
+        CardDefinition::character(CardDefId::from_raw(200), 1, true, 1, 2, 1).with_abilities(vec![
+            TriggeredAbility::new(
+                TriggerCondition::WhenBanishedInChallenge,
+                Effect::GainLore(2),
+            ),
+        ]),
+    );
+    let mut state = started_with(&registry);
+    let active = state.active_player();
+    let foe = opponent_of(&state, active);
+    let challenger = place_character(&mut state, active, 100, 5, 9, true);
+    let target = place_character(&mut state, foe, 200, 1, 2, false); // exerted, lethal willpower 2
+
+    let _ = apply(
+        &mut state,
+        &registry,
+        Input::Challenge { challenger, target },
+    )
+    .expect("challenge");
+
+    assert!(
+        state.player(foe).unwrap().discard().contains(target),
+        "target was banished"
+    );
+    assert_eq!(
+        state.player(active).unwrap().lore(),
+        1,
+        "challenger's banishes-in-challenge trigger"
+    );
+    assert_eq!(
+        state.player(foe).unwrap().lore(),
+        2,
+        "banished target's when-banished-in-challenge trigger"
+    );
+}
