@@ -1,450 +1,288 @@
 # Lorcana Engine Architecture
 
-> **Note**: This is a living document that describes the intended architecture of the lorcana-engine. As implementation progresses, this document will be updated to reflect actual implementation decisions and discovered patterns. Specific struct definitions and implementation details will be added as components are completed.
+> **Note**: This is a living document describing the intended architecture of the
+> lorcana-engine. It is written to match the official Disney Lorcana Comprehensive
+> Rules (see [../rules/](../rules/)). As implementation progresses via vertical
+> slices (see [../planning/IMPLEMENTATION_PLAN.md](../planning/IMPLEMENTATION_PLAN.md)),
+> concrete type definitions will be filled in here.
 
 ## Overview
 
-The lorcana-engine is a headless, deterministic game engine for Disney's Lorcana trading card game. It uses a data-driven approach with hybrid effect system (TOML definitions + Rhai scripting) to ensure flexibility for future card releases while maintaining type safety and performance.
+The lorcana-engine is a headless, deterministic, rules-accurate game engine for
+Disney's Lorcana trading card game. It is data-driven (card definitions describe
+behaviour declaratively) and is built so that the same seed plus the same ordered
+sequence of inputs always produces the same game state and event log.
+
+The architecture deliberately models Lorcana's *actual* rules rather than borrowing
+concepts from other TCGs. In particular, Lorcana has **no MTG-style stack and no
+priority/response windows** — it uses **the bag** for simultaneous triggered
+abilities, and effects resolve at "sorcery speed" only.
 
 ## Core Design Principles
 
-### 1. Event-Sourced Game State
-- **Deterministic**: Same seed + actions = identical outcome
-- **Replayable**: Complete game log for debugging and replays
-- **Serializable**: Game state can be saved/loaded at any point
-- **Authoritative**: Single source of truth with no conflicting state
+### 1. Deterministic, reproducible game state
+- **Deterministic**: same seed + same ordered inputs ⇒ identical state and event log.
+- **Replayable**: the full input stream can be re-applied to reconstruct any point.
+- **Serializable**: game state can be saved/loaded at any point, including while
+  waiting on a player decision mid-resolution.
+- **Authoritative**: a single `GameState` is the source of truth.
 
-### 2. Data-Driven Card Definitions
-- **TOML-based**: Card definitions in human-readable TOML format
-- **No code changes**: New cards can be added without recompiling
-- **Version control friendly**: Easy to diff and review card changes
-- **Hot-reload capable**: Card definitions can be reloaded without restart
+To preserve determinism:
+- The random seed and PRNG state live **inside** `GameState`; all randomness
+  (shuffles, random discards) flows through it. No global RNG.
+- Game logic avoids iteration-order-dependent containers. Use ordered collections
+  (`BTreeMap`, `Vec`, index-keyed maps) wherever iteration order can affect outcomes.
 
-### 3. Hybrid Effect System
-- **Built-in effects**: Common effects (damage, draw, quest, etc.) as TOML
-- **Scripted effects**: Complex mechanics via Rhai scripting
-- **Extensible**: New effect types can be added to the engine
-- **Type-safe**: Rust ensures effect validity at compile time
+### 2. Inputs vs. events
+The engine is a **state machine driven by an input stream**:
+- **Inputs** are the things players submit: `Action`s (play a card, quest, challenge,
+  put a card in the inkwell, end turn, …) and `Choice`s (answers to decisions the
+  engine requests during resolution, e.g. "choose a character", "you may …",
+  "order these triggers").
+- **Events** are **outputs**: an append-only log describing what happened, for UIs,
+  replays, and debugging.
 
-### 4. Headless Architecture
-- **No UI coupling**: Engine has no knowledge of rendering or input
-- **Event-driven**: Emits events for UI to consume
-- **Multi-platform**: Can be embedded in web, desktop, mobile, or terminal
-- **Testable**: Easy to test without UI dependencies
+This distinction matters because many Lorcana effects require player input *while an
+ability is resolving*. Those choices are first-class inputs, not hidden internal
+decisions — that is what keeps replays exact.
 
-## Architecture Layers
+### 3. Data-driven card definitions
+- Card behaviour is described declaratively (definitions + a structured effect DSL).
+- Adding most new cards requires **no engine code changes**, only new definitions.
+- Definitions are version-control friendly and validated on load.
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                    UI Layer (External)                   │
-│              (Web, Desktop, Mobile, Terminal)            │
-└─────────────────────────────────────────────────────────┘
-                            │
-                            ▼
-┌─────────────────────────────────────────────────────────┐
-│                   API Layer                              │
-│              (Action validation, Event emission)          │
-└─────────────────────────────────────────────────────────┘
-                            │
-                            ▼
-┌─────────────────────────────────────────────────────────┐
-│                 Game Engine Core                         │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
-│  │   Rules      │  │    State     │  │   Effects    │  │
-│  │   Engine     │  │   Manager    │  │   Executor   │  │
-│  └──────────────┘  └──────────────┘  └──────────────┘  │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
-│  │    Turn      │  │    Zone      │  │   Trigger    │  │
-│  │   Manager    │  │   Manager    │  │   System     │  │
-│  └──────────────┘  └──────────────┘  └──────────────┘  │
-└─────────────────────────────────────────────────────────┘
-                            │
-                            ▼
-┌─────────────────────────────────────────────────────────┐
-│              Card Definition Layer                       │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
-│  │   Card       │  │   Effect     │  │   Script     │  │
-│  │   Registry   │  │   Compiler   │  │   Engine     │  │
-│  └──────────────┘  └──────────────┘  └──────────────┘  │
-└─────────────────────────────────────────────────────────┘
-                            │
-                            ▼
-┌─────────────────────────────────────────────────────────┐
-│              Data Storage Layer                          │
-│         (TOML card definitions, Game logs)                │
-└─────────────────────────────────────────────────────────┘
-```
+### 4. Structured effect DSL (no general-purpose scripting)
+- Effects, targets, and conditions are represented as **serializable Rust enums**.
+- The vast majority of card text is templated and maps directly onto this DSL.
+- For the rare card that doesn't fit, the escape hatch is `Effect::Custom(name)`,
+  which dispatches to a **compiled-in, deterministic Rust handler** — not an embedded
+  script interpreter. This protects determinism, serialization, and replay.
+- Embedded scripting (e.g. Rhai) is intentionally **not** part of the core design. It
+  can be reconsidered only if a concrete card provably cannot be expressed by the DSL
+  plus custom handlers.
 
-## Core Components
+### 5. Headless
+- No coupling to rendering or input. The engine emits events; a host consumes them.
+- Embeddable in web (WASM), desktop, mobile, or terminal.
 
-### 1. Game State
+## The bag (Lorcana's resolution model)
 
-The game state will be the single source of truth containing all game information. It will include:
-- Game metadata (ID, turn, phase, step, priority player, random seed)
-- Player states (lore, inkwell, hand, deck, discard)
-- Zone management (all Lorcana zones)
-- Stack for effect resolution
-- Event log for determinism and replay
+This is the most important rules-specific concept and replaces any notion of a
+"stack" or "priority":
 
-*Implementation details to be defined during Phase 1 development.*
+- When one or more triggered abilities' conditions are met simultaneously, each is
+  added to **the bag** by the controller of the card that triggered it (rules §8.7.3).
+- The **active player** then resolves **all** of their abilities from the bag, one at
+  a time and in an order they choose (§8.7.4–8.7.5). Newly created triggers are added
+  to the bag as the current ability finishes.
+- Then the **next player in turn order** resolves all of theirs, and so on around the
+  table, until the bag is empty (§8.7.6–8.7.8).
+- There is **no opponent response window**: players cannot play cards or activate
+  abilities in reaction to another player's action. Activated abilities and plays are
+  taken by the active player during their Main Phase only.
 
-### 2. Zone System
+Implications for the engine:
+- The bag is an ordered collection plus a small resolver state machine; it is **not**
+  LIFO and is **not** a zone in the physical sense (though the rules group it with
+  zones in §8.7).
+- Resolving a bag entry may require a `Choice` from a specific player, so bag
+  resolution can suspend on a `PendingDecision`.
 
-Lorcana has multiple zones where cards can exist:
-- Deck
-- Hand
-- Inkwell
-- Field
-- Discard
-- Stack
-- Banished
+## Zones
 
-Each zone will have visibility rules and ownership tracking.
+Per rules §8, the zones are exactly:
 
-*Implementation details to be defined during Phase 1 development.*
+| Zone | Visibility | Notes |
+|------|------------|-------|
+| Deck | private | facedown, ordered |
+| Hand | private (owner) | |
+| Inkwell | private | facedown; each card = 1 ink regardless of its face |
+| Play | public | characters, items, locations |
+| Discard | public | banished cards and resolved actions go here |
+| Bag | n/a | where triggered abilities wait to resolve (see above) |
 
-### 3. Card Definition System
+Notes:
+- There is **no separate "banished" zone** — banished cards go to **discard** (§8.6.2).
+- "Field"/"battlefield" is called **Play**.
+- **Card stacks** (created by Shift) are *not* a zone and are *not* the bag. A stack is
+  an ordered pile of card instances **within Play**: a top card with one or more cards
+  under it (§5.1.6–5.1.7, §10.10). The engine models this as a stack of card instances
+  attached to the top card; when the top card leaves play the whole stack moves with it.
 
-Cards will be defined in TOML with a hybrid effect system. The system will support:
+## Card instances and conditions
 
-- **Basic card properties**: ID, name, version, cost, ink type, card type
-- **Character stats**: Strength, willpower, quest value
-- **Classifications**: Categories for card references
-- **Keywords**: Common abilities (Rush, Evasive, etc.)
-- **Abilities**: Triggered, activated, static, and replacement effects
-- **Built-in effects**: Common effects defined in TOML
-- **Scripted effects**: Complex mechanics via Rhai scripts
+A **card definition** is static data (name, cost, ink, stats, abilities). A **card
+instance** is a specific card in a specific zone with mutable state. Per rules §5, an
+instance carries **conditions**:
 
-*Card definition format and examples will be developed during Phase 2 implementation.*
+- `ready` / `exerted`
+- `damage: u32` (damage counters; persistent; banish when `damage >= willpower`, §6.2.10)
+- `dry` / `drying` — the "summoning sickness" condition. A **drying** character cannot
+  quest, be declared as a challenger, or exert to pay a cost (§5.1.11). It becomes
+  **dry** at the start of its controller's next turn (Set step).
+- `faceup` / `facedown`
+- stack membership (`on_top` / `under` / `in_a_stack`)
 
-### 4. Effect System
+Conditions are validated per zone (§5.1.13): e.g. inkwell cards may only be
+ready/exerted/facedown; deck cards only facedown; discard cards only faceup.
 
-The effect system uses a hierarchical approach:
+## Turn structure
 
-#### Built-in Effects (TOML)
-- `draw`: Draw cards
-- `damage`: Deal damage to characters
-- `heal`: Restore willpower
-- `quest`: Gain lore
-- `exert`: Exert a character
-- `ready`: Ready a character
-- `move`: Move cards between zones
-- `create`: Create tokens
-- `counter`: Add counters
-- `modify`: Modify card stats
+Matches rules §4 exactly:
 
-#### Scripted Effects (Rhai)
-Complex mechanics that don't fit built-in patterns:
-- Multi-step effects with conditions
-- Dynamic targeting based on game state
-- Custom timing and priority interactions
-- Replacement effects
+- **Beginning Phase**: `Ready` → `Set` → `Draw`
+  - *Ready*: "during your turn" effects begin; ready all your cards (§4.2.1).
+  - *Set*: drying characters become dry; gain lore from your locations; start-of-turn
+    triggers go to the bag and resolve (§4.2.2).
+  - *Draw*: draw a card (the starting player skips this on turn 1) (§4.2.3).
+- **Main Phase**: turn actions in any order — put a card in inkwell (once per turn),
+  play a card, quest, challenge, move a character to a location, use activated
+  abilities (§4.3).
+- **End of Turn Phase**: end-of-turn triggers go to the bag; "this turn" effects end
+  (§4.4).
 
-### 5. Trigger System
+(There is no "Cleanup" step; that earlier name has been removed.)
 
-Event-driven trigger system for card abilities. The system will support:
-- Card enters/leaves play triggers
-- Turn start/end triggers
-- Phase start/end triggers
-- Damage dealing triggers
-- Quest completion triggers
-- Custom triggers for unique mechanics
+## Game-state checks
 
-*Implementation details to be defined during Phase 3 development.*
+The engine performs a **game-state check** at the times defined in §1.9 (end of any
+step, after any action or ability finishes resolving, and after each bag entry
+resolves). A check applies required actions such as banishing characters/locations
+with `damage >= willpower` and detecting win/loss (20 lore; empty-deck draw).
 
-### 6. Turn Structure
+## Card types
 
-Lorcana's turn structure with phases and steps:
-- **Beginning Phase**: Ready, Set, Draw steps
-- **Main Phase**: Main actions (play cards, quest, challenge)
-- **End Phase**: End of turn effects and cleanup
+Per rules §6:
+- **Character** — has `{S}` strength, `{W}` willpower, `{L}` lore, and at least one
+  classification; can quest and challenge.
+- **Action** — played for a one-time effect, then to discard; never enters Play. A
+  **Song** is an Action with the **"Song" classification** (not a distinct card type),
+  payable by exerting a character (§6.3.3).
+- **Item** — stays in Play.
+- **Location** — stays in Play; has move cost and willpower; may give lore each turn.
 
-The system will track current turn, active player, current phase, step, and priority player.
+## Abilities
 
-*Implementation details to be defined during Phase 1 development.*
+Per rules §7, modeled as a tagged union:
+- **Triggered** ("When/Whenever/At the start of/At the end of …") → goes to the bag.
+- **Activated** (`[Cost] — [Effect]`) → used by the active player; resolves immediately
+  (not via the bag).
+- **Static** — continuous modifiers/permissions while in play (or for a duration).
+- **Replacement** ("instead"/"skip"/"enter") → §7.7, including self-replacement
+  ordering and "same replacement can't apply twice" rules.
+- **Floating / delayed** triggered abilities (§7.4.7) exist outside the bag until their
+  condition is met, then enqueue.
 
-### 7. Event System
+Stat modifiers (§7.8) apply continuously and combine; negative `{S}`/`{L}` clamp to 0
+for use while retaining the true value for further modification.
 
-Comprehensive event system for UI updates and replays. Events will include:
-- Game lifecycle events (start, end)
-- Turn progression events
-- Card movement events
-- Effect resolution events
-- State change events
+## Layered structure
 
-*Implementation details to be defined during Phase 1 development.*
-
-## Data Flow
-
-### 1. Player Action Flow
+All **game logic lives in `domain`**. `infrastructure` is IO/adapters only.
+`application` is a thin facade.
 
 ```
-Player Action
-    ↓
-API Layer (validate action format)
-    ↓
-Rules Engine (validate legality)
-    ↓
-State Manager (apply changes)
-    ↓
-Effect Executor (process effects)
-    ↓
-Trigger System (check triggers)
-    ↓
-Event Emitter (generate events)
-    ↓
-UI Update (consume events)
+┌───────────────────────────────────────────────┐
+│ Host (UI / CLI / tests) — consumes events,     │
+│ submits Actions and Choices                    │
+└───────────────────────────────────────────────┘
+                     │
+                     ▼
+┌───────────────────────────────────────────────┐
+│ application/api  (thin facade)                 │
+│  new_game · submit(Action|Choice) · query ·    │
+│  subscribe(events)                             │
+└───────────────────────────────────────────────┘
+                     │
+                     ▼
+┌───────────────────────────────────────────────┐
+│ domain  (the engine)                           │
+│  state · zones · turn · cards · effects ·      │
+│  bag · rules · resolution · events             │
+└───────────────────────────────────────────────┘
+                     │
+                     ▼
+┌───────────────────────────────────────────────┐
+│ infrastructure  (IO/adapters)                  │
+│  parsing(TOML) · random(seeded PRNG) ·         │
+│  serialization(serde) · card-data loader       │
+└───────────────────────────────────────────────┘
 ```
 
-### 2. Card Resolution Flow
+## Proposed module layout
 
 ```
-Card Played
-    ↓
-Check costs (ink, requirements)
-    ↓
-Move card to play zone
-    ↓
-Check for ETB triggers
-    ↓
-Resolve triggered abilities (stack if multiple)
-    ↓
-Apply effects
-    ↓
-Check state-based actions
-    ↓
-Emit events
+src/
+├── main.rs                     # CLI entry point
+├── lib.rs                      # library exports / public prelude
+├── domain/                     # ALL game logic; no IO
+│   ├── state/                  # GameState, PlayerState, CardInstance, Conditions
+│   ├── zones/                  # zone model incl. card stacks (Shift)
+│   ├── turn/                   # phase/step progression, start/end hooks
+│   ├── cards/                  # CardDefinition, Registry, classifications, keywords
+│   ├── effects/                # Effect/Target/Condition DSL + resolver
+│   ├── bag/                    # trigger collection + ordered resolution
+│   ├── rules/                  # legality (cost/timing/targeting), game-state checks
+│   ├── resolution/             # PendingDecision / Choice request-response
+│   └── events/                 # output GameEvent log
+├── infrastructure/
+│   ├── parsing/                # TOML → CardDefinition
+│   ├── random/                 # seeded PRNG implementation
+│   ├── serialization/          # serde helpers
+│   └── carddata/               # bulk card-data loader (e.g. community dataset → DSL)
+├── application/
+│   └── api/                    # thin facade: actions, choices, queries, events
+└── shared/                     # error & result types
 ```
 
-## Technology Stack
+Type-safe IDs (`CardId`, `PlayerId`, `ZoneId`, `GameId`) and core enums
+(`CardType`, `InkType`, `Rarity`, `Phase`, `Step`) already exist under
+`domain/types/` and will be folded into the layout above as slices land.
 
-### Core Dependencies
-- **serde**: Serialization/deserialization of game state and card definitions
-- **toml**: Parsing card definitions
-- **rhai**: Embedded scripting for complex effects
-- **rand**: Deterministic random number generation
-- **thiserror**: Error handling
+## Data flow
 
-### Optional Dependencies
-- **uuid**: Unique identifiers for games, players, cards
-- **chrono**: Timestamps for game logs
-- **tracing**: Structured logging and instrumentation
-
-## File Structure
-
+### Submitting an action
 ```
-lorcana-engine/
-├── src/
-│   ├── main.rs                   # CLI entry point
-│   ├── lib.rs                    # Library exports and public API
-│   ├── domain/                   # Core domain logic (no external dependencies)
-│   │   ├── mod.rs
-│   │   ├── game/                 # Game state, turn structure, zones
-│   │   │   ├── mod.rs
-│   │   │   ├── state.rs          # GameState and related types
-│   │   │   ├── turn.rs           # Turn management
-│   │   │   ├── zones.rs          # Zone management
-│   │   │   └── events.rs         # Event system
-│   │   ├── cards/                # Card definitions and registry
-│   │   │   ├── mod.rs
-│   │   │   ├── definition.rs     # Card definition types
-│   │   │   ├── registry.rs       # Card registry
-│   │   │   └── loader.rs         # Card loader
-│   │   ├── effects/              # Effect system
-│   │   │   ├── mod.rs
-│   │   │   ├── executor.rs       # Effect execution
-│   │   │   ├── builtin.rs        # Built-in effect implementations
-│   │   │   └── trigger.rs       # Trigger system
-│   │   └── types/                # Shared domain types
-│   │       ├── mod.rs
-│   │       ├── ids/              # Type-safe IDs
-│   │       │   ├── mod.rs
-│   │       │   ├── card_id.rs
-│   │       │   ├── game_id.rs
-│   │       │   ├── player_id.rs
-│   │       │   └── zone_id.rs
-│   │       ├── turn/             # Turn structure types
-│   │       │   ├── mod.rs
-│   │       │   ├── phase.rs
-│   │       │   └── step.rs
-│   │       └── card/             # Card-related types
-│   │           ├── mod.rs
-│   │           ├── card_type.rs
-│   │           ├── ink_type.rs
-│   │           ├── rarity.rs
-│   │           └── set_info.rs
-│   ├── infrastructure/           # External dependencies and adapters
-│   │   ├── mod.rs
-│   │   ├── parsing/              # TOML parsing
-│   │   │   ├── mod.rs
-│   │   │   └── toml.rs           # TOML parser implementation
-│   │   ├── scripting/            # Rhai scripting integration
-│   │   │   ├── mod.rs
-│   │   │   └── rhai.rs           # Rhai engine wrapper
-│   │   ├── random/               # Deterministic RNG
-│   │   │   ├── mod.rs
-│   │   │   └── rng.rs            # RNG implementation
-│   │   └── serialization/        # Serde integration
-│   │       ├── mod.rs
-│   │       └── serde.rs          # Serialization helpers
-│   ├── application/              # Application services and orchestration
-│   │   ├── mod.rs
-│   │   ├── engine/               # Game engine orchestration
-│   │   │   ├── mod.rs
-│   │   │   └── core.rs           # Core game engine
-│   │   ├── rules/                # Rules validation
-│   │   │   ├── mod.rs
-│   │   │   ├── validator.rs      # Action validation
-│   │   │   ├── lorcana.rs        # Lorcana-specific rules
-│   │   │   └── engine.rs         # Rules engine
-│   │   └── api/                  # Public API interface
-│   │       ├── mod.rs
-│   │       ├── actions.rs        # Action types
-│   │       └── interface.rs      # API interface
-│   └── shared/                   # Shared utilities
-│       ├── mod.rs
-│       ├── error.rs              # Error types
-│       └── result.rs             # Result types
-├── cards/                        # Card definitions
-│   ├── set1.toml
-│   ├── set2.toml
-│   └── scripts/                  # Rhai scripts
-│       ├── ability1.rhai
-│       └── ability2.rhai
-├── tests/
-│   ├── integration/
-│   │   └── game_scenarios.rs
-│   └── unit/
-│       ├── domain/
-│       ├── infrastructure/
-│       └── application/
-├── examples/
-│   ├── simple_game.rs
-│   └── custom_card.rs
-├── benches/                      # Performance benchmarks
-├── docs/                         # Documentation
-│   ├── architecture/             # Architecture documentation
-│   │   └── ARCHITECTURE.md       # This file
-│   ├── planning/                 # Implementation planning
-│   │   └── IMPLEMENTATION_PLAN.md # Implementation roadmap
-│   └── development/              # Development guides
-│       └── CONTRIBUTING.md       # Contributing guidelines
+Action ──▶ api.submit
+        ──▶ rules: legality check (turn/phase, cost, timing, targeting)
+        ──▶ domain: apply primitive state changes
+        ──▶ effects/bag: enqueue & resolve (active player first, around the table)
+        ──▶ rules: game-state check (banish, win/loss)
+        ──▶ events appended
+        ──▶ returns either "advanced" or a PendingDecision
 ```
 
-## Code Organization Conventions
-
-### One Module Per File
-
-This project follows the Rust convention of **one module per file**. Each `.rs` file should contain:
-
-- **Either** a single module declaration (typically `mod.rs` files)
-- **Or** a single primary type/struct/enum with its implementation
-- **Type aliases** and simple helper functions are acceptable in the same file
-- **Enum variants** are part of the enum type and do not need separate files
-
-**Examples:**
-- ✅ `card_type.rs` contains only the `CardType` enum
-- ✅ `game_id.rs` contains only the `GameId` struct and its impl
-- ✅ `mod.rs` files declare sub-modules and provide re-exports
-- ❌ Avoid putting multiple unrelated types in a single file
-- ❌ Avoid putting a module declaration and type definitions in the same file
-
-**Module Structure:**
-```rust
-// src/domain/types/ids/mod.rs
-pub mod card_id;
-pub mod game_id;
-pub mod player_id;
-pub mod zone_id;
-
-// Re-export for convenience
-pub use card_id::CardId;
-pub use game_id::GameId;
-pub use player_id::PlayerId;
-pub use zone_id::ZoneId;
+### Resolving a decision
+```
+Choice ──▶ api.submit (must match the outstanding PendingDecision)
+        ──▶ resume the suspended resolution at the exact point it paused
+        ──▶ continue effects/bag → game-state check → events
 ```
 
-This convention ensures:
-- Clear separation of concerns
-- Easier navigation and code discovery
-- Better compile times (changes are more localized)
-- Consistent project structure
+## Technology stack
 
-## Implementation Phases
+**Core**: `serde` (state + definitions), `toml` (definitions), `rand` (seeded PRNG),
+`thiserror` (errors), `uuid` (ids).
 
-### Phase 1: Core Infrastructure
-- Game state structure
-- Zone system
-- Turn management
-- Event system
-- Basic API interface
+**Intentionally excluded from the core**: a general-purpose embedded script engine.
+Effects use the structured DSL + compiled-in custom handlers instead.
 
-### Phase 2: Card System
-- Card definition types
-- TOML parser
-- Card registry
-- Basic card loading
+## Testing strategy
 
-### Phase 3: Effect System
-- Built-in effect implementations
-- Effect executor
-- Trigger system
-- Rhai integration
+Testing is **continuous and slice-driven**, not a final phase:
+- **Unit tests** for each component as it is built.
+- **Scenario/integration tests** per vertical slice (a slice isn't done until its
+  acceptance scenarios pass).
+- **Property tests** for the core determinism invariant:
+  `seed + inputs ⇒ identical state + event log` (replay equivalence).
+- **Golden tests** for known states and expected event sequences.
+- **Conformance tests** mapping rules-section examples (e.g. the worked examples in
+  §7–§10) to executable scenarios.
 
-### Phase 4: Rules Engine
-- Action validation
-- Lorcana-specific rules
-- Turn structure enforcement
-- State-based actions
+## Future extensibility
 
-### Phase 5: Advanced Features
-- Complex trigger interactions
-- Replacement effects
-- Timing system
-- Priority and pass system
-
-### Phase 6: Tooling
-- Card validation tools
-- Game log viewer
-- Testing framework
-- Benchmarking
-
-## Future Extensibility
-
-### New Card Types
-- Add new `CardType` enum variants
-- Extend zone system if needed
-- Add new built-in effects
-
-### New Mechanics
-- Add new trigger events
-- Extend effect system
-- Add new scripting APIs
-
-### Performance Optimizations
-- Effect caching
-- State diff optimization
-- Parallel trigger evaluation
-- WASM compilation for web
-
-## Testing Strategy
-
-### Unit Tests
-- Individual component testing
-- Effect system testing
-- Trigger system testing
-
-### Integration Tests
-- Complete game scenarios
-- Card interaction testing
-- Turn structure testing
-
-### Property Tests
-- Determinism verification
-- State consistency
-- Event log integrity
-
-### Golden Tests
-- Known game states
-- Expected event sequences
-- Card definition validation
+- **New cards**: add definitions; extend the DSL only when needed.
+- **New mechanics/keywords**: add DSL/condition variants and rules hooks.
+- **Performance**: continuous-effect caching, state diffing, WASM build for web.
+- **Multi-crate**: the domain/infrastructure/application boundaries are designed so
+  they can later be split into separate crates if the project grows.
