@@ -24,8 +24,15 @@ pub enum CardKind {
     Action,
     /// An item (stays in play).
     Item,
-    /// A location (stays in play).
-    Location,
+    /// A location (stays in play, §6.5).
+    Location {
+        /// Move cost — ink to move a character here (§6.5.4).
+        move_cost: u32,
+        /// Printed Willpower `{W}` — banished when damage reaches it (§6.5.5).
+        willpower: u32,
+        /// Printed Lore `{L}` — gained at the Set step (§6.5.6).
+        lore: u32,
+    },
 }
 
 impl CardKind {
@@ -36,7 +43,7 @@ impl CardKind {
             Self::Character { .. } => CardType::Character,
             Self::Action => CardType::Action,
             Self::Item => CardType::Item,
-            Self::Location => CardType::Location,
+            Self::Location { .. } => CardType::Location,
         }
     }
 }

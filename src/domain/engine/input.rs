@@ -42,6 +42,14 @@ pub enum Input {
         /// The character to boost.
         card: CardId,
     },
+    /// Move one of the active player's characters to one of their locations,
+    /// paying the location's move cost (§4.3.7).
+    MoveCharacter {
+        /// The character to move.
+        character: CardId,
+        /// The destination location.
+        location: CardId,
+    },
     /// Sing a song (§6.3.3): play it for free by exerting one or more of the
     /// active player's dry, ready characters whose (Singer-adjusted) cost meets
     /// the song's cost (or, for several singers, its Sing Together value, §10.12).
@@ -179,6 +187,9 @@ pub enum Rejected {
     /// The deck is empty, so there is no card to put under via Boost (§10.4.1).
     #[error("the deck is empty")]
     DeckEmpty,
+    /// The move destination isn't one of the active player's locations (§4.3.7.1).
+    #[error("{0:?} is not your location")]
+    NotALocation(CardId),
     /// The card being sung is not a song (§6.3.3.2).
     #[error("card {0:?} is not a song")]
     NotASong(CardId),

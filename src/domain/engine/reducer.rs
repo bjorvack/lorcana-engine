@@ -7,8 +7,8 @@ use crate::domain::cards::{
 };
 use crate::domain::effects::{CardCategory, Effect, TriggerCondition};
 use crate::domain::game::{
-    CardInstance, CharacterStats, Conditions, GameEvent, GameState, GameStatus, ModifierDuration,
-    ModifierTarget, PendingDecision, RuleModifier, StatModifier, TriggerId,
+    CardInstance, CharacterStats, Conditions, GameEvent, GameState, GameStatus, LocationStats,
+    ModifierDuration, ModifierTarget, PendingDecision, RuleModifier, StatModifier, TriggerId,
 };
 use crate::domain::rules::game_state_check;
 use crate::domain::types::card::Classification;
@@ -79,6 +79,10 @@ pub fn apply(
         Input::PlayCard { card, shift_onto } => apply_play_card(state, registry, card, shift_onto),
         Input::Quest { character } => apply_quest(state, registry, character),
         Input::Boost { card } => apply_boost(state, registry, card),
+        Input::MoveCharacter {
+            character,
+            location,
+        } => apply_move(state, character, location),
         Input::Sing { song, singers } => apply_sing(state, registry, song, &singers),
         Input::Challenge { challenger, target } => {
             apply_challenge(state, registry, challenger, target)
@@ -239,47 +243,11 @@ fn apply_play_card(
             effects,
         ));
     }
-    // Items / locations: later sub-slices.
-    let CardKind::Character {
-        strength,
-        willpower,
-        lore,
-    } = definition.kind()
-    else {
-        return Err(Rejected::CardTypeNotPlayableYet(card));
-    };
-    let character_stats = CharacterStats::new(strength, willpower, lore);
     let statics = definition.static_abilities().to_vec();
     let rule_statics = definition.rule_statics().to_vec();
-    let classifications = definition.classifications().to_vec();
-    let ink_cost = definition.cost();
-    let shift_ability = definition.shift().cloned();
-    let shift_names = definition.names().to_vec();
 
-    // --- pay the cost and place the card ---
-    if let Some(target) = shift_onto {
-        let ability = shift_ability.ok_or(Rejected::CannotShift(card))?;
-        place_via_shift(
-            state,
-            registry,
-            active,
-            card,
-            target,
-            &ability,
-            &shift_names,
-            character_stats,
-            classifications,
-        )?;
-    } else {
-        place_normally(
-            state,
-            active,
-            card,
-            ink_cost,
-            character_stats,
-            classifications,
-        )?;
-    }
+    // --- pay the cost and place the card (a permanent: character or location) ---
+    place_permanent(state, registry, active, card, shift_onto, definition)?;
     // Static abilities apply as the card enters play (§7.6.2).
     apply_enter_statics(state, active, card, &statics);
     apply_enter_rule_statics(state, active, card, &rule_statics);
@@ -314,6 +282,75 @@ fn apply_play_card(
     Ok(events)
 }
 
+/// Place a permanent (character or location) into play, paying its cost. Routes
+/// to the right placement by card kind; items are not playable yet, and actions
+/// are handled before this is called.
+fn place_permanent(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    active: PlayerId,
+    card: CardId,
+    shift_onto: Option<CardId>,
+    definition: &CardDefinition,
+) -> Result<(), Rejected> {
+    let ink_cost = definition.cost();
+    match definition.kind() {
+        CardKind::Character {
+            strength,
+            willpower,
+            lore,
+        } => {
+            let character_stats = CharacterStats::new(strength, willpower, lore);
+            let classifications = definition.classifications().to_vec();
+            if let Some(target) = shift_onto {
+                let ability = definition
+                    .shift()
+                    .cloned()
+                    .ok_or(Rejected::CannotShift(card))?;
+                let shift_names = definition.names().to_vec();
+                place_via_shift(
+                    state,
+                    registry,
+                    active,
+                    card,
+                    target,
+                    &ability,
+                    &shift_names,
+                    character_stats,
+                    classifications,
+                )
+            } else {
+                place_normally(
+                    state,
+                    active,
+                    card,
+                    ink_cost,
+                    character_stats,
+                    classifications,
+                )
+            }
+        }
+        CardKind::Location {
+            move_cost,
+            willpower,
+            lore,
+        } => {
+            if shift_onto.is_some() {
+                return Err(Rejected::CannotShift(card)); // locations can't Shift
+            }
+            place_location(
+                state,
+                active,
+                card,
+                ink_cost,
+                LocationStats::new(willpower, lore, move_cost),
+            )
+        }
+        CardKind::Item => Err(Rejected::CardTypeNotPlayableYet(card)),
+        CardKind::Action => unreachable!("actions are handled before placement"),
+    }
+}
+
 /// Pay a character's ink cost and put it into play drying (the normal play path).
 fn place_normally(
     state: &mut GameState,
@@ -337,6 +374,32 @@ fn place_normally(
     *instance.conditions_mut() = Conditions::entering_play();
     instance.set_stats(Some(character_stats));
     instance.set_classifications(classifications);
+    p.play_mut().push(instance);
+    Ok(())
+}
+
+/// Pay a location's ink cost and put it into play (§6.5): faceup, undamaged, in
+/// play — locations have no ready/exerted/drying state (§5.1.13.3).
+fn place_location(
+    state: &mut GameState,
+    active: PlayerId,
+    card: CardId,
+    ink_cost: u32,
+    location: LocationStats,
+) -> Result<(), Rejected> {
+    if state
+        .player(active)
+        .expect("active player exists")
+        .ready_ink()
+        < ink_cost
+    {
+        return Err(Rejected::InsufficientInk(card));
+    }
+    let p = state.player_mut(active).expect("active player exists");
+    p.exert_ink(ink_cost);
+    let mut instance = p.hand_mut().take(card).expect("validated present");
+    *instance.conditions_mut() = Conditions::faceup_idle();
+    instance.set_location_stats(Some(location));
     p.play_mut().push(instance);
     Ok(())
 }
@@ -406,6 +469,54 @@ fn place_via_shift(
     // don't transfer to the new top yet.
     state.remove_modifiers_from_source(target);
     Ok(())
+}
+
+/// Move one of the active player's characters to one of their locations (§4.3.7):
+/// pay the location's move cost (read from the location's denormalized stats),
+/// then record the character as being there.
+fn apply_move(
+    state: &mut GameState,
+    character: CardId,
+    location: CardId,
+) -> Result<Vec<GameEvent>, Rejected> {
+    if !matches!(state.status(), GameStatus::Playing) {
+        return Err(Rejected::NotPlaying);
+    }
+    if state.phase() != Phase::Main {
+        return Err(Rejected::NotMainPhase);
+    }
+    let active = state.active_player();
+    let mover = find_in_play(state, active, character)?;
+    if !mover.is_character() {
+        return Err(Rejected::NotACharacter(character));
+    }
+    // Only your characters may move, and only to your locations (§4.3.7.1).
+    let destination =
+        find_in_play(state, active, location).map_err(|_| Rejected::NotALocation(location))?;
+    let move_cost = destination
+        .location_stats()
+        .ok_or(Rejected::NotALocation(location))?
+        .move_cost;
+    if state
+        .player(active)
+        .expect("active player exists")
+        .ready_ink()
+        < move_cost
+    {
+        return Err(Rejected::InsufficientInk(character));
+    }
+    let p = state.player_mut(active).expect("active player exists");
+    p.exert_ink(move_cost);
+    if let Some(c) = p.play_mut().iter_mut().find(|c| c.id() == character) {
+        c.set_at_location(Some(location));
+    }
+    // TODO(move triggers — Slice 8 / trigger taxonomy): effects that happen "as a
+    // result of moving" (and "while here") go to the bag here (§4.3.7.5).
+    Ok(vec![GameEvent::Moved {
+        player: active,
+        character,
+        location,
+    }])
 }
 
 /// Sing a song (§6.3.3): pay the alternate cost by exerting eligible singers, then
@@ -1069,11 +1180,26 @@ fn begin_turn(state: &mut GameState, first_turn: bool) -> Vec<GameEvent> {
         return events;
     }
 
-    // Set step (§4.2.2): dry characters, gain location lore (none yet), resolve
-    // start-of-turn triggers (none yet).
+    // Set step (§4.2.2): dry characters, gain lore from locations (§6.5.6). (Resolve
+    // start-of-turn triggers — none yet; see the Slice 5h TODO above.)
     state.set_step(Step::Set);
     events.push(GameEvent::StepEntered { step: Step::Set });
     dry_characters(state, active);
+    let location_lore: u32 = state.player(active).map_or(0, |p| {
+        p.play()
+            .iter()
+            .filter_map(|c| c.location_stats().map(|l| l.lore))
+            .sum()
+    });
+    if location_lore > 0 {
+        if let Some(p) = state.player_mut(active) {
+            p.add_lore(location_lore);
+        }
+        events.push(GameEvent::LoreGained {
+            player: active,
+            amount: location_lore,
+        });
+    }
     events.extend(game_state_check(state));
     if state.is_finished() {
         return events;
@@ -1245,7 +1371,7 @@ fn category_matches(category: &CardCategory, played: &CardDefinition) -> bool {
         CardCategory::Action => matches!(played.kind(), CardKind::Action),
         CardCategory::Song => played.is_song(),
         CardCategory::Item => matches!(played.kind(), CardKind::Item),
-        CardCategory::Location => matches!(played.kind(), CardKind::Location),
+        CardCategory::Location => matches!(played.kind(), CardKind::Location { .. }),
     }
 }
 

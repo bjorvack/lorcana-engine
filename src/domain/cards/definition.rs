@@ -149,6 +149,28 @@ impl CardDefinition {
         self
     }
 
+    /// Convenience constructor for a location card with no abilities (§6.5).
+    #[must_use]
+    pub const fn location(
+        id: CardDefId,
+        cost: u32,
+        inkwell: bool,
+        move_cost: u32,
+        willpower: u32,
+        lore: u32,
+    ) -> Self {
+        Self::new(
+            id,
+            cost,
+            inkwell,
+            CardKind::Location {
+                move_cost,
+                willpower,
+                lore,
+            },
+        )
+    }
+
     /// The printed-card id.
     #[must_use]
     pub const fn id(&self) -> CardDefId {

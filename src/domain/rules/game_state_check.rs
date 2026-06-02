@@ -102,8 +102,14 @@ fn banishable_cards(state: &GameState) -> Vec<(PlayerId, CardId)> {
     let mut out = Vec::new();
     for player in state.players() {
         for card in player.play().iter() {
-            if let Some(stats) = state.current_character_stats(card.id())
-                && card.conditions().damage >= stats.willpower
+            // A character (current willpower incl. modifiers) or a location (§6.5.5)
+            // is banished once its damage reaches its willpower (§1.9.1.1, §9.4).
+            let willpower = state
+                .current_character_stats(card.id())
+                .map(|s| s.willpower)
+                .or_else(|| card.location_stats().map(|l| l.willpower));
+            if let Some(willpower) = willpower
+                && card.conditions().damage >= willpower
             {
                 out.push((player.id(), card.id()));
             }

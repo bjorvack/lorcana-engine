@@ -1,6 +1,6 @@
 //! A specific card instance within a game.
 
-use super::{CharacterStats, Conditions};
+use super::{CharacterStats, Conditions, LocationStats};
 use crate::domain::types::card::Classification;
 use crate::domain::types::ids::{CardDefId, CardId};
 use serde::{Deserialize, Serialize};
@@ -21,6 +21,10 @@ pub struct CardInstance {
     definition: CardDefId,
     conditions: Conditions,
     stats: Option<CharacterStats>,
+    /// The live location characteristics while this is an in-play location (§6.5).
+    location: Option<LocationStats>,
+    /// The location this character has been moved to, if any (§4.3.7).
+    at_location: Option<CardId>,
     classifications: Vec<Classification>,
     /// Cards stacked **under** this one (§5.1.5–5.1.7). Only the top (this
     /// instance) is in play; under-cards are inert (not in play, can't be chosen).
@@ -44,6 +48,8 @@ impl CardInstance {
             definition,
             conditions,
             stats: None,
+            location: None,
+            at_location: None,
             classifications: Vec::new(),
             under: Vec::new(),
         }
@@ -87,6 +93,34 @@ impl CardInstance {
     /// Set (or clear) this instance's live character stats.
     pub const fn set_stats(&mut self, stats: Option<CharacterStats>) {
         self.stats = stats;
+    }
+
+    /// The live location characteristics, if this is an in-play location (§6.5).
+    #[must_use]
+    pub const fn location_stats(&self) -> Option<LocationStats> {
+        self.location
+    }
+
+    /// `true` if this instance is an in-play location.
+    #[must_use]
+    pub const fn is_location(&self) -> bool {
+        self.location.is_some()
+    }
+
+    /// Set (or clear) this instance's live location characteristics.
+    pub const fn set_location_stats(&mut self, location: Option<LocationStats>) {
+        self.location = location;
+    }
+
+    /// The location this character is at, if any (§4.3.7).
+    #[must_use]
+    pub const fn at_location(&self) -> Option<CardId> {
+        self.at_location
+    }
+
+    /// Record the location this character has moved to (§4.3.7).
+    pub const fn set_at_location(&mut self, location: Option<CardId>) {
+        self.at_location = location;
     }
 
     /// This instance's classifications (§6.2.6).

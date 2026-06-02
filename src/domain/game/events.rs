@@ -110,6 +110,15 @@ pub enum GameEvent {
         /// The character that was boosted.
         card: CardId,
     },
+    /// A character moved to a location (§4.3.7).
+    Moved {
+        /// The player who moved a character.
+        player: PlayerId,
+        /// The character that moved.
+        character: CardId,
+        /// The destination location.
+        location: CardId,
+    },
     /// A player ended their turn (§4.4).
     TurnEnded {
         /// The player whose turn ended.

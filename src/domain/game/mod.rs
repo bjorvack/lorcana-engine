@@ -18,7 +18,7 @@ pub mod zone_kind;
 // Re-export for convenience
 pub use bag::{BagEntry, TriggerId};
 pub use card_instance::CardInstance;
-pub use character_stats::CharacterStats;
+pub use character_stats::{CharacterStats, LocationStats};
 pub use conditions::Conditions;
 pub use events::GameEvent;
 pub use modifier::{ModifierDuration, ModifierTarget, RuleModifier, Stat, StatModifier};

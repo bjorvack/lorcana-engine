@@ -410,21 +410,29 @@ character is banished", plus the §1.9.1.3 "banished by that character" attribut
       Together deferral. Tested in `tests/actions.rs`.
 - Uses the minimal `Effect` enum for now; the full effect DSL is Slice 8.
 
-### Slice 7b — Locations & movement
-- **Locations**: play, move cost to move a character there (§4.3.7), willpower &
-  banishment, start-of-turn lore (§6.5). Location characteristics (move cost,
-  willpower, lore) become modifiable `Stat` variants in the continuous-effects
-  layer — see the TODO on `Stat` in `src/domain/game/modifier.rs`. Locations are
-  also **challenge targets** — extend the legality authority (`can_challenge` /
-  `can_legally_challenge_anything` in `src/domain/engine/reducer.rs`, which carry
-  Slice 7 TODOs) to allow challenging opposing locations.
-- **Triggers** (see [Trigger taxonomy rollout](#trigger-taxonomy-rollout-when-the-triggercondition-todo-gets-done)):
-  add sing-a-song and move-to-location / "while here" `TriggerCondition` variants
-  with these mechanics.
+### Slice 7b — Locations & movement ✅ (core)
+- [x] **Locations** (§6.5): `CardKind::Location { move_cost, willpower, lore }` is
+      playable; enters play faceup/undamaged (no ready/exerted/drying, §5.1.13.3),
+      with `LocationStats` denormalized onto the `CardInstance`. **Willpower
+      banishment** (§6.5.5) shares the `banishable_cards` path; **Set-step lore**
+      (§6.5.6) is granted in `begin_turn`.
+- [x] **Movement** (§4.3.7): `Input::MoveCharacter { character, location }` pays
+      the location's move cost and records `CardInstance.at_location`. Tested in
+      `tests/locations.rs`.
+- Deferred (back-linked): locations as **challenge targets** (the `can_challenge`
+  / `can_legally_challenge_anything` Slice 7 TODOs still stand — a location is
+  always challengeable, takes damage, deals none); **modifiable** location stats
+  (the `Stat` TODO in `src/domain/game/modifier.rs`); location **abilities** and
+  move / "while here" **triggers** (the `apply_move` TODO + trigger rollout).
+
+### Slice 7c — Items
+- **Items** (§6.4): in-play permanents whose activated abilities (already modeled,
+  Slice 5a) can be used the turn played. Currently `CardKind::Item` is rejected by
+  `place_permanent` — make it enter play and allow `UseAbility` on it.
 
 **Acceptance**
-- [ ] A song can be sung by exerting an eligible character or paid for with ink.
-- [ ] Characters move to a location for its move cost; locations grant lore at Set.
+- [x] A song can be sung by exerting an eligible character (Slice 7a).
+- [x] Characters move to a location for its move cost; locations grant lore at Set.
 
 ---
 
