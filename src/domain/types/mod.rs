@@ -1,4 +1,5 @@
 //! Shared domain types and identifiers
 
-pub mod common;
+pub mod card;
 pub mod ids;
+pub mod turn;
