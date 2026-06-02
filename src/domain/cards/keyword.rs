@@ -61,9 +61,12 @@ impl ShiftAbility {
 /// Universal + [Classification] (Slice 6c); `Boost`, incl. its "card put under"
 /// trigger (Slice 6d); `Singer` / `SingTogether` (songs, Slice 7a).
 ///
+/// `Support` (§10.13) is also done (Slice 8a-2: quest → may → add the source's
+/// current `{S}` to another chosen character until end of turn).
+///
 /// TODO(remaining keywords): `Shift` alternate costs / cost reducers / granted-
 /// name + Morph targeting / shift-conditional triggers (Slice 8 — see `ShiftCost`
-/// and the reducer TODOs); `Support`/`Vanish` (triggers/targeting); `Ward`
+/// and the reducer TODOs); `Vanish` (chosen-by-opponent trigger); `Ward`
 /// (effect-targeting restriction). See "Slice 6"/"Slice 7"/"Slice 8" in
 /// `docs/planning/IMPLEMENTATION_PLAN.md`.
 //

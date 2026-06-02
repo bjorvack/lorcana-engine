@@ -1,6 +1,7 @@
 //! A decision the engine is waiting on before it can continue resolving.
 
 use super::bag::TriggerId;
+use crate::domain::effects::Effect;
 use crate::domain::types::ids::{CardId, PlayerId};
 use serde::{Deserialize, Serialize};
 
@@ -33,6 +34,18 @@ pub enum PendingDecision {
         /// The Bodyguard character that just entered play.
         card: CardId,
     },
+    /// A targeted effect is resolving and its controller must choose a target
+    /// from `options`; the stashed `effect` is applied to the pick (§7.1).
+    ChooseTarget {
+        /// The player who must choose.
+        player: PlayerId,
+        /// The effect's source card.
+        source: CardId,
+        /// The eligible targets.
+        options: Vec<CardId>,
+        /// The effect to apply to the chosen target.
+        effect: Effect,
+    },
 }
 
 impl PendingDecision {
@@ -42,7 +55,8 @@ impl PendingDecision {
         match self {
             Self::OrderTriggers { player, .. }
             | Self::MayResolve { player, .. }
-            | Self::EnterPlayExerted { player, .. } => *player,
+            | Self::EnterPlayExerted { player, .. }
+            | Self::ChooseTarget { player, .. } => *player,
         }
     }
 }

@@ -5,10 +5,12 @@ use crate::domain::cards::{
     CardDefinition, CardKind, CardRegistry, GameRuleStatic, Keyword, ShiftAbility, ShiftCost,
     ShiftKind, StaticAbility, StaticTarget,
 };
-use crate::domain::effects::{CardCategory, Effect, Target, TriggerCondition};
+use crate::domain::effects::{
+    CardCategory, CharacterFilter, Effect, Target, TargetSide, TriggerCondition,
+};
 use crate::domain::game::{
     CardInstance, CharacterStats, Conditions, GameEvent, GameState, GameStatus, LocationStats,
-    ModifierDuration, ModifierTarget, PendingDecision, RuleModifier, StatModifier, TriggerId,
+    ModifierDuration, ModifierTarget, PendingDecision, RuleModifier, Stat, StatModifier, TriggerId,
 };
 use crate::domain::rules::game_state_check;
 use crate::domain::types::card::Classification;
@@ -659,7 +661,7 @@ fn resolve_action_play(
         card,
     }];
     for effect in effects {
-        execute_effect(state, active, card, effect, &mut events);
+        execute_effect(state, active, card, &effect, &mut events);
     }
     events.extend(game_state_check(state));
     if !state.is_finished() {
@@ -795,9 +797,43 @@ fn apply_quest(
             character,
             &TriggerCondition::WhenThisQuests,
         );
+        enqueue_support_trigger(state, registry, active, character);
         events.extend(resolve_bag(state, registry));
     }
     Ok(events)
+}
+
+/// Support (§10.13): on quest, "you may add this character's `{S}` to another
+/// chosen character's `{S}` this turn." Enqueued as an optional bag trigger
+/// carrying the source's **current** `{S}` (so modifiers count), targeting
+/// another chosen character.
+fn enqueue_support_trigger(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    controller: PlayerId,
+    character: CardId,
+) {
+    if !character_has_keyword(state, registry, character, &Keyword::Support) {
+        return;
+    }
+    let strength = state
+        .current_character_stats(character)
+        .map_or(0, |s| s.strength);
+    if strength == 0 {
+        return; // adding 0 {S} is a no-op
+    }
+    let _ = state.enqueue_trigger(
+        controller,
+        character,
+        true, // "you may"
+        Effect::GiveStrengthThisTurn {
+            target: Target::ChosenCharacter {
+                filter: CharacterFilter::any(TargetSide::Any),
+                another: true,
+            },
+            amount: i32::try_from(strength).unwrap_or(i32::MAX),
+        },
+    );
 }
 
 /// Resolve a challenge (§4.3.6): the active player's dry, ready character
@@ -1203,7 +1239,7 @@ fn apply_use_ability(
         .get(ability_index)
         .ok_or(Rejected::NoSuchAbility(card))?;
     let cost = ability.cost;
-    let effect = ability.effect;
+    let effect = ability.effect.clone();
 
     // Cost legality. Drying characters can't pay an exert cost (§4.2.2.1).
     if cost.exert_self {
@@ -1239,7 +1275,7 @@ fn apply_use_ability(
         player: active,
         card,
     }];
-    execute_effect(state, active, card, effect, &mut events);
+    execute_effect(state, active, card, &effect, &mut events);
     events.extend(game_state_check(state));
     Ok(events)
 }
@@ -1469,7 +1505,7 @@ fn enqueue_triggers_for_def(
         .abilities()
         .iter()
         .filter(|a| a.condition == *condition)
-        .map(|a| (a.optional, a.effect))
+        .map(|a| (a.optional, a.effect.clone()))
         .collect();
     for (optional, effect) in matches {
         let _ = state.enqueue_trigger(controller, source, optional, effect);
@@ -1560,7 +1596,7 @@ fn enqueue_play_a_card_triggers(
             if let TriggerCondition::WhenYouPlay(category) = &ability.condition
                 && category_matches(category, played_definition)
             {
-                to_enqueue.push((watcher.id(), ability.optional, ability.effect));
+                to_enqueue.push((watcher.id(), ability.optional, ability.effect.clone()));
             }
         }
     }
@@ -1711,7 +1747,7 @@ fn execute_trigger(
         state,
         entry.controller(),
         entry.source(),
-        entry.effect(),
+        &entry.effect(),
         events,
     );
     let _ = registry; // effects don't consult the registry yet
@@ -1723,22 +1759,22 @@ fn execute_effect(
     state: &mut GameState,
     controller: PlayerId,
     source: CardId,
-    effect: Effect,
+    effect: &Effect,
     events: &mut Vec<GameEvent>,
 ) {
     match effect {
         Effect::DrawCards(n) => {
-            for _ in 0..n {
+            for _ in 0..*n {
                 events.push(draw(state, controller));
             }
         }
         Effect::GainLore(n) => {
             if let Some(p) = state.player_mut(controller) {
-                p.add_lore(n);
+                p.add_lore(*n);
             }
             events.push(GameEvent::LoreGained {
                 player: controller,
-                amount: n,
+                amount: *n,
             });
         }
         Effect::EachOpponentLosesLore(n) => {
@@ -1750,20 +1786,38 @@ fn execute_effect(
                 .collect();
             for opponent in opponents {
                 if let Some(p) = state.player_mut(opponent) {
-                    p.lose_lore(n);
+                    p.lose_lore(*n);
                 }
                 events.push(GameEvent::LoreLost {
                     player: opponent,
-                    amount: n,
+                    amount: *n,
                 });
             }
         }
-        Effect::ReturnToHand(Target::SelfCard) => {
-            move_self_card(state, controller, source, SelfDestination::Hand);
-        }
-        Effect::IntoInkwell(Target::SelfCard) => {
-            move_self_card(state, controller, source, SelfDestination::Inkwell);
-        }
+        // Targeted effects: resolve the target now (self) or suspend to let the
+        // controller choose (§7.1).
+        Effect::ReturnToHand(target)
+        | Effect::IntoInkwell(target)
+        | Effect::GiveStrengthThisTurn { target, .. } => match target {
+            Target::SelfCard => apply_effect_to(state, source, source, effect),
+            Target::ChosenCharacter { filter, another } => {
+                let options = chosen_character_options(state, controller, source, filter, *another);
+                if !options.is_empty() {
+                    state.set_pending(PendingDecision::ChooseTarget {
+                        player: controller,
+                        source,
+                        options,
+                        effect: effect.clone(),
+                    });
+                }
+            }
+            Target::AllCharacters(filter) => {
+                let targets = chosen_character_options(state, controller, source, filter, false);
+                for card in targets {
+                    apply_effect_to(state, source, card, effect);
+                }
+            }
+        },
     }
 }
 
@@ -1814,6 +1868,82 @@ fn move_self_card(state: &mut GameState, owner: PlayerId, card: CardId, dest: Se
     }
 }
 
+/// Apply a targeted effect to an already-resolved `target_card` (after a
+/// `SelfCard`/`AllCharacters` resolution or a `ChooseTarget` decision). The
+/// untargeted variants never reach here.
+fn apply_effect_to(state: &mut GameState, source: CardId, target_card: CardId, effect: &Effect) {
+    match effect {
+        Effect::ReturnToHand(_) => {
+            if let Some(owner) = owner_holding(state, target_card) {
+                move_self_card(state, owner, target_card, SelfDestination::Hand);
+            }
+        }
+        Effect::IntoInkwell(_) => {
+            if let Some(owner) = owner_holding(state, target_card) {
+                move_self_card(state, owner, target_card, SelfDestination::Inkwell);
+            }
+        }
+        Effect::GiveStrengthThisTurn { amount, .. } => {
+            state.add_modifier(StatModifier::new(
+                source,
+                ModifierTarget::Card(target_card),
+                Stat::Strength,
+                *amount,
+                ModifierDuration::UntilEndOfTurn,
+            ));
+        }
+        Effect::DrawCards(_) | Effect::GainLore(_) | Effect::EachOpponentLosesLore(_) => {}
+    }
+}
+
+/// The in-play characters eligible for a [`CharacterFilter`] from `controller`'s
+/// perspective (side + classifications), optionally excluding the `source`.
+fn chosen_character_options(
+    state: &GameState,
+    controller: PlayerId,
+    source: CardId,
+    filter: &CharacterFilter,
+    exclude_source: bool,
+) -> Vec<CardId> {
+    let mut out = Vec::new();
+    for player in state.players() {
+        let is_yours = player.id() == controller;
+        let side_ok = match filter.side {
+            TargetSide::Any => true,
+            TargetSide::Yours => is_yours,
+            TargetSide::Opposing => !is_yours,
+        };
+        if !side_ok {
+            continue;
+        }
+        for card in player.play().iter() {
+            if !card.is_character() {
+                continue;
+            }
+            if exclude_source && card.id() == source {
+                continue;
+            }
+            if filter
+                .classifications
+                .iter()
+                .all(|c| card.has_classification(c))
+            {
+                out.push(card.id());
+            }
+        }
+    }
+    out
+}
+
+/// The player whose play area or discard currently holds `card`.
+fn owner_holding(state: &GameState, card: CardId) -> Option<PlayerId> {
+    state
+        .players()
+        .iter()
+        .find(|p| p.play().contains(card) || p.discard().contains(card))
+        .map(super::super::game::PlayerState::id)
+}
+
 /// Answer the pending bag decision and continue resolving (§8.7).
 fn apply_decision(
     state: &mut GameState,
@@ -1854,6 +1984,22 @@ fn apply_decision(
             {
                 enqueue_enter_play_triggers(state, registry, player, card, definition_id);
             }
+        }
+        (
+            PendingDecision::ChooseTarget {
+                source,
+                options,
+                effect,
+                ..
+            },
+            Decision::ChooseTarget(chosen),
+        ) => {
+            if !options.contains(&chosen) {
+                return Err(Rejected::InvalidDecision);
+            }
+            let _ = state.take_pending();
+            apply_effect_to(state, source, chosen, &effect);
+            events.extend(game_state_check(state));
         }
         _ => return Err(Rejected::InvalidDecision),
     }

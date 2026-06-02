@@ -80,7 +80,7 @@ impl BagEntry {
 
     /// The effect to apply when this entry resolves.
     #[must_use]
-    pub const fn effect(&self) -> Effect {
-        self.effect
+    pub fn effect(&self) -> Effect {
+        self.effect.clone()
     }
 }

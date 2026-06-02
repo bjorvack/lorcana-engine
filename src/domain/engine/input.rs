@@ -90,6 +90,8 @@ pub enum Decision {
     May(bool),
     /// For `EnterPlayExerted`: whether a Bodyguard enters play exerted (§10.3.2).
     EnterExerted(bool),
+    /// For `ChooseTarget`: the target card chosen for the resolving effect (§7.1).
+    ChooseTarget(CardId),
 }
 
 /// Why an [`Input`] was rejected. When an input is rejected the game state is

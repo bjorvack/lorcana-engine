@@ -8,5 +8,5 @@ pub mod trigger;
 
 // Re-export for convenience
 pub use effect::Effect;
-pub use target::Target;
+pub use target::{CharacterFilter, Target, TargetSide};
 pub use trigger::{CardCategory, TriggerCondition};

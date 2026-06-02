@@ -18,7 +18,9 @@ use serde::{Deserialize, Serialize};
 /// `PendingDecision` machinery is fully in place). An `Effect::Custom(name)`
 /// escape hatch (compiled-in handler) remains the plan for the rare card the DSL
 /// can't express.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+// Not `Copy`: targeted variants carry a `Target`, which can hold a
+// `CharacterFilter` with classification strings.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum Effect {
     /// The controller draws this many cards.
     DrawCards(u32),
@@ -33,4 +35,12 @@ pub enum Effect {
     /// Put the target card into its owner's inkwell facedown and exerted (Gramma
     /// Tala "into your inkwell facedown and exerted").
     IntoInkwell(Target),
+    /// Give the target character `amount` Strength `{S}` until end of turn (e.g.
+    /// Support adds the source's current `{S}`; "gets +N {S} this turn").
+    GiveStrengthThisTurn {
+        /// Who is buffed/debuffed.
+        target: Target,
+        /// The signed `{S}` change.
+        amount: i32,
+    },
 }

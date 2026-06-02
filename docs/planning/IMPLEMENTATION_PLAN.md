@@ -370,14 +370,10 @@ see the TODO there). Split smallest-first like Slice 5.
 - [x] **Bodyguard "may enter play exerted"** (§10.3.2): a play-time choice —
       `PendingDecision::EnterPlayExerted` / `Decision::EnterExerted`, answered with
       `Decide` after the Bodyguard enters play; tested in `tests/keywords.rs`.
-- **Support** (§10.13): on quest, "may add this character's `{S}` to another
-  chosen character's `{S}` this turn" — quest trigger + target choice + timed
-  modifier. The added amount is the Support character's **current** `{S}` (base
-  **plus** modifiers, via `GameState::current_character_stats`), **not** its
-  printed strength — so a buffed/debuffed Support character contributes its
-  modified value. Snapshot that value at resolution as a flat `+N`
-  `ModifierDuration::UntilEndOfTurn` on the chosen character (not a live link to
-  the Support character's `{S}`).
+- [x] **Support** (§10.13) — done in Slice 8a-2 (`enqueue_support_trigger`): an
+  optional quest trigger adds the source's **current** `{S}` (modifiers included,
+  via `current_character_stats`, snapshot at quest time) to another chosen
+  character as a flat `+N` `UntilEndOfTurn` modifier. Tested in `tests/support.rs`.
 - **Vanish** (§10.14) / **Ward** (§10.15): effect-targeting interactions (need
   targeted effects / choices — overlaps Slice 8).
 - **Singer / Sing Together** (§10.11–12): songs — **Slice 7**.
@@ -464,14 +460,20 @@ Challenge/banish triggers into the bag (see
   the bag suspend/resume (as triggers / Bodyguard-enter-exerted already do) and
   fits triggered abilities (targets chosen as they resolve).
 - **Sub-slices (smallest-first):**
-  - **8a-1 — self move-zone effects** (no choice): `Effect::ReturnToHand` /
+  - [x] **8a-1 — self move-zone effects** (no choice): `Effect::ReturnToHand` /
     `IntoInkwell` with `Target::SelfCard`, threading the effect **source** into
     `execute_effect`. Unblocks the banish-trigger effects (Marshmallow / HeiHei
-    "return this card to hand", Gramma Tala "into your inkwell") — relocating the
-    card from the **discard** where banishment left it.
-  - **8a-2 — targeting + Support:** extend `Target` with `ChosenCharacter` +
-    `PendingDecision::ChooseTarget`; wire **Support** (§10.13: may, choose another
-    character, snapshot the source's current `{S}` as a `+{S}` until-end-of-turn).
+    "return this card to hand", Gramma Tala "into your inkwell"), relocating from
+    the discard. Tested in `tests/challenge.rs`.
+  - [x] **8a-2 — targeting + Support:** `Target::ChosenCharacter { filter,
+    another }` + `AllCharacters`, a reusable `CharacterFilter { side,
+    classifications }`, and `PendingDecision::ChooseTarget` (choose at resolution,
+    via the bag). **Support** (§10.13) wired as an optional quest trigger carrying
+    `GiveStrengthThisTurn { ChosenCharacter, amount = source's current {S} }`
+    (so modifiers count). `Effect` is now non-`Copy` (filters hold classification
+    strings). Tested in `tests/support.rs`. Target **filter dimensions** still to
+    grow (cost/{S}/state, item/location/player, group-"other") — back-linked on
+    `CharacterFilter`.
   - **8b+ —** replacement effects (§7.7), "up to N" / no-duplicates / ordering,
     floating & delayed triggers, turn-progression-with-suspension (start/end-of-
     turn triggers), and the multi-effect-sequence-with-suspension case.
