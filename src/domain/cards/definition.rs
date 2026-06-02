@@ -258,6 +258,15 @@ impl CardDefinition {
             _ => None,
         })
     }
+
+    /// This card's Boost cost in ink, if it has Boost (§10.4).
+    #[must_use]
+    pub fn boost(&self) -> Option<u32> {
+        self.keywords.iter().find_map(|k| match k {
+            Keyword::Boost(cost) => Some(*cost),
+            _ => None,
+        })
+    }
 }
 
 #[cfg(test)]

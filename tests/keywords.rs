@@ -412,3 +412,54 @@ fn with_multiple_bodyguards_either_one_may_be_challenged() {
         .is_ok()
     );
 }
+
+#[test]
+fn boost_puts_a_facedown_card_under_the_character() {
+    let mut registry = CardRegistry::new();
+    registry.insert(char_def(80).with_keywords(vec![Keyword::Boost(0)]));
+    let mut state = started(&registry);
+    let active = state.active_player();
+    let booster = place(&mut state, active, 100, 80, 3, 9, true, false);
+    let deck_before = state.player(active).unwrap().deck().iter().count();
+
+    let _ = apply(&mut state, &registry, Input::Boost { card: booster }).expect("boost");
+
+    let player = state.player(active).unwrap();
+    let inst = player.play().iter().find(|c| c.id() == booster).unwrap();
+    assert_eq!(inst.under().len(), 1, "a card was put under the character");
+    assert!(
+        inst.under()[0].conditions().facedown,
+        "the Boost card stays facedown (§10.4.3)"
+    );
+    assert_eq!(
+        player.deck().iter().count(),
+        deck_before - 1,
+        "the top deck card moved under the character"
+    );
+}
+
+#[test]
+fn boost_can_only_be_used_once_per_turn() {
+    let mut registry = CardRegistry::new();
+    registry.insert(char_def(80).with_keywords(vec![Keyword::Boost(0)]));
+    let mut state = started(&registry);
+    let active = state.active_player();
+    let booster = place(&mut state, active, 100, 80, 3, 9, true, false);
+
+    assert!(apply(&mut state, &registry, Input::Boost { card: booster }).is_ok());
+    assert!(
+        apply(&mut state, &registry, Input::Boost { card: booster }).is_err(),
+        "Boost is once per turn (§10.4.1)"
+    );
+}
+
+#[test]
+fn a_character_without_boost_cannot_boost() {
+    let mut registry = CardRegistry::new();
+    registry.insert(char_def(81)); // no Boost
+    let mut state = started(&registry);
+    let active = state.active_player();
+    let plain = place(&mut state, active, 100, 81, 3, 9, true, false);
+
+    assert!(apply(&mut state, &registry, Input::Boost { card: plain }).is_err());
+}

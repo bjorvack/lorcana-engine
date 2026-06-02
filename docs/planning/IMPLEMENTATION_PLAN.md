@@ -357,13 +357,18 @@ see the TODO there). Split smallest-first like Slice 5.
   effect-granted names + Morph wildcard targeting, the §10.10.6 modifier-transfer,
   and shift-conditional triggers ("if you used Shift", 23 cards).
 
-### Slice 6d+ — remaining keywords (deferred, back-linked from `keyword.rs`)
+### Slice 6d — Boost ✅
+- [x] **Boost** (§10.4): `Input::Boost { card }` pays the character's ink cost,
+      once per turn (`GameState::has/mark/clear_boosted_this_turn`), to move the
+      top deck card **facedown** under it (`CardInstance::push_under`) — the same
+      stack model as Shift, so it dissolves out on leave-play (§5.1.7). Tested in
+      `tests/keywords.rs`.
+- Deferred (back-linked): Boost's "**card put under this**" watcher trigger rides
+  the trigger taxonomy rollout / Slice 8.
+
+### Slice 6e+ — remaining keywords (deferred, back-linked from `keyword.rs`)
 - **Bodyguard "may enter play exerted"** (§10.3.2): a play-time choice — needs a
   small decision at play (deferred from 6a).
-- **Boost** (§10.4): an activated-style "put the top deck card facedown under
-  this" — shares the stack/under-pile model already built for Shift
-  (`CardInstance.under`, see its doc); the facedown card dissolves out with the
-  stack on leave-play (§5.1.7). Plus its "card put under" trigger.
 - **Support** (§10.13): quest trigger adding `{S}` to a chosen character (quest
   trigger + target choice + timed modifier).
 - **Vanish** (§10.14) / **Ward** (§10.15): effect-targeting interactions (need

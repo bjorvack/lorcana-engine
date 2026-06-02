@@ -78,6 +78,7 @@ pub fn apply(
         Input::PutCardInInkwell { card } => apply_put_in_inkwell(state, registry, card),
         Input::PlayCard { card, shift_onto } => apply_play_card(state, registry, card, shift_onto),
         Input::Quest { character } => apply_quest(state, registry, character),
+        Input::Boost { card } => apply_boost(state, registry, card),
         Input::Challenge { challenger, target } => {
             apply_challenge(state, registry, challenger, target)
         }
@@ -376,6 +377,57 @@ fn place_via_shift(
     // don't transfer to the new top yet.
     state.remove_modifiers_from_source(target);
     Ok(())
+}
+
+/// Use a character's Boost ability (§10.4): pay its ink cost to put the top deck
+/// card facedown under it, once per turn. The under-pile is the same stack model
+/// Shift uses, so the Boost card dissolves out with the stack on leave-play.
+fn apply_boost(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    card: CardId,
+) -> Result<Vec<GameEvent>, Rejected> {
+    if !matches!(state.status(), GameStatus::Playing) {
+        return Err(Rejected::NotPlaying);
+    }
+    if state.phase() != Phase::Main {
+        return Err(Rejected::NotMainPhase);
+    }
+    let active = state.active_player();
+    let instance = find_in_play(state, active, card)?;
+    if !instance.is_character() {
+        return Err(Rejected::NotACharacter(card));
+    }
+    let cost = registry
+        .get(instance.definition())
+        .and_then(CardDefinition::boost)
+        .ok_or(Rejected::CannotBoost(card))?;
+    if state.has_boosted_this_turn(card) {
+        return Err(Rejected::AlreadyBoosted(card));
+    }
+    let player = state.player(active).expect("active player exists");
+    if player.ready_ink() < cost {
+        return Err(Rejected::InsufficientInk(card));
+    }
+    if player.deck().iter().next().is_none() {
+        return Err(Rejected::DeckEmpty);
+    }
+
+    {
+        let p = state.player_mut(active).expect("active player exists");
+        p.exert_ink(cost);
+        // The top deck card is already facedown (deck conditions); put it under
+        // the character without revealing it (§10.4.1, §10.4.3).
+        let deck_card = p.deck_mut().pop_top().expect("deck checked non-empty");
+        if let Some(target) = p.play_mut().iter_mut().find(|c| c.id() == card) {
+            target.push_under(deck_card);
+        }
+    }
+    state.mark_boosted_this_turn(card);
+    Ok(vec![GameEvent::Boosted {
+        player: active,
+        card,
+    }])
 }
 
 fn apply_quest(
@@ -860,6 +912,7 @@ fn apply_end_turn(
 fn begin_turn(state: &mut GameState, first_turn: bool) -> Vec<GameEvent> {
     let active = state.active_player();
     state.set_inked_this_turn(false);
+    state.clear_boosted_this_turn();
 
     let mut events = vec![GameEvent::TurnStarted {
         player: active,

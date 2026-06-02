@@ -36,6 +36,12 @@ pub enum Input {
         /// The character to quest with.
         character: CardId,
     },
+    /// Use a character's Boost ability: pay its ink cost to put the top deck card
+    /// facedown under it (§10.4), once per turn.
+    Boost {
+        /// The character to boost.
+        card: CardId,
+    },
     /// Challenge an exerted opposing character with one of the active player's
     /// characters (§4.3.6).
     Challenge {
@@ -155,6 +161,15 @@ pub enum Rejected {
     /// The card has no Shift ability, so it can't be played via Shift (§10.10).
     #[error("card {0:?} has no Shift ability")]
     CannotShift(CardId),
+    /// The card has no Boost ability (§10.4).
+    #[error("card {0:?} has no Boost ability")]
+    CannotBoost(CardId),
+    /// The character already used Boost this turn (§10.4.1).
+    #[error("card {0:?} has already boosted this turn")]
+    AlreadyBoosted(CardId),
+    /// The deck is empty, so there is no card to put under via Boost (§10.4.1).
+    #[error("the deck is empty")]
+    DeckEmpty,
     /// The Shift target isn't a valid character to shift onto (wrong owner,
     /// name, or classification) (§10.10).
     #[error("{0:?} is not a valid Shift target")]

@@ -31,6 +31,9 @@ pub struct GameState {
     /// Whether the active player has used their once-per-turn inkwell action
     /// (§4.3.3). Reset at the start of each turn.
     inked_this_turn: bool,
+    /// Characters that have used Boost this turn (§10.4.1, once per turn). Reset
+    /// at the start of each turn.
+    boosted_this_turn: Vec<CardId>,
     next_card_id: u32,
     /// Triggered abilities waiting to resolve (§8.7).
     bag: Vec<BagEntry>,
@@ -88,6 +91,7 @@ impl GameState {
             phase: Phase::Beginning,
             step: Step::Ready,
             inked_this_turn: false,
+            boosted_this_turn: Vec::new(),
             next_card_id,
             bag: Vec::new(),
             pending: None,
@@ -213,6 +217,22 @@ impl GameState {
     /// Record whether the active player has used their inkwell action this turn.
     pub const fn set_inked_this_turn(&mut self, value: bool) {
         self.inked_this_turn = value;
+    }
+
+    /// Whether `card` has already used Boost this turn (§10.4.1).
+    #[must_use]
+    pub fn has_boosted_this_turn(&self, card: CardId) -> bool {
+        self.boosted_this_turn.contains(&card)
+    }
+
+    /// Record that `card` used Boost this turn.
+    pub fn mark_boosted_this_turn(&mut self, card: CardId) {
+        self.boosted_this_turn.push(card);
+    }
+
+    /// Clear the per-turn Boost record (called at the start of each turn).
+    pub fn clear_boosted_this_turn(&mut self) {
+        self.boosted_this_turn.clear();
     }
 
     /// The triggered abilities currently waiting in the bag (§8.7).

@@ -102,6 +102,14 @@ pub enum GameEvent {
         /// The source card whose ability was used.
         card: CardId,
     },
+    /// A character used Boost, putting the top deck card facedown under it
+    /// (§10.4).
+    Boosted {
+        /// The player who used Boost.
+        player: PlayerId,
+        /// The character that was boosted.
+        card: CardId,
+    },
     /// A player ended their turn (§4.4).
     TurnEnded {
         /// The player whose turn ended.

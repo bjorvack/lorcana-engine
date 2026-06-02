@@ -122,6 +122,12 @@ impl CardInstance {
         self.under.extend(beneath);
     }
 
+    /// Put a single card under this one (e.g. a facedown deck card via Boost,
+    /// §10.4). The card keeps its own conditions (Boost cards stay facedown).
+    pub fn push_under(&mut self, card: Self) {
+        self.under.push(card);
+    }
+
     /// Remove and return the under-pile (e.g. when the stack leaves play and its
     /// cards move to the same zone, §10.10.8).
     pub fn take_under(&mut self) -> Vec<Self> {

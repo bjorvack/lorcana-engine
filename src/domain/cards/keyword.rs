@@ -57,14 +57,15 @@ impl ShiftAbility {
 ///
 /// Implemented so far: `Rush`, `Evasive`, `Alert`, `Bodyguard` (challenge
 /// restriction), `Resist`, `Challenger` (Slice 6a); `Reckless` (Slice 6b);
-/// `Shift` — standard same-name + Universal + [Classification] (Slice 6c).
+/// `Shift` — standard same-name + Universal + [Classification] (Slice 6c);
+/// `Boost` (Slice 6d).
 ///
 /// TODO(remaining keywords): `Bodyguard` "may enter play exerted" (a play-time
 /// choice); `Shift` alternate costs / cost reducers / granted-name + Morph
 /// targeting / shift-conditional triggers (Slice 8 — see `ShiftCost` and the
-/// reducer TODOs); `Singer`/`SingTogether` (songs — Slice 7); `Support`/`Vanish`
-/// (triggers/targeting); `Ward` (effect-targeting restriction); `Boost`
-/// (card-under, shares the stack model). See "Slice 6" in
+/// reducer TODOs); `Boost`'s "card put under" watcher trigger; `Singer`/
+/// `SingTogether` (songs — Slice 7); `Support`/`Vanish` (triggers/targeting);
+/// `Ward` (effect-targeting restriction). See "Slice 6" in
 /// `docs/planning/IMPLEMENTATION_PLAN.md`.
 //
 // Not `Copy`: `Shift` carries a `ShiftAbility` (which can hold a `Classification`
