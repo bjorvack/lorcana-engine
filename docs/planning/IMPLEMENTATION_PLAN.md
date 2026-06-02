@@ -474,9 +474,19 @@ Challenge/banish triggers into the bag (see
     strings). Tested in `tests/support.rs`. Target **filter dimensions** still to
     grow (cost/{S}/state, item/location/player, group-"other") — back-linked on
     `CharacterFilter`.
-  - **8b+ —** replacement effects (§7.7), "up to N" / no-duplicates / ordering,
-    floating & delayed triggers, turn-progression-with-suspension (start/end-of-
-    turn triggers), and the multi-effect-sequence-with-suspension case.
+  - [x] **8b-1 — targeted damage effects + centralized banish triggers:**
+    `Effect::DealDamage` / `RemoveDamage` (chosen / all / self), and a
+    `game_state_check_with_triggers` wrapper at the effect-resolution sites
+    (`execute_trigger`, `apply_decision`, `apply_use_ability`,
+    `resolve_action_play`) so **effect-driven** banishment fires `WhenBanished`
+    (clearing the centralization deferral). `ReturnToHand`/`IntoInkwell` to a
+    *chosen* target also work now (move to the target's owner's zone). Tested in
+    `tests/targeted_effects.rs`.
+  - **8b+ —** `Effect::Banish(Target)` (direct banish — needs registry/events in
+    the apply path), replacement effects (§7.7), "up to N" / no-duplicates /
+    ordering, the remaining `CharacterFilter` dimensions, item/location/player
+    targets, floating & delayed triggers, turn-progression-with-suspension
+    (start/end-of-turn triggers), and multi-effect-sequence-with-suspension.
 
 ### Slice 8b+ — harder resolution rules
 - Replacement effects (§7.7): "instead"/"skip"/"enter"; self-replacement applied

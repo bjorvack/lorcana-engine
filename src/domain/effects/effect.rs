@@ -43,4 +43,20 @@ pub enum Effect {
         /// The signed `{S}` change.
         amount: i32,
     },
+    /// Deal `amount` damage to the target character (§4.3.6.16, §9). Lethal damage
+    /// banishes it at the next game-state check.
+    DealDamage {
+        /// Who takes the damage.
+        target: Target,
+        /// How much damage.
+        amount: u32,
+    },
+    /// Remove up to `amount` damage from the target character (§9.4; "remove up to
+    /// N damage from chosen character").
+    RemoveDamage {
+        /// Whose damage is removed.
+        target: Target,
+        /// How much damage to remove (clamped at 0).
+        amount: u32,
+    },
 }

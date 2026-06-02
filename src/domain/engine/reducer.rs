@@ -663,7 +663,7 @@ fn resolve_action_play(
     for effect in effects {
         execute_effect(state, active, card, &effect, &mut events);
     }
-    events.extend(game_state_check(state));
+    events.extend(game_state_check_with_triggers(state, registry));
     if !state.is_finished() {
         enqueue_play_a_card_triggers(state, registry, active, card, played_def);
         events.extend(resolve_bag(state, registry));
@@ -1276,7 +1276,12 @@ fn apply_use_ability(
         card,
     }];
     execute_effect(state, active, card, &effect, &mut events);
-    events.extend(game_state_check(state));
+    events.extend(game_state_check_with_triggers(state, registry));
+    // Resolve any triggers the effect produced (e.g. a banished card's "when
+    // banished"), unless the effect itself is awaiting a target choice.
+    if !state.is_awaiting_decision() && !state.is_finished() {
+        events.extend(resolve_bag(state, registry));
+    }
     Ok(events)
 }
 
@@ -1516,13 +1521,13 @@ fn enqueue_triggers_for_def(
 /// banished by the just-run game-state check (the `Banished` events). The card is
 /// already in the discard (dissolved), so its triggers are read from its def.
 ///
-/// TODO(Slice 8): (a) the matching **effects** (e.g. Marshmallow / `HeiHei` "return
-/// this card to your hand", Gramma Tala "into your inkwell") need the move-zone
-/// effect DSL — and must relocate the card *from the discard* (where it now is),
-/// not from play; (b) when banishment can happen outside a challenge (effect-
-/// driven, Slice 8), enqueue `WhenBanished` centrally (a `game_state_check`
-/// wrapper) rather than only here; (c) §1.9.1.3 "banished by that character"
-/// attribution for who-banished-whom effects.
+/// Effect-driven (non-challenge) banishment routes through
+/// `game_state_check_with_triggers`, which calls this with `in_challenge = false`,
+/// so `WhenBanished` is centralized (the move-zone effects — Marshmallow / Gramma
+/// Tala — also work now, Slice 8a-1/8b).
+///
+/// TODO(Slice 8+): §1.9.1.3 "banished by that character" attribution for
+/// who-banished-whom effects still needs effect context.
 fn enqueue_banish_triggers(
     state: &mut GameState,
     registry: &CardRegistry,
@@ -1563,6 +1568,19 @@ fn enqueue_banish_triggers(
             );
         }
     }
+}
+
+/// Run the game-state check and enqueue "when banished" triggers for anything it
+/// banished (the centralized banishment path for **effect-driven** banishment —
+/// `apply_challenge` handles the in-challenge variants itself). The caller
+/// resolves the bag.
+fn game_state_check_with_triggers(
+    state: &mut GameState,
+    registry: &CardRegistry,
+) -> Vec<GameEvent> {
+    let events = game_state_check(state);
+    enqueue_banish_triggers(state, registry, &events, false);
+    events
 }
 
 /// Enqueue "whenever you play a [category]" triggers on the controller's other
@@ -1751,7 +1769,7 @@ fn execute_trigger(
         events,
     );
     let _ = registry; // effects don't consult the registry yet
-    events.extend(game_state_check(state));
+    events.extend(game_state_check_with_triggers(state, registry));
 }
 
 /// Apply a built-in effect for `controller`.
@@ -1798,7 +1816,9 @@ fn execute_effect(
         // controller choose (§7.1).
         Effect::ReturnToHand(target)
         | Effect::IntoInkwell(target)
-        | Effect::GiveStrengthThisTurn { target, .. } => match target {
+        | Effect::GiveStrengthThisTurn { target, .. }
+        | Effect::DealDamage { target, .. }
+        | Effect::RemoveDamage { target, .. } => match target {
             Target::SelfCard => apply_effect_to(state, source, source, effect),
             Target::ChosenCharacter { filter, another } => {
                 let options = chosen_character_options(state, controller, source, filter, *another);
@@ -1891,6 +1911,21 @@ fn apply_effect_to(state: &mut GameState, source: CardId, target_card: CardId, e
                 *amount,
                 ModifierDuration::UntilEndOfTurn,
             ));
+        }
+        Effect::DealDamage { amount, .. } => {
+            if let Some(owner) = owner_holding(state, target_card) {
+                add_damage(state, owner, target_card, *amount);
+            }
+        }
+        Effect::RemoveDamage { amount, .. } => {
+            if let Some(owner) = owner_holding(state, target_card)
+                && let Some(c) = state
+                    .player_mut(owner)
+                    .and_then(|p| p.play_mut().iter_mut().find(|c| c.id() == target_card))
+            {
+                let conditions = c.conditions_mut();
+                conditions.damage = conditions.damage.saturating_sub(*amount);
+            }
         }
         Effect::DrawCards(_) | Effect::GainLore(_) | Effect::EachOpponentLosesLore(_) => {}
     }
@@ -1999,7 +2034,7 @@ fn apply_decision(
             }
             let _ = state.take_pending();
             apply_effect_to(state, source, chosen, &effect);
-            events.extend(game_state_check(state));
+            events.extend(game_state_check_with_triggers(state, registry));
         }
         _ => return Err(Rejected::InvalidDecision),
     }
