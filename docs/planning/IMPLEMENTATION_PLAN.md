@@ -229,19 +229,19 @@ added when their source enters play and removed when it leaves (§7.6.4); timed
 state-only (consistent with Slice 3). Grounded in the card pool: `-N{S}` ×71,
 selectors over 42 classifications.
 
-### Slice 5a — Activated abilities
+### Slice 5a — Activated abilities ✅
 - `ActivatedAbility { cost, effect }` on `CardDefinition`; `Input::UseAbility`.
 - Costs: exert-self + pay-ink now (the dominant `{E}` / `{E}+N{I}` shapes);
   banish-self / discard deferred (TODO with back-link). Drying characters can't
   pay an `{E}` cost (§4.2.2.1).
 - Resolve **immediately**, not via the bag (§7.5.3.3); reuse the minimal effects.
-- [ ] Acceptance: an activated ability pays its cost and applies its effect;
+- [x] Acceptance: an activated ability pays its cost and applies its effect;
       illegal if the cost is unpayable or the source is drying/exerted.
 
-### Slice 5b — Classifications (data)
-- `Classification` (open vocabulary; newtype over a symbol) + `classifications`
+### Slice 5b — Classifications (data) ✅
+- `Classification` (open-vocabulary newtype over `String`) + `classifications`
   on `CardDefinition`. Unblocks selectors (5e) and play-a-classification triggers.
-- [ ] Acceptance: classifications round-trip and are queryable.
+- [x] Acceptance: classifications round-trip and are queryable.
 
 ### Slice 5c — Continuous-effects layer (refactor, no behaviour change)
 - `GameState` modifier list + `current_stats(card)` = base + Σ deltas (clamped at

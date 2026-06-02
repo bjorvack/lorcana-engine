@@ -26,7 +26,7 @@ pub use domain::game::{
 };
 pub use domain::rules::{RequiredAction, check_win_loss, game_state_check, lore_to_win};
 pub use domain::types::{
-    card::{CardType, InkType, Rarity, SetInfo},
+    card::{CardType, Classification, InkType, Rarity, SetInfo},
     ids::{CardDefId, CardId, GameId, PlayerId, ZoneId},
     turn::{Phase, Step},
 };

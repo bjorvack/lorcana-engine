@@ -9,7 +9,7 @@
 
 use super::ability::{ActivatedAbility, TriggeredAbility};
 use super::card_kind::CardKind;
-use crate::domain::types::card::CardType;
+use crate::domain::types::card::{CardType, Classification};
 use crate::domain::types::ids::CardDefId;
 use serde::{Deserialize, Serialize};
 
@@ -31,6 +31,8 @@ pub struct CardDefinition {
     abilities: Vec<TriggeredAbility>,
     /// The card's activated abilities (§7.5).
     activated: Vec<ActivatedAbility>,
+    /// The card's classifications (§6.2.6), e.g. Hero, Villain, Princess.
+    classifications: Vec<Classification>,
 }
 
 impl CardDefinition {
@@ -44,6 +46,7 @@ impl CardDefinition {
             kind,
             abilities: Vec::new(),
             activated: Vec::new(),
+            classifications: Vec::new(),
         }
     }
 
@@ -80,6 +83,13 @@ impl CardDefinition {
     #[must_use]
     pub fn with_activated(mut self, activated: Vec<ActivatedAbility>) -> Self {
         self.activated = activated;
+        self
+    }
+
+    /// Replace this definition's classifications (builder style).
+    #[must_use]
+    pub fn with_classifications(mut self, classifications: Vec<Classification>) -> Self {
+        self.classifications = classifications;
         self
     }
 
@@ -124,6 +134,18 @@ impl CardDefinition {
     pub fn activated_abilities(&self) -> &[ActivatedAbility] {
         &self.activated
     }
+
+    /// This card's classifications (§6.2.6).
+    #[must_use]
+    pub fn classifications(&self) -> &[Classification] {
+        &self.classifications
+    }
+
+    /// Whether this card has the given classification.
+    #[must_use]
+    pub fn has_classification(&self, classification: &Classification) -> bool {
+        self.classifications.contains(classification)
+    }
 }
 
 #[cfg(test)]
@@ -136,8 +158,20 @@ mod tests {
     fn new_card_has_no_abilities() {
         let def = CardDefinition::character(CardDefId::from_raw(1), 3, true, 2, 2, 1);
         assert!(def.abilities().is_empty());
+        assert!(def.activated_abilities().is_empty());
+        assert!(def.classifications().is_empty());
         assert_eq!(def.cost(), 3);
         assert!(def.has_inkwell_symbol());
+    }
+
+    #[test]
+    fn classifications_round_trip_and_query() {
+        use crate::domain::types::card::Classification;
+        let def = CardDefinition::character(CardDefId::from_raw(3), 4, true, 3, 4, 2)
+            .with_classifications(vec!["Villain".into(), "Sorcerer".into()]);
+        assert_eq!(def.classifications().len(), 2);
+        assert!(def.has_classification(&Classification::new("Villain")));
+        assert!(!def.has_classification(&Classification::new("Hero")));
     }
 
     #[test]
