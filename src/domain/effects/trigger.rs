@@ -11,6 +11,9 @@ use serde::{Deserialize, Serialize};
 /// against the relevant `GameEvent`), and (b) a scenario test.
 ///
 /// TODO(trigger taxonomy — add variants as needed, grounded in the card survey):
+/// The rollout (which slice each kind lands in, plus the cross-scope
+/// event→trigger matcher) is tracked in `docs/planning/IMPLEMENTATION_PLAN.md`
+/// under "Trigger taxonomy rollout" (after Slice 4).
 /// Most conditions also carry a *scope* filter naming which card the trigger
 /// watches: `This` | `YoursOther` | `Yours` | `Any` | `Opposing` (and locations'
 /// "while here"). Approximate frequencies in parentheses.

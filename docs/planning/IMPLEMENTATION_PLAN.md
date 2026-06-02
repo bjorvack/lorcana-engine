@@ -190,6 +190,28 @@ is recorded as a TODO on `TriggerCondition` (`src/domain/effects/trigger.rs`).
   (Slice 8) build on this.
 - The full effect/target DSL and richer decisions (targeting, "up to N") — Slice 8.
 
+### Trigger taxonomy rollout (when the `TriggerCondition` TODO gets done)
+
+The `TriggerCondition` TODO (`src/domain/effects/trigger.rs`) is a **living
+checklist**, ticked off as the mechanics that emit each event arrive — there is
+no single "done" moment. Each addition follows the same recipe: add the variant
++ detection + a scenario test. Mapping of the deferred kinds to their slice:
+
+| Deferred trigger kind | Lands in |
+|---|---|
+| Start / End of turn; play-a-[type/classification] (needs classifications) | **Slice 5** |
+| Challenge / banish triggers (challenges, is challenged, banishes-another, is banished) + §1.9.1.3 "banished by that character" attribution; Boost trigger | **Slice 6** |
+| Sing-a-song; move-to-location / "while here" | **Slice 7** |
+| Damage / ready / leaves-play / draw (and any stragglers) | as needed, Slices 6–8 |
+| Full taxonomy + scope filters completeness | guaranteed by **Slice 9** (real card data + conformance) |
+
+**Structural item (don't forget):** today only *self*-scoped triggers are detected
+at the action site (`enqueue_self_triggers`). Watching *other* cards' events
+(scope filters: one of your / a / an opposing character) requires a general
+**event → trigger matcher**. Build it when the first cross-scope card appears
+(Slice 5 or 6), not as per-card hacks; harden it in Slice 9. Each slice below
+back-links here.
+
 ---
 
 ## Slice 5 — Activated & static abilities, modifiers
@@ -208,6 +230,11 @@ is recorded as a TODO on `TriggerCondition` (`src/domain/effects/trigger.rs`).
   [`src/domain/rules/win_loss.rs`](../../src/domain/rules/win_loss.rs) — e.g.
   Donald Duck – Flustered Sorcerer ("Opponents need 25 lore to win") overriding
   `lore_to_win`. Convert those TODO bullets into real tests here.
+- **Triggers** (see [Trigger taxonomy rollout](#trigger-taxonomy-rollout-when-the-triggercondition-todo-gets-done)):
+  add Start/End-of-turn and play-a-[type/classification] `TriggerCondition`
+  variants (the latter needs classifications, added this slice). If a card here
+  watches another card's events, build the general **event → trigger matcher**
+  now rather than per-card hacks.
 
 **Acceptance**
 - [ ] An activated ability pays its cost and applies its effect; illegal if cost
@@ -238,6 +265,13 @@ the dry requirement for challenging, **Evasive**/**Alert** gate/ungate who may
 challenge an Evasive character, **Bodyguard** forces target choice, and
 **Resist** modifies challenge damage. Wire these into that legality/damage seam.
 
+This slice also adds the **challenge/banish triggers** to the bag (see
+[Trigger taxonomy rollout](#trigger-taxonomy-rollout-when-the-triggercondition-todo-gets-done)
+and the `apply_challenge` / `game_state_check` hooks): "whenever this character
+challenges / is challenged / banishes another in a challenge" and "when this
+character is banished", plus the §1.9.1.3 "banished by that character"
+attribution, and the **Boost** trigger ("card put under this character").
+
 **Acceptance**
 - [ ] Each keyword has a passing scenario matching its §10 definition/example.
 - [ ] Shift forms/moves stacks correctly; the stack moves with its top card on leave.
@@ -254,6 +288,9 @@ challenge an Evasive character, **Bodyguard** forces target choice, and
   sufficient cost (§6.3.3); interaction with Singer / Sing Together.
 - **Locations**: play, move cost to move a character there (§4.3.7), willpower &
   banishment, start-of-turn lore (§6.5).
+- **Triggers** (see [Trigger taxonomy rollout](#trigger-taxonomy-rollout-when-the-triggercondition-todo-gets-done)):
+  add sing-a-song and move-to-location / "while here" `TriggerCondition` variants
+  with these mechanics.
 
 **Acceptance**
 - [ ] A song can be sung by exerting an eligible character or paid for with ink.
@@ -287,10 +324,16 @@ challenge an Evasive character, **Bodyguard** forces target choice, and
 - Definition validation on load (schema + DSL well-formedness).
 - A conformance test suite: encode the rules examples (§7–§10) and a library of
   hand-authored interaction scenarios as golden tests.
+- **Trigger taxonomy completeness** (see
+  [Trigger taxonomy rollout](#trigger-taxonomy-rollout-when-the-triggercondition-todo-gets-done)):
+  loading real cards forces any still-missing `TriggerCondition` variant and the
+  scope-filter / event→trigger matcher to be finished and tested. The
+  `TriggerCondition` TODO should be empty after this slice.
 
 **Acceptance**
 - [ ] A meaningful subset of a real set loads and validates.
 - [ ] The conformance suite passes and runs in CI.
+- [ ] No remaining items in the `TriggerCondition` TODO.
 
 ---
 
