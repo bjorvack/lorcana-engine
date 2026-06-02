@@ -62,4 +62,20 @@ pub enum TriggerCondition {
     /// "Whenever you play a [category]" — fires on another card the controller
     /// plays that matches the category (~90 cards).
     WhenYouPlay(CardCategory),
+    /// "Whenever this character challenges another character" — fires for the
+    /// challenger when it is declared (§4.3.6).
+    WhenThisChallenges,
+    /// "Whenever this character is challenged" — fires for the challenged
+    /// character (§4.3.6).
+    WhenChallenged,
+    /// "Whenever this character banishes another character in a challenge"
+    /// (§4.3.6.16) — fires for the challenger when its challenge target is
+    /// banished.
+    WhenBanishesInChallenge,
+    /// "When this character/location is banished" — fires for a card as it leaves
+    /// play to the discard (§1.9.1.1, §9.4).
+    WhenBanished,
+    /// "Whenever a card is put under this character" — fires when a card is placed
+    /// under this one (e.g. via Boost, §10.4).
+    WhenCardPutUnder,
 }

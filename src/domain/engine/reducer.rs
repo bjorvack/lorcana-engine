@@ -873,7 +873,27 @@ fn apply_challenge(
         challenger,
         target,
     }];
+    // "Whenever this character challenges / is challenged" triggers go to the bag
+    // (§4.3.6); enqueued before the game-state check so a challenger/target that is
+    // about to be banished still triggers (the bag captures the effect).
+    enqueue_self_triggers(
+        state,
+        registry,
+        active,
+        challenger,
+        &TriggerCondition::WhenThisChallenges,
+    );
+    enqueue_self_triggers(
+        state,
+        registry,
+        target_owner,
+        target,
+        &TriggerCondition::WhenChallenged,
+    );
     events.extend(game_state_check(state));
+    if !state.is_finished() {
+        events.extend(resolve_bag(state, registry));
+    }
     Ok(events)
 }
 

@@ -5,9 +5,28 @@
 //! can be exercised without playing through several turns.
 
 use lorcana_engine::{
-    CardDefId, CardId, CardInstance, CardRegistry, CharacterStats, Conditions, GameEvent,
-    GameState, GameStatus, Input, PlayerId, apply, start,
+    CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterStats, Conditions,
+    Effect, GameEvent, GameState, GameStatus, Input, PlayerId, TriggerCondition, TriggeredAbility,
+    apply, start,
 };
+
+/// Start a game (skipping mulligans) using the given registry.
+fn started_with(registry: &CardRegistry) -> GameState {
+    let mut state = GameState::new(two_decks(30), 7);
+    let _ = start(&mut state).expect("start");
+    while let GameStatus::AwaitingMulligan(player) = *state.status() {
+        let _ = apply(
+            &mut state,
+            registry,
+            Input::Mulligan {
+                player,
+                put_back: Vec::new(),
+            },
+        )
+        .expect("mulligan");
+    }
+    state
+}
 
 fn two_decks(size: u32) -> Vec<Vec<CardDefId>> {
     vec![
@@ -253,5 +272,45 @@ fn cannot_challenge_your_own_character() {
     assert!(
         result.is_err(),
         "a player cannot challenge their own character"
+    );
+}
+
+#[test]
+fn challenge_triggers_fire_for_challenger_and_target() {
+    let mut registry = CardRegistry::new();
+    // Challenger: "whenever this character challenges, gain 1 lore."
+    registry.insert(
+        CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 3, 1).with_abilities(vec![
+            TriggeredAbility::new(TriggerCondition::WhenThisChallenges, Effect::GainLore(1)),
+        ]),
+    );
+    // Target: "whenever this character is challenged, its controller gains 2 lore."
+    registry.insert(
+        CardDefinition::character(CardDefId::from_raw(200), 1, true, 1, 9, 1).with_abilities(vec![
+            TriggeredAbility::new(TriggerCondition::WhenChallenged, Effect::GainLore(2)),
+        ]),
+    );
+    let mut state = started_with(&registry);
+    let active = state.active_player();
+    let foe = opponent_of(&state, active);
+    let challenger = place_character(&mut state, active, 100, 2, 3, true);
+    let target = place_character(&mut state, foe, 200, 1, 9, false); // exerted, high willpower
+
+    let _ = apply(
+        &mut state,
+        &registry,
+        Input::Challenge { challenger, target },
+    )
+    .expect("challenge");
+
+    assert_eq!(
+        state.player(active).unwrap().lore(),
+        1,
+        "challenger's trigger fired"
+    );
+    assert_eq!(
+        state.player(foe).unwrap().lore(),
+        2,
+        "challenged character's trigger fired"
     );
 }
