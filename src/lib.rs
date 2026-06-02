@@ -5,15 +5,6 @@
 // Domain modules
 pub mod domain;
 
-// Infrastructure modules
-pub mod infrastructure;
-
-// Application modules
-pub mod application;
-
-// Shared utilities
-pub mod shared;
-
 // Re-export commonly used types for convenience
 pub use domain::cards::{
     AbilityCost, ActivatedAbility, CardDefinition, CardKind, CardRegistry, GameRuleStatic, Keyword,

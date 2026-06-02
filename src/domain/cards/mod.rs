@@ -4,7 +4,6 @@ pub mod ability;
 pub mod card_kind;
 pub mod definition;
 pub mod keyword;
-pub mod loader;
 pub mod registry;
 
 // Re-export for convenience

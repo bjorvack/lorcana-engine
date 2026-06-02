@@ -184,8 +184,11 @@ for use while retaining the true value for further modification.
 
 ## Layered structure
 
-All **game logic lives in `domain`**. `infrastructure` is IO/adapters only.
-`application` is a thin facade.
+All **game logic lives in `domain`**, which is the only module that exists today.
+The `application` (thin facade) and `infrastructure` (IO/adapters) layers below
+are the **intended** structure; they'll be added when there's real code for them
+(the empty placeholder stubs were removed). The dependency rule stands: nothing
+the domain depends on may point back at it.
 
 ```
 ┌───────────────────────────────────────────────┐
@@ -238,21 +241,16 @@ src/
 │   │   ├── zone.rs             # Zone: ordered pile of CardInstance
 │   │   ├── zone_kind.rs        # ZoneKind: deck/hand/inkwell/play/discard
 │   │   ├── rng.rs              # SeededRng (ChaCha8Rng) — domain state
-│   │   ├── turn.rs             # turn progression (planned)
-│   │   └── events.rs           # output GameEvent log (planned)
+│   │   ├── bag.rs              # trigger collection (the bag)
+│   │   ├── pending.rs          # PendingDecision (choices that suspend resolution)
+│   │   └── events.rs           # output GameEvent log
 │   ├── types/                  # leaf types: ids, card enums, phase/step
-│   ├── cards/                  # CardDefinition, Registry, keywords (planned)
-│   ├── effects/                # Effect/Target/Condition DSL + resolver (planned)
-│   ├── bag/                    # trigger collection + ordered resolution (planned)
-│   ├── rules/                  # legality + game-state checks (planned)
-│   └── resolution/             # PendingDecision / Choice (planned)
-├── infrastructure/
-│   ├── parsing/                # TOML → CardDefinition (planned)
-│   ├── serialization/          # serde helpers (planned)
-│   └── carddata/               # bulk card-data loader (planned)
-├── application/
-│   └── api/                    # thin facade: actions, choices, queries, events (planned)
-└── shared/                     # error & result types
+│   ├── cards/                  # CardDefinition, Registry, keywords, abilities
+│   ├── effects/                # Effect / Target / CharacterFilter + triggers
+│   ├── engine/                 # reducer: apply(Input) → events, turn progression
+│   └── rules/                  # legality + game-state / win-loss checks
+└── (planned) infrastructure/ · application/api/ · shared/
+    # IO/adapters, thin facade, error types — added when real code needs them
 ```
 
 Type-safe IDs (`CardId`, `CardDefId`, `PlayerId`, `GameId`) and core enums
