@@ -4,8 +4,9 @@
 
 use lorcana_engine::{
     CardCategory, CardDefId, CardDefinition, CardId, CardInstance, CardKind, CardRegistry,
-    CharacterStats, Classification, Conditions, Effect, GameState, GameStatus, Input, Keyword,
-    PlayerId, TriggerCondition, TriggeredAbility, apply, start,
+    CharacterFilter, CharacterStats, Classification, Conditions, Decision, Effect, GameState,
+    GameStatus, Input, Keyword, PlayerId, Target, TargetSide, TriggerCondition, TriggeredAbility,
+    apply, start,
 };
 
 fn action_card(id: u32, cost: u32, effects: Vec<Effect>) -> CardDefinition {
@@ -283,4 +284,70 @@ fn singing_a_song_fires_a_play_a_song_watcher() {
 
     // Song's GainLore(2) plus the watcher's GainLore(1).
     assert_eq!(lore(&state, active), 3, "the play-a-song watcher fired");
+}
+
+#[test]
+fn a_targeted_action_suspends_to_choose_then_resolves() {
+    // Every deck card is "Deal 2 damage to chosen opposing character".
+    let mut reg: CardRegistry = (0..30)
+        .map(|n| {
+            action_card(
+                n,
+                0,
+                vec![Effect::DealDamage {
+                    target: Target::ChosenCharacter {
+                        filter: CharacterFilter::any(TargetSide::Opposing),
+                        another: false,
+                    },
+                    amount: 2,
+                }],
+            )
+        })
+        .collect();
+    reg.insert(CardDefinition::character(
+        CardDefId::from_raw(100),
+        1,
+        true,
+        1,
+        1,
+        1,
+    ));
+    let mut state = started(&reg);
+    let active = state.active_player();
+    let foe = state
+        .players()
+        .iter()
+        .map(lorcana_engine::PlayerState::id)
+        .find(|p| *p != active)
+        .unwrap();
+    let victim = place_character(&mut state, foe, 5000, 100, true, false); // willpower 1
+    let action = hand_card(&state, 0);
+
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::PlayCard {
+            card: action,
+            shift_onto: None,
+        },
+    )
+    .expect("play action");
+    assert!(
+        state.is_awaiting_decision(),
+        "the action waits for a target"
+    );
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(Decision::ChooseTarget(victim)),
+    )
+    .expect("choose target");
+
+    // 2 damage to a 1-willpower character banishes it.
+    assert!(!state.player(foe).unwrap().play().contains(victim));
+    assert!(state.player(foe).unwrap().discard().contains(victim));
+    assert!(
+        state.player(active).unwrap().discard().contains(action),
+        "action discarded"
+    );
 }

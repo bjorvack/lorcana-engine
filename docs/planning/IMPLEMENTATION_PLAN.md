@@ -492,10 +492,17 @@ Challenge/banish triggers into the bag (see
     and **damaged**/**exerted** booleans; matched in `character_matches_filter`
     (cost from the printed def, `{S}` from current stats). Tested in
     `tests/targeted_effects.rs`.
+  - [x] **8b-4 — targeted actions verified:** a single-effect targeted **action**
+    ("Deal 2 damage to chosen opposing character") suspends for the choice and
+    resolves correctly (the action is discarded first, the lone effect sets the
+    `ChooseTarget` pending, `Decide` applies it). Tested in `tests/actions.rs`.
+    NB: a *multi*-effect action whose targeted effect isn't last still needs
+    sequence-with-suspension (below).
   - **8b+ —** replacement effects (§7.7), "up to N" / no-duplicates / ordering,
     **item/location/player** targets + name filter + group-"other", floating &
     delayed triggers, turn-progression-with-suspension (start/end-of-turn
-    triggers), and multi-effect-sequence-with-suspension.
+    triggers), and **multi-effect-sequence-with-suspension** (stash remaining
+    effects in the pending so they resume after a mid-sequence choice).
 
 ### Slice 8b+ — harder resolution rules
 - Replacement effects (§7.7): "instead"/"skip"/"enter"; self-replacement applied
