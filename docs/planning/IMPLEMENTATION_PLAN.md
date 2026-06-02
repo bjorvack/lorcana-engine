@@ -90,21 +90,33 @@ something to act on.
 
 ---
 
-## Slice 2 — Vanilla characters & questing
+## Slice 2 — Vanilla characters & questing ✅
 
 **Goal**: win a game with French-vanilla characters.
 
-- Card definitions for characters (cost, S/W/L, classifications), loaded from TOML.
-- Play a character paying ink cost; it enters `drying` (§5.1.11).
-- Set step transitions `drying → dry`.
-- Action: quest (exert a dry character, gain its `{L}`, §4.3.5).
-- Win at 20 lore (§3.2).
+- [x] `CardKind` enum (Character{strength, willpower, lore}, Action, Item,
+      Location); `CardDefinition` expanded with `cost` + `kind`; `CardType` is a
+      derived tag. (Classifications/abilities deferred until referenced.)
+- [x] `Input::PlayCard` — play a character, paying its ink cost by auto-exerting
+      ready ink (fungible, §8.5.1); it enters `drying` (§5.1.11). Non-character
+      types are rejected for now (`CardTypeNotPlayableYet`).
+- [x] Set step transitions `drying → dry` (wired in Slice 1, now meaningful).
+- [x] `Input::Quest` — exert a dry, ready character and gain its `{L}` (§4.3.5);
+      rejects drying/exerted/not-a-character/not-in-play.
+- [x] Win at 20 lore via questing, through the game-state check (§3.2).
 
 **Acceptance**
-- [ ] Cannot quest with a drying character; can after it dries.
-- [ ] Questing exerts the character and adds the correct lore.
-- [ ] Reaching 20 lore ends the game with the correct winner.
-- [ ] Insufficient ink prevents playing a card.
+- [x] Cannot quest with a drying character; can after it dries
+      (`tests/play_and_quest.rs`).
+- [x] Questing exerts the character and adds the correct lore.
+- [x] Reaching 20 lore ends the game with the correct winner.
+- [x] Insufficient ink prevents playing a card (rejected, no mutation).
+
+**Notes**
+- TOML loading of definitions is deferred to Slice 9 (real card data); Slice 2
+  builds `CardDefinition`s directly / via a test `CardRegistry`.
+- Card classifications aren't modeled yet — nothing references them until static
+  abilities (Slice 5); added then.
 
 ---
 
