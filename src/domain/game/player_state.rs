@@ -16,6 +16,13 @@ pub struct PlayerState {
     inkwell: Zone,
     play: Zone,
     discard: Zone,
+    /// `true` once this player has lost or left the game. Eliminated players are
+    /// skipped by the win/loss check and trigger last-player-standing (§3.2.1.3).
+    eliminated: bool,
+    /// Set when this player attempts to draw from an empty deck; read by the
+    /// game-state check (§1.9.1.2, "since the last game state check") and cleared
+    /// by the check afterwards.
+    drew_from_empty_deck: bool,
 }
 
 impl PlayerState {
@@ -30,6 +37,8 @@ impl PlayerState {
             inkwell: Zone::new(),
             play: Zone::new(),
             discard: Zone::new(),
+            eliminated: false,
+            drew_from_empty_deck: false,
         }
     }
 
@@ -43,6 +52,39 @@ impl PlayerState {
     #[must_use]
     pub const fn lore(&self) -> u32 {
         self.lore
+    }
+
+    /// Add lore to this player's total (e.g. from questing or locations).
+    pub const fn add_lore(&mut self, amount: u32) {
+        self.lore += amount;
+    }
+
+    /// `true` if this player has lost or left the game.
+    #[must_use]
+    pub const fn is_eliminated(&self) -> bool {
+        self.eliminated
+    }
+
+    /// Mark this player as having lost or left the game.
+    pub const fn eliminate(&mut self) {
+        self.eliminated = true;
+    }
+
+    /// `true` if this player attempted to draw from an empty deck since the last
+    /// game-state check.
+    #[must_use]
+    pub const fn drew_from_empty_deck(&self) -> bool {
+        self.drew_from_empty_deck
+    }
+
+    /// Record that this player attempted to draw from an empty deck.
+    pub const fn note_drew_from_empty_deck(&mut self) {
+        self.drew_from_empty_deck = true;
+    }
+
+    /// Clear the empty-deck-draw flag (done by the game-state check).
+    pub const fn clear_drew_from_empty_deck(&mut self) {
+        self.drew_from_empty_deck = false;
     }
 
     /// This player's deck.

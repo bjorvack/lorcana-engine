@@ -86,6 +86,11 @@ impl GameState {
         self.players.get(usize::from(id.index()))
     }
 
+    /// Mutable access to a specific player's state, if present.
+    pub fn player_mut(&mut self, id: PlayerId) -> Option<&mut PlayerState> {
+        self.players.get_mut(usize::from(id.index()))
+    }
+
     /// The player whose turn it currently is.
     #[must_use]
     pub const fn active_player(&self) -> PlayerId {

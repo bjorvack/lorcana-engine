@@ -3,4 +3,5 @@
 pub mod cards;
 pub mod effects;
 pub mod game;
+pub mod rules;
 pub mod types;
