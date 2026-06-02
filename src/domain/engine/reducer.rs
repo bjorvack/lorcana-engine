@@ -941,6 +941,11 @@ fn target_legal_basic(
     let owner =
         opposing_owner_of(state, active, target).ok_or(Rejected::TargetNotInPlay(target))?;
     let instance = find_in_play(state, owner, target)?;
+    // A location can be challenged at any time — never ready/exerted, and Evasive
+    // doesn't apply (§4.3.6.19–22).
+    if instance.is_location() {
+        return Ok(());
+    }
     if !instance.is_character() {
         return Err(Rejected::TargetNotACharacter(target));
     }
@@ -963,7 +968,7 @@ fn target_legal_basic(
 /// TODO(effect challenge-legality — Slice 8): the challenger side must also honor
 /// "can't challenge" effects (Frying Pan, Cobra Bubbles, Gantu's "characters with
 /// cost ≤2 can't challenge your characters"); the target side is handled in
-/// `target_legal_basic`. Locations as targets arrive in Slice 7.
+/// `target_legal_basic` (which already accepts locations, §4.3.6.19–22).
 fn can_challenge(
     state: &GameState,
     registry: &CardRegistry,
@@ -988,10 +993,14 @@ fn can_challenge(
     // Target side (basics).
     target_legal_basic(state, registry, active, challenger, target)?;
 
-    // Bodyguard must-choose (§10.3.3): if the target isn't a Bodyguard and the
+    // Bodyguard must-choose (§10.3.3): only applies when choosing a *character*
+    // to challenge (not a location). If the target isn't a Bodyguard and the
     // defender has a Bodyguard this challenger could *legally* challenge (basics
     // pass), one of those must be chosen instead.
-    if !character_has_keyword(state, registry, target, &Keyword::Bodyguard) {
+    let target_is_character = state
+        .instance_in_play(target)
+        .is_some_and(CardInstance::is_character);
+    if target_is_character && !character_has_keyword(state, registry, target, &Keyword::Bodyguard) {
         let owner =
             opposing_owner_of(state, active, target).expect("validated by target_legal_basic");
         let forced = state.player(owner).is_some_and(|p| {
@@ -1007,9 +1016,9 @@ fn can_challenge(
     Ok(())
 }
 
-/// Whether `challenger` could legally challenge **any** opposing character right
-/// now (used by Reckless and Bodyguard "if able"). TODO(locations — Slice 7):
-/// also consider opposing locations as challenge targets.
+/// Whether `challenger` could legally challenge **any** opposing card right now —
+/// character or location (used by Reckless and Bodyguard "if able"). It scans all
+/// opposing in-play cards, so locations are covered via `can_challenge`.
 fn can_legally_challenge_anything(
     state: &GameState,
     registry: &CardRegistry,
@@ -1147,8 +1156,8 @@ fn apply_end_turn(
     let active = state.active_player();
 
     // Reckless (§10.7.3): can't end the turn while a ready Reckless character can
-    // still legally challenge something (reuses the `can_challenge` authority, so
-    // it respects Evasive/Bodyguard/Rush/etc.). Locations as targets: Slice 7.
+    // still legally challenge an opposing character *or location* (reuses the
+    // `can_challenge` authority, so it respects Evasive/Bodyguard/Rush/locations).
     if let Some(reckless) = reckless_must_challenge(state, registry, active) {
         return Err(Rejected::RecklessMustChallenge(reckless));
     }

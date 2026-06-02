@@ -4,8 +4,21 @@
 
 use lorcana_engine::{
     CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterStats, Conditions,
-    GameState, GameStatus, Input, LocationStats, PlayerId, apply, game_state_check, start,
+    GameState, GameStatus, Input, Keyword, LocationStats, PlayerId, apply, game_state_check, start,
 };
+
+fn opponent_of(state: &GameState, player: PlayerId) -> PlayerId {
+    state
+        .players()
+        .iter()
+        .map(lorcana_engine::PlayerState::id)
+        .find(|p| *p != player)
+        .unwrap()
+}
+
+fn damage(state: &GameState, owner: PlayerId, card: CardId) -> u32 {
+    in_play(state, owner, card).unwrap().conditions().damage
+}
 
 fn started(reg: &CardRegistry) -> GameState {
     let mut state = GameState::new(
@@ -188,5 +201,100 @@ fn moving_to_a_non_location_is_rejected() {
             },
         )
         .is_err()
+    );
+}
+
+#[test]
+fn challenging_a_location_deals_damage_and_takes_none() {
+    let reg = CardRegistry::new();
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let foe = opponent_of(&state, me);
+    let challenger = inject_character(&mut state, me, 100); // strength 2
+    let location = inject_location(&mut state, foe, 5000, 5, 0, 1, 0); // willpower 5
+
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Challenge {
+            challenger,
+            target: location,
+        },
+    )
+    .expect("challenge the location");
+
+    assert_eq!(
+        damage(&state, foe, location),
+        2,
+        "the location took the challenger's strength"
+    );
+    assert_eq!(
+        damage(&state, me, challenger),
+        0,
+        "a location deals no damage back (§4.3.6.22)"
+    );
+}
+
+#[test]
+fn a_location_with_lethal_damage_is_banished_after_a_challenge() {
+    let reg = CardRegistry::new();
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let foe = opponent_of(&state, me);
+    let challenger = inject_character(&mut state, me, 100); // strength 2
+    let location = inject_location(&mut state, foe, 5000, 2, 0, 1, 0); // willpower 2
+
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Challenge {
+            challenger,
+            target: location,
+        },
+    )
+    .expect("challenge");
+
+    assert!(
+        in_play(&state, foe, location).is_none(),
+        "the location was banished"
+    );
+    assert!(state.player(foe).unwrap().discard().contains(location));
+}
+
+#[test]
+fn a_bodyguard_does_not_force_away_from_challenging_a_location() {
+    let mut reg = CardRegistry::new();
+    reg.insert(
+        CardDefinition::character(CardDefId::from_raw(200), 1, true, 1, 3, 1)
+            .with_keywords(vec![Keyword::Bodyguard]),
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let foe = opponent_of(&state, me);
+    let challenger = inject_character(&mut state, me, 100);
+    let guard = inject_character(&mut state, foe, 200); // Bodyguard
+    // Make the Bodyguard a challengeable (exerted) character.
+    state
+        .player_mut(foe)
+        .unwrap()
+        .play_mut()
+        .iter_mut()
+        .find(|c| c.id() == guard)
+        .unwrap()
+        .conditions_mut()
+        .ready = false;
+    let location = inject_location(&mut state, foe, 5000, 5, 0, 1, 0);
+
+    // Bodyguard only restricts choosing a character; the location is still legal.
+    assert!(
+        apply(
+            &mut state,
+            &reg,
+            Input::Challenge {
+                challenger,
+                target: location,
+            },
+        )
+        .is_ok()
     );
 }

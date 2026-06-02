@@ -419,11 +419,15 @@ character is banished", plus the §1.9.1.3 "banished by that character" attribut
 - [x] **Movement** (§4.3.7): `Input::MoveCharacter { character, location }` pays
       the location's move cost and records `CardInstance.at_location`. Tested in
       `tests/locations.rs`.
-- Deferred (back-linked): locations as **challenge targets** (the `can_challenge`
-  / `can_legally_challenge_anything` Slice 7 TODOs still stand — a location is
-  always challengeable, takes damage, deals none); **modifiable** location stats
-  (the `Stat` TODO in `src/domain/game/modifier.rs`); location **abilities** and
-  move / "while here" **triggers** (the `apply_move` TODO + trigger rollout).
+- [x] Locations as **challenge targets** (§4.3.6.19–22): `target_legal_basic`
+      accepts a location any time (never exerted, Evasive N/A); Bodyguard only
+      restricts choosing a *character* (gated in `can_challenge`); damage math
+      already gives 0-back for non-characters. Tested in `tests/locations.rs`.
+  Reckless's "must challenge … or location" now works too, since
+  `can_legally_challenge_anything` scans all opposing in-play cards.
+- Deferred (back-linked): **modifiable** location stats (the `Stat` TODO in
+  `src/domain/game/modifier.rs`); location **abilities** and move / "while here"
+  **triggers** (the `apply_move` TODO + trigger rollout).
 
 ### Slice 7c — Items ✅
 - [x] **Items** (§6.4): `CardKind::Item` is playable — enters play faceup/in play

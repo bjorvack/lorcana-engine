@@ -4,7 +4,7 @@
 
 use lorcana_engine::{
     CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterStats, Conditions,
-    GameState, GameStatus, Input, Keyword, PlayerId, apply, start,
+    GameState, GameStatus, Input, Keyword, LocationStats, PlayerId, apply, start,
 };
 
 fn started(registry: &CardRegistry) -> GameState {
@@ -339,6 +339,35 @@ fn reckless_blocks_ending_the_turn_while_it_can_challenge() {
     assert!(
         apply(&mut state, &registry, Input::EndTurn).is_err(),
         "can't end the turn while a ready Reckless character can challenge (§10.7.3)"
+    );
+}
+
+#[test]
+fn reckless_must_challenge_an_opposing_location() {
+    let mut registry = CardRegistry::new();
+    registry.insert(char_def(70).with_keywords(vec![Keyword::Reckless]));
+    let mut state = started(&registry);
+    let active = state.active_player();
+    let foe = opponent_of(&state, active);
+    let _reckless = place(&mut state, active, 100, 70, 3, 9, true, false); // ready Reckless
+    // The opponent has only a location (no exerted characters); a location can be
+    // challenged any time, so Reckless still can't end the turn (§10.7.3).
+    let mut location = CardInstance::new(
+        CardId::from_raw(200),
+        CardDefId::from_raw(200),
+        Conditions {
+            ready: true,
+            damage: 0,
+            drying: false,
+            facedown: false,
+        },
+    );
+    location.set_location_stats(Some(LocationStats::new(3, 0, 1)));
+    state.player_mut(foe).unwrap().play_mut().push(location);
+
+    assert!(
+        apply(&mut state, &registry, Input::EndTurn).is_err(),
+        "Reckless must challenge an opposing location too (§10.7.3)"
     );
 }
 
