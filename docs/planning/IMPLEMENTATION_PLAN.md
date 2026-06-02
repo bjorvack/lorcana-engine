@@ -359,11 +359,20 @@ attribution, and the **Boost** trigger ("card put under this character").
 - Choice machinery completeness: "may" (§7.1.3), "up to N" (§7.1.8, no duplicates),
   ordering simultaneous discards/destinations, "that [game term]" resolution (§7.1.9).
 - Floating & delayed triggered abilities (§7.4.7).
+- **Effect-driven leave-play removals** (return-to-hand, banish-by-effect, etc.):
+  each MUST call `GameState::remove_modifiers_from_source` and then run a
+  game-state check, exactly like the banishment path — otherwise the static /
+  win-loss modification layers go stale (see the caveat on
+  `remove_modifiers_from_source` and the `banish` comment in
+  `src/domain/rules/game_state_check.rs`). Also: timed selector effects must
+  **snapshot** their targets (§7.6.3 — TODO on `expire_end_of_turn_modifiers`).
 
 **Acceptance**
 - [ ] A worked replacement example from §7.7 reproduces exactly (ordering included).
 - [ ] "Up to N" forbids duplicate picks and allows 0; "may" can decline cleanly.
 - [ ] A delayed trigger ("at the end of your turn, …") fires at the right moment.
+- [ ] An effect that returns/banishes a card removes its modifiers and a pending
+      win/loss/banishment resolves on the next check (parallels the Donald case).
 
 ---
 

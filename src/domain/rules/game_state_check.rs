@@ -123,6 +123,10 @@ fn banish(state: &mut GameState, player: PlayerId, card: CardId, events: &mut Ve
         p.discard_mut().push(instance);
         events.push(GameEvent::Banished { player, card });
         // The card left play: any continuous modifiers it generated end (§7.6.4).
+        // This is the model every leave-play path must follow (remove modifiers,
+        // then let the check loop re-resolve) — see the caveat on
+        // `GameState::remove_modifiers_from_source`. Future effect-driven removals
+        // (Slice 8) must do the same.
         state.remove_modifiers_from_source(card);
     }
 }
