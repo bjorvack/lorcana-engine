@@ -10,6 +10,7 @@
 use super::ability::{ActivatedAbility, GameRuleStatic, StaticAbility, TriggeredAbility};
 use super::card_kind::CardKind;
 use super::keyword::{Keyword, ShiftAbility};
+use crate::domain::effects::Effect;
 use crate::domain::types::card::{CardType, Classification};
 use crate::domain::types::ids::CardDefId;
 use serde::{Deserialize, Serialize};
@@ -44,6 +45,10 @@ pub struct CardDefinition {
     /// (e.g. Flotsam & Jetsam counts as `Flotsam` and `Jetsam`; Chip 'n' Dale as
     /// `Chip` and `Dale`). Used by Shift's same-name rule and "named X" effects.
     names: Vec<String>,
+    /// An action's on-play effects (§6.3.2): actions have effects rather than
+    /// abilities. Resolved directly when the action is played (not via the bag,
+    /// §6.3.1.2), then the card goes to discard. Empty for non-actions.
+    action_effects: Vec<Effect>,
 }
 
 impl CardDefinition {
@@ -62,6 +67,7 @@ impl CardDefinition {
             rule_statics: Vec::new(),
             keywords: Vec::new(),
             names: Vec::new(),
+            action_effects: Vec::new(),
         }
     }
 
@@ -133,6 +139,13 @@ impl CardDefinition {
     #[must_use]
     pub fn with_names(mut self, names: Vec<String>) -> Self {
         self.names = names;
+        self
+    }
+
+    /// Set an action's on-play effects (builder style, §6.3.2).
+    #[must_use]
+    pub fn with_action_effects(mut self, action_effects: Vec<Effect>) -> Self {
+        self.action_effects = action_effects;
         self
     }
 
@@ -264,6 +277,40 @@ impl CardDefinition {
     pub fn boost(&self) -> Option<u32> {
         self.keywords.iter().find_map(|k| match k {
             Keyword::Boost(cost) => Some(*cost),
+            _ => None,
+        })
+    }
+
+    /// An action's on-play effects (§6.3.2).
+    #[must_use]
+    pub fn action_effects(&self) -> &[Effect] {
+        &self.action_effects
+    }
+
+    /// Whether this card is a song (an action with the "Song" classification,
+    /// §6.3.3.2).
+    #[must_use]
+    pub fn is_song(&self) -> bool {
+        matches!(self.kind, CardKind::Action)
+            && self.has_classification(&Classification::new("Song"))
+    }
+
+    /// This card's Singer value, if it has Singer (§10.11): it may sing songs as
+    /// if its cost were this value.
+    #[must_use]
+    pub fn singer(&self) -> Option<u32> {
+        self.keywords.iter().find_map(|k| match k {
+            Keyword::Singer(n) => Some(*n),
+            _ => None,
+        })
+    }
+
+    /// This song's Sing Together value, if it has Sing Together (§10.12):
+    /// characters with combined cost ≥ this value may sing it together.
+    #[must_use]
+    pub fn sing_together(&self) -> Option<u32> {
+        self.keywords.iter().find_map(|k| match k {
+            Keyword::SingTogether(n) => Some(*n),
             _ => None,
         })
     }

@@ -397,8 +397,20 @@ character is banished", plus the §1.9.1.3 "banished by that character" attribut
 
 **Goal**: remaining card types.
 
-- **Songs**: Action + "Song" classification; pay by exerting a character of
-  sufficient cost (§6.3.3); interaction with Singer / Sing Together.
+### Slice 7a — Actions & Songs ✅
+- [x] **Actions** (§6.3): `CardKind::Action` is playable — pay ink, resolve its
+      `CardDefinition.action_effects` **directly** (not via the bag, §6.3.1.2),
+      then discard (never in play). Effects triggered by the play go to the bag
+      after (§6.3.4); the play-a-category matcher (`category_matches`) now keys off
+      the played card's **definition**, so Action/Song watchers work.
+- [x] **Songs** (§6.3.3): `Input::Sing { song, singers }` plays a song by exerting
+      eligible dry/ready characters instead of paying ink — single singer (cost ≥
+      song cost, Singer-adjusted, §10.11) or **Sing Together** combined cost
+      (§10.12). Shares `resolve_action_play`. Clears the Slice 6 Singer/Sing
+      Together deferral. Tested in `tests/actions.rs`.
+- Uses the minimal `Effect` enum for now; the full effect DSL is Slice 8.
+
+### Slice 7b — Locations & movement
 - **Locations**: play, move cost to move a character there (§4.3.7), willpower &
   banishment, start-of-turn lore (§6.5). Location characteristics (move cost,
   willpower, lore) become modifiable `Stat` variants in the continuous-effects

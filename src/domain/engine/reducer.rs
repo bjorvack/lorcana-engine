@@ -12,7 +12,7 @@ use crate::domain::game::{
 };
 use crate::domain::rules::game_state_check;
 use crate::domain::types::card::Classification;
-use crate::domain::types::ids::{CardId, PlayerId};
+use crate::domain::types::ids::{CardDefId, CardId, PlayerId};
 use crate::domain::types::turn::{Phase, Step};
 
 /// The opening hand size (§3.1.5).
@@ -79,6 +79,7 @@ pub fn apply(
         Input::PlayCard { card, shift_onto } => apply_play_card(state, registry, card, shift_onto),
         Input::Quest { character } => apply_quest(state, registry, character),
         Input::Boost { card } => apply_boost(state, registry, card),
+        Input::Sing { song, singers } => apply_sing(state, registry, song, &singers),
         Input::Challenge { challenger, target } => {
             apply_challenge(state, registry, challenger, target)
         }
@@ -210,7 +211,35 @@ fn apply_play_card(
     let definition = registry
         .get(definition_id)
         .ok_or(Rejected::UnknownCard(card))?;
-    // Only characters can be played so far (items/locations/actions: later slices).
+    // Actions resolve their effect and go to discard (never in play, §6.3).
+    if matches!(definition.kind(), CardKind::Action) {
+        if shift_onto.is_some() {
+            return Err(Rejected::CannotShift(card)); // actions can't Shift
+        }
+        let ink_cost = definition.cost();
+        let effects = definition.action_effects().to_vec();
+        if state
+            .player(active)
+            .expect("active player exists")
+            .ready_ink()
+            < ink_cost
+        {
+            return Err(Rejected::InsufficientInk(card));
+        }
+        state
+            .player_mut(active)
+            .expect("active player exists")
+            .exert_ink(ink_cost);
+        return Ok(resolve_action_play(
+            state,
+            registry,
+            active,
+            card,
+            definition_id,
+            effects,
+        ));
+    }
+    // Items / locations: later sub-slices.
     let CardKind::Character {
         strength,
         willpower,
@@ -273,7 +302,7 @@ fn apply_play_card(
         );
         // "Whenever you play a [category]" triggers on the controller's other
         // in-play cards (the cross-scope event→trigger matcher).
-        enqueue_play_a_card_triggers(state, registry, active, card);
+        enqueue_play_a_card_triggers(state, registry, active, card, definition_id);
         // TODO(shift-conditional triggers — Slice 8): 23 cards gate a play
         // trigger on "if you used Shift to play them" (Mulan, Pegasus, Mickey,
         // Basil; watchers Bucky, Honey Lemon, Chem Purse). Thread a was-shifted
@@ -377,6 +406,112 @@ fn place_via_shift(
     // don't transfer to the new top yet.
     state.remove_modifiers_from_source(target);
     Ok(())
+}
+
+/// Sing a song (§6.3.3): pay the alternate cost by exerting eligible singers, then
+/// resolve it like any action. A single singer must have a (Singer-adjusted) cost
+/// ≥ the song's cost; several singers use the song's Sing Together value (§10.12).
+fn apply_sing(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    song: CardId,
+    singers: &[CardId],
+) -> Result<Vec<GameEvent>, Rejected> {
+    if !matches!(state.status(), GameStatus::Playing) {
+        return Err(Rejected::NotPlaying);
+    }
+    if state.phase() != Phase::Main {
+        return Err(Rejected::NotMainPhase);
+    }
+    let active = state.active_player();
+    let definition_id = hand_card_definition(state, active, song)?;
+    let definition = registry
+        .get(definition_id)
+        .ok_or(Rejected::UnknownCard(song))?;
+    if !definition.is_song() {
+        return Err(Rejected::NotASong(song));
+    }
+    let song_cost = definition.cost();
+    let sing_together = definition.sing_together();
+    let effects = definition.action_effects().to_vec();
+    if singers.is_empty() {
+        return Err(Rejected::CannotSing(song));
+    }
+
+    // Each singer must be the active player's dry, ready character (§6.3.3.3); its
+    // contribution is its cost raised to its Singer value if it has Singer (§10.11).
+    let mut total = 0u32;
+    for &singer in singers {
+        let instance =
+            find_in_play(state, active, singer).map_err(|_| Rejected::InvalidSinger(singer))?;
+        if !instance.is_character() || !instance.conditions().ready || instance.conditions().drying
+        {
+            return Err(Rejected::InvalidSinger(singer));
+        }
+        let def = registry
+            .get(instance.definition())
+            .ok_or(Rejected::InvalidSinger(singer))?;
+        total += def.cost().max(def.singer().unwrap_or(0));
+    }
+    // Enough singing value? One singer pays a song of its cost or less; several
+    // require the song's Sing Together value (§10.12).
+    let enough = if singers.len() == 1 {
+        total >= song_cost
+    } else {
+        sing_together.is_some_and(|n| total >= n)
+    };
+    if !enough {
+        return Err(Rejected::CannotSing(song));
+    }
+
+    // Pay by exerting the singers, then resolve the song.
+    for &singer in singers {
+        if let Some(p) = state.player_mut(active)
+            && let Some(c) = p.play_mut().iter_mut().find(|c| c.id() == singer)
+        {
+            c.conditions_mut().ready = false;
+        }
+    }
+    Ok(resolve_action_play(
+        state,
+        registry,
+        active,
+        song,
+        definition_id,
+        effects,
+    ))
+}
+
+/// Resolve a just-paid-for action/song: move it from hand to discard (it's never
+/// in play, §6.3.1), resolve its effects **directly** (not via the bag, §6.3.1.2),
+/// then place any effects triggered by the play into the bag (§6.3.4). The cost
+/// (ink for a normal play, exerted singers for a song) is paid by the caller.
+fn resolve_action_play(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    active: PlayerId,
+    card: CardId,
+    played_def: CardDefId,
+    effects: Vec<Effect>,
+) -> Vec<GameEvent> {
+    if let Some(p) = state.player_mut(active)
+        && let Some(instance) = p.hand_mut().take(card)
+    {
+        p.discard_mut().push(instance);
+    }
+    let mut events = vec![GameEvent::CardPlayed {
+        player: active,
+        card,
+    }];
+    for effect in effects {
+        execute_effect(state, active, effect, &mut events);
+    }
+    events.extend(game_state_check(state));
+    if !state.is_finished() {
+        enqueue_play_a_card_triggers(state, registry, active, card, played_def);
+        events.extend(resolve_bag(state, registry));
+    }
+    events
 }
 
 /// Use a character's Boost ability (§10.4): pay its ink cost to put the top deck
@@ -787,7 +922,7 @@ fn hand_card_definition(
     state: &GameState,
     player: PlayerId,
     card: CardId,
-) -> Result<crate::domain::types::ids::CardDefId, Rejected> {
+) -> Result<CardDefId, Rejected> {
     state
         .player(player)
         .expect("active player exists")
@@ -1068,11 +1203,14 @@ fn enqueue_play_a_card_triggers(
     registry: &CardRegistry,
     controller: PlayerId,
     played: CardId,
+    played_def: CardDefId,
 ) {
-    let Some(owner) = state.player(controller) else {
+    // The played card's category comes from its definition (it may not be in play
+    // — actions are discarded), so this works for characters and actions/songs.
+    let Some(played_definition) = registry.get(played_def) else {
         return;
     };
-    let Some(played_instance) = owner.play().iter().find(|c| c.id() == played).cloned() else {
+    let Some(owner) = state.player(controller) else {
         return;
     };
     let mut to_enqueue: Vec<(CardId, bool, Effect)> = Vec::new();
@@ -1085,7 +1223,7 @@ fn enqueue_play_a_card_triggers(
         };
         for ability in definition.abilities() {
             if let TriggerCondition::WhenYouPlay(category) = &ability.condition
-                && category_matches(category, &played_instance)
+                && category_matches(category, played_definition)
             {
                 to_enqueue.push((watcher.id(), ability.optional, ability.effect));
             }
@@ -1096,16 +1234,18 @@ fn enqueue_play_a_card_triggers(
     }
 }
 
-/// Whether a played card matches a "whenever you play a …" category. Only
-/// characters are playable so far, so non-character categories never match yet.
-fn category_matches(category: &CardCategory, played: &CardInstance) -> bool {
+/// Whether a played card (by its definition) matches a "whenever you play a …"
+/// category. A song is an action, so it matches both `Action` and `Song`.
+fn category_matches(category: &CardCategory, played: &CardDefinition) -> bool {
     match category {
         CardCategory::Character(filter) => {
-            played.is_character() && filter.as_ref().is_none_or(|c| played.has_classification(c))
+            matches!(played.kind(), CardKind::Character { .. })
+                && filter.as_ref().is_none_or(|c| played.has_classification(c))
         }
-        CardCategory::Action | CardCategory::Song | CardCategory::Item | CardCategory::Location => {
-            false
-        }
+        CardCategory::Action => matches!(played.kind(), CardKind::Action),
+        CardCategory::Song => played.is_song(),
+        CardCategory::Item => matches!(played.kind(), CardKind::Item),
+        CardCategory::Location => matches!(played.kind(), CardKind::Location),
     }
 }
 

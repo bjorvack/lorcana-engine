@@ -232,9 +232,9 @@ fn quest_for_a_character_not_in_play_is_rejected() {
 #[test]
 fn non_character_cards_cannot_be_played_yet() {
     let mut state = GameState::new(two_decks(30), 7);
-    // All ids map to Action cards (not playable in this slice).
+    // All ids map to Item cards (items/locations aren't playable yet; actions are).
     let registry: CardRegistry = (0..30)
-        .map(|n| CardDefinition::new(CardDefId::from_raw(n), 1, true, CardKind::Action))
+        .map(|n| CardDefinition::new(CardDefId::from_raw(n), 1, true, CardKind::Item))
         .collect();
     start_to_play(&mut state, &registry);
 

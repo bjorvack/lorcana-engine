@@ -42,6 +42,15 @@ pub enum Input {
         /// The character to boost.
         card: CardId,
     },
+    /// Sing a song (§6.3.3): play it for free by exerting one or more of the
+    /// active player's dry, ready characters whose (Singer-adjusted) cost meets
+    /// the song's cost (or, for several singers, its Sing Together value, §10.12).
+    Sing {
+        /// The song card in hand to sing.
+        song: CardId,
+        /// The character(s) exerted to sing it.
+        singers: Vec<CardId>,
+    },
     /// Challenge an exerted opposing character with one of the active player's
     /// characters (§4.3.6).
     Challenge {
@@ -170,6 +179,17 @@ pub enum Rejected {
     /// The deck is empty, so there is no card to put under via Boost (§10.4.1).
     #[error("the deck is empty")]
     DeckEmpty,
+    /// The card being sung is not a song (§6.3.3.2).
+    #[error("card {0:?} is not a song")]
+    NotASong(CardId),
+    /// A chosen singer isn't an eligible character (not your dry, ready character)
+    /// (§6.3.3.3).
+    #[error("{0:?} can't sing right now")]
+    InvalidSinger(CardId),
+    /// The singers don't meet the song's cost / Sing Together requirement
+    /// (§6.3.3.3, §10.12).
+    #[error("the chosen singers can't pay for song {0:?}")]
+    CannotSing(CardId),
     /// The Shift target isn't a valid character to shift onto (wrong owner,
     /// name, or classification) (§10.10).
     #[error("{0:?} is not a valid Shift target")]
