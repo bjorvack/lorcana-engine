@@ -1,5 +1,7 @@
 # Lorcana Engine Architecture
 
+> **Note**: This is a living document that describes the intended architecture of the lorcana-engine. As implementation progresses, this document will be updated to reflect actual implementation decisions and discovered patterns. Specific struct definitions and implementation details will be added as components are completed.
+
 ## Overview
 
 The lorcana-engine is a headless, deterministic game engine for Disney's Lorcana trading card game. It uses a data-driven approach with hybrid effect system (TOML definitions + Rhai scripting) to ensure flexibility for future card releases while maintaining type safety and performance.
@@ -77,64 +79,29 @@ The lorcana-engine is a headless, deterministic game engine for Disney's Lorcana
 
 ### 1. Game State
 
-The `GameState` struct is the single source of truth containing all game information:
+The game state will be the single source of truth containing all game information. It will include:
+- Game metadata (ID, turn, phase, step, priority player, random seed)
+- Player states (lore, inkwell, hand, deck, discard)
+- Zone management (all Lorcana zones)
+- Stack for effect resolution
+- Event log for determinism and replay
 
-```rust
-pub struct GameState {
-    // Game metadata
-    pub game_id: GameId,
-    pub turn: u32,
-    pub phase: Phase,
-    pub step: Step,
-    pub priority_player: PlayerId,
-    pub random_seed: u64,
-
-    // Players
-    pub players: HashMap<PlayerId, PlayerState>,
-
-    // Zones
-    pub zones: HashMap<ZoneId, Zone>,
-
-    // Stack (for effect resolution)
-    pub stack: Vec<StackItem>,
-
-    // Event log (for determinism and replay)
-    pub event_log: Vec<GameEvent>,
-}
-
-pub struct PlayerState {
-    pub player_id: PlayerId,
-    pub lore: u32,
-    pub inkwell: Vec<CardId>,
-    pub hand: Vec<CardId>,
-    pub deck: Vec<CardId>,
-    pub discard: Vec<CardId>,
-}
-```
+*Implementation details to be defined during Phase 1 development.*
 
 ### 2. Zone System
 
 Lorcana has multiple zones where cards can exist:
+- Deck
+- Hand
+- Inkwell
+- Field
+- Discard
+- Stack
+- Banished
 
-```rust
-pub enum ZoneType {
-    Deck,
-    Hand,
-    Inkwell,
-    Field,
-    Discard,
-    Stack,
-    Banished,
-}
+Each zone will have visibility rules and ownership tracking.
 
-pub struct Zone {
-    pub zone_id: ZoneId,
-    pub zone_type: ZoneType,
-    pub owner: PlayerId,
-    pub cards: Vec<CardId>,
-    pub visibility: ZoneVisibility,
-}
-```
+*Implementation details to be defined during Phase 1 development.*
 
 ### 3. Card Definition System
 
@@ -201,76 +168,37 @@ Complex mechanics that don't fit built-in patterns:
 
 ### 5. Trigger System
 
-Event-driven trigger system for card abilities:
+Event-driven trigger system for card abilities. The system will support:
+- Card enters/leaves play triggers
+- Turn start/end triggers
+- Phase start/end triggers
+- Damage dealing triggers
+- Quest completion triggers
+- Custom triggers for unique mechanics
 
-```rust
-pub enum TriggerEvent {
-    CardEntersPlay { card_id: CardId, zone: ZoneId },
-    CardLeavesPlay { card_id: CardId, zone: ZoneId },
-    TurnStart { player_id: PlayerId },
-    TurnEnd { player_id: PlayerId },
-    PhaseStart { phase: Phase },
-    PhaseEnd { phase: Phase },
-    DamageDealt { source: CardId, target: CardId, amount: u32 },
-    QuestCompleted { character_id: CardId, player_id: PlayerId },
-    // ... more triggers
-}
-
-pub struct Trigger {
-    pub id: TriggerId,
-    pub card_id: CardId,
-    pub event_type: TriggerEvent,
-    pub condition: Option<EffectCondition>,
-    pub effect: Effect,
-    pub optional: bool,
-}
-```
+*Implementation details to be defined during Phase 3 development.*
 
 ### 6. Turn Structure
 
 Lorcana's turn structure with phases and steps:
+- **Beginning Phase**: Ready, Set, Draw steps
+- **Main Phase**: Main actions (play cards, quest, challenge)
+- **End Phase**: End of turn effects and cleanup
 
-```rust
-pub enum Phase {
-    Beginning,
-    Main,
-    End,
-}
+The system will track current turn, active player, current phase, step, and priority player.
 
-pub enum Step {
-    Ready,
-    Set,
-    Draw,
-}
-
-pub struct TurnManager {
-    pub current_turn: u32,
-    pub current_player: PlayerId,
-    pub current_phase: Phase,
-    pub current_step: Option<Step>,
-    pub priority_player: PlayerId,
-}
-```
+*Implementation details to be defined during Phase 1 development.*
 
 ### 7. Event System
 
-Comprehensive event system for UI updates and replays:
+Comprehensive event system for UI updates and replays. Events will include:
+- Game lifecycle events (start, end)
+- Turn progression events
+- Card movement events
+- Effect resolution events
+- State change events
 
-```rust
-pub enum GameEvent {
-    GameStarted { players: Vec<PlayerId> },
-    TurnStarted { player_id: PlayerId, turn: u32 },
-    PhaseChanged { phase: Phase },
-    CardPlayed { card_id: CardId, player_id: PlayerId },
-    CardMoved { card_id: CardId, from_zone: ZoneId, to_zone: ZoneId },
-    EffectTriggered { trigger_id: TriggerId },
-    DamageDealt { source: CardId, target: CardId, amount: u32 },
-    LoreGained { player_id: PlayerId, amount: u32 },
-    QuestCompleted { character_id: CardId, player_id: PlayerId },
-    GameEnded { winner: PlayerId },
-    // ... more events
-}
-```
+*Implementation details to be defined during Phase 1 development.*
 
 ## Data Flow
 
@@ -555,3 +483,30 @@ lorcana-engine/
 - Known game states
 - Expected event sequences
 - Card definition validation
+
+## Implementation Status
+
+This architecture document represents the planned design for the lorcana-engine. As implementation progresses according to the [implementation plan](../planning/IMPLEMENTATION_PLAN.md), this document will be updated to reflect:
+
+### Current Status
+- **Phase 1**: Not started - Core infrastructure
+- **Phase 2**: Not started - Card system
+- **Phase 3**: Not started - Effect system
+- **Phase 4**: Not started - Rules engine
+- **Phase 5**: Not started - API layer
+- **Phase 6**: Not started - Testing and validation
+
+### Documentation Updates
+As each phase is completed, the corresponding sections in this document will be updated with:
+- Actual struct definitions and types used
+- Implementation decisions and trade-offs
+- Performance characteristics
+- Discovered patterns and best practices
+- Lessons learned during implementation
+
+### Review Process
+This architecture document should be reviewed and updated:
+- After each major phase completion
+- When significant architectural decisions are made
+- When patterns emerge that differ from initial design
+- Before releasing new versions
