@@ -105,43 +105,17 @@ Each zone will have visibility rules and ownership tracking.
 
 ### 3. Card Definition System
 
-Cards are defined in TOML with a hybrid effect system:
+Cards will be defined in TOML with a hybrid effect system. The system will support:
 
-```toml
-[[cards]]
-id = "lor-001"
-name = "Mickey Mouse - Brave Little Tailor"
-version = "1"
-cost = 2
-ink_type = "Sapphire"
-card_type = "Character"
-strength = 3
-willpower = 3
-quest_value = 2
-classifications = ["Hero", "Mouse", "Prince"]
+- **Basic card properties**: ID, name, version, cost, ink type, card type
+- **Character stats**: Strength, willpower, quest value
+- **Classifications**: Categories for card references
+- **Keywords**: Common abilities (Rush, Evasive, etc.)
+- **Abilities**: Triggered, activated, static, and replacement effects
+- **Built-in effects**: Common effects defined in TOML
+- **Scripted effects**: Complex mechanics via Rhai scripts
 
-[[cards.keywords]]
-name = "Rush"
-
-[[cards.abilities]]
-name = "Inspiring"
-type = "triggered"
-trigger = "etb"  # enters the battlefield
-
-[[cards.abilities.effects]]
-type = "draw"
-target = "self"
-value = 1
-```
-
-For complex effects, Rhai scripts can be used:
-
-```toml
-[[cards.abilities]]
-name = "ComplexEffect"
-type = "scripted"
-script = "scripts/complex_ability.rhai"
-```
+*Card definition format and examples will be developed during Phase 2 implementation.*
 
 ### 4. Effect System
 
@@ -240,68 +214,6 @@ Apply effects
 Check state-based actions
     ↓
 Emit events
-```
-
-## Card Definition Examples
-
-### Simple Character with Built-in Effects
-
-```toml
-[[cards]]
-id = "lor-002"
-name = "Elsa - Snow Queen"
-version = "1"
-cost = 4
-ink_type = "Amethyst"
-card_type = "Character"
-strength = 4
-willpower = 4
-quest_value = 3
-classifications = ["Queen", "Frost"]
-
-[[cards.abilities]]
-name = "Frozen Shield"
-type = "static"
-effect_type = "protection"
-condition = "weather"
-```
-
-### Complex Character with Scripted Effect
-
-```toml
-[[cards]]
-id = "lor-003"
-name = "Maleficent - Mistress of Evil"
-version = "1"
-cost = 6
-ink_type = "Amethyst"
-card_type = "Character"
-strength = 5
-willpower = 7
-quest_value = 2
-classifications = ["Villain", "Fairy"]
-
-[[cards.abilities]]
-name = "Curse of Sleeping Beauty"
-type = "scripted"
-script = "scripts/maleficent_curse.rhai"
-```
-
-### Action Card
-
-```toml
-[[cards]]
-id = "lor-004"
-name = "Let It Go"
-version = "1"
-cost = 3
-ink_type = "Amethyst"
-card_type = "Action"
-
-[[cards.effects]]
-type = "return_to_hand"
-target = "opponent_character"
-condition = "cost_less_than_4"
 ```
 
 ## Technology Stack
@@ -499,6 +411,7 @@ This architecture document represents the planned design for the lorcana-engine.
 ### Documentation Updates
 As each phase is completed, the corresponding sections in this document will be updated with:
 - Actual struct definitions and types used
+- Card definition examples and TOML schema (Phase 2)
 - Implementation decisions and trade-offs
 - Performance characteristics
 - Discovered patterns and best practices

@@ -15,10 +15,12 @@ Update the architecture document after completing each implementation phase:
   - Event system
 
 - **After Phase 2 (Card System)**: Add actual implementation details for:
-  - Card definition types
+  - Card definition types and TOML schema
+  - Actual card definition examples from the first set
   - TOML parser implementation
   - Card registry structure
   - Card loading mechanism
+  - Real card definitions in the `cards/` directory
 
 - **After Phase 3 (Effect System)**: Add actual implementation details for:
   - Built-in effect implementations
@@ -61,6 +63,34 @@ The `docs/planning/IMPLEMENTATION_PLAN.md` should also be updated:
 - Adjust time estimates based on actual experience
 - Add new tasks discovered during implementation
 - Update dependencies as the architecture evolves
+
+## Card Definitions Development
+
+**IMPORTANT**: Card definitions will be developed while implementing Phase 2 (Card System). The architecture document currently contains high-level descriptions of the card definition system, but specific TOML examples and schemas will be created during implementation.
+
+### Card Definition Development Process
+
+When working on Phase 2:
+1. Start with basic card properties and structure
+2. Develop TOML schema incrementally
+3. Create example card definitions as the parser is developed
+4. Add real Lorcana card definitions once the system is working
+5. Update architecture document with actual examples
+
+### Card Definition Files
+
+Card definitions will be stored in the `cards/` directory:
+- `cards/set1.toml` - First set of card definitions
+- `cards/set2.toml` - Second set of card definitions
+- `cards/scripts/` - Rhai scripts for complex effects
+
+### Documentation Updates
+
+As card definitions are developed:
+- Add actual TOML examples to architecture document
+- Document the final TOML schema
+- Include real card examples from the first Lorcana set
+- Update card definition system section with implementation details
 
 ## Contributing Guide Updates
 
