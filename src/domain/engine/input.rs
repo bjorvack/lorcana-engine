@@ -1,5 +1,6 @@
 //! Player inputs and the reasons an input may be rejected.
 
+use crate::domain::game::TriggerId;
 use crate::domain::types::ids::{CardId, PlayerId};
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
@@ -41,6 +42,17 @@ pub enum Input {
     },
     /// End the active player's turn (§4.4).
     EndTurn,
+    /// Answer the engine's currently pending decision (bag resolution, §8.7).
+    Decide(Decision),
+}
+
+/// A player's answer to a [`PendingDecision`](crate::domain::game::PendingDecision).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum Decision {
+    /// For `OrderTriggers`: the next of your bag triggers to resolve (§8.7.4).
+    ResolveNext(TriggerId),
+    /// For `MayResolve`: whether to apply an optional ("you may") trigger.
+    May(bool),
 }
 
 /// Why an [`Input`] was rejected. When an input is rejected the game state is
@@ -107,4 +119,14 @@ pub enum Rejected {
     /// (§4.3.6.7).
     #[error("challenge target {0:?} is not exerted")]
     TargetNotExerted(CardId),
+    /// A turn action was submitted while the engine is awaiting a decision; the
+    /// pending decision must be answered first (§8.7).
+    #[error("the engine is awaiting a decision; answer it before acting")]
+    AwaitingDecision,
+    /// A `Decide` input was submitted when no decision is pending.
+    #[error("there is no pending decision to answer")]
+    NoPendingDecision,
+    /// The `Decide` answer doesn't match the pending decision.
+    #[error("that answer does not match the pending decision")]
+    InvalidDecision,
 }

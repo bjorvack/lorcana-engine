@@ -1,8 +1,11 @@
 //! The reducer: `start` sets a game up, `apply` advances it by one input.
 
-use super::input::{Input, Rejected};
+use super::input::{Decision, Input, Rejected};
 use crate::domain::cards::{CardKind, CardRegistry};
-use crate::domain::game::{CharacterStats, Conditions, GameEvent, GameState, GameStatus};
+use crate::domain::effects::{Effect, TriggerCondition};
+use crate::domain::game::{
+    CharacterStats, Conditions, GameEvent, GameState, GameStatus, PendingDecision, TriggerId,
+};
 use crate::domain::rules::game_state_check;
 use crate::domain::types::ids::{CardId, PlayerId};
 use crate::domain::types::turn::{Phase, Step};
@@ -57,13 +60,22 @@ pub fn apply(
     registry: &CardRegistry,
     input: Input,
 ) -> Result<Vec<GameEvent>, Rejected> {
+    // A pending decision must be answered before any other input (§8.7).
+    if let Input::Decide(decision) = input {
+        return apply_decision(state, registry, decision);
+    }
+    if state.is_awaiting_decision() {
+        return Err(Rejected::AwaitingDecision);
+    }
+
     match input {
         Input::Mulligan { player, put_back } => apply_mulligan(state, player, &put_back),
         Input::PutCardInInkwell { card } => apply_put_in_inkwell(state, registry, card),
         Input::PlayCard { card } => apply_play_card(state, registry, card),
-        Input::Quest { character } => apply_quest(state, character),
+        Input::Quest { character } => apply_quest(state, registry, character),
         Input::Challenge { challenger, target } => apply_challenge(state, challenger, target),
         Input::EndTurn => apply_end_turn(state),
+        Input::Decide(_) => unreachable!("handled above"),
     }
 }
 
@@ -218,10 +230,25 @@ fn apply_play_card(
         card,
     }];
     events.extend(game_state_check(state));
+    if !state.is_finished() {
+        // "When you play this character" triggers go to the bag (§4.3.4.8).
+        enqueue_self_triggers(
+            state,
+            registry,
+            active,
+            card,
+            TriggerCondition::WhenYouPlayThis,
+        );
+        events.extend(resolve_bag(state, registry));
+    }
     Ok(events)
 }
 
-fn apply_quest(state: &mut GameState, character: CardId) -> Result<Vec<GameEvent>, Rejected> {
+fn apply_quest(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    character: CardId,
+) -> Result<Vec<GameEvent>, Rejected> {
     // --- validate (no mutation yet) ---
     if !matches!(state.status(), GameStatus::Playing) {
         return Err(Rejected::NotPlaying);
@@ -262,6 +289,17 @@ fn apply_quest(state: &mut GameState, character: CardId) -> Result<Vec<GameEvent
         },
     ];
     events.extend(game_state_check(state));
+    if !state.is_finished() {
+        // "Whenever this character quests" triggers go to the bag (§4.3.5.9).
+        enqueue_self_triggers(
+            state,
+            registry,
+            active,
+            character,
+            TriggerCondition::WhenThisQuests,
+        );
+        events.extend(resolve_bag(state, registry));
+    }
     Ok(events)
 }
 
@@ -546,4 +584,179 @@ fn next_active_player(state: &GameState, from: PlayerId) -> PlayerId {
 /// Build a [`PlayerId`] from a seat index.
 fn seat(index: usize) -> PlayerId {
     PlayerId::from_index(u8::try_from(index).expect("a game has at most 255 players"))
+}
+
+// ---------------------------------------------------------------------------
+// The bag: enqueueing and resolving triggered abilities (§8.7).
+// ---------------------------------------------------------------------------
+
+/// Enqueue the source card's own triggers whose condition matches (e.g. a
+/// character's "when you play this character" or "whenever this character
+/// quests"). Only self-scoped triggers are detected so far (see the
+/// `TriggerCondition` TODO for the broader scope/event space).
+fn enqueue_self_triggers(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    controller: PlayerId,
+    source: CardId,
+    condition: TriggerCondition,
+) {
+    let Ok(instance) = find_in_play(state, controller, source) else {
+        return;
+    };
+    let Some(definition) = registry.get(instance.definition()) else {
+        return;
+    };
+    let matches: Vec<(bool, Effect)> = definition
+        .abilities()
+        .iter()
+        .filter(|a| a.condition == condition)
+        .map(|a| (a.optional, a.effect))
+        .collect();
+    for (optional, effect) in matches {
+        let _ = state.enqueue_trigger(controller, source, optional, effect);
+    }
+}
+
+/// Resolve the bag until it is empty or a player decision is required (§8.7).
+/// The active player resolves all of their triggers first (choosing the order
+/// when they have more than one), then each player around the table.
+fn resolve_bag(state: &mut GameState, registry: &CardRegistry) -> Vec<GameEvent> {
+    let mut events = Vec::new();
+    while !state.is_awaiting_decision() && !state.is_finished() {
+        let Some(player) = next_resolving_player(state) else {
+            break; // bag empty
+        };
+        let theirs = state.triggers_for(player);
+        if theirs.len() >= 2 {
+            // §8.7.4: the player chooses which of their triggers resolves next.
+            state.set_pending(PendingDecision::OrderTriggers {
+                player,
+                options: theirs,
+            });
+            break;
+        }
+        resolve_or_ask(state, registry, &mut events, theirs[0]);
+    }
+    events
+}
+
+/// The next player who should resolve a trigger: the active player if they have
+/// any, otherwise each player around the table in turn order (§8.7.5–§8.7.6).
+fn next_resolving_player(state: &GameState) -> Option<PlayerId> {
+    let player_count = state.player_count();
+    let start = usize::from(state.active_player().index());
+    (0..player_count)
+        .map(|offset| seat((start + offset) % player_count))
+        .find(|p| !state.triggers_for(*p).is_empty())
+}
+
+/// Resolve a single trigger, or suspend on a "may" decision if it is optional.
+fn resolve_or_ask(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    events: &mut Vec<GameEvent>,
+    trigger: TriggerId,
+) {
+    let Some(entry) = state.bag().iter().find(|e| e.id() == trigger) else {
+        return;
+    };
+    if entry.optional() {
+        let player = entry.controller();
+        state.set_pending(PendingDecision::MayResolve { player, trigger });
+        return;
+    }
+    execute_trigger(state, registry, events, trigger);
+}
+
+/// Remove a trigger from the bag and apply its effect, then run a game-state
+/// check (§8.7: a check follows each bag entry's resolution).
+fn execute_trigger(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    events: &mut Vec<GameEvent>,
+    trigger: TriggerId,
+) {
+    let Some(entry) = state.remove_trigger(trigger) else {
+        return;
+    };
+    execute_effect(state, entry.controller(), entry.effect(), events);
+    let _ = registry; // effects don't consult the registry yet
+    events.extend(game_state_check(state));
+}
+
+/// Apply a built-in effect for `controller`.
+fn execute_effect(
+    state: &mut GameState,
+    controller: PlayerId,
+    effect: Effect,
+    events: &mut Vec<GameEvent>,
+) {
+    match effect {
+        Effect::DrawCards(n) => {
+            for _ in 0..n {
+                events.push(draw(state, controller));
+            }
+        }
+        Effect::GainLore(n) => {
+            if let Some(p) = state.player_mut(controller) {
+                p.add_lore(n);
+            }
+            events.push(GameEvent::LoreGained {
+                player: controller,
+                amount: n,
+            });
+        }
+        Effect::EachOpponentLosesLore(n) => {
+            let opponents: Vec<PlayerId> = state
+                .players()
+                .iter()
+                .map(super::super::game::PlayerState::id)
+                .filter(|id| *id != controller)
+                .collect();
+            for opponent in opponents {
+                if let Some(p) = state.player_mut(opponent) {
+                    p.lose_lore(n);
+                }
+                events.push(GameEvent::LoreLost {
+                    player: opponent,
+                    amount: n,
+                });
+            }
+        }
+    }
+}
+
+/// Answer the pending bag decision and continue resolving (§8.7).
+fn apply_decision(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    decision: Decision,
+) -> Result<Vec<GameEvent>, Rejected> {
+    let Some(pending) = state.pending().cloned() else {
+        return Err(Rejected::NoPendingDecision);
+    };
+    let mut events = Vec::new();
+    match (pending, decision) {
+        (PendingDecision::OrderTriggers { options, .. }, Decision::ResolveNext(trigger)) => {
+            if !options.contains(&trigger) {
+                return Err(Rejected::InvalidDecision);
+            }
+            let _ = state.take_pending();
+            resolve_or_ask(state, registry, &mut events, trigger);
+        }
+        (PendingDecision::MayResolve { trigger, .. }, Decision::May(apply_it)) => {
+            let _ = state.take_pending();
+            if apply_it {
+                execute_trigger(state, registry, &mut events, trigger);
+            } else {
+                let _ = state.remove_trigger(trigger);
+            }
+        }
+        _ => return Err(Rejected::InvalidDecision),
+    }
+    if !state.is_awaiting_decision() {
+        events.extend(resolve_bag(state, registry));
+    }
+    Ok(events)
 }

@@ -72,6 +72,13 @@ pub enum GameEvent {
         /// How much lore was gained.
         amount: u32,
     },
+    /// A player lost lore (clamped at 0).
+    LoreLost {
+        /// The player who lost lore.
+        player: PlayerId,
+        /// How much lore was lost.
+        amount: u32,
+    },
     /// A character challenged an opposing character (§4.3.6).
     Challenged {
         /// The challenging player.

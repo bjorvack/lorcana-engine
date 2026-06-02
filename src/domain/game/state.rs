@@ -1,6 +1,10 @@
 //! The authoritative game state.
 
-use super::{CardInstance, Conditions, GameStatus, PlayerState, SeededRng, Zone};
+use super::{
+    BagEntry, CardInstance, Conditions, GameStatus, PendingDecision, PlayerState, SeededRng,
+    TriggerId, Zone,
+};
+use crate::domain::effects::Effect;
 use crate::domain::types::ids::{CardDefId, CardId, PlayerId};
 use crate::domain::types::turn::{Phase, Step};
 use serde::{Deserialize, Serialize};
@@ -24,6 +28,11 @@ pub struct GameState {
     /// (§4.3.3). Reset at the start of each turn.
     inked_this_turn: bool,
     next_card_id: u32,
+    /// Triggered abilities waiting to resolve (§8.7).
+    bag: Vec<BagEntry>,
+    /// A decision the engine is waiting on before it can continue resolving.
+    pending: Option<PendingDecision>,
+    next_trigger_id: u32,
 }
 
 impl GameState {
@@ -72,6 +81,9 @@ impl GameState {
             step: Step::Ready,
             inked_this_turn: false,
             next_card_id,
+            bag: Vec::new(),
+            pending: None,
+            next_trigger_id: 0,
         }
     }
 
@@ -191,5 +203,64 @@ impl GameState {
     /// Record whether the active player has used their inkwell action this turn.
     pub const fn set_inked_this_turn(&mut self, value: bool) {
         self.inked_this_turn = value;
+    }
+
+    /// The triggered abilities currently waiting in the bag (§8.7).
+    #[must_use]
+    pub fn bag(&self) -> &[BagEntry] {
+        &self.bag
+    }
+
+    /// The decision the engine is currently waiting on, if any.
+    #[must_use]
+    pub const fn pending(&self) -> Option<&PendingDecision> {
+        self.pending.as_ref()
+    }
+
+    /// `true` if the engine is waiting on a player decision.
+    #[must_use]
+    pub const fn is_awaiting_decision(&self) -> bool {
+        self.pending.is_some()
+    }
+
+    /// Set the pending decision.
+    pub fn set_pending(&mut self, pending: PendingDecision) {
+        self.pending = Some(pending);
+    }
+
+    /// Take (clear) the pending decision.
+    pub const fn take_pending(&mut self) -> Option<PendingDecision> {
+        self.pending.take()
+    }
+
+    /// Add a triggered ability to the bag, returning its id (§8.7.3).
+    pub fn enqueue_trigger(
+        &mut self,
+        controller: PlayerId,
+        source: CardId,
+        optional: bool,
+        effect: Effect,
+    ) -> TriggerId {
+        let id = TriggerId::from_raw(self.next_trigger_id);
+        self.next_trigger_id += 1;
+        self.bag
+            .push(BagEntry::new(id, controller, source, optional, effect));
+        id
+    }
+
+    /// Remove and return a bag entry by id.
+    pub fn remove_trigger(&mut self, id: TriggerId) -> Option<BagEntry> {
+        let index = self.bag.iter().position(|e| e.id() == id)?;
+        Some(self.bag.remove(index))
+    }
+
+    /// The ids of the bag entries controlled by a player, in bag order.
+    #[must_use]
+    pub fn triggers_for(&self, player: PlayerId) -> Vec<TriggerId> {
+        self.bag
+            .iter()
+            .filter(|e| e.controller() == player)
+            .map(BagEntry::id)
+            .collect()
     }
 }

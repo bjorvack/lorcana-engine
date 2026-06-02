@@ -1,9 +1,11 @@
 //! Game state, turn structure, zones, and events
 
+pub mod bag;
 pub mod card_instance;
 pub mod character_stats;
 pub mod conditions;
 pub mod events;
+pub mod pending;
 pub mod player_state;
 pub mod rng;
 pub mod state;
@@ -13,10 +15,12 @@ pub mod zone;
 pub mod zone_kind;
 
 // Re-export for convenience
+pub use bag::{BagEntry, TriggerId};
 pub use card_instance::CardInstance;
 pub use character_stats::CharacterStats;
 pub use conditions::Conditions;
 pub use events::GameEvent;
+pub use pending::PendingDecision;
 pub use player_state::PlayerState;
 pub use rng::SeededRng;
 pub use state::GameState;

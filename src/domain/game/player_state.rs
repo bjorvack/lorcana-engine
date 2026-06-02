@@ -59,6 +59,11 @@ impl PlayerState {
         self.lore += amount;
     }
 
+    /// Remove lore from this player's total, clamped at 0.
+    pub const fn lose_lore(&mut self, amount: u32) {
+        self.lore = self.lore.saturating_sub(amount);
+    }
+
     /// The number of ready ink cards available to pay costs (§8.5, §4.3.4.6).
     #[must_use]
     pub fn ready_ink(&self) -> u32 {
