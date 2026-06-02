@@ -290,10 +290,26 @@ selectors over 42 classifications.
   need their ability kinds + the effect DSL (Slice 5g+/8).
 
 ### Slice 5h — Trigger additions (see [Trigger taxonomy rollout](#trigger-taxonomy-rollout-when-the-triggercondition-todo-gets-done))
-- Start/End-of-turn and play-a-[type/classification] `TriggerCondition` variants.
-- If a card watches another card's events, build the general **event → trigger
-  matcher** here rather than per-card hacks.
-- [ ] Acceptance: a start-of-turn and a play-a-classification trigger fire.
+- [x] **Play-a-[classification]** (`TriggerCondition::WhenYouPlay(CardCategory)`):
+      the cross-scope **event → trigger matcher** (`enqueue_play_a_card_triggers`)
+      scans the controller's other in-play cards on a play and enqueues matches.
+      Only characters are playable, so character categories are exercised;
+      action/song/item/location categories are wired but unreachable until those
+      types are playable (Slice 7). Tested in `tests/triggers.rs`.
+- [ ] **Start/End-of-turn triggers — DEFERRED (needs a design decision).** These
+      fire during the turn's Beginning/End, where resolving the bag can **suspend**
+      on a `PendingDecision` (ordering / "may"). The current engine resolves the
+      bag and returns; it has no way to **resume the rest of a turn transition**
+      after a suspension (e.g. finish the End step and pass the turn once an
+      end-of-turn trigger's decision is answered). Implementing these correctly
+      needs a **turn-progression state machine that survives suspension** (a
+      "what to do after the bag empties" continuation), which also requires
+      threading the registry through `start` / `apply_end_turn` / `begin_turn`.
+      This overlaps the resolution work in Slice 8 and should be designed
+      deliberately. Until then `WhenYouPlayThis`/`WhenThisQuests`/`WhenYouPlay`
+      (which fire at input sites that already resolve the bag) are sufficient.
+- [ ] Acceptance (remaining): a start-of-turn trigger fires (after the
+      turn-progression-with-suspension machinery lands).
 
 ---
 

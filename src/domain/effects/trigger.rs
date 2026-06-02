@@ -1,6 +1,23 @@
 //! Trigger conditions for triggered abilities (§7.4).
 
+use crate::domain::types::card::Classification;
 use serde::{Deserialize, Serialize};
+
+/// A category of card a "whenever you play a …" trigger watches for (§7.4).
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub enum CardCategory {
+    /// A character, optionally filtered by a classification ("a Floodborn
+    /// character"); `None` matches any character.
+    Character(Option<Classification>),
+    /// An action.
+    Action,
+    /// A song (an action with the Song classification).
+    Song,
+    /// An item.
+    Item,
+    /// A location.
+    Location,
+}
 
 /// The condition that makes a triggered ability fire (§7.4.2).
 ///
@@ -35,11 +52,14 @@ use serde::{Deserialize, Serialize};
 ///     here" (location); draw; leaves play.
 ///
 /// These pair with the effect DSL (see `effects::effect`) and the bag.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum TriggerCondition {
     /// "When you play this character/item/location" — fires on the source card
     /// entering play (the dominant trigger, ~480 cards).
     WhenYouPlayThis,
     /// "Whenever this character quests" (~200 cards).
     WhenThisQuests,
+    /// "Whenever you play a [category]" — fires on another card the controller
+    /// plays that matches the category (~90 cards).
+    WhenYouPlay(CardCategory),
 }

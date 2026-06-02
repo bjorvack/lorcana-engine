@@ -2,7 +2,7 @@
 
 use super::input::{Decision, Input, Rejected};
 use crate::domain::cards::{CardKind, CardRegistry, GameRuleStatic, StaticAbility, StaticTarget};
-use crate::domain::effects::{Effect, TriggerCondition};
+use crate::domain::effects::{CardCategory, Effect, TriggerCondition};
 use crate::domain::game::{
     CardInstance, CharacterStats, Conditions, GameEvent, GameState, GameStatus, ModifierDuration,
     ModifierTarget, PendingDecision, RuleModifier, StatModifier, TriggerId,
@@ -246,8 +246,11 @@ fn apply_play_card(
             registry,
             active,
             card,
-            TriggerCondition::WhenYouPlayThis,
+            &TriggerCondition::WhenYouPlayThis,
         );
+        // "Whenever you play a [category]" triggers on the controller's other
+        // in-play cards (the cross-scope event→trigger matcher).
+        enqueue_play_a_card_triggers(state, registry, active, card);
         events.extend(resolve_bag(state, registry));
     }
     Ok(events)
@@ -311,7 +314,7 @@ fn apply_quest(
             registry,
             active,
             character,
-            TriggerCondition::WhenThisQuests,
+            &TriggerCondition::WhenThisQuests,
         );
         events.extend(resolve_bag(state, registry));
     }
@@ -548,6 +551,11 @@ fn apply_end_turn(state: &mut GameState) -> Result<Vec<GameEvent>, Rejected> {
     events.push(GameEvent::StepEntered { step: Step::End });
     // "Until end of turn" effects end here (§7.6.1).
     state.expire_end_of_turn_modifiers();
+    // TODO(Slice 5h — start/end-of-turn triggers): "at the end of your turn"
+    // triggers would be enqueued here, but resolving them can suspend on a
+    // decision, and the engine can't yet resume the turn transition afterward.
+    // Needs the turn-progression-with-suspension machinery — see "Slice 5h" in
+    // docs/planning/IMPLEMENTATION_PLAN.md.
     events.push(GameEvent::TurnEnded { player: active });
     events.extend(game_state_check(state));
     if state.is_finished() {
@@ -572,6 +580,11 @@ fn begin_turn(state: &mut GameState, first_turn: bool) -> Vec<GameEvent> {
         player: active,
         turn: state.turn_number(),
     }];
+    // TODO(Slice 5h — start/end-of-turn triggers): "at the start of your turn"
+    // triggers would be enqueued around here, pending the
+    // turn-progression-with-suspension machinery (see "Slice 5h" in
+    // docs/planning/IMPLEMENTATION_PLAN.md). begin_turn would also need the
+    // registry threaded through start/apply_end_turn.
 
     // Ready step (§4.2.1).
     state.set_phase(Phase::Beginning);
@@ -689,7 +702,7 @@ fn enqueue_self_triggers(
     registry: &CardRegistry,
     controller: PlayerId,
     source: CardId,
-    condition: TriggerCondition,
+    condition: &TriggerCondition,
 ) {
     let Ok(instance) = find_in_play(state, controller, source) else {
         return;
@@ -700,11 +713,61 @@ fn enqueue_self_triggers(
     let matches: Vec<(bool, Effect)> = definition
         .abilities()
         .iter()
-        .filter(|a| a.condition == condition)
+        .filter(|a| a.condition == *condition)
         .map(|a| (a.optional, a.effect))
         .collect();
     for (optional, effect) in matches {
         let _ = state.enqueue_trigger(controller, source, optional, effect);
+    }
+}
+
+/// Enqueue "whenever you play a [category]" triggers on the controller's other
+/// in-play cards when `played` (a card the controller just played) matches the
+/// category. This is the cross-scope event→trigger matcher (vs. the self-only
+/// `enqueue_self_triggers`); only `WhenYouPlay` is matched here so far.
+fn enqueue_play_a_card_triggers(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    controller: PlayerId,
+    played: CardId,
+) {
+    let Some(owner) = state.player(controller) else {
+        return;
+    };
+    let Some(played_instance) = owner.play().iter().find(|c| c.id() == played).cloned() else {
+        return;
+    };
+    let mut to_enqueue: Vec<(CardId, bool, Effect)> = Vec::new();
+    for watcher in owner.play().iter() {
+        if watcher.id() == played {
+            continue; // a card's own play doesn't trigger its own "whenever you play"
+        }
+        let Some(definition) = registry.get(watcher.definition()) else {
+            continue;
+        };
+        for ability in definition.abilities() {
+            if let TriggerCondition::WhenYouPlay(category) = &ability.condition
+                && category_matches(category, &played_instance)
+            {
+                to_enqueue.push((watcher.id(), ability.optional, ability.effect));
+            }
+        }
+    }
+    for (source, optional, effect) in to_enqueue {
+        let _ = state.enqueue_trigger(controller, source, optional, effect);
+    }
+}
+
+/// Whether a played card matches a "whenever you play a …" category. Only
+/// characters are playable so far, so non-character categories never match yet.
+fn category_matches(category: &CardCategory, played: &CardInstance) -> bool {
+    match category {
+        CardCategory::Character(filter) => {
+            played.is_character() && filter.as_ref().is_none_or(|c| played.has_classification(c))
+        }
+        CardCategory::Action | CardCategory::Song | CardCategory::Item | CardCategory::Location => {
+            false
+        }
     }
 }
 

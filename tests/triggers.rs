@@ -3,9 +3,9 @@
 //! simultaneous triggers.
 
 use lorcana_engine::{
-    CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterStats, Conditions,
-    Decision, Effect, GameEvent, GameState, GameStatus, Input, PendingDecision, TriggerCondition,
-    TriggeredAbility, apply, start,
+    CardCategory, CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterStats,
+    Classification, Conditions, Decision, Effect, GameEvent, GameState, GameStatus, Input,
+    PendingDecision, TriggerCondition, TriggeredAbility, apply, start,
 };
 
 fn two_decks(size: u32) -> Vec<Vec<CardDefId>> {
@@ -161,6 +161,50 @@ fn player_orders_two_simultaneous_triggers() {
     assert!(!state.is_awaiting_decision());
     assert_eq!(state.player(active).unwrap().lore(), 1);
     assert_eq!(state.player(active).unwrap().hand().len(), 6);
+}
+
+#[test]
+fn whenever_you_play_a_classification_trigger_fires() {
+    // Deck cards are cost-0 Villain characters; a watcher in play has "whenever
+    // you play a Villain character, gain 1 lore".
+    let mut registry: CardRegistry = (0..30)
+        .map(|n| {
+            CardDefinition::character(CardDefId::from_raw(n), 0, true, 2, 3, 1)
+                .with_classifications(vec![Classification::new("Villain")])
+        })
+        .collect();
+    registry.insert(
+        CardDefinition::character(CardDefId::from_raw(1000), 0, true, 1, 1, 1).with_abilities(
+            vec![TriggeredAbility::new(
+                TriggerCondition::WhenYouPlay(CardCategory::Character(Some(Classification::new(
+                    "Villain",
+                )))),
+                Effect::GainLore(1),
+            )],
+        ),
+    );
+    let mut state = started(&registry);
+    let active = state.active_player();
+
+    // Put the watcher into play.
+    let mut watcher = CardInstance::new(
+        CardId::from_raw(5000),
+        CardDefId::from_raw(1000),
+        Conditions {
+            ready: true,
+            damage: 0,
+            drying: false,
+            facedown: false,
+        },
+    );
+    watcher.set_stats(Some(CharacterStats::new(1, 1, 1)));
+    state.player_mut(active).unwrap().play_mut().push(watcher);
+
+    // Playing a Villain character fires the watcher's trigger.
+    let subject = active_hand_card(&state, 0);
+    let _ = apply(&mut state, &registry, Input::PlayCard { card: subject }).expect("play villain");
+
+    assert_eq!(state.player(active).unwrap().lore(), 1);
 }
 
 #[test]

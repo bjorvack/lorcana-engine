@@ -7,4 +7,4 @@ pub mod trigger;
 
 // Re-export for convenience
 pub use effect::Effect;
-pub use trigger::TriggerCondition;
+pub use trigger::{CardCategory, TriggerCondition};
