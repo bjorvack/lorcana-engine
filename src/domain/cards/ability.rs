@@ -1,6 +1,7 @@
 //! Card abilities.
 
 use crate::domain::effects::{Effect, TriggerCondition};
+use crate::domain::game::Stat;
 use serde::{Deserialize, Serialize};
 
 /// A triggered ability (§7.4): when its `condition` is met its `effect` is added
@@ -97,5 +98,31 @@ impl ActivatedAbility {
     #[must_use]
     pub const fn new(cost: AbilityCost, effect: Effect) -> Self {
         Self { cost, effect }
+    }
+}
+
+/// A static ability that continuously modifies a characteristic while the card
+/// is in play (§7.6).
+///
+/// Only the **self** modifier ("this character gets +N {S}") is modeled so far:
+/// it applies to the source card for as long as it's in play.
+///
+/// TODO(selectors — Slice 5e): add a `selector` so a static ability can affect
+/// other cards ("your Villain characters get +1 {S}"); TODO(duration — Slice
+/// 5f): add timed statics ("until end of turn"). See
+/// `docs/planning/IMPLEMENTATION_PLAN.md` ("Slice 5e"/"Slice 5f").
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub struct StaticAbility {
+    /// The characteristic modified.
+    pub stat: Stat,
+    /// The signed amount (e.g. `+2` or `-1`).
+    pub delta: i32,
+}
+
+impl StaticAbility {
+    /// Create a self static modifier.
+    #[must_use]
+    pub const fn self_modifier(stat: Stat, delta: i32) -> Self {
+        Self { stat, delta }
     }
 }

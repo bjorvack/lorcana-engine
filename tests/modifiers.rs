@@ -3,13 +3,12 @@
 //! while retaining the true total (§7.8).
 
 use lorcana_engine::{
-    CardDefId, CardId, CardInstance, CardRegistry, CharacterStats, Conditions, GameState,
-    GameStatus, Input, ModifierDuration, ModifierTarget, PlayerId, Stat, StatModifier, apply,
-    start,
+    CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterStats, Conditions,
+    GameState, GameStatus, Input, ModifierDuration, ModifierTarget, PlayerId, Stat, StatModifier,
+    StaticAbility, apply, start,
 };
 
-fn started() -> GameState {
-    let registry = CardRegistry::new();
+fn started_with(registry: &CardRegistry) -> GameState {
     let mut state = GameState::new(
         vec![
             (0..30).map(CardDefId::from_raw).collect(),
@@ -21,7 +20,7 @@ fn started() -> GameState {
     while let GameStatus::AwaitingMulligan(player) = *state.status() {
         let _ = apply(
             &mut state,
-            &registry,
+            registry,
             Input::Mulligan {
                 player,
                 put_back: Vec::new(),
@@ -30,6 +29,10 @@ fn started() -> GameState {
         .expect("mulligan");
     }
     state
+}
+
+fn started() -> GameState {
+    started_with(&CardRegistry::new())
 }
 
 fn place_character(state: &mut GameState, owner: PlayerId, raw: u32, strength: u32) -> CardId {
@@ -96,4 +99,35 @@ fn modifiers_end_when_their_source_is_removed() {
 
     state.remove_modifiers_from_source(CardId::from_raw(9001));
     assert_eq!(state.current_character_stats(card).unwrap().strength, 2);
+}
+
+#[test]
+fn self_static_modifier_applies_when_played() {
+    // Every card is a base-2-strength character with "this character gets +2 {S}".
+    let registry: CardRegistry = (0..30)
+        .map(|n| {
+            CardDefinition::character(CardDefId::from_raw(n), 1, true, 2, 3, 1)
+                .with_static(vec![StaticAbility::self_modifier(Stat::Strength, 2)])
+        })
+        .collect();
+    let mut state = started_with(&registry);
+    let active = state.active_player();
+
+    let hand: Vec<CardId> = state
+        .player(active)
+        .unwrap()
+        .hand()
+        .iter()
+        .map(|c| c.id())
+        .collect();
+    let _ = apply(
+        &mut state,
+        &registry,
+        Input::PutCardInInkwell { card: hand[0] },
+    )
+    .expect("ink");
+    let _ = apply(&mut state, &registry, Input::PlayCard { card: hand[1] }).expect("play");
+
+    // Base 2 + static 2 = current 4 the moment it enters play (§7.6.2).
+    assert_eq!(state.current_character_stats(hand[1]).unwrap().strength, 4);
 }

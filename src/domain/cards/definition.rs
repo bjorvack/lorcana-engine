@@ -7,7 +7,7 @@
 //!
 //! [`CardInstance`]: crate::domain::game::CardInstance
 
-use super::ability::{ActivatedAbility, TriggeredAbility};
+use super::ability::{ActivatedAbility, StaticAbility, TriggeredAbility};
 use super::card_kind::CardKind;
 use crate::domain::types::card::{CardType, Classification};
 use crate::domain::types::ids::CardDefId;
@@ -33,6 +33,8 @@ pub struct CardDefinition {
     activated: Vec<ActivatedAbility>,
     /// The card's classifications (§6.2.6), e.g. Hero, Villain, Princess.
     classifications: Vec<Classification>,
+    /// The card's static abilities (§7.6).
+    static_abilities: Vec<StaticAbility>,
 }
 
 impl CardDefinition {
@@ -47,6 +49,7 @@ impl CardDefinition {
             abilities: Vec::new(),
             activated: Vec::new(),
             classifications: Vec::new(),
+            static_abilities: Vec::new(),
         }
     }
 
@@ -90,6 +93,13 @@ impl CardDefinition {
     #[must_use]
     pub fn with_classifications(mut self, classifications: Vec<Classification>) -> Self {
         self.classifications = classifications;
+        self
+    }
+
+    /// Replace this definition's static abilities (builder style).
+    #[must_use]
+    pub fn with_static(mut self, static_abilities: Vec<StaticAbility>) -> Self {
+        self.static_abilities = static_abilities;
         self
     }
 
@@ -145,6 +155,12 @@ impl CardDefinition {
     #[must_use]
     pub fn has_classification(&self, classification: &Classification) -> bool {
         self.classifications.contains(classification)
+    }
+
+    /// This card's static abilities (§7.6).
+    #[must_use]
+    pub fn static_abilities(&self) -> &[StaticAbility] {
+        &self.static_abilities
     }
 }
 

@@ -250,10 +250,13 @@ selectors over 42 classifications.
 - [x] Acceptance: all existing tests still pass; current == base with no
       modifiers; combine/clamp follows §7.8 (`tests/modifiers.rs`).
 
-### Slice 5d — Self static modifiers
-- `StaticAbility` that emits a self modifier ("this character gets +N {S}");
-  applied on enter, removed on leave (§7.6.4).
-- [ ] Acceptance: a self `+N{S}` shows in challenge damage and ends on leave.
+### Slice 5d — Self static modifiers ✅
+- `StaticAbility::self_modifier(stat, delta)` on `CardDefinition`; applied as a
+  `WhileSourceInPlay` modifier when the card enters play (§7.6.2), removed when it
+  leaves (§7.6.4, via `remove_modifiers_from_source` in the banish path).
+- [x] Acceptance: a self `+N{S}` is reflected in `current_character_stats` on
+      enter (and thus in challenge damage, which reads current stats);
+      `tests/modifiers.rs`.
 
 ### Slice 5e — Selector static modifiers (needs 5b)
 - Selectors: your / your-other / a / opposing characters with a classification

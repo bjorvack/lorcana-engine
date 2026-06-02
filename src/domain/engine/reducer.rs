@@ -1,10 +1,11 @@
 //! The reducer: `start` sets a game up, `apply` advances it by one input.
 
 use super::input::{Decision, Input, Rejected};
-use crate::domain::cards::{CardKind, CardRegistry};
+use crate::domain::cards::{CardKind, CardRegistry, StaticAbility};
 use crate::domain::effects::{Effect, TriggerCondition};
 use crate::domain::game::{
-    CharacterStats, Conditions, GameEvent, GameState, GameStatus, PendingDecision, TriggerId,
+    CharacterStats, Conditions, GameEvent, GameState, GameStatus, ModifierDuration, ModifierTarget,
+    PendingDecision, StatModifier, TriggerId,
 };
 use crate::domain::rules::game_state_check;
 use crate::domain::types::ids::{CardId, PlayerId};
@@ -215,6 +216,7 @@ fn apply_play_card(
     {
         return Err(Rejected::InsufficientInk(card));
     }
+    let statics = definition.static_abilities().to_vec();
 
     // --- mutate ---
     {
@@ -225,6 +227,8 @@ fn apply_play_card(
         instance.set_stats(Some(CharacterStats::new(strength, willpower, lore)));
         p.play_mut().push(instance);
     }
+    // Static abilities apply as the card enters play (§7.6.2).
+    apply_enter_statics(state, card, &statics);
 
     let mut events = vec![GameEvent::CardPlayed {
         player: active,
@@ -696,6 +700,21 @@ fn enqueue_self_triggers(
         .collect();
     for (optional, effect) in matches {
         let _ = state.enqueue_trigger(controller, source, optional, effect);
+    }
+}
+
+/// Apply a card's self static abilities as it enters play (§7.6.2): each becomes
+/// a continuous modifier on the source itself, lasting while it's in play. The
+/// modifiers are removed when the card leaves play (see `game_state_check`).
+fn apply_enter_statics(state: &mut GameState, card: CardId, statics: &[StaticAbility]) {
+    for ability in statics {
+        state.add_modifier(StatModifier::new(
+            card,
+            ModifierTarget::Card(card),
+            ability.stat,
+            ability.delta,
+            ModifierDuration::WhileSourceInPlay,
+        ));
     }
 }
 
