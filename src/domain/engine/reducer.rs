@@ -404,18 +404,20 @@ fn apply_challenge(
     {
         return Err(Rejected::TargetEvasive(target));
     }
-    // Bodyguard: if the defender has a challengeable Bodyguard, the challenger
-    // must choose one (§10.3.3). With several Bodyguards the challenger may pick
-    // any of them (each passes this check by being a Bodyguard).
-    //
-    // TODO(Bodyguard "if able" — Slice 6b): this treats "able" as "an exerted
-    // Bodyguard exists", but a Bodyguard the challenger *can't legally challenge*
-    // (e.g. an Evasive Bodyguard vs a non-Evasive challenger) shouldn't force the
-    // restriction. The correct check is "does a Bodyguard exist that THIS
-    // challenger can legally challenge?", which needs the shared challenge-
-    // legality predicate noted in the `apply_end_turn` Reckless TODO.
+    // Bodyguard: if the defender has a Bodyguard this challenger could legally
+    // challenge, the challenger must choose one (§10.3.3). With several such
+    // Bodyguards the challenger may pick any of them. A Bodyguard the challenger
+    // can't legally challenge (e.g. an Evasive Bodyguard vs a non-Evasive
+    // challenger) doesn't make the restriction apply.
+    let challenger_evades_evasive =
+        challenger_has(Keyword::Evasive) || challenger_has(Keyword::Alert);
     if !target_def.is_some_and(|d| d.has_keyword(Keyword::Bodyguard))
-        && defender_has_challengeable_bodyguard(state, registry, target_owner)
+        && defender_has_challengeable_bodyguard(
+            state,
+            registry,
+            target_owner,
+            challenger_evades_evasive,
+        )
     {
         return Err(Rejected::MustChallengeBodyguard(target));
     }
@@ -488,19 +490,30 @@ fn find_in_play(
         .ok_or(Rejected::CharacterNotInPlay(card))
 }
 
-/// Whether `defender` has a challengeable (exerted) character with Bodyguard
-/// (§10.3.3). Used to enforce "must challenge a Bodyguard if able".
+/// Whether `defender` has a Bodyguard the challenger could legally challenge
+/// (§10.3.3): exerted, with Bodyguard, and not blocked from this challenger by
+/// Evasive (§10.6). `challenger_evades_evasive` is true if the challenger has
+/// Evasive or Alert.
+///
+/// TODO(shared legality — Slice 6b): this inlines the exerted + Evasive checks;
+/// once other "can't be challenged" effects and locations exist, replace it with
+/// the shared `can this challenger legally challenge X?` predicate (see the
+/// `apply_end_turn` Reckless TODO).
 fn defender_has_challengeable_bodyguard(
     state: &GameState,
     registry: &CardRegistry,
     defender: PlayerId,
+    challenger_evades_evasive: bool,
 ) -> bool {
     state.player(defender).is_some_and(|p| {
         p.play().iter().any(|c| {
-            !c.conditions().ready
-                && registry
-                    .get(c.definition())
-                    .is_some_and(|d| d.has_keyword(Keyword::Bodyguard))
+            if c.conditions().ready {
+                return false; // only exerted characters are challengeable
+            }
+            registry.get(c.definition()).is_some_and(|d| {
+                d.has_keyword(Keyword::Bodyguard)
+                    && (challenger_evades_evasive || !d.has_keyword(Keyword::Evasive))
+            })
         })
     })
 }

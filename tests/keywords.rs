@@ -246,6 +246,64 @@ fn bodyguard_must_be_challenged_if_able() {
 }
 
 #[test]
+fn evasive_bodyguard_does_not_trap_a_non_evasive_challenger() {
+    let mut registry = CardRegistry::new();
+    // A Bodyguard that is also Evasive.
+    registry.insert(char_def(60).with_keywords(vec![Keyword::Bodyguard, Keyword::Evasive]));
+    registry.insert(char_def(41)); // plain
+    registry.insert(char_def(12).with_keywords(vec![Keyword::Evasive])); // evasive challenger
+    let mut state = started(&registry);
+    let active = state.active_player();
+    let foe = opponent_of(&state, active);
+
+    let plain_challenger = place(&mut state, active, 100, 41, 3, 9, true, false);
+    let evasive_challenger = place(&mut state, active, 101, 12, 3, 9, true, false);
+    let guard = place(&mut state, foe, 200, 60, 1, 9, false, false); // Bodyguard + Evasive
+    let plain_target = place(&mut state, foe, 201, 41, 1, 9, false, false);
+
+    // Non-Evasive challenger: can't challenge the Evasive Bodyguard, and is NOT
+    // forced to (it isn't a legal target for them), so it may challenge the plain.
+    assert!(
+        apply(
+            &mut state,
+            &registry,
+            Input::Challenge {
+                challenger: plain_challenger,
+                target: guard
+            }
+        )
+        .is_err()
+    );
+    assert!(
+        apply(
+            &mut state,
+            &registry,
+            Input::Challenge {
+                challenger: plain_challenger,
+                target: plain_target
+            }
+        )
+        .is_ok(),
+        "an Evasive Bodyguard must not trap a non-Evasive challenger"
+    );
+
+    // An Evasive challenger, by contrast, IS forced to the Bodyguard.
+    let plain_target2 = place(&mut state, foe, 202, 41, 1, 9, false, false);
+    assert!(
+        apply(
+            &mut state,
+            &registry,
+            Input::Challenge {
+                challenger: evasive_challenger,
+                target: plain_target2
+            }
+        )
+        .is_err(),
+        "an Evasive challenger can reach the Bodyguard, so must choose it"
+    );
+}
+
+#[test]
 fn with_multiple_bodyguards_either_one_may_be_challenged() {
     let mut registry = CardRegistry::new();
     registry.insert(char_def(40).with_keywords(vec![Keyword::Bodyguard]));
