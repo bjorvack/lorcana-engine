@@ -120,20 +120,38 @@ something to act on.
 
 ---
 
-## Slice 3 — Challenges
+## Slice 3 — Challenges ✅
 
 **Goal**: combat with damage and banishment.
 
-- Action: challenge (exert a dry character; target an **exerted** opposing character or
-  a location, §4.3.6).
-- Both deal damage equal to `{S}`; damage counters persist (§9, §6.2.9–6.2.10).
-- Game-state check banishes anything with `damage >= willpower` → **discard**.
-- Drying characters can't be declared as challengers; challenge-targeting legality.
+- [x] In-play character stats live on the `CardInstance` (`CharacterStats`, set
+      from the definition at play time); the game-state check stays state-only.
+- [x] `Input::Challenge` — exert a dry, ready character; target an **exerted**
+      opposing character (§4.3.6). Both deal `{S}` damage simultaneously
+      (§4.3.6.13); damage counters persist (§9).
+- [x] `RequiredAction::Banish` in the game-state check: `damage ≥ willpower` →
+      banish to **discard**, clearing counters (§1.9.1.3, §9.4, §8.6.2); win/loss
+      still resolved first (§1.9.2).
+- [x] Legality: drying/exerted challenger rejected; target must be opposing,
+      in-play, and exerted; rejections leave state unchanged.
 
 **Acceptance**
-- [ ] Challenge applies mutual damage and banishes lethal characters to discard.
-- [ ] Cannot challenge a ready character (must be exerted), nor with a drying character.
-- [ ] Damage persists across turns until banishment/heal.
+- [x] Challenge applies mutual damage and banishes lethal characters to discard
+      (`tests/challenge.rs`), including a trade that banishes both.
+- [x] Cannot challenge a ready character, nor with a drying character.
+- [x] 0-strength characters deal no damage (§4.3.6.14).
+- [x] Damage persists (only cleared on banishment for now).
+
+**Notes — challenge/banish are heavy hook points (deferred, cross-linked):**
+- Location challenge → Slice 7 (no locations yet).
+- Legality overrides: Rush, Evasive, Alert, Bodyguard → Slice 6; "can challenge
+  ready" / "can't challenge" effects → Slice 5/8. (See the `apply_challenge` doc
+  comment in `src/domain/engine/reducer.rs`.)
+- Challenge/banish **triggers** ("whenever this character challenges / is
+  banished / banishes another in a challenge") → **Slice 4** (the bag), with the
+  §1.9.1.3 "banished by that character" attribution. Damage modification (Resist)
+  → Slice 6; banish replacement/prevention → Slice 8. (See the `game_state_check`
+  TODO in `src/domain/rules/game_state_check.rs`.)
 
 ---
 
@@ -147,12 +165,20 @@ something to act on.
   each player around the table** (§8.7); newly created triggers re-enqueue.
 - Bag resolution can suspend on a `PendingDecision` (ordering / choices).
 - Game-state check after each bag entry resolves.
+- **Challenge/banish triggers** (from Slice 3): "whenever this character
+  challenges / is challenged / banishes another in a challenge" (Scar, Mulan,
+  Captain Hook, Cheshire Cat, Marshmallow) and "when this character is banished"
+  enqueue here. Add the §1.9.1.3 "banished by that character" attribution that the
+  `game_state_check` TODO calls out. (Hooks documented in the `apply_challenge`
+  doc comment and `game_state_check` in `src/domain/`.)
 
 **Acceptance**
 - [ ] Multiple simultaneous triggers resolve active-player-first, in a player-chosen
       order, around the table until empty.
 - [ ] A trigger created during resolution is added and resolved correctly.
 - [ ] A worked example from §8.7 reproduces exactly.
+- [ ] A challenge/banish trigger (e.g. Cheshire Cat / Marshmallow from the §4.3.6
+      examples) fires and resolves correctly.
 
 ---
 
@@ -196,9 +222,17 @@ something to act on.
 Each keyword gets reminder-text-accurate behaviour and a focused scenario test. Shift
 introduces the in-Play card-stack model (top/under/in-a-stack, §5.1.6–5.1.7, §10.10).
 
+Several of these modify the **challenge legality** built in Slice 3 (see the
+`apply_challenge` doc comment in `src/domain/engine/reducer.rs`): **Rush** lifts
+the dry requirement for challenging, **Evasive**/**Alert** gate/ungate who may
+challenge an Evasive character, **Bodyguard** forces target choice, and
+**Resist** modifies challenge damage. Wire these into that legality/damage seam.
+
 **Acceptance**
 - [ ] Each keyword has a passing scenario matching its §10 definition/example.
 - [ ] Shift forms/moves stacks correctly; the stack moves with its top card on leave.
+- [ ] Rush/Evasive/Alert/Bodyguard correctly alter challenge legality from Slice 3;
+      Resist reduces challenge damage.
 
 ---
 
