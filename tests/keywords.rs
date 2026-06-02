@@ -4,7 +4,8 @@
 
 use lorcana_engine::{
     CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterStats, Conditions,
-    GameState, GameStatus, Input, Keyword, LocationStats, PlayerId, apply, start,
+    Effect, GameState, GameStatus, Input, Keyword, LocationStats, PlayerId, TriggerCondition,
+    TriggeredAbility, apply, start,
 };
 
 fn started(registry: &CardRegistry) -> GameState {
@@ -491,4 +492,29 @@ fn a_character_without_boost_cannot_boost() {
     let plain = place(&mut state, active, 100, 81, 3, 9, true, false);
 
     assert!(apply(&mut state, &registry, Input::Boost { card: plain }).is_err());
+}
+
+#[test]
+fn boosting_fires_a_card_put_under_trigger() {
+    let mut registry = CardRegistry::new();
+    // Boost 0 plus "whenever a card is put under this character, gain 1 lore."
+    registry.insert(
+        char_def(80)
+            .with_keywords(vec![Keyword::Boost(0)])
+            .with_abilities(vec![TriggeredAbility::new(
+                TriggerCondition::WhenCardPutUnder,
+                Effect::GainLore(1),
+            )]),
+    );
+    let mut state = started(&registry);
+    let active = state.active_player();
+    let booster = place(&mut state, active, 100, 80, 3, 9, true, false);
+
+    let _ = apply(&mut state, &registry, Input::Boost { card: booster }).expect("boost");
+
+    assert_eq!(
+        state.player(active).unwrap().lore(),
+        1,
+        "the card-put-under trigger fired (§10.4)"
+    );
 }

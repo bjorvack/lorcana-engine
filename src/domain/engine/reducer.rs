@@ -695,10 +695,20 @@ fn apply_boost(
         }
     }
     state.mark_boosted_this_turn(card);
-    Ok(vec![GameEvent::Boosted {
+    let mut events = vec![GameEvent::Boosted {
         player: active,
         card,
-    }])
+    }];
+    // "Whenever a card is put under this character" triggers go to the bag (§10.4).
+    enqueue_self_triggers(
+        state,
+        registry,
+        active,
+        card,
+        &TriggerCondition::WhenCardPutUnder,
+    );
+    events.extend(resolve_bag(state, registry));
+    Ok(events)
 }
 
 fn apply_quest(
