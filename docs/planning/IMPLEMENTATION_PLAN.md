@@ -270,9 +270,12 @@ selectors over 42 classifications.
 
   Note: `CardInstance` is now `Clone` (not `Copy`) since it owns classifications.
 
-### Slice 5f — Timed modifiers
-- "until end of turn" duration; expire at cleanup.
-- [ ] Acceptance: a `this turn` modifier ends at the right moment.
+### Slice 5f — Timed modifiers ✅
+- `ModifierDuration::UntilEndOfTurn` modifiers are removed at the End step
+  (§7.6.1) via `expire_end_of_turn_modifiers`. (Effects that *create* timed
+  selector modifiers must snapshot their targets per §7.6.3 — back-linked TODO on
+  that method, lands with the effect DSL in Slice 8.)
+- [x] Acceptance: a `this turn` modifier ends at end of turn (`tests/modifiers.rs`).
 
 ### Slice 5g — Win/loss & game-rule static modifiers
 - Wire static abilities into the win/loss seam (Slice 1) so effects **add /

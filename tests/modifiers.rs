@@ -158,6 +158,28 @@ fn place_classed(
 }
 
 #[test]
+fn until_end_of_turn_modifiers_expire_at_end_of_turn() {
+    let mut state = started();
+    let active = state.active_player();
+    let card = place_character(&mut state, active, 2000, 2);
+
+    state.add_modifier(StatModifier::new(
+        CardId::from_raw(999),
+        ModifierTarget::Card(card),
+        Stat::Strength,
+        2,
+        ModifierDuration::UntilEndOfTurn,
+    ));
+    assert_eq!(state.current_character_stats(card).unwrap().strength, 4);
+
+    let registry = CardRegistry::new();
+    let _ = apply(&mut state, &registry, Input::EndTurn).expect("end turn");
+
+    // The "this turn" modifier has expired (§7.6.1).
+    assert_eq!(state.current_character_stats(card).unwrap().strength, 2);
+}
+
+#[test]
 fn selector_static_buffs_only_matching_owned_characters() {
     let mut state = started();
     let active = state.active_player();

@@ -1,8 +1,8 @@
 //! The authoritative game state.
 
 use super::{
-    BagEntry, CardInstance, CharacterStats, Conditions, GameStatus, PendingDecision, PlayerState,
-    SeededRng, Stat, StatModifier, TriggerId, Zone,
+    BagEntry, CardInstance, CharacterStats, Conditions, GameStatus, ModifierDuration,
+    PendingDecision, PlayerState, SeededRng, Stat, StatModifier, TriggerId, Zone,
 };
 use crate::domain::effects::Effect;
 use crate::domain::types::ids::{CardDefId, CardId, PlayerId};
@@ -282,6 +282,18 @@ impl GameState {
     /// §7.6.4).
     pub fn remove_modifiers_from_source(&mut self, source: CardId) {
         self.modifiers.retain(|m| m.source() != source);
+    }
+
+    /// Remove all "until end of turn" modifiers (called at end of turn, §7.6.1).
+    ///
+    /// TODO(§7.6.3 — when effects create timed selector modifiers, Slice 8): a
+    /// resolved timed effect like "your characters get +1 {S} this turn" must
+    /// **snapshot** the matching cards at resolution (store per-card
+    /// `ModifierTarget::Card` modifiers), since it must not affect characters
+    /// that enter play later — unlike the continuous selector statics in 5e.
+    pub fn expire_end_of_turn_modifiers(&mut self) {
+        self.modifiers
+            .retain(|m| m.duration() != ModifierDuration::UntilEndOfTurn);
     }
 
     /// Find an in-play card instance by id, searching every player's play area.

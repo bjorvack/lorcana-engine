@@ -544,7 +544,8 @@ fn apply_end_turn(state: &mut GameState) -> Result<Vec<GameEvent>, Rejected> {
     state.set_phase(Phase::End);
     state.set_step(Step::End);
     events.push(GameEvent::StepEntered { step: Step::End });
-    // "this turn" effects end here — none yet.
+    // "Until end of turn" effects end here (§7.6.1).
+    state.expire_end_of_turn_modifiers();
     events.push(GameEvent::TurnEnded { player: active });
     events.extend(game_state_check(state));
     if state.is_finished() {
