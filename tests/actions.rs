@@ -351,3 +351,80 @@ fn a_targeted_action_suspends_to_choose_then_resolves() {
         "action discarded"
     );
 }
+
+#[test]
+fn a_multi_effect_action_resolves_the_rest_after_the_choice() {
+    // "Deal 2 damage to chosen opposing character. Gain 3 lore." (Energy-Blast-like)
+    let mut reg: CardRegistry = (0..30)
+        .map(|n| {
+            action_card(
+                n,
+                0,
+                vec![
+                    Effect::DealDamage {
+                        target: Target::ChosenCharacter {
+                            filter: CharacterFilter::any(TargetSide::Opposing),
+                            another: false,
+                        },
+                        amount: 2,
+                    },
+                    Effect::GainLore(3),
+                ],
+            )
+        })
+        .collect();
+    reg.insert(CardDefinition::character(
+        CardDefId::from_raw(100),
+        1,
+        true,
+        1,
+        1,
+        1,
+    ));
+    let mut state = started(&reg);
+    let active = state.active_player();
+    let foe = state
+        .players()
+        .iter()
+        .map(lorcana_engine::PlayerState::id)
+        .find(|p| *p != active)
+        .unwrap();
+    let victim = place_character(&mut state, foe, 5000, 100, true, false);
+    let action = hand_card(&state, 0);
+
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::PlayCard {
+            card: action,
+            shift_onto: None,
+        },
+    )
+    .expect("play action");
+    // Suspended on the first clause; the second clause ("gain 3 lore") must NOT
+    // have resolved yet (§7.1.2 "[A] then [B]" resolves in order).
+    assert!(state.is_awaiting_decision());
+    assert_eq!(
+        lore(&state, active),
+        0,
+        "the 'then' clause waits for the choice"
+    );
+
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(Decision::ChooseTarget(victim)),
+    )
+    .expect("choose target");
+
+    assert!(
+        state.player(foe).unwrap().discard().contains(victim),
+        "first clause: banished"
+    );
+    assert_eq!(
+        lore(&state, active),
+        3,
+        "second clause resolved after the choice"
+    );
+    assert!(!state.is_awaiting_decision());
+}

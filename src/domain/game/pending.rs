@@ -35,7 +35,8 @@ pub enum PendingDecision {
         card: CardId,
     },
     /// A targeted effect is resolving and its controller must choose a target
-    /// from `options`; the stashed `effect` is applied to the pick (§7.1).
+    /// from `options`; the stashed `effect` is applied to the pick, then any
+    /// `rest` effects resolve in order (§7.1.2, §7.1).
     ChooseTarget {
         /// The player who must choose.
         player: PlayerId,
@@ -45,6 +46,9 @@ pub enum PendingDecision {
         options: Vec<CardId>,
         /// The effect to apply to the chosen target.
         effect: Effect,
+        /// The remaining effects of the same ability/action, resolved in order
+        /// after this one (the "[A] then [B]" continuation).
+        rest: Vec<Effect>,
     },
 }
 

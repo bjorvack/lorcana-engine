@@ -660,12 +660,12 @@ fn resolve_action_play(
         player: active,
         card,
     }];
-    for effect in effects {
-        execute_effect(state, registry, active, card, &effect, &mut events);
-    }
+    // Play-a-card watchers go to the bag now (§4.3.4.8) so they aren't lost if the
+    // action's own effect suspends to choose a target; they resolve after it.
+    enqueue_play_a_card_triggers(state, registry, active, card, played_def);
+    resolve_effects(state, registry, active, card, effects, &mut events);
     events.extend(game_state_check_with_triggers(state, registry));
-    if !state.is_finished() {
-        enqueue_play_a_card_triggers(state, registry, active, card, played_def);
+    if !state.is_awaiting_decision() && !state.is_finished() {
         events.extend(resolve_bag(state, registry));
     }
     events
@@ -1275,7 +1275,7 @@ fn apply_use_ability(
         player: active,
         card,
     }];
-    execute_effect(state, registry, active, card, &effect, &mut events);
+    resolve_effects(state, registry, active, card, vec![effect], &mut events);
     events.extend(game_state_check_with_triggers(state, registry));
     // Resolve any triggers the effect produced (e.g. a banished card's "when
     // banished"), unless the effect itself is awaiting a target choice.
@@ -1761,18 +1761,49 @@ fn execute_trigger(
     let Some(entry) = state.remove_trigger(trigger) else {
         return;
     };
-    execute_effect(
+    resolve_effects(
         state,
         registry,
         entry.controller(),
         entry.source(),
-        &entry.effect(),
+        vec![entry.effect()],
         events,
     );
     events.extend(game_state_check_with_triggers(state, registry));
 }
 
-/// Apply a built-in effect for `controller`.
+/// Resolve a sequence of effects in order ("[A] then [B]", §7.1.2). If an effect
+/// needs a target choice, stash the remaining effects in a `ChooseTarget` pending
+/// and stop; `Decide` then applies the choice and resumes the `rest`. Effects with
+/// no eligible target fizzle and the sequence continues ("as much as possible").
+fn resolve_effects(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    controller: PlayerId,
+    source: CardId,
+    effects: Vec<Effect>,
+    events: &mut Vec<GameEvent>,
+) {
+    let mut iter = effects.into_iter();
+    while let Some(effect) = iter.next() {
+        if let Some((options, effect)) =
+            execute_effect(state, registry, controller, source, &effect, events)
+        {
+            state.set_pending(PendingDecision::ChooseTarget {
+                player: controller,
+                source,
+                options,
+                effect,
+                rest: iter.collect(),
+            });
+            return;
+        }
+    }
+}
+
+/// Apply a built-in effect for `controller`. Returns `Some((options, effect))`
+/// when the effect needs the controller to choose a target (nothing applied yet);
+/// otherwise applies the effect and returns `None`.
 fn execute_effect(
     state: &mut GameState,
     registry: &CardRegistry,
@@ -1780,7 +1811,7 @@ fn execute_effect(
     source: CardId,
     effect: &Effect,
     events: &mut Vec<GameEvent>,
-) {
+) -> Option<(Vec<CardId>, Effect)> {
     match effect {
         Effect::DrawCards(n) => {
             for _ in 0..*n {
@@ -1813,8 +1844,8 @@ fn execute_effect(
                 });
             }
         }
-        // Targeted effects: resolve the target now (self) or suspend to let the
-        // controller choose (§7.1).
+        // Targeted effects: resolve the target now (self / all) or report that a
+        // choice is needed (§7.1).
         Effect::ReturnToHand(target)
         | Effect::IntoInkwell(target)
         | Effect::GiveStrengthThisTurn { target, .. }
@@ -1826,12 +1857,7 @@ fn execute_effect(
                 let options =
                     chosen_character_options(state, registry, controller, source, filter, *another);
                 if !options.is_empty() {
-                    state.set_pending(PendingDecision::ChooseTarget {
-                        player: controller,
-                        source,
-                        options,
-                        effect: effect.clone(),
-                    });
+                    return Some((options, effect.clone()));
                 }
             }
             Target::AllCharacters(filter) => {
@@ -1843,6 +1869,7 @@ fn execute_effect(
             }
         },
     }
+    None
 }
 
 /// A zone an effect can move the source card to.
@@ -2119,10 +2146,11 @@ fn apply_decision(
         }
         (
             PendingDecision::ChooseTarget {
+                player,
                 source,
                 options,
                 effect,
-                ..
+                rest,
             },
             Decision::ChooseTarget(chosen),
         ) => {
@@ -2131,6 +2159,8 @@ fn apply_decision(
             }
             let _ = state.take_pending();
             apply_effect_to(state, registry, source, chosen, &effect, &mut events);
+            // Resume the remaining "[A] then [B]" effects (may suspend again).
+            resolve_effects(state, registry, player, source, rest, &mut events);
             events.extend(game_state_check_with_triggers(state, registry));
         }
         _ => return Err(Rejected::InvalidDecision),

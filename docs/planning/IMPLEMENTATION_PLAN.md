@@ -493,16 +493,18 @@ Challenge/banish triggers into the bag (see
     (cost from the printed def, `{S}` from current stats). Tested in
     `tests/targeted_effects.rs`.
   - [x] **8b-4 — targeted actions verified:** a single-effect targeted **action**
-    ("Deal 2 damage to chosen opposing character") suspends for the choice and
-    resolves correctly (the action is discarded first, the lone effect sets the
-    `ChooseTarget` pending, `Decide` applies it). Tested in `tests/actions.rs`.
-    NB: a *multi*-effect action whose targeted effect isn't last still needs
-    sequence-with-suspension (below).
+    suspends for the choice and resolves correctly. Tested in `tests/actions.rs`.
+  - [x] **8b-5 — multi-effect sequence with suspension (§7.1.2):** `resolve_effects`
+    resolves a `Vec<Effect>` in order; a mid-sequence target choice stashes the
+    remaining effects as `ChooseTarget { rest }` and `Decide` resumes them (may
+    suspend again); empty-target effects fizzle and the sequence continues. All
+    effect-resolution sites (triggers, abilities, actions) route through it.
+    Unblocks "[A] then [B]" cards — Improvise, Energy Blast, Distract, Glean, …
+    (30+). Tested in `tests/actions.rs`.
   - **8b+ —** replacement effects (§7.7), "up to N" / no-duplicates / ordering,
     **item/location/player** targets + name filter + group-"other", floating &
-    delayed triggers, turn-progression-with-suspension (start/end-of-turn
-    triggers), and **multi-effect-sequence-with-suspension** (stash remaining
-    effects in the pending so they resume after a mid-sequence choice).
+    delayed triggers, and turn-progression-with-suspension (start/end-of-turn
+    triggers).
 
 ### Slice 8b+ — harder resolution rules
 - Replacement effects (§7.7): "instead"/"skip"/"enter"; self-replacement applied
