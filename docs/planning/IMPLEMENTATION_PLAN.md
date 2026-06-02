@@ -375,6 +375,13 @@ attribution, and the **Boost** trigger ("card put under this character").
 - Choice machinery completeness: "may" (§7.1.3), "up to N" (§7.1.8, no duplicates),
   ordering simultaneous discards/destinations, "that [game term]" resolution (§7.1.9).
 - Floating & delayed triggered abilities (§7.4.7).
+- **Turn-progression-with-suspension** (carried over from Slice 5h): the engine
+  needs a "what to do after the bag empties" continuation so a turn transition
+  can resume after bag resolution suspends on a decision. This unblocks
+  **start/end-of-turn triggers** (`TriggerCondition` Start/EndOfYourTurn) — see
+  the back-linked TODOs in `begin_turn` / `apply_end_turn`
+  (`src/domain/engine/reducer.rs`) and "Slice 5h" above. Likely also threads the
+  registry through `start` / `apply_end_turn` / `begin_turn`.
 - **Effect-driven leave-play removals** (return-to-hand, banish-by-effect, etc.):
   each MUST call `GameState::remove_modifiers_from_source` and then run a
   game-state check, exactly like the banishment path — otherwise the static /
@@ -389,6 +396,8 @@ attribution, and the **Boost** trigger ("card put under this character").
 - [ ] A delayed trigger ("at the end of your turn, …") fires at the right moment.
 - [ ] An effect that returns/banishes a card removes its modifiers and a pending
       win/loss/banishment resolves on the next check (parallels the Donald case).
+- [ ] A turn transition resumes correctly after a bag suspension, and a
+      start/end-of-turn trigger fires (completes the deferred Slice 5h piece).
 
 ---
 
