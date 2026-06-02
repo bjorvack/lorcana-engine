@@ -22,7 +22,8 @@ pub use domain::effects::{Effect, TriggerCondition};
 pub use domain::engine::{Decision, Input, Rejected, apply, start};
 pub use domain::game::{
     BagEntry, CardInstance, CharacterStats, Conditions, GameEvent, GameState, GameStatus,
-    PendingDecision, PlayerState, SeededRng, TriggerId, Zone, ZoneKind,
+    ModifierDuration, ModifierTarget, PendingDecision, PlayerState, SeededRng, Stat, StatModifier,
+    TriggerId, Zone, ZoneKind,
 };
 pub use domain::rules::{RequiredAction, check_win_loss, game_state_check, lore_to_win};
 pub use domain::types::{

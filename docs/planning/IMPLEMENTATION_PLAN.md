@@ -243,10 +243,12 @@ selectors over 42 classifications.
   on `CardDefinition`. Unblocks selectors (5e) and play-a-classification triggers.
 - [x] Acceptance: classifications round-trip and are queryable.
 
-### Slice 5c — Continuous-effects layer (refactor, no behaviour change)
-- `GameState` modifier list + `current_stats(card)` = base + Σ deltas (clamped at
-  use). Wire challenge/quest/banishment to current stats with an empty list.
-- [ ] Acceptance: all existing tests still pass; current == base when no modifiers.
+### Slice 5c — Continuous-effects layer (refactor, no behaviour change) ✅
+- `GameState` modifier list + `current_character_stats(card)` = base + Σ deltas
+  (clamped at use, true total retained). Challenge/quest/banishment now read
+  current stats; modifiers end when their source leaves play.
+- [x] Acceptance: all existing tests still pass; current == base with no
+      modifiers; combine/clamp follows §7.8 (`tests/modifiers.rs`).
 
 ### Slice 5d — Self static modifiers
 - `StaticAbility` that emits a self modifier ("this character gets +N {S}");
@@ -322,7 +324,9 @@ attribution, and the **Boost** trigger ("card put under this character").
 - **Songs**: Action + "Song" classification; pay by exerting a character of
   sufficient cost (§6.3.3); interaction with Singer / Sing Together.
 - **Locations**: play, move cost to move a character there (§4.3.7), willpower &
-  banishment, start-of-turn lore (§6.5).
+  banishment, start-of-turn lore (§6.5). Location characteristics (move cost,
+  willpower, lore) become modifiable `Stat` variants in the continuous-effects
+  layer — see the TODO on `Stat` in `src/domain/game/modifier.rs`.
 - **Triggers** (see [Trigger taxonomy rollout](#trigger-taxonomy-rollout-when-the-triggercondition-todo-gets-done)):
   add sing-a-song and move-to-location / "while here" `TriggerCondition` variants
   with these mechanics.

@@ -259,7 +259,9 @@ fn apply_quest(
     }
     let active = state.active_player();
     let instance = find_in_play(state, active, character)?;
-    let character_stats = instance.stats().ok_or(Rejected::NotACharacter(character))?;
+    if !instance.is_character() {
+        return Err(Rejected::NotACharacter(character));
+    }
     // Questing requires a dry, ready character (§4.3.5.5).
     // TODO(keywords/effects): Reckless prevents questing (Slice 6); effects can
     // also forbid a specific character from questing (Slice 4/8).
@@ -269,6 +271,10 @@ fn apply_quest(
     if !instance.conditions().ready {
         return Err(Rejected::CharacterExerted(character));
     }
+    // Current Lore includes continuous modifiers, clamped at 0 (§7.8.3).
+    let lore = state
+        .current_character_stats(character)
+        .map_or(0, |s| s.lore);
 
     // --- mutate ---
     {
@@ -276,7 +282,7 @@ fn apply_quest(
         if let Some(c) = p.play_mut().iter_mut().find(|c| c.id() == character) {
             c.conditions_mut().ready = false;
         }
-        p.add_lore(character_stats.lore);
+        p.add_lore(lore);
     }
 
     let mut events = vec![
@@ -286,7 +292,7 @@ fn apply_quest(
         },
         GameEvent::LoreGained {
             player: active,
-            amount: character_stats.lore,
+            amount: lore,
         },
     ];
     events.extend(game_state_check(state));
@@ -349,9 +355,9 @@ fn apply_challenge(
 
     // Challenger: the active player's dry, ready character (§4.3.6.6).
     let challenger_instance = find_in_play(state, active, challenger)?;
-    let challenger_stats = challenger_instance
-        .stats()
-        .ok_or(Rejected::NotACharacter(challenger))?;
+    if !challenger_instance.is_character() {
+        return Err(Rejected::NotACharacter(challenger));
+    }
     if challenger_instance.conditions().drying {
         return Err(Rejected::CharacterStillDrying(challenger));
     }
@@ -363,16 +369,25 @@ fn apply_challenge(
     let target_owner =
         opposing_owner_of(state, active, target).ok_or(Rejected::TargetNotInPlay(target))?;
     let target_instance = find_in_play(state, target_owner, target)?;
-    let target_stats = target_instance
-        .stats()
-        .ok_or(Rejected::TargetNotACharacter(target))?;
+    if !target_instance.is_character() {
+        return Err(Rejected::TargetNotACharacter(target));
+    }
     if target_instance.conditions().ready {
         return Err(Rejected::TargetNotExerted(target));
     }
 
+    // Current Strength includes continuous modifiers, clamped at 0 (§4.3.6.14,
+    // §7.8.2).
+    let challenger_strength = state
+        .current_character_stats(challenger)
+        .map_or(0, |s| s.strength);
+    let target_strength = state
+        .current_character_stats(target)
+        .map_or(0, |s| s.strength);
+
     // --- mutate ---
     // Exert the challenger (§4.3.6.9), then both deal damage simultaneously
-    // (§4.3.6.13). Negative Strength counts as 0 (§4.3.6.14); stats are u32.
+    // (§4.3.6.13).
     if let Some(c) = state
         .player_mut(active)
         .expect("active player exists")
@@ -382,8 +397,8 @@ fn apply_challenge(
     {
         c.conditions_mut().ready = false;
     }
-    add_damage(state, active, challenger, target_stats.strength);
-    add_damage(state, target_owner, target, challenger_stats.strength);
+    add_damage(state, active, challenger, target_strength);
+    add_damage(state, target_owner, target, challenger_strength);
 
     let mut events = vec![GameEvent::Challenged {
         player: active,

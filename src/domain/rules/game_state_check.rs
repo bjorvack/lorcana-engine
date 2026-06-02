@@ -96,12 +96,13 @@ fn apply_win_loss(state: &mut GameState, actions: &[RequiredAction], events: &mu
     }
 }
 
-/// Collect the in-play characters whose damage has reached their willpower.
+/// Collect the in-play characters whose damage has reached their (current,
+/// modifier-adjusted) willpower.
 fn banishable_cards(state: &GameState) -> Vec<(PlayerId, CardId)> {
     let mut out = Vec::new();
     for player in state.players() {
         for card in player.play().iter() {
-            if let Some(stats) = card.stats()
+            if let Some(stats) = state.current_character_stats(card.id())
                 && card.conditions().damage >= stats.willpower
             {
                 out.push((player.id(), card.id()));
@@ -121,5 +122,7 @@ fn banish(state: &mut GameState, player: PlayerId, card: CardId, events: &mut Ve
         instance.set_stats(None);
         p.discard_mut().push(instance);
         events.push(GameEvent::Banished { player, card });
+        // The card left play: any continuous modifiers it generated end (§7.6.4).
+        state.remove_modifiers_from_source(card);
     }
 }
