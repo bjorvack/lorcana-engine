@@ -1,7 +1,10 @@
 //! The TOML card-data loader: our committed `cards/*.toml` define real cards in
 //! the engine's own format, validated on load (Slice 9).
 
-use lorcana_engine::{CardDefId, CardKind, Classification, Keyword, ShiftAbility, load_toml};
+use lorcana_engine::{
+    Amount, CardDefId, CardKind, CharacterFilter, Classification, Effect, Keyword, PlayerScope,
+    ShiftAbility, Target, TargetSide, TriggerCondition, load_toml,
+};
 
 /// The committed example deck, compiled in so the test needs no runtime files.
 const EXAMPLES: &str = include_str!("../cards/examples.toml");
@@ -9,7 +12,7 @@ const EXAMPLES: &str = include_str!("../cards/examples.toml");
 #[test]
 fn committed_example_cards_load_and_validate() {
     let defs = load_toml(EXAMPLES).expect("examples.toml loads");
-    assert_eq!(defs.len(), 8, "all example cards loaded");
+    assert_eq!(defs.len(), 9, "all example cards loaded");
 
     // ids are assigned sequentially by position.
     assert_eq!(defs[0].id(), CardDefId::from_raw(0));
@@ -103,4 +106,63 @@ fn an_unknown_keyword_is_rejected() {
     )
     .expect_err("unknown keyword");
     assert!(format!("{err}").contains("could not be loaded"), "{err}");
+}
+
+#[test]
+fn the_effect_dsl_maps_abilities_onto_the_ast() {
+    let defs = load_toml(EXAMPLES).expect("loads");
+    let by_name = |name: &str| defs.iter().find(|d| d.has_name(name)).unwrap();
+
+    // "When you play this, draw a card and gain 1 lore." -> All([Draw, Lore]).
+    let genie = by_name("Genie");
+    assert_eq!(genie.abilities().len(), 1);
+    let play = &genie.abilities()[0];
+    assert_eq!(play.condition, TriggerCondition::WhenYouPlayThis);
+    assert_eq!(
+        play.effect,
+        Effect::All(vec![
+            Effect::Draw {
+                who: PlayerScope::You,
+                amount: Amount::fixed(1),
+            },
+            Effect::Lore {
+                who: PlayerScope::You,
+                amount: Amount::fixed(1),
+            },
+        ])
+    );
+
+    // "Whenever this quests, chosen opposing character gets -2 {S} this turn."
+    let ferdinand = by_name("Ferdinand");
+    let quest = &ferdinand.abilities()[0];
+    assert_eq!(quest.condition, TriggerCondition::WhenThisQuests);
+    assert_eq!(
+        quest.effect,
+        Effect::GiveStrengthThisTurn {
+            target: Target::ChosenCharacter {
+                filter: CharacterFilter::any(TargetSide::Opposing),
+            },
+            amount: Amount::fixed(-2),
+        }
+    );
+}
+
+#[test]
+fn an_unparseable_ability_is_rejected() {
+    let err = load_toml(
+        r#"
+        [[card]]
+        name = "Bad"
+        type = "Character"
+        cost = 1
+        strength = 1
+        willpower = 1
+        lore = 1
+        [[card.abilities]]
+        on = "quest"
+        do = { teleport = 1 }
+        "#,
+    )
+    .expect_err("unknown effect verb");
+    assert!(format!("{err}").contains("no known effect verb"), "{err}");
 }

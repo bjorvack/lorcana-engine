@@ -62,6 +62,9 @@ pub struct TomlCard {
     /// Keyword abilities, value inline where applicable ("Challenger 2", "Shift 5").
     #[serde(default)]
     pub keywords: Vec<String>,
+    /// Triggered abilities authored in the effect DSL (see [`super::dsl`]).
+    #[serde(default)]
+    pub abilities: Vec<super::dsl::TomlAbility>,
 }
 
 /// Why a card couldn't be loaded.
@@ -94,6 +97,14 @@ pub enum LoadError {
         /// The offending keyword string.
         keyword: String,
     },
+    /// An ability couldn't be parsed from the effect DSL.
+    #[error("card {name:?}: {detail}")]
+    BadAbility {
+        /// The card name.
+        name: String,
+        /// What went wrong.
+        detail: String,
+    },
 }
 
 impl TomlCard {
@@ -118,10 +129,21 @@ impl TomlCard {
                 })
             })
             .collect::<Result<_, _>>()?;
+        let abilities = self
+            .abilities
+            .iter()
+            .map(|a| {
+                a.to_ability().map_err(|detail| LoadError::BadAbility {
+                    name: self.name.clone(),
+                    detail,
+                })
+            })
+            .collect::<Result<_, _>>()?;
         Ok(CardDefinition::new(id, self.cost, self.inkwell, kind)
             .with_classifications(classifications)
             .with_names(vec![self.name.clone()])
-            .with_keywords(keywords))
+            .with_keywords(keywords)
+            .with_abilities(abilities))
     }
 
     fn stat(&self, value: Option<u32>, stat: &'static str) -> Result<u32, LoadError> {
@@ -155,7 +177,7 @@ impl TomlCard {
 }
 
 /// Map a keyword string (name + optional inline value) to a [`Keyword`].
-fn keyword_from(s: &str) -> Option<Keyword> {
+pub(crate) fn keyword_from(s: &str) -> Option<Keyword> {
     let mut parts = s.split_whitespace();
     let name = parts.next()?;
     let rest = s[name.len()..].trim();

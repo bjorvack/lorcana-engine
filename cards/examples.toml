@@ -27,6 +27,24 @@ willpower = 5
 lore = 2
 classifications = ["Storyborn", "Ally"]
 keywords = ["Evasive"]
+# "When you play this character, draw a card and gain 1 lore."
+[[card.abilities]]
+on = "play"
+do = [{ draw = 1 }, { gain_lore = 1 }]
+
+[[card]]
+name = "Ferdinand"
+type = "Character"
+cost = 3
+inkwell = true
+strength = 4
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally"]
+# "Whenever this character quests, chosen opposing character gets -2 {S} this turn."
+[[card.abilities]]
+on = "quest"
+do = { give_strength = -2, target = "chosen opposing character" }
 
 [[card]]
 name = "Captain Hook"

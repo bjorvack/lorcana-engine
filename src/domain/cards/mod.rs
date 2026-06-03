@@ -3,6 +3,7 @@
 pub mod ability;
 pub mod card_kind;
 pub mod definition;
+pub mod dsl;
 pub mod keyword;
 pub mod loader;
 pub mod registry;
@@ -13,6 +14,7 @@ pub use ability::{
 };
 pub use card_kind::CardKind;
 pub use definition::CardDefinition;
+pub use dsl::TomlAbility;
 pub use keyword::{Keyword, ShiftAbility, ShiftCost, ShiftKind};
 pub use loader::{LoadError, TomlCard, load_toml};
 pub use registry::CardRegistry;

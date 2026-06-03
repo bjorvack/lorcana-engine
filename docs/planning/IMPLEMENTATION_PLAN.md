@@ -748,7 +748,15 @@ work, tracked separately.
   Covers printed characteristics + keywords (values inline); text-based abilities
   via the effect DSL are a separate concern. `cards/examples.toml`,
   `tests/card_loader.rs`.
-- [ ] Effect-DSL authoring for abilities in the TOML format (extends the loader).
+- [~] **Effect-DSL authoring (first cut)** — `[[card.abilities]]` author **triggered**
+  abilities in TOML, mapped to the `Effect` AST. Hybrid surface: structured verb
+  tables (`{ draw = 1 }`) + `do = [..]` sequences (-> `Effect::All`), with leaf
+  **selectors** as compact strings (`"chosen opposing character"`, `"each
+  opponent"`) *or* the structured AST form as a fallback. Verbs covered: draw,
+  gain/lose lore, deal/remove damage, give-strength, banish/exert/ready/freeze,
+  discard, grant-keyword. Added `Effect::All` (sequencing) to the engine.
+  `src/domain/cards/dsl.rs`, `cards/examples.toml`, `tests/card_loader.rs`.
+  **Next:** activated + static abilities; dynamic amounts/conditionals in the DSL.
 - A conformance test suite: encode the rules examples (§7–§10) and a library of
   hand-authored interaction scenarios as golden tests.
 - **Trigger taxonomy completeness** (see
