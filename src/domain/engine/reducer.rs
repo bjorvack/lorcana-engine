@@ -1093,6 +1093,7 @@ fn has_restriction(
         Restriction::CantBeChosen => character_has_keyword(state, registry, card, &Keyword::Ward),
         Restriction::CantChallenge
         | Restriction::CantBeChallenged
+        | Restriction::CantReady
         | Restriction::TakesNoChallengeDamage => false,
     }
 }
@@ -1598,13 +1599,31 @@ fn draw(state: &mut GameState, player: PlayerId) -> GameEvent {
 
 /// Ready all of a player's cards in play and in their inkwell (§4.2.1.1).
 fn ready_all(state: &mut GameState, player: PlayerId) {
-    let p = state.player_mut(player).expect("player exists");
-    for card in p.play_mut().iter_mut() {
-        card.conditions_mut().ready = true;
+    // A card with the "can't ready" restriction (freeze / continuous) stays
+    // exerted this turn (§"can't ready"). Computed before the mutable pass.
+    let frozen: std::collections::HashSet<CardId> = state
+        .player(player)
+        .map(|p| {
+            p.play()
+                .iter()
+                .map(CardInstance::id)
+                .filter(|&c| state.has_restriction(c, Restriction::CantReady))
+                .collect()
+        })
+        .unwrap_or_default();
+    if let Some(p) = state.player_mut(player) {
+        for card in p.play_mut().iter_mut() {
+            if !frozen.contains(&card.id()) {
+                card.conditions_mut().ready = true;
+            }
+        }
+        for card in p.inkwell_mut().iter_mut() {
+            card.conditions_mut().ready = true;
+        }
     }
-    for card in p.inkwell_mut().iter_mut() {
-        card.conditions_mut().ready = true;
-    }
+    // One-shot freezes (UntilStep { Ready, player }) are consumed now; continuous
+    // "can't ready" (e.g. while a source is in play) persists.
+    state.expire_step_modifiers(Step::Ready, player);
 }
 
 /// A player's characters in play stop drying (§4.2.2.1).
@@ -2160,6 +2179,7 @@ fn execute_effect(
         | Effect::Banish(target)
         | Effect::Exert(target)
         | Effect::Ready(target)
+        | Effect::Freeze(target)
         | Effect::GrantKeywordThisTurn { target, .. }
         | Effect::RestrictThisTurn { target, .. }
         | Effect::PermitThisTurn { target, .. }
@@ -2280,6 +2300,23 @@ const fn leave_play_destination(effect: &Effect) -> SelfDestination {
             DeckPosition::Shuffle => SelfDestination::ShuffleIntoDeck,
         },
         _ => SelfDestination::Hand,
+    }
+}
+
+/// Freeze `card`: it can't ready at its controller's next ready step. The
+/// `CantReady` modifier is sourced to the card itself (so it survives the freezer
+/// leaving play) and expires when that controller next readies (§"can't ready").
+fn freeze_card(state: &mut GameState, card: CardId) {
+    if let Some(owner) = state.card_owner_in_play(card) {
+        state.add_property_modifier(PropertyModifier::new(
+            card,
+            ModifierTarget::Card(card),
+            Property::Restriction(Restriction::CantReady),
+            ModifierDuration::UntilStep {
+                step: Step::Ready,
+                player: owner,
+            },
+        ));
     }
 }
 
@@ -2687,6 +2724,7 @@ fn apply_effect_to(
                 c.conditions_mut().ready = ready;
             }
         }
+        Effect::Freeze(_) => freeze_card(state, target_card),
         // Grant a keyword / restriction / permission to the target until end of
         // turn (a single `UntilEndOfTurn` property modifier).
         Effect::GrantKeywordThisTurn { keyword, .. } => {

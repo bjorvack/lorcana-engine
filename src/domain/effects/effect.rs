@@ -111,6 +111,10 @@ pub enum Effect {
     Exert(Target),
     /// Ready the target ("ready this character" / "ready chosen character").
     Ready(Target),
+    /// Freeze the target: it can't ready at the start of its next turn (the flag
+    /// is consumed at that ready step). Does **not** exert — compose with
+    /// [`Effect::Exert`] for "exert chosen character; it can't ready…".
+    Freeze(Target),
     /// Give the target a keyword until end of turn ("chosen character gains
     /// Challenger +2 this turn", "gains Evasive", §10).
     GrantKeywordThisTurn {

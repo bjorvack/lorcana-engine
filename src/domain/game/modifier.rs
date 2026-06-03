@@ -10,6 +10,7 @@
 use crate::domain::cards::Keyword;
 use crate::domain::types::card::Classification;
 use crate::domain::types::ids::{CardId, PlayerId};
+use crate::domain::types::turn::Step;
 use serde::{Deserialize, Serialize};
 
 /// A modifiable characteristic.
@@ -47,6 +48,16 @@ pub enum ModifierDuration {
     WhileSourceInPlay,
     /// Active until the end of the current turn; expires at cleanup.
     UntilEndOfTurn,
+    /// Active until `player` next reaches `step` (consumed when that player
+    /// completes that step). Survives the end of the turn it was created in.
+    /// Generalizes "until the start of their next turn" timings — e.g. one-shot
+    /// freeze is `UntilStep { step: Ready, player: <the frozen card's owner> }`.
+    UntilStep {
+        /// The step at which this expires.
+        step: Step,
+        /// Whose turn's `step` consumes it.
+        player: PlayerId,
+    },
 }
 
 /// Which cards a modifier applies to. Matching against a card is done by
@@ -116,6 +127,10 @@ pub enum Restriction {
     /// §10.15; or an effect-granted "can't be chosen this turn"). Challenges are
     /// unaffected.
     CantBeChosen,
+    /// The card can't **ready** at its controller's ready step ("can't ready at the
+    /// start of their next turn" — freeze, one-shot via
+    /// [`ModifierDuration::UntilNextReadyStep`]; or a continuous "can't ready").
+    CantReady,
     /// The character takes no damage from challenges (a §7.7 damage replacement —
     /// "takes no damage from challenges this turn", Noi / Nothing We Won't Do).
     TakesNoChallengeDamage,

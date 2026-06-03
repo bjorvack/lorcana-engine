@@ -437,6 +437,15 @@ impl GameState {
             .retain(|m| m.duration() != ModifierDuration::UntilEndOfTurn);
     }
 
+    /// Expire the modifiers whose duration is `UntilStep { step, player }` —
+    /// called when `player` completes `step` (e.g. one-shot freeze is consumed at
+    /// that player's ready step, after frozen cards have been kept exerted).
+    pub fn expire_step_modifiers(&mut self, step: Step, player: PlayerId) {
+        let target = ModifierDuration::UntilStep { step, player };
+        self.modifiers.retain(|m| m.duration() != target);
+        self.property_modifiers.retain(|m| m.duration() != target);
+    }
+
     /// Find an in-play card instance by id, searching every player's play area.
     #[must_use]
     pub fn instance_in_play(&self, card: CardId) -> Option<&CardInstance> {

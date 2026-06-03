@@ -662,8 +662,15 @@ mechanics ranked by card count, with the remaining gaps to close in order:
       reveals their hand and discards [a card of your choice]"; needs choosing from
       an opponent's hand. (Looking at your own deck doesn't need a reveal-to-self
       step — state is fully known.)
-- [ ] **freeze / "can't ready next turn"** (38) — an exert that skips the next
-      ready step (a per-character delayed flag).
+- [~] **freeze / "can't ready"** (38) — modeled uniformly as
+      `Restriction::CantReady` (every card action goes through restrictions): the
+      ready step skips cards that have it. `Effect::Freeze(Target)` adds it with a
+      new general duration `ModifierDuration::UntilStep { step, player }` (the
+      `NextStep(step, player)` idea) = consumed when that controller next readies;
+      survives end of turn. Continuous "can't ready" (Vincenzo) is the same
+      restriction with a `WhileSourceInPlay` modifier. `tests/turn_triggers.rs`.
+      **Remaining:** exert+freeze on the same chosen target (needs multi-effect-
+      per-target); continuous can't-ready statics; Anna-style is covered.
 - [ ] **+N for each …** (24) — dynamic amount counted over a filter (also "gain
       lore equal to", "deal damage equal to", 15+1).
 - [ ] **chosen / each player targets** (12 + 7) — player-directed draw/discard/

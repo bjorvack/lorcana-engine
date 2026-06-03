@@ -3,9 +3,9 @@
 //! pauses the turn transition, and answering it resumes the remaining steps.
 
 use lorcana_engine::{
-    CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterStats, Conditions,
-    Decision, DelayedWhen, Effect, GameState, GameStatus, Input, Phase, PlayerId, TriggerCondition,
-    TriggeredAbility, apply, start,
+    CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterFilter, CharacterStats,
+    Conditions, Decision, DelayedWhen, Effect, GameState, GameStatus, Input, Phase, PlayerId,
+    Target, TargetSide, TriggerCondition, TriggeredAbility, apply, start,
 };
 
 fn started(reg: &CardRegistry) -> GameState {
@@ -164,5 +164,94 @@ fn a_delayed_end_of_turn_trigger_fires_at_the_end_of_the_turn() {
         lore(&state, a),
         3,
         "the delayed effect fired at end of turn (+2)"
+    );
+}
+
+fn opponent_of(state: &GameState, player: PlayerId) -> PlayerId {
+    state
+        .players()
+        .iter()
+        .map(lorcana_engine::PlayerState::id)
+        .find(|p| *p != player)
+        .unwrap()
+}
+
+fn ready(state: &GameState, owner: PlayerId, card: CardId) -> bool {
+    state
+        .player(owner)
+        .unwrap()
+        .play()
+        .iter()
+        .find(|c| c.id() == card)
+        .unwrap()
+        .conditions()
+        .ready
+}
+
+fn exert(state: &mut GameState, owner: PlayerId, card: CardId) {
+    state
+        .player_mut(owner)
+        .unwrap()
+        .play_mut()
+        .iter_mut()
+        .find(|c| c.id() == card)
+        .unwrap()
+        .conditions_mut()
+        .ready = false;
+}
+
+#[test]
+fn freeze_keeps_a_character_exerted_through_its_next_ready_step_then_readies() {
+    let mut reg = CardRegistry::new();
+    reg.insert(
+        CardDefinition::character(CardDefId::from_raw(100), 1, true, 1, 3, 1).with_abilities(vec![
+            TriggeredAbility::new(
+                TriggerCondition::WhenThisQuests,
+                Effect::Freeze(Target::ChosenCharacter {
+                    filter: CharacterFilter::any(TargetSide::Opposing),
+                    another: false,
+                }),
+            ),
+        ]),
+    );
+    reg.insert(CardDefinition::character(
+        CardDefId::from_raw(200),
+        1,
+        true,
+        1,
+        3,
+        1,
+    ));
+    let mut state = started(&reg);
+    let a = state.active_player();
+    let b = opponent_of(&state, a);
+    let quester = place(&mut state, a, 1000, 100);
+    let victim = place(&mut state, b, 2000, 200);
+    exert(&mut state, b, victim); // it quested last turn, say
+
+    // Freeze the victim.
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(Decision::ChooseTarget(victim)),
+    )
+    .expect("freeze");
+
+    // B's next turn: the ready step must NOT ready the frozen victim.
+    end_turn(&mut state, &reg);
+    assert_eq!(state.active_player(), b);
+    assert!(
+        !ready(&state, b, victim),
+        "frozen: stays exerted through its ready step"
+    );
+
+    // The freeze is one-shot: on B's following turn it readies normally.
+    end_turn(&mut state, &reg); // B -> A
+    end_turn(&mut state, &reg); // A -> B again
+    assert_eq!(state.active_player(), b);
+    assert!(
+        ready(&state, b, victim),
+        "freeze was consumed; victim readies"
     );
 }
