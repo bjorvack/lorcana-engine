@@ -24,6 +24,7 @@
 //! effect DSL (a separate concern).
 
 use super::{CardDefinition, CardKind, Keyword, ShiftAbility};
+use crate::domain::effects::{Effect, TriggerCondition};
 use crate::domain::types::card::Classification;
 use crate::domain::types::ids::CardDefId;
 use serde::Deserialize;
@@ -139,11 +140,28 @@ impl TomlCard {
             name: self.name.clone(),
             detail,
         };
-        let abilities = self
+        let mut abilities: Vec<_> = self
             .abilities
             .iter()
             .map(|a| a.to_ability().map_err(&bad))
             .collect::<Result<_, _>>()?;
+        // An action/song never enters play, so its "when you play this" abilities
+        // are really its on-play **action effects** (§6.3.2), resolved directly.
+        let mut action_effects = Vec::new();
+        if matches!(kind, CardKind::Action) {
+            abilities.retain(|a| {
+                if a.condition == TriggerCondition::WhenYouPlayThis {
+                    action_effects.push(if a.optional {
+                        Effect::May(Box::new(a.effect.clone()))
+                    } else {
+                        a.effect.clone()
+                    });
+                    false
+                } else {
+                    true
+                }
+            });
+        }
         let activated = self
             .activated
             .iter()
@@ -160,7 +178,8 @@ impl TomlCard {
             .with_keywords(keywords)
             .with_abilities(abilities)
             .with_activated(activated)
-            .with_static(statics))
+            .with_static(statics)
+            .with_action_effects(action_effects))
     }
 
     fn stat(&self, value: Option<u32>, stat: &'static str) -> Result<u32, LoadError> {

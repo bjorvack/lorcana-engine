@@ -392,3 +392,36 @@ fn the_dsl_parses_name_and_threshold_selector_predicates() {
         })
     );
 }
+
+#[test]
+fn an_action_authored_in_the_dsl_resolves_its_effect_on_play() {
+    use lorcana_engine::{Amount, Effect, Target};
+    // An action's "when you play this" ability is loaded as its on-play action
+    // effect (§6.3.2), not a triggered ability — so it actually resolves.
+    let defs = load_toml(
+        r#"
+        [[card]]
+        name = "Zap"
+        type = "Action"
+        cost = 1
+        [[card.abilities]]
+        on = "play"
+        do = { deal_damage = 2, to = "chosen opposing character" }
+        "#,
+    )
+    .expect("loads");
+    let zap = &defs[0];
+    assert!(
+        zap.abilities().is_empty(),
+        "the play ability became an action effect, not a trigger"
+    );
+    assert_eq!(
+        zap.action_effects(),
+        &[Effect::DealDamage {
+            target: Target::ChosenCharacter {
+                filter: CharacterFilter::any(TargetSide::Opposing),
+            },
+            amount: Amount::fixed(2),
+        }]
+    );
+}
