@@ -658,10 +658,14 @@ mechanics ranked by card count, with the remaining gaps to close in order:
       to `rest` (top/bottom/shuffle). Covers Be Our Guest / Ariel / Develop Your
       Brain. `tests/reveal.rs`. **Remaining:** take >1, reorder-in-any-order of the
       rest, split top+bottom (Dr. Facilier), search the whole deck (tutor, 9).
-- [ ] **reveal (opponent's hand) / discard from it** (Lenny, Timon) — "opponent
-      reveals their hand and discards [a card of your choice]"; needs choosing from
-      an opponent's hand. (Looking at your own deck doesn't need a reveal-to-self
-      step — state is fully known.)
+- [x] **reveal (opponent's hand) / discard from it** (Lenny, Timon, Goldie) —
+      `Effect::OpponentDiscardsChosen { whose, filter }`: resolve the (chosen)
+      opponent via `PlayerScope` (prompting in multiplayer), then the controller
+      picks a card matching `filter` from their hand via the `Choose` primitive
+      (`ChoiceThen::DiscardFrom { owner }`). Filters reuse the algebra:
+      `Category(Action)` (Lenny), `Not(Category(Character))` (Timon),
+      `Category(Location)` (Goldie). Reveal is implicit (hand is known to the
+      engine). `tests/opponent_discard.rs`.
 - [~] **freeze / "can't ready"** (38) — modeled uniformly as
       `Restriction::CantReady` (every card action goes through restrictions): the
       ready step skips cards that have it. `Effect::Freeze(Target)` adds it with a

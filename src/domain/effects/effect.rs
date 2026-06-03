@@ -264,6 +264,16 @@ pub enum Effect {
         /// How many each discards.
         amount: DiscardAmount,
     },
+    /// A chosen opponent reveals their hand and the **controller** picks a card
+    /// matching `filter` for them to discard ("chosen opponent reveals their hand
+    /// and discards an action card of your choice", Lenny / Timon / Goldie, §8.4).
+    /// Hand contents are already known to the engine, so the reveal is implicit.
+    OpponentDiscardsChosen {
+        /// Whose hand (the revealing opponent), usually `ChosenOpponent`.
+        whose: PlayerScope,
+        /// Which of their hand cards the controller may pick to discard.
+        filter: CharacterFilter,
+    },
     /// The controller plays a card matching `filter` from their hand **for free**
     /// (no ink), choosing which eligible card (§6). Wrap in [`Effect::May`] for
     /// "you may play …".

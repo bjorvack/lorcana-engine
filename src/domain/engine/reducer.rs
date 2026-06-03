@@ -2343,6 +2343,18 @@ fn choose_discard(
     }
 }
 
+/// Build a single-pick [`Choice::Choose`] for `chooser` to pick one of `owner`'s
+/// hand cards (`options`) for `owner` to discard (Lenny / Timon / Goldie, §8.4).
+fn choose_discard_from(chooser: PlayerId, owner: PlayerId, options: Vec<CardId>) -> Choice {
+    Choice::Choose {
+        player: chooser,
+        options: options.into_iter().map(ChoiceRef::Card).collect(),
+        min: 1,
+        max: 1,
+        then: ChoiceThen::DiscardFrom { owner },
+    }
+}
+
 /// Build an "up to one" [`Choice::Choose`] that takes the picked looked-at card to
 /// hand and returns the rest to `deck_owner`'s deck (look-at-top, §8.2).
 fn choose_take_revealed(
@@ -2405,6 +2417,18 @@ fn execute_effect(
         // hand goes (§8.4). A `Chosen*` scope may first prompt a player choice.
         Effect::Discard { who, amount } => {
             return resolve_discard_effect(state, controller, *who, *amount, effect, events);
+        }
+        // A chosen opponent reveals their hand; the controller picks a matching
+        // card for them to discard (§8.4). Resolve the opponent (prompting in
+        // multiplayer), then choose from their hand.
+        Effect::OpponentDiscardsChosen { whose, filter } => {
+            return match resolve_scope(state, controller, *whose) {
+                ScopeOutcome::Choose(options) => Some(choose_player(controller, options, effect)),
+                ScopeOutcome::Players(players) => players.first().and_then(|&owner| {
+                    let options = hand_matching(state, registry, controller, owner, filter);
+                    (!options.is_empty()).then(|| choose_discard_from(controller, owner, options))
+                }),
+            };
         }
         // Move the top `count` of each scoped player's deck to `to` (mill / dig).
         Effect::Move {
@@ -2714,6 +2738,10 @@ fn substitute_chosen_player(effect: &Effect, player: PlayerId) -> Effect {
             who: PlayerScope::Player(player),
             amount: *amount,
         },
+        Effect::OpponentDiscardsChosen { filter, .. } => Effect::OpponentDiscardsChosen {
+            whose: PlayerScope::Player(player),
+            filter: filter.clone(),
+        },
         Effect::LookAtTopAndTake {
             count,
             filter,
@@ -2833,28 +2861,40 @@ fn resolve_scope_discard(
     None
 }
 
-/// The cards in `player`'s hand that a "play for free" effect with `filter` may
-/// play (matching cost and category, §6).
-fn eligible_free_plays(
+/// The cards in `owner`'s hand matching `filter`, evaluated against each card's
+/// definition from `controller`'s perspective (§6, §8.4).
+fn hand_matching(
     state: &GameState,
     registry: &CardRegistry,
-    player: PlayerId,
+    controller: PlayerId,
+    owner: PlayerId,
     filter: &CharacterFilter,
 ) -> Vec<CardId> {
     state
-        .player(player)
+        .player(owner)
         .map(|p| {
             p.hand()
                 .iter()
                 .filter(|c| {
                     registry
                         .get(c.definition())
-                        .is_some_and(|d| def_matches_filter(player, player, d, filter))
+                        .is_some_and(|d| def_matches_filter(controller, owner, d, filter))
                 })
                 .map(CardInstance::id)
                 .collect()
         })
         .unwrap_or_default()
+}
+
+/// The cards in `player`'s hand that a "play for free" effect with `filter` may
+/// play (§6).
+fn eligible_free_plays(
+    state: &GameState,
+    registry: &CardRegistry,
+    player: PlayerId,
+    filter: &CharacterFilter,
+) -> Vec<CardId> {
+    hand_matching(state, registry, player, player, filter)
 }
 
 /// Resolve "look at the top N": offer up to one matching card to take into hand,
@@ -3712,6 +3752,15 @@ fn apply_choose_decision(
             if let Some(choice) = resolve_scope_discard(state, remaining_players, *amount, events) {
                 state.set_pending(choice_to_pending(choice, source, rest));
                 return Ok(());
+            }
+            resolve_effects(state, registry, player, source, rest, events);
+        }
+        // Discard each picked card from `owner`'s hand (chosen by someone else, §8.4).
+        ChoiceThen::DiscardFrom { owner } => {
+            for pick in &picks {
+                if let ChoiceRef::Card(c) = pick {
+                    discard_card(state, *owner, *c, events);
+                }
             }
             resolve_effects(state, registry, player, source, rest, events);
         }

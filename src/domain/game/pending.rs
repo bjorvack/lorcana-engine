@@ -46,6 +46,12 @@ pub enum ChoiceThen {
         /// The players who still need to discard, in order.
         remaining_players: Vec<PlayerId>,
     },
+    /// Discard each picked card from `owner`'s hand (the chooser is someone else —
+    /// "chosen opponent … discards a card of your choice", §8.4).
+    DiscardFrom {
+        /// Whose hand the picked cards are discarded from.
+        owner: PlayerId,
+    },
 }
 
 /// A point in bag resolution that requires a player's input before the engine
