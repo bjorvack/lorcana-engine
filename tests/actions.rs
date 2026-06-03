@@ -319,7 +319,6 @@ fn a_targeted_action_suspends_to_choose_then_resolves() {
                 vec![Effect::DealDamage {
                     target: Target::ChosenCharacter {
                         filter: CharacterFilter::any(TargetSide::Opposing),
-                        another: false,
                     },
                     amount: Amount::fixed(2),
                 }],
@@ -386,7 +385,6 @@ fn a_multi_effect_action_resolves_the_rest_after_the_choice() {
                     Effect::DealDamage {
                         target: Target::ChosenCharacter {
                             filter: CharacterFilter::any(TargetSide::Opposing),
-                            another: false,
                         },
                         amount: Amount::fixed(2),
                     },
@@ -468,7 +466,6 @@ fn ward_target_does_as_much_as_you_can_still_draws() {
                     Effect::DealDamage {
                         target: Target::ChosenCharacter {
                             filter: CharacterFilter::any(TargetSide::Opposing),
-                            another: false,
                         },
                         amount: Amount::fixed(2),
                     },

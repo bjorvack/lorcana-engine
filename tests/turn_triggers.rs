@@ -230,7 +230,6 @@ fn freeze_keeps_a_character_exerted_through_its_next_ready_step_then_readies() {
                 TriggerCondition::WhenThisQuests,
                 Effect::Freeze(Target::ChosenCharacter {
                     filter: CharacterFilter::any(TargetSide::Opposing),
-                    another: false,
                 }),
             ),
         ]),

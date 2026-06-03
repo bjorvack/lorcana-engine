@@ -623,8 +623,7 @@ fn effect_granted_challenger_adds_strength_in_a_challenge() {
         TriggerCondition::WhenThisQuests,
         Effect::GrantKeywordThisTurn {
             target: Target::ChosenCharacter {
-                filter: CharacterFilter::any(TargetSide::Yours),
-                another: true,
+                filter: CharacterFilter::any(TargetSide::Yours).exclude_source(),
             },
             keyword: Keyword::Challenger(3),
         },
@@ -670,7 +669,6 @@ fn ward_prevents_being_chosen_by_an_opponents_effect() {
         Effect::DealDamage {
             target: Target::ChosenCharacter {
                 filter: CharacterFilter::any(TargetSide::Opposing),
-                another: false,
             },
             amount: Amount::fixed(1),
         },
@@ -717,7 +715,6 @@ fn ward_does_not_protect_from_all_character_effects() {
         Effect::DealDamage {
             target: Target::AllCharacters {
                 filter: CharacterFilter::any(TargetSide::Opposing),
-                another: false,
             },
             amount: Amount::fixed(1),
         },
@@ -750,8 +747,8 @@ fn your_own_warded_character_can_be_chosen_by_your_own_effect() {
         TriggerCondition::WhenThisQuests,
         Effect::DealDamage {
             target: Target::ChosenCharacter {
-                filter: CharacterFilter::any(TargetSide::Yours),
-                another: true, // exclude the quester, leaving only the Warded ally
+                // exclude the quester, leaving only the Warded ally
+                filter: CharacterFilter::any(TargetSide::Yours).exclude_source(),
             },
             amount: Amount::fixed(1),
         },

@@ -136,8 +136,7 @@ fn an_effect_banishing_donald_resolves_the_opponents_pending_win() {
             TriggeredAbility::new(
                 TriggerCondition::WhenThisQuests,
                 Effect::Banish(Target::ChosenCharacter {
-                    filter: CharacterFilter::any(TargetSide::Yours),
-                    another: true,
+                    filter: CharacterFilter::any(TargetSide::Yours).exclude_source(),
                 }),
             ),
         ]),

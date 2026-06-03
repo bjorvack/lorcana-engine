@@ -84,7 +84,6 @@ fn quester_dealing(def: u32, amount: i32) -> CardDefinition {
             Effect::DealDamage {
                 target: Target::ChosenCharacter {
                     filter: CharacterFilter::any(TargetSide::Opposing),
-                    another: false,
                 },
                 amount: Amount::fixed(amount),
             },
@@ -176,8 +175,7 @@ fn remove_damage_heals_a_chosen_character() {
                 TriggerCondition::WhenThisQuests,
                 Effect::RemoveDamage {
                     target: Target::ChosenCharacter {
-                        filter: CharacterFilter::any(TargetSide::Yours),
-                        another: true,
+                        filter: CharacterFilter::any(TargetSide::Yours).exclude_source(),
                     },
                     amount: Amount::fixed(2),
                 },
@@ -222,7 +220,6 @@ fn a_trigger_banishes_a_chosen_character_and_fires_when_banished() {
                 TriggerCondition::WhenThisQuests,
                 Effect::Banish(Target::ChosenCharacter {
                     filter: CharacterFilter::any(TargetSide::Opposing),
-                    another: false,
                 }),
             ),
         ]),
@@ -282,7 +279,6 @@ fn a_cost_filter_restricts_the_choosable_targets() {
                     target: Target::ChosenCharacter {
                         filter: CharacterFilter::any(TargetSide::Opposing)
                             .and(CharacterFilter::Cost(NumericFilter::at_most(2))),
-                        another: false,
                     },
                     amount: Amount::fixed(2),
                 },
@@ -489,7 +485,6 @@ fn a_name_filter_restricts_the_choosable_targets() {
                     target: Target::ChosenCharacter {
                         filter: CharacterFilter::any(TargetSide::Opposing)
                             .and(CharacterFilter::Named("Stitch".to_string())),
-                        another: false,
                     },
                     amount: Amount::fixed(2),
                 },
@@ -541,8 +536,7 @@ fn all_your_other_characters_excludes_the_source() {
                 TriggerCondition::WhenThisQuests,
                 Effect::GiveStrengthThisTurn {
                     target: Target::AllCharacters {
-                        filter: CharacterFilter::any(TargetSide::Yours),
-                        another: true,
+                        filter: CharacterFilter::any(TargetSide::Yours).exclude_source(),
                     },
                     amount: Amount::fixed(1),
                 },
@@ -640,7 +634,6 @@ fn exert_effect_exerts_a_chosen_character() {
                 TriggerCondition::WhenThisQuests,
                 Effect::Exert(Target::ChosenCharacter {
                     filter: CharacterFilter::any(TargetSide::Opposing),
-                    another: false,
                 }),
             ),
         ]),
@@ -696,8 +689,7 @@ fn conditional_buffer(def: u32) -> CardDefinition {
             TriggerCondition::WhenThisQuests,
             Effect::IfTargetMatches {
                 target: Target::ChosenCharacter {
-                    filter: CharacterFilter::any(TargetSide::Any),
-                    another: true,
+                    filter: CharacterFilter::any(TargetSide::Any).exclude_source(),
                 },
                 filter: CharacterFilter::any(TargetSide::Any).and(CharacterFilter::Classification(
                     Classification::new("Villain"),
@@ -791,7 +783,6 @@ fn return_to_deck_moves_the_target_out_of_play_into_the_deck() {
                 Effect::Move {
                     what: lorcana_engine::MoveSource::Card(Target::ChosenCharacter {
                         filter: CharacterFilter::any(TargetSide::Opposing),
-                        another: false,
                     }),
                     to: lorcana_engine::Destination::Deck(lorcana_engine::DeckPosition::Bottom),
                 },
@@ -1023,7 +1014,6 @@ fn deal_damage_equal_to_the_number_of_your_characters() {
                 Effect::DealDamage {
                     target: Target::ChosenCharacter {
                         filter: CharacterFilter::any(TargetSide::Opposing),
-                        another: false,
                     },
                     amount: Amount::PerMatchingCharacter(CharacterFilter::any(TargetSide::Yours)),
                 },
@@ -1120,8 +1110,7 @@ fn move_damage_from_chosen_onto_this_character() {
                 TriggerCondition::WhenThisQuests,
                 Effect::MoveDamage {
                     from: Target::ChosenCharacter {
-                        filter: CharacterFilter::any(TargetSide::Any),
-                        another: true,
+                        filter: CharacterFilter::any(TargetSide::Any).exclude_source(),
                     },
                     to: Target::SelfCard,
                     amount: Amount::fixed(2),
@@ -1180,12 +1169,10 @@ fn move_damage_between_two_chosen_characters() {
                 TriggerCondition::WhenThisQuests,
                 Effect::MoveDamage {
                     from: Target::ChosenCharacter {
-                        filter: CharacterFilter::any(TargetSide::Yours),
-                        another: true,
+                        filter: CharacterFilter::any(TargetSide::Yours).exclude_source(),
                     },
                     to: Target::ChosenCharacter {
                         filter: CharacterFilter::any(TargetSide::Opposing),
-                        another: false,
                     },
                     amount: Amount::fixed(2),
                 },
@@ -1253,12 +1240,10 @@ fn move_damage_second_pick_excludes_the_first() {
                 TriggerCondition::WhenThisQuests,
                 Effect::MoveDamage {
                     from: Target::ChosenCharacter {
-                        filter: CharacterFilter::any(TargetSide::Yours),
-                        another: true,
+                        filter: CharacterFilter::any(TargetSide::Yours).exclude_source(),
                     },
                     to: Target::ChosenCharacter {
-                        filter: CharacterFilter::any(TargetSide::Yours),
-                        another: true,
+                        filter: CharacterFilter::any(TargetSide::Yours).exclude_source(),
                     },
                     amount: Amount::fixed(2),
                 },
@@ -1323,7 +1308,6 @@ fn filter_algebra_or_composes() {
                             CharacterFilter::Classification(Classification::new("Villain")),
                             CharacterFilter::Classification(Classification::new("Hero")),
                         ]),
-                        another: false,
                     },
                     amount: Amount::fixed(1),
                 },

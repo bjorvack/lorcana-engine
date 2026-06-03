@@ -143,20 +143,18 @@ pub enum Target {
     /// target (e.g. the first pick of a two-target move-damage). Not authored on
     /// cards directly.
     Card(CardId),
-    /// A single character the controller chooses at resolution (§7.1).
+    /// A single character the controller chooses at resolution (§7.1). "Another
+    /// chosen …" is expressed by the `filter` (`Not(IsSource)`).
     ChosenCharacter {
         /// Which characters are eligible to be chosen.
         filter: CharacterFilter,
-        /// If `true`, the source card itself can't be chosen ("another chosen…").
-        another: bool,
     },
     /// **Every** character matching the filter, with no choice ("your Pirate
-    /// characters", "all opposing characters").
+    /// characters", "all opposing characters"). "Your *other* …" is expressed by
+    /// the `filter` (`Not(IsSource)`).
     AllCharacters {
         /// Which characters are affected.
         filter: CharacterFilter,
-        /// If `true`, the source card itself is excluded ("your *other* …").
-        another: bool,
     },
     /// **Up to `max`** distinct chosen characters matching the filter (§7.1.8);
     /// the effect applies to each. 0 is a legal choice ("Up to 2 chosen

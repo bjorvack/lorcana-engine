@@ -834,8 +834,7 @@ fn enqueue_support_trigger(
         true, // "you may"
         Effect::GiveStrengthThisTurn {
             target: Target::ChosenCharacter {
-                filter: CharacterFilter::any(TargetSide::Any),
-                another: true,
+                filter: CharacterFilter::any(TargetSide::Any).exclude_source(),
             },
             amount: Amount::StatOf {
                 stat: Stat::Strength,
@@ -1118,14 +1117,8 @@ fn endpoint_options(
     source: CardId,
     target: &Target,
 ) -> Vec<CardId> {
-    if let Target::ChosenCharacter { filter, another } = target {
-        choosable_characters(
-            state,
-            registry,
-            controller,
-            source,
-            &with_another(filter, *another),
-        )
+    if let Target::ChosenCharacter { filter } = target {
+        choosable_characters(state, registry, controller, source, filter)
     } else {
         Vec::new()
     }
@@ -2487,29 +2480,17 @@ fn resolve_targeted(
             apply_effect_to(state, registry, controller, source, *card, effect, events);
             None
         }
-        Target::ChosenCharacter { filter, another } => {
-            let options = choosable_characters(
-                state,
-                registry,
-                controller,
-                source,
-                &with_another(filter, *another),
-            );
+        Target::ChosenCharacter { filter } => {
+            let options = choosable_characters(state, registry, controller, source, filter);
             (!options.is_empty()).then(|| Choice::One {
                 options,
                 effect: effect.clone(),
             })
         }
-        Target::AllCharacters { filter, another } => {
+        Target::AllCharacters { filter } => {
             // "All characters" affects every match — it does not *choose*, so Ward
             // does not apply (§10.15); use the raw matching set.
-            let targets = matching_characters(
-                state,
-                registry,
-                controller,
-                source,
-                &with_another(filter, *another),
-            );
+            let targets = matching_characters(state, registry, controller, source, filter);
             for card in targets {
                 apply_effect_to(state, registry, controller, source, card, effect, events);
             }
@@ -3473,16 +3454,6 @@ fn banish_by_effect(
             def_id,
             &TriggerCondition::WhenBanished,
         );
-    }
-}
-
-/// Desugar the `another` flag on a target into the filter algebra: "another …"
-/// is just the filter with the source card excluded (§7.1).
-fn with_another(filter: &CharacterFilter, another: bool) -> CharacterFilter {
-    if another {
-        filter.clone().exclude_source()
-    } else {
-        filter.clone()
     }
 }
 
