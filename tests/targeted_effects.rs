@@ -3,9 +3,10 @@
 //! effect-driven banishment.
 
 use lorcana_engine::{
-    CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterFilter, CharacterStats,
-    Classification, Conditions, Decision, DiscardAmount, Effect, GameState, GameStatus, Input,
-    NumericFilter, PlayerId, Target, TargetSide, TriggerCondition, TriggeredAbility, apply, start,
+    CardCategory, CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterFilter,
+    CharacterStats, Classification, Conditions, Decision, DiscardAmount, Effect, GameState,
+    GameStatus, Input, NumericFilter, PlayFilter, PlayerId, Target, TargetSide, TriggerCondition,
+    TriggeredAbility, apply, start,
 };
 
 fn started(reg: &CardRegistry) -> GameState {
@@ -890,4 +891,105 @@ fn discard_your_whole_hand_needs_no_choice() {
     );
     assert_eq!(hand_ids(&state, active).len(), 0);
     assert_eq!(state.player(active).unwrap().discard().len(), before);
+}
+
+// Registry where every deck card (0..30) is a cheap character, plus a quester
+// (100) whose WhenThisQuests trigger is `ability`.
+fn registry_with_quester(ability: Effect) -> CardRegistry {
+    let mut reg = CardRegistry::new();
+    for n in 0..30 {
+        reg.insert(CardDefinition::character(
+            CardDefId::from_raw(n),
+            2,
+            true,
+            2,
+            3,
+            1,
+        ));
+    }
+    reg.insert(
+        CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 5, 1).with_abilities(vec![
+            TriggeredAbility::new(TriggerCondition::WhenThisQuests, ability),
+        ]),
+    );
+    reg
+}
+
+#[test]
+fn play_a_character_from_hand_for_free() {
+    let reg = registry_with_quester(Effect::PlayFreeFromHand {
+        filter: PlayFilter {
+            max_cost: Some(5),
+            category: Some(CardCategory::Character(None)),
+        },
+    });
+    let mut state = started(&reg);
+    let active = state.active_player();
+    let quester = place(&mut state, active, 1000, 100, 5, 0);
+    let hand = hand_ids(&state, active);
+    let chosen = hand[0];
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(Decision::PlayFreeChoice(chosen)),
+    )
+    .expect("play free");
+
+    assert!(
+        state.player(active).unwrap().play().contains(chosen),
+        "entered play"
+    );
+    assert!(!hand_ids(&state, active).contains(&chosen), "left hand");
+}
+
+#[test]
+fn may_wrapper_resolves_inner_only_on_yes() {
+    let reg = registry_with_quester(Effect::May(Box::new(Effect::DrawCards(1))));
+    // Yes: draws.
+    let mut state = started(&reg);
+    let active = state.active_player();
+    let q = place(&mut state, active, 1000, 100, 5, 0);
+    let before = hand_ids(&state, active).len();
+    let _ = apply(&mut state, &reg, Input::Quest { character: q }).expect("quest");
+    let _ = apply(&mut state, &reg, Input::Decide(Decision::May(true))).expect("may yes");
+    assert_eq!(hand_ids(&state, active).len(), before + 1);
+
+    // No: declines, nothing drawn.
+    let mut state = started(&reg);
+    let active = state.active_player();
+    let q = place(&mut state, active, 1000, 100, 5, 0);
+    let before = hand_ids(&state, active).len();
+    let _ = apply(&mut state, &reg, Input::Quest { character: q }).expect("quest");
+    let _ = apply(&mut state, &reg, Input::Decide(Decision::May(false))).expect("may no");
+    assert_eq!(hand_ids(&state, active).len(), before);
+}
+
+#[test]
+fn may_composes_with_play_free() {
+    // "You may play a character for free" = May(PlayFreeFromHand{..}).
+    let reg = registry_with_quester(Effect::May(Box::new(Effect::PlayFreeFromHand {
+        filter: PlayFilter {
+            max_cost: Some(5),
+            category: Some(CardCategory::Character(None)),
+        },
+    })));
+    let mut state = started(&reg);
+    let active = state.active_player();
+    let q = place(&mut state, active, 1000, 100, 5, 0);
+    let hand = hand_ids(&state, active);
+    let chosen = hand[0];
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: q }).expect("quest");
+    // First the "may" yes/no, then the which-card choice.
+    let _ = apply(&mut state, &reg, Input::Decide(Decision::May(true))).expect("may yes");
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(Decision::PlayFreeChoice(chosen)),
+    )
+    .expect("play free");
+
+    assert!(state.player(active).unwrap().play().contains(chosen));
 }

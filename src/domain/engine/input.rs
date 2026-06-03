@@ -97,6 +97,8 @@ pub enum Decision {
     ChooseTargets(Vec<CardId>),
     /// For `ChooseCardsToDiscard`: the exact cards from hand to discard (§8.4).
     DiscardCards(Vec<CardId>),
+    /// For `ChoosePlayFree`: the eligible hand card chosen to play for free (§6).
+    PlayFreeChoice(CardId),
 }
 
 /// Why an [`Input`] was rejected. When an input is rejected the game state is

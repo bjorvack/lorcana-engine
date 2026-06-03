@@ -1,9 +1,19 @@
 //! Effects produced by abilities.
 
 use super::target::Target;
+use super::trigger::CardCategory;
 use crate::domain::cards::Keyword;
 use crate::domain::game::{Permission, Restriction};
 use serde::{Deserialize, Serialize};
+
+/// Which cards in a zone are eligible to be played by a "play … for free" effect.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default)]
+pub struct PlayFilter {
+    /// Maximum ink cost ("a character with cost 5 or less"); `None` = any.
+    pub max_cost: Option<u32>,
+    /// Required card category ("an action", "a character"); `None` = any.
+    pub category: Option<CardCategory>,
+}
 
 /// How many cards a discard effect removes from a hand (§8.4).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -142,6 +152,17 @@ pub enum Effect {
     /// The controller discards cards from their hand ("choose and discard 2
     /// cards"; "discard your hand"). The discarding player chooses which (§8.4).
     Discard(DiscardAmount),
+    /// The controller plays a card matching `filter` from their hand **for free**
+    /// (no ink), choosing which eligible card (§6). Wrap in [`Effect::May`] for
+    /// "you may play …".
+    PlayFreeFromHand {
+        /// Which hand cards are eligible.
+        filter: PlayFilter,
+    },
+    /// Optionally resolve `inner` ("you may …"): the controller is asked yes/no,
+    /// and `inner` resolves only on yes (§7.1.3). Composes optionality onto any
+    /// effect, so individual effects don't carry an `optional` flag.
+    May(Box<Self>),
     /// Schedule a one-shot **delayed** effect to resolve later (§7.4.7), e.g.
     /// "at the end of this turn, banish this character".
     ScheduleDelayed {

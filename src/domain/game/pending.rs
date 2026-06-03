@@ -62,6 +62,31 @@ pub enum PendingDecision {
         /// The remaining effects of the ability/action, resolved in order after.
         rest: Vec<Effect>,
     },
+    /// A "play a card for free" effect is resolving; `player` chooses one of
+    /// `options` (from hand) to play; then `rest` resolves (§6). Optionality is
+    /// expressed by wrapping in `Effect::May` (see `MayResolveEffect`).
+    ChoosePlayFree {
+        /// The player who must choose.
+        player: PlayerId,
+        /// The effect's source card (continuation controller).
+        source: CardId,
+        /// The eligible cards to play for free.
+        options: Vec<CardId>,
+        /// The remaining effects, resolved in order after.
+        rest: Vec<Effect>,
+    },
+    /// A `May` effect is resolving; `player` chooses whether to resolve `effect`
+    /// ("you may …", §7.1.3). `rest` resolves afterwards either way.
+    MayResolveEffect {
+        /// The player who must choose.
+        player: PlayerId,
+        /// The effect's source card (continuation controller).
+        source: CardId,
+        /// The effect resolved only if the player agrees.
+        effect: Effect,
+        /// The remaining effects, resolved in order after.
+        rest: Vec<Effect>,
+    },
     /// "Up to N" — the controller chooses 0..`max` distinct targets from
     /// `options`; `effect` applies to each, then `rest` resolves (§7.1.8).
     ChooseUpToN {
@@ -90,6 +115,8 @@ impl PendingDecision {
             | Self::EnterPlayExerted { player, .. }
             | Self::ChooseTarget { player, .. }
             | Self::ChooseCardsToDiscard { player, .. }
+            | Self::ChoosePlayFree { player, .. }
+            | Self::MayResolveEffect { player, .. }
             | Self::ChooseUpToN { player, .. } => *player,
         }
     }

@@ -634,9 +634,13 @@ mechanics ranked by card count, with the remaining gaps to close in order:
       `Decision::DiscardCards`) or discards the whole hand outright. Done for
       **you**; `tests/targeted_effects.rs`. **Remaining:** "each opponent
       chooses/discards N" (opponent is the chooser) and at-random.
-- [ ] **play a card from a zone** (147) — "you may play … for free / from your
-      hand / from your discard", "without paying its cost". Needs a play-from-zone
-      effect + alternate-cost path.
+- [~] **play a card from a zone** (147) — `Effect::PlayFreeFromHand { filter }`
+      plays an eligible hand card for free (`PendingDecision::ChoosePlayFree`;
+      characters/items/locations enter play, actions resolve + discard). Optionality
+      is composed via the new `Effect::May(Box<Effect>)` wrapper (one yes/no
+      `MayResolveEffect`, reusable by any effect) rather than a per-effect flag.
+      `tests/targeted_effects.rs`. **Remaining:** play from **discard**,
+      cost-reduction (pay N less) alternate costs, free-played Bodyguard enter-exerted.
 - [ ] **Ward / can't be chosen** (86, incl. reminder) — targeting restriction
       (can't be chosen except to challenge); a targeting-legality property.
 - [ ] **reveal** (69) — reveal hand / top of deck; often gates a follow-up.

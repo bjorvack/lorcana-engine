@@ -6,8 +6,8 @@ use crate::domain::cards::{
     ShiftKind, StaticAbility, StaticTarget,
 };
 use crate::domain::effects::{
-    CardCategory, CharacterFilter, DeckPosition, DelayedWhen, DiscardAmount, Effect, Target,
-    TargetSide, TriggerCondition,
+    CardCategory, CharacterFilter, DeckPosition, DelayedWhen, DiscardAmount, Effect, PlayFilter,
+    Target, TargetSide, TriggerCondition,
 };
 use crate::domain::game::{
     CardInstance, CharacterStats, Conditions, DelayedTrigger, GameEvent, GameState, GameStatus,
@@ -1989,6 +1989,18 @@ fn resolve_effects(
                     count,
                     rest,
                 },
+                Choice::PlayFree { player, options } => PendingDecision::ChoosePlayFree {
+                    player,
+                    source,
+                    options,
+                    rest,
+                },
+                Choice::May { player, inner } => PendingDecision::MayResolveEffect {
+                    player,
+                    source,
+                    effect: inner,
+                    rest,
+                },
             };
             state.set_pending(pending);
             return;
@@ -2011,6 +2023,13 @@ enum Choice {
     },
     /// `player` must choose `count` cards from their hand to discard (§8.4).
     Discard { player: PlayerId, count: u32 },
+    /// `player` chooses one of `options` from hand to play for free (§6).
+    PlayFree {
+        player: PlayerId,
+        options: Vec<CardId>,
+    },
+    /// `player` is asked whether to resolve `inner` ("you may …", §7.1.3).
+    May { player: PlayerId, inner: Effect },
 }
 
 /// Apply a built-in effect for `controller`. Returns `Some(Choice)` when the
@@ -2034,6 +2053,23 @@ fn execute_effect(
         // the whole hand goes (§8.4).
         Effect::Discard(amount) => {
             return resolve_discard(state, controller, *amount, events);
+        }
+        // The controller plays an eligible card from hand for free (§6).
+        Effect::PlayFreeFromHand { filter } => {
+            let options = eligible_free_plays(state, registry, controller, filter);
+            if !options.is_empty() {
+                return Some(Choice::PlayFree {
+                    player: controller,
+                    options,
+                });
+            }
+        }
+        // "You may …": ask the controller, resolve `inner` only on yes (§7.1.3).
+        Effect::May(inner) => {
+            return Some(Choice::May {
+                player: controller,
+                inner: (**inner).clone(),
+            });
         }
         Effect::GainLore(n) => {
             if let Some(p) = state.player_mut(controller) {
@@ -2256,6 +2292,113 @@ fn resolve_discard(
     }
 }
 
+/// The cards in `player`'s hand that a "play for free" effect with `filter` may
+/// play (matching cost and category, §6).
+fn eligible_free_plays(
+    state: &GameState,
+    registry: &CardRegistry,
+    player: PlayerId,
+    filter: &PlayFilter,
+) -> Vec<CardId> {
+    state
+        .player(player)
+        .map(|p| {
+            p.hand()
+                .iter()
+                .filter(|c| {
+                    registry.get(c.definition()).is_some_and(|d| {
+                        filter.max_cost.is_none_or(|m| d.cost() <= m)
+                            && filter
+                                .category
+                                .as_ref()
+                                .is_none_or(|cat| category_matches(cat, d))
+                    })
+                })
+                .map(CardInstance::id)
+                .collect()
+        })
+        .unwrap_or_default()
+}
+
+/// Play `card` from `player`'s hand **for free** (no ink, §6). Actions resolve
+/// their effect and go to the discard; permanents enter play (ready) with their
+/// statics and enters-play triggers. (A free-played Bodyguard enters ready — the
+/// optional enter-exerted prompt is skipped, which is a legal choice.)
+fn play_card_free(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    player: PlayerId,
+    card: CardId,
+    events: &mut Vec<GameEvent>,
+) {
+    let Some(def_id) = state
+        .player(player)
+        .and_then(|p| p.hand().iter().find(|c| c.id() == card))
+        .map(CardInstance::definition)
+    else {
+        return;
+    };
+    let Some(definition) = registry.get(def_id) else {
+        return;
+    };
+    if matches!(definition.kind(), CardKind::Action) {
+        let effects = definition.action_effects().to_vec();
+        events.extend(resolve_action_play(
+            state, registry, player, card, def_id, effects,
+        ));
+        return;
+    }
+    let statics = definition.static_abilities().to_vec();
+    let rule_statics = definition.rule_statics().to_vec();
+    place_permanent_free(state, player, card, definition);
+    apply_enter_statics(state, player, card, &statics);
+    apply_enter_rule_statics(state, player, card, &rule_statics);
+    events.push(GameEvent::CardPlayed { player, card });
+    enqueue_enter_play_triggers(state, registry, player, card, def_id);
+}
+
+/// Put a permanent into play from `player`'s hand without paying its cost
+/// (helper for [`play_card_free`]; Shift is never used here).
+fn place_permanent_free(
+    state: &mut GameState,
+    player: PlayerId,
+    card: CardId,
+    definition: &CardDefinition,
+) {
+    let (conditions, char_stats, loc_stats) = match definition.kind() {
+        CardKind::Character {
+            strength,
+            willpower,
+            lore,
+        } => (
+            Conditions::entering_play(),
+            Some(CharacterStats::new(strength, willpower, lore)),
+            None,
+        ),
+        CardKind::Location {
+            move_cost,
+            willpower,
+            lore,
+        } => (
+            Conditions::faceup_idle(),
+            None,
+            Some(LocationStats::new(willpower, lore, move_cost)),
+        ),
+        CardKind::Item => (Conditions::faceup_idle(), None, None),
+        CardKind::Action => return,
+    };
+    let classifications = definition.classifications().to_vec();
+    if let Some(p) = state.player_mut(player)
+        && let Some(mut instance) = p.hand_mut().take(card)
+    {
+        *instance.conditions_mut() = conditions;
+        instance.set_stats(char_stats);
+        instance.set_location_stats(loc_stats);
+        instance.set_classifications(classifications);
+        p.play_mut().push(instance);
+    }
+}
+
 /// Move `card` from `player`'s hand to their discard pile (§8.4).
 fn discard_card(
     state: &mut GameState,
@@ -2434,6 +2577,8 @@ fn apply_effect_to(
         | Effect::GainLore(_)
         | Effect::EachOpponentLosesLore(_)
         | Effect::Discard(_)
+        | Effect::PlayFreeFromHand { .. }
+        | Effect::May(_)
         | Effect::IfControl { .. }
         | Effect::ScheduleDelayed { .. } => {}
     }
@@ -2607,6 +2752,30 @@ fn apply_decision(
         (PendingDecision::EnterPlayExerted { player, card }, Decision::EnterExerted(exert)) => {
             apply_enter_exerted_decision(state, registry, player, card, exert);
         }
+        // Effect-resolution choices (target / up-to-N / discard / play-free / may).
+        (pending, decision) => {
+            apply_choice_decision(state, registry, pending, decision, &mut events)?;
+        }
+    }
+    if !state.is_awaiting_decision() {
+        events.extend(resolve_bag(state, registry));
+    }
+    // Resume a turn transition that suspended on a start/end-of-turn trigger.
+    events.extend(resume_turn_progression(state, registry));
+    Ok(events)
+}
+
+/// Dispatch the effect-resolution choices (a target / up-to-N / discard /
+/// play-free / "may" decision) to their handlers. Split out of `apply_decision`
+/// to keep each match small.
+fn apply_choice_decision(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    pending: PendingDecision,
+    decision: Decision,
+    events: &mut Vec<GameEvent>,
+) -> Result<(), Rejected> {
+    match (pending, decision) {
         (
             PendingDecision::ChooseTarget {
                 player,
@@ -2616,16 +2785,9 @@ fn apply_decision(
                 rest,
             },
             Decision::ChooseTarget(chosen),
-        ) => {
-            if !options.contains(&chosen) {
-                return Err(Rejected::InvalidDecision);
-            }
-            let _ = state.take_pending();
-            apply_effect_to(state, registry, source, chosen, &effect, &mut events);
-            // Resume the remaining "[A] then [B]" effects (may suspend again).
-            resolve_effects(state, registry, player, source, rest, &mut events);
-            events.extend(game_state_check_with_triggers(state, registry));
-        }
+        ) => apply_choose_target_decision(
+            state, registry, player, source, &options, &effect, rest, chosen, events,
+        ),
         (
             PendingDecision::ChooseUpToN {
                 player,
@@ -2636,20 +2798,9 @@ fn apply_decision(
                 rest,
             },
             Decision::ChooseTargets(chosen),
-        ) => {
-            apply_up_to_n_decision(
-                state,
-                registry,
-                player,
-                source,
-                &options,
-                max,
-                &effect,
-                rest,
-                chosen,
-                &mut events,
-            )?;
-        }
+        ) => apply_up_to_n_decision(
+            state, registry, player, source, &options, max, &effect, rest, chosen, events,
+        ),
         (
             PendingDecision::ChooseCardsToDiscard {
                 player,
@@ -2658,26 +2809,102 @@ fn apply_decision(
                 rest,
             },
             Decision::DiscardCards(chosen),
-        ) => {
-            apply_discard_decision(
-                state,
-                registry,
+        ) => apply_discard_decision(state, registry, player, source, count, rest, chosen, events),
+        (
+            PendingDecision::ChoosePlayFree {
                 player,
                 source,
-                count,
+                options,
                 rest,
-                chosen,
-                &mut events,
-            )?;
+            },
+            Decision::PlayFreeChoice(card),
+        ) => apply_play_free_decision(
+            state, registry, player, source, &options, card, rest, events,
+        ),
+        (
+            PendingDecision::MayResolveEffect {
+                player,
+                source,
+                effect,
+                rest,
+            },
+            Decision::May(yes),
+        ) => {
+            apply_may_decision(state, registry, player, source, effect, rest, yes, events);
+            Ok(())
         }
-        _ => return Err(Rejected::InvalidDecision),
+        _ => Err(Rejected::InvalidDecision),
     }
-    if !state.is_awaiting_decision() {
-        events.extend(resolve_bag(state, registry));
+}
+
+/// Answer a [`PendingDecision::ChooseTarget`]: validate the pick, apply `effect`
+/// to it, then resume the continuation (§7.1).
+#[allow(clippy::too_many_arguments)]
+fn apply_choose_target_decision(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    player: PlayerId,
+    source: CardId,
+    options: &[CardId],
+    effect: &Effect,
+    rest: Vec<Effect>,
+    chosen: CardId,
+    events: &mut Vec<GameEvent>,
+) -> Result<(), Rejected> {
+    if !options.contains(&chosen) {
+        return Err(Rejected::InvalidDecision);
     }
-    // Resume a turn transition that suspended on a start/end-of-turn trigger.
-    events.extend(resume_turn_progression(state, registry));
-    Ok(events)
+    let _ = state.take_pending();
+    apply_effect_to(state, registry, source, chosen, effect, events);
+    resolve_effects(state, registry, player, source, rest, events);
+    events.extend(game_state_check_with_triggers(state, registry));
+    Ok(())
+}
+
+/// Answer a [`PendingDecision::MayResolveEffect`]: resolve `effect` first if the
+/// player agreed, then the continuation either way ("you may …", §7.1.3).
+#[allow(clippy::too_many_arguments)]
+fn apply_may_decision(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    player: PlayerId,
+    source: CardId,
+    effect: Effect,
+    rest: Vec<Effect>,
+    yes: bool,
+    events: &mut Vec<GameEvent>,
+) {
+    let effects: Vec<Effect> = if yes {
+        std::iter::once(effect).chain(rest).collect()
+    } else {
+        rest
+    };
+    let _ = state.take_pending();
+    resolve_effects(state, registry, player, source, effects, events);
+    events.extend(game_state_check_with_triggers(state, registry));
+}
+
+/// Answer a [`PendingDecision::ChoosePlayFree`]: validate the chosen card is
+/// eligible, play it for free, then resume the continuation (§6).
+#[allow(clippy::too_many_arguments)]
+fn apply_play_free_decision(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    player: PlayerId,
+    source: CardId,
+    options: &[CardId],
+    card: CardId,
+    rest: Vec<Effect>,
+    events: &mut Vec<GameEvent>,
+) -> Result<(), Rejected> {
+    if !options.contains(&card) {
+        return Err(Rejected::InvalidDecision);
+    }
+    let _ = state.take_pending();
+    play_card_free(state, registry, player, card, events);
+    resolve_effects(state, registry, player, source, rest, events);
+    events.extend(game_state_check_with_triggers(state, registry));
+    Ok(())
 }
 
 /// Answer a [`PendingDecision::EnterPlayExerted`] (Bodyguard, §10.3.2): optionally
