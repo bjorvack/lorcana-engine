@@ -331,6 +331,10 @@ pub enum Effect {
     /// "Name a card, then return all character cards with that name from your
     /// discard to your hand" (§8.2; Blast from Your Past).
     NameThenRecur,
+    /// Resolve a sequence of effects in order ("draw a card **and** gain 1 lore";
+    /// "[A], then [B]", §7.1.2). A later effect resumes after an earlier one's
+    /// choice is answered.
+    All(Vec<Self>),
     /// Optionally resolve `inner` ("you may …"): the controller is asked yes/no,
     /// and `inner` resolves only on yes (§7.1.3). Composes optionality onto any
     /// effect, so individual effects don't carry an `optional` flag.

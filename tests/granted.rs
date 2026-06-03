@@ -193,3 +193,131 @@ fn granted_activated_ability_can_be_used_this_turn() {
         "activating exerted the ally"
     );
 }
+
+fn hand_len(state: &GameState, p: PlayerId) -> usize {
+    state.player(p).unwrap().hand().iter().count()
+}
+
+#[test]
+fn all_resolves_each_effect_in_order() {
+    let mut reg = CardRegistry::new();
+    reg.insert(
+        CardDefinition::character(CardDefId::from_raw(100), 1, true, 1, 5, 1).with_abilities(vec![
+            TriggeredAbility::new(
+                TriggerCondition::WhenThisQuests,
+                Effect::All(vec![
+                    Effect::Draw {
+                        who: PlayerScope::You,
+                        amount: Amount::fixed(1),
+                    },
+                    Effect::Lore {
+                        who: PlayerScope::You,
+                        amount: Amount::fixed(2),
+                    },
+                ]),
+            ),
+        ]),
+    );
+    for n in 0..30 {
+        if reg.get(CardDefId::from_raw(n)).is_none() {
+            reg.insert(CardDefinition::character(
+                CardDefId::from_raw(n),
+                1,
+                true,
+                1,
+                1,
+                1,
+            ));
+        }
+    }
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let quester = place(&mut state, me, 100);
+    let lore_before = lore(&state, me);
+    let hand_before = hand_len(&state, me);
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+
+    assert_eq!(hand_len(&state, me), hand_before + 1, "drew a card");
+    // quester's own quest lore (1) + the sequence's +2.
+    assert_eq!(
+        lore(&state, me),
+        lore_before + 1 + 2,
+        "both sequence steps ran"
+    );
+}
+
+#[test]
+fn a_sequence_resumes_after_a_mid_step_choice() {
+    let mut reg = CardRegistry::new();
+    reg.insert(
+        CardDefinition::character(CardDefId::from_raw(100), 1, true, 1, 5, 1).with_abilities(vec![
+            TriggeredAbility::new(
+                TriggerCondition::WhenThisQuests,
+                // First step needs a target choice; the second must still run after.
+                Effect::All(vec![
+                    Effect::DealDamage {
+                        target: Target::ChosenCharacter {
+                            filter: CharacterFilter::any(TargetSide::Opposing),
+                        },
+                        amount: Amount::fixed(2),
+                    },
+                    Effect::Lore {
+                        who: PlayerScope::You,
+                        amount: Amount::fixed(1),
+                    },
+                ]),
+            ),
+        ]),
+    );
+    reg.insert(CardDefinition::character(
+        CardDefId::from_raw(200),
+        1,
+        true,
+        2,
+        9,
+        1,
+    ));
+    for n in 0..30 {
+        if reg.get(CardDefId::from_raw(n)).is_none() {
+            reg.insert(CardDefinition::character(
+                CardDefId::from_raw(n),
+                1,
+                true,
+                1,
+                1,
+                1,
+            ));
+        }
+    }
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let foe = state
+        .players()
+        .iter()
+        .map(lorcana_engine::PlayerState::id)
+        .find(|p| *p != me)
+        .unwrap();
+    let quester = place(&mut state, me, 100);
+    let victim = place(&mut state, foe, 200);
+    let lore_before = lore(&state, me);
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+    // Suspended on the deal-damage target choice; the lore step hasn't run yet.
+    assert_eq!(
+        lore(&state, me),
+        lore_before + 1,
+        "only the quest lore so far"
+    );
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(Decision::ChooseTarget(victim)),
+    )
+    .expect("target");
+    assert_eq!(
+        lore(&state, me),
+        lore_before + 1 + 1,
+        "the lore step ran after the choice"
+    );
+}

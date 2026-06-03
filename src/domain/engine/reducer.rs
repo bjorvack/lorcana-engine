@@ -2194,10 +2194,18 @@ fn resolve_effects(
     effects: Vec<Effect>,
     events: &mut Vec<GameEvent>,
 ) {
-    let mut iter = effects.into_iter();
-    while let Some(effect) = iter.next() {
+    let mut work: std::collections::VecDeque<Effect> = effects.into();
+    while let Some(effect) = work.pop_front() {
+        // Flatten a sequence into the work-list so its tail becomes the `rest`
+        // continuation if an earlier element suspends on a choice (§7.1.2).
+        if let Effect::All(seq) = effect {
+            for e in seq.into_iter().rev() {
+                work.push_front(e);
+            }
+            continue;
+        }
         if let Some(choice) = execute_effect(state, registry, controller, source, &effect, events) {
-            let rest: Vec<Effect> = iter.collect();
+            let rest: Vec<Effect> = work.into_iter().collect();
             state.set_pending(choice_to_pending(choice, source, rest));
             return;
         }
@@ -2412,6 +2420,7 @@ fn name_card_choice(player: PlayerId, effect: &Effect) -> Choice {
 /// Apply a built-in effect for `controller`. Returns `Some(Choice)` when the
 /// effect needs the controller to choose target(s) (nothing applied yet);
 /// otherwise applies the effect and returns `None`.
+#[allow(clippy::too_many_lines)] // one big per-effect dispatch
 fn execute_effect(
     state: &mut GameState,
     registry: &CardRegistry,
@@ -2489,6 +2498,18 @@ fn execute_effect(
                 player: controller,
                 inner: (**inner).clone(),
             });
+        }
+        // A sequence reached as a nested branch (e.g. an `IfControl` `then`):
+        // resolve in order. (Top-level sequences are flattened by `resolve_effects`,
+        // which also handles suspension; a mid-sequence choice in a *nested* branch
+        // is a known limitation — add when a card needs it.)
+        Effect::All(effects) => {
+            for e in effects {
+                if let Some(choice) = execute_effect(state, registry, controller, source, e, events)
+                {
+                    return Some(choice);
+                }
+            }
         }
         // Schedule a one-shot delayed trigger to fire later (§7.4.7).
         Effect::ScheduleDelayed {
