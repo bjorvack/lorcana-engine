@@ -542,9 +542,13 @@ Challenge/banish triggers into the bag (see
     (§1.2.2, verified). `Effect::RestrictThisTurn` / `PermitThisTurn`. Tested in
     `tests/restrictions.rs`. This completes the effect-driven-challenge-legality
     deferral (Tiana's Palace/The Wall etc. now need only a conditional-static source).
+  - [x] **8b-14 — conditional on the chosen target:** `Effect::IfTargetMatches {
+    target, filter, then, otherwise }` chooses `target`, then applies `then`/
+    `otherwise` to the chosen card by whether it matches `filter` ("Chosen
+    character gets +2; if a Villain, +3 instead"). Tested in
+    `tests/targeted_effects.rs`.
   - **8b+ —** the card survey shows true §7.7 **replacement** effects are rare
-    (~16, mostly "takes no damage"); higher-value remaining: **conditional on the
-    chosen target** ("if a Villain is chosen, +3 instead"), **conditional static
+    (~16, mostly "takes no damage"); higher-value remaining: **conditional static
     abilities** ("while here / while exerted" — the source for can't-be-challenged
     etc.), **damage prevention**, **player** targets, and floating & delayed
     triggers.

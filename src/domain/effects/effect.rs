@@ -90,6 +90,20 @@ pub enum Effect {
         /// The permission.
         permission: Permission,
     },
+    /// Choose `target`, then apply `then` to it if it matches `filter`, else
+    /// `otherwise` ("Chosen character gets +2 {S}; if a Villain character is
+    /// chosen, they get +3 instead"). `then`/`otherwise` apply to the **chosen
+    /// target** (their own inner target is ignored).
+    IfTargetMatches {
+        /// Who is chosen.
+        target: Target,
+        /// The condition tested against the chosen target.
+        filter: super::target::CharacterFilter,
+        /// Applied to the target when it matches.
+        then: Box<Self>,
+        /// Applied to the target when it doesn't.
+        otherwise: Box<Self>,
+    },
     /// Resolve `then` only if the controller has at least one in-play character
     /// matching `filter` ("if you have a character named X in play, …", §7.1).
     IfControl {

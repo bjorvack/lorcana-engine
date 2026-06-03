@@ -4,8 +4,8 @@
 
 use lorcana_engine::{
     CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterFilter, CharacterStats,
-    Conditions, Decision, Effect, GameState, GameStatus, Input, NumericFilter, PlayerId, Target,
-    TargetSide, TriggerCondition, TriggeredAbility, apply, start,
+    Classification, Conditions, Decision, Effect, GameState, GameStatus, Input, NumericFilter,
+    PlayerId, Target, TargetSide, TriggerCondition, TriggeredAbility, apply, start,
 };
 
 fn started(reg: &CardRegistry) -> GameState {
@@ -677,4 +677,95 @@ fn ready_effect_readies_the_source() {
         is_ready(&state, active, quester),
         "questing exerted it, then it readied itself"
     );
+}
+
+fn conditional_buffer(def: u32) -> CardDefinition {
+    // "Chosen character gets +2 {S}; if a Villain is chosen, +3 instead."
+    CardDefinition::character(CardDefId::from_raw(def), 1, true, 2, 5, 1).with_abilities(vec![
+        TriggeredAbility::new(
+            TriggerCondition::WhenThisQuests,
+            Effect::IfTargetMatches {
+                target: Target::ChosenCharacter {
+                    filter: CharacterFilter::any(TargetSide::Any),
+                    another: true,
+                },
+                filter: CharacterFilter {
+                    classifications: vec![Classification::new("Villain")],
+                    ..CharacterFilter::any(TargetSide::Any)
+                },
+                then: Box::new(Effect::GiveStrengthThisTurn {
+                    target: Target::SelfCard,
+                    amount: 3,
+                }),
+                otherwise: Box::new(Effect::GiveStrengthThisTurn {
+                    target: Target::SelfCard,
+                    amount: 2,
+                }),
+            },
+        ),
+    ])
+}
+
+#[test]
+fn conditional_on_target_applies_the_bonus_branch_for_a_match() {
+    let mut reg = CardRegistry::new();
+    reg.insert(conditional_buffer(100));
+    reg.insert(
+        CardDefinition::character(CardDefId::from_raw(200), 1, true, 2, 5, 1)
+            .with_classifications(vec![Classification::new("Villain")]),
+    );
+    let mut state = started(&reg);
+    let active = state.active_player();
+    let quester = place(&mut state, active, 1000, 100, 5, 0);
+    let villain = place(&mut state, active, 1001, 200, 5, 0); // {S} 2, Villain
+    state
+        .player_mut(active)
+        .unwrap()
+        .play_mut()
+        .iter_mut()
+        .find(|c| c.id() == villain)
+        .unwrap()
+        .set_classifications(vec![Classification::new("Villain")]);
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(Decision::ChooseTarget(villain)),
+    )
+    .expect("choose");
+
+    assert_eq!(
+        strength(&state, villain),
+        2 + 3,
+        "Villain branch (+3) applied"
+    );
+}
+
+#[test]
+fn conditional_on_target_applies_the_default_branch_for_a_non_match() {
+    let mut reg = CardRegistry::new();
+    reg.insert(conditional_buffer(100));
+    reg.insert(CardDefinition::character(
+        CardDefId::from_raw(200),
+        1,
+        true,
+        2,
+        5,
+        1,
+    )); // not a Villain
+    let mut state = started(&reg);
+    let active = state.active_player();
+    let quester = place(&mut state, active, 1000, 100, 5, 0);
+    let ally = place(&mut state, active, 1001, 200, 5, 0);
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(Decision::ChooseTarget(ally)),
+    )
+    .expect("choose");
+
+    assert_eq!(strength(&state, ally), 2 + 2, "default branch (+2) applied");
 }

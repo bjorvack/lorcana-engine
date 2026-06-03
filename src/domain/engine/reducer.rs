@@ -2037,7 +2037,8 @@ fn execute_effect(
         | Effect::Ready(target)
         | Effect::GrantKeywordThisTurn { target, .. }
         | Effect::RestrictThisTurn { target, .. }
-        | Effect::PermitThisTurn { target, .. } => {
+        | Effect::PermitThisTurn { target, .. }
+        | Effect::IfTargetMatches { target, .. } => {
             return resolve_targeted(state, registry, controller, source, target, effect, events);
         }
     }
@@ -2271,6 +2272,18 @@ fn apply_effect_to(
                 Property::Permission(*permission),
                 ModifierDuration::UntilEndOfTurn,
             ));
+        }
+        Effect::IfTargetMatches {
+            filter,
+            then,
+            otherwise,
+            ..
+        } => {
+            let matches = state
+                .instance_in_play(target_card)
+                .is_some_and(|c| character_matches_filter(state, registry, c, filter));
+            let branch = if matches { then } else { otherwise };
+            apply_effect_to(state, registry, source, target_card, branch, events);
         }
         // Never reach here: these are resolved in `execute_effect`, not applied to
         // a concrete target.
