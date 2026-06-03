@@ -4,6 +4,7 @@ use super::target::{CharacterFilter, Target};
 use super::trigger::CardCategory;
 use crate::domain::cards::Keyword;
 use crate::domain::game::{Permission, Restriction, Stat};
+use crate::domain::types::ids::PlayerId;
 use serde::{Deserialize, Serialize};
 
 /// A numeric amount used by effects (damage, lore, draws, `{S}` change). Either a
@@ -45,6 +46,11 @@ pub struct PlayFilter {
 }
 
 /// Which players an effect applies to.
+///
+/// The `Chosen*` variants require the controller to pick a player — a real
+/// decision with 2+ candidates (3–4 player games); they auto-resolve when there's
+/// only one candidate (e.g. a "chosen opponent" in a 2-player game). `Player` is
+/// the resolved single target.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum PlayerScope {
     /// The controller only ("you").
@@ -53,6 +59,12 @@ pub enum PlayerScope {
     EachOpponent,
     /// Every player (controller and opponents).
     EachPlayer,
+    /// One opponent the controller chooses ("chosen opponent").
+    ChosenOpponent,
+    /// Any one player the controller chooses, including themselves ("chosen player").
+    ChosenPlayer,
+    /// A specific, already-resolved player (the outcome of a `Chosen*` choice).
+    Player(PlayerId),
 }
 
 /// How many cards a discard effect removes from a hand (§8.4).

@@ -2043,6 +2043,17 @@ fn resolve_effects(
                     effect: inner,
                     rest,
                 },
+                Choice::ChoosePlayer {
+                    player,
+                    options,
+                    effect,
+                } => PendingDecision::ChoosePlayer {
+                    player,
+                    source,
+                    options,
+                    effect,
+                    rest,
+                },
             };
             state.set_pending(pending);
             return;
@@ -2086,6 +2097,12 @@ enum Choice {
     },
     /// `player` is asked whether to resolve `inner` ("you may …", §7.1.3).
     May { player: PlayerId, inner: Effect },
+    /// `player` chooses one player from `options` for a `Chosen*`-scoped effect.
+    ChoosePlayer {
+        player: PlayerId,
+        options: Vec<PlayerId>,
+        effect: Effect,
+    },
 }
 
 /// Apply a built-in effect for `controller`. Returns `Some(Choice)` when the
@@ -2107,11 +2124,20 @@ fn execute_effect(
             }
         }
         // Players in `who` discard; each chooses which of their own cards unless
-        // their whole hand goes (§8.4).
-        Effect::Discard { who, amount } => {
-            let players = scope_players(state, controller, *who);
-            return resolve_scope_discard(state, &players, *amount, events);
-        }
+        // their whole hand goes (§8.4). A `Chosen*` scope may first need a
+        // choose-a-player decision (3–4 player games).
+        Effect::Discard { who, amount } => match resolve_scope(state, controller, *who) {
+            ScopeOutcome::Players(players) => {
+                return resolve_scope_discard(state, &players, *amount, events);
+            }
+            ScopeOutcome::Choose(options) => {
+                return Some(Choice::ChoosePlayer {
+                    player: controller,
+                    options,
+                    effect: effect.clone(),
+                });
+            }
+        },
         // The controller plays an eligible card from hand for free (§6).
         Effect::PlayFreeFromHand { filter } => {
             let options = eligible_free_plays(state, registry, controller, filter);
@@ -2363,16 +2389,46 @@ fn apply_lore_effect(
     }
 }
 
-/// The players a [`PlayerScope`] resolves to, in resolution order (controller
-/// first for `EachPlayer`).
-fn scope_players(state: &GameState, controller: PlayerId, who: PlayerScope) -> Vec<PlayerId> {
+/// The outcome of resolving a [`PlayerScope`]: either the concrete players it
+/// applies to, or (for a `Chosen*` scope with 2+ candidates) the candidates the
+/// controller must choose one from.
+enum ScopeOutcome {
+    Players(Vec<PlayerId>),
+    Choose(Vec<PlayerId>),
+}
+
+/// Resolve a [`PlayerScope`] from `controller`'s perspective. `Chosen*` scopes
+/// auto-resolve when there's a single candidate (e.g. a "chosen opponent" in a
+/// 2-player game) and otherwise require a choice (3–4 player games).
+fn resolve_scope(state: &GameState, controller: PlayerId, who: PlayerScope) -> ScopeOutcome {
     let all: Vec<PlayerId> = state.players().iter().map(PlayerState::id).collect();
+    let opponents =
+        || -> Vec<PlayerId> { all.iter().copied().filter(|p| *p != controller).collect() };
     match who {
-        PlayerScope::You => vec![controller],
-        PlayerScope::EachOpponent => all.into_iter().filter(|p| *p != controller).collect(),
-        PlayerScope::EachPlayer => std::iter::once(controller)
-            .chain(all.into_iter().filter(|p| *p != controller))
-            .collect(),
+        PlayerScope::You => ScopeOutcome::Players(vec![controller]),
+        PlayerScope::EachOpponent => ScopeOutcome::Players(opponents()),
+        PlayerScope::EachPlayer => {
+            ScopeOutcome::Players(std::iter::once(controller).chain(opponents()).collect())
+        }
+        PlayerScope::Player(p) => ScopeOutcome::Players(vec![p]),
+        PlayerScope::ChosenOpponent => match opponents() {
+            o if o.len() <= 1 => ScopeOutcome::Players(o),
+            o => ScopeOutcome::Choose(o),
+        },
+        PlayerScope::ChosenPlayer if all.len() <= 1 => ScopeOutcome::Players(all),
+        PlayerScope::ChosenPlayer => ScopeOutcome::Choose(all),
+    }
+}
+
+/// Re-target a player-scoped effect onto a now-resolved single player (after a
+/// `ChoosePlayer` decision). Effects without a player scope are unchanged.
+fn substitute_chosen_player(effect: &Effect, player: PlayerId) -> Effect {
+    match effect {
+        Effect::Discard { amount, .. } => Effect::Discard {
+            who: PlayerScope::Player(player),
+            amount: *amount,
+        },
+        other => other.clone(),
     }
 }
 
@@ -3181,6 +3237,22 @@ fn apply_choice_decision(
         ) => apply_play_free_decision(
             state, registry, player, source, &options, card, rest, events,
         ),
+        (pending, decision) => {
+            apply_choice_decision_rest(state, registry, pending, decision, events)
+        }
+    }
+}
+
+/// Continuation of [`apply_choice_decision`] (split to keep each match small):
+/// the reveal / "may" / choose-player decisions.
+fn apply_choice_decision_rest(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    pending: PendingDecision,
+    decision: Decision,
+    events: &mut Vec<GameEvent>,
+) -> Result<(), Rejected> {
+    match (pending, decision) {
         (
             PendingDecision::ChooseFromRevealed {
                 player,
@@ -3215,8 +3287,45 @@ fn apply_choice_decision(
             apply_may_decision(state, registry, player, source, effect, rest, yes, events);
             Ok(())
         }
+        (
+            PendingDecision::ChoosePlayer {
+                player,
+                source,
+                options,
+                effect,
+                rest,
+            },
+            Decision::ChoosePlayer(chosen),
+        ) => apply_choose_player_decision(
+            state, registry, player, source, &options, &effect, rest, chosen, events,
+        ),
         _ => Err(Rejected::InvalidDecision),
     }
+}
+
+/// Answer a [`PendingDecision::ChoosePlayer`]: re-target the player-scoped effect
+/// onto the chosen player, then resolve it and the continuation (§7.1).
+#[allow(clippy::too_many_arguments)]
+fn apply_choose_player_decision(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    player: PlayerId,
+    source: CardId,
+    options: &[PlayerId],
+    effect: &Effect,
+    rest: Vec<Effect>,
+    chosen: PlayerId,
+    events: &mut Vec<GameEvent>,
+) -> Result<(), Rejected> {
+    if !options.contains(&chosen) {
+        return Err(Rejected::InvalidDecision);
+    }
+    let _ = state.take_pending();
+    let resolved = substitute_chosen_player(effect, chosen);
+    let effects: Vec<Effect> = std::iter::once(resolved).chain(rest).collect();
+    resolve_effects(state, registry, player, source, effects, events);
+    events.extend(game_state_check_with_triggers(state, registry));
+    Ok(())
 }
 
 /// Answer a [`PendingDecision::ChooseTarget`]: validate the pick, apply `effect`

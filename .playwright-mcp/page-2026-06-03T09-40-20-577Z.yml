@@ -1,0 +1,192 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e8]:
+      - paragraph [ref=e13]:
+        - text: Codecov is joining Harness. Read more about the announcement
+        - link "here" [ref=e14] [cursor=pointer]:
+          - /url: https://about.codecov.io/blog/a-new-chapter-for-codecov/
+          - text: here
+          - img [ref=e16]
+        - text: .
+      - generic [ref=e19]:
+        - paragraph [ref=e22]:
+          - generic [ref=e23]:
+            - img [ref=e24]
+            - text: You must now upload using a token.
+          - text: Upload with either the global upload token or the repo upload token. Admins can manage the
+          - link "global upload token settings." [ref=e26] [cursor=pointer]:
+            - /url: /account/gh/bjorvack/org-upload-token
+        - button "Dismiss" [ref=e28] [cursor=pointer]
+    - banner [ref=e29]:
+      - navigation [ref=e30]:
+        - navigation [ref=e34]:
+          - link "bjorvack" [ref=e35] [cursor=pointer]:
+            - /url: /gh/bjorvack
+          - generic [ref=e36]: /
+          - generic [ref=e38]:
+            - img [ref=e39]
+            - text: lorcana-engine
+        - generic [ref=e41]:
+          - button "theme toggle" [ref=e42] [cursor=pointer]:
+            - img [ref=e43]
+          - generic [ref=e45]:
+            - generic [ref=e46]: Help menu dropdown
+            - button "help menu" [ref=e47] [cursor=pointer]:
+              - img [ref=e48]
+              - img [ref=e51]
+          - generic [ref=e53]:
+            - generic [ref=e54]: Logged in user sub navigation
+            - button "avatar" [ref=e55] [cursor=pointer]:
+              - img "avatar" [ref=e56]
+              - img [ref=e58]
+    - main [ref=e60]:
+      - generic [ref=e61]:
+        - navigation [ref=e64]:
+          - link "Coverage" [ref=e65] [cursor=pointer]:
+            - /url: /gh/bjorvack/lorcana-engine
+          - link "Tests New" [ref=e66] [cursor=pointer]:
+            - /url: /gh/bjorvack/lorcana-engine/tests/new
+          - link "Commits" [ref=e67] [cursor=pointer]:
+            - /url: /gh/bjorvack/lorcana-engine/commits
+          - link "Pulls" [ref=e68] [cursor=pointer]:
+            - /url: /gh/bjorvack/lorcana-engine/pulls
+          - link "Configuration" [ref=e69] [cursor=pointer]:
+            - /url: /gh/bjorvack/lorcana-engine/config
+        - generic [ref=e71]:
+          - navigation [ref=e73]:
+            - link "Configuration Manager" [ref=e75] [cursor=pointer]:
+              - /url: /gh/bjorvack/lorcana-engine/config
+            - link "General" [ref=e77] [cursor=pointer]:
+              - /url: /gh/bjorvack/lorcana-engine/config/general
+            - link "Yaml" [ref=e79] [cursor=pointer]:
+              - /url: /gh/bjorvack/lorcana-engine/config/yaml
+            - link "Badges & Graphs" [active] [ref=e81] [cursor=pointer]:
+              - /url: /gh/bjorvack/lorcana-engine/config/badge
+          - generic [ref=e189]:
+            - generic [ref=e190]:
+              - generic [ref=e191]:
+                - generic [ref=e192]: Codecov badge
+                - paragraph [ref=e193]:
+                  - text: A live icon that you can embed in code, such as in a README.md, to provide quick insight into your project's code coverage percentage.
+                  - link "Learn more" [ref=e194] [cursor=pointer]:
+                    - /url: https://docs.codecov.com/docs/status-badges
+                    - text: Learn more
+                    - img [ref=e196]
+                - separator [ref=e198]
+              - generic [ref=e199]:
+                - generic [ref=e200]:
+                  - paragraph [ref=e201]: "Optionally, select a branch:"
+                  - generic [ref=e204]:
+                    - button "badge branch selector" [ref=e205] [cursor=pointer]:
+                      - generic [ref=e207]: Default branch
+                      - img [ref=e208]
+                    - listbox "badge branch selector"
+                - generic [ref=e210]:
+                  - heading "Markdown" [level=2] [ref=e211]
+                  - generic [ref=e212]:
+                    - generic [ref=e213]: "[![codecov](https://codecov.io/gh/bjorvack/lorcana-engine/graph/badge.svg?token=GCZZO49E10)](https://codecov.io/gh/bjorvack/lorcana-engine)"
+                    - button "Copy token" [ref=e214] [cursor=pointer]:
+                      - img [ref=e216]
+                - generic [ref=e218]:
+                  - heading "HTML" [level=2] [ref=e219]
+                  - generic [ref=e220]:
+                    - generic [ref=e221]: <a href="https://codecov.io/gh/bjorvack/lorcana-engine" > <img src="https://codecov.io/gh/bjorvack/lorcana-engine/graph/badge.svg?token=GCZZO49E10"/> </a>
+                    - button "Copy token" [ref=e222] [cursor=pointer]:
+                      - img [ref=e224]
+                - generic [ref=e226]:
+                  - heading "RST" [level=2] [ref=e227]
+                  - generic [ref=e228]:
+                    - generic [ref=e229]: ".. image:: https://codecov.io/gh/bjorvack/lorcana-engine/graph/badge.svg?token=GCZZO49E10 :target: https://codecov.io/gh/bjorvack/lorcana-engine"
+                    - button "Copy token" [ref=e230] [cursor=pointer]:
+                      - img [ref=e232]
+            - generic [ref=e234]:
+              - generic [ref=e235]:
+                - generic [ref=e236]:
+                  - generic [ref=e237]: Graphs
+                  - paragraph
+                  - separator [ref=e238]
+                - generic [ref=e239]:
+                  - heading "Embed via API" [level=3] [ref=e240]
+                  - paragraph [ref=e241]:
+                    - text: Use this token to view graphs and images for third party dashboard usage.
+                    - link "Learn more" [ref=e242] [cursor=pointer]:
+                      - /url: https://docs.codecov.com/docs/graphs#sunburst
+                      - text: Learn more
+                      - img [ref=e244]
+                  - generic [ref=e246]:
+                    - generic [ref=e247]: GCZZO49E10
+                    - button "Copy token" [ref=e248] [cursor=pointer]:
+                      - img [ref=e250]
+              - generic [ref=e252]:
+                - heading "Embed via URL" [level=3] [ref=e253]
+                - paragraph [ref=e254]: Use the URL of the svg to embed a graph of your repository page.
+                - generic [ref=e255]:
+                  - generic [ref=e256]:
+                    - generic [ref=e257]:
+                      - img "graph-chart" [ref=e258]
+                      - heading "Sunburst" [level=2] [ref=e259]
+                      - paragraph [ref=e260]: The inner-most circle is the entire project, moving away from the center are folders then, finally, a single file. The size and color of each slice is representing the number of statements and the coverage, respectively.
+                    - separator [ref=e261]
+                    - generic [ref=e262]:
+                      - generic [ref=e263]:
+                        - generic [ref=e264]: https://codecov.io/gh/bjorvack/lorcana-engine/graphs/sunburst.svg?token=GCZZO49E10
+                        - button "Copy token" [ref=e265] [cursor=pointer]:
+                          - img [ref=e267]
+                      - link "Open SVG" [ref=e269] [cursor=pointer]:
+                        - /url: https://codecov.io/gh/bjorvack/lorcana-engine/graphs/sunburst.svg?token=GCZZO49E10
+                        - text: Open SVG
+                        - img [ref=e271]
+                  - generic [ref=e273]:
+                    - generic [ref=e274]:
+                      - img "graph-chart" [ref=e275]
+                      - heading "Grid" [level=2] [ref=e276]
+                      - paragraph [ref=e277]: Each block represents a single file in the project. The size and color of each block is represented by the number of statements and the coverage, respectively.
+                    - separator [ref=e278]
+                    - generic [ref=e279]:
+                      - generic [ref=e280]:
+                        - generic [ref=e281]: https://codecov.io/gh/bjorvack/lorcana-engine/graphs/tree.svg?token=GCZZO49E10
+                        - button "Copy token" [ref=e282] [cursor=pointer]:
+                          - img [ref=e284]
+                      - link "Open SVG" [ref=e286] [cursor=pointer]:
+                        - /url: https://codecov.io/gh/bjorvack/lorcana-engine/graphs/tree.svg?token=GCZZO49E10
+                        - text: Open SVG
+                        - img [ref=e288]
+                  - generic [ref=e290]:
+                    - generic [ref=e291]:
+                      - img "graph-chart" [ref=e292]
+                      - heading "Icicle" [level=2] [ref=e293]
+                      - paragraph [ref=e294]: The top section represents the entire project. Proceeding with folders and finally individual files. The size and color of each slice is representing the number of statements and the coverage, respectively.
+                    - separator [ref=e295]
+                    - generic [ref=e296]:
+                      - generic [ref=e297]:
+                        - generic [ref=e298]: https://codecov.io/gh/bjorvack/lorcana-engine/graphs/icicle.svg?token=GCZZO49E10
+                        - button "Copy token" [ref=e299] [cursor=pointer]:
+                          - img [ref=e301]
+                      - link "Open SVG" [ref=e303] [cursor=pointer]:
+                        - /url: https://codecov.io/gh/bjorvack/lorcana-engine/graphs/icicle.svg?token=GCZZO49E10
+                        - text: Open SVG
+                        - img [ref=e305]
+    - contentinfo [ref=e168]:
+      - navigation [ref=e169]:
+        - list [ref=e170]:
+          - link "Codecov Logo An umbrella logo." [ref=e171] [cursor=pointer]:
+            - /url: /gh/bjorvack
+            - img "Codecov Logo An umbrella logo." [ref=e172]
+          - listitem [ref=e176]:
+            - generic [ref=e177]: © 2026 Sentry
+          - listitem [ref=e178]:
+            - link "Terms" [ref=e179] [cursor=pointer]:
+              - /url: https://about.codecov.io/terms-and-conditions
+          - listitem [ref=e180]:
+            - link "Privacy" [ref=e181] [cursor=pointer]:
+              - /url: https://about.codecov.io/privacy
+          - listitem [ref=e182]:
+            - link "Security" [ref=e183] [cursor=pointer]:
+              - /url: https://about.codecov.io/security
+          - listitem [ref=e184]:
+            - link "GDPR" [ref=e185] [cursor=pointer]:
+              - /url: https://about.codecov.io/gdpr
+          - listitem [ref=e186]:
+            - link "Pricing" [ref=e187] [cursor=pointer]:
+              - /url: https://about.codecov.io/pricing
+  - status [ref=e307]

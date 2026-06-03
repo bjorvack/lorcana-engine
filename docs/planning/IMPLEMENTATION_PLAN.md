@@ -688,9 +688,16 @@ mechanics ranked by card count, with the remaining gaps to close in order:
       backs `Effect::Discard { who, amount }`: each player in scope discards,
       sequenced (each is its own `ChooseCardsToDiscard`, the *discarding* player
       chooses; whole-hand needs no choice). Closes the deferred "each opponent
-      chooses and discards" (35). `tests/targeted_effects.rs`. **Remaining:**
-      `PlayerScope::ChosenPlayer` (choose-a-player axis — "chosen player draws/
-      discards", 12+ incl. deck-manip); player-scoped draw ("each player draws", 8).
+      chooses and discards" (35). `tests/targeted_effects.rs`.
+  - [x] **choose-a-player axis (multiplayer-ready)** — `PlayerScope` gains
+    `ChosenOpponent` / `ChosenPlayer` (+ resolved `Player(id)`). `resolve_scope`
+    auto-resolves a single candidate (2-player "chosen opponent") and otherwise
+    emits a `PendingDecision::ChoosePlayer` (3–4 player games); `Decision::
+    ChoosePlayer` re-targets the effect onto the chosen player. Wired into
+    `Discard`. `tests/multiplayer.rs` (4-player prompts; 2-player auto-resolves).
+    **Remaining:** player-scoped **draw/lore** onto `PlayerScope` ("each/chosen
+    player draws", "chosen opponent loses lore"); other-player **deck ops** (the
+    bulk of "chosen player": look-at/mill/shuffle another player's deck).
 - [ ] **grant an ability** (10) — "gains '\<ability text\>'" (a granted triggered/
       activated ability, not just a keyword).
 - [ ] **name a card** (6), **move damage** (15) — niche.

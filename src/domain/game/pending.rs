@@ -97,6 +97,21 @@ pub enum PendingDecision {
         /// The remaining effects, resolved in order after.
         rest: Vec<Effect>,
     },
+    /// A player-scoped effect with a `Chosen*` scope is resolving; `player` chooses
+    /// one player from `options`, the effect re-targets onto them, then `rest`
+    /// resolves (§7.1; multiplayer "chosen opponent / player").
+    ChoosePlayer {
+        /// The player who must choose.
+        player: PlayerId,
+        /// The effect's source card.
+        source: CardId,
+        /// The candidate players.
+        options: Vec<PlayerId>,
+        /// The player-scoped effect to re-target onto the chosen player.
+        effect: Effect,
+        /// The remaining effects, resolved in order after.
+        rest: Vec<Effect>,
+    },
     /// A `May` effect is resolving; `player` chooses whether to resolve `effect`
     /// ("you may …", §7.1.3). `rest` resolves afterwards either way.
     MayResolveEffect {
@@ -139,6 +154,7 @@ impl PendingDecision {
             | Self::ChooseCardsToDiscard { player, .. }
             | Self::ChoosePlayFree { player, .. }
             | Self::ChooseFromRevealed { player, .. }
+            | Self::ChoosePlayer { player, .. }
             | Self::MayResolveEffect { player, .. }
             | Self::ChooseUpToN { player, .. } => *player,
         }

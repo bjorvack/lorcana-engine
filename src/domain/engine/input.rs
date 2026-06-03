@@ -102,6 +102,8 @@ pub enum Decision {
     /// For `ChooseFromRevealed`: the looked-at card taken into hand, or `None` to
     /// take nothing (§8.2).
     TakeRevealed(Option<CardId>),
+    /// For `ChoosePlayer`: the player chosen for a `Chosen*`-scoped effect.
+    ChoosePlayer(PlayerId),
 }
 
 /// Why an [`Input`] was rejected. When an input is rejected the game state is
