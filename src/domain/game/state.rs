@@ -538,6 +538,14 @@ impl GameState {
                 self.current_character_stats(card.id())
                     .map_or(0, |s| s.strength),
             ),
+            CharacterFilter::Willpower(nf) => nf.matches(
+                self.current_character_stats(card.id())
+                    .map_or(0, |s| s.willpower),
+            ),
+            CharacterFilter::Lore(nf) => nf.matches(
+                self.current_character_stats(card.id())
+                    .map_or(0, |s| s.lore),
+            ),
             CharacterFilter::Damaged(b) => (card.conditions().damage > 0) == *b,
             CharacterFilter::Exerted(b) => card.conditions().ready != *b,
             CharacterFilter::IsSource => card.id() == source,

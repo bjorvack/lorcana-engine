@@ -25,8 +25,8 @@
 use super::loader::keyword_from;
 use super::{AbilityCost, ActivatedAbility, StaticAbility, StaticTarget, TriggeredAbility};
 use crate::domain::effects::{
-    Amount, CardCategory, CharacterFilter, Destination, DiscardAmount, DiscardBy, Effect,
-    MoveSource, PlayerScope, Target, TargetSide, TriggerCondition,
+    Amount, CardCategory, CharacterFilter, Comparison, Destination, DiscardAmount, DiscardBy,
+    Effect, MoveSource, NumericFilter, PlayerScope, Target, TargetSide, TriggerCondition,
 };
 use crate::domain::game::{Condition, Property, Stat};
 use crate::domain::types::card::Classification;
@@ -232,9 +232,93 @@ fn parse_selector(s: &str) -> Option<Target> {
     })
 }
 
-/// Parse a compact card filter — side + category + classifications + `another` —
-/// e.g. `"your other Villain characters"`, `"opposing item"`. Requires a noun so
-/// it's distinguishable from free text.
+/// Words the filter grammar treats as structure (side / count / category / the
+/// threshold & name vocabulary) rather than as a classification name.
+const STRUCTURAL: &[&str] = &[
+    "all",
+    "chosen",
+    "another",
+    "other",
+    "opposing",
+    "your",
+    "own",
+    "character",
+    "characters",
+    "item",
+    "items",
+    "location",
+    "locations",
+    "permanent",
+    "permanents",
+    // name + numeric-threshold vocabulary
+    "named",
+    "with",
+    "and",
+    "or",
+    "than",
+    "less",
+    "fewer",
+    "more",
+    "greater",
+    "cost",
+    "strength",
+    "willpower",
+    "lore",
+    "{s}",
+    "{w}",
+    "{l}",
+];
+
+/// The four numeric characteristics the compact filter grammar can threshold.
+#[derive(Clone, Copy)]
+enum NumericKind {
+    Cost,
+    Strength,
+    Willpower,
+    Lore,
+}
+
+/// Map a stat keyword — a word or a `{S}`/`{W}`/`{L}` symbol — to its kind.
+fn numeric_kind(tok: &str) -> Option<NumericKind> {
+    Some(match tok {
+        "cost" => NumericKind::Cost,
+        "strength" | "{s}" => NumericKind::Strength,
+        "willpower" | "{w}" => NumericKind::Willpower,
+        "lore" | "{l}" => NumericKind::Lore,
+        _ => return None,
+    })
+}
+
+/// The token at `idx` parsed as a non-negative threshold value, if present.
+fn token_u32(tokens: &[String], idx: usize) -> Option<u32> {
+    tokens.get(idx).and_then(|t| t.parse::<u32>().ok())
+}
+
+/// The comparison implied by the words after a `<stat> <N>` clause: `or less` /
+/// `or fewer` ⇒ at-most, `or more` / `or greater` ⇒ at-least, absent ⇒ exactly N.
+/// Stops at the next stat keyword so adjacent clauses don't bleed together.
+fn comparison_after(tokens: &[String], from: usize) -> Comparison {
+    for tok in tokens.iter().skip(from) {
+        if numeric_kind(tok).is_some() {
+            break;
+        }
+        match tok.as_str() {
+            "less" | "fewer" => return Comparison::AtMost,
+            "more" | "greater" => return Comparison::AtLeast,
+            _ => {}
+        }
+    }
+    Comparison::Exactly
+}
+
+/// Parse a compact card filter. Combines side + category + classifications +
+/// `another` with the richer leaf predicates: a name (`named X`) and numeric
+/// thresholds on cost / `{S}` / `{W}` / `{L}` — `"with cost 3 or less"`,
+/// `"with 3 {S} or more"`, `"with strength 2 or more"`, `"with 2 {W} or more"`,
+/// `"with 1 lore or more"`. These compose with everything else, e.g.
+/// `"another Villain character with cost 3 or less"`. Requires a noun so it's
+/// distinguishable from free text. Anything the grammar can't express still
+/// round-trips via the structured AST fallback.
 fn parse_filter(s: &str) -> Option<CharacterFilter> {
     let lower = s.to_lowercase();
     if !["character", "item", "location", "permanent"]
@@ -258,32 +342,67 @@ fn parse_filter(s: &str) -> Option<CharacterFilter> {
     } else {
         None // characters (the default) need no Category gate
     };
-    let known = [
-        "all",
-        "chosen",
-        "another",
-        "other",
-        "opposing",
-        "your",
-        "own",
-        "character",
-        "characters",
-        "item",
-        "items",
-        "location",
-        "locations",
-        "permanent",
-        "permanents",
-    ];
+
+    // Tokenize once: original-case (for classification names) alongside a
+    // lowercased view, with a `consumed` flag so phrases lifted out as predicates
+    // (names, thresholds) aren't also misread as classifications.
+    let tokens: Vec<&str> = s.split_whitespace().collect();
+    let lower_tokens: Vec<String> = tokens.iter().map(|t| t.to_lowercase()).collect();
+    let mut consumed = vec![false; tokens.len()];
+    let mut predicates: Vec<CharacterFilter> = Vec::new();
+
+    // `named X`: the following token is the name (a single token; multi-word
+    // names use the structured form). Matches the card's counts-as names (§6.2.1).
+    for i in 0..tokens.len() {
+        if lower_tokens[i] == "named" && i + 1 < tokens.len() {
+            predicates.push(CharacterFilter::Named(tokens[i + 1].to_string()));
+            consumed[i] = true;
+            consumed[i + 1] = true;
+        }
+    }
+
+    // Numeric thresholds: a stat keyword adjacent to an integer, optionally
+    // followed by `or less` / `or more` (else exactly N), §7.1.
+    for i in 0..lower_tokens.len() {
+        if consumed[i] {
+            continue;
+        }
+        let Some(kind) = numeric_kind(&lower_tokens[i]) else {
+            continue;
+        };
+        // The threshold value is the integer right after the keyword ("cost 3")
+        // or right before it ("3 {S}").
+        let before = i.checked_sub(1).and_then(|j| token_u32(&lower_tokens, j));
+        let (value, value_idx) = match (token_u32(&lower_tokens, i + 1), before) {
+            (Some(n), _) => (n, i + 1),
+            (None, Some(n)) => (n, i - 1),
+            (None, None) => continue,
+        };
+        let comparison = comparison_after(&lower_tokens, value_idx.max(i) + 1);
+        let nf = NumericFilter { comparison, value };
+        predicates.push(match kind {
+            NumericKind::Cost => CharacterFilter::Cost(nf),
+            NumericKind::Strength => CharacterFilter::Strength(nf),
+            NumericKind::Willpower => CharacterFilter::Willpower(nf),
+            NumericKind::Lore => CharacterFilter::Lore(nf),
+        });
+        consumed[i] = true;
+        consumed[value_idx] = true;
+    }
+
     let mut filter = CharacterFilter::any(side);
     if let Some(cat) = category {
         filter = filter.and(CharacterFilter::Category(cat));
     }
-    for c in s
-        .split_whitespace()
-        .filter(|w| !known.contains(&w.to_lowercase().as_str()))
-    {
-        filter = filter.and(CharacterFilter::Classification(Classification::new(c)));
+    for predicate in predicates {
+        filter = filter.and(predicate);
+    }
+    for (i, word) in tokens.iter().enumerate() {
+        let lw = lower_tokens[i].as_str();
+        if consumed[i] || STRUCTURAL.contains(&lw) || token_u32(&lower_tokens, i).is_some() {
+            continue;
+        }
+        filter = filter.and(CharacterFilter::Classification(Classification::new(*word)));
     }
     if another {
         filter = filter.and(CharacterFilter::negate(CharacterFilter::IsSource));
@@ -462,4 +581,134 @@ fn static_target_from_str(s: &str) -> Option<StaticTarget> {
         classifications,
         include_self,
     })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{parse_filter, parse_selector};
+    use crate::domain::effects::{CharacterFilter, Comparison, NumericFilter, Target, TargetSide};
+    use crate::domain::types::card::Classification;
+
+    const fn at_least(value: u32) -> NumericFilter {
+        NumericFilter::at_least(value)
+    }
+    const fn at_most(value: u32) -> NumericFilter {
+        NumericFilter::at_most(value)
+    }
+    const fn exactly(value: u32) -> NumericFilter {
+        NumericFilter {
+            comparison: Comparison::Exactly,
+            value,
+        }
+    }
+
+    #[test]
+    fn parses_named_predicate() {
+        assert_eq!(
+            parse_filter("character named Stitch"),
+            Some(
+                CharacterFilter::any(TargetSide::Any).and(CharacterFilter::Named("Stitch".into()))
+            )
+        );
+        // Composes with side + `chosen` framing via the selector.
+        assert_eq!(
+            parse_selector("chosen opposing character named Stitch"),
+            Some(Target::ChosenCharacter {
+                filter: CharacterFilter::any(TargetSide::Opposing)
+                    .and(CharacterFilter::Named("Stitch".into())),
+            })
+        );
+    }
+
+    #[test]
+    fn parses_cost_thresholds() {
+        assert_eq!(
+            parse_filter("character with cost 3 or less"),
+            Some(CharacterFilter::any(TargetSide::Any).and(CharacterFilter::Cost(at_most(3))))
+        );
+        assert_eq!(
+            parse_filter("character with cost 4 or more"),
+            Some(CharacterFilter::any(TargetSide::Any).and(CharacterFilter::Cost(at_least(4))))
+        );
+        // No comparison words means exactly N.
+        assert_eq!(
+            parse_filter("character with cost 2"),
+            Some(CharacterFilter::any(TargetSide::Any).and(CharacterFilter::Cost(exactly(2))))
+        );
+    }
+
+    #[test]
+    fn parses_strength_thresholds_word_and_symbol() {
+        let expected =
+            CharacterFilter::any(TargetSide::Any).and(CharacterFilter::Strength(at_least(3)));
+        // `{S}` symbol with the number before it.
+        assert_eq!(
+            parse_filter("character with 3 {S} or more"),
+            Some(expected.clone())
+        );
+        // The `strength` word with the number after it.
+        assert_eq!(
+            parse_filter("character with strength 3 or more"),
+            Some(expected)
+        );
+        assert_eq!(
+            parse_filter("character with 2 strength or less"),
+            Some(CharacterFilter::any(TargetSide::Any).and(CharacterFilter::Strength(at_most(2))))
+        );
+    }
+
+    #[test]
+    fn parses_willpower_and_lore_thresholds() {
+        assert_eq!(
+            parse_filter("character with 4 {W} or more"),
+            Some(
+                CharacterFilter::any(TargetSide::Any).and(CharacterFilter::Willpower(at_least(4)))
+            )
+        );
+        assert_eq!(
+            parse_filter("character with willpower 2 or less"),
+            Some(CharacterFilter::any(TargetSide::Any).and(CharacterFilter::Willpower(at_most(2))))
+        );
+        assert_eq!(
+            parse_filter("character with 2 {L} or more"),
+            Some(CharacterFilter::any(TargetSide::Any).and(CharacterFilter::Lore(at_least(2))))
+        );
+        assert_eq!(
+            parse_filter("character with lore 1 or more"),
+            Some(CharacterFilter::any(TargetSide::Any).and(CharacterFilter::Lore(at_least(1))))
+        );
+    }
+
+    #[test]
+    fn predicates_compose_with_side_classification_and_another() {
+        // "another Villain character with cost 3 or less".
+        let expected = CharacterFilter::any(TargetSide::Any)
+            .and(CharacterFilter::Cost(at_most(3)))
+            .and(CharacterFilter::Classification(Classification::new(
+                "Villain",
+            )))
+            .and(CharacterFilter::negate(CharacterFilter::IsSource));
+        assert_eq!(
+            parse_filter("another Villain character with cost 3 or less"),
+            Some(expected)
+        );
+    }
+
+    #[test]
+    fn existing_classification_filters_still_parse() {
+        // Regression: the original grammar (no new predicates) is unchanged.
+        let villains = CharacterFilter::any(TargetSide::Yours)
+            .and(CharacterFilter::Classification(Classification::new(
+                "Villain",
+            )))
+            .and(CharacterFilter::negate(CharacterFilter::IsSource));
+        assert_eq!(
+            parse_filter("your other Villain characters"),
+            Some(villains)
+        );
+        assert_eq!(
+            parse_filter("chosen opposing character"),
+            Some(CharacterFilter::any(TargetSide::Opposing))
+        );
+    }
 }

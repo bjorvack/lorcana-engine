@@ -3,8 +3,8 @@
 
 use lorcana_engine::{
     AbilityCost, ActivatedAbility, Amount, CardDefId, CardKind, CharacterFilter, Classification,
-    Condition, Effect, Keyword, PlayerScope, ShiftAbility, Stat, StaticAbility, StaticTarget,
-    Target, TargetSide, TriggerCondition, load_toml,
+    Condition, Effect, Keyword, NumericFilter, PlayerScope, ShiftAbility, Stat, StaticAbility,
+    StaticTarget, Target, TargetSide, TriggerCondition, load_toml,
 };
 
 /// The committed example deck, compiled in so the test needs no runtime files.
@@ -331,5 +331,64 @@ fn the_dsl_supports_dynamic_amounts_conditionals_and_static_per_while() {
                 per: None,
             },
         ]
+    );
+}
+
+/// DSL — the compact selector grammar parses the richer leaf predicates (a name,
+/// and numeric thresholds on cost / `{S}`) into the `CharacterFilter` algebra,
+/// composing with side / classification / `another`.
+#[test]
+fn the_dsl_parses_name_and_threshold_selector_predicates() {
+    let defs = load_toml(
+        r#"
+        [[card]]
+        name = "Tester"
+        type = "Character"
+        cost = 3
+        strength = 2
+        willpower = 3
+        lore = 1
+        [[card.abilities]]
+        on = "play"
+        do = { banish = "chosen opposing character with cost 3 or less" }
+        [[card.abilities]]
+        on = "quest"
+        do = { banish = "another Villain character with 3 {S} or more" }
+        [[card.abilities]]
+        on = "challenge"
+        do = { banish = "chosen character named Stitch" }
+        "#,
+    )
+    .expect("loads");
+    let card = &defs[0];
+
+    // "with cost 3 or less" -> Cost(at_most 3), composed with the opposing side.
+    assert_eq!(
+        card.abilities()[0].effect,
+        Effect::Banish(Target::ChosenCharacter {
+            filter: CharacterFilter::any(TargetSide::Opposing)
+                .and(CharacterFilter::Cost(NumericFilter::at_most(3))),
+        })
+    );
+    // "another Villain character with 3 {S} or more" -> Strength(at_least 3) +
+    // classification + the `another` exclusion.
+    assert_eq!(
+        card.abilities()[1].effect,
+        Effect::Banish(Target::ChosenCharacter {
+            filter: CharacterFilter::any(TargetSide::Any)
+                .and(CharacterFilter::Strength(NumericFilter::at_least(3)))
+                .and(CharacterFilter::Classification(Classification::new(
+                    "Villain"
+                )))
+                .and(CharacterFilter::negate(CharacterFilter::IsSource)),
+        })
+    );
+    // "named Stitch" -> Named.
+    assert_eq!(
+        card.abilities()[2].effect,
+        Effect::Banish(Target::ChosenCharacter {
+            filter: CharacterFilter::any(TargetSide::Any)
+                .and(CharacterFilter::Named("Stitch".into())),
+        })
     );
 }

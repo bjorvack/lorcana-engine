@@ -827,3 +827,76 @@ fn the_structured_target_fallback_resolves() {
         "structured-target banish resolved"
     );
 }
+
+/// DSL / §7.1 — the compact selector grammar exposes a current-`{S}` threshold
+/// (`"with N {S} or more"`). Only characters at/above the threshold are
+/// choosable: a strength-2 character can't be picked while a strength-4 one can,
+/// proving the parsed `CharacterFilter::Strength` predicate gates resolution
+/// end-to-end (authored in TOML, loaded via `load_toml`, resolved by the engine).
+#[test]
+fn dsl_strength_threshold_selector_filters_choices() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Hunter"
+        type = "Character"
+        cost = 1
+        strength = 1
+        willpower = 5
+        lore = 1
+        [[card.abilities]]
+        on = "quest"
+        do = { banish = "chosen opposing character with 3 {S} or more" }
+        [[card]]
+        name = "Weakling"
+        type = "Character"
+        cost = 1
+        strength = 2
+        willpower = 5
+        lore = 1
+        [[card]]
+        name = "Bruiser"
+        type = "Character"
+        cost = 1
+        strength = 4
+        willpower = 5
+        lore = 1
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let foe = opponent_of(&state, me);
+    let hunter = place(&mut state, me, 100, 0, 1, 5, true);
+    let weak = place(&mut state, foe, 200, 1, 2, 5, false);
+    let bruiser = place(&mut state, foe, 300, 2, 4, 5, false);
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: hunter }).expect("quest");
+
+    // The strength-2 character is below the threshold, so it isn't a legal pick.
+    let rejected = apply(
+        &mut state,
+        &reg,
+        Input::Decide(lorcana_engine::Decision::ChooseTarget(weak)),
+    );
+    assert!(
+        rejected.is_err(),
+        "a strength-2 character can't be chosen by a `3 {{S}} or more` selector"
+    );
+
+    // The strength-4 character is at/above the threshold, so it resolves.
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(lorcana_engine::Decision::ChooseTarget(bruiser)),
+    )
+    .expect("choose the qualifying character");
+
+    assert!(
+        !in_play(&state, foe, bruiser),
+        "the strength>=3 character is banished"
+    );
+    assert!(
+        in_play(&state, foe, weak),
+        "the below-threshold character survives"
+    );
+}

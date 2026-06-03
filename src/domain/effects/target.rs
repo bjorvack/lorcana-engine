@@ -67,7 +67,8 @@ impl NumericFilter {
 /// Which characters an effect may apply to / choose from (§7.1, §6.2.6).
 ///
 /// A small **boolean algebra** of predicates: leaf predicates (side,
-/// classification, name, cost, current `{S}`, damaged/exerted, the source card, a
+/// classification, name, cost, current `{S}`/`{W}`/`{L}`, damaged/exerted, the
+/// source card, a
 /// specific card) combined with `And` / `Or` / `Not`. This composes — "another
 /// Villain you have in play with cost 3 or less" is just
 /// `And([Side(Yours), Classification(Villain), Cost(≤3), Not(IsSource)])` — and
@@ -90,6 +91,10 @@ pub enum CharacterFilter {
     Cost(NumericFilter),
     /// Current `{S}` satisfies the numeric filter.
     Strength(NumericFilter),
+    /// Current `{W}` (willpower) satisfies the numeric filter.
+    Willpower(NumericFilter),
+    /// Current `{L}` (lore) satisfies the numeric filter.
+    Lore(NumericFilter),
     /// Damaged (`true`) or undamaged (`false`).
     Damaged(bool),
     /// Exerted (`true`) or ready (`false`).

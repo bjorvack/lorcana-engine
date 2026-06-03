@@ -3072,6 +3072,10 @@ fn def_matches_filter(
         CharacterFilter::Category(cat) => category_matches(cat, def),
         CharacterFilter::Named(n) => def.has_name(n),
         CharacterFilter::Cost(nf) => nf.matches(def.cost()),
+        // Willpower/Lore use the *printed* stat for a zoned card (§6); a card with
+        // no such stat (action/item) never matches the threshold.
+        CharacterFilter::Willpower(nf) => def.printed_willpower().is_some_and(|w| nf.matches(w)),
+        CharacterFilter::Lore(nf) => def.printed_lore().is_some_and(|l| nf.matches(l)),
         CharacterFilter::Strength(_)
         | CharacterFilter::Damaged(_)
         | CharacterFilter::Exerted(_)

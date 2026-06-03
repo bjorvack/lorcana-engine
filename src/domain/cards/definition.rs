@@ -195,6 +195,28 @@ impl CardDefinition {
         self.kind
     }
 
+    /// Printed Willpower `{W}` for characters and locations (§6.2, §6.5.5);
+    /// `None` for actions/items, which have none.
+    #[must_use]
+    pub const fn printed_willpower(&self) -> Option<u32> {
+        match self.kind {
+            CardKind::Character { willpower, .. } | CardKind::Location { willpower, .. } => {
+                Some(willpower)
+            }
+            CardKind::Action | CardKind::Item => None,
+        }
+    }
+
+    /// Printed Lore `{L}` for characters and locations (§6.2, §6.5.6); `None` for
+    /// actions/items, which have none.
+    #[must_use]
+    pub const fn printed_lore(&self) -> Option<u32> {
+        match self.kind {
+            CardKind::Character { lore, .. } | CardKind::Location { lore, .. } => Some(lore),
+            CardKind::Action | CardKind::Item => None,
+        }
+    }
+
     /// The card-type tag.
     #[must_use]
     pub const fn card_type(&self) -> CardType {
