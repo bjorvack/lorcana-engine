@@ -166,6 +166,11 @@ fn effect_from_table(t: &toml::Table) -> Result<Effect, String> {
             what: MoveSource::Card(target_from_value(v)?),
             to: Destination::Hand,
         })
+    } else if let Some(v) = t.get("into_inkwell") {
+        Ok(Effect::Move {
+            what: MoveSource::Card(target_from_value(v)?),
+            to: Destination::Inkwell,
+        })
     } else if t.contains_key("discard") {
         Ok(Effect::Discard {
             who: scope(PlayerScope::You)?,

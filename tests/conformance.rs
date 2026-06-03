@@ -599,3 +599,119 @@ fn rush_can_challenge_while_drying() {
         "Rush lets a drying character challenge"
     );
 }
+
+fn in_inkwell(state: &GameState, owner: PlayerId, card: CardId) -> bool {
+    state
+        .player(owner)
+        .unwrap()
+        .inkwell()
+        .iter()
+        .any(|c| c.id() == card)
+}
+
+/// §8 — "into inkwell": a chosen character is put into its owner's inkwell.
+#[test]
+fn into_inkwell_moves_a_character_to_the_inkwell() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Enchanter"
+        type = "Character"
+        cost = 1
+        strength = 1
+        willpower = 5
+        lore = 1
+        [[card.abilities]]
+        on = "quest"
+        do = { into_inkwell = "chosen opposing character" }
+        [[card]]
+        name = "Mark"
+        type = "Character"
+        cost = 1
+        strength = 1
+        willpower = 5
+        lore = 1
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let foe = opponent_of(&state, me);
+    let enchanter = place(&mut state, me, 100, 0, 1, 5, true);
+    let mark = place(&mut state, foe, 200, 1, 1, 5, false);
+
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Quest {
+            character: enchanter,
+        },
+    )
+    .expect("quest");
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(lorcana_engine::Decision::ChooseTarget(mark)),
+    )
+    .expect("choose");
+
+    assert!(!in_play(&state, foe, mark), "left play");
+    assert!(in_inkwell(&state, foe, mark), "into its owner's inkwell");
+}
+
+/// §6.5 — a character can move to a location (here a TOML-loaded location with
+/// move cost 0), and is recorded as being there.
+#[test]
+fn a_character_moves_to_a_loaded_location() {
+    use lorcana_engine::LocationStats;
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Sleepy Hollow"
+        type = "Location"
+        cost = 2
+        inkwell = true
+        move_cost = 0
+        willpower = 5
+        lore = 1
+        [[card]]
+        name = "Traveler"
+        type = "Character"
+        cost = 1
+        strength = 1
+        willpower = 5
+        lore = 1
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let traveler = place(&mut state, me, 100, 1, 1, 5, true);
+
+    // Put the loaded location (def 0) in play with its stats.
+    let loc = CardId::from_raw(300);
+    let mut inst = CardInstance::new(loc, CardDefId::from_raw(0), Conditions::faceup_idle());
+    inst.set_location_stats(Some(LocationStats::new(5, 1, 0)));
+    state.player_mut(me).unwrap().play_mut().push(inst);
+
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::MoveCharacter {
+            character: traveler,
+            location: loc,
+        },
+    )
+    .expect("move to location");
+
+    assert_eq!(
+        state
+            .player(me)
+            .unwrap()
+            .play()
+            .iter()
+            .find(|c| c.id() == traveler)
+            .unwrap()
+            .at_location(),
+        Some(loc),
+        "the character is recorded at the location"
+    );
+}
