@@ -1,12 +1,12 @@
 //! The authoritative game state.
 
 use super::{
-    BagEntry, CardInstance, CharacterStats, Condition, Conditions, GameStatus, ModifierDuration,
-    PendingDecision, Permission, PlayerState, Property, PropertyModifier, Restriction,
-    RuleModifier, SeededRng, Stat, StatModifier, TriggerId, Zone,
+    BagEntry, CardInstance, CharacterStats, Condition, Conditions, DelayedTrigger, GameStatus,
+    ModifierDuration, PendingDecision, Permission, PlayerState, Property, PropertyModifier,
+    Restriction, RuleModifier, SeededRng, Stat, StatModifier, TriggerId, Zone,
 };
 use crate::domain::cards::Keyword;
-use crate::domain::effects::Effect;
+use crate::domain::effects::{DelayedWhen, Effect};
 use crate::domain::types::ids::{CardDefId, CardId, PlayerId};
 use crate::domain::types::turn::{Phase, Step};
 use serde::{Deserialize, Serialize};
@@ -46,6 +46,8 @@ pub struct GameState {
     modifiers: Vec<StatModifier>,
     /// Active continuous property modifiers (granted keywords / restrictions).
     property_modifiers: Vec<PropertyModifier>,
+    /// Scheduled one-shot delayed triggers (§7.4.7).
+    delayed_triggers: Vec<DelayedTrigger>,
     /// Active game-rule modifiers (e.g. lore-to-win overrides, §1.2.1).
     rule_modifiers: Vec<RuleModifier>,
 }
@@ -102,6 +104,7 @@ impl GameState {
             next_trigger_id: 0,
             modifiers: Vec::new(),
             property_modifiers: Vec::new(),
+            delayed_triggers: Vec::new(),
             rule_modifiers: Vec::new(),
         }
     }
@@ -366,6 +369,25 @@ impl GameState {
         self.property_modifiers.iter().filter(move |m| {
             self.condition_holds(m.condition(), m.source()) && self.target_matches(m.target(), card)
         })
+    }
+
+    /// Schedule a one-shot delayed trigger (§7.4.7).
+    pub fn schedule_delayed(&mut self, delayed: DelayedTrigger) {
+        self.delayed_triggers.push(delayed);
+    }
+
+    /// Remove and return the delayed triggers due at `when` (in scheduling order).
+    pub fn take_delayed_due(&mut self, when: DelayedWhen) -> Vec<DelayedTrigger> {
+        let mut due = Vec::new();
+        self.delayed_triggers.retain(|d| {
+            if d.when() == when {
+                due.push(d.clone());
+                false
+            } else {
+                true
+            }
+        });
+        due
     }
 
     /// Add a game-rule modifier (e.g. a lore-to-win override).

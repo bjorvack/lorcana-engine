@@ -5,6 +5,13 @@ use crate::domain::cards::Keyword;
 use crate::domain::game::{Permission, Restriction};
 use serde::{Deserialize, Serialize};
 
+/// When a delayed (floating) triggered ability fires (§7.4.7).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum DelayedWhen {
+    /// At the end of the current turn ("at the end of this turn, …").
+    EndOfTurn,
+}
+
 /// Where a card returned to a deck goes (§8.2).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum DeckPosition {
@@ -122,6 +129,14 @@ pub enum Effect {
         then: Box<Self>,
         /// Applied to the target when it doesn't.
         otherwise: Box<Self>,
+    },
+    /// Schedule a one-shot **delayed** effect to resolve later (§7.4.7), e.g.
+    /// "at the end of this turn, banish this character".
+    ScheduleDelayed {
+        /// When the delayed effect fires.
+        when: DelayedWhen,
+        /// The effect resolved at that time.
+        effect: Box<Self>,
     },
     /// Resolve `then` only if the controller has at least one in-play character
     /// matching `filter` ("if you have a character named X in play, …", §7.1).

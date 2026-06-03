@@ -6,12 +6,13 @@ use crate::domain::cards::{
     ShiftKind, StaticAbility, StaticTarget,
 };
 use crate::domain::effects::{
-    CardCategory, CharacterFilter, DeckPosition, Effect, Target, TargetSide, TriggerCondition,
+    CardCategory, CharacterFilter, DeckPosition, DelayedWhen, Effect, Target, TargetSide,
+    TriggerCondition,
 };
 use crate::domain::game::{
-    CardInstance, CharacterStats, Conditions, GameEvent, GameState, GameStatus, LocationStats,
-    ModifierDuration, ModifierTarget, PendingDecision, Permission, Property, PropertyModifier,
-    Restriction, RuleModifier, Stat, StatModifier, TriggerId,
+    CardInstance, CharacterStats, Conditions, DelayedTrigger, GameEvent, GameState, GameStatus,
+    LocationStats, ModifierDuration, ModifierTarget, PendingDecision, Permission, Property,
+    PropertyModifier, Restriction, RuleModifier, Stat, StatModifier, TriggerId,
 };
 use crate::domain::rules::game_state_check;
 use crate::domain::types::card::Classification;
@@ -1420,9 +1421,17 @@ fn apply_end_turn(
     // "Until end of turn" effects end here (§7.6.1). (Done before the end-of-turn
     // triggers; ordering vs §4.4.1.3 is immaterial for the current effect set.)
     state.expire_end_of_turn_modifiers();
-    // "At the end of your turn" triggers (§4.4.1.1) go to the bag and resolve;
-    // this may suspend on a decision.
+    // "At the end of your turn" triggers (§4.4.1.1) and any delayed triggers due
+    // at end of turn (§7.4.7) go to the bag and resolve; this may suspend.
     enqueue_turn_triggers(state, registry, active, &TriggerCondition::AtEndOfTurn);
+    for delayed in state.take_delayed_due(DelayedWhen::EndOfTurn) {
+        let _ = state.enqueue_trigger(
+            delayed.controller(),
+            delayed.source(),
+            false,
+            delayed.effect(),
+        );
+    }
     events.extend(resolve_bag(state, registry));
     // If an end-of-turn trigger is awaiting a decision, ending the turn and
     // starting the next one resumes from `resume_turn_progression`.
@@ -2039,6 +2048,18 @@ fn execute_effect(
                 });
             }
         }
+        // Schedule a one-shot delayed trigger to fire later (§7.4.7).
+        Effect::ScheduleDelayed {
+            when,
+            effect: inner,
+        } => {
+            state.schedule_delayed(DelayedTrigger::new(
+                controller,
+                source,
+                *when,
+                (**inner).clone(),
+            ));
+        }
         // Conditional: resolve `then` only if the controller has a matching
         // in-play character. `then` may itself be targeted (delegated).
         Effect::IfControl { filter, then } => {
@@ -2341,7 +2362,8 @@ fn apply_effect_to(
         Effect::DrawCards(_)
         | Effect::GainLore(_)
         | Effect::EachOpponentLosesLore(_)
-        | Effect::IfControl { .. } => {}
+        | Effect::IfControl { .. }
+        | Effect::ScheduleDelayed { .. } => {}
     }
 }
 

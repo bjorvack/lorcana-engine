@@ -5,6 +5,6 @@ pub mod target;
 pub mod trigger;
 
 // Re-export for convenience
-pub use effect::{DeckPosition, Effect};
+pub use effect::{DeckPosition, DelayedWhen, Effect};
 pub use target::{CharacterFilter, Comparison, NumericFilter, Target, TargetSide};
 pub use trigger::{CardCategory, TriggerCondition};

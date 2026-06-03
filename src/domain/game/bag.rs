@@ -1,8 +1,60 @@
 //! The bag: triggered abilities waiting to resolve (§8.7).
 
-use crate::domain::effects::Effect;
+use crate::domain::effects::{DelayedWhen, Effect};
 use crate::domain::types::ids::{CardId, PlayerId};
 use serde::{Deserialize, Serialize};
+
+/// A one-shot **delayed** (floating) triggered ability scheduled by an effect,
+/// resolved at a later time (§7.4.7).
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct DelayedTrigger {
+    controller: PlayerId,
+    source: CardId,
+    when: DelayedWhen,
+    effect: Effect,
+}
+
+impl DelayedTrigger {
+    /// Create a delayed trigger.
+    #[must_use]
+    pub const fn new(
+        controller: PlayerId,
+        source: CardId,
+        when: DelayedWhen,
+        effect: Effect,
+    ) -> Self {
+        Self {
+            controller,
+            source,
+            when,
+            effect,
+        }
+    }
+
+    /// The player who controls (resolves) it.
+    #[must_use]
+    pub const fn controller(&self) -> PlayerId {
+        self.controller
+    }
+
+    /// The card that scheduled it.
+    #[must_use]
+    pub const fn source(&self) -> CardId {
+        self.source
+    }
+
+    /// When it fires.
+    #[must_use]
+    pub const fn when(&self) -> DelayedWhen {
+        self.when
+    }
+
+    /// The effect to resolve when it fires.
+    #[must_use]
+    pub fn effect(&self) -> Effect {
+        self.effect.clone()
+    }
+}
 
 /// A stable, deterministic id for a bag entry (allocated sequentially).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]

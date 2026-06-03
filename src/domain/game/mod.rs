@@ -15,7 +15,7 @@ pub mod zone;
 pub mod zone_kind;
 
 // Re-export for convenience
-pub use bag::{BagEntry, TriggerId};
+pub use bag::{BagEntry, DelayedTrigger, TriggerId};
 pub use card_instance::CardInstance;
 pub use character_stats::{CharacterStats, LocationStats};
 pub use conditions::Conditions;

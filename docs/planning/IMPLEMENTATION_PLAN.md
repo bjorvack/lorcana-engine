@@ -566,9 +566,15 @@ Challenge/banish triggers into the bag (see
     Tested in `tests/modifiers.rs`. Grows with more conditions (stat thresholds,
     "while here", "while you have a … in play") + richer static targets (names /
     at-location) to fully cover Tiana's Palace / The Wall / Kenai.
-  - **8b+ —** remaining: more `Condition` variants + static targets (the above),
-    **player** targets, floating & delayed triggers, the §7.7 "from the current
-    challenge" timing, §1.9.1.3 attribution, and modifiable location stats.
+  - [x] **8b-18 — delayed triggers (§7.4.7):** `Effect::ScheduleDelayed { when:
+    DelayedWhen::EndOfTurn, effect }` stores a one-shot `DelayedTrigger` in state;
+    `apply_end_turn` enqueues those due (alongside the AtEndOfTurn triggers) so
+    they resolve via the bag + resumable turn transition. Tested in
+    `tests/turn_triggers.rs`. (More `DelayedWhen` variants — start-of-next-turn —
+    grow from here.) Clears the "delayed trigger fires" acceptance.
+  - **8b+ —** remaining: more `Condition` / `DelayedWhen` variants + static
+    targets, **player** targets, the §7.7 "from the current challenge" timing +
+    full replacement ordering, §1.9.1.3 attribution, and modifiable location stats.
 
 ### Slice 8b+ — harder resolution rules
 - Replacement effects (§7.7): "instead"/"skip"/"enter"; self-replacement applied
@@ -605,8 +611,10 @@ Challenge/banish triggers into the bag (see
 
 **Acceptance**
 - [ ] A worked replacement example from §7.7 reproduces exactly (ordering included).
-- [ ] "Up to N" forbids duplicate picks and allows 0; "may" can decline cleanly.
-- [ ] A delayed trigger ("at the end of your turn, …") fires at the right moment.
+- [x] "Up to N" forbids duplicate picks and allows 0; "may" can decline cleanly
+      (Slice 8b-7 `tests/targeted_effects.rs`; "may" via `MayResolve`).
+- [x] A delayed trigger ("at the end of your turn, …") fires at the right moment
+      (Slice 8b-18, `tests/turn_triggers.rs`).
 - [ ] An effect that returns/banishes a card removes its modifiers and a pending
       win/loss/banishment resolves on the next check (parallels the Donald case).
 - [x] A turn transition resumes correctly after a bag suspension, and a

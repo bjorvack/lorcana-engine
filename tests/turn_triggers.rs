@@ -4,7 +4,7 @@
 
 use lorcana_engine::{
     CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterStats, Conditions,
-    Decision, Effect, GameState, GameStatus, Input, Phase, PlayerId, TriggerCondition,
+    Decision, DelayedWhen, Effect, GameState, GameStatus, Input, Phase, PlayerId, TriggerCondition,
     TriggeredAbility, apply, start,
 };
 
@@ -131,4 +131,38 @@ fn a_suspending_start_of_turn_trigger_pauses_then_resumes_the_turn() {
         "the turn resumed to the Main phase"
     );
     assert_eq!(lore(&state, a), 2, "the trigger applied after the decision");
+}
+
+#[test]
+fn a_delayed_end_of_turn_trigger_fires_at_the_end_of_the_turn() {
+    let mut reg = CardRegistry::new();
+    // "Whenever this quests, at the end of this turn, gain 2 lore."
+    reg.insert(
+        CardDefinition::character(CardDefId::from_raw(100), 1, true, 1, 3, 1).with_abilities(vec![
+            TriggeredAbility::new(
+                TriggerCondition::WhenThisQuests,
+                Effect::ScheduleDelayed {
+                    when: DelayedWhen::EndOfTurn,
+                    effect: Box::new(Effect::GainLore(2)),
+                },
+            ),
+        ]),
+    );
+    let mut state = started(&reg);
+    let a = state.active_player();
+    let q = place(&mut state, a, 1000, 100);
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: q }).expect("quest");
+    assert_eq!(
+        lore(&state, a),
+        1,
+        "only the quest lore so far; delayed not yet fired"
+    );
+
+    end_turn(&mut state, &reg);
+    assert_eq!(
+        lore(&state, a),
+        3,
+        "the delayed effect fired at end of turn (+2)"
+    );
 }
