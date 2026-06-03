@@ -166,3 +166,92 @@ fn an_unparseable_ability_is_rejected() {
     .expect_err("unknown effect verb");
     assert!(format!("{err}").contains("no known effect verb"), "{err}");
 }
+
+#[test]
+fn a_dsl_authored_card_plays_through_the_engine() {
+    use lorcana_engine::{
+        CardInstance, CardRegistry, Conditions, GameState, GameStatus, Input, apply, start,
+    };
+
+    // Build the registry from the committed TOML, then play one of its cards.
+    let mut reg = CardRegistry::new();
+    for def in load_toml(EXAMPLES).expect("load") {
+        reg.insert(def);
+    }
+    // examples.toml order: Abu=0 (vanilla cost-1, inkable), Genie=1.
+    let abu = CardDefId::from_raw(0);
+    let genie_def = CardDefId::from_raw(1);
+
+    let decks = vec![
+        (0..30).map(|_| abu).collect::<Vec<_>>(),
+        (0..30).map(|_| abu).collect(),
+    ];
+    let mut state = GameState::new(decks, 7);
+    let _ = start(&mut state).expect("start");
+    while let GameStatus::AwaitingMulligan(p) = *state.status() {
+        let _ = apply(
+            &mut state,
+            &reg,
+            Input::Mulligan {
+                player: p,
+                put_back: Vec::new(),
+            },
+        )
+        .expect("mulligan");
+    }
+
+    let me = state.active_player();
+    // Put Genie in hand + 5 ready ink to pay its cost.
+    let genie = state.allocate_card_id();
+    state
+        .player_mut(me)
+        .unwrap()
+        .hand_mut()
+        .push(CardInstance::new(
+            genie,
+            genie_def,
+            Conditions::faceup_idle(),
+        ));
+    for _ in 0..5 {
+        let ink = state.allocate_card_id();
+        state
+            .player_mut(me)
+            .unwrap()
+            .inkwell_mut()
+            .push(CardInstance::new(ink, abu, Conditions::faceup_idle()));
+    }
+    let lore_before = state.player(me).unwrap().lore();
+    let deck_before = state.player(me).unwrap().deck().iter().count();
+
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::PlayCard {
+            card: genie,
+            shift_onto: None,
+        },
+    )
+    .expect("play Genie");
+
+    // Genie's TOML ability — "when played, draw a card and gain 1 lore" — fired:
+    // a card was drawn and lore went up (and Genie is in play).
+    assert!(
+        state
+            .player(me)
+            .unwrap()
+            .play()
+            .iter()
+            .any(|c| c.id() == genie),
+        "Genie entered play"
+    );
+    assert_eq!(
+        state.player(me).unwrap().lore(),
+        lore_before + 1,
+        "gained 1 lore"
+    );
+    assert_eq!(
+        state.player(me).unwrap().deck().iter().count(),
+        deck_before - 1,
+        "drew a card"
+    );
+}
