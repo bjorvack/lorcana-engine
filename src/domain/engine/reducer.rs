@@ -10,7 +10,8 @@ use crate::domain::effects::{
 };
 use crate::domain::game::{
     CardInstance, CharacterStats, Conditions, GameEvent, GameState, GameStatus, LocationStats,
-    ModifierDuration, ModifierTarget, PendingDecision, RuleModifier, Stat, StatModifier, TriggerId,
+    ModifierDuration, ModifierTarget, PendingDecision, Property, PropertyModifier, RuleModifier,
+    Stat, StatModifier, TriggerId,
 };
 use crate::domain::rules::game_state_check;
 use crate::domain::types::card::Classification;
@@ -892,34 +893,21 @@ fn apply_challenge(
     // Legality passed; derive what's needed to resolve the challenge.
     let target_owner =
         opposing_owner_of(state, active, target).expect("legality validated the target owner");
-    let challenger_def_id = find_in_play(state, active, challenger)
-        .expect("legality validated the challenger")
-        .definition();
-    let target_def_id = find_in_play(state, target_owner, target)
-        .expect("legality validated the target")
-        .definition();
-
     // Current Strength includes continuous modifiers, clamped at 0 (§4.3.6.14,
     // §7.8.2); the challenger also gets Challenger +N while challenging (§10.5).
-    let challenger_bonus = registry
-        .get(challenger_def_id)
-        .map_or(0, CardDefinition::challenger_bonus);
+    // Challenger/Resist are effective values (printed + effect-granted).
     let challenger_strength = state
         .current_character_stats(challenger)
         .map_or(0, |s| s.strength)
-        + challenger_bonus;
+        + effective_challenger_bonus(state, registry, challenger);
     let target_strength = state
         .current_character_stats(target)
         .map_or(0, |s| s.strength);
 
     // Resist +N reduces the damage each takes (§10.8); applied inline (the general
     // damage-replacement framework is Slice 8).
-    let challenger_resist = registry
-        .get(challenger_def_id)
-        .map_or(0, CardDefinition::resist);
-    let target_resist = registry
-        .get(target_def_id)
-        .map_or(0, CardDefinition::resist);
+    let challenger_resist = effective_resist(state, registry, challenger);
+    let target_resist = effective_resist(state, registry, target);
     let damage_to_target = challenger_strength.saturating_sub(target_resist);
     let damage_to_challenger = target_strength.saturating_sub(challenger_resist);
 
@@ -1057,10 +1045,46 @@ fn character_has_keyword(
     card: CardId,
     keyword: &Keyword,
 ) -> bool {
-    state
+    let printed = state
         .instance_in_play(card)
         .and_then(|i| registry.get(i.definition()))
-        .is_some_and(|d| d.has_keyword(keyword))
+        .is_some_and(|d| d.has_keyword(keyword));
+    // Effect-granted keywords ("gains Alert/Evasive/…") OR in (§10, §1.2.1).
+    printed || state.granted_keywords(card).iter().any(|k| k == keyword)
+}
+
+/// The card's effective Challenger +N: printed plus any effect-granted Challenger.
+fn effective_challenger_bonus(state: &GameState, registry: &CardRegistry, card: CardId) -> u32 {
+    let printed = state
+        .instance_in_play(card)
+        .and_then(|i| registry.get(i.definition()))
+        .map_or(0, CardDefinition::challenger_bonus);
+    let granted: u32 = state
+        .granted_keywords(card)
+        .iter()
+        .filter_map(|k| match k {
+            Keyword::Challenger(n) => Some(*n),
+            _ => None,
+        })
+        .sum();
+    printed + granted
+}
+
+/// The card's effective Resist +N: printed plus any effect-granted Resist.
+fn effective_resist(state: &GameState, registry: &CardRegistry, card: CardId) -> u32 {
+    let printed = state
+        .instance_in_play(card)
+        .and_then(|i| registry.get(i.definition()))
+        .map_or(0, CardDefinition::resist);
+    let granted: u32 = state
+        .granted_keywords(card)
+        .iter()
+        .filter_map(|k| match k {
+            Keyword::Resist(n) => Some(*n),
+            _ => None,
+        })
+        .sum();
+    printed + granted
 }
 
 /// Target-side challenge legality **excluding** the Bodyguard must-choose rule:
@@ -1950,59 +1974,71 @@ fn execute_effect(
         | Effect::RemoveDamage { target, .. }
         | Effect::Banish(target)
         | Effect::Exert(target)
-        | Effect::Ready(target) => match target {
-            Target::SelfCard => apply_effect_to(state, registry, source, source, effect, events),
-            Target::ChosenCharacter { filter, another } => {
-                let options =
-                    chosen_character_options(state, registry, controller, source, filter, *another);
-                if !options.is_empty() {
-                    return Some(Choice::One {
-                        options,
-                        effect: effect.clone(),
-                    });
-                }
-            }
-            Target::AllCharacters { filter, another } => {
-                let targets =
-                    chosen_character_options(state, registry, controller, source, filter, *another);
-                for card in targets {
-                    apply_effect_to(state, registry, source, card, effect, events);
-                }
-            }
-            Target::UpToCharacters { filter, max } => {
-                let options =
-                    chosen_character_options(state, registry, controller, source, filter, false);
-                if !options.is_empty() {
-                    return Some(Choice::UpTo {
-                        options,
-                        max: *max,
-                        effect: effect.clone(),
-                    });
-                }
-            }
-            Target::ChosenItem { side } => {
-                let options =
-                    chosen_permanent_options(state, controller, *side, PermanentKind::Item);
-                if !options.is_empty() {
-                    return Some(Choice::One {
-                        options,
-                        effect: effect.clone(),
-                    });
-                }
-            }
-            Target::ChosenLocation { side } => {
-                let options =
-                    chosen_permanent_options(state, controller, *side, PermanentKind::Location);
-                if !options.is_empty() {
-                    return Some(Choice::One {
-                        options,
-                        effect: effect.clone(),
-                    });
-                }
-            }
-        },
+        | Effect::Ready(target)
+        | Effect::GrantKeywordThisTurn { target, .. } => {
+            return resolve_targeted(state, registry, controller, source, target, effect, events);
+        }
     }
     None
+}
+
+/// Resolve a targeted effect's target: apply it now for `SelfCard` / `AllCharacters`,
+/// or report the [`Choice`] the controller must make (§7.1, §7.1.8).
+fn resolve_targeted(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    controller: PlayerId,
+    source: CardId,
+    target: &Target,
+    effect: &Effect,
+    events: &mut Vec<GameEvent>,
+) -> Option<Choice> {
+    match target {
+        Target::SelfCard => {
+            apply_effect_to(state, registry, source, source, effect, events);
+            None
+        }
+        Target::ChosenCharacter { filter, another } => {
+            let options =
+                chosen_character_options(state, registry, controller, source, filter, *another);
+            (!options.is_empty()).then(|| Choice::One {
+                options,
+                effect: effect.clone(),
+            })
+        }
+        Target::AllCharacters { filter, another } => {
+            let targets =
+                chosen_character_options(state, registry, controller, source, filter, *another);
+            for card in targets {
+                apply_effect_to(state, registry, source, card, effect, events);
+            }
+            None
+        }
+        Target::UpToCharacters { filter, max } => {
+            let options =
+                chosen_character_options(state, registry, controller, source, filter, false);
+            (!options.is_empty()).then(|| Choice::UpTo {
+                options,
+                max: *max,
+                effect: effect.clone(),
+            })
+        }
+        Target::ChosenItem { side } => {
+            let options = chosen_permanent_options(state, controller, *side, PermanentKind::Item);
+            (!options.is_empty()).then(|| Choice::One {
+                options,
+                effect: effect.clone(),
+            })
+        }
+        Target::ChosenLocation { side } => {
+            let options =
+                chosen_permanent_options(state, controller, *side, PermanentKind::Location);
+            (!options.is_empty()).then(|| Choice::One {
+                options,
+                effect: effect.clone(),
+            })
+        }
+    }
 }
 
 /// A non-character permanent kind that can be a target.
@@ -2149,6 +2185,14 @@ fn apply_effect_to(
             {
                 c.conditions_mut().ready = ready;
             }
+        }
+        Effect::GrantKeywordThisTurn { keyword, .. } => {
+            state.add_property_modifier(PropertyModifier::new(
+                source,
+                ModifierTarget::Card(target_card),
+                Property::Keyword(keyword.clone()),
+                ModifierDuration::UntilEndOfTurn,
+            ));
         }
         // Never reach here: these are resolved in `execute_effect`, not applied to
         // a concrete target.

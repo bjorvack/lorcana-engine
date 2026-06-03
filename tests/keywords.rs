@@ -3,9 +3,9 @@
 //! challenge legality/damage seam.
 
 use lorcana_engine::{
-    CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterStats, Conditions,
-    Decision, Effect, GameState, GameStatus, Input, Keyword, LocationStats, PlayerId,
-    TriggerCondition, TriggeredAbility, apply, start,
+    CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterFilter, CharacterStats,
+    Conditions, Decision, Effect, GameState, GameStatus, Input, Keyword, LocationStats, PlayerId,
+    Target, TargetSide, TriggerCondition, TriggeredAbility, apply, start,
 };
 
 fn started(registry: &CardRegistry) -> GameState {
@@ -608,5 +608,51 @@ fn bodyguard_may_decline_to_enter_exerted() {
     assert!(
         ready_in_play(&state, active, card),
         "stayed ready when declined"
+    );
+}
+
+#[test]
+fn effect_granted_challenger_adds_strength_in_a_challenge() {
+    let mut registry = CardRegistry::new();
+    // Quester grants "Challenger +3 this turn" to another chosen character of yours.
+    registry.insert(char_def(101).with_abilities(vec![TriggeredAbility::new(
+        TriggerCondition::WhenThisQuests,
+        Effect::GrantKeywordThisTurn {
+            target: Target::ChosenCharacter {
+                filter: CharacterFilter::any(TargetSide::Yours),
+                another: true,
+            },
+            keyword: Keyword::Challenger(3),
+        },
+    )]));
+    registry.insert(char_def(100)); // the challenger
+    registry.insert(char_def(200)); // the target
+    let mut state = started(&registry);
+    let active = state.active_player();
+    let foe = opponent_of(&state, active);
+    let quester = place(&mut state, active, 1, 101, 1, 5, true, false);
+    let challenger = place(&mut state, active, 2, 100, 2, 5, true, false); // {S} 2
+    let target = place(&mut state, foe, 3, 200, 1, 9, false, false); // exerted, willpower 9
+
+    // Quest grants the challenger Challenger +3.
+    let _ = apply(&mut state, &registry, Input::Quest { character: quester }).expect("quest");
+    let _ = apply(
+        &mut state,
+        &registry,
+        Input::Decide(Decision::ChooseTarget(challenger)),
+    )
+    .expect("grant target");
+
+    let _ = apply(
+        &mut state,
+        &registry,
+        Input::Challenge { challenger, target },
+    )
+    .expect("challenge");
+
+    assert_eq!(
+        damage(&state, foe, target),
+        Some(5),
+        "2 base {{S}} + granted Challenger +3"
     );
 }

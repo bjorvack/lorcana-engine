@@ -7,6 +7,7 @@
 //! damage, a negative `{L}` grants none), while the true value is retained for
 //! combining further modifiers (§7.8.1.2/§7.8.2/§7.8.3).
 
+use crate::domain::cards::Keyword;
 use crate::domain::types::card::Classification;
 use crate::domain::types::ids::{CardId, PlayerId};
 use serde::{Deserialize, Serialize};
@@ -86,6 +87,92 @@ impl RuleModifier {
         match self {
             Self::LoreToWin { source, .. } => source,
         }
+    }
+}
+
+/// A continuous **prevention** an effect/keyword places on a card ("can't …").
+/// Preventions beat permissions (§1.2.2).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum Restriction {
+    /// The character can't quest ("can't quest", granted Reckless).
+    CantQuest,
+    /// The character can't challenge.
+    CantChallenge,
+    /// The character/location can't be challenged ("can't be challenged while here").
+    CantBeChallenged,
+}
+
+/// A continuous **permission** an effect grants a card ("can …"). Kept distinct
+/// from [`Restriction`] so the two never get conflated (and §1.2.2: a prevention
+/// still beats a permission).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum Permission {
+    /// The character may challenge **ready** characters, not just exerted ones
+    /// (Pick a Fight).
+    ChallengeReady,
+}
+
+/// A continuous boolean property an effect/ability grants to one or more in-play
+/// cards: a granted keyword (§10), a [`Restriction`], or a [`Permission`].
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub enum Property {
+    /// A granted keyword (e.g. `Challenger(2)`, `Evasive`).
+    Keyword(Keyword),
+    /// A granted prevention.
+    Restriction(Restriction),
+    /// A granted permission.
+    Permission(Permission),
+}
+
+/// A continuous [`Property`] applied to one or more in-play cards, mirroring
+/// [`StatModifier`]. Removed when its source leaves play / at end of turn.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct PropertyModifier {
+    source: CardId,
+    target: ModifierTarget,
+    property: Property,
+    duration: ModifierDuration,
+}
+
+impl PropertyModifier {
+    /// Create a property modifier.
+    #[must_use]
+    pub const fn new(
+        source: CardId,
+        target: ModifierTarget,
+        property: Property,
+        duration: ModifierDuration,
+    ) -> Self {
+        Self {
+            source,
+            target,
+            property,
+            duration,
+        }
+    }
+
+    /// The card whose ability generates this modifier.
+    #[must_use]
+    pub const fn source(&self) -> CardId {
+        self.source
+    }
+
+    /// The target this modifier applies to.
+    #[must_use]
+    pub const fn target(&self) -> &ModifierTarget {
+        &self.target
+    }
+
+    /// The granted property.
+    #[must_use]
+    pub const fn property(&self) -> &Property {
+        &self.property
+    }
+
+    /// The duration.
+    #[must_use]
+    pub const fn duration(&self) -> ModifierDuration {
+        self.duration
     }
 }
 

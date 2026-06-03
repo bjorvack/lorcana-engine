@@ -2,8 +2,10 @@
 
 use super::{
     BagEntry, CardInstance, CharacterStats, Conditions, GameStatus, ModifierDuration,
-    PendingDecision, PlayerState, RuleModifier, SeededRng, Stat, StatModifier, TriggerId, Zone,
+    PendingDecision, Permission, PlayerState, Property, PropertyModifier, Restriction,
+    RuleModifier, SeededRng, Stat, StatModifier, TriggerId, Zone,
 };
+use crate::domain::cards::Keyword;
 use crate::domain::effects::Effect;
 use crate::domain::types::ids::{CardDefId, CardId, PlayerId};
 use crate::domain::types::turn::{Phase, Step};
@@ -42,6 +44,8 @@ pub struct GameState {
     next_trigger_id: u32,
     /// Active continuous stat modifiers (§7.6, §7.8).
     modifiers: Vec<StatModifier>,
+    /// Active continuous property modifiers (granted keywords / restrictions).
+    property_modifiers: Vec<PropertyModifier>,
     /// Active game-rule modifiers (e.g. lore-to-win overrides, §1.2.1).
     rule_modifiers: Vec<RuleModifier>,
 }
@@ -97,6 +101,7 @@ impl GameState {
             pending: None,
             next_trigger_id: 0,
             modifiers: Vec::new(),
+            property_modifiers: Vec::new(),
             rule_modifiers: Vec::new(),
         }
     }
@@ -320,7 +325,45 @@ impl GameState {
     /// `docs/planning/IMPLEMENTATION_PLAN.md`.
     pub fn remove_modifiers_from_source(&mut self, source: CardId) {
         self.modifiers.retain(|m| m.source() != source);
+        self.property_modifiers.retain(|m| m.source() != source);
         self.rule_modifiers.retain(|m| m.source() != source);
+    }
+
+    /// Add a continuous property modifier (granted keyword / restriction).
+    pub fn add_property_modifier(&mut self, modifier: PropertyModifier) {
+        self.property_modifiers.push(modifier);
+    }
+
+    /// The keywords granted to `card` by active property modifiers (in addition
+    /// to its printed keywords, which live on the definition).
+    #[must_use]
+    pub fn granted_keywords(&self, card: CardId) -> Vec<Keyword> {
+        self.property_modifiers
+            .iter()
+            .filter(|m| self.target_matches(m.target(), card))
+            .filter_map(|m| match m.property() {
+                Property::Keyword(k) => Some(k.clone()),
+                Property::Restriction(_) | Property::Permission(_) => None,
+            })
+            .collect()
+    }
+
+    /// Whether `card` currently has the given [`Restriction`] (prevention).
+    #[must_use]
+    pub fn has_restriction(&self, card: CardId, restriction: Restriction) -> bool {
+        self.property_modifiers
+            .iter()
+            .filter(|m| self.target_matches(m.target(), card))
+            .any(|m| matches!(m.property(), Property::Restriction(r) if *r == restriction))
+    }
+
+    /// Whether `card` currently has the given [`Permission`].
+    #[must_use]
+    pub fn has_permission(&self, card: CardId, permission: Permission) -> bool {
+        self.property_modifiers
+            .iter()
+            .filter(|m| self.target_matches(m.target(), card))
+            .any(|m| matches!(m.property(), Property::Permission(p) if *p == permission))
     }
 
     /// Add a game-rule modifier (e.g. a lore-to-win override).
@@ -355,6 +398,8 @@ impl GameState {
     /// that enter play later — unlike the continuous selector statics in 5e.
     pub fn expire_end_of_turn_modifiers(&mut self) {
         self.modifiers
+            .retain(|m| m.duration() != ModifierDuration::UntilEndOfTurn);
+        self.property_modifiers
             .retain(|m| m.duration() != ModifierDuration::UntilEndOfTurn);
     }
 

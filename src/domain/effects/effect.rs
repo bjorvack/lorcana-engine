@@ -1,6 +1,7 @@
 //! Effects produced by abilities.
 
 use super::target::Target;
+use crate::domain::cards::Keyword;
 use serde::{Deserialize, Serialize};
 
 /// A built-in effect an ability or action can produce.
@@ -64,6 +65,14 @@ pub enum Effect {
     Exert(Target),
     /// Ready the target ("ready this character" / "ready chosen character").
     Ready(Target),
+    /// Give the target a keyword until end of turn ("chosen character gains
+    /// Challenger +2 this turn", "gains Evasive", §10).
+    GrantKeywordThisTurn {
+        /// Who gains the keyword.
+        target: Target,
+        /// The granted keyword.
+        keyword: Keyword,
+    },
     /// Resolve `then` only if the controller has at least one in-play character
     /// matching `filter` ("if you have a character named X in play, …", §7.1).
     IfControl {
