@@ -794,11 +794,11 @@ pattern can collapse. Tracked and done one at a time:
       `Not(IsSource)` / `Not(IsCard)` via the algebra (no flag/helper/`options.retain`).
       Recorded as a required rule in `AGENTS.md` ("Composable algebras").
 - [x] **#2 collapse `Grant*ThisTurn` → `GrantThisTurn { target, property }`**.
-- [ ] **#3 fold `Count` into `Amount`** — *blocked*: `Count` evaluates inside the
-      registry-free `GameState`, but the filter algebra needs the registry for
-      `Named`/`Cost`. Clean unblock: **denormalize cost + names onto `CardInstance`**
-      (as classifications already are) so `eval_filter` is registry-free and one
-      evaluator serves both. Then `Count::ControlledCharacters` → `PerMatching(filter)`.
+- [x] **#3 fold `Count` into `Amount`** — denormalized cost + names onto
+      `CardInstance` so the filter is registry-free; one `GameState::matches_filter`
+      / `eval_amount` now serves both the reducer and dynamic statics, and `Count`
+      is gone (`ControlledCharacters` → `PerMatchingCharacter(filter)`, plus
+      `CardsInHand`/`DamageOnSource`).
 - [x] **#4 fold `PlayFilter` into the filter algebra** — added
       `CharacterFilter::Category(CardCategory)`; removed `PlayFilter`. One vocabulary
       for in-play/hand/deck: in-play derives category from the instance
@@ -825,13 +825,6 @@ pattern can collapse. Tracked and done one at a time:
       parallel `chosen_permanent_options`/`PermanentKind` path is deleted —
       item/location targeting now goes through the unified filter algebra like
       everything else.
-- [ ] **#2** collapse `GrantKeywordThisTurn`/`RestrictThisTurn`/`PermitThisTurn` →
-      `GrantThisTurn { target, property }`.
-- [ ] **#3** fold `Count` into `Amount` (`ControlledCharacters` → `PerMatching(filter)`).
-- [ ] **#4** fold `PlayFilter` (hand) into the unified card-filter algebra.
-- [ ] **#5** unify `Target` (card ref) and `PlayerScope` (player ref) as a choosable
-      reference; remove `substitute_chosen_player`/`substitute_move_endpoint`; fully
-      remove `another`.
 
 All previously-deferred card features are now done: granted **activated** abilities
 (`Effect::GrantActivatedThisTurn`, `tests/granted.rs`) and **Blast from Your Past**
