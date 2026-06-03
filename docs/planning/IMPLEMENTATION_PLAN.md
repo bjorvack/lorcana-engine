@@ -783,8 +783,9 @@ work, tracked separately.
   rule-cited (§7–§10) **end-to-end** golden tests; every card is authored in the
   TOML DSL and loaded, so they exercise loader → engine. Runs under the existing
   CI `cargo test`. Covers §7.1.2 ordering, §8 bounce, §9 lethal damage, and
-  keywords §10.2/10.3/10.5/10.6/10.7/10.8/10.9/10.15. Growing as mechanics are
-  covered.
+  §7.4 "whenever you play a [category]", into-inkwell, and keywords
+  §10.2/10.3/10.5/10.6/10.7/10.8/10.9/10.15. DSL trigger surface gained
+  `play_action`/`play_song`/`play_character`/… (`WhenYouPlay`). Growing.
 - [ ] No remaining items in the `TriggerCondition` TODO.
 
 ---

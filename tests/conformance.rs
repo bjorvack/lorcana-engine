@@ -715,3 +715,69 @@ fn a_character_moves_to_a_loaded_location() {
         "the character is recorded at the location"
     );
 }
+
+/// §7.4 — "Whenever you play an action": a watcher's ability fires when its
+/// controller plays a matching card.
+#[test]
+fn whenever_you_play_an_action_fires() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Watcher"
+        type = "Character"
+        cost = 1
+        strength = 1
+        willpower = 5
+        lore = 1
+        [[card.abilities]]
+        on = "play_action"
+        do = { gain_lore = 1 }
+        [[card]]
+        name = "Zap"
+        type = "Action"
+        cost = 1
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let _ = place(&mut state, me, 100, 0, 1, 5, true); // the Watcher
+
+    // Put the action (def 1) in hand + 1 ready ink to play it.
+    let zap = CardId::from_raw(300);
+    state
+        .player_mut(me)
+        .unwrap()
+        .hand_mut()
+        .push(CardInstance::new(
+            zap,
+            CardDefId::from_raw(1),
+            Conditions::faceup_idle(),
+        ));
+    let ink = CardId::from_raw(301);
+    state
+        .player_mut(me)
+        .unwrap()
+        .inkwell_mut()
+        .push(CardInstance::new(
+            ink,
+            CardDefId::from_raw(1),
+            Conditions::faceup_idle(),
+        ));
+    let lore_before = lore(&state, me);
+
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::PlayCard {
+            card: zap,
+            shift_onto: None,
+        },
+    )
+    .expect("play action");
+
+    assert_eq!(
+        lore(&state, me),
+        lore_before + 1,
+        "the play-an-action trigger fired"
+    );
+}

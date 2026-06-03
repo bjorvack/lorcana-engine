@@ -66,6 +66,11 @@ impl TomlAbility {
 fn trigger_from(s: &str) -> Result<TriggerCondition, String> {
     Ok(match s {
         "play" | "play_this" => TriggerCondition::WhenYouPlayThis,
+        "play_action" => TriggerCondition::WhenYouPlay(CardCategory::Action),
+        "play_song" => TriggerCondition::WhenYouPlay(CardCategory::Song),
+        "play_character" => TriggerCondition::WhenYouPlay(CardCategory::Character(None)),
+        "play_item" => TriggerCondition::WhenYouPlay(CardCategory::Item),
+        "play_location" => TriggerCondition::WhenYouPlay(CardCategory::Location),
         "quest" => TriggerCondition::WhenThisQuests,
         "challenge" => TriggerCondition::WhenThisChallenges,
         "challenged" => TriggerCondition::WhenChallenged,
