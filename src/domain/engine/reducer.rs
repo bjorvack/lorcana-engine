@@ -7,7 +7,7 @@ use crate::domain::cards::{
 };
 use crate::domain::effects::{
     Amount, CardCategory, CharacterFilter, DeckPosition, DelayedWhen, Destination, DiscardAmount,
-    Effect, MoveSource, PlayFilter, PlayerScope, Target, TargetSide, TriggerCondition,
+    Effect, MoveSource, PlayerScope, Target, TargetSide, TriggerCondition,
 };
 use crate::domain::game::{
     CardInstance, CharacterStats, ChoiceRef, ChoiceThen, Conditions, DelayedTrigger, GameEvent,
@@ -2854,7 +2854,7 @@ fn eligible_free_plays(
     state: &GameState,
     registry: &CardRegistry,
     player: PlayerId,
-    filter: &PlayFilter,
+    filter: &CharacterFilter,
 ) -> Vec<CardId> {
     state
         .player(player)
@@ -2864,7 +2864,7 @@ fn eligible_free_plays(
                 .filter(|c| {
                     registry
                         .get(c.definition())
-                        .is_some_and(|d| play_filter_matches(filter, d))
+                        .is_some_and(|d| def_matches_filter(player, player, d, filter))
                 })
                 .map(CardInstance::id)
                 .collect()
@@ -2881,7 +2881,7 @@ fn resolve_look_at_top(
     controller: PlayerId,
     whose: PlayerScope,
     count: u32,
-    filter: &PlayFilter,
+    filter: &CharacterFilter,
     rest: DeckPosition,
     effect: &Effect,
 ) -> Option<Choice> {
@@ -2902,7 +2902,7 @@ fn resolve_look_at_top(
         .filter(|&id| {
             deck_card_def(state, owner, id)
                 .and_then(|d| registry.get(d))
-                .is_some_and(|def| play_filter_matches(filter, def))
+                .is_some_and(|def| def_matches_filter(controller, owner, def, filter))
         })
         .collect();
     if options.is_empty() {
@@ -2962,13 +2962,34 @@ fn apply_amount_effect(
     }
 }
 
-/// Whether a card definition satisfies a [`PlayFilter`] (cost ceiling + category).
-fn play_filter_matches(filter: &PlayFilter, def: &CardDefinition) -> bool {
-    filter.max_cost.is_none_or(|m| def.cost() <= m)
-        && filter
-            .category
-            .as_ref()
-            .is_none_or(|cat| category_matches(cat, def))
+/// Evaluate the [`CharacterFilter`] algebra against a card **definition** (a card
+/// in hand/deck, from `controller`'s view with the card owned by `owner`). Only
+/// the printed predicates apply; instance-only ones (damage/exert/`{S}`/source/
+/// specific-card) are false for a zoned card (§6).
+fn def_matches_filter(
+    controller: PlayerId,
+    owner: PlayerId,
+    def: &CardDefinition,
+    filter: &CharacterFilter,
+) -> bool {
+    let recurse = |f: &CharacterFilter| def_matches_filter(controller, owner, def, f);
+    match filter {
+        CharacterFilter::Any | CharacterFilter::Side(TargetSide::Any) => true,
+        CharacterFilter::Side(TargetSide::Yours) => owner == controller,
+        CharacterFilter::Side(TargetSide::Opposing) => owner != controller,
+        CharacterFilter::Classification(c) => def.has_classification(c),
+        CharacterFilter::Category(cat) => category_matches(cat, def),
+        CharacterFilter::Named(n) => def.has_name(n),
+        CharacterFilter::Cost(nf) => nf.matches(def.cost()),
+        CharacterFilter::Strength(_)
+        | CharacterFilter::Damaged(_)
+        | CharacterFilter::Exerted(_)
+        | CharacterFilter::IsSource
+        | CharacterFilter::IsCard(_) => false,
+        CharacterFilter::And(fs) => fs.iter().all(recurse),
+        CharacterFilter::Or(fs) => fs.iter().any(recurse),
+        CharacterFilter::Not(f) => !recurse(f),
+    }
 }
 
 /// The top `count` cards of `player`'s deck, in deck order (bottom-to-top of the

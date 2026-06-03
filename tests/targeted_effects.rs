@@ -5,9 +5,8 @@
 use lorcana_engine::{
     Amount, CardCategory, CardDefId, CardDefinition, CardId, CardInstance, CardRegistry,
     CharacterFilter, CharacterStats, ChoiceRef, Classification, Conditions, Decision,
-    DiscardAmount, Effect, GameState, GameStatus, Input, NumericFilter, PendingDecision,
-    PlayFilter, PlayerId, PlayerScope, Target, TargetSide, TriggerCondition, TriggeredAbility,
-    apply, start,
+    DiscardAmount, Effect, GameState, GameStatus, Input, NumericFilter, PendingDecision, PlayerId,
+    PlayerScope, Target, TargetSide, TriggerCondition, TriggeredAbility, apply, start,
 };
 
 fn started(reg: &CardRegistry) -> GameState {
@@ -932,10 +931,8 @@ fn registry_with_quester(ability: Effect) -> CardRegistry {
 #[test]
 fn play_a_character_from_hand_for_free() {
     let reg = registry_with_quester(Effect::PlayFreeFromHand {
-        filter: PlayFilter {
-            max_cost: Some(5),
-            category: Some(CardCategory::Character(None)),
-        },
+        filter: CharacterFilter::Category(CardCategory::Character(None))
+            .and(CharacterFilter::Cost(NumericFilter::at_most(5))),
     });
     let mut state = started(&reg);
     let active = state.active_player();
@@ -987,10 +984,8 @@ fn may_wrapper_resolves_inner_only_on_yes() {
 fn may_composes_with_play_free() {
     // "You may play a character for free" = May(PlayFreeFromHand{..}).
     let reg = registry_with_quester(Effect::May(Box::new(Effect::PlayFreeFromHand {
-        filter: PlayFilter {
-            max_cost: Some(5),
-            category: Some(CardCategory::Character(None)),
-        },
+        filter: CharacterFilter::Category(CardCategory::Character(None))
+            .and(CharacterFilter::Cost(NumericFilter::at_most(5))),
     })));
     let mut state = started(&reg);
     let active = state.active_player();

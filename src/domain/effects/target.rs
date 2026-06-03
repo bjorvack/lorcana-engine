@@ -1,5 +1,6 @@
 //! Targets that an effect applies to (§7.1).
 
+use super::trigger::CardCategory;
 use crate::domain::types::card::Classification;
 use crate::domain::types::ids::CardId;
 use serde::{Deserialize, Serialize};
@@ -80,6 +81,9 @@ pub enum CharacterFilter {
     Side(TargetSide),
     /// Has the given classification.
     Classification(Classification),
+    /// Is of the given card category (character / action / song / item /
+    /// location). Lets one filter vocabulary cover hand/deck cards too (§6).
+    Category(CardCategory),
     /// Counts as the given name ("named X").
     Named(String),
     /// Printed ink cost satisfies the numeric filter.

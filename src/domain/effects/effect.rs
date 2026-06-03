@@ -1,7 +1,7 @@
 //! Effects produced by abilities.
 
 use super::target::{CharacterFilter, Target};
-use super::trigger::{CardCategory, TriggerCondition};
+use super::trigger::TriggerCondition;
 use crate::domain::game::{Property, Stat};
 use crate::domain::types::ids::PlayerId;
 use serde::{Deserialize, Serialize};
@@ -38,15 +38,6 @@ impl Amount {
     pub const fn fixed(n: i32) -> Self {
         Self::Fixed(n)
     }
-}
-
-/// Which cards in a zone are eligible to be played by a "play … for free" effect.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default)]
-pub struct PlayFilter {
-    /// Maximum ink cost ("a character with cost 5 or less"); `None` = any.
-    pub max_cost: Option<u32>,
-    /// Required card category ("an action", "a character"); `None` = any.
-    pub category: Option<CardCategory>,
 }
 
 /// What a [`Effect::Move`] selects to move.
@@ -278,7 +269,7 @@ pub enum Effect {
     /// "you may play …".
     PlayFreeFromHand {
         /// Which hand cards are eligible.
-        filter: PlayFilter,
+        filter: CharacterFilter,
     },
     /// Look at the top `count` cards of `whose` deck; the controller may take **up
     /// to one** matching `filter` into their hand; the rest go to `rest` (§8.2).
@@ -290,7 +281,7 @@ pub enum Effect {
         /// How many cards to look at.
         count: u32,
         /// Which of the looked-at cards the controller may take into hand.
-        filter: PlayFilter,
+        filter: CharacterFilter,
         /// Where the cards that aren't taken go (in the looked-at player's deck).
         rest: DeckPosition,
     },

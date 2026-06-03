@@ -7,7 +7,9 @@ use super::{
     TriggerId, Zone,
 };
 use crate::domain::cards::Keyword;
-use crate::domain::effects::{Amount, CharacterFilter, DelayedWhen, Effect, Target, TargetSide};
+use crate::domain::effects::{
+    Amount, CardCategory, CharacterFilter, DelayedWhen, Effect, Target, TargetSide,
+};
 use crate::domain::types::ids::{CardDefId, CardId, PlayerId};
 use crate::domain::types::turn::{Phase, Step};
 use serde::{Deserialize, Serialize};
@@ -519,6 +521,17 @@ impl GameState {
             CharacterFilter::Side(TargetSide::Yours) => owner == controller,
             CharacterFilter::Side(TargetSide::Opposing) => owner != controller,
             CharacterFilter::Classification(c) => card.has_classification(c),
+            // In-play category is derived from the instance (no registry): character
+            // cards have `{S}`/`{W}`, locations have location stats, else item.
+            // Actions/songs are never in play, so they never match here.
+            CharacterFilter::Category(cat) => match cat {
+                CardCategory::Character(cls) => {
+                    card.is_character() && cls.as_ref().is_none_or(|c| card.has_classification(c))
+                }
+                CardCategory::Location => card.location_stats().is_some(),
+                CardCategory::Item => !card.is_character() && card.location_stats().is_none(),
+                CardCategory::Action | CardCategory::Song => false,
+            },
             CharacterFilter::Named(n) => card.has_name(n),
             CharacterFilter::Cost(nf) => nf.matches(card.printed_cost()),
             CharacterFilter::Strength(nf) => nf.matches(

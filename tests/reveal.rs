@@ -4,8 +4,9 @@
 
 use lorcana_engine::{
     CardCategory, CardDefId, CardDefinition, CardId, CardInstance, CardKind, CardRegistry,
-    CharacterStats, ChoiceRef, Conditions, Decision, DeckPosition, Effect, GameState, GameStatus,
-    Input, PendingDecision, PlayFilter, PlayerId, TriggerCondition, TriggeredAbility, apply, start,
+    CharacterFilter, CharacterStats, ChoiceRef, Conditions, Decision, DeckPosition, Effect,
+    GameState, GameStatus, Input, PendingDecision, PlayerId, TriggerCondition, TriggeredAbility,
+    apply, start,
 };
 
 const fn char_def(id: u32) -> CardDefinition {
@@ -82,10 +83,7 @@ fn look_quester(count: u32, category: Option<CardCategory>, rest: DeckPosition) 
         Effect::LookAtTopAndTake {
             whose: lorcana_engine::PlayerScope::You,
             count,
-            filter: PlayFilter {
-                max_cost: None,
-                category,
-            },
+            filter: category.map_or(CharacterFilter::Any, CharacterFilter::Category),
             rest,
         },
     )])
@@ -215,10 +213,7 @@ fn look_at_a_chosen_players_deck_and_take_to_your_hand() {
             Effect::LookAtTopAndTake {
                 whose: lorcana_engine::PlayerScope::ChosenPlayer,
                 count: 1,
-                filter: PlayFilter {
-                    max_cost: None,
-                    category: Some(CardCategory::Character(None)),
-                },
+                filter: CharacterFilter::Category(CardCategory::Character(None)),
                 rest: DeckPosition::Bottom,
             },
         )]),
