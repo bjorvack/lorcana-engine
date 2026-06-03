@@ -778,3 +778,27 @@ work, tracked separately.
 
 If the project grows, the existing boundaries extract cleanly into:
 `lorcana-domain`, `lorcana-infrastructure`, `lorcana-application`, `lorcana-cli`.
+
+## Composability refactors (in progress)
+
+Survey found bespoke code that the same "small algebra + general continuation"
+pattern can collapse. Tracked and done one at a time:
+
+- [x] **#1a CharacterFilter → boolean algebra** — `enum { Any, Side, Classification,
+      Named, Cost, Strength, Damaged, Exerted, IsSource, IsCard, And, Or, Not }`
+      with a recursive `eval_filter`. `another` is now sugar (`with_another` →
+      `filter.exclude_source()` = `And([.., Not(IsSource)])`); the same exclusion
+      predicates also express "not the already-chosen card". `tests/targeted_effects.rs`
+      (`filter_algebra_or_composes`).
+- [ ] **#1b general `Choose { options, min, max, then }`** + sequential threading of
+      prior results; migrate the 6 bespoke choices onto it.
+- [ ] **#2** collapse `GrantKeywordThisTurn`/`RestrictThisTurn`/`PermitThisTurn` →
+      `GrantThisTurn { target, property }`.
+- [ ] **#3** fold `Count` into `Amount` (`ControlledCharacters` → `PerMatching(filter)`).
+- [ ] **#4** fold `PlayFilter` (hand) into the unified card-filter algebra.
+- [ ] **#5** unify `Target` (card ref) and `PlayerScope` (player ref) as a choosable
+      reference; remove `substitute_chosen_player`/`substitute_move_endpoint`; fully
+      remove `another`.
+
+Deferred card features still open: granted **activated** abilities (Aladdin/Dumbo);
+**Blast from Your Past** (name a card, recur all matching from discard).

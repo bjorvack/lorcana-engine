@@ -1119,7 +1119,13 @@ fn endpoint_options(
     target: &Target,
 ) -> Vec<CardId> {
     if let Target::ChosenCharacter { filter, another } = target {
-        choosable_characters(state, registry, controller, source, filter, *another)
+        choosable_characters(
+            state,
+            registry,
+            controller,
+            source,
+            &with_another(filter, *another),
+        )
     } else {
         Vec::new()
     }
@@ -2424,7 +2430,7 @@ fn execute_effect(
         // in-play character. `then` may itself be targeted (delegated).
         Effect::IfControl { filter, then } => {
             let controls =
-                !matching_characters(state, registry, controller, source, filter, false).is_empty();
+                !matching_characters(state, registry, controller, source, filter).is_empty();
             if controls {
                 return execute_effect(state, registry, controller, source, then, events);
             }
@@ -2482,8 +2488,13 @@ fn resolve_targeted(
             None
         }
         Target::ChosenCharacter { filter, another } => {
-            let options =
-                choosable_characters(state, registry, controller, source, filter, *another);
+            let options = choosable_characters(
+                state,
+                registry,
+                controller,
+                source,
+                &with_another(filter, *another),
+            );
             (!options.is_empty()).then(|| Choice::One {
                 options,
                 effect: effect.clone(),
@@ -2492,15 +2503,20 @@ fn resolve_targeted(
         Target::AllCharacters { filter, another } => {
             // "All characters" affects every match — it does not *choose*, so Ward
             // does not apply (§10.15); use the raw matching set.
-            let targets =
-                matching_characters(state, registry, controller, source, filter, *another);
+            let targets = matching_characters(
+                state,
+                registry,
+                controller,
+                source,
+                &with_another(filter, *another),
+            );
             for card in targets {
                 apply_effect_to(state, registry, controller, source, card, effect, events);
             }
             None
         }
         Target::UpToCharacters { filter, max } => {
-            let options = choosable_characters(state, registry, controller, source, filter, false);
+            let options = choosable_characters(state, registry, controller, source, filter);
             (!options.is_empty()).then(|| Choice::UpTo {
                 options,
                 max: *max,
@@ -2979,8 +2995,7 @@ fn eval_amount(
     match amount {
         Amount::Fixed(n) => *n,
         Amount::PerMatchingCharacter(filter) => {
-            let count =
-                matching_characters(state, registry, controller, source, filter, false).len();
+            let count = matching_characters(state, registry, controller, source, filter).len();
             i32::try_from(count).unwrap_or(i32::MAX)
         }
         // `SelfCard` reads the source; any other target reads the resolved target.
@@ -3396,9 +3411,10 @@ fn apply_effect_to_rest(
             otherwise,
             ..
         } => {
-            let matched = state
-                .instance_in_play(target_card)
-                .is_some_and(|c| character_matches_filter(state, registry, c, filter));
+            let owner = state.card_owner_in_play(target_card).unwrap_or(controller);
+            let matched = state.instance_in_play(target_card).is_some_and(|c| {
+                eval_filter(state, registry, controller, source, owner, c, filter)
+            });
             let branch = if matched { then } else { otherwise };
             apply_effect_to(
                 state,
@@ -3460,32 +3476,31 @@ fn banish_by_effect(
     }
 }
 
-/// The in-play characters eligible for a [`CharacterFilter`] from `controller`'s
-/// perspective (side, classifications, cost/`{S}`, damaged/exerted), optionally
-/// excluding the `source`.
+/// Desugar the `another` flag on a target into the filter algebra: "another …"
+/// is just the filter with the source card excluded (§7.1).
+fn with_another(filter: &CharacterFilter, another: bool) -> CharacterFilter {
+    if another {
+        filter.clone().exclude_source()
+    } else {
+        filter.clone()
+    }
+}
+
+/// The in-play characters matching a [`CharacterFilter`] from `controller`'s
+/// perspective (the algebra is evaluated per card).
 fn matching_characters(
     state: &GameState,
     registry: &CardRegistry,
     controller: PlayerId,
     source: CardId,
     filter: &CharacterFilter,
-    exclude_source: bool,
 ) -> Vec<CardId> {
     let mut out = Vec::new();
     for player in state.players() {
-        let is_yours = player.id() == controller;
-        let side_ok = match filter.side {
-            TargetSide::Any => true,
-            TargetSide::Yours => is_yours,
-            TargetSide::Opposing => !is_yours,
-        };
-        if !side_ok {
-            continue;
-        }
+        let owner = player.id();
         for card in player.play().iter() {
             if card.is_character()
-                && !(exclude_source && card.id() == source)
-                && character_matches_filter(state, registry, card, filter)
+                && eval_filter(state, registry, controller, source, owner, card, filter)
             {
                 out.push(card.id());
             }
@@ -3496,18 +3511,16 @@ fn matching_characters(
 
 /// The characters `controller` may **choose** as a target: the matching
 /// characters minus those an opponent can't choose (Ward / "can't be chosen",
-/// §10.15). Used only by the *choosing* targets (`ChosenCharacter`,
-/// `UpToCharacters`) — effects that affect all characters use
-/// [`matching_characters`] directly, since they don't choose.
+/// §10.15). Used only by the *choosing* targets — effects that affect all
+/// characters use [`matching_characters`] directly, since they don't choose.
 fn choosable_characters(
     state: &GameState,
     registry: &CardRegistry,
     controller: PlayerId,
     source: CardId,
     filter: &CharacterFilter,
-    exclude_source: bool,
 ) -> Vec<CardId> {
-    matching_characters(state, registry, controller, source, filter, exclude_source)
+    matching_characters(state, registry, controller, source, filter)
         .into_iter()
         .filter(|&card| {
             state.card_owner_in_play(card) == Some(controller)
@@ -3516,56 +3529,45 @@ fn choosable_characters(
         .collect()
 }
 
-/// Whether an in-play character matches every set dimension of a filter.
-fn character_matches_filter(
+/// Evaluate the [`CharacterFilter`] algebra against an in-play `card` owned by
+/// `owner`, from the effect `controller`/`source`'s perspective (§7.1).
+fn eval_filter(
     state: &GameState,
     registry: &CardRegistry,
+    controller: PlayerId,
+    source: CardId,
+    owner: PlayerId,
     card: &CardInstance,
     filter: &CharacterFilter,
 ) -> bool {
-    if !filter
-        .classifications
-        .iter()
-        .all(|c| card.has_classification(c))
-    {
-        return false;
-    }
-    if !filter.names.is_empty() {
-        let matches_name = registry
+    let recurse =
+        |f: &CharacterFilter| eval_filter(state, registry, controller, source, owner, card, f);
+    match filter {
+        CharacterFilter::Any | CharacterFilter::Side(TargetSide::Any) => true,
+        CharacterFilter::Side(TargetSide::Yours) => owner == controller,
+        CharacterFilter::Side(TargetSide::Opposing) => owner != controller,
+        CharacterFilter::Classification(c) => card.has_classification(c),
+        CharacterFilter::Named(n) => registry
             .get(card.definition())
-            .is_some_and(|d| filter.names.iter().any(|n| d.has_name(n)));
-        if !matches_name {
-            return false;
-        }
+            .is_some_and(|d| d.has_name(n)),
+        CharacterFilter::Cost(nf) => nf.matches(
+            registry
+                .get(card.definition())
+                .map_or(0, CardDefinition::cost),
+        ),
+        CharacterFilter::Strength(nf) => nf.matches(
+            state
+                .current_character_stats(card.id())
+                .map_or(0, |s| s.strength),
+        ),
+        CharacterFilter::Damaged(b) => (card.conditions().damage > 0) == *b,
+        CharacterFilter::Exerted(b) => card.conditions().ready != *b,
+        CharacterFilter::IsSource => card.id() == source,
+        CharacterFilter::IsCard(id) => card.id() == *id,
+        CharacterFilter::And(fs) => fs.iter().all(recurse),
+        CharacterFilter::Or(fs) => fs.iter().any(recurse),
+        CharacterFilter::Not(f) => !recurse(f),
     }
-    if let Some(nf) = filter.cost {
-        let cost = registry
-            .get(card.definition())
-            .map_or(0, CardDefinition::cost);
-        if !nf.matches(cost) {
-            return false;
-        }
-    }
-    if let Some(nf) = filter.strength {
-        let strength = state
-            .current_character_stats(card.id())
-            .map_or(0, |s| s.strength);
-        if !nf.matches(strength) {
-            return false;
-        }
-    }
-    if let Some(want_damaged) = filter.damaged
-        && (card.conditions().damage > 0) != want_damaged
-    {
-        return false;
-    }
-    // exerted == !ready, so "exerted != want" simplifies to "ready == want".
-    if let Some(want_exerted) = filter.exerted
-        && card.conditions().ready == want_exerted
-    {
-        return false;
-    }
-    true
 }
 
 /// The player whose play area or discard currently holds `card`.

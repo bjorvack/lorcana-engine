@@ -65,45 +65,72 @@ impl NumericFilter {
 
 /// Which characters an effect may apply to / choose from (§7.1, §6.2.6).
 ///
-/// A character matches when it is on the allowed `side`, has every classification
-/// in `classifications`, has one of `names` (if any), and satisfies any set
-/// numeric / state filters. Cost is the printed cost (cost-modifier interaction
-/// on in-play characters is deferred); strength is the **current** `{S}`.
-///
-/// TODO(filter dimensions — grow as cards need them): **player** targets (12) are
-/// a separate axis; see "Slice 8" in `docs/planning/IMPLEMENTATION_PLAN.md`.
+/// A small **boolean algebra** of predicates: leaf predicates (side,
+/// classification, name, cost, current `{S}`, damaged/exerted, the source card, a
+/// specific card) combined with `And` / `Or` / `Not`. This composes — "another
+/// Villain you have in play with cost 3 or less" is just
+/// `And([Side(Yours), Classification(Villain), Cost(≤3), Not(IsSource)])` — and
+/// the same exclusion predicates express "another …" and "not the already-chosen
+/// card" uniformly. Cost is the printed cost; strength is the current `{S}`.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-pub struct CharacterFilter {
-    /// Which side the character may be on.
-    pub side: TargetSide,
-    /// Required classifications (all must be present); empty means no filter.
-    pub classifications: Vec<Classification>,
-    /// Accepted names ("named X"); empty means no name filter, otherwise the
-    /// character must count as one of them.
-    pub names: Vec<String>,
-    /// Constrain the (printed) ink cost.
-    pub cost: Option<NumericFilter>,
-    /// Constrain the current `{S}`.
-    pub strength: Option<NumericFilter>,
-    /// If set, require the character to be damaged (`true`) / undamaged (`false`).
-    pub damaged: Option<bool>,
-    /// If set, require the character to be exerted (`true`) / ready (`false`).
-    pub exerted: Option<bool>,
+pub enum CharacterFilter {
+    /// Matches any character.
+    Any,
+    /// On the given side relative to the effect's controller.
+    Side(TargetSide),
+    /// Has the given classification.
+    Classification(Classification),
+    /// Counts as the given name ("named X").
+    Named(String),
+    /// Printed ink cost satisfies the numeric filter.
+    Cost(NumericFilter),
+    /// Current `{S}` satisfies the numeric filter.
+    Strength(NumericFilter),
+    /// Damaged (`true`) or undamaged (`false`).
+    Damaged(bool),
+    /// Exerted (`true`) or ready (`false`).
+    Exerted(bool),
+    /// The effect's source card itself.
+    IsSource,
+    /// A specific card (e.g. an already-chosen target).
+    IsCard(CardId),
+    /// All sub-filters match (empty ⇒ matches anything).
+    And(Vec<Self>),
+    /// At least one sub-filter matches (empty ⇒ matches nothing).
+    Or(Vec<Self>),
+    /// The sub-filter does not match.
+    Not(Box<Self>),
 }
 
 impl CharacterFilter {
-    /// A filter matching any character on `side` with no other constraints.
+    /// A filter matching any character on `side`.
     #[must_use]
     pub const fn any(side: TargetSide) -> Self {
-        Self {
-            side,
-            classifications: Vec::new(),
-            names: Vec::new(),
-            cost: None,
-            strength: None,
-            damaged: None,
-            exerted: None,
+        Self::Side(side)
+    }
+
+    /// Combine with another predicate via AND (flattening nested `And`s).
+    #[must_use]
+    pub fn and(self, other: Self) -> Self {
+        match self {
+            Self::And(mut fs) => {
+                fs.push(other);
+                Self::And(fs)
+            }
+            first => Self::And(vec![first, other]),
         }
+    }
+
+    /// Exclude the effect's source card ("another …").
+    #[must_use]
+    pub fn exclude_source(self) -> Self {
+        self.and(Self::Not(Box::new(Self::IsSource)))
+    }
+
+    /// Exclude a specific card (e.g. an already-chosen endpoint).
+    #[must_use]
+    pub fn excluding(self, card: CardId) -> Self {
+        self.and(Self::Not(Box::new(Self::IsCard(card))))
     }
 }
 

@@ -280,10 +280,8 @@ fn a_cost_filter_restricts_the_choosable_targets() {
                 TriggerCondition::WhenThisQuests,
                 Effect::DealDamage {
                     target: Target::ChosenCharacter {
-                        filter: CharacterFilter {
-                            cost: Some(NumericFilter::at_most(2)),
-                            ..CharacterFilter::any(TargetSide::Opposing)
-                        },
+                        filter: CharacterFilter::any(TargetSide::Opposing)
+                            .and(CharacterFilter::Cost(NumericFilter::at_most(2))),
                         another: false,
                     },
                     amount: Amount::fixed(2),
@@ -489,10 +487,8 @@ fn a_name_filter_restricts_the_choosable_targets() {
                 TriggerCondition::WhenThisQuests,
                 Effect::DealDamage {
                     target: Target::ChosenCharacter {
-                        filter: CharacterFilter {
-                            names: vec!["Stitch".to_string()],
-                            ..CharacterFilter::any(TargetSide::Opposing)
-                        },
+                        filter: CharacterFilter::any(TargetSide::Opposing)
+                            .and(CharacterFilter::Named("Stitch".to_string())),
                         another: false,
                     },
                     amount: Amount::fixed(2),
@@ -573,10 +569,8 @@ fn conditional_quester(def: u32) -> CardDefinition {
         TriggeredAbility::new(
             TriggerCondition::WhenThisQuests,
             Effect::IfControl {
-                filter: CharacterFilter {
-                    names: vec!["Elsa".to_string()],
-                    ..CharacterFilter::any(TargetSide::Yours)
-                },
+                filter: CharacterFilter::any(TargetSide::Yours)
+                    .and(CharacterFilter::Named("Elsa".to_string())),
                 then: Box::new(Effect::Lore {
                     who: PlayerScope::You,
                     amount: Amount::fixed(3),
@@ -705,10 +699,9 @@ fn conditional_buffer(def: u32) -> CardDefinition {
                     filter: CharacterFilter::any(TargetSide::Any),
                     another: true,
                 },
-                filter: CharacterFilter {
-                    classifications: vec![Classification::new("Villain")],
-                    ..CharacterFilter::any(TargetSide::Any)
-                },
+                filter: CharacterFilter::any(TargetSide::Any).and(CharacterFilter::Classification(
+                    Classification::new("Villain"),
+                )),
                 then: Box::new(Effect::GiveStrengthThisTurn {
                     target: Target::SelfCard,
                     amount: Amount::fixed(3),
@@ -1303,4 +1296,66 @@ fn move_damage_second_pick_excludes_the_first() {
         "the donor can't also be the recipient"
     );
     assert!(options.contains(&recipient));
+}
+
+fn set_class(state: &mut GameState, owner: PlayerId, card: CardId, class: &str) {
+    state
+        .player_mut(owner)
+        .unwrap()
+        .play_mut()
+        .iter_mut()
+        .find(|c| c.id() == card)
+        .unwrap()
+        .set_classifications(vec![Classification::new(class)]);
+}
+
+#[test]
+fn filter_algebra_or_composes() {
+    // "Chosen Villain or Hero character" — Or over two classification predicates.
+    let mut reg = CardRegistry::new();
+    reg.insert(
+        CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 9, 1).with_abilities(vec![
+            TriggeredAbility::new(
+                TriggerCondition::WhenThisQuests,
+                Effect::DealDamage {
+                    target: Target::ChosenCharacter {
+                        filter: CharacterFilter::Or(vec![
+                            CharacterFilter::Classification(Classification::new("Villain")),
+                            CharacterFilter::Classification(Classification::new("Hero")),
+                        ]),
+                        another: false,
+                    },
+                    amount: Amount::fixed(1),
+                },
+            ),
+        ]),
+    );
+    reg.insert(CardDefinition::character(
+        CardDefId::from_raw(200),
+        1,
+        true,
+        2,
+        9,
+        1,
+    ));
+    let mut state = started(&reg);
+    let active = state.active_player();
+    let foe = opponent_of(&state, active);
+    let quester = place(&mut state, active, 1000, 100, 9, 0);
+    let villain = place(&mut state, foe, 2000, 200, 9, 0);
+    let hero = place(&mut state, foe, 2001, 200, 9, 0);
+    let pirate = place(&mut state, foe, 2002, 200, 9, 0);
+    set_class(&mut state, foe, villain, "Villain");
+    set_class(&mut state, foe, hero, "Hero");
+    set_class(&mut state, foe, pirate, "Pirate");
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+    let Some(PendingDecision::ChooseTarget { options, .. }) = state.pending() else {
+        panic!("expected a target choice");
+    };
+    assert!(options.contains(&villain) && options.contains(&hero));
+    assert!(
+        !options.contains(&pirate),
+        "Pirate matches neither Villain nor Hero"
+    );
 }
