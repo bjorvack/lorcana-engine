@@ -201,3 +201,88 @@ fn no_matching_card_means_no_discard() {
         .count();
     assert_eq!(opp_hand_before, opp_hand_after);
 }
+
+fn quester_with(effect: Effect) -> CardDefinition {
+    CardDefinition::character(CardDefId::from_raw(100), 1, true, 1, 5, 1).with_abilities(vec![
+        TriggeredAbility::new(TriggerCondition::WhenThisQuests, effect),
+    ])
+}
+
+fn reg_with(quester: CardDefinition) -> CardRegistry {
+    let mut reg = CardRegistry::new();
+    reg.insert(quester);
+    for n in 0..30 {
+        if reg.get(CardDefId::from_raw(n)).is_none() {
+            reg.insert(CardDefinition::character(
+                CardDefId::from_raw(n),
+                1,
+                true,
+                1,
+                1,
+                1,
+            ));
+        }
+    }
+    reg
+}
+
+fn opponent_of(state: &GameState, me: PlayerId) -> PlayerId {
+    state
+        .players()
+        .iter()
+        .map(lorcana_engine::PlayerState::id)
+        .find(|p| *p != me)
+        .unwrap()
+}
+
+#[test]
+fn random_discard_removes_a_card_without_a_choice() {
+    use lorcana_engine::DiscardBy;
+    let reg = reg_with(quester_with(Effect::Discard {
+        who: PlayerScope::ChosenOpponent,
+        amount: lorcana_engine::DiscardAmount::Count(1),
+        by: DiscardBy::Random,
+    }));
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let opp = opponent_of(&state, me);
+    let quester = place_quester(&mut state, me);
+    let before = state.player(opp).unwrap().hand().iter().count();
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+
+    // Random discard resolves with no decision pending.
+    assert!(state.pending().is_none(), "random discard needs no choice");
+    let after = state.player(opp).unwrap().hand().iter().count();
+    assert_eq!(
+        after,
+        before - 1,
+        "exactly one card was discarded at random"
+    );
+    assert_eq!(state.player(opp).unwrap().discard().iter().count(), 1);
+}
+
+#[test]
+fn reveal_hand_emits_a_hand_revealed_event() {
+    use lorcana_engine::GameEvent;
+    let reg = reg_with(quester_with(Effect::RevealHand {
+        whose: PlayerScope::ChosenOpponent,
+    }));
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let opp = opponent_of(&state, me);
+    let quester = place_quester(&mut state, me);
+
+    let events = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+
+    let revealed = events.iter().any(|e| {
+        matches!(
+            e,
+            GameEvent::HandRevealed { player, cards } if *player == opp && !cards.is_empty()
+        )
+    });
+    assert!(
+        revealed,
+        "a HandRevealed event names the opponent and their cards"
+    );
+}

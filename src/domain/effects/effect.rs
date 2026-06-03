@@ -90,6 +90,17 @@ pub enum PlayerScope {
     Player(PlayerId),
 }
 
+/// How the discarded cards are selected (§8.4).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
+pub enum DiscardBy {
+    /// The discarding player chooses which of their own cards (hand unseen by the
+    /// chooser, "chooses and discards").
+    #[default]
+    Owner,
+    /// Cards are chosen uniformly at random ("discards a card at random").
+    Random,
+}
+
 /// How many cards a discard effect removes from a hand (§8.4).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum DiscardAmount {
@@ -263,6 +274,16 @@ pub enum Effect {
         who: PlayerScope,
         /// How many each discards.
         amount: DiscardAmount,
+        /// How the discarded cards are selected — the player's own choice
+        /// (default) or at random (hand unseen, §8.4).
+        by: DiscardBy,
+    },
+    /// The named players reveal their hand (an information event — hand contents
+    /// are already known to the engine, §8.x; Dolores Madrigal / Copper / Nothing
+    /// to Hide).
+    RevealHand {
+        /// Whose hand is revealed.
+        whose: PlayerScope,
     },
     /// A chosen opponent reveals their hand and the **controller** picks a card
     /// matching `filter` for them to discard ("chosen opponent reveals their hand

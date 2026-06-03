@@ -1,7 +1,7 @@
 //! A decision the engine is waiting on before it can continue resolving.
 
 use super::bag::TriggerId;
-use crate::domain::effects::{Amount, DeckPosition, Destination, DiscardAmount, Effect};
+use crate::domain::effects::{Amount, DeckPosition, Destination, DiscardAmount, DiscardBy, Effect};
 use crate::domain::types::ids::{CardId, PlayerId};
 use serde::{Deserialize, Serialize};
 
@@ -43,6 +43,8 @@ pub enum ChoiceThen {
     Discard {
         /// How much each remaining player discards.
         amount: DiscardAmount,
+        /// How the remaining players' discards are selected.
+        by: DiscardBy,
         /// The players who still need to discard, in order.
         remaining_players: Vec<PlayerId>,
     },

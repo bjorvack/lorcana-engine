@@ -5,8 +5,8 @@
 use lorcana_engine::{
     Amount, CardCategory, CardDefId, CardDefinition, CardId, CardInstance, CardRegistry,
     CharacterFilter, CharacterStats, ChoiceRef, Classification, Conditions, Decision,
-    DiscardAmount, Effect, GameState, GameStatus, Input, NumericFilter, PendingDecision, PlayerId,
-    PlayerScope, Target, TargetSide, TriggerCondition, TriggeredAbility, apply, start,
+    DiscardAmount, DiscardBy, Effect, GameState, GameStatus, Input, NumericFilter, PendingDecision,
+    PlayerId, PlayerScope, Target, TargetSide, TriggerCondition, TriggeredAbility, apply, start,
 };
 
 fn started(reg: &CardRegistry) -> GameState {
@@ -851,6 +851,7 @@ fn choose_and_discard_n_removes_the_chosen_cards() {
                 Effect::Discard {
                     who: PlayerScope::You,
                     amount: DiscardAmount::Count(2),
+                    by: DiscardBy::Owner,
                 },
             ),
         ]),
@@ -887,6 +888,7 @@ fn discard_your_whole_hand_needs_no_choice() {
                 Effect::Discard {
                     who: PlayerScope::You,
                     amount: DiscardAmount::WholeHand,
+                    by: DiscardBy::Owner,
                 },
             ),
         ]),
@@ -1075,6 +1077,7 @@ fn each_opponent_chooses_and_discards() {
                 Effect::Discard {
                     who: PlayerScope::EachOpponent,
                     amount: DiscardAmount::Count(1),
+                    by: DiscardBy::Owner,
                 },
             ),
         ]),

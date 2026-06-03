@@ -4,8 +4,8 @@
 
 use lorcana_engine::{
     CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterStats, ChoiceRef,
-    Conditions, Decision, DiscardAmount, Effect, GameState, GameStatus, Input, PendingDecision,
-    PlayerId, PlayerScope, TriggerCondition, TriggeredAbility, apply, start,
+    Conditions, Decision, DiscardAmount, DiscardBy, Effect, GameState, GameStatus, Input,
+    PendingDecision, PlayerId, PlayerScope, TriggerCondition, TriggeredAbility, apply, start,
 };
 
 fn registry() -> CardRegistry {
@@ -18,6 +18,7 @@ fn registry() -> CardRegistry {
                 Effect::Discard {
                     who: PlayerScope::ChosenOpponent,
                     amount: DiscardAmount::Count(1),
+                    by: DiscardBy::Owner,
                 },
             ),
         ]),

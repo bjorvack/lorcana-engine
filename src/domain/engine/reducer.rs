@@ -7,7 +7,7 @@ use crate::domain::cards::{
 };
 use crate::domain::effects::{
     Amount, CardCategory, CharacterFilter, DeckPosition, DelayedWhen, Destination, DiscardAmount,
-    Effect, MoveSource, PlayerScope, Target, TargetSide, TriggerCondition,
+    DiscardBy, Effect, MoveSource, PlayerScope, Target, TargetSide, TriggerCondition,
 };
 use crate::domain::game::{
     CardInstance, CharacterStats, ChoiceRef, ChoiceThen, Conditions, DelayedTrigger, GameEvent,
@@ -1053,13 +1053,25 @@ fn resolve_discard_effect(
     controller: PlayerId,
     who: PlayerScope,
     amount: DiscardAmount,
+    by: DiscardBy,
     effect: &Effect,
     events: &mut Vec<GameEvent>,
 ) -> Option<Choice> {
     match resolve_scope(state, controller, who) {
-        ScopeOutcome::Players(players) => resolve_scope_discard(state, &players, amount, events),
+        ScopeOutcome::Players(players) => {
+            resolve_scope_discard(state, &players, amount, by, events)
+        }
         ScopeOutcome::Choose(options) => Some(choose_player(controller, options, effect)),
     }
+}
+
+/// Reveal `player`'s hand: emit a `HandRevealed` information event (§8.x).
+fn reveal_hand(state: &GameState, player: PlayerId, events: &mut Vec<GameEvent>) {
+    let cards: Vec<CardId> = state
+        .player(player)
+        .map(|p| p.hand().iter().map(CardInstance::id).collect())
+        .unwrap_or_default();
+    events.push(GameEvent::HandRevealed { player, cards });
 }
 
 /// An already-resolved move-damage endpoint: the source (`SelfCard`) or a
@@ -2329,6 +2341,7 @@ fn choose_discard(
     hand: Vec<CardId>,
     count: u32,
     amount: DiscardAmount,
+    by: DiscardBy,
     remaining: Vec<PlayerId>,
 ) -> Choice {
     Choice::Choose {
@@ -2338,6 +2351,7 @@ fn choose_discard(
         max: count,
         then: ChoiceThen::Discard {
             amount,
+            by,
             remaining_players: remaining,
         },
     }
@@ -2415,8 +2429,20 @@ fn execute_effect(
         }
         // Players in `who` discard; each chooses their own cards unless the whole
         // hand goes (§8.4). A `Chosen*` scope may first prompt a player choice.
-        Effect::Discard { who, amount } => {
-            return resolve_discard_effect(state, controller, *who, *amount, effect, events);
+        Effect::Discard { who, amount, by } => {
+            return resolve_discard_effect(state, controller, *who, *amount, *by, effect, events);
+        }
+        // The named players reveal their hand — an information event (§8.x).
+        Effect::RevealHand { whose } => {
+            return match resolve_scope(state, controller, *whose) {
+                ScopeOutcome::Choose(options) => Some(choose_player(controller, options, effect)),
+                ScopeOutcome::Players(players) => {
+                    for p in players {
+                        reveal_hand(state, p, events);
+                    }
+                    None
+                }
+            };
         }
         // A chosen opponent reveals their hand; the controller picks a matching
         // card for them to discard (§8.4). Resolve the opponent (prompting in
@@ -2734,9 +2760,13 @@ fn substitute_chosen_player(effect: &Effect, player: PlayerId) -> Effect {
             who: PlayerScope::Player(player),
             amount: amount.clone(),
         },
-        Effect::Discard { amount, .. } => Effect::Discard {
+        Effect::Discard { amount, by, .. } => Effect::Discard {
             who: PlayerScope::Player(player),
             amount: *amount,
+            by: *by,
+        },
+        Effect::RevealHand { .. } => Effect::RevealHand {
+            whose: PlayerScope::Player(player),
         },
         Effect::OpponentDiscardsChosen { filter, .. } => Effect::OpponentDiscardsChosen {
             whose: PlayerScope::Player(player),
@@ -2833,10 +2863,11 @@ fn resolve_scope_discard(
     state: &mut GameState,
     players: &[PlayerId],
     amount: DiscardAmount,
+    by: DiscardBy,
     events: &mut Vec<GameEvent>,
 ) -> Option<Choice> {
     for (i, &player) in players.iter().enumerate() {
-        let hand: Vec<CardId> = state
+        let mut hand: Vec<CardId> = state
             .player(player)
             .map(|p| p.hand().iter().map(CardInstance::id).collect())
             .unwrap_or_default();
@@ -2845,17 +2876,31 @@ fn resolve_scope_discard(
             DiscardAmount::Count(n) => n,
         };
         if count as usize >= hand.len() {
+            // The whole hand goes regardless of how it's selected.
             for card in hand {
                 discard_card(state, player, card, events);
             }
         } else {
-            return Some(choose_discard(
-                player,
-                hand,
-                count,
-                amount,
-                players[i + 1..].to_vec(),
-            ));
+            match by {
+                // Random: discard `count` uniformly-random cards (no choice, §8.4).
+                DiscardBy::Random => {
+                    for _ in 0..count {
+                        let idx = state.rng_mut().below(hand.len());
+                        discard_card(state, player, hand.remove(idx), events);
+                    }
+                }
+                // Owner chooses: suspend on a discard pick (carrying the rest).
+                DiscardBy::Owner => {
+                    return Some(choose_discard(
+                        player,
+                        hand,
+                        count,
+                        amount,
+                        by,
+                        players[i + 1..].to_vec(),
+                    ));
+                }
+            }
         }
     }
     None
@@ -3742,6 +3787,7 @@ fn apply_choose_decision(
         // next player who must choose suspends again (carrying `rest`, §8.4).
         ChoiceThen::Discard {
             amount,
+            by,
             remaining_players,
         } => {
             for pick in &picks {
@@ -3749,7 +3795,9 @@ fn apply_choose_decision(
                     discard_card(state, player, *c, events);
                 }
             }
-            if let Some(choice) = resolve_scope_discard(state, remaining_players, *amount, events) {
+            if let Some(choice) =
+                resolve_scope_discard(state, remaining_players, *amount, *by, events)
+            {
                 state.set_pending(choice_to_pending(choice, source, rest));
                 return Ok(());
             }

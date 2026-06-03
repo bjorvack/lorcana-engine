@@ -51,6 +51,13 @@ pub enum GameEvent {
         /// The card moved to the discard pile.
         card: CardId,
     },
+    /// A player's hand was revealed (its cards are now public information, §8.x).
+    HandRevealed {
+        /// The player whose hand was revealed.
+        player: PlayerId,
+        /// The revealed hand cards.
+        cards: Vec<CardId>,
+    },
     /// A player put a card into their inkwell (§4.3.3).
     CardPutInInkwell {
         /// The player who inked.
