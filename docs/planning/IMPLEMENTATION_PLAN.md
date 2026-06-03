@@ -799,8 +799,12 @@ pattern can collapse. Tracked and done one at a time:
       `Named`/`Cost`. Clean unblock: **denormalize cost + names onto `CardInstance`**
       (as classifications already are) so `eval_filter` is registry-free and one
       evaluator serves both. Then `Count::ControlledCharacters` → `PerMatching(filter)`.
-- [ ] **#4 fold `PlayFilter` into the filter algebra** — needs the same
-      denormalization + a `Kind`/`Category` predicate; otherwise a second evaluator.
+- [x] **#4 fold `PlayFilter` into the filter algebra** — added
+      `CharacterFilter::Category(CardCategory)`; removed `PlayFilter`. One vocabulary
+      for in-play/hand/deck: in-play derives category from the instance
+      (registry-free `matches_filter`), hand/deck evaluate the printed predicates
+      against the definition (`def_matches_filter`, reducer already has the
+      registry). No `GameState::new` change needed.
 - [x] **#1b general `Choose { options, min, max, then }`** — all 7 former bespoke
       choices (ChoosePlayer, ChooseMoveTarget, ChooseTarget, ChooseUpToN,
       ChoosePlayFree, ChooseFromRevealed, ChooseCardsToDiscard) are now one
