@@ -16,6 +16,10 @@ classifications = ["Storyborn", "Ally"]
 # text:
 #   AHEAD OF THE PACK 1 {I} — This character gets +1 {S} this turn.
 
+[[card.activated]]
+cost = { ink = 1 }
+do = { give_strength = 1 }
+
 [[card]]
 name = "Aladdin - Barreling Through"
 type = "Character"
@@ -451,6 +455,10 @@ classifications = ["Storyborn", "Villain"]
 #   LEARN FROM EVERYTHING During your turn, whenever one of your characters is banished, draw a card.
 #   WHAT ARE YOU WAITING FOR? Whenever this character quests, chosen character gains Rush this turn. (They can challenge the turn they're played.)
 
+[[card.abilities]]
+on = "quest"
+do = { grant_keyword = "Rush", to = "chosen character" }
+
 [[card]]
 name = "David Xanatos - Steel Clan Leader"
 type = "Character"
@@ -702,6 +710,11 @@ classifications = ["Dreamborn", "Ally"]
 #   HOLD... YOUR HORSES This character enters play exerted.
 #   DEEP RESEARCH Whenever this character quests, you may give chosen Detective character +2 {S} this turn.
 
+[[card.abilities]]
+on = "quest"
+may = true
+do = { give_strength = 2, to = "chosen Detective character" }
+
 [[card]]
 name = "Flintheart Glomgold - Scheming Billionaire"
 type = "Character"
@@ -812,6 +825,10 @@ cost = 4
 inkwell = true
 # text:
 #   Exert all opposing characters with 2 {S} or less.
+
+[[card.abilities]]
+on = "play"
+do = { exert = "all opposing characters with 2 {S} or less" }
 
 [[card]]
 name = "Goldie O'Gilt - Cunning Prospector"
@@ -1122,6 +1139,14 @@ inkwell = true
 # text:
 #   PREFLIGHT CHECK When you play this item, draw a card.
 #   READY TO RIDE {E}, 1 {I} - Chosen character gains Alert this turn. (They can challenge as if they had Evasive.)
+
+[[card.abilities]]
+on = "play"
+do = { draw = 1 }
+
+[[card.activated]]
+cost = { exert = true, ink = 1 }
+do = { grant_keyword = "Alert", to = "chosen character" }
 
 [[card]]
 name = "Inscrutable Map"
@@ -1476,6 +1501,10 @@ classifications = ["Dreamborn", "Hero", "Detective"]
 # text:
 #   SEARCH THE SHADOWS When you play this character, chosen Detective character gains Alert this turn. (They can challenge as if they had Evasive.)
 
+[[card.abilities]]
+on = "play"
+do = { grant_keyword = "Alert", to = "chosen Detective character" }
+
 [[card]]
 name = "Mother Gothel - Underhanded Schemer"
 type = "Character"
@@ -1770,6 +1799,10 @@ lore = 2
 classifications = ["Storyborn", "Hero", "Princess"]
 # text:
 #   ENSNARL When you play this character, chosen opposing character gets -3 {S} this turn.
+
+[[card.abilities]]
+on = "play"
+do = { give_strength = -3, to = "chosen opposing character" }
 
 [[card]]
 name = "Rapunzel - Ready for Adventure"

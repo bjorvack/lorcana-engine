@@ -26,6 +26,11 @@ classifications = ["Storyborn", "Hero"]
 #   HELPING HAND Whenever this character quests, you may play an Ally character with cost 3 or less for free.
 #   PUT IN THE EFFORT While this character is exerted, your Ally characters get +1 {S}.
 
+[[card.statics]]
+strength = 1
+to = "your Ally characters"
+while = "exerted"
+
 [[card]]
 name = "All Is Found"
 type = "Song"
@@ -294,6 +299,11 @@ lore = 1
 classifications = ["Dreamborn", "Ally"]
 # text:
 #   POP! When this character is banished in a challenge, you may draw a card.
+
+[[card.abilities]]
+on = "banished_in_challenge"
+may = true
+do = { draw = 1 }
 
 [[card]]
 name = "Calhoun - Battle-Tested"
@@ -971,6 +981,10 @@ inkwell = true
 # text:
 #   YOU CAN BE A CHAMPION, TOO Your Puppy characters get +1 {W}.
 
+[[card.statics]]
+willpower = 1
+to = "your Puppy characters"
+
 [[card]]
 name = "Kashekim - Ancient Ruler"
 type = "Character"
@@ -1494,6 +1508,11 @@ lore = 1
 classifications = ["Storyborn", "Hero", "Princess"]
 # text:
 #   WHERE DO I SIGN IN? When you play this character, you may draw a card, then choose and discard a card.
+
+[[card.abilities]]
+on = "play"
+may = true
+do = [{ draw = 1 }, { discard = 1 }]
 
 [[card]]
 name = "Mulan - Imperial General"
@@ -2389,6 +2408,11 @@ lore = 1
 classifications = ["Storyborn", "Villain", "Sorcerer"]
 # text:
 #   HOW SHALL I DO IT? When you play this character, you may draw a card, then choose and discard a card.
+
+[[card.abilities]]
+on = "play"
+may = true
+do = [{ draw = 1 }, { discard = 1 }]
 
 [[card]]
 name = "Yzma - Transformed Kitten"

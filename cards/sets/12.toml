@@ -43,6 +43,11 @@ classifications = ["Storyborn", "Ally", "Alien", "Toy"]
 #   WE ARE ONE This character gets +1 {S} for each other Toy character you have in play.
 #   HE HAS BEEN CHOSEN During your turn, when this character is banished, return another character card named Alien from your discard to your hand.
 
+[[card.statics]]
+strength = 1
+to = "self"
+per = "your other Toy characters"
+
 [[card]]
 name = "Alma Madrigal - Heart of the Family"
 type = "Character"
@@ -110,6 +115,10 @@ lore = 1
 classifications = ["Storyborn", "Ally"]
 # text:
 #   DAUNTLESS When you play this character, chosen character gains Alert this turn. (They can challenge as if they had Evasive.)
+
+[[card.abilities]]
+on = "play"
+do = { grant_keyword = "Alert", to = "chosen character" }
 
 [[card]]
 name = "Ariel - Curious Traveler"
@@ -915,6 +924,10 @@ inkwell = true
 # text:
 #   Chosen character gets +1 {S} this turn. Draw a card.
 
+[[card.abilities]]
+on = "play"
+do = [{ give_strength = 1, to = "chosen character" }, { draw = 1 }]
+
 [[card]]
 name = "Isabela Madrigal - Caring Cultivator"
 type = "Character"
@@ -1500,6 +1513,11 @@ keywords = ["Shift 3"]
 #   ALWAYS UNITED This character gets +2 {S} for each other character you have in play.
 #   LET'S DO THIS! Whenever one of your Super characters challenges another character, draw a card.
 
+[[card.statics]]
+strength = 2
+to = "self"
+per = "your other characters"
+
 [[card]]
 name = "Mr. Incredible - Taking Out the Trash"
 type = "Character"
@@ -1668,6 +1686,10 @@ cost = 1
 inkwell = true
 # text:
 #   SUCTION TECHNOLOGY {E}, 2 {I} — Draw a card, then choose and discard a card.
+
+[[card.activated]]
+cost = { exert = true, ink = 2 }
+do = [{ draw = 1 }, { discard = 1 }]
 
 [[card]]
 name = "Pluto - Vigilant Traveler"
@@ -2265,6 +2287,10 @@ keywords = ["Shift 3"]
 #   Shift 3 {I} (You may pay 3 {I} to play this on top of one of your characters named Woody.)
 #   LET'S GET MOVIN' Whenever this character quests, draw a card. Then, you may play a character with cost 2 or less for free.
 #   EVERYONE GATHER 'ROUND Your other Toy characters get +1 {W}.
+
+[[card.statics]]
+willpower = 1
+to = "your other Toy characters"
 
 [[card]]
 name = "Woody - Leader of the Toys"
