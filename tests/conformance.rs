@@ -781,3 +781,49 @@ fn whenever_you_play_an_action_fires() {
         "the play-an-action trigger fired"
     );
 }
+
+/// DSL design — the hybrid surface also accepts the **structured AST form** for a
+/// leaf selector (here a `Target` written as a TOML table), so anything the
+/// compact string grammar can't express still round-trips via serde.
+#[test]
+fn the_structured_target_fallback_resolves() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Sniper"
+        type = "Character"
+        cost = 1
+        strength = 1
+        willpower = 5
+        lore = 1
+        [[card.abilities]]
+        on = "quest"
+        do = { banish = { ChosenCharacter = { filter = { Side = "Opposing" } } } }
+        [[card]]
+        name = "Prey"
+        type = "Character"
+        cost = 1
+        strength = 1
+        willpower = 5
+        lore = 1
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let foe = opponent_of(&state, me);
+    let sniper = place(&mut state, me, 100, 0, 1, 5, true);
+    let prey = place(&mut state, foe, 200, 1, 1, 5, false);
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: sniper }).expect("quest");
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(lorcana_engine::Decision::ChooseTarget(prey)),
+    )
+    .expect("choose");
+
+    assert!(
+        !in_play(&state, foe, prey),
+        "structured-target banish resolved"
+    );
+}
