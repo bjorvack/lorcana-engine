@@ -769,3 +769,56 @@ fn conditional_on_target_applies_the_default_branch_for_a_non_match() {
 
     assert_eq!(strength(&state, ally), 2 + 2, "default branch (+2) applied");
 }
+
+#[test]
+fn return_to_deck_moves_the_target_out_of_play_into_the_deck() {
+    let mut reg = CardRegistry::new();
+    // Quester: "whenever this quests, put chosen opposing character on the bottom
+    // of their player's deck."
+    reg.insert(
+        CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 5, 1).with_abilities(vec![
+            TriggeredAbility::new(
+                TriggerCondition::WhenThisQuests,
+                Effect::ReturnToDeck {
+                    target: Target::ChosenCharacter {
+                        filter: CharacterFilter::any(TargetSide::Opposing),
+                        another: false,
+                    },
+                    position: lorcana_engine::DeckPosition::Bottom,
+                },
+            ),
+        ]),
+    );
+    reg.insert(CardDefinition::character(
+        CardDefId::from_raw(200),
+        1,
+        true,
+        2,
+        5,
+        1,
+    ));
+    let mut state = started(&reg);
+    let active = state.active_player();
+    let foe = opponent_of(&state, active);
+    let quester = place(&mut state, active, 1000, 100, 5, 0);
+    let victim = place(&mut state, foe, 2000, 200, 5, 0);
+    let deck_before = state.player(foe).unwrap().deck().len();
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(Decision::ChooseTarget(victim)),
+    )
+    .expect("choose");
+
+    assert!(
+        !state.player(foe).unwrap().play().contains(victim),
+        "left play"
+    );
+    assert!(
+        state.player(foe).unwrap().deck().contains(victim),
+        "went to its owner's deck"
+    );
+    assert_eq!(state.player(foe).unwrap().deck().len(), deck_before + 1);
+}

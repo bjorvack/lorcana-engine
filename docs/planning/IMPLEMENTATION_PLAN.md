@@ -547,6 +547,11 @@ Challenge/banish triggers into the bag (see
     `otherwise` to the chosen card by whether it matches `filter` ("Chosen
     character gets +2; if a Villain, +3 instead"). Tested in
     `tests/targeted_effects.rs`.
+  - [x] **8b-15 — effect-driven return-to-deck:** `Effect::ReturnToDeck { target,
+    position: Top/Bottom/Shuffle }` via `move_self_card` (dissolves any stack,
+    facedown `in_deck` conditions, `insert_bottom` for bottom, `shuffle_deck` for
+    shuffle-in §8.2.4.1) and removes the source's modifiers on leave-play. Tested
+    in `tests/targeted_effects.rs`.
   - **8b+ —** the card survey shows true §7.7 **replacement** effects are rare
     (~16, mostly "takes no damage"); higher-value remaining: **conditional static
     abilities** ("while here / while exerted" — the source for can't-be-challenged

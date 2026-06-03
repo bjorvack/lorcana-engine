@@ -11,8 +11,8 @@ pub use domain::cards::{
     ShiftAbility, ShiftCost, ShiftKind, StaticAbility, StaticTarget, TriggeredAbility,
 };
 pub use domain::effects::{
-    CardCategory, CharacterFilter, Comparison, Effect, NumericFilter, Target, TargetSide,
-    TriggerCondition,
+    CardCategory, CharacterFilter, Comparison, DeckPosition, Effect, NumericFilter, Target,
+    TargetSide, TriggerCondition,
 };
 pub use domain::engine::{Decision, Input, Rejected, apply, start};
 pub use domain::game::{

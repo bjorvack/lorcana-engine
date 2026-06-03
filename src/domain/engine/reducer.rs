@@ -6,7 +6,7 @@ use crate::domain::cards::{
     ShiftKind, StaticAbility, StaticTarget,
 };
 use crate::domain::effects::{
-    CardCategory, CharacterFilter, Effect, Target, TargetSide, TriggerCondition,
+    CardCategory, CharacterFilter, DeckPosition, Effect, Target, TargetSide, TriggerCondition,
 };
 use crate::domain::game::{
     CardInstance, CharacterStats, Conditions, GameEvent, GameState, GameStatus, LocationStats,
@@ -2029,6 +2029,7 @@ fn execute_effect(
         // choice is needed (§7.1).
         Effect::ReturnToHand(target)
         | Effect::IntoInkwell(target)
+        | Effect::ReturnToDeck { target, .. }
         | Effect::GiveStrengthThisTurn { target, .. }
         | Effect::DealDamage { target, .. }
         | Effect::RemoveDamage { target, .. }
@@ -2148,6 +2149,9 @@ fn chosen_permanent_options(
 enum SelfDestination {
     Hand,
     Inkwell,
+    TopOfDeck,
+    BottomOfDeck,
+    ShuffleIntoDeck,
 }
 
 /// Move `card` (the effect's source) from play or the discard to `owner`'s hand
@@ -2177,16 +2181,29 @@ fn move_self_card(state: &mut GameState, owner: PlayerId, card: CardId, dest: Se
                 drying: false,
                 facedown: true,
             },
+            // Deck cards are facedown (§5.1.13.5).
+            SelfDestination::TopOfDeck
+            | SelfDestination::BottomOfDeck
+            | SelfDestination::ShuffleIntoDeck => Conditions::in_deck(),
         };
+        // A stack dissolves into the destination as separate cards (§5.1.7).
         for moved in instance.dissolve(conditions) {
             match dest {
                 SelfDestination::Hand => p.hand_mut().push(moved),
                 SelfDestination::Inkwell => p.inkwell_mut().push(moved),
+                SelfDestination::TopOfDeck | SelfDestination::ShuffleIntoDeck => {
+                    p.deck_mut().push(moved);
+                }
+                SelfDestination::BottomOfDeck => p.deck_mut().insert_bottom(moved),
             }
         }
     }
     if was_in_play {
         state.remove_modifiers_from_source(card);
+    }
+    // §8.2.4.1: a shuffled-in stack's cards take a free (RNG) order.
+    if matches!(dest, SelfDestination::ShuffleIntoDeck) {
+        state.shuffle_deck(owner);
     }
 }
 
@@ -2210,6 +2227,16 @@ fn apply_effect_to(
         Effect::IntoInkwell(_) => {
             if let Some(owner) = owner_holding(state, target_card) {
                 move_self_card(state, owner, target_card, SelfDestination::Inkwell);
+            }
+        }
+        Effect::ReturnToDeck { position, .. } => {
+            if let Some(owner) = owner_holding(state, target_card) {
+                let dest = match position {
+                    DeckPosition::Top => SelfDestination::TopOfDeck,
+                    DeckPosition::Bottom => SelfDestination::BottomOfDeck,
+                    DeckPosition::Shuffle => SelfDestination::ShuffleIntoDeck,
+                };
+                move_self_card(state, owner, target_card, dest);
             }
         }
         Effect::GiveStrengthThisTurn { amount, .. } => {

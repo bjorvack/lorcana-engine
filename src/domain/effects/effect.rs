@@ -5,6 +5,17 @@ use crate::domain::cards::Keyword;
 use crate::domain::game::{Permission, Restriction};
 use serde::{Deserialize, Serialize};
 
+/// Where a card returned to a deck goes (§8.2).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum DeckPosition {
+    /// On top of the owner's deck.
+    Top,
+    /// On the bottom of the owner's deck.
+    Bottom,
+    /// Shuffled into the owner's deck.
+    Shuffle,
+}
+
 /// A built-in effect an ability or action can produce.
 ///
 /// The structured effect / target / condition DSL (Slice 8): untargeted effects
@@ -36,6 +47,14 @@ pub enum Effect {
     /// Put the target card into its owner's inkwell facedown and exerted (Gramma
     /// Tala "into your inkwell facedown and exerted").
     IntoInkwell(Target),
+    /// Return the target card to its owner's deck (top / bottom / shuffled in),
+    /// e.g. "shuffle chosen character into their player's deck" (§8.2).
+    ReturnToDeck {
+        /// Who is returned.
+        target: Target,
+        /// Where in the deck.
+        position: DeckPosition,
+    },
     /// Give the target character `amount` Strength `{S}` until end of turn (e.g.
     /// Support adds the source's current `{S}`; "gets +N {S} this turn").
     GiveStrengthThisTurn {
