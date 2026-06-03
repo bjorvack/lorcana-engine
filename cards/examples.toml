@@ -1,0 +1,83 @@
+# Example card definitions in the engine's own TOML format.
+#
+# Authored by us (using public card facts as reference); we never load external
+# datasets directly. Only the printed characteristics + keywords are defined here
+# — text-based abilities are authored via the effect DSL separately.
+#
+# `type`: Character | Action | Song | Item | Location
+# `keywords`: name with any value inline, e.g. "Challenger 2", "Shift 5".
+
+[[card]]
+name = "Abu"
+type = "Character"
+cost = 1
+inkwell = true
+strength = 1
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally"]
+
+[[card]]
+name = "Genie"
+type = "Character"
+cost = 5
+inkwell = true
+strength = 4
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Ally"]
+keywords = ["Evasive"]
+
+[[card]]
+name = "Captain Hook"
+type = "Character"
+cost = 4
+inkwell = false
+strength = 4
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Villain", "Pirate", "Captain"]
+keywords = ["Challenger 2"]
+
+[[card]]
+name = "Aladdin"
+type = "Character"
+cost = 7
+inkwell = false
+strength = 5
+willpower = 5
+lore = 2
+classifications = ["Floodborn", "Hero"]
+keywords = ["Shift 5"]
+
+[[card]]
+name = "Donald Duck"
+type = "Character"
+cost = 6
+inkwell = false
+strength = 3
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Ally"]
+keywords = ["Bodyguard", "Resist 1"]
+
+[[card]]
+name = "A Whole New World"
+type = "Song"
+cost = 5
+inkwell = false
+
+[[card]]
+name = "Beast's Mirror"
+type = "Item"
+cost = 4
+inkwell = false
+
+[[card]]
+name = "The Great Illuminary"
+type = "Location"
+cost = 2
+inkwell = true
+move_cost = 1
+willpower = 3
+lore = 1

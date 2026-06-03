@@ -1,20 +1,36 @@
 # Card Definitions
 
-This directory contains TOML card definitions for the Lorcana trading card game.
+Card definitions in the engine's **own TOML format** (`*.toml`). These are
+authored by us; external datasets (e.g. Lorcast) are only research aids and are
+never loaded directly.
 
-## Structure
+## Format
 
-- `*.toml` - Card definition files organized by set
-- `scripts/` - Rhai script files for complex card abilities
+Each file is a list of `[[card]]` tables. Only the **printed characteristics +
+keywords** are defined here; a card's text-based triggered / activated / static
+abilities are authored via the effect DSL (a separate concern — see
+`docs/architecture/ARCHITECTURE.md`).
 
-## Card Definition Format
+```toml
+[[card]]
+name = "Genie"
+type = "Character"            # Character | Action | Song | Item | Location
+cost = 5
+inkwell = true
+strength = 4                 # characters
+willpower = 5                # characters / locations
+lore = 2                     # characters / locations
+move_cost = 1                # locations
+classifications = ["Floodborn", "Ally"]
+keywords = ["Evasive", "Challenger 2"]   # value (if any) is inline
+```
 
-Card definitions are written in TOML format and follow the schema defined in the architecture documentation.
+Keyword values are inline: `"Challenger 2"`, `"Resist 1"`, `"Shift 5"`,
+`"Singer 5"`, `"Sing Together 4"`, `"Boost 1"`; valueless keywords are just their
+name (`"Evasive"`, `"Bodyguard"`, `"Ward"`, …).
 
-Example card definitions will be added in Phase 2.2.
+## Loading
 
-## Scripts
-
-The `scripts/` directory contains Rhai scripts for card abilities that require complex logic beyond the built-in effect system.
-
-Script files will be added in Phase 3.4.
+`lorcana_engine::load_toml(&str)` parses a document into `CardDefinition`s
+(validating types/stats/keywords), which insert directly into a `CardRegistry`.
+See `cards/examples.toml` and `tests/card_loader.rs`.

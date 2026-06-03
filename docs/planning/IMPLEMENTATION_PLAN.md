@@ -742,9 +742,13 @@ work, tracked separately.
 
 **Goal**: scale beyond hand-written cards and lock in correctness.
 
-- Bulk card-data loader mapping a community dataset (e.g. LorcanaJSON-style data) into
-  our `CardDefinition`/DSL, or generate TOML from it.
-- Definition validation on load (schema + DSL well-formedness).
+- [x] **TOML card-data loader** (`load_toml`) — the engine's own committed format
+  (`cards/*.toml`) → `CardDefinition`, validated on load (type/stats/keywords).
+  Authored by us; external datasets (Lorcast) are research-only and never loaded.
+  Covers printed characteristics + keywords (values inline); text-based abilities
+  via the effect DSL are a separate concern. `cards/examples.toml`,
+  `tests/card_loader.rs`.
+- [ ] Effect-DSL authoring for abilities in the TOML format (extends the loader).
 - A conformance test suite: encode the rules examples (§7–§10) and a library of
   hand-authored interaction scenarios as golden tests.
 - **Trigger taxonomy completeness** (see

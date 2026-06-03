@@ -8,7 +8,8 @@ pub mod domain;
 // Re-export commonly used types for convenience
 pub use domain::cards::{
     AbilityCost, ActivatedAbility, CardDefinition, CardKind, CardRegistry, GameRuleStatic, Keyword,
-    ShiftAbility, ShiftCost, ShiftKind, StaticAbility, StaticTarget, TriggeredAbility,
+    LoadError, ShiftAbility, ShiftCost, ShiftKind, StaticAbility, StaticTarget, TomlCard,
+    TriggeredAbility, load_toml,
 };
 pub use domain::effects::{
     Amount, CardCategory, CharacterFilter, Comparison, DeckPosition, DelayedWhen, Destination,
