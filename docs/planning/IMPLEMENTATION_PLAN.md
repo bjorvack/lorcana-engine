@@ -705,9 +705,22 @@ mechanics ranked by card count, with the remaining gaps to close in order:
     Mill = `Move { DeckTop, Discard }`, threads `PlayerScope` (so "top N of chosen
     player's deck into their discard" works in multiplayer). `tests/multiplayer.rs`.
     **Remaining:** other-player look-at-top (scoped `LookAtTopAndTake`).
-- [ ] **grant an ability** (10) — "gains '\<ability text\>'" (a granted triggered/
-      activated ability, not just a keyword).
-- [ ] **name a card** (6), **move damage** (15) — niche.
+- [x] **dynamic continuous statics** — `StatModifier`/`StaticAbility` gain
+      `per: Count` (registry-free `ControlledCharacters`/`CardsInHand`/`DamageOnSelf`);
+      effective delta = `delta × count`, evaluated live in `stat_delta`. Hades /
+      Jafar / Minnie. `tests/modifiers.rs`.
+- [x] **move damage** (113) — `Effect::MoveDamage { from, to, amount }`: up to N
+      counters from one character to another (one side `SelfCard`, other chosen),
+      capped by `from`'s damage; lethal banishes. `tests/targeted_effects.rs`.
+      Two-chosen (Belle/Alma) deferred.
+- [x] **name a card** (6) — `Effect::NameThenReveal { lore_on_match, match_to,
+      otherwise_to }` + `Decision::NameCard(String)`: name, reveal top, branch on
+      match (Merlin / Bruno / Sorcerer's Hat). `tests/reveal.rs`.
+- [x] **grant an ability** (10) — `Effect::GrantAbilityThisTurn { target,
+      condition, effect, optional }` adds a `GrantedTrigger` (until end of turn)
+      that fires from the target alongside its printed triggers (Hero Work /
+      Megara). `tests/granted.rs`. Granted **activated** abilities + "Blast"-style
+      name-from-discard deferred.
 
 Costs (activated-ability "discard a card", "{E}" etc.) ride the AbilityCost atom
 work, tracked separately.

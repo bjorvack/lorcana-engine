@@ -1,7 +1,7 @@
 //! Effects produced by abilities.
 
 use super::target::{CharacterFilter, Target};
-use super::trigger::CardCategory;
+use super::trigger::{CardCategory, TriggerCondition};
 use crate::domain::cards::Keyword;
 use crate::domain::game::{Permission, Restriction, Stat};
 use crate::domain::types::ids::PlayerId;
@@ -212,6 +212,19 @@ pub enum Effect {
     /// is consumed at that ready step). Does **not** exert — compose with
     /// [`Effect::Exert`] for "exert chosen character; it can't ready…".
     Freeze(Target),
+    /// Grant the target a **triggered ability** until end of turn ("gains
+    /// 'Whenever this character challenges, …' this turn", §7.6). The granted
+    /// ability fires from the target alongside its printed triggers.
+    GrantAbilityThisTurn {
+        /// Who gains the ability.
+        target: Target,
+        /// When the granted ability fires.
+        condition: TriggerCondition,
+        /// What it does.
+        effect: Box<Self>,
+        /// Whether the granted trigger is a "you may" (optional).
+        optional: bool,
+    },
     /// Give the target a keyword until end of turn ("chosen character gains
     /// Challenger +2 this turn", "gains Evasive", §10).
     GrantKeywordThisTurn {

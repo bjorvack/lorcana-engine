@@ -2,8 +2,9 @@
 
 use super::{
     BagEntry, CardInstance, CharacterStats, Condition, Conditions, Count, DelayedTrigger,
-    GameStatus, ModifierDuration, PendingDecision, Permission, PlayerState, Property,
-    PropertyModifier, Restriction, RuleModifier, SeededRng, Stat, StatModifier, TriggerId, Zone,
+    GameStatus, GrantedTrigger, ModifierDuration, PendingDecision, Permission, PlayerState,
+    Property, PropertyModifier, Restriction, RuleModifier, SeededRng, Stat, StatModifier,
+    TriggerId, Zone,
 };
 use crate::domain::cards::Keyword;
 use crate::domain::effects::{DelayedWhen, Effect};
@@ -50,6 +51,8 @@ pub struct GameState {
     delayed_triggers: Vec<DelayedTrigger>,
     /// Active game-rule modifiers (e.g. lore-to-win overrides, §1.2.1).
     rule_modifiers: Vec<RuleModifier>,
+    /// Triggered abilities granted to cards by effects ("gains '…'", §7.6).
+    granted_triggers: Vec<GrantedTrigger>,
 }
 
 impl GameState {
@@ -106,6 +109,7 @@ impl GameState {
             property_modifiers: Vec::new(),
             delayed_triggers: Vec::new(),
             rule_modifiers: Vec::new(),
+            granted_triggers: Vec::new(),
         }
     }
 
@@ -435,6 +439,19 @@ impl GameState {
             .retain(|m| m.duration() != ModifierDuration::UntilEndOfTurn);
         self.property_modifiers
             .retain(|m| m.duration() != ModifierDuration::UntilEndOfTurn);
+        self.granted_triggers
+            .retain(|g| g.duration != ModifierDuration::UntilEndOfTurn);
+    }
+
+    /// Grant a triggered ability to a card (§7.6, "gains '…'").
+    pub fn add_granted_trigger(&mut self, granted: GrantedTrigger) {
+        self.granted_triggers.push(granted);
+    }
+
+    /// The triggered abilities currently granted to cards by effects.
+    #[must_use]
+    pub fn granted_triggers(&self) -> &[GrantedTrigger] {
+        &self.granted_triggers
     }
 
     /// Expire the modifiers whose duration is `UntilStep { step, player }` —

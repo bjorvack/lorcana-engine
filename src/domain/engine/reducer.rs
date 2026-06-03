@@ -11,8 +11,9 @@ use crate::domain::effects::{
 };
 use crate::domain::game::{
     CardInstance, CharacterStats, Conditions, DelayedTrigger, GameEvent, GameState, GameStatus,
-    LocationStats, ModifierDuration, ModifierTarget, PendingDecision, Permission, PlayerState,
-    Property, PropertyModifier, Restriction, RuleModifier, Stat, StatModifier, TriggerId,
+    GrantedTrigger, LocationStats, ModifierDuration, ModifierTarget, PendingDecision, Permission,
+    PlayerState, Property, PropertyModifier, Restriction, RuleModifier, Stat, StatModifier,
+    TriggerId,
 };
 use crate::domain::rules::game_state_check;
 use crate::domain::types::card::Classification;
@@ -1753,12 +1754,20 @@ fn enqueue_triggers_for_def(
     let Some(definition) = registry.get(definition_id) else {
         return;
     };
-    let matches: Vec<(bool, Effect)> = definition
+    let mut matches: Vec<(bool, Effect)> = definition
         .abilities()
         .iter()
         .filter(|a| a.condition == *condition)
         .map(|a| (a.optional, a.effect.clone()))
         .collect();
+    // Also fire any triggered abilities granted to this card by an effect (§7.6).
+    matches.extend(
+        state
+            .granted_triggers()
+            .iter()
+            .filter(|g| g.source == source && g.condition == *condition)
+            .map(|g| (g.optional, g.effect.clone())),
+    );
     for (optional, effect) in matches {
         let _ = state.enqueue_trigger(controller, source, optional, effect);
     }
@@ -2320,6 +2329,7 @@ fn execute_effect(
         | Effect::Exert(target)
         | Effect::Ready(target)
         | Effect::Freeze(target)
+        | Effect::GrantAbilityThisTurn { target, .. }
         | Effect::GrantKeywordThisTurn { target, .. }
         | Effect::RestrictThisTurn { target, .. }
         | Effect::PermitThisTurn { target, .. }
@@ -3214,6 +3224,21 @@ fn apply_effect_to_rest(
     events: &mut Vec<GameEvent>,
 ) {
     match effect {
+        // Grant a triggered ability to the target until end of turn (§7.6).
+        Effect::GrantAbilityThisTurn {
+            condition,
+            effect: granted,
+            optional,
+            ..
+        } => {
+            state.add_granted_trigger(GrantedTrigger {
+                source: target_card,
+                condition: condition.clone(),
+                effect: (**granted).clone(),
+                optional: *optional,
+                duration: ModifierDuration::UntilEndOfTurn,
+            });
+        }
         // Grant a keyword / restriction / permission to the target until end of
         // turn (a single `UntilEndOfTurn` property modifier).
         Effect::GrantKeywordThisTurn { keyword, .. } => {

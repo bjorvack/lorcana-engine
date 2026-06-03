@@ -8,10 +8,30 @@
 //! combining further modifiers (§7.8.1.2/§7.8.2/§7.8.3).
 
 use crate::domain::cards::Keyword;
+use crate::domain::effects::{Effect, TriggerCondition};
 use crate::domain::types::card::Classification;
 use crate::domain::types::ids::{CardId, PlayerId};
 use crate::domain::types::turn::Step;
 use serde::{Deserialize, Serialize};
+
+/// A triggered ability granted to a card by an effect.
+///
+/// "Gains 'Whenever this character challenges, …' this turn" (§7.6): fires
+/// alongside the card's printed triggered abilities for as long as `duration`
+/// holds.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct GrantedTrigger {
+    /// The card that has the granted ability (it fires from this card).
+    pub source: CardId,
+    /// When it fires.
+    pub condition: TriggerCondition,
+    /// What it does.
+    pub effect: Effect,
+    /// Whether it's a "you may" (optional) trigger.
+    pub optional: bool,
+    /// How long the grant lasts.
+    pub duration: ModifierDuration,
+}
 
 /// A modifiable characteristic.
 ///
