@@ -249,6 +249,11 @@ keywords = ["Evasive"]
 #   Evasive (Only characters with Evasive can challenge this character.)
 #   PARTING GIFT When this character is banished, you may draw a card.
 
+[[card.abilities]]
+on = "banish"
+may = true
+do = { draw = 1 }
+
 [[card]]
 name = "Camilo Madrigal - Family Copycat"
 type = "Character"
@@ -495,6 +500,10 @@ keywords = ["Evasive", "Rush"]
 #   Evasive (Only characters with Evasive can challenge this character.)
 #   CRYSTALLIZE When you play this character, exert chosen opposing character.
 
+[[card.abilities]]
+on = "play"
+do = { exert = "chosen opposing character" }
+
 [[card]]
 name = "Elsa's Ice Palace - Place of Solitude"
 type = "Location"
@@ -708,6 +717,10 @@ cost = 2
 inkwell = true
 # text:
 #   RENEWING ESSENCE {E} — Remove up to 2 damage from chosen character.
+
+[[card.activated]]
+cost = { exert = true }
+do = { remove_damage = 2, to = "chosen character" }
 
 [[card]]
 name = "Healing Touch"
@@ -1145,6 +1158,11 @@ classifications = ["Storyborn", "Hero"]
 # text:
 #   PATCH THEM UP Whenever this character quests, you may remove up to 2 damage from chosen character.
 
+[[card.abilities]]
+on = "quest"
+may = true
+do = { remove_damage = 2, to = "chosen character" }
+
 [[card]]
 name = "Minnie Mouse - Dazzling Dancer"
 type = "Character"
@@ -1181,6 +1199,10 @@ lore = 1
 classifications = ["Dreamborn", "Hero", "Inventor"]
 # text:
 #   CAKE CATAPULT When you play this character, chosen character gets -2 {S} this turn.
+
+[[card.abilities]]
+on = "play"
+do = { give_strength = -2, target = "chosen character" }
 
 [[card]]
 name = "Mirabel Madrigal - Family Gatherer"
@@ -1503,6 +1525,10 @@ keywords = ["Evasive", "Shift 4"]
 #   Evasive (Only characters with Evasive can challenge this character.)
 #   DELIGHTFULLY WICKED Your damaged characters get +2 {S}.
 
+[[card.statics]]
+strength = 2
+to = "Your damaged characters"
+
 [[card]]
 name = "Ratigan - Raging Rat"
 type = "Character"
@@ -1585,6 +1611,11 @@ keywords = ["Shift 3"]
 #   Shift 3 (You may pay 3 {I} to play this on top of one of your characters named Robin Hood.)
 #   CLEVER PLAN This character gets +1 {L} for each opposing damaged character in play.
 
+[[card.statics]]
+lore = 1
+to = "self"
+per = "your opposing damaged characters"
+
 [[card]]
 name = "Robin Hood - Timely Contestant"
 type = "Character"
@@ -1622,6 +1653,10 @@ cost = 1
 inkwell = true
 # text:
 #   RUBY LIGHT {E} — Chosen character gets +1 {S} this turn.
+
+[[card.activated]]
+cost = { exert = true }
+do = { give_strength = 1, target = "chosen character" }
 
 [[card]]
 name = "Rudy - Groove Disrupter"
@@ -1726,6 +1761,11 @@ classifications = ["Storyborn", "Ally", "Hyena"]
 #   STICK AROUND FOR DINNER This character gets +1 {S} for each other Hyena character you have in play.
 #   WHAT HAVE WE GOT HERE? Whenever one of your Hyena characters challenges a damaged character, gain 2 lore.
 
+[[card.statics]]
+strength = 1
+to = "self"
+per = "your other Hyena characters"
+
 [[card]]
 name = "Shenzi - Scar's Accomplice"
 type = "Character"
@@ -1783,6 +1823,10 @@ lore = 1
 classifications = ["Storyborn", "Hero", "Prince"]
 # text:
 #   I LAUGH IN THE FACE OF DANGER When you play this character, chosen character gets +2 {S} this turn.
+
+[[card.abilities]]
+on = "play"
+do = { give_strength = 2, target = "chosen character" }
 
 [[card]]
 name = "Simba - Lost Prince"
@@ -1874,6 +1918,10 @@ cost = 6
 # text:
 #   STEEL LIGHT {E} — Deal 1 damage to chosen character.
 
+[[card.activated]]
+cost = { exert = true }
+do = { deal_damage = 1, to = "chosen character" }
+
 [[card]]
 name = "Stitch - Team Underdog"
 type = "Character"
@@ -1884,6 +1932,11 @@ lore = 1
 classifications = ["Storyborn", "Hero", "Alien"]
 # text:
 #   HEAVE HO! When you play this character, you may deal 2 damage to chosen character.
+
+[[card.abilities]]
+on = "play"
+may = true
+do = { deal_damage = 2, to = "chosen character" }
 
 [[card]]
 name = "Sugar Rush Speedway - Starting Line"
