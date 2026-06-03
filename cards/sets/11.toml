@@ -532,6 +532,10 @@ lore = 2
 classifications = ["Storyborn", "Hero"]
 # text:
 #   COMIN' THROUGH! When you play this character, you may banish chosen item.
+[[card.abilities]]
+on = "play"
+may = true
+do = { banish = "chosen item" }
 
 [[card]]
 name = "Donald Duck - Fred Honeywell"
@@ -688,6 +692,9 @@ inkwell = true
 # text:
 #   (A character with cost 2 or more can {E} to sing this song for free.)
 #   Chosen character gets +5 {S} this turn.
+[[card.abilities]]
+on = "play"
+do = { give_strength = 5, target = "chosen character" }
 
 [[card]]
 name = "Freeze the Vine"
@@ -925,6 +932,9 @@ lore = 1
 classifications = ["Storyborn", "Super", "Villain"]
 # text:
 #   CHILL OUT When you play this character, exert chosen opposing character.
+[[card.abilities]]
+on = "play"
+do = { exert = "chosen opposing character" }
 
 [[card]]
 name = "Jiminy Cricket - Ghost of Christmas Past"
@@ -1422,6 +1432,9 @@ lore = 3
 classifications = ["Storyborn", "Ally", "Dragon"]
 # text:
 #   SNOWY SURPRISE When you play this character, deal 2 damage to chosen character.
+[[card.abilities]]
+on = "play"
+do = { deal_damage = 2, to = "chosen character" }
 
 [[card]]
 name = "Mystical Inkcaster"

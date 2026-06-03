@@ -332,6 +332,10 @@ lore = 1
 classifications = ["Storyborn", "Ally", "Racer"]
 # text:
 #   WINNING ISN'T EVERYTHING When this character is banished, you may remove up to 2 damage from chosen character.
+[[card.abilities]]
+on = "banish"
+may = true
+do = { remove_damage = 2, to = "chosen character" }
 
 [[card]]
 name = "Card Soldiers - Royal Troops"
@@ -417,6 +421,10 @@ lore = 1
 classifications = ["Storyborn"]
 # text:
 #   HIVE MIND This character gets +1 {S} for each other character you have in play.
+[[card.statics]]
+strength = 1
+to = "self"
+per = "your other characters"
 
 [[card]]
 name = "Daisy Duck - Multitalented Pirate"
@@ -648,6 +656,9 @@ lore = 1
 classifications = ["Storyborn", "Puppy"]
 # text:
 #   JUST SO CUTE! When you play this character, chosen opposing character gets -1 {S} this turn.
+[[card.abilities]]
+on = "play"
+do = { give_strength = -1, target = "chosen opposing character" }
 
 [[card]]
 name = "Gaetan Moliere - The Mole"
@@ -1196,6 +1207,9 @@ lore = 2
 classifications = ["Storyborn", "Villain", "Sorcerer"]
 # text:
 #   PLAY ROUGH Whenever this character quests, exert chosen opposing character.
+[[card.abilities]]
+on = "quest"
+do = { exert = "chosen opposing character" }
 
 [[card]]
 name = "Madame Medusa - Diamond Lover"
@@ -1528,6 +1542,9 @@ cost = 7
 inkwell = true
 # text:
 #   Banish chosen character.
+[[card.abilities]]
+on = "play"
+do = { banish = "chosen character" }
 
 [[card]]
 name = "Pacha - Trekmate"
@@ -1811,6 +1828,9 @@ lore = 2
 classifications = ["Storyborn", "Ally"]
 # text:
 #   DESTINY CALLING Your other characters get +2 {W}.
+[[card.statics]]
+willpower = 2
+to = "your other characters"
 
 [[card]]
 name = "Robin Hood - Eye for Detail"
@@ -1883,6 +1903,9 @@ type = "Action"
 cost = 2
 # text:
 #   Each player draws 3 cards.
+[[card.abilities]]
+on = "play"
+do = { draw = 3, who = "each player" }
 
 [[card]]
 name = "Sir Kay - Unruly Knight"
@@ -1933,6 +1956,9 @@ lore = 1
 classifications = ["Storyborn", "Ally"]
 # text:
 #   CRIME OF OPPORTUNITY When you play this character, chosen opponent loses 1 lore.
+[[card.abilities]]
+on = "play"
+do = { lose_lore = 1, who = "chosen opponent" }
 
 [[card]]
 name = "Stabbington Brother - Without a Patch"
@@ -1976,6 +2002,9 @@ keywords = ["Rush"]
 # text:
 #   Rush (This character can challenge the turn they're played.)
 #   FORMIDABLE GLARE When you play this character, chosen character gets -3 {S} this turn.
+[[card.abilities]]
+on = "play"
+do = { give_strength = -3, target = "chosen character" }
 
 [[card]]
 name = "Tamatoa - Happy as a Clam"
@@ -2055,6 +2084,9 @@ lore = 1
 classifications = ["Storyborn"]
 # text:
 #   YOU ARE A DISGRACE! Whenever this character challenges another character, each opponent loses 1 lore.
+[[card.abilities]]
+on = "challenge"
+do = { lose_lore = 1 }
 
 [[card]]
 name = "The Phantom Blot - Shadowy Figure"

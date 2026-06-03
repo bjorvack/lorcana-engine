@@ -359,6 +359,9 @@ keywords = ["Bodyguard"]
 # text:
 #   Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)
 #   LOOT DROP When this character is banished, gain 1 lore.
+[[card.abilities]]
+on = "banish"
+do = { gain_lore = 1 }
 
 [[card]]
 name = "Camilo Madrigal - Center Stage"
@@ -732,6 +735,10 @@ lore = 2
 classifications = ["Storyborn", "Hero"]
 # text:
 #   SPITTING FIRE! When you play this character, you may banish chosen item.
+[[card.abilities]]
+on = "play"
+may = true
+do = { banish = "chosen item" }
 
 [[card]]
 name = "Friend Owl - Cantankerous Neighbor"
@@ -778,6 +785,10 @@ lore = 1
 classifications = ["Storyborn"]
 # text:
 #   I GUESS YOU EARNED THIS Whenever this character quests, you may remove up to 2 damage from chosen character.
+[[card.abilities]]
+on = "quest"
+may = true
+do = { remove_damage = 2, to = "chosen character" }
 
 [[card]]
 name = "General Li - Head of the Imperial Army"
@@ -886,6 +897,9 @@ keywords = ["Evasive"]
 # text:
 #   Evasive (Only characters with Evasive can challenge this character.)
 #   I'LL SHOW YOU! When you play this character, chosen opposing character gets -3 {S} this turn.
+[[card.abilities]]
+on = "play"
+do = { give_strength = -3, target = "chosen opposing character" }
 
 [[card]]
 name = "Hades - Ruthless Tyrant"
@@ -934,6 +948,9 @@ lore = 1
 classifications = ["Storyborn", "Hero", "Inventor"]
 # text:
 #   LOOK FOR A NEW ANGLE {E} — Ready chosen Floodborn character.
+[[card.activated]]
+cost = { exert = true }
+do = { ready = "chosen Floodborn character" }
 
 [[card]]
 name = "Honest John - Shameless Schemer"
@@ -1232,6 +1249,9 @@ keywords = ["Evasive"]
 # text:
 #   Evasive (Only characters with Evasive can challenge this character.)
 #   SUPERNATURAL VENGEANCE {E} – Deal 1 damage to chosen character.
+[[card.activated]]
+cost = { exert = true }
+do = { deal_damage = 1, to = "chosen character" }
 
 [[card]]
 name = "Light the Fuse"
@@ -1264,6 +1284,10 @@ lore = 1
 classifications = ["Storyborn", "Ally"]
 # text:
 #   LET ME HELP When you play this character, you may remove up to 1 damage from chosen character.
+[[card.abilities]]
+on = "play"
+may = true
+do = { remove_damage = 1, to = "chosen character" }
 
 [[card]]
 name = "Louie - One Cool Duck"
@@ -1669,6 +1693,9 @@ lore = 1
 classifications = ["Storyborn", "Ally"]
 # text:
 #   ENDLESS TALE When you play this character, chosen opposing character gets -1 {S} this turn.
+[[card.abilities]]
+on = "play"
+do = { give_strength = -1, target = "chosen opposing character" }
 
 [[card]]
 name = "Only So Much Room"
@@ -1785,6 +1812,10 @@ lore = 1
 classifications = ["Storyborn", "Prince"]
 # text:
 #   UNWELCOME PROPOSAL When you play this character, you may exert chosen Princess character.
+[[card.abilities]]
+on = "play"
+may = true
+do = { exert = "chosen Princess character" }
 
 [[card]]
 name = "Prince John - Fraidy-Cat"
@@ -1810,6 +1841,10 @@ keywords = ["Bodyguard"]
 # text:
 #   Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)
 #   FREE FRUIT When this character is banished, you may draw a card.
+[[card.abilities]]
+on = "banish"
+may = true
+do = { draw = 1 }
 
 [[card]]
 name = "Pull the Lever!"
@@ -2263,6 +2298,10 @@ lore = 3
 classifications = ["Storyborn", "Ally"]
 # text:
 #   I JUST LIKE TO BLOW THINGS UP When you play this character, you may deal 3 damage to chosen character.
+[[card.abilities]]
+on = "play"
+may = true
+do = { deal_damage = 3, to = "chosen character" }
 
 [[card]]
 name = "Vinnie - Green Pigeon"

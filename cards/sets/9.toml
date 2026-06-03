@@ -292,6 +292,10 @@ lore = 2
 classifications = ["Storyborn", "Mentor", "King"]
 # text:
 #   WE HAVE A CHOICE When you play this character, you may banish chosen item.
+[[card.abilities]]
+on = "play"
+may = true
+do = { banish = "chosen item" }
 
 [[card]]
 name = "Bobby Zimuruski - Spray Cheese Kid"
@@ -645,6 +649,9 @@ type = "Action"
 cost = 1
 # text:
 #   Deal 2 damage to chosen character.
+[[card.abilities]]
+on = "play"
+do = { deal_damage = 2, to = "chosen character" }
 
 [[card]]
 name = "Flounder - Voice of Reason"
@@ -1128,6 +1135,9 @@ lore = 1
 classifications = ["Dreamborn", "Ally"]
 # text:
 #   FERVENT ADDRESS Your other characters get +1 {S}.
+[[card.statics]]
+strength = 1
+to = "your other characters"
 
 [[card]]
 name = "Magic Mirror"
@@ -1147,6 +1157,9 @@ lore = 2
 classifications = ["Storyborn", "Princess"]
 # text:
 #   HIGHBORN LADY When you play this character, chosen character gets -2 {S} this turn.
+[[card.abilities]]
+on = "play"
+do = { give_strength = -2, target = "chosen character" }
 
 [[card]]
 name = "Make the Potion"
@@ -1166,6 +1179,10 @@ lore = 2
 classifications = ["Storyborn", "Villain", "Dragon"]
 # text:
 #   DRAGON FIRE When you play this character, you may banish chosen character.
+[[card.abilities]]
+on = "play"
+may = true
+do = { banish = "chosen character" }
 
 [[card]]
 name = "Mama Odie - Mystical Maven"
@@ -1272,6 +1289,9 @@ lore = 1
 classifications = ["Dreamborn", "Ally"]
 # text:
 #   WONDER BOY When you play this character, chosen character gets +2 {S} this turn.
+[[card.abilities]]
+on = "play"
+do = { give_strength = 2, target = "chosen character" }
 
 [[card]]
 name = "Mickey Mouse - Brave Little Prince"
@@ -1775,6 +1795,9 @@ lore = 1
 classifications = ["Dreamborn", "Hero", "Princess"]
 # text:
 #   MAGIC HAIR {E} — Remove up to 2 damage from chosen character.
+[[card.activated]]
+cost = { exert = true }
+do = { remove_damage = 2, to = "chosen character" }
 
 [[card]]
 name = "Raya - Headstrong"
@@ -1962,6 +1985,9 @@ cost = 3
 inkwell = true
 # text:
 #   Deal 3 damage to chosen character.
+[[card.abilities]]
+on = "play"
+do = { deal_damage = 3, to = "chosen character" }
 
 [[card]]
 name = "Stand Out"
@@ -2101,6 +2127,9 @@ lore = 1
 classifications = ["Storyborn", "Villain", "Queen"]
 # text:
 #   I SUMMON THEE {E} — Draw a card.
+[[card.activated]]
+cost = { exert = true }
+do = { draw = 1 }
 
 [[card]]
 name = "Tiana - Diligent Waitress"

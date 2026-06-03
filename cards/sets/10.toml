@@ -558,6 +558,9 @@ type = "Action"
 cost = 5
 # text:
 #   Banish chosen character.
+[[card.abilities]]
+on = "play"
+do = { banish = "chosen character" }
 
 [[card]]
 name = "Duckburg - Funso's Funzone"
@@ -618,6 +621,10 @@ lore = 1
 classifications = ["Dreamborn", "Hero", "Queen", "Sorcerer"]
 # text:
 #   CLOSER LOOK When you play this character, you may draw a card.
+[[card.abilities]]
+on = "play"
+may = true
+do = { draw = 1 }
 
 [[card]]
 name = "Emily Quackfaster - Level-Headed Librarian"
@@ -903,6 +910,10 @@ lore = 1
 classifications = ["Storyborn", "Ally"]
 # text:
 #   HAPPY DAY When you play this character, you may remove up to 2 damage from chosen character.
+[[card.abilities]]
+on = "play"
+may = true
+do = { remove_damage = 2, to = "chosen character" }
 
 [[card]]
 name = "Gwythaint - Savage Hunter"
@@ -1276,6 +1287,10 @@ lore = 1
 classifications = ["Storyborn", "Ally"]
 # text:
 #   OFF THE MAP When you play this character, you may banish chosen location.
+[[card.abilities]]
+on = "play"
+may = true
+do = { banish = "chosen location" }
 
 [[card]]
 name = "Lena Sabrewing - Mysterious Duck"
@@ -2229,6 +2244,10 @@ lore = 2
 classifications = ["Storyborn", "Ally"]
 # text:
 #   HIGH STANDARDS Whenever this character quests, you may banish chosen item.
+[[card.abilities]]
+on = "quest"
+may = true
+do = { banish = "chosen item" }
 
 [[card]]
 name = "Webby Vanderquack - Junior Prospector"
@@ -2268,6 +2287,9 @@ lore = 1
 classifications = ["Storyborn", "Ally"]
 # text:
 #   CONTAGIOUS ENERGY When you play this character, chosen character gets +1 {S} this turn.
+[[card.abilities]]
+on = "play"
+do = { give_strength = 1, target = "chosen character" }
 
 [[card]]
 name = "Webby's Diary"

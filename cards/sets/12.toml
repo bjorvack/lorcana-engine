@@ -1101,6 +1101,9 @@ lore = 1
 classifications = ["Storyborn", "Hero", "Princess"]
 # text:
 #   NATURAL DEFENSE When you play this character, chosen opposing character gets -2 {S} this turn.
+[[card.abilities]]
+on = "play"
+do = { give_strength = -2, target = "chosen opposing character" }
 
 [[card]]
 name = "Lenny - Toy Binoculars"
@@ -1409,6 +1412,9 @@ lore = 1
 classifications = ["Storyborn", "Hero", "Madrigal"]
 # text:
 #   THIS WILL HELP When you play this character, remove up to 2 damage from chosen character.
+[[card.abilities]]
+on = "play"
+do = { remove_damage = 2, to = "chosen character" }
 
 [[card]]
 name = "Mirage - Super Recruiter"
@@ -2096,6 +2102,9 @@ lore = 2
 classifications = ["Storyborn", "Sorcerer"]
 # text:
 #   UNSATISFIED CUSTOMERS Whenever this character is challenged, each opponent loses 1 lore.
+[[card.abilities]]
+on = "challenged"
+do = { lose_lore = 1 }
 
 [[card]]
 name = "This Growing Pressure"
