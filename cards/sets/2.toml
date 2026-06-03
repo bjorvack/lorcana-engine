@@ -109,6 +109,11 @@ classifications = ["Dreamborn", "Hero", "Prince"]
 # text:
 #   YOU'RE NOT WELCOME HERE When you play this character, you may deal 1 damage to chosen character.
 
+[[card.abilities]]
+on = "play"
+may = true
+do = { deal_damage = 1, to = "chosen character" }
+
 [[card]]
 name = "Beast - Relentless"
 type = "Character"
@@ -182,6 +187,11 @@ lore = 2
 classifications = ["Storyborn", "Mentor", "King"]
 # text:
 #   WE HAVE A CHOICE When you play this character, you may banish chosen item.
+
+[[card.abilities]]
+on = "play"
+may = true
+do = { banish = "chosen item" }
 
 [[card]]
 name = "Bibbidi Bobbidi Boo"
@@ -436,6 +446,10 @@ keywords = ["Shift 3"]
 # text:
 #   Shift 3 (You may pay 3 {I} to play this on top of one of your characters named Cruella De Vil.)
 #   OH, NO YOU DON'T Whenever this character quests, chosen opposing character gets -2 {S} this turn.
+
+[[card.abilities]]
+on = "quest"
+do = { give_strength = -2, target = "chosen opposing character" }
 
 [[card]]
 name = "Daisy Duck - Secret Agent"
@@ -833,6 +847,10 @@ classifications = ["Storyborn", "Ally", "Seven Dwarfs"]
 # text:
 #   THERE'S TROUBLE A-BREWIN' Your other Seven Dwarfs characters get +1 {S}.
 
+[[card.statics]]
+strength = 1
+to = "Your other Seven Dwarfs characters"
+
 [[card]]
 name = "Gumbo Pot"
 type = "Item"
@@ -1057,6 +1075,11 @@ lore = 1
 classifications = ["Storyborn", "King"]
 # text:
 #   OK, WHERE AM I? When this character is banished, you may draw a card.
+
+[[card.abilities]]
+on = "banish"
+may = true
+do = { draw = 1 }
 
 [[card]]
 name = "Lady Tremaine - Imperious Queen"
@@ -1669,6 +1692,11 @@ classifications = ["Storyborn", "Hero"]
 # text:
 #   TELLING LIES When you play this character, you may exert chosen opposing character.
 
+[[card.abilities]]
+on = "play"
+may = true
+do = { exert = "chosen opposing character" }
+
 [[card]]
 name = "Prince Charming - Heir to the Throne"
 type = "Character"
@@ -1788,6 +1816,10 @@ classifications = ["Dreamborn", "Hero", "Princess"]
 # text:
 #   MAGIC HAIR {E} — Remove up to 2 damage from chosen character.
 
+[[card.activated]]
+cost = { exert = true }
+do = { remove_damage = 2, to = "chosen character" }
+
 [[card]]
 name = "Ratigan - Criminal Mastermind"
 type = "Character"
@@ -1887,6 +1919,10 @@ classifications = ["Dreamborn", "Hero"]
 # text:
 #   SKIRMISH {E} — Deal 1 damage to chosen character.
 
+[[card.activated]]
+cost = { exert = true }
+do = { deal_damage = 1, to = "chosen character" }
+
 [[card]]
 name = "Sardine Can"
 type = "Item"
@@ -1973,6 +2009,11 @@ lore = 1
 classifications = ["Storyborn", "Hero", "Princess"]
 # text:
 #   I WON'T HURT YOU When you play this character, you may remove up to 2 damage from chosen character.
+
+[[card.abilities]]
+on = "play"
+may = true
+do = { remove_damage = 2, to = "chosen character" }
 
 [[card]]
 name = "Snow White - Unexpected Houseguest"
@@ -2084,6 +2125,10 @@ keywords = ["Shift 2"]
 #   Shift 2 (You may pay 2 {I} to play this on top of one of your characters named The Queen.)
 #   WHO IS THE FAIREST? Whenever this character quests, chosen opposing character gets -4 {S} this turn and chosen character gets +4 {S} this turn.
 
+[[card.abilities]]
+on = "quest"
+do = [{ give_strength = -4, target = "chosen opposing character" }, { give_strength = 4, target = "chosen character" }]
+
 [[card]]
 name = "The Queen - Disguised Peddler"
 type = "Character"
@@ -2111,6 +2156,10 @@ type = "Item"
 cost = 3
 # text:
 #   KNOWLEDGE {E}, 1 {I} — Gain 1 lore.
+
+[[card.activated]]
+cost = { exert = true, ink = 1 }
+do = { gain_lore = 1 }
 
 [[card]]
 name = "Tiana - Celebrating Princess"

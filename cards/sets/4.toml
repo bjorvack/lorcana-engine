@@ -821,6 +821,10 @@ cost = 1
 # text:
 #   CHILLY LABOR {E} — Chosen character gets -1 {S} this turn.
 
+[[card.activated]]
+cost = { exert = true }
+do = { give_strength = -1, target = "chosen character" }
+
 [[card]]
 name = "Iduna - Caring Mother"
 type = "Character"
@@ -990,6 +994,10 @@ classifications = ["Storyborn", "Ally"]
 # text:
 #   FULL OF SPIRIT Your Hero characters get +1 {S}.
 
+[[card.statics]]
+strength = 1
+to = "Your Hero characters"
+
 [[card]]
 name = "Look at This Family"
 type = "Song"
@@ -1045,6 +1053,10 @@ classifications = ["Dreamborn", "Ally"]
 # text:
 #   FERVENT ADDRESS Your other characters get +1 {S}.
 
+[[card.statics]]
+strength = 1
+to = "Your other characters"
+
 [[card]]
 name = "Magic Broom - Aerial Cleaner"
 type = "Character"
@@ -1070,6 +1082,11 @@ keywords = ["Resist 1"]
 # text:
 #   Resist +1 (Damage dealt to this character is reduced by 1.)
 #   ARMY OF BROOMS This character gets +2 {S} for each other character named Magic Broom you have in play.
+
+[[card.statics]]
+strength = 2
+to = "self"
+per = "your other characters"
 
 [[card]]
 name = "Magic Broom - Illuminary Keeper"
@@ -1962,6 +1979,10 @@ lore = 2
 classifications = ["Storyborn", "Ally"]
 # text:
 #   A CULINARY MASTERPIECE When you play this character, remove up to 2 damage from chosen character.
+
+[[card.abilities]]
+on = "play"
+do = { remove_damage = 2, to = "chosen character" }
 
 [[card]]
 name = "Treasures Untold"
