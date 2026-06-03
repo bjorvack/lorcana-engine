@@ -4,8 +4,8 @@
 
 use lorcana_engine::{
     CardCategory, CardDefId, CardDefinition, CardId, CardInstance, CardKind, CardRegistry,
-    CharacterStats, Conditions, Decision, DeckPosition, Effect, GameState, GameStatus, Input,
-    PendingDecision, PlayFilter, PlayerId, TriggerCondition, TriggeredAbility, apply, start,
+    CharacterStats, ChoiceRef, Conditions, Decision, DeckPosition, Effect, GameState, GameStatus,
+    Input, PendingDecision, PlayFilter, PlayerId, TriggerCondition, TriggeredAbility, apply, start,
 };
 
 const fn char_def(id: u32) -> CardDefinition {
@@ -119,10 +119,17 @@ fn look_at_top_and_take_a_matching_card_into_hand() {
     let top_item = push_top(&mut state, me, 902);
 
     let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
-    let Some(PendingDecision::ChooseFromRevealed { options, .. }) = state.pending() else {
+    let Some(PendingDecision::Choose { options, .. }) = state.pending() else {
         panic!("expected a take-from-revealed choice");
     };
-    assert_eq!(options, &vec![target], "only the character is takeable");
+    let cards: Vec<_> = options
+        .iter()
+        .filter_map(|r| match r {
+            ChoiceRef::Card(c) => Some(*c),
+            ChoiceRef::Player(_) => None,
+        })
+        .collect();
+    assert_eq!(cards, vec![target], "only the character is takeable");
 
     let _ = apply(
         &mut state,

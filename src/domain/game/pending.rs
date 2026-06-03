@@ -28,6 +28,16 @@ pub enum ChoiceThen {
     ApplyToEach(Box<Effect>),
     /// Play each picked card for free (§6).
     PlayFree,
+    /// Take the (up-to-one) picked card from `deck_owner`'s deck into hand; the
+    /// rest of `looked_at` go to `rest_position` (look-at-top, §8.2).
+    TakeRevealed {
+        /// Whose deck the looked-at cards came from.
+        deck_owner: PlayerId,
+        /// All looked-at cards (the non-taken ones return to the deck).
+        looked_at: Vec<CardId>,
+        /// Where the non-taken cards go.
+        rest_position: DeckPosition,
+    },
 }
 
 /// A point in bag resolution that requires a player's input before the engine
@@ -94,25 +104,6 @@ pub enum PendingDecision {
         /// The remaining effects of the ability/action, resolved in order after.
         rest: Vec<Effect>,
     },
-    /// A "look at the top N" effect is resolving; `player` chooses up to one of
-    /// `options` (the eligible looked-at cards) to take into hand, then the rest of
-    /// `looked_at` go to `rest_position` and `rest` resolves (§8.2).
-    ChooseFromRevealed {
-        /// The player who chooses and receives the taken card (the looker).
-        player: PlayerId,
-        /// The effect's source card (continuation controller).
-        source: CardId,
-        /// Whose deck was looked at (where the rest go); usually == `player`.
-        deck_owner: PlayerId,
-        /// All the looked-at cards (top of deck), in deck order.
-        looked_at: Vec<CardId>,
-        /// The subset of `looked_at` that may be taken into hand.
-        options: Vec<CardId>,
-        /// Where the cards that aren't taken go.
-        rest_position: DeckPosition,
-        /// The remaining effects, resolved in order after.
-        rest: Vec<Effect>,
-    },
     /// A "name a card, then reveal the top of your deck" effect is resolving;
     /// `player` names a card and the revealed top is matched against it (§8.2).
     NameCard {
@@ -163,7 +154,6 @@ impl PendingDecision {
             | Self::MayResolve { player, .. }
             | Self::EnterPlayExerted { player, .. }
             | Self::ChooseCardsToDiscard { player, .. }
-            | Self::ChooseFromRevealed { player, .. }
             | Self::Choose { player, .. }
             | Self::NameCard { player, .. }
             | Self::NameThenRecur { player, .. }

@@ -2200,21 +2200,6 @@ fn resolve_effects(
                     remaining_players: remaining,
                     rest,
                 },
-                Choice::TakeFromRevealed {
-                    player,
-                    deck_owner,
-                    looked_at,
-                    options,
-                    rest_position,
-                } => PendingDecision::ChooseFromRevealed {
-                    player,
-                    source,
-                    deck_owner,
-                    looked_at,
-                    options,
-                    rest_position,
-                    rest,
-                },
                 Choice::May { player, inner } => PendingDecision::MayResolveEffect {
                     player,
                     source,
@@ -2270,15 +2255,6 @@ enum Choice {
         count: u32,
         amount: DiscardAmount,
         remaining: Vec<PlayerId>,
-    },
-    /// `player` takes up to one of `options` (looked-at cards) into hand; the rest
-    /// of `looked_at` go to `rest_position` (§8.2).
-    TakeFromRevealed {
-        player: PlayerId,
-        deck_owner: PlayerId,
-        looked_at: Vec<CardId>,
-        options: Vec<CardId>,
-        rest_position: DeckPosition,
     },
     /// `player` is asked whether to resolve `inner` ("you may …", §7.1.3).
     May { player: PlayerId, inner: Effect },
@@ -2359,6 +2335,28 @@ fn choose_play_free(player: PlayerId, options: Vec<CardId>) -> Choice {
         min: 1,
         max: 1,
         then: ChoiceThen::PlayFree,
+    }
+}
+
+/// Build an "up to one" [`Choice::Choose`] that takes the picked looked-at card to
+/// hand and returns the rest to `deck_owner`'s deck (look-at-top, §8.2).
+fn choose_take_revealed(
+    player: PlayerId,
+    deck_owner: PlayerId,
+    looked_at: Vec<CardId>,
+    options: Vec<CardId>,
+    rest_position: DeckPosition,
+) -> Choice {
+    Choice::Choose {
+        player,
+        options: options.into_iter().map(ChoiceRef::Card).collect(),
+        min: 0,
+        max: 1,
+        then: ChoiceThen::TakeRevealed {
+            deck_owner,
+            looked_at,
+            rest_position,
+        },
     }
 }
 
@@ -2906,13 +2904,9 @@ fn resolve_look_at_top(
         None
     } else {
         // `controller` chooses and receives; `owner`'s deck holds the rest.
-        Some(Choice::TakeFromRevealed {
-            player: controller,
-            deck_owner: owner,
-            looked_at,
-            options,
-            rest_position: rest,
-        })
+        Some(choose_take_revealed(
+            controller, owner, looked_at, options, rest,
+        ))
     }
 }
 
@@ -3015,50 +3009,6 @@ fn place_revealed_rest(
     if matches!(position, DeckPosition::Shuffle) {
         state.shuffle_deck(player);
     }
-}
-
-/// Answer a [`PendingDecision::ChooseFromRevealed`]: take the chosen looked-at
-/// card (if any) into hand, send the rest to `rest_position`, then resume (§8.2).
-#[allow(clippy::too_many_arguments)]
-fn apply_take_revealed_decision(
-    state: &mut GameState,
-    registry: &CardRegistry,
-    player: PlayerId,
-    source: CardId,
-    deck_owner: PlayerId,
-    looked_at: &[CardId],
-    options: &[CardId],
-    rest_position: DeckPosition,
-    choice: Option<CardId>,
-    rest: Vec<Effect>,
-    events: &mut Vec<GameEvent>,
-) -> Result<(), Rejected> {
-    if let Some(card) = choice
-        && !options.contains(&card)
-    {
-        return Err(Rejected::InvalidDecision);
-    }
-    let _ = state.take_pending();
-    // The taken card leaves `deck_owner`'s deck and enters the looker's hand.
-    if let Some(card) = choice
-        && let Some(mut instance) = state
-            .player_mut(deck_owner)
-            .and_then(|p| p.deck_mut().take(card))
-    {
-        *instance.conditions_mut() = Conditions::faceup_idle();
-        if let Some(p) = state.player_mut(player) {
-            p.hand_mut().push(instance);
-        }
-    }
-    let remaining: Vec<CardId> = looked_at
-        .iter()
-        .copied()
-        .filter(|&id| Some(id) != choice)
-        .collect();
-    place_revealed_rest(state, deck_owner, &remaining, rest_position);
-    resolve_effects(state, registry, player, source, rest, events);
-    events.extend(game_state_check_with_triggers(state, registry));
-    Ok(())
 }
 
 /// Play `card` from `player`'s hand **for free** (no ink, §6). Actions resolve
@@ -3543,30 +3493,6 @@ fn apply_choice_decision_rest(
 ) -> Result<(), Rejected> {
     match (pending, decision) {
         (
-            PendingDecision::ChooseFromRevealed {
-                player,
-                source,
-                deck_owner,
-                looked_at,
-                options,
-                rest_position,
-                rest,
-            },
-            Decision::TakeRevealed(choice),
-        ) => apply_take_revealed_decision(
-            state,
-            registry,
-            player,
-            source,
-            deck_owner,
-            &looked_at,
-            &options,
-            rest_position,
-            choice,
-            rest,
-            events,
-        ),
-        (
             PendingDecision::MayResolveEffect {
                 player,
                 source,
@@ -3731,6 +3657,7 @@ fn apply_choose_decision(
         Decision::ChooseTarget(c) | Decision::PlayFreeChoice(c) => vec![ChoiceRef::Card(*c)],
         Decision::ChoosePlayer(p) => vec![ChoiceRef::Player(*p)],
         Decision::ChooseTargets(cs) => cs.iter().map(|c| ChoiceRef::Card(*c)).collect(),
+        Decision::TakeRevealed(opt) => opt.iter().map(|c| ChoiceRef::Card(*c)).collect(),
         _ => return Err(Rejected::InvalidDecision),
     };
     let n = u32::try_from(picks.len()).unwrap_or(u32::MAX);
@@ -3765,6 +3692,35 @@ fn apply_choose_decision(
                     play_card_free(state, registry, player, *c, events);
                 }
             }
+            resolve_effects(state, registry, player, source, rest, events);
+        }
+        // Take the (up-to-one) picked looked-at card to hand; the rest of
+        // `looked_at` return to `deck_owner`'s deck at `rest_position` (§8.2).
+        ChoiceThen::TakeRevealed {
+            deck_owner,
+            looked_at,
+            rest_position,
+        } => {
+            let taken = match picks.first() {
+                Some(ChoiceRef::Card(c)) => Some(*c),
+                _ => None,
+            };
+            if let Some(card) = taken
+                && let Some(mut instance) = state
+                    .player_mut(*deck_owner)
+                    .and_then(|p| p.deck_mut().take(card))
+            {
+                *instance.conditions_mut() = Conditions::faceup_idle();
+                if let Some(p) = state.player_mut(player) {
+                    p.hand_mut().push(instance);
+                }
+            }
+            let remaining: Vec<CardId> = looked_at
+                .iter()
+                .copied()
+                .filter(|&id| Some(id) != taken)
+                .collect();
+            place_revealed_rest(state, *deck_owner, &remaining, *rest_position);
             resolve_effects(state, registry, player, source, rest, events);
         }
     }
