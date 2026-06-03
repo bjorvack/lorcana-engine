@@ -801,9 +801,12 @@ pattern can collapse. Tracked and done one at a time:
       evaluator serves both. Then `Count::ControlledCharacters` → `PerMatching(filter)`.
 - [ ] **#4 fold `PlayFilter` into the filter algebra** — needs the same
       denormalization + a `Kind`/`Category` predicate; otherwise a second evaluator.
-- [ ] **#1b general `Choose { options, min, max, then }`** + sequential threading of
-      prior results; migrate the 6 bespoke choices onto it (large; best done
-      incrementally — introduce the primitive, migrate one bespoke choice per commit).
+- [x] **#1b general `Choose { options, min, max, then }`** — all 7 former bespoke
+      choices (ChoosePlayer, ChooseMoveTarget, ChooseTarget, ChooseUpToN,
+      ChoosePlayFree, ChooseFromRevealed, ChooseCardsToDiscard) are now one
+      `Choose` over `ChoiceRef = Card | Player` with five `ChoiceThen`
+      continuations (SubstituteAndResolve, ApplyToEach, PlayFree, TakeRevealed,
+      Discard). One `apply_choose_decision` + `choice_to_pending`.
 - [ ] **#5 unify `Target` (card ref) and `PlayerScope` (player ref)** as a choosable
       reference; remove `substitute_chosen_player`/`substitute_move_endpoint` (large).
 - [ ] **#2** collapse `GrantKeywordThisTurn`/`RestrictThisTurn`/`PermitThisTurn` →
