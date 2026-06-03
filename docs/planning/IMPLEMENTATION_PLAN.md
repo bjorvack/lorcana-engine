@@ -666,6 +666,13 @@ mechanics ranked by card count, with the remaining gaps to close in order:
       `Category(Action)` (Lenny), `Not(Category(Character))` (Timon),
       `Category(Location)` (Goldie). Reveal is implicit (hand is known to the
       engine). `tests/opponent_discard.rs`.
+- [x] **random discard / reveal hand** — `Effect::Discard` carries `by: DiscardBy`
+      (`Owner` chooses, default; `Random` picks uniformly via the seeded RNG, no
+      choice) for "discard a card at random" (Dangerous Plan / Lady Tremaine /
+      Bruno). `Effect::RevealHand { whose }` emits a `HandRevealed { player, cards }`
+      information event (Dolores / Copper / Nothing to Hide); reveal-and-pick emits
+      it too. Reveal is **event-only** — the engine is full-information, so there's
+      no persistent "revealed" state. `tests/opponent_discard.rs`.
 - [~] **freeze / "can't ready"** (38) — modeled uniformly as
       `Restriction::CantReady` (every card action goes through restrictions): the
       ready step skips cards that have it. `Effect::Freeze(Target)` adds it with a
