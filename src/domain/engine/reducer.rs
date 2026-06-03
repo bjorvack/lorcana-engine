@@ -11,9 +11,9 @@ use crate::domain::effects::{
 };
 use crate::domain::game::{
     CardInstance, CharacterStats, Conditions, DelayedTrigger, GameEvent, GameState, GameStatus,
-    GrantedTrigger, LocationStats, ModifierDuration, ModifierTarget, PendingDecision, Permission,
-    PlayerState, Property, PropertyModifier, Restriction, RuleModifier, Stat, StatModifier,
-    TriggerId,
+    GrantedActivated, GrantedTrigger, LocationStats, ModifierDuration, ModifierTarget,
+    PendingDecision, Permission, PlayerState, Property, PropertyModifier, Restriction,
+    RuleModifier, Stat, StatModifier, TriggerId,
 };
 use crate::domain::rules::game_state_check;
 use crate::domain::types::card::Classification;
@@ -1536,17 +1536,26 @@ fn apply_use_ability(
     }
     let active = state.active_player();
     let instance = find_in_play(state, active, card)?;
-    let ability = registry
+    // Abilities available on `card`: its printed activated abilities, then any
+    // granted to it by an effect (§7.5). `ability_index` spans the combined list.
+    let printed = registry
         .get(instance.definition())
         .ok_or(Rejected::UnknownCard(card))?
         .activated_abilities()
-        .get(ability_index)
+        .iter()
+        .map(|a| (a.cost.ink, a.cost.exert_self, a.effect.clone()));
+    let granted = state
+        .granted_activated()
+        .iter()
+        .filter(|g| g.source == card)
+        .map(|g| (g.ink, g.exert_self, g.effect.clone()));
+    let (ink, exert_self, effect) = printed
+        .chain(granted)
+        .nth(ability_index)
         .ok_or(Rejected::NoSuchAbility(card))?;
-    let cost = ability.cost;
-    let effect = ability.effect.clone();
 
     // Cost legality. Drying characters can't pay an exert cost (§4.2.2.1).
-    if cost.exert_self {
+    if exert_self {
         if instance.conditions().drying {
             return Err(Rejected::CharacterStillDrying(card));
         }
@@ -1558,7 +1567,7 @@ fn apply_use_ability(
         .player(active)
         .expect("active player exists")
         .ready_ink()
-        < cost.ink
+        < ink
     {
         return Err(Rejected::InsufficientInk(card));
     }
@@ -1566,10 +1575,8 @@ fn apply_use_ability(
     // --- pay the cost ---
     {
         let p = state.player_mut(active).expect("active player exists");
-        p.exert_ink(cost.ink);
-        if cost.exert_self
-            && let Some(c) = p.play_mut().iter_mut().find(|c| c.id() == card)
-        {
+        p.exert_ink(ink);
+        if exert_self && let Some(c) = p.play_mut().iter_mut().find(|c| c.id() == card) {
             c.conditions_mut().ready = false;
         }
     }
@@ -2466,6 +2473,7 @@ fn execute_effect(
         | Effect::Ready(target)
         | Effect::Freeze(target)
         | Effect::GrantAbilityThisTurn { target, .. }
+        | Effect::GrantActivatedThisTurn { target, .. }
         | Effect::GrantThisTurn { target, .. }
         | Effect::IfTargetMatches { target, .. } => {
             return resolve_targeted(state, registry, controller, source, target, effect, events);
@@ -3325,6 +3333,21 @@ fn apply_effect_to_rest(
         // turn (a single `UntilEndOfTurn` property modifier).
         Effect::GrantThisTurn { property, .. } => {
             grant_property(state, source, target_card, property.clone());
+        }
+        // Grant an activated ability to the target until end of turn (§7.5).
+        Effect::GrantActivatedThisTurn {
+            ink,
+            exert_self,
+            effect: granted,
+            ..
+        } => {
+            state.add_granted_activated(GrantedActivated {
+                source: target_card,
+                ink: *ink,
+                exert_self: *exert_self,
+                effect: (**granted).clone(),
+                duration: ModifierDuration::UntilEndOfTurn,
+            });
         }
         Effect::IfTargetMatches {
             filter,

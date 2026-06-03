@@ -238,6 +238,18 @@ pub enum Effect {
         /// The granted property.
         property: Property,
     },
+    /// Grant the target an **activated** ability until end of turn ("gains '{E} —
+    /// Draw a card' this turn", §7.5). Usable like a printed activated ability.
+    GrantActivatedThisTurn {
+        /// Who gains the ability.
+        target: Target,
+        /// Ink cost to activate.
+        ink: u32,
+        /// Whether activating exerts the card.
+        exert_self: bool,
+        /// What the activated ability does.
+        effect: Box<Self>,
+    },
     /// Choose `target`, then apply `then` to it if it matches `filter`, else
     /// `otherwise` ("Chosen character gets +2 {S}; if a Villain character is
     /// chosen, they get +3 instead"). `then`/`otherwise` apply to the **chosen

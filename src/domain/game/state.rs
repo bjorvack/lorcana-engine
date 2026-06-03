@@ -2,8 +2,9 @@
 
 use super::{
     BagEntry, CardInstance, CharacterStats, Condition, Conditions, DelayedTrigger, GameStatus,
-    GrantedTrigger, ModifierDuration, PendingDecision, Permission, PlayerState, Property,
-    PropertyModifier, Restriction, RuleModifier, SeededRng, Stat, StatModifier, TriggerId, Zone,
+    GrantedActivated, GrantedTrigger, ModifierDuration, PendingDecision, Permission, PlayerState,
+    Property, PropertyModifier, Restriction, RuleModifier, SeededRng, Stat, StatModifier,
+    TriggerId, Zone,
 };
 use crate::domain::cards::Keyword;
 use crate::domain::effects::{Amount, CharacterFilter, DelayedWhen, Effect, Target, TargetSide};
@@ -52,6 +53,8 @@ pub struct GameState {
     rule_modifiers: Vec<RuleModifier>,
     /// Triggered abilities granted to cards by effects ("gains '…'", §7.6).
     granted_triggers: Vec<GrantedTrigger>,
+    /// Activated abilities granted to cards by effects ("gains '{E} — …'", §7.5).
+    granted_activated: Vec<GrantedActivated>,
 }
 
 impl GameState {
@@ -109,6 +112,7 @@ impl GameState {
             delayed_triggers: Vec::new(),
             rule_modifiers: Vec::new(),
             granted_triggers: Vec::new(),
+            granted_activated: Vec::new(),
         }
     }
 
@@ -440,6 +444,8 @@ impl GameState {
             .retain(|m| m.duration() != ModifierDuration::UntilEndOfTurn);
         self.granted_triggers
             .retain(|g| g.duration != ModifierDuration::UntilEndOfTurn);
+        self.granted_activated
+            .retain(|g| g.duration != ModifierDuration::UntilEndOfTurn);
     }
 
     /// Grant a triggered ability to a card (§7.6, "gains '…'").
@@ -451,6 +457,17 @@ impl GameState {
     #[must_use]
     pub fn granted_triggers(&self) -> &[GrantedTrigger] {
         &self.granted_triggers
+    }
+
+    /// Grant an activated ability to a card (§7.5, "gains '{E} — …'").
+    pub fn add_granted_activated(&mut self, granted: GrantedActivated) {
+        self.granted_activated.push(granted);
+    }
+
+    /// The activated abilities currently granted to cards by effects.
+    #[must_use]
+    pub fn granted_activated(&self) -> &[GrantedActivated] {
+        &self.granted_activated
     }
 
     /// Expire the modifiers whose duration is `UntilStep { step, player }` —

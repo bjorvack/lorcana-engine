@@ -118,3 +118,78 @@ fn granted_quest_trigger_fires_when_the_target_quests() {
         "ally's quest lore plus the granted trigger"
     );
 }
+
+#[test]
+fn granted_activated_ability_can_be_used_this_turn() {
+    let mut reg = CardRegistry::new();
+    // Granter: "Whenever this quests, chosen character gains '{E} — you gain 2
+    // lore' this turn." (§7.5)
+    reg.insert(
+        CardDefinition::character(CardDefId::from_raw(100), 1, true, 1, 5, 1).with_abilities(vec![
+            TriggeredAbility::new(
+                TriggerCondition::WhenThisQuests,
+                Effect::GrantActivatedThisTurn {
+                    target: Target::ChosenCharacter {
+                        filter: CharacterFilter::any(TargetSide::Yours)
+                            .and(CharacterFilter::negate(CharacterFilter::IsSource)),
+                    },
+                    ink: 0,
+                    exert_self: true,
+                    effect: Box::new(Effect::Lore {
+                        who: PlayerScope::You,
+                        amount: Amount::fixed(2),
+                    }),
+                },
+            ),
+        ]),
+    );
+    reg.insert(CardDefinition::character(
+        CardDefId::from_raw(200),
+        1,
+        true,
+        1,
+        5,
+        1,
+    ));
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let granter = place(&mut state, me, 100);
+    let ally = place(&mut state, me, 200); // ready, not drying
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: granter }).expect("quest");
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(Decision::ChooseTarget(ally)),
+    )
+    .expect("grant");
+
+    let before = lore(&state, me);
+    // The ally now has a single (granted) activated ability at index 0.
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::UseAbility {
+            card: ally,
+            ability: 0,
+        },
+    )
+    .expect("activate");
+    assert_eq!(
+        lore(&state, me),
+        before + 2,
+        "granted exert ability resolved"
+    );
+    assert!(
+        !state
+            .player(me)
+            .unwrap()
+            .play()
+            .iter()
+            .find(|c| c.id() == ally)
+            .unwrap()
+            .conditions()
+            .ready,
+        "activating exerted the ally"
+    );
+}

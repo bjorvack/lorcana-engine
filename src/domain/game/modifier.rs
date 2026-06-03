@@ -14,6 +14,25 @@ use crate::domain::types::ids::{CardId, PlayerId};
 use crate::domain::types::turn::Step;
 use serde::{Deserialize, Serialize};
 
+/// An **activated** ability granted to a card by an effect.
+///
+/// "Gains '{E} — Draw a card' this turn" (§7.5): usable like a printed activated
+/// ability for as long as `duration` holds. Stored as primitives (cost + effect)
+/// to stay decoupled from the card-definition types.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct GrantedActivated {
+    /// The card that has the granted ability.
+    pub source: CardId,
+    /// Ink cost to activate.
+    pub ink: u32,
+    /// Whether activating exerts the card.
+    pub exert_self: bool,
+    /// What it does.
+    pub effect: Effect,
+    /// How long the grant lasts.
+    pub duration: ModifierDuration,
+}
+
 /// A triggered ability granted to a card by an effect.
 ///
 /// "Gains 'Whenever this character challenges, …' this turn" (§7.6): fires
