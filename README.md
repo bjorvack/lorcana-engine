@@ -1,7 +1,7 @@
 # lorcana-engine
 
 [![CI](https://github.com/bjorvack/lorcana-engine/actions/workflows/ci.yml/badge.svg)](https://github.com/bjorvack/lorcana-engine/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/bjorvack/lorcana-engine/branch/main/graph/badge.svg)](https://codecov.io/gh/bjorvack/lorcana-engine)
+[![codecov](https://codecov.io/gh/bjorvack/lorcana-engine/graph/badge.svg)](https://codecov.io/gh/bjorvack/lorcana-engine)
 
 A game engine for the Lorcana trading card game.
 
