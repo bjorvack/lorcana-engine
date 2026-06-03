@@ -5,8 +5,8 @@
 use lorcana_engine::{
     Amount, CardCategory, CardDefId, CardDefinition, CardId, CardInstance, CardKind, CardRegistry,
     CharacterFilter, CharacterStats, Classification, Conditions, Decision, Effect, GameState,
-    GameStatus, Input, Keyword, PlayerId, Target, TargetSide, TriggerCondition, TriggeredAbility,
-    apply, start,
+    GameStatus, Input, Keyword, PlayerId, PlayerScope, Target, TargetSide, TriggerCondition,
+    TriggeredAbility, apply, start,
 };
 
 fn action_card(id: u32, cost: u32, effects: Vec<Effect>) -> CardDefinition {
@@ -103,7 +103,16 @@ fn is_ready(state: &GameState, player: PlayerId, card: CardId) -> bool {
 #[test]
 fn playing_an_action_resolves_its_effect_and_discards_it() {
     let reg: CardRegistry = (0..30)
-        .map(|n| action_card(n, 0, vec![Effect::GainLore(Amount::fixed(2))]))
+        .map(|n| {
+            action_card(
+                n,
+                0,
+                vec![Effect::Lore {
+                    who: PlayerScope::You,
+                    amount: Amount::fixed(2),
+                }],
+            )
+        })
         .collect();
     let mut state = started(&reg);
     let active = state.active_player();
@@ -139,7 +148,10 @@ fn song_reg(cost: u32, keywords: &[Keyword], extra: Vec<CardDefinition>) -> Card
                 n,
                 cost,
                 keywords.to_vec(),
-                vec![Effect::GainLore(Amount::fixed(2))],
+                vec![Effect::Lore {
+                    who: PlayerScope::You,
+                    amount: Amount::fixed(2),
+                }],
             )
         })
         .collect();
@@ -270,7 +282,10 @@ fn singing_a_song_fires_a_play_a_song_watcher() {
     let watcher = CardDefinition::character(CardDefId::from_raw(300), 1, true, 1, 1, 1)
         .with_abilities(vec![TriggeredAbility::new(
             TriggerCondition::WhenYouPlay(CardCategory::Song),
-            Effect::GainLore(Amount::fixed(1)),
+            Effect::Lore {
+                who: PlayerScope::You,
+                amount: Amount::fixed(1),
+            },
         )]);
     let reg = song_reg(3, &[], vec![singer_char(200, 4, None), watcher]);
     let mut state = started(&reg);
@@ -375,7 +390,10 @@ fn a_multi_effect_action_resolves_the_rest_after_the_choice() {
                         },
                         amount: Amount::fixed(2),
                     },
-                    Effect::GainLore(Amount::fixed(3)),
+                    Effect::Lore {
+                        who: PlayerScope::You,
+                        amount: Amount::fixed(3),
+                    },
                 ],
             )
         })
@@ -454,7 +472,10 @@ fn ward_target_does_as_much_as_you_can_still_draws() {
                         },
                         amount: Amount::fixed(2),
                     },
-                    Effect::DrawCards(Amount::fixed(1)),
+                    Effect::Draw {
+                        who: PlayerScope::You,
+                        amount: Amount::fixed(1),
+                    },
                 ],
             )
         })

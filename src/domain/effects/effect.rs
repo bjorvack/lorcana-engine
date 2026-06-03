@@ -140,12 +140,23 @@ pub enum DeckPosition {
 // `CharacterFilter` with classification strings.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum Effect {
-    /// The controller draws this many cards.
-    DrawCards(Amount),
-    /// The controller gains this much lore.
-    GainLore(Amount),
-    /// Each opponent of the controller loses this much lore (clamped at 0).
-    EachOpponentLosesLore(Amount),
+    /// Each player in `who` draws `amount` cards ("draw 2 cards" = `You`; "each
+    /// player draws 3"; "chosen player draws 5").
+    Draw {
+        /// Which players draw.
+        who: PlayerScope,
+        /// How many each draws.
+        amount: Amount,
+    },
+    /// Each player in `who` changes their lore by `amount` (positive = gain,
+    /// negative = lose, clamped at 0). "Gain 2 lore" = `You` +2; "each opponent
+    /// loses 1 lore" = `EachOpponent` -1; "chosen opponent loses 1" = `ChosenOpponent`.
+    Lore {
+        /// Which players' lore changes.
+        who: PlayerScope,
+        /// The signed lore change applied to each.
+        amount: Amount,
+    },
     /// Move card(s) from one zone to another (§7, §8): the single zone-move
     /// primitive. Covers "return to hand" (bounce), "into your inkwell", "return
     /// to deck", and milling — `what` selects the cards, `to` is the destination.

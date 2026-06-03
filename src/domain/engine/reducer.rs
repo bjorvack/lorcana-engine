@@ -2117,10 +2117,23 @@ fn execute_effect(
     events: &mut Vec<GameEvent>,
 ) -> Option<Choice> {
     match effect {
-        Effect::DrawCards(n) => {
-            let count = eval_amount(state, registry, controller, source, source, n).max(0);
-            for _ in 0..count {
-                events.push(draw(state, controller));
+        // Each player in `who` draws / changes lore. A `Chosen*` scope may first
+        // need a choose-a-player decision (3–4 player games).
+        Effect::Draw { who, amount } | Effect::Lore { who, amount } => {
+            let n = eval_amount(state, registry, controller, source, source, amount);
+            match resolve_scope(state, controller, *who) {
+                ScopeOutcome::Players(players) => {
+                    for p in players {
+                        apply_player_amount(state, p, effect, n, events);
+                    }
+                }
+                ScopeOutcome::Choose(options) => {
+                    return Some(Choice::ChoosePlayer {
+                        player: controller,
+                        options,
+                        effect: effect.clone(),
+                    });
+                }
             }
         }
         // Players in `who` discard; each chooses which of their own cards unless
@@ -2171,12 +2184,6 @@ fn execute_effect(
                 player: controller,
                 inner: (**inner).clone(),
             });
-        }
-        Effect::GainLore(n) | Effect::EachOpponentLosesLore(n) => {
-            let amount =
-                u32::try_from(eval_amount(state, registry, controller, source, source, n).max(0))
-                    .unwrap_or(0);
-            apply_lore_effect(state, controller, effect, amount, events);
         }
         // Schedule a one-shot delayed trigger to fire later (§7.4.7).
         Effect::ScheduleDelayed {
@@ -2361,39 +2368,42 @@ fn grant_property(state: &mut GameState, source: CardId, target: CardId, propert
     ));
 }
 
-/// Apply a lore gain/loss: `GainLore` adds to the controller; `EachOpponentLosesLore`
-/// subtracts from each opponent. The `amount` is pre-evaluated.
-fn apply_lore_effect(
+/// Apply a pre-evaluated draw/lore `amount` to a single `player`. Draw uses the
+/// count (clamped ≥0); `Lore` adds when positive, loses when negative.
+fn apply_player_amount(
     state: &mut GameState,
-    controller: PlayerId,
+    player: PlayerId,
     effect: &Effect,
-    amount: u32,
+    amount: i32,
     events: &mut Vec<GameEvent>,
 ) {
-    if matches!(effect, Effect::GainLore(_)) {
-        if let Some(p) = state.player_mut(controller) {
-            p.add_lore(amount);
+    match effect {
+        Effect::Draw { .. } => {
+            for _ in 0..amount.max(0) {
+                events.push(draw(state, player));
+            }
         }
-        events.push(GameEvent::LoreGained {
-            player: controller,
-            amount,
-        });
-        return;
-    }
-    let opponents: Vec<PlayerId> = state
-        .players()
-        .iter()
-        .map(PlayerState::id)
-        .filter(|id| *id != controller)
-        .collect();
-    for opponent in opponents {
-        if let Some(p) = state.player_mut(opponent) {
-            p.lose_lore(amount);
+        Effect::Lore { .. } if amount >= 0 => {
+            let gained = u32::try_from(amount).unwrap_or(0);
+            if let Some(p) = state.player_mut(player) {
+                p.add_lore(gained);
+            }
+            events.push(GameEvent::LoreGained {
+                player,
+                amount: gained,
+            });
         }
-        events.push(GameEvent::LoreLost {
-            player: opponent,
-            amount,
-        });
+        Effect::Lore { .. } => {
+            let lost = u32::try_from(-amount).unwrap_or(0);
+            if let Some(p) = state.player_mut(player) {
+                p.lose_lore(lost);
+            }
+            events.push(GameEvent::LoreLost {
+                player,
+                amount: lost,
+            });
+        }
+        _ => {}
     }
 }
 
@@ -2432,6 +2442,14 @@ fn resolve_scope(state: &GameState, controller: PlayerId, who: PlayerScope) -> S
 /// `ChoosePlayer` decision). Effects without a player scope are unchanged.
 fn substitute_chosen_player(effect: &Effect, player: PlayerId) -> Effect {
     match effect {
+        Effect::Draw { amount, .. } => Effect::Draw {
+            who: PlayerScope::Player(player),
+            amount: amount.clone(),
+        },
+        Effect::Lore { amount, .. } => Effect::Lore {
+            who: PlayerScope::Player(player),
+            amount: amount.clone(),
+        },
         Effect::Discard { amount, .. } => Effect::Discard {
             who: PlayerScope::Player(player),
             amount: *amount,
@@ -3040,9 +3058,8 @@ fn apply_effect_to(
         }
         // Never reach here: these are resolved in `execute_effect`, not applied to
         // a concrete target.
-        Effect::DrawCards(_)
-        | Effect::GainLore(_)
-        | Effect::EachOpponentLosesLore(_)
+        Effect::Draw { .. }
+        | Effect::Lore { .. }
         | Effect::Discard { .. }
         | Effect::Move {
             what: MoveSource::DeckTop { .. },

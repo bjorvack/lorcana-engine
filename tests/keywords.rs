@@ -5,7 +5,7 @@
 use lorcana_engine::{
     Amount, CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterFilter,
     CharacterStats, Conditions, Decision, Effect, GameState, GameStatus, Input, Keyword,
-    LocationStats, PendingDecision, PlayerId, Target, TargetSide, TriggerCondition,
+    LocationStats, PendingDecision, PlayerId, PlayerScope, Target, TargetSide, TriggerCondition,
     TriggeredAbility, apply, start,
 };
 
@@ -504,7 +504,10 @@ fn boosting_fires_a_card_put_under_trigger() {
             .with_keywords(vec![Keyword::Boost(0)])
             .with_abilities(vec![TriggeredAbility::new(
                 TriggerCondition::WhenCardPutUnder,
-                Effect::GainLore(Amount::fixed(1)),
+                Effect::Lore {
+                    who: PlayerScope::You,
+                    amount: Amount::fixed(1),
+                },
             )]),
     );
     let mut state = started(&registry);

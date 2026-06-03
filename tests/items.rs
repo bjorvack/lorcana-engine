@@ -3,14 +3,17 @@
 
 use lorcana_engine::{
     AbilityCost, ActivatedAbility, Amount, CardDefId, CardDefinition, CardKind, CardRegistry,
-    Effect, GameState, GameStatus, Input, PlayerId, apply, start,
+    Effect, GameState, GameStatus, Input, PlayerId, PlayerScope, apply, start,
 };
 
 fn item_card(id: u32) -> CardDefinition {
     CardDefinition::new(CardDefId::from_raw(id), 0, true, CardKind::Item).with_activated(vec![
         ActivatedAbility::new(
             AbilityCost::new(false, 0),
-            Effect::GainLore(Amount::fixed(1)),
+            Effect::Lore {
+                who: PlayerScope::You,
+                amount: Amount::fixed(1),
+            },
         ),
     ])
 }

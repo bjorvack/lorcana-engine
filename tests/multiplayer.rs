@@ -205,3 +205,46 @@ fn mill_is_a_card_move_from_deck_to_discard() {
         discard_before + 2
     );
 }
+
+#[test]
+fn each_player_draws_applies_to_everyone() {
+    let mut reg = CardRegistry::new();
+    reg.insert(
+        CardDefinition::character(CardDefId::from_raw(100), 1, true, 1, 5, 1).with_abilities(vec![
+            TriggeredAbility::new(
+                TriggerCondition::WhenThisQuests,
+                Effect::Draw {
+                    who: PlayerScope::EachPlayer,
+                    amount: lorcana_engine::Amount::fixed(2),
+                },
+            ),
+        ]),
+    );
+    for n in 0..30 {
+        if reg.get(CardDefId::from_raw(n)).is_none() {
+            reg.insert(CardDefinition::character(
+                CardDefId::from_raw(n),
+                1,
+                true,
+                1,
+                1,
+                1,
+            ));
+        }
+    }
+    let mut state = started_n(&reg, 4);
+    let active = state.active_player();
+    let quester = place_quester(&mut state, active);
+    let before: Vec<usize> = state
+        .players()
+        .iter()
+        .map(|p| p.hand().iter().count())
+        .collect();
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+
+    assert!(state.pending().is_none(), "no choice: every player draws");
+    for (p, b) in state.players().iter().zip(before) {
+        assert_eq!(p.hand().iter().count(), b + 2);
+    }
+}

@@ -6,7 +6,7 @@
 
 use lorcana_engine::{
     Amount, CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterStats,
-    Conditions, Effect, GameEvent, GameState, GameStatus, Input, PlayerId, Target,
+    Conditions, Effect, GameEvent, GameState, GameStatus, Input, PlayerId, PlayerScope, Target,
     TriggerCondition, TriggeredAbility, apply, start,
 };
 
@@ -283,7 +283,10 @@ fn challenge_triggers_fire_for_challenger_and_target() {
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 3, 1).with_abilities(vec![
             TriggeredAbility::new(
                 TriggerCondition::WhenThisChallenges,
-                Effect::GainLore(Amount::fixed(1)),
+                Effect::Lore {
+                    who: PlayerScope::You,
+                    amount: Amount::fixed(1),
+                },
             ),
         ]),
     );
@@ -292,7 +295,10 @@ fn challenge_triggers_fire_for_challenger_and_target() {
         CardDefinition::character(CardDefId::from_raw(200), 1, true, 1, 9, 1).with_abilities(vec![
             TriggeredAbility::new(
                 TriggerCondition::WhenChallenged,
-                Effect::GainLore(Amount::fixed(2)),
+                Effect::Lore {
+                    who: PlayerScope::You,
+                    amount: Amount::fixed(2),
+                },
             ),
         ]),
     );
@@ -329,7 +335,10 @@ fn banish_triggers_fire_for_both_banisher_and_banished() {
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 5, 9, 1).with_abilities(vec![
             TriggeredAbility::new(
                 TriggerCondition::WhenBanishesInChallenge,
-                Effect::GainLore(Amount::fixed(1)),
+                Effect::Lore {
+                    who: PlayerScope::You,
+                    amount: Amount::fixed(1),
+                },
             ),
         ]),
     );
@@ -338,7 +347,10 @@ fn banish_triggers_fire_for_both_banisher_and_banished() {
         CardDefinition::character(CardDefId::from_raw(200), 1, true, 1, 2, 1).with_abilities(vec![
             TriggeredAbility::new(
                 TriggerCondition::WhenBanishedInChallenge,
-                Effect::GainLore(Amount::fixed(2)),
+                Effect::Lore {
+                    who: PlayerScope::You,
+                    amount: Amount::fixed(2),
+                },
             ),
         ]),
     );

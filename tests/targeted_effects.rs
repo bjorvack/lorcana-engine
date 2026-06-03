@@ -134,7 +134,10 @@ fn lethal_effect_damage_banishes_and_fires_when_banished() {
         CardDefinition::character(CardDefId::from_raw(200), 1, true, 2, 2, 1).with_abilities(vec![
             TriggeredAbility::new(
                 TriggerCondition::WhenBanished,
-                Effect::GainLore(Amount::fixed(4)),
+                Effect::Lore {
+                    who: PlayerScope::You,
+                    amount: Amount::fixed(4),
+                },
             ),
         ]),
     );
@@ -230,7 +233,10 @@ fn a_trigger_banishes_a_chosen_character_and_fires_when_banished() {
         CardDefinition::character(CardDefId::from_raw(200), 1, true, 2, 9, 1).with_abilities(vec![
             TriggeredAbility::new(
                 TriggerCondition::WhenBanished,
-                Effect::GainLore(Amount::fixed(3)),
+                Effect::Lore {
+                    who: PlayerScope::You,
+                    amount: Amount::fixed(3),
+                },
             ),
         ]),
     );
@@ -571,7 +577,10 @@ fn conditional_quester(def: u32) -> CardDefinition {
                     names: vec!["Elsa".to_string()],
                     ..CharacterFilter::any(TargetSide::Yours)
                 },
-                then: Box::new(Effect::GainLore(Amount::fixed(3))),
+                then: Box::new(Effect::Lore {
+                    who: PlayerScope::You,
+                    amount: Amount::fixed(3),
+                }),
             },
         ),
     ])
@@ -958,7 +967,10 @@ fn play_a_character_from_hand_for_free() {
 
 #[test]
 fn may_wrapper_resolves_inner_only_on_yes() {
-    let reg = registry_with_quester(Effect::May(Box::new(Effect::DrawCards(Amount::fixed(1)))));
+    let reg = registry_with_quester(Effect::May(Box::new(Effect::Draw {
+        who: PlayerScope::You,
+        amount: Amount::fixed(1),
+    })));
     // Yes: draws.
     let mut state = started(&reg);
     let active = state.active_player();
