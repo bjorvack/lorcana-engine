@@ -5,8 +5,8 @@
 use lorcana_engine::{
     Amount, CardCategory, CardDefId, CardDefinition, CardId, CardInstance, CardRegistry,
     CharacterFilter, CharacterStats, Classification, Conditions, Decision, DiscardAmount, Effect,
-    GameState, GameStatus, Input, NumericFilter, PlayFilter, PlayerId, PlayerScope, Target,
-    TargetSide, TriggerCondition, TriggeredAbility, apply, start,
+    GameState, GameStatus, Input, NumericFilter, PendingDecision, PlayFilter, PlayerId,
+    PlayerScope, Target, TargetSide, TriggerCondition, TriggeredAbility, apply, start,
 };
 
 fn started(reg: &CardRegistry) -> GameState {
@@ -1101,7 +1101,7 @@ fn each_opponent_chooses_and_discards() {
 
     let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
     assert_eq!(
-        state.pending().map(lorcana_engine::PendingDecision::player),
+        state.pending().map(PendingDecision::player),
         Some(foe),
         "the opponent makes their own discard choice"
     );
@@ -1247,4 +1247,60 @@ fn move_damage_between_two_chosen_characters() {
         2,
         "...onto the chosen opposing character"
     );
+}
+
+#[test]
+fn move_damage_second_pick_excludes_the_first() {
+    // Both endpoints are "your characters": after picking the donor, it must not
+    // be offered again as the recipient (no moving damage to itself).
+    let mut reg = CardRegistry::new();
+    reg.insert(
+        CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 9, 1).with_abilities(vec![
+            TriggeredAbility::new(
+                TriggerCondition::WhenThisQuests,
+                Effect::MoveDamage {
+                    from: Target::ChosenCharacter {
+                        filter: CharacterFilter::any(TargetSide::Yours),
+                        another: true,
+                    },
+                    to: Target::ChosenCharacter {
+                        filter: CharacterFilter::any(TargetSide::Yours),
+                        another: true,
+                    },
+                    amount: Amount::fixed(2),
+                },
+            ),
+        ]),
+    );
+    reg.insert(CardDefinition::character(
+        CardDefId::from_raw(200),
+        1,
+        true,
+        2,
+        9,
+        1,
+    ));
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let quester = place(&mut state, me, 1000, 100, 9, 0);
+    let donor = place(&mut state, me, 1001, 200, 9, 3);
+    let recipient = place(&mut state, me, 1002, 200, 9, 0);
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(Decision::ChooseTarget(donor)),
+    )
+    .expect("from");
+
+    // The second pick must exclude the donor (and the source quester via `another`).
+    let Some(PendingDecision::ChooseMoveTarget { options, .. }) = state.pending() else {
+        panic!("expected a second move-target pick");
+    };
+    assert!(
+        !options.contains(&donor),
+        "the donor can't also be the recipient"
+    );
+    assert!(options.contains(&recipient));
 }

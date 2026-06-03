@@ -1057,7 +1057,19 @@ fn resolve_discard_effect(
     }
 }
 
-/// Resolve a move-damage effect, picking endpoints as needed (§9.3).
+/// An already-resolved move-damage endpoint: the source (`SelfCard`) or a
+/// specific `Card`. `None` if it still needs to be chosen.
+const fn resolved_endpoint(t: &Target, source: CardId) -> Option<CardId> {
+    match t {
+        Target::SelfCard => Some(source),
+        Target::Card(id) => Some(*id),
+        _ => None,
+    }
+}
+
+/// Resolve a move-damage effect one endpoint at a time (§9.3): once both are
+/// concrete, move; otherwise prompt for the next unresolved endpoint, excluding
+/// the endpoint that's already fixed so the two can't be the same card.
 #[allow(clippy::too_many_arguments)]
 fn resolve_move_damage(
     state: &mut GameState,
@@ -1068,33 +1080,32 @@ fn resolve_move_damage(
     to: &Target,
     amount: &Amount,
     effect: &Effect,
-    events: &mut Vec<GameEvent>,
 ) -> Option<Choice> {
-    match (is_chosen_target(from), is_chosen_target(to)) {
-        // Both endpoints already resolved (self / specific card): move now.
-        (false, false) => {
+    match (
+        resolved_endpoint(from, source),
+        resolved_endpoint(to, source),
+    ) {
+        (Some(f), Some(t)) => {
             let max = eval_amount(state, registry, controller, source, source, amount).max(0);
-            move_damage(
-                state,
-                move_endpoint(from, source, source),
-                move_endpoint(to, source, source),
-                max,
-            );
+            move_damage(state, f, t, max);
             None
         }
-        // Two chosen: pick `from` first; the continuation re-runs for `to`.
-        (true, true) => {
-            let options = endpoint_options(state, registry, controller, source, from);
+        // Pick the first unresolved endpoint, excluding the one already fixed.
+        (fixed_from, fixed_to) => {
+            let (target, already) = if fixed_from.is_none() {
+                (from, fixed_to)
+            } else {
+                (to, fixed_from)
+            };
+            let mut options = endpoint_options(state, registry, controller, source, target);
+            if let Some(other) = already {
+                options.retain(|c| *c != other);
+            }
             (!options.is_empty()).then(|| Choice::ChooseMoveTarget {
                 player: controller,
                 options,
                 effect: effect.clone(),
             })
-        }
-        // Exactly one chosen: the standard single-target path resolves it.
-        _ => {
-            let target = if is_chosen_target(from) { from } else { to };
-            resolve_targeted(state, registry, controller, source, target, effect, events)
         }
     }
 }
@@ -2418,12 +2429,11 @@ fn execute_effect(
                 return execute_effect(state, registry, controller, source, then, events);
             }
         }
-        // Move damage between two characters (§9.3): two chosen ⇒ pick `from`
-        // first (then re-run for `to`); one chosen ⇒ the standard targeting path;
-        // none ⇒ move immediately.
+        // Move damage between two characters (§9.3): resolve endpoints one at a
+        // time (each pick excludes the already-fixed endpoint), then move.
         Effect::MoveDamage { from, to, amount } => {
             return resolve_move_damage(
-                state, registry, controller, source, from, to, amount, effect, events,
+                state, registry, controller, source, from, to, amount, effect,
             );
         }
         // Targeted effects: resolve the target now (self / all) or report that a
