@@ -236,6 +236,28 @@ Test organization:
 - Integration tests should be placed in the `tests/` directory
 - Use descriptive test names that explain what is being tested
 
+### Test-driven development (required)
+
+We develop engine behaviour **test-first**. For every behaviour change or bug fix:
+
+1. **Understand the real behaviour first.** Ground the change in the comprehensive
+   rules (`docs/rules/`) and, for card mechanics, in actual card text (use the
+   `lorcast-cards` skill). The rules docs win if card text and rules disagree.
+2. **Think up concrete board states** that exercise the behaviour — including the
+   edge cases and interactions the cards imply (e.g. self-target vs opponent,
+   "choose" vs "affect all", "do as much as you can" §1.2.3).
+3. **Write the tests first and run them** — confirm they fail (or pass) for the
+   right reason *before* changing the implementation. A test that passes
+   immediately may not be exercising what you think.
+4. **Implement the minimal change** to make them pass (red → green).
+5. **Refactor** with the suite green; prefer small composable primitives.
+6. **Encode worked rules examples** (the §-numbered examples in `docs/rules/`) as
+   conformance tests where practical — they are the highest-value tests.
+
+Before committing, the full suite plus `cargo fmt --all --check` and
+`cargo clippy --all-targets --all-features -- -D warnings` must pass (CI enforces
+all three; see `.github/workflows/ci.yml`).
+
 ### Documentation
 
 Public APIs must be documented with rustdoc comments:
