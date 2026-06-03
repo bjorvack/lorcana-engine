@@ -90,6 +90,24 @@ name = "Beast's Mirror"
 type = "Item"
 cost = 4
 inkwell = false
+# "{E}, 1 {I} — Draw a card."
+[[card.activated]]
+cost = { exert = true, ink = 1 }
+do = { draw = 1 }
+
+[[card]]
+name = "Hercules"
+type = "Character"
+cost = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 2
+classifications = ["Hero", "Prince"]
+# "Your other Hero characters get +1 {S}."
+[[card.statics]]
+strength = 1
+to = "your other Hero characters"
 
 [[card]]
 name = "The Great Illuminary"

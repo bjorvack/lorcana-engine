@@ -65,6 +65,12 @@ pub struct TomlCard {
     /// Triggered abilities authored in the effect DSL (see [`super::dsl`]).
     #[serde(default)]
     pub abilities: Vec<super::dsl::TomlAbility>,
+    /// Activated abilities (`{E}`/ink cost + effect).
+    #[serde(default)]
+    pub activated: Vec<super::dsl::TomlActivated>,
+    /// Continuous static stat modifiers.
+    #[serde(default)]
+    pub statics: Vec<super::dsl::TomlStatic>,
 }
 
 /// Why a card couldn't be loaded.
@@ -129,21 +135,32 @@ impl TomlCard {
                 })
             })
             .collect::<Result<_, _>>()?;
+        let bad = |detail: String| LoadError::BadAbility {
+            name: self.name.clone(),
+            detail,
+        };
         let abilities = self
             .abilities
             .iter()
-            .map(|a| {
-                a.to_ability().map_err(|detail| LoadError::BadAbility {
-                    name: self.name.clone(),
-                    detail,
-                })
-            })
+            .map(|a| a.to_ability().map_err(&bad))
+            .collect::<Result<_, _>>()?;
+        let activated = self
+            .activated
+            .iter()
+            .map(|a| a.to_ability().map_err(&bad))
+            .collect::<Result<_, _>>()?;
+        let statics = self
+            .statics
+            .iter()
+            .map(|s| s.to_static().map_err(&bad))
             .collect::<Result<_, _>>()?;
         Ok(CardDefinition::new(id, self.cost, self.inkwell, kind)
             .with_classifications(classifications)
             .with_names(vec![self.name.clone()])
             .with_keywords(keywords)
-            .with_abilities(abilities))
+            .with_abilities(abilities)
+            .with_activated(activated)
+            .with_static(statics))
     }
 
     fn stat(&self, value: Option<u32>, stat: &'static str) -> Result<u32, LoadError> {

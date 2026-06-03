@@ -2,8 +2,9 @@
 //! the engine's own format, validated on load (Slice 9).
 
 use lorcana_engine::{
-    Amount, CardDefId, CardKind, CharacterFilter, Classification, Effect, Keyword, PlayerScope,
-    ShiftAbility, Target, TargetSide, TriggerCondition, load_toml,
+    AbilityCost, ActivatedAbility, Amount, CardDefId, CardKind, CharacterFilter, Classification,
+    Effect, Keyword, PlayerScope, ShiftAbility, Stat, StaticAbility, StaticTarget, Target,
+    TargetSide, TriggerCondition, load_toml,
 };
 
 /// The committed example deck, compiled in so the test needs no runtime files.
@@ -12,7 +13,7 @@ const EXAMPLES: &str = include_str!("../cards/examples.toml");
 #[test]
 fn committed_example_cards_load_and_validate() {
     let defs = load_toml(EXAMPLES).expect("examples.toml loads");
-    assert_eq!(defs.len(), 9, "all example cards loaded");
+    assert_eq!(defs.len(), 10, "all example cards loaded");
 
     // ids are assigned sequentially by position.
     assert_eq!(defs[0].id(), CardDefId::from_raw(0));
@@ -144,6 +145,35 @@ fn the_effect_dsl_maps_abilities_onto_the_ast() {
             },
             amount: Amount::fixed(-2),
         }
+    );
+
+    // "{E}, 1 {I} — Draw a card."  (activated)
+    let mirror = by_name("Beast's Mirror");
+    assert_eq!(
+        mirror.activated_abilities(),
+        &[ActivatedAbility::new(
+            AbilityCost::new(true, 1),
+            Effect::Draw {
+                who: PlayerScope::You,
+                amount: Amount::fixed(1),
+            },
+        )]
+    );
+
+    // "Your other Hero characters get +1 {S}."  (static)
+    let hercules = by_name("Hercules");
+    assert_eq!(
+        hercules.static_abilities(),
+        &[StaticAbility {
+            target: StaticTarget::OwnedCharacters {
+                classifications: vec![Classification::new("Hero")],
+                include_self: false,
+            },
+            stat: Stat::Strength,
+            delta: 1,
+            condition: None,
+            per: None,
+        }]
     );
 }
 

@@ -22,13 +22,13 @@
 //! ]
 //! ```
 
-use super::TriggeredAbility;
 use super::loader::keyword_from;
+use super::{AbilityCost, ActivatedAbility, StaticAbility, StaticTarget, TriggeredAbility};
 use crate::domain::effects::{
     Amount, CardCategory, CharacterFilter, DiscardAmount, DiscardBy, Effect, PlayerScope, Target,
     TargetSide, TriggerCondition,
 };
-use crate::domain::game::Property;
+use crate::domain::game::{Property, Stat};
 use crate::domain::types::card::Classification;
 use serde::Deserialize;
 use toml::Value;
@@ -271,5 +271,100 @@ fn scope_from_str(s: &str) -> Option<PlayerScope> {
         "chosen opponent" => PlayerScope::ChosenOpponent,
         "chosen player" => PlayerScope::ChosenPlayer,
         _ => return None,
+    })
+}
+
+/// One `[[card.activated]]` table: a cost and an effect.
+#[derive(Debug, Clone, Deserialize)]
+pub struct TomlActivated {
+    /// The activation cost (`{ exert = true, ink = 1 }`).
+    #[serde(default)]
+    pub cost: TomlCost,
+    /// The effect, in the same verb-table form as triggered abilities.
+    #[serde(rename = "do")]
+    pub effect: Value,
+}
+
+/// An activated-ability cost.
+#[derive(Debug, Clone, Copy, Default, Deserialize)]
+pub struct TomlCost {
+    /// Whether activating exerts the source (`{E}`).
+    #[serde(default)]
+    pub exert: bool,
+    /// Ink to pay.
+    #[serde(default)]
+    pub ink: u32,
+}
+
+impl TomlActivated {
+    /// Build the [`ActivatedAbility`].
+    ///
+    /// # Errors
+    /// Returns a detail string if the effect can't be parsed.
+    pub fn to_ability(&self) -> Result<ActivatedAbility, String> {
+        Ok(ActivatedAbility::new(
+            AbilityCost::new(self.cost.exert, self.cost.ink),
+            effect_from_value(&self.effect)?,
+        ))
+    }
+}
+
+/// One `[[card.statics]]` table: a continuous stat modifier on a selector.
+#[derive(Debug, Clone, Deserialize)]
+pub struct TomlStatic {
+    /// `+N`/`-N` to `{S}` (set exactly one of strength/willpower/lore).
+    pub strength: Option<i32>,
+    /// `+N`/`-N` to `{W}`.
+    pub willpower: Option<i32>,
+    /// `+N`/`-N` to `{L}`.
+    pub lore: Option<i32>,
+    /// Who it applies to: "this" / "your characters" / "your other Villain characters".
+    #[serde(rename = "to")]
+    pub target: String,
+}
+
+impl TomlStatic {
+    /// Build the [`StaticAbility`].
+    ///
+    /// # Errors
+    /// Returns a detail string if exactly-one-stat or the target can't be resolved.
+    pub fn to_static(&self) -> Result<StaticAbility, String> {
+        let (stat, delta) = match (self.strength, self.willpower, self.lore) {
+            (Some(d), None, None) => (Stat::Strength, d),
+            (None, Some(d), None) => (Stat::Willpower, d),
+            (None, None, Some(d)) => (Stat::Lore, d),
+            _ => return Err("a static must set exactly one of strength/willpower/lore".into()),
+        };
+        let target = static_target_from_str(&self.target)
+            .ok_or_else(|| format!("unparseable static target {:?}", self.target))?;
+        Ok(StaticAbility {
+            target,
+            stat,
+            delta,
+            condition: None,
+            per: None,
+        })
+    }
+}
+
+/// Parse a static target: "this" / "your [other] [Class…] characters".
+fn static_target_from_str(s: &str) -> Option<StaticTarget> {
+    let lower = s.to_lowercase();
+    if lower == "self" || lower == "this" {
+        return Some(StaticTarget::SelfCard);
+    }
+    if !lower.contains("character") {
+        return None; // statics buff characters
+    }
+    let include_self = !(lower.contains("other") || lower.contains("another"));
+    let known = ["your", "own", "other", "another", "character", "characters"];
+    let classifications = s
+        .split_whitespace()
+        .filter(|w| !known.contains(&w.to_lowercase().as_str()))
+        .map(Classification::new)
+        .collect();
+    Some(StaticTarget::OwnedCharacters {
+        classifications,
+        include_self,
     })
 }

@@ -755,8 +755,14 @@ work, tracked separately.
   opponent"`) *or* the structured AST form as a fallback. Verbs covered: draw,
   gain/lose lore, deal/remove damage, give-strength, banish/exert/ready/freeze,
   discard, grant-keyword. Added `Effect::All` (sequencing) to the engine.
-  `src/domain/cards/dsl.rs`, `cards/examples.toml`, `tests/card_loader.rs`.
-  **Next:** activated + static abilities; dynamic amounts/conditionals in the DSL.
+  `src/domain/cards/dsl.rs`, `cards/examples.toml`, `tests/card_loader.rs`. Played
+  end-to-end (TOML -> registry -> engine).
+- [~] **Effect-DSL: activated + static abilities** — `[[card.activated]]`
+  (`cost = { exert, ink }` + `do`) -> `ActivatedAbility`; `[[card.statics]]`
+  (`strength/willpower/lore = N`, `to = "your other Hero characters"`) ->
+  `StaticAbility`. Beast's Mirror ({E},1 -> draw) and Hercules (+1 {S} to other
+  Heroes) in `cards/examples.toml`. **Next:** dynamic amounts/conditionals + static
+  conditions (`per`/`while`) in the DSL surface.
 - A conformance test suite: encode the rules examples (§7–§10) and a library of
   hand-authored interaction scenarios as golden tests.
 - **Trigger taxonomy completeness** (see
