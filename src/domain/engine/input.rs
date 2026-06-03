@@ -95,6 +95,8 @@ pub enum Decision {
     ChooseTarget(CardId),
     /// For `ChooseUpToN`: the 0..N distinct targets chosen (§7.1.8).
     ChooseTargets(Vec<CardId>),
+    /// For `ChooseCardsToDiscard`: the exact cards from hand to discard (§8.4).
+    DiscardCards(Vec<CardId>),
 }
 
 /// Why an [`Input`] was rejected. When an input is rejected the game state is

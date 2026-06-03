@@ -5,6 +5,15 @@ use crate::domain::cards::Keyword;
 use crate::domain::game::{Permission, Restriction};
 use serde::{Deserialize, Serialize};
 
+/// How many cards a discard effect removes from a hand (§8.4).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum DiscardAmount {
+    /// Exactly N cards (the player chooses which, unless the hand is smaller).
+    Count(u32),
+    /// The player's whole hand ("discard your hand").
+    WholeHand,
+}
+
 /// When a delayed (floating) triggered ability fires (§7.4.7).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum DelayedWhen {
@@ -130,6 +139,9 @@ pub enum Effect {
         /// Applied to the target when it doesn't.
         otherwise: Box<Self>,
     },
+    /// The controller discards cards from their hand ("choose and discard 2
+    /// cards"; "discard your hand"). The discarding player chooses which (§8.4).
+    Discard(DiscardAmount),
     /// Schedule a one-shot **delayed** effect to resolve later (§7.4.7), e.g.
     /// "at the end of this turn, banish this character".
     ScheduleDelayed {

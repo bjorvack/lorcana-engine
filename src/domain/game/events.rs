@@ -44,6 +44,13 @@ pub enum GameEvent {
         /// The player who could not draw.
         player: PlayerId,
     },
+    /// A player discarded a card from their hand (§8.4).
+    CardDiscarded {
+        /// The player who discarded.
+        player: PlayerId,
+        /// The card moved to the discard pile.
+        card: CardId,
+    },
     /// A player put a card into their inkwell (§4.3.3).
     CardPutInInkwell {
         /// The player who inked.

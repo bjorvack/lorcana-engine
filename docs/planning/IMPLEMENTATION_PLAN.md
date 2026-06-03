@@ -623,6 +623,39 @@ Challenge/banish triggers into the bag (see
 
 ---
 
+## Slice 8c — Card-coverage gap inventory (express every known card)
+
+**Goal**: every printed card's text is expressible in the DSL. Grounded in a
+2,610-card corpus (Lorcast, sets 1–12 + promos; 2,314 with rules text). Effect
+mechanics ranked by card count, with the remaining gaps to close in order:
+
+- [~] **discard** (288) — `Effect::Discard(DiscardAmount::Count(n)/WholeHand)`:
+      the controller chooses N from hand (`PendingDecision::ChooseCardsToDiscard` /
+      `Decision::DiscardCards`) or discards the whole hand outright. Done for
+      **you**; `tests/targeted_effects.rs`. **Remaining:** "each opponent
+      chooses/discards N" (opponent is the chooser) and at-random.
+- [ ] **play a card from a zone** (147) — "you may play … for free / from your
+      hand / from your discard", "without paying its cost". Needs a play-from-zone
+      effect + alternate-cost path.
+- [ ] **Ward / can't be chosen** (86, incl. reminder) — targeting restriction
+      (can't be chosen except to challenge); a targeting-legality property.
+- [ ] **reveal** (69) — reveal hand / top of deck; often gates a follow-up.
+- [ ] **search / look at top N** (59) — scry/tutor: look, take matching, reorder.
+- [ ] **freeze / "can't ready next turn"** (38) — an exert that skips the next
+      ready step (a per-character delayed flag).
+- [ ] **+N for each …** (24) — dynamic amount counted over a filter (also "gain
+      lore equal to", "deal damage equal to", 15+1).
+- [ ] **chosen / each player targets** (12 + 7) — player-directed draw/discard/
+      lore (needs a choose-a-player axis).
+- [ ] **grant an ability** (10) — "gains '\<ability text\>'" (a granted triggered/
+      activated ability, not just a keyword).
+- [ ] **name a card** (6), **move damage** (15) — niche.
+
+Costs (activated-ability "discard a card", "{E}" etc.) ride the AbilityCost atom
+work, tracked separately.
+
+---
+
 ## Slice 9 — Real card data & conformance suite
 
 **Goal**: scale beyond hand-written cards and lock in correctness.

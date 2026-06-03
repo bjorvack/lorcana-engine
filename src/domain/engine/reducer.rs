@@ -6,8 +6,8 @@ use crate::domain::cards::{
     ShiftKind, StaticAbility, StaticTarget,
 };
 use crate::domain::effects::{
-    CardCategory, CharacterFilter, DeckPosition, DelayedWhen, Effect, Target, TargetSide,
-    TriggerCondition,
+    CardCategory, CharacterFilter, DeckPosition, DelayedWhen, DiscardAmount, Effect, Target,
+    TargetSide, TriggerCondition,
 };
 use crate::domain::game::{
     CardInstance, CharacterStats, Conditions, DelayedTrigger, GameEvent, GameState, GameStatus,
@@ -1983,6 +1983,12 @@ fn resolve_effects(
                     effect,
                     rest,
                 },
+                Choice::Discard { player, count } => PendingDecision::ChooseCardsToDiscard {
+                    player,
+                    source,
+                    count,
+                    rest,
+                },
             };
             state.set_pending(pending);
             return;
@@ -2003,6 +2009,8 @@ enum Choice {
         max: u32,
         effect: Effect,
     },
+    /// `player` must choose `count` cards from their hand to discard (§8.4).
+    Discard { player: PlayerId, count: u32 },
 }
 
 /// Apply a built-in effect for `controller`. Returns `Some(Choice)` when the
@@ -2021,6 +2029,11 @@ fn execute_effect(
             for _ in 0..*n {
                 events.push(draw(state, controller));
             }
+        }
+        // The controller discards from their hand; they choose which cards unless
+        // the whole hand goes (§8.4).
+        Effect::Discard(amount) => {
+            return resolve_discard(state, controller, *amount, events);
         }
         Effect::GainLore(n) => {
             if let Some(p) = state.player_mut(controller) {
@@ -2189,6 +2202,75 @@ fn chosen_permanent_options(
     out
 }
 
+/// The destination zone for a leave-play move effect (return to hand / inkwell /
+/// deck), defaulting to hand.
+const fn leave_play_destination(effect: &Effect) -> SelfDestination {
+    match effect {
+        Effect::IntoInkwell(_) => SelfDestination::Inkwell,
+        Effect::ReturnToDeck { position, .. } => match position {
+            DeckPosition::Top => SelfDestination::TopOfDeck,
+            DeckPosition::Bottom => SelfDestination::BottomOfDeck,
+            DeckPosition::Shuffle => SelfDestination::ShuffleIntoDeck,
+        },
+        _ => SelfDestination::Hand,
+    }
+}
+
+/// Add a continuous [`Property`] (keyword / restriction / permission) to a target
+/// for the rest of the turn (§7.6.1).
+fn grant_property(state: &mut GameState, source: CardId, target: CardId, property: Property) {
+    state.add_property_modifier(PropertyModifier::new(
+        source,
+        ModifierTarget::Card(target),
+        property,
+        ModifierDuration::UntilEndOfTurn,
+    ));
+}
+
+/// Resolve a [`DiscardAmount`] for `controller`: discard the whole hand outright
+/// when the count covers it, else ask the controller to choose (§8.4).
+fn resolve_discard(
+    state: &mut GameState,
+    controller: PlayerId,
+    amount: DiscardAmount,
+    events: &mut Vec<GameEvent>,
+) -> Option<Choice> {
+    let hand: Vec<CardId> = state
+        .player(controller)
+        .map(|p| p.hand().iter().map(CardInstance::id).collect())
+        .unwrap_or_default();
+    let count = match amount {
+        DiscardAmount::WholeHand => u32::try_from(hand.len()).unwrap_or(u32::MAX),
+        DiscardAmount::Count(n) => n,
+    };
+    if count as usize >= hand.len() {
+        for card in hand {
+            discard_card(state, controller, card, events);
+        }
+        None
+    } else {
+        Some(Choice::Discard {
+            player: controller,
+            count,
+        })
+    }
+}
+
+/// Move `card` from `player`'s hand to their discard pile (§8.4).
+fn discard_card(
+    state: &mut GameState,
+    player: PlayerId,
+    card: CardId,
+    events: &mut Vec<GameEvent>,
+) {
+    if let Some(p) = state.player_mut(player)
+        && let Some(instance) = p.hand_mut().take(card)
+    {
+        p.discard_mut().push(instance);
+        events.push(GameEvent::CardDiscarded { player, card });
+    }
+}
+
 /// A zone an effect can move the source card to.
 #[derive(Clone, Copy)]
 enum SelfDestination {
@@ -2264,24 +2346,11 @@ fn apply_effect_to(
     events: &mut Vec<GameEvent>,
 ) {
     match effect {
-        Effect::ReturnToHand(_) => {
+        // Move the target out of play / discard to its owner's hand, inkwell, or
+        // deck, dissolving any stack into the destination (§5.1.7).
+        Effect::ReturnToHand(_) | Effect::IntoInkwell(_) | Effect::ReturnToDeck { .. } => {
             if let Some(owner) = owner_holding(state, target_card) {
-                move_self_card(state, owner, target_card, SelfDestination::Hand);
-            }
-        }
-        Effect::IntoInkwell(_) => {
-            if let Some(owner) = owner_holding(state, target_card) {
-                move_self_card(state, owner, target_card, SelfDestination::Inkwell);
-            }
-        }
-        Effect::ReturnToDeck { position, .. } => {
-            if let Some(owner) = owner_holding(state, target_card) {
-                let dest = match position {
-                    DeckPosition::Top => SelfDestination::TopOfDeck,
-                    DeckPosition::Bottom => SelfDestination::BottomOfDeck,
-                    DeckPosition::Shuffle => SelfDestination::ShuffleIntoDeck,
-                };
-                move_self_card(state, owner, target_card, dest);
+                move_self_card(state, owner, target_card, leave_play_destination(effect));
             }
         }
         Effect::GiveStrengthThisTurn { amount, .. } => {
@@ -2321,29 +2390,31 @@ fn apply_effect_to(
                 c.conditions_mut().ready = ready;
             }
         }
+        // Grant a keyword / restriction / permission to the target until end of
+        // turn (a single `UntilEndOfTurn` property modifier).
         Effect::GrantKeywordThisTurn { keyword, .. } => {
-            state.add_property_modifier(PropertyModifier::new(
+            grant_property(
+                state,
                 source,
-                ModifierTarget::Card(target_card),
+                target_card,
                 Property::Keyword(keyword.clone()),
-                ModifierDuration::UntilEndOfTurn,
-            ));
+            );
         }
         Effect::RestrictThisTurn { restriction, .. } => {
-            state.add_property_modifier(PropertyModifier::new(
+            grant_property(
+                state,
                 source,
-                ModifierTarget::Card(target_card),
+                target_card,
                 Property::Restriction(*restriction),
-                ModifierDuration::UntilEndOfTurn,
-            ));
+            );
         }
         Effect::PermitThisTurn { permission, .. } => {
-            state.add_property_modifier(PropertyModifier::new(
+            grant_property(
+                state,
                 source,
-                ModifierTarget::Card(target_card),
+                target_card,
                 Property::Permission(*permission),
-                ModifierDuration::UntilEndOfTurn,
-            ));
+            );
         }
         Effect::IfTargetMatches {
             filter,
@@ -2351,10 +2422,10 @@ fn apply_effect_to(
             otherwise,
             ..
         } => {
-            let matches = state
+            let matched = state
                 .instance_in_play(target_card)
                 .is_some_and(|c| character_matches_filter(state, registry, c, filter));
-            let branch = if matches { then } else { otherwise };
+            let branch = if matched { then } else { otherwise };
             apply_effect_to(state, registry, source, target_card, branch, events);
         }
         // Never reach here: these are resolved in `execute_effect`, not applied to
@@ -2362,6 +2433,7 @@ fn apply_effect_to(
         Effect::DrawCards(_)
         | Effect::GainLore(_)
         | Effect::EachOpponentLosesLore(_)
+        | Effect::Discard(_)
         | Effect::IfControl { .. }
         | Effect::ScheduleDelayed { .. } => {}
     }
@@ -2533,19 +2605,7 @@ fn apply_decision(
             }
         }
         (PendingDecision::EnterPlayExerted { player, card }, Decision::EnterExerted(exert)) => {
-            let _ = state.take_pending();
-            if exert
-                && let Some(p) = state.player_mut(player)
-                && let Some(c) = p.play_mut().iter_mut().find(|c| c.id() == card)
-            {
-                c.conditions_mut().ready = false;
-            }
-            // Now that it has entered (ready or exerted), run its enters-play
-            // triggers (§10.3.2 resolves before the enters-play trigger window).
-            if let Some(definition_id) = state.instance_in_play(card).map(CardInstance::definition)
-            {
-                enqueue_enter_play_triggers(state, registry, player, card, definition_id);
-            }
+            apply_enter_exerted_decision(state, registry, player, card, exert);
         }
         (
             PendingDecision::ChooseTarget {
@@ -2577,23 +2637,38 @@ fn apply_decision(
             },
             Decision::ChooseTargets(chosen),
         ) => {
-            // §7.1.8: 0..max distinct targets, all eligible.
-            let distinct = chosen
-                .iter()
-                .collect::<std::collections::HashSet<_>>()
-                .len();
-            if chosen.len() > max as usize
-                || distinct != chosen.len()
-                || !chosen.iter().all(|c| options.contains(c))
-            {
-                return Err(Rejected::InvalidDecision);
-            }
-            let _ = state.take_pending();
-            for target in chosen {
-                apply_effect_to(state, registry, source, target, &effect, &mut events);
-            }
-            resolve_effects(state, registry, player, source, rest, &mut events);
-            events.extend(game_state_check_with_triggers(state, registry));
+            apply_up_to_n_decision(
+                state,
+                registry,
+                player,
+                source,
+                &options,
+                max,
+                &effect,
+                rest,
+                chosen,
+                &mut events,
+            )?;
+        }
+        (
+            PendingDecision::ChooseCardsToDiscard {
+                player,
+                source,
+                count,
+                rest,
+            },
+            Decision::DiscardCards(chosen),
+        ) => {
+            apply_discard_decision(
+                state,
+                registry,
+                player,
+                source,
+                count,
+                rest,
+                chosen,
+                &mut events,
+            )?;
         }
         _ => return Err(Rejected::InvalidDecision),
     }
@@ -2603,4 +2678,94 @@ fn apply_decision(
     // Resume a turn transition that suspended on a start/end-of-turn trigger.
     events.extend(resume_turn_progression(state, registry));
     Ok(events)
+}
+
+/// Answer a [`PendingDecision::EnterPlayExerted`] (Bodyguard, §10.3.2): optionally
+/// exert the entering character, then run its enters-play triggers.
+fn apply_enter_exerted_decision(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    player: PlayerId,
+    card: CardId,
+    exert: bool,
+) {
+    let _ = state.take_pending();
+    if exert
+        && let Some(p) = state.player_mut(player)
+        && let Some(c) = p.play_mut().iter_mut().find(|c| c.id() == card)
+    {
+        c.conditions_mut().ready = false;
+    }
+    if let Some(definition_id) = state.instance_in_play(card).map(CardInstance::definition) {
+        enqueue_enter_play_triggers(state, registry, player, card, definition_id);
+    }
+}
+
+/// Answer a [`PendingDecision::ChooseUpToN`]: 0..`max` distinct eligible targets,
+/// apply `effect` to each, then resume the continuation (§7.1.8).
+#[allow(clippy::too_many_arguments)]
+fn apply_up_to_n_decision(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    player: PlayerId,
+    source: CardId,
+    options: &[CardId],
+    max: u32,
+    effect: &Effect,
+    rest: Vec<Effect>,
+    chosen: Vec<CardId>,
+    events: &mut Vec<GameEvent>,
+) -> Result<(), Rejected> {
+    let distinct = chosen
+        .iter()
+        .collect::<std::collections::HashSet<_>>()
+        .len();
+    if chosen.len() > max as usize
+        || distinct != chosen.len()
+        || !chosen.iter().all(|c| options.contains(c))
+    {
+        return Err(Rejected::InvalidDecision);
+    }
+    let _ = state.take_pending();
+    for target in chosen {
+        apply_effect_to(state, registry, source, target, effect, events);
+    }
+    resolve_effects(state, registry, player, source, rest, events);
+    events.extend(game_state_check_with_triggers(state, registry));
+    Ok(())
+}
+
+/// Answer a [`PendingDecision::ChooseCardsToDiscard`]: validate the chosen cards
+/// (exactly `count`, distinct, in `player`'s hand), discard them, then resume the
+/// continuation effects (§8.4, §7.1).
+#[allow(clippy::too_many_arguments)]
+fn apply_discard_decision(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    player: PlayerId,
+    source: CardId,
+    count: u32,
+    rest: Vec<Effect>,
+    chosen: Vec<CardId>,
+    events: &mut Vec<GameEvent>,
+) -> Result<(), Rejected> {
+    let in_hand = |c: &CardId| {
+        state
+            .player(player)
+            .is_some_and(|p| p.hand().iter().any(|h| h.id() == *c))
+    };
+    let distinct = chosen
+        .iter()
+        .collect::<std::collections::HashSet<_>>()
+        .len();
+    if chosen.len() != count as usize || distinct != chosen.len() || !chosen.iter().all(in_hand) {
+        return Err(Rejected::InvalidDecision);
+    }
+    let _ = state.take_pending();
+    for card in chosen {
+        discard_card(state, player, card, events);
+    }
+    resolve_effects(state, registry, player, source, rest, events);
+    events.extend(game_state_check_with_triggers(state, registry));
+    Ok(())
 }

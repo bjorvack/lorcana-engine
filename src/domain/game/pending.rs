@@ -50,6 +50,18 @@ pub enum PendingDecision {
         /// after this one (the "[A] then [B]" continuation).
         rest: Vec<Effect>,
     },
+    /// A discard effect is resolving and `player` must choose exactly `count`
+    /// cards from their own hand to discard; then `rest` resolves (§8.4, §7.1).
+    ChooseCardsToDiscard {
+        /// The player who must choose (the discarding player).
+        player: PlayerId,
+        /// The effect's source card (for resuming the continuation's controller).
+        source: CardId,
+        /// How many cards must be chosen.
+        count: u32,
+        /// The remaining effects of the ability/action, resolved in order after.
+        rest: Vec<Effect>,
+    },
     /// "Up to N" — the controller chooses 0..`max` distinct targets from
     /// `options`; `effect` applies to each, then `rest` resolves (§7.1.8).
     ChooseUpToN {
@@ -77,6 +89,7 @@ impl PendingDecision {
             | Self::MayResolve { player, .. }
             | Self::EnterPlayExerted { player, .. }
             | Self::ChooseTarget { player, .. }
+            | Self::ChooseCardsToDiscard { player, .. }
             | Self::ChooseUpToN { player, .. } => *player,
         }
     }

@@ -4,8 +4,8 @@
 
 use lorcana_engine::{
     CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterFilter, CharacterStats,
-    Classification, Conditions, Decision, Effect, GameState, GameStatus, Input, NumericFilter,
-    PlayerId, Target, TargetSide, TriggerCondition, TriggeredAbility, apply, start,
+    Classification, Conditions, Decision, DiscardAmount, Effect, GameState, GameStatus, Input,
+    NumericFilter, PlayerId, Target, TargetSide, TriggerCondition, TriggeredAbility, apply, start,
 };
 
 fn started(reg: &CardRegistry) -> GameState {
@@ -821,4 +821,73 @@ fn return_to_deck_moves_the_target_out_of_play_into_the_deck() {
         "went to its owner's deck"
     );
     assert_eq!(state.player(foe).unwrap().deck().len(), deck_before + 1);
+}
+
+fn hand_ids(state: &GameState, player: PlayerId) -> Vec<CardId> {
+    state
+        .player(player)
+        .unwrap()
+        .hand()
+        .iter()
+        .map(CardInstance::id)
+        .collect()
+}
+
+#[test]
+fn choose_and_discard_n_removes_the_chosen_cards() {
+    let mut reg = CardRegistry::new();
+    reg.insert(
+        CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 5, 1).with_abilities(vec![
+            TriggeredAbility::new(
+                TriggerCondition::WhenThisQuests,
+                Effect::Discard(DiscardAmount::Count(2)),
+            ),
+        ]),
+    );
+    let mut state = started(&reg);
+    let active = state.active_player();
+    let quester = place(&mut state, active, 1000, 100, 5, 0);
+    let hand = hand_ids(&state, active);
+    let before = hand.len();
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+    // Awaiting the discard choice; pick the first two hand cards.
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(Decision::DiscardCards(vec![hand[0], hand[1]])),
+    )
+    .expect("discard");
+
+    assert_eq!(hand_ids(&state, active).len(), before - 2);
+    let discard = state.player(active).unwrap().discard();
+    assert!(discard.contains(hand[0]) && discard.contains(hand[1]));
+    // Wrong count is rejected.
+    assert!(state.pending().is_none());
+}
+
+#[test]
+fn discard_your_whole_hand_needs_no_choice() {
+    let mut reg = CardRegistry::new();
+    reg.insert(
+        CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 5, 1).with_abilities(vec![
+            TriggeredAbility::new(
+                TriggerCondition::WhenThisQuests,
+                Effect::Discard(DiscardAmount::WholeHand),
+            ),
+        ]),
+    );
+    let mut state = started(&reg);
+    let active = state.active_player();
+    let quester = place(&mut state, active, 1000, 100, 5, 0);
+    let before = hand_ids(&state, active).len();
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+
+    assert!(
+        state.pending().is_none(),
+        "whole-hand discard needs no choice"
+    );
+    assert_eq!(hand_ids(&state, active).len(), 0);
+    assert_eq!(state.player(active).unwrap().discard().len(), before);
 }
