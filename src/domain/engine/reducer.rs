@@ -1020,6 +1020,60 @@ fn add_damage(state: &mut GameState, owner: PlayerId, card: CardId, amount: u32)
     }
 }
 
+/// Resolve one endpoint of a move-damage effect: `SelfCard` is the source, any
+/// other (chosen) target is the resolved `chosen` card.
+const fn move_endpoint(t: &Target, source: CardId, chosen: CardId) -> CardId {
+    if matches!(t, Target::SelfCard) {
+        source
+    } else {
+        chosen
+    }
+}
+
+/// Apply a [`Effect::MoveDamage`] to the resolved `target_card` (the chosen side);
+/// the other side is the `SelfCard` source. Capped by `from`'s damage (§9.3).
+#[allow(clippy::too_many_arguments)]
+fn apply_move_damage(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    controller: PlayerId,
+    source: CardId,
+    target_card: CardId,
+    from: &Target,
+    to: &Target,
+    amount: &Amount,
+) {
+    let max = eval_amount(state, registry, controller, source, target_card, amount).max(0);
+    let from_card = move_endpoint(from, source, target_card);
+    let to_card = move_endpoint(to, source, target_card);
+    move_damage(state, from_card, to_card, max);
+}
+
+/// Move up to `max` damage counters from `from` to `to`, capped by the damage
+/// actually on `from` (§9.3). A no-op if they're the same card or `from` is clean.
+fn move_damage(state: &mut GameState, from: CardId, to: CardId, max: i32) {
+    if from == to {
+        return;
+    }
+    let on_from = state
+        .instance_in_play(from)
+        .map_or(0, |c| c.conditions().damage);
+    let moved = on_from.min(u32::try_from(max).unwrap_or(0));
+    if moved == 0 {
+        return;
+    }
+    if let Some(owner) = owner_holding(state, from)
+        && let Some(c) = state
+            .player_mut(owner)
+            .and_then(|p| p.play_mut().iter_mut().find(|c| c.id() == from))
+    {
+        c.conditions_mut().damage -= moved;
+    }
+    if let Some(owner) = owner_holding(state, to) {
+        add_damage(state, owner, to, moved);
+    }
+}
+
 /// Find an instance in a specific player's play area, or reject.
 fn find_in_play(
     state: &GameState,
@@ -2123,24 +2177,11 @@ fn execute_effect(
     events: &mut Vec<GameEvent>,
 ) -> Option<Choice> {
     match effect {
-        // Each player in `who` draws / changes lore. A `Chosen*` scope may first
-        // need a choose-a-player decision (3–4 player games).
+        // Each player in `who` draws / changes lore (may prompt a player choice).
         Effect::Draw { who, amount } | Effect::Lore { who, amount } => {
-            let n = eval_amount(state, registry, controller, source, source, amount);
-            match resolve_scope(state, controller, *who) {
-                ScopeOutcome::Players(players) => {
-                    for p in players {
-                        apply_player_amount(state, p, effect, n, events);
-                    }
-                }
-                ScopeOutcome::Choose(options) => {
-                    return Some(Choice::ChoosePlayer {
-                        player: controller,
-                        options,
-                        effect: effect.clone(),
-                    });
-                }
-            }
+            return resolve_player_draw_lore(
+                state, registry, controller, source, *who, amount, effect, events,
+            );
         }
         // Players in `who` discard; each chooses which of their own cards unless
         // their whole hand goes (§8.4). A `Chosen*` scope may first need a
@@ -2214,6 +2255,16 @@ fn execute_effect(
             if controls {
                 return execute_effect(state, registry, controller, source, then, events);
             }
+        }
+        // Move damage between two characters: resolve the non-`SelfCard` (chosen)
+        // side via targeting; the move itself happens in `apply_effect_to` (§9.3).
+        Effect::MoveDamage { from, to, .. } => {
+            let target = if matches!(from, Target::SelfCard) {
+                to
+            } else {
+                from
+            };
+            return resolve_targeted(state, registry, controller, source, target, effect, events);
         }
         // Targeted effects: resolve the target now (self / all) or report that a
         // choice is needed (§7.1).
@@ -2375,6 +2426,35 @@ fn grant_property(state: &mut GameState, source: CardId, target: CardId, propert
         property,
         ModifierDuration::UntilEndOfTurn,
     ));
+}
+
+/// Resolve a player-scoped draw/lore: apply to each player in scope, or prompt a
+/// choose-a-player decision for a `Chosen*` scope with 2+ candidates.
+#[allow(clippy::too_many_arguments)]
+fn resolve_player_draw_lore(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    controller: PlayerId,
+    source: CardId,
+    who: PlayerScope,
+    amount: &Amount,
+    effect: &Effect,
+    events: &mut Vec<GameEvent>,
+) -> Option<Choice> {
+    let n = eval_amount(state, registry, controller, source, source, amount);
+    match resolve_scope(state, controller, who) {
+        ScopeOutcome::Players(players) => {
+            for p in players {
+                apply_player_amount(state, p, effect, n, events);
+            }
+            None
+        }
+        ScopeOutcome::Choose(options) => Some(Choice::ChoosePlayer {
+            player: controller,
+            options,
+            effect: effect.clone(),
+        }),
+    }
 }
 
 /// Apply a pre-evaluated draw/lore `amount` to a single `player`. Draw uses the
@@ -3027,6 +3107,19 @@ fn apply_effect_to(
                 move_self_card(state, owner, target_card, destination_to_self(*to));
             }
         }
+        // Move damage from `from` to `to` (§9.3).
+        Effect::MoveDamage {
+            from, to, amount, ..
+        } => apply_move_damage(
+            state,
+            registry,
+            controller,
+            source,
+            target_card,
+            from,
+            to,
+            amount,
+        ),
         Effect::GiveStrengthThisTurn { amount, .. }
         | Effect::DealDamage { amount, .. }
         | Effect::RemoveDamage { amount, .. } => {
@@ -3054,6 +3147,32 @@ fn apply_effect_to(
             }
         }
         Effect::Freeze(_) => freeze_card(state, target_card),
+        // Grant / restrict / conditional / never-reached effects.
+        _ => apply_effect_to_rest(
+            state,
+            registry,
+            controller,
+            source,
+            target_card,
+            effect,
+            events,
+        ),
+    }
+}
+
+/// Continuation of [`apply_effect_to`] (split to keep the match small): grant a
+/// keyword / restriction / permission, the conditional-on-target branch, and the
+/// untargeted variants that never reach here.
+fn apply_effect_to_rest(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    controller: PlayerId,
+    source: CardId,
+    target_card: CardId,
+    effect: &Effect,
+    events: &mut Vec<GameEvent>,
+) {
+    match effect {
         // Grant a keyword / restriction / permission to the target until end of
         // turn (a single `UntilEndOfTurn` property modifier).
         Effect::GrantKeywordThisTurn { keyword, .. } => {
@@ -3100,20 +3219,9 @@ fn apply_effect_to(
                 events,
             );
         }
-        // Never reach here: these are resolved in `execute_effect`, not applied to
-        // a concrete target.
-        Effect::Draw { .. }
-        | Effect::Lore { .. }
-        | Effect::Discard { .. }
-        | Effect::Move {
-            what: MoveSource::DeckTop { .. },
-            ..
-        }
-        | Effect::PlayFreeFromHand { .. }
-        | Effect::LookAtTopAndTake { .. }
-        | Effect::May(_)
-        | Effect::IfControl { .. }
-        | Effect::ScheduleDelayed { .. } => {}
+        // Everything else (untargeted effects resolved in `execute_effect`, and the
+        // targeted effects handled by `apply_effect_to`) never reaches here.
+        _ => {}
     }
 }
 

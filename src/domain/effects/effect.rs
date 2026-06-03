@@ -190,6 +190,18 @@ pub enum Effect {
         /// How much damage to remove (evaluated and clamped at 0).
         amount: Amount,
     },
+    /// Move up to `amount` damage counters from `from` to `to` (§9.3; "move up to
+    /// 2 damage from chosen character to this character"). One side is usually
+    /// `SelfCard`; the other (chosen) side is resolved via targeting. The amount
+    /// moved is capped by the damage actually on `from`.
+    MoveDamage {
+        /// The character losing damage.
+        from: Target,
+        /// The character receiving it.
+        to: Target,
+        /// The maximum to move ("up to N").
+        amount: Amount,
+    },
     /// Banish the target directly (not via damage) — "banish chosen character".
     Banish(Target),
     /// Exert the target ("exert chosen opposing character").

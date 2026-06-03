@@ -1115,3 +1115,63 @@ fn each_opponent_chooses_and_discards() {
     assert_eq!(hand_ids(&state, foe).len(), before - 1);
     assert!(state.player(foe).unwrap().discard().contains(foe_hand[0]));
 }
+
+#[test]
+fn move_damage_from_chosen_onto_this_character() {
+    // "Move up to 2 damage from chosen character to this character" (§9.3): capped
+    // by the damage actually on the chosen character.
+    let mut reg = CardRegistry::new();
+    reg.insert(
+        CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 9, 1).with_abilities(vec![
+            TriggeredAbility::new(
+                TriggerCondition::WhenThisQuests,
+                Effect::MoveDamage {
+                    from: Target::ChosenCharacter {
+                        filter: CharacterFilter::any(TargetSide::Any),
+                        another: true,
+                    },
+                    to: Target::SelfCard,
+                    amount: Amount::fixed(2),
+                },
+            ),
+        ]),
+    );
+    reg.insert(CardDefinition::character(
+        CardDefId::from_raw(200),
+        1,
+        true,
+        2,
+        9,
+        1,
+    ));
+    let mut state = started(&reg);
+    let active = state.active_player();
+    let quester = place(&mut state, active, 1000, 100, 9, 0); // no damage
+    let victim = place(&mut state, active, 1001, 200, 9, 3); // 3 damage
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(Decision::ChooseTarget(victim)),
+    )
+    .expect("choose");
+
+    let dmg = |id| {
+        state
+            .player(active)
+            .unwrap()
+            .play()
+            .iter()
+            .find(|c| c.id() == id)
+            .unwrap()
+            .conditions()
+            .damage
+    };
+    assert_eq!(
+        dmg(victim),
+        1,
+        "2 of the 3 damage moved off the chosen character"
+    );
+    assert_eq!(dmg(quester), 2, "...onto this character");
+}
