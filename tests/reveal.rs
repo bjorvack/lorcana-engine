@@ -312,3 +312,60 @@ fn name_a_card_miss_goes_to_the_bottom() {
     );
     assert_eq!(lore(&state, me), lore_after_quest, "no lore on a miss");
 }
+
+fn push_discard(state: &mut GameState, owner: PlayerId, def: u32) -> CardId {
+    let id = state.allocate_card_id();
+    let inst = CardInstance::new(id, CardDefId::from_raw(def), Conditions::faceup_idle());
+    state.player_mut(owner).unwrap().discard_mut().push(inst);
+    id
+}
+
+fn in_discard(state: &GameState, player: PlayerId, card: CardId) -> bool {
+    state
+        .player(player)
+        .unwrap()
+        .discard()
+        .iter()
+        .any(|c| c.id() == card)
+}
+
+fn blast_quester() -> CardDefinition {
+    char_def(100).with_abilities(vec![TriggeredAbility::new(
+        TriggerCondition::WhenThisQuests,
+        Effect::NameThenRecur,
+    )])
+}
+
+#[test]
+fn name_a_card_recurs_all_matching_characters_from_discard() {
+    // Blast from Your Past: name a card, return ALL character cards with that name
+    // from your discard to your hand (other names stay).
+    let reg = registry(vec![
+        blast_quester(),
+        named_def(901, "Mickey Mouse"),
+        named_def(902, "Donald Duck"),
+    ]);
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let quester = place_quester(&mut state, me, 100);
+    let mickey_a = push_discard(&mut state, me, 901);
+    let mickey_b = push_discard(&mut state, me, 901);
+    let donald = push_discard(&mut state, me, 902);
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(Decision::NameCard("Mickey Mouse".to_string())),
+    )
+    .expect("name");
+
+    assert!(
+        in_hand(&state, me, mickey_a) && in_hand(&state, me, mickey_b),
+        "both Mickeys recur"
+    );
+    assert!(
+        in_discard(&state, me, donald),
+        "the non-matching card stays in the discard"
+    );
+}

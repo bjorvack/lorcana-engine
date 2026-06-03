@@ -2278,6 +2278,11 @@ fn resolve_effects(
                     otherwise_to,
                     rest,
                 },
+                Choice::NameThenRecur { player } => PendingDecision::NameThenRecur {
+                    player,
+                    source,
+                    rest,
+                },
                 Choice::ChooseMoveTarget {
                     player,
                     options,
@@ -2347,6 +2352,9 @@ enum Choice {
         match_to: Destination,
         otherwise_to: Destination,
     },
+    /// `player` names a card; all character cards with that name in their discard
+    /// return to their hand (§8.2).
+    NameThenRecur { player: PlayerId },
     /// `player` picks one of `options` as an endpoint of a two-target move-damage;
     /// `effect` is re-run with that endpoint resolved (§9.3).
     ChooseMoveTarget {
@@ -2425,6 +2433,8 @@ fn execute_effect(
         }
         // "Name a card, then reveal the top of your deck" — ask for the name (§8.2).
         Effect::NameThenReveal { .. } => return Some(name_card_choice(controller, effect)),
+        // "Name a card, then recur all matching characters from your discard" (§8.2).
+        Effect::NameThenRecur => return Some(Choice::NameThenRecur { player: controller }),
         // "You may …": ask the controller; resolve `inner` only on yes (§7.1.3).
         Effect::May(inner) => {
             return Some(Choice::May {
@@ -3589,6 +3599,7 @@ fn apply_choice_decision(
 
 /// Continuation of [`apply_choice_decision`] (split to keep each match small):
 /// the reveal / "may" / choose-player decisions.
+#[allow(clippy::too_many_lines)] // one big (PendingDecision, Decision) dispatch
 fn apply_choice_decision_rest(
     state: &mut GameState,
     registry: &CardRegistry,
@@ -3671,6 +3682,17 @@ fn apply_choice_decision_rest(
             Ok(())
         }
         (
+            PendingDecision::NameThenRecur {
+                player,
+                source,
+                rest,
+            },
+            Decision::NameCard(named),
+        ) => {
+            apply_name_then_recur_decision(state, registry, player, source, &named, rest, events);
+            Ok(())
+        }
+        (
             PendingDecision::ChooseMoveTarget {
                 player,
                 source,
@@ -3692,6 +3714,37 @@ fn apply_choice_decision_rest(
         }
         _ => Err(Rejected::InvalidDecision),
     }
+}
+
+/// Answer a [`PendingDecision::NameThenRecur`]: return every character card in
+/// `player`'s discard whose definition has the `named` name to their hand, then
+/// resume the continuation (§8.2; Blast from Your Past).
+fn apply_name_then_recur_decision(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    player: PlayerId,
+    source: CardId,
+    named: &str,
+    rest: Vec<Effect>,
+    events: &mut Vec<GameEvent>,
+) {
+    let _ = state.take_pending();
+    let matching: Vec<CardId> = state.player(player).map_or_else(Vec::new, |p| {
+        p.discard()
+            .iter()
+            .filter(|c| {
+                registry.get(c.definition()).is_some_and(|d| {
+                    d.has_name(named) && matches!(d.kind(), CardKind::Character { .. })
+                })
+            })
+            .map(CardInstance::id)
+            .collect()
+    });
+    for card in matching {
+        move_self_card(state, player, card, SelfDestination::Hand);
+    }
+    resolve_effects(state, registry, player, source, rest, events);
+    events.extend(game_state_check_with_triggers(state, registry));
 }
 
 /// Answer a [`PendingDecision::NameCard`]: reveal the top of `player`'s deck; if

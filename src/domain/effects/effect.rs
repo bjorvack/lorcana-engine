@@ -306,6 +306,9 @@ pub enum Effect {
         /// Where it goes otherwise (usually the bottom of the deck).
         otherwise_to: Destination,
     },
+    /// "Name a card, then return all character cards with that name from your
+    /// discard to your hand" (§8.2; Blast from Your Past).
+    NameThenRecur,
     /// Optionally resolve `inner` ("you may …"): the controller is asked yes/no,
     /// and `inner` resolves only on yes (§7.1.3). Composes optionality onto any
     /// effect, so individual effects don't carry an `optional` flag.

@@ -130,6 +130,16 @@ pub enum PendingDecision {
         /// The remaining effects, resolved in order after.
         rest: Vec<Effect>,
     },
+    /// A "name a card, then return all character cards with that name from your
+    /// discard to your hand" effect is resolving (Blast from Your Past, §8.2).
+    NameThenRecur {
+        /// The player naming the card (and recurring from their discard).
+        player: PlayerId,
+        /// The effect's source card.
+        source: CardId,
+        /// The remaining effects, resolved in order after.
+        rest: Vec<Effect>,
+    },
     /// A two-target move-damage is resolving; `player` picks one endpoint from
     /// `options`, then `effect` is re-run with it resolved (§9.3).
     ChooseMoveTarget {
@@ -188,6 +198,7 @@ impl PendingDecision {
             | Self::ChooseFromRevealed { player, .. }
             | Self::ChoosePlayer { player, .. }
             | Self::NameCard { player, .. }
+            | Self::NameThenRecur { player, .. }
             | Self::ChooseMoveTarget { player, .. }
             | Self::MayResolveEffect { player, .. }
             | Self::ChooseUpToN { player, .. } => *player,
