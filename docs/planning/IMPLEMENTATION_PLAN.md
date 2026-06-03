@@ -790,8 +790,19 @@ pattern can collapse. Tracked and done one at a time:
       `filter.exclude_source()` = `And([.., Not(IsSource)])`); the same exclusion
       predicates also express "not the already-chosen card". `tests/targeted_effects.rs`
       (`filter_algebra_or_composes`).
+- [x] **`another` removed** — folded entirely into the filter; all exclusions are
+      `Not(IsSource)` / `Not(IsCard)` via the algebra (no flag/helper/`options.retain`).
+      Recorded as a required rule in `AGENTS.md` ("Composable algebras").
+- [x] **#2 collapse `Grant*ThisTurn` → `GrantThisTurn { target, property }`**.
+- [ ] **#3 fold `Count` into `Amount`** — *blocked*: `Count` evaluates inside the
+      registry-free `GameState`, but the filter algebra needs the registry for
+      `Named`/`Cost`. Clean unblock: **denormalize cost + names onto `CardInstance`**
+      (as classifications already are) so `eval_filter` is registry-free and one
+      evaluator serves both. Then `Count::ControlledCharacters` → `PerMatching(filter)`.
+- [ ] **#4 fold `PlayFilter` into the filter algebra** — needs the same
+      denormalization + a `Kind`/`Category` predicate; otherwise a second evaluator.
 - [ ] **#1b general `Choose { options, min, max, then }`** + sequential threading of
-      prior results; migrate the 6 bespoke choices onto it.
+      prior results; migrate the 6 bespoke choices onto it (large).
 - [ ] **#2** collapse `GrantKeywordThisTurn`/`RestrictThisTurn`/`PermitThisTurn` →
       `GrantThisTurn { target, property }`.
 - [ ] **#3** fold `Count` into `Amount` (`ControlledCharacters` → `PerMatching(filter)`).
