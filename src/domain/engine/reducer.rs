@@ -2186,61 +2186,7 @@ fn resolve_effects(
     while let Some(effect) = iter.next() {
         if let Some(choice) = execute_effect(state, registry, controller, source, &effect, events) {
             let rest: Vec<Effect> = iter.collect();
-            let pending = match choice {
-                Choice::Discard {
-                    player,
-                    count,
-                    amount,
-                    remaining,
-                } => PendingDecision::ChooseCardsToDiscard {
-                    player,
-                    source,
-                    count,
-                    amount,
-                    remaining_players: remaining,
-                    rest,
-                },
-                Choice::May { player, inner } => PendingDecision::MayResolveEffect {
-                    player,
-                    source,
-                    effect: inner,
-                    rest,
-                },
-                Choice::Choose {
-                    player,
-                    options,
-                    min,
-                    max,
-                    then,
-                } => PendingDecision::Choose {
-                    player,
-                    source,
-                    options,
-                    min,
-                    max,
-                    then,
-                    rest,
-                },
-                Choice::NameCard {
-                    player,
-                    lore_on_match,
-                    match_to,
-                    otherwise_to,
-                } => PendingDecision::NameCard {
-                    player,
-                    source,
-                    lore_on_match,
-                    match_to,
-                    otherwise_to,
-                    rest,
-                },
-                Choice::NameThenRecur { player } => PendingDecision::NameThenRecur {
-                    player,
-                    source,
-                    rest,
-                },
-            };
-            state.set_pending(pending);
+            state.set_pending(choice_to_pending(choice, source, rest));
             return;
         }
     }
@@ -2248,14 +2194,6 @@ fn resolve_effects(
 
 /// A target choice an effect needs the controller to make at resolution.
 enum Choice {
-    /// `player` must choose `count` cards from their hand to discard; afterwards
-    /// the `remaining` players each discard per `amount` in turn (§8.4).
-    Discard {
-        player: PlayerId,
-        count: u32,
-        amount: DiscardAmount,
-        remaining: Vec<PlayerId>,
-    },
     /// `player` is asked whether to resolve `inner` ("you may …", §7.1.3).
     May { player: PlayerId, inner: Effect },
     /// The general choose primitive: pick `min..=max` of `options`, then run `then`.
@@ -2277,6 +2215,52 @@ enum Choice {
     /// `player` names a card; all character cards with that name in their discard
     /// return to their hand (§8.2).
     NameThenRecur { player: PlayerId },
+}
+
+/// Map a [`Choice`] to the [`PendingDecision`] that stashes it with its `source`
+/// and continuation `rest` while awaiting the player's input.
+fn choice_to_pending(choice: Choice, source: CardId, rest: Vec<Effect>) -> PendingDecision {
+    match choice {
+        Choice::May { player, inner } => PendingDecision::MayResolveEffect {
+            player,
+            source,
+            effect: inner,
+            rest,
+        },
+        Choice::Choose {
+            player,
+            options,
+            min,
+            max,
+            then,
+        } => PendingDecision::Choose {
+            player,
+            source,
+            options,
+            min,
+            max,
+            then,
+            rest,
+        },
+        Choice::NameCard {
+            player,
+            lore_on_match,
+            match_to,
+            otherwise_to,
+        } => PendingDecision::NameCard {
+            player,
+            source,
+            lore_on_match,
+            match_to,
+            otherwise_to,
+            rest,
+        },
+        Choice::NameThenRecur { player } => PendingDecision::NameThenRecur {
+            player,
+            source,
+            rest,
+        },
+    }
 }
 
 /// Build a single-pick [`Choice::Choose`] that substitutes the chosen player into
@@ -2335,6 +2319,27 @@ fn choose_play_free(player: PlayerId, options: Vec<CardId>) -> Choice {
         min: 1,
         max: 1,
         then: ChoiceThen::PlayFree,
+    }
+}
+
+/// Build an exactly-`count` [`Choice::Choose`] for `player` to discard from hand,
+/// continuing the discard down `remaining` players afterwards (§8.4).
+fn choose_discard(
+    player: PlayerId,
+    hand: Vec<CardId>,
+    count: u32,
+    amount: DiscardAmount,
+    remaining: Vec<PlayerId>,
+) -> Choice {
+    Choice::Choose {
+        player,
+        options: hand.into_iter().map(ChoiceRef::Card).collect(),
+        min: count,
+        max: count,
+        then: ChoiceThen::Discard {
+            amount,
+            remaining_players: remaining,
+        },
     }
 }
 
@@ -2831,12 +2836,13 @@ fn resolve_scope_discard(
                 discard_card(state, player, card, events);
             }
         } else {
-            return Some(Choice::Discard {
+            return Some(choose_discard(
                 player,
+                hand,
                 count,
                 amount,
-                remaining: players[i + 1..].to_vec(),
-            });
+                players[i + 1..].to_vec(),
+            ));
         }
     }
     None
@@ -3442,49 +3448,10 @@ fn apply_decision(
     Ok(events)
 }
 
-/// Dispatch the effect-resolution choices (a target / up-to-N / discard /
-/// play-free / "may" decision) to their handlers. Split out of `apply_decision`
-/// to keep each match small.
-fn apply_choice_decision(
-    state: &mut GameState,
-    registry: &CardRegistry,
-    pending: PendingDecision,
-    decision: Decision,
-    events: &mut Vec<GameEvent>,
-) -> Result<(), Rejected> {
-    match (pending, decision) {
-        (
-            PendingDecision::ChooseCardsToDiscard {
-                player,
-                source,
-                count,
-                amount,
-                remaining_players,
-                rest,
-            },
-            Decision::DiscardCards(chosen),
-        ) => apply_discard_decision(
-            state,
-            registry,
-            player,
-            source,
-            count,
-            amount,
-            &remaining_players,
-            rest,
-            chosen,
-            events,
-        ),
-        (pending, decision) => {
-            apply_choice_decision_rest(state, registry, pending, decision, events)
-        }
-    }
-}
-
-/// Continuation of [`apply_choice_decision`] (split to keep each match small):
-/// the reveal / "may" / choose-player decisions.
+/// Dispatch the effect-resolution decisions (the general `Choose`, "may", and the
+/// name-a-card variants) to their handlers.
 #[allow(clippy::too_many_lines)] // one big (PendingDecision, Decision) dispatch
-fn apply_choice_decision_rest(
+fn apply_choice_decision(
     state: &mut GameState,
     registry: &CardRegistry,
     pending: PendingDecision,
@@ -3656,7 +3623,9 @@ fn apply_choose_decision(
     let picks: Vec<ChoiceRef> = match decision {
         Decision::ChooseTarget(c) | Decision::PlayFreeChoice(c) => vec![ChoiceRef::Card(*c)],
         Decision::ChoosePlayer(p) => vec![ChoiceRef::Player(*p)],
-        Decision::ChooseTargets(cs) => cs.iter().map(|c| ChoiceRef::Card(*c)).collect(),
+        Decision::ChooseTargets(cs) | Decision::DiscardCards(cs) => {
+            cs.iter().map(|c| ChoiceRef::Card(*c)).collect()
+        }
         Decision::TakeRevealed(opt) => opt.iter().map(|c| ChoiceRef::Card(*c)).collect(),
         _ => return Err(Rejected::InvalidDecision),
     };
@@ -3723,6 +3692,23 @@ fn apply_choose_decision(
             place_revealed_rest(state, *deck_owner, &remaining, *rest_position);
             resolve_effects(state, registry, player, source, rest, events);
         }
+        // Discard the picked cards, then continue down the remaining players; the
+        // next player who must choose suspends again (carrying `rest`, §8.4).
+        ChoiceThen::Discard {
+            amount,
+            remaining_players,
+        } => {
+            for pick in &picks {
+                if let ChoiceRef::Card(c) = pick {
+                    discard_card(state, player, *c, events);
+                }
+            }
+            if let Some(choice) = resolve_scope_discard(state, remaining_players, *amount, events) {
+                state.set_pending(choice_to_pending(choice, source, rest));
+                return Ok(());
+            }
+            resolve_effects(state, registry, player, source, rest, events);
+        }
     }
     events.extend(game_state_check_with_triggers(state, registry));
     Ok(())
@@ -3770,60 +3756,4 @@ fn apply_enter_exerted_decision(
     if let Some(definition_id) = state.instance_in_play(card).map(CardInstance::definition) {
         enqueue_enter_play_triggers(state, registry, player, card, definition_id);
     }
-}
-
-/// Answer a [`PendingDecision::ChooseCardsToDiscard`]: validate the chosen cards
-/// (exactly `count`, distinct, in `player`'s hand), discard them, then resume the
-/// continuation effects (§8.4, §7.1).
-#[allow(clippy::too_many_arguments)]
-fn apply_discard_decision(
-    state: &mut GameState,
-    registry: &CardRegistry,
-    player: PlayerId,
-    source: CardId,
-    count: u32,
-    amount: DiscardAmount,
-    remaining_players: &[PlayerId],
-    rest: Vec<Effect>,
-    chosen: Vec<CardId>,
-    events: &mut Vec<GameEvent>,
-) -> Result<(), Rejected> {
-    let in_hand = |c: &CardId| {
-        state
-            .player(player)
-            .is_some_and(|p| p.hand().iter().any(|h| h.id() == *c))
-    };
-    let distinct = chosen
-        .iter()
-        .collect::<std::collections::HashSet<_>>()
-        .len();
-    if chosen.len() != count as usize || distinct != chosen.len() || !chosen.iter().all(in_hand) {
-        return Err(Rejected::InvalidDecision);
-    }
-    let _ = state.take_pending();
-    for card in chosen {
-        discard_card(state, player, card, events);
-    }
-    // Continue the scope: the next player who must choose suspends again (carrying
-    // `rest`); once all have discarded, the continuation resolves.
-    if let Some(Choice::Discard {
-        player: next,
-        count: next_count,
-        amount: next_amount,
-        remaining,
-    }) = resolve_scope_discard(state, remaining_players, amount, events)
-    {
-        state.set_pending(PendingDecision::ChooseCardsToDiscard {
-            player: next,
-            source,
-            count: next_count,
-            amount: next_amount,
-            remaining_players: remaining,
-            rest,
-        });
-        return Ok(());
-    }
-    resolve_effects(state, registry, player, source, rest, events);
-    events.extend(game_state_check_with_triggers(state, registry));
-    Ok(())
 }

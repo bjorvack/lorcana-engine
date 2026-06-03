@@ -38,6 +38,14 @@ pub enum ChoiceThen {
         /// Where the non-taken cards go.
         rest_position: DeckPosition,
     },
+    /// Discard the picked cards, then continue the discard down `remaining_players`
+    /// (each discards per `amount` in turn, §8.4).
+    Discard {
+        /// How much each remaining player discards.
+        amount: DiscardAmount,
+        /// The players who still need to discard, in order.
+        remaining_players: Vec<PlayerId>,
+    },
 }
 
 /// A point in bag resolution that requires a player's input before the engine
@@ -86,23 +94,6 @@ pub enum PendingDecision {
         player: PlayerId,
         /// The Bodyguard character that just entered play.
         card: CardId,
-    },
-    /// A discard effect is resolving and `player` must choose exactly `count`
-    /// cards from their own hand to discard. Afterwards the `remaining_players`
-    /// each discard per `amount` in turn; then `rest` resolves (§8.4, §7.1).
-    ChooseCardsToDiscard {
-        /// The player who must choose (the discarding player).
-        player: PlayerId,
-        /// The effect's source card (for resuming the continuation's controller).
-        source: CardId,
-        /// How many cards must be chosen.
-        count: u32,
-        /// How much each remaining player discards.
-        amount: DiscardAmount,
-        /// Players that still discard after this one (multi-player scope).
-        remaining_players: Vec<PlayerId>,
-        /// The remaining effects of the ability/action, resolved in order after.
-        rest: Vec<Effect>,
     },
     /// A "name a card, then reveal the top of your deck" effect is resolving;
     /// `player` names a card and the revealed top is matched against it (§8.2).
@@ -153,7 +144,6 @@ impl PendingDecision {
             Self::OrderTriggers { player, .. }
             | Self::MayResolve { player, .. }
             | Self::EnterPlayExerted { player, .. }
-            | Self::ChooseCardsToDiscard { player, .. }
             | Self::Choose { player, .. }
             | Self::NameCard { player, .. }
             | Self::NameThenRecur { player, .. }

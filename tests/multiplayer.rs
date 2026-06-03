@@ -124,7 +124,7 @@ fn chosen_opponent_prompts_a_choice_in_a_four_player_game() {
     .expect("choose");
 
     // Now that opponent makes their own discard choice.
-    let Some(PendingDecision::ChooseCardsToDiscard {
+    let Some(PendingDecision::Choose {
         player: chooser, ..
     }) = state.pending()
     else {
@@ -160,7 +160,7 @@ fn chosen_opponent_auto_resolves_in_two_player() {
 
     // Only one opponent: no choose-a-player step — straight to that opponent's
     // discard choice.
-    let Some(PendingDecision::ChooseCardsToDiscard { player, .. }) = state.pending() else {
+    let Some(PendingDecision::Choose { player, .. }) = state.pending() else {
         panic!("expected the single opponent's discard choice, no player prompt");
     };
     assert_eq!(*player, opp);
