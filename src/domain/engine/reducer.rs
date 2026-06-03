@@ -904,12 +904,10 @@ fn apply_challenge(
         .current_character_stats(target)
         .map_or(0, |s| s.strength);
 
-    // Resist +N reduces the damage each takes (§10.8); applied inline (the general
-    // damage-replacement framework is Slice 8).
-    let challenger_resist = effective_resist(state, registry, challenger);
-    let target_resist = effective_resist(state, registry, target);
-    let damage_to_target = challenger_strength.saturating_sub(target_resist);
-    let damage_to_challenger = target_strength.saturating_sub(challenger_resist);
+    // Resist +N reduces the damage taken (§10.8); "takes no damage" prevents it
+    // (§7.7 / §1.2.2). See `combat_damage`.
+    let damage_to_target = combat_damage(state, registry, challenger_strength, target);
+    let damage_to_challenger = combat_damage(state, registry, target_strength, challenger);
 
     // --- mutate ---
     // Exert the challenger (§4.3.6.9), then both deal damage simultaneously
@@ -1090,8 +1088,30 @@ fn has_restriction(
     }
     match restriction {
         Restriction::CantQuest => character_has_keyword(state, registry, card, &Keyword::Reckless),
-        Restriction::CantChallenge | Restriction::CantBeChallenged => false,
+        Restriction::CantChallenge
+        | Restriction::CantBeChallenged
+        | Restriction::TakesNoChallengeDamage => false,
     }
+}
+
+/// The damage `recipient` takes from an attacker of `attacker_strength` in a
+/// challenge: 0 if it takes no challenge damage (§7.7/§1.2.2), else the attacker's
+/// strength reduced by the recipient's effective Resist (§10.8).
+fn combat_damage(
+    state: &GameState,
+    registry: &CardRegistry,
+    attacker_strength: u32,
+    recipient: CardId,
+) -> u32 {
+    if has_restriction(
+        state,
+        registry,
+        recipient,
+        Restriction::TakesNoChallengeDamage,
+    ) {
+        return 0;
+    }
+    attacker_strength.saturating_sub(effective_resist(state, registry, recipient))
 }
 
 /// The card's effective Challenger +N: printed plus any effect-granted Challenger.

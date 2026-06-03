@@ -90,8 +90,8 @@ impl RuleModifier {
     }
 }
 
-/// A continuous **prevention** an effect/keyword places on a card ("can't …").
-/// Preventions beat permissions (§1.2.2).
+/// A continuous **prevention** an effect/keyword places on a card ("can't …" /
+/// "takes no …"). Preventions beat permissions (§1.2.2).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum Restriction {
     /// The character can't quest ("can't quest", granted Reckless).
@@ -100,6 +100,9 @@ pub enum Restriction {
     CantChallenge,
     /// The character/location can't be challenged ("can't be challenged while here").
     CantBeChallenged,
+    /// The character takes no damage from challenges (a §7.7 damage replacement —
+    /// "takes no damage from challenges this turn", Noi / Nothing We Won't Do).
+    TakesNoChallengeDamage,
 }
 
 /// A continuous **permission** an effect grants a card ("may …").

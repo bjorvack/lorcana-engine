@@ -231,3 +231,42 @@ fn an_effect_can_grant_a_permission_to_a_chosen_character() {
         "the granted permission lets the ally challenge a ready character"
     );
 }
+
+fn damage_on(state: &GameState, owner: PlayerId, card: CardId) -> u32 {
+    state
+        .player(owner)
+        .unwrap()
+        .play()
+        .iter()
+        .find(|c| c.id() == card)
+        .unwrap()
+        .conditions()
+        .damage
+}
+
+#[test]
+fn takes_no_challenge_damage_prevents_combat_damage() {
+    let reg = CardRegistry::new();
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let foe = opponent_of(&state, me);
+    let c = place(&mut state, me, 1, 100, true, false); // {S} 2
+    let t = place(&mut state, foe, 2, 200, false, false); // exerted, {W} 5
+    restrict(&mut state, t, Restriction::TakesNoChallengeDamage);
+
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Challenge {
+            challenger: c,
+            target: t,
+        },
+    )
+    .expect("challenge");
+
+    assert_eq!(
+        damage_on(&state, foe, t),
+        0,
+        "no challenge damage was dealt (§7.7)"
+    );
+}

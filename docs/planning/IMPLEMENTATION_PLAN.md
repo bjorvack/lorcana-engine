@@ -552,11 +552,16 @@ Challenge/banish triggers into the bag (see
     facedown `in_deck` conditions, `insert_bottom` for bottom, `shuffle_deck` for
     shuffle-in §8.2.4.1) and removes the source's modifiers on leave-play. Tested
     in `tests/targeted_effects.rs`.
-  - **8b+ —** the card survey shows true §7.7 **replacement** effects are rare
-    (~16, mostly "takes no damage"); higher-value remaining: **conditional static
-    abilities** ("while here / while exerted" — the source for can't-be-challenged
-    etc.), **damage prevention**, **player** targets, and floating & delayed
-    triggers.
+  - [x] **8b-16 — damage prevention:** `Restriction::TakesNoChallengeDamage` (a
+    §7.7 damage replacement) zeroes challenge damage to a recipient
+    (`combat_damage`), granted via `RestrictThisTurn` ("takes no damage from
+    challenges this turn"). Tested in `tests/restrictions.rs`. NB: the "from **the**
+    (current) challenge" variant (Raya/Peter Pan) still needs replacement timing
+    (resolve the challenge trigger before damage) — deferred.
+  - **8b+ —** remaining: **conditional static abilities** ("while here / while
+    exerted" — the source for can't-be-challenged etc.), **player** targets,
+    floating & delayed triggers, the §7.7 "from the current challenge" timing,
+    §1.9.1.3 attribution, and modifiable location stats.
 
 ### Slice 8b+ — harder resolution rules
 - Replacement effects (§7.7): "instead"/"skip"/"enter"; self-replacement applied
