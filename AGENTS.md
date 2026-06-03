@@ -36,6 +36,30 @@ cargo clippy --all-targets --all-features -- -D warnings
 cargo test --all-targets --all-features
 ```
 
+## Composable algebras (required)
+
+Prefer **small composable algebras + a general continuation** over bespoke,
+per-case enums/handlers. When you reach for a new one-off type or flag, first
+check whether an existing algebra already expresses it (or can be extended):
+
+- **Candidate selection** uses the `CharacterFilter` boolean algebra
+  (`And` / `Or` / `Not` over leaf predicates incl. `IsSource` / `IsCard`).
+  Express *exclusions* with the algebra — "another" is
+  `And([.., Not(IsSource)])`, "not the already-chosen card" is `Not(IsCard(..))` —
+  **never** a bespoke `another`/`exclude_*` flag, helper, or an ad-hoc
+  `options.retain`.
+- **Amounts** (`Amount`: `Fixed` / `PerMatchingCharacter(filter)` / `StatOf`),
+  **player scope** (`PlayerScope`), and **zone moves** (`Effect::Move` with
+  `MoveSource` / `Destination`) are the other canonical algebras — reuse them.
+- A new "choose / target / filter / amount / move" need should **extend the
+  existing algebra**, not add a parallel specific type. Interactive choices go
+  through the general choose primitive (resolve options + a continuation that can
+  thread earlier results into later filters), not a new `Choice`/`PendingDecision`
+  triple per case.
+
+If a card genuinely can't be expressed, that's a signal to grow an algebra (add a
+predicate/variant), not to special-case it.
+
 ## Other standing rules
 
 - **Atomic, Conventional Commits** (see CONTRIBUTING) — each commit builds and
