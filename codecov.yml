@@ -4,12 +4,10 @@ coverage:
       default:
         target: auto
         threshold: 1%
-        informational: true
     patch:
       default:
         target: auto
         threshold: 1%
-        informational: true
 comment:
   layout: "reach,diff,flags,tree"
   behavior: default
