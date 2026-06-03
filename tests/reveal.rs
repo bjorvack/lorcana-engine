@@ -80,6 +80,7 @@ fn look_quester(count: u32, category: Option<CardCategory>, rest: DeckPosition) 
     char_def(100).with_abilities(vec![TriggeredAbility::new(
         TriggerCondition::WhenThisQuests,
         Effect::LookAtTopAndTake {
+            whose: lorcana_engine::PlayerScope::You,
             count,
             filter: PlayFilter {
                 max_cost: None,
@@ -193,4 +194,56 @@ fn look_at_top_can_decline_to_take() {
         "declined: nothing taken"
     );
     assert!(in_deck(&state, me, a) && in_deck(&state, me, b));
+}
+
+#[test]
+fn look_at_a_chosen_players_deck_and_take_to_your_hand() {
+    // "Look at the top card of chosen player's deck; take a character into your
+    // hand." The looked-at deck is the chosen player's; the card enters the
+    // looker's hand. With 2 candidates (self/opponent) the looker is prompted.
+    let reg = registry(vec![
+        char_def(901),
+        char_def(100).with_abilities(vec![TriggeredAbility::new(
+            TriggerCondition::WhenThisQuests,
+            Effect::LookAtTopAndTake {
+                whose: lorcana_engine::PlayerScope::ChosenPlayer,
+                count: 1,
+                filter: PlayFilter {
+                    max_cost: None,
+                    category: Some(CardCategory::Character(None)),
+                },
+                rest: DeckPosition::Bottom,
+            },
+        )]),
+    ]);
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let opp = state
+        .players()
+        .iter()
+        .map(lorcana_engine::PlayerState::id)
+        .find(|p| *p != me)
+        .unwrap();
+    let quester = place_quester(&mut state, me, 100);
+    let target = push_top(&mut state, opp, 901); // a character atop the opponent's deck
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+    // 2 candidates (me / opp): the looker chooses whose deck.
+    let _ =
+        apply(&mut state, &reg, Input::Decide(Decision::ChoosePlayer(opp))).expect("choose player");
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(Decision::TakeRevealed(Some(target))),
+    )
+    .expect("take");
+
+    assert!(
+        in_hand(&state, me, target),
+        "the card enters the looker's hand"
+    );
+    assert!(
+        !in_deck(&state, opp, target),
+        "it left the chosen player's deck"
+    );
 }

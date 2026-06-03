@@ -2026,12 +2026,14 @@ fn resolve_effects(
                 },
                 Choice::TakeFromRevealed {
                     player,
+                    deck_owner,
                     looked_at,
                     options,
                     rest_position,
                 } => PendingDecision::ChooseFromRevealed {
                     player,
                     source,
+                    deck_owner,
                     looked_at,
                     options,
                     rest_position,
@@ -2091,6 +2093,7 @@ enum Choice {
     /// of `looked_at` go to `rest_position` (§8.2).
     TakeFromRevealed {
         player: PlayerId,
+        deck_owner: PlayerId,
         looked_at: Vec<CardId>,
         options: Vec<CardId>,
         rest_position: DeckPosition,
@@ -2172,11 +2175,14 @@ fn execute_effect(
         }
         // Look at the top N; may take one matching `filter`, rest go to `rest` (§8.2).
         Effect::LookAtTopAndTake {
+            whose,
             count,
             filter,
             rest,
         } => {
-            return resolve_look_at_top(state, registry, controller, *count, filter, *rest);
+            return resolve_look_at_top(
+                state, registry, controller, *whose, *count, filter, *rest, effect,
+            );
         }
         // "You may …": ask the controller, resolve `inner` only on yes (§7.1.3).
         Effect::May(inner) => {
@@ -2454,6 +2460,17 @@ fn substitute_chosen_player(effect: &Effect, player: PlayerId) -> Effect {
             who: PlayerScope::Player(player),
             amount: *amount,
         },
+        Effect::LookAtTopAndTake {
+            count,
+            filter,
+            rest,
+            ..
+        } => Effect::LookAtTopAndTake {
+            whose: PlayerScope::Player(player),
+            count: *count,
+            filter: filter.clone(),
+            rest: *rest,
+        },
         Effect::Move {
             what: MoveSource::DeckTop { count, .. },
             to,
@@ -2592,30 +2609,49 @@ fn eligible_free_plays(
 
 /// Resolve "look at the top N": offer up to one matching card to take into hand,
 /// or (if none match) send the looked-at cards to `rest` immediately (§8.2).
+#[allow(clippy::too_many_arguments)]
 fn resolve_look_at_top(
     state: &mut GameState,
     registry: &CardRegistry,
     controller: PlayerId,
+    whose: PlayerScope,
     count: u32,
     filter: &PlayFilter,
     rest: DeckPosition,
+    effect: &Effect,
 ) -> Option<Choice> {
-    let looked_at = peek_top(state, controller, count);
+    // The deck looked at: resolve the scope to a single owner (prompt if needed).
+    let owner = match resolve_scope(state, controller, whose) {
+        ScopeOutcome::Players(players) => match players.first() {
+            Some(p) => *p,
+            None => return None,
+        },
+        ScopeOutcome::Choose(options) => {
+            return Some(Choice::ChoosePlayer {
+                player: controller,
+                options,
+                effect: effect.clone(),
+            });
+        }
+    };
+    let looked_at = peek_top(state, owner, count);
     let options: Vec<CardId> = looked_at
         .iter()
         .copied()
         .filter(|&id| {
-            deck_card_def(state, controller, id)
+            deck_card_def(state, owner, id)
                 .and_then(|d| registry.get(d))
                 .is_some_and(|def| play_filter_matches(filter, def))
         })
         .collect();
     if options.is_empty() {
-        place_revealed_rest(state, controller, &looked_at, rest);
+        place_revealed_rest(state, owner, &looked_at, rest);
         None
     } else {
+        // `controller` chooses and receives; `owner`'s deck holds the rest.
         Some(Choice::TakeFromRevealed {
             player: controller,
+            deck_owner: owner,
             looked_at,
             options,
             rest_position: rest,
@@ -2770,6 +2806,7 @@ fn apply_take_revealed_decision(
     registry: &CardRegistry,
     player: PlayerId,
     source: CardId,
+    deck_owner: PlayerId,
     looked_at: &[CardId],
     options: &[CardId],
     rest_position: DeckPosition,
@@ -2783,19 +2820,23 @@ fn apply_take_revealed_decision(
         return Err(Rejected::InvalidDecision);
     }
     let _ = state.take_pending();
+    // The taken card leaves `deck_owner`'s deck and enters the looker's hand.
     if let Some(card) = choice
-        && let Some(p) = state.player_mut(player)
-        && let Some(mut instance) = p.deck_mut().take(card)
+        && let Some(mut instance) = state
+            .player_mut(deck_owner)
+            .and_then(|p| p.deck_mut().take(card))
     {
         *instance.conditions_mut() = Conditions::faceup_idle();
-        p.hand_mut().push(instance);
+        if let Some(p) = state.player_mut(player) {
+            p.hand_mut().push(instance);
+        }
     }
     let remaining: Vec<CardId> = looked_at
         .iter()
         .copied()
         .filter(|&id| Some(id) != choice)
         .collect();
-    place_revealed_rest(state, player, &remaining, rest_position);
+    place_revealed_rest(state, deck_owner, &remaining, rest_position);
     resolve_effects(state, registry, player, source, rest, events);
     events.extend(game_state_check_with_triggers(state, registry));
     Ok(())
@@ -3365,6 +3406,7 @@ fn apply_choice_decision_rest(
             PendingDecision::ChooseFromRevealed {
                 player,
                 source,
+                deck_owner,
                 looked_at,
                 options,
                 rest_position,
@@ -3376,6 +3418,7 @@ fn apply_choice_decision_rest(
             registry,
             player,
             source,
+            deck_owner,
             &looked_at,
             &options,
             rest_position,

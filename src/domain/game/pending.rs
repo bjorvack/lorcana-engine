@@ -84,10 +84,12 @@ pub enum PendingDecision {
     /// `options` (the eligible looked-at cards) to take into hand, then the rest of
     /// `looked_at` go to `rest_position` and `rest` resolves (§8.2).
     ChooseFromRevealed {
-        /// The player who must choose.
+        /// The player who chooses and receives the taken card (the looker).
         player: PlayerId,
         /// The effect's source card (continuation controller).
         source: CardId,
+        /// Whose deck was looked at (where the rest go); usually == `player`.
+        deck_owner: PlayerId,
         /// All the looked-at cards (top of deck), in deck order.
         looked_at: Vec<CardId>,
         /// The subset of `looked_at` that may be taken into hand.

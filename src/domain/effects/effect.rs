@@ -254,16 +254,18 @@ pub enum Effect {
         /// Which hand cards are eligible.
         filter: PlayFilter,
     },
-    /// Look at the top `count` cards of the controller's deck; they may take **up
+    /// Look at the top `count` cards of `whose` deck; the controller may take **up
     /// to one** matching `filter` into their hand; the rest go to `rest` (§8.2).
-    /// "Look at the top 4 cards … you may reveal a character card and put it into
-    /// your hand. Put the rest on the bottom of your deck."
+    /// "Look at the top 4 cards … put a character into your hand, rest on the
+    /// bottom"; `whose` is usually `You` but can be a chosen player's deck.
     LookAtTopAndTake {
+        /// Whose deck is looked at (resolved to a single deck owner).
+        whose: PlayerScope,
         /// How many cards to look at.
         count: u32,
-        /// Which of the looked-at cards may be taken into hand.
+        /// Which of the looked-at cards the controller may take into hand.
         filter: PlayFilter,
-        /// Where the cards that aren't taken go.
+        /// Where the cards that aren't taken go (in the looked-at player's deck).
         rest: DeckPosition,
     },
     /// Optionally resolve `inner` ("you may …"): the controller is asked yes/no,
