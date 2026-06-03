@@ -652,8 +652,16 @@ mechanics ranked by card count, with the remaining gaps to close in order:
       (§1.2.3 "deal damage to chosen char, draw" with a Warded target still draws).
       (Ward on items/locations: minor follow-up — needs registry in
       `chosen_permanent_options`.)
-- [ ] **reveal** (69) — reveal hand / top of deck; often gates a follow-up.
-- [ ] **search / look at top N** (59) — scry/tutor: look, take matching, reorder.
+- [~] **search / look at top N** (59) — `Effect::LookAtTopAndTake { count, filter,
+      rest }`: look at the top N, take **up to one** matching card to hand
+      (`PendingDecision::ChooseFromRevealed` / `Decision::TakeRevealed`), the rest go
+      to `rest` (top/bottom/shuffle). Covers Be Our Guest / Ariel / Develop Your
+      Brain. `tests/reveal.rs`. **Remaining:** take >1, reorder-in-any-order of the
+      rest, split top+bottom (Dr. Facilier), search the whole deck (tutor, 9).
+- [ ] **reveal (opponent's hand) / discard from it** (Lenny, Timon) — "opponent
+      reveals their hand and discards [a card of your choice]"; needs choosing from
+      an opponent's hand. (Looking at your own deck doesn't need a reveal-to-self
+      step — state is fully known.)
 - [ ] **freeze / "can't ready next turn"** (38) — an exert that skips the next
       ready step (a per-character delayed flag).
 - [ ] **+N for each …** (24) — dynamic amount counted over a filter (also "gain

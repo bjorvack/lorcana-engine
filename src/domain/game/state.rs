@@ -243,6 +243,16 @@ impl GameState {
         self.boosted_this_turn.clear();
     }
 
+    /// Allocate a fresh, never-before-used [`CardId`] from the game's monotonic
+    /// counter. The single source of card ids: use this whenever a new card
+    /// instance is introduced at runtime (and in tests, to inject cards without
+    /// risking a collision with setup-assigned ids).
+    pub const fn allocate_card_id(&mut self) -> CardId {
+        let id = CardId::from_raw(self.next_card_id);
+        self.next_card_id += 1;
+        id
+    }
+
     /// The triggered abilities currently waiting in the bag (§8.7).
     #[must_use]
     pub fn bag(&self) -> &[BagEntry] {

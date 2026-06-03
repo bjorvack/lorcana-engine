@@ -99,6 +99,9 @@ pub enum Decision {
     DiscardCards(Vec<CardId>),
     /// For `ChoosePlayFree`: the eligible hand card chosen to play for free (§6).
     PlayFreeChoice(CardId),
+    /// For `ChooseFromRevealed`: the looked-at card taken into hand, or `None` to
+    /// take nothing (§8.2).
+    TakeRevealed(Option<CardId>),
 }
 
 /// Why an [`Input`] was rejected. When an input is rejected the game state is

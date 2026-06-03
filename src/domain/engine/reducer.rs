@@ -1997,6 +1997,19 @@ fn resolve_effects(
                     options,
                     rest,
                 },
+                Choice::TakeFromRevealed {
+                    player,
+                    looked_at,
+                    options,
+                    rest_position,
+                } => PendingDecision::ChooseFromRevealed {
+                    player,
+                    source,
+                    looked_at,
+                    options,
+                    rest_position,
+                    rest,
+                },
                 Choice::May { player, inner } => PendingDecision::MayResolveEffect {
                     player,
                     source,
@@ -2029,6 +2042,14 @@ enum Choice {
     PlayFree {
         player: PlayerId,
         options: Vec<CardId>,
+    },
+    /// `player` takes up to one of `options` (looked-at cards) into hand; the rest
+    /// of `looked_at` go to `rest_position` (§8.2).
+    TakeFromRevealed {
+        player: PlayerId,
+        looked_at: Vec<CardId>,
+        options: Vec<CardId>,
+        rest_position: DeckPosition,
     },
     /// `player` is asked whether to resolve `inner` ("you may …", §7.1.3).
     May { player: PlayerId, inner: Effect },
@@ -2065,6 +2086,14 @@ fn execute_effect(
                     options,
                 });
             }
+        }
+        // Look at the top N; may take one matching `filter`, rest go to `rest` (§8.2).
+        Effect::LookAtTopAndTake {
+            count,
+            filter,
+            rest,
+        } => {
+            return resolve_look_at_top(state, registry, controller, *count, filter, *rest);
         }
         // "You may …": ask the controller, resolve `inner` only on yes (§7.1.3).
         Effect::May(inner) => {
@@ -2308,18 +2337,141 @@ fn eligible_free_plays(
             p.hand()
                 .iter()
                 .filter(|c| {
-                    registry.get(c.definition()).is_some_and(|d| {
-                        filter.max_cost.is_none_or(|m| d.cost() <= m)
-                            && filter
-                                .category
-                                .as_ref()
-                                .is_none_or(|cat| category_matches(cat, d))
-                    })
+                    registry
+                        .get(c.definition())
+                        .is_some_and(|d| play_filter_matches(filter, d))
                 })
                 .map(CardInstance::id)
                 .collect()
         })
         .unwrap_or_default()
+}
+
+/// Resolve "look at the top N": offer up to one matching card to take into hand,
+/// or (if none match) send the looked-at cards to `rest` immediately (§8.2).
+fn resolve_look_at_top(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    controller: PlayerId,
+    count: u32,
+    filter: &PlayFilter,
+    rest: DeckPosition,
+) -> Option<Choice> {
+    let looked_at = peek_top(state, controller, count);
+    let options: Vec<CardId> = looked_at
+        .iter()
+        .copied()
+        .filter(|&id| {
+            deck_card_def(state, controller, id)
+                .and_then(|d| registry.get(d))
+                .is_some_and(|def| play_filter_matches(filter, def))
+        })
+        .collect();
+    if options.is_empty() {
+        place_revealed_rest(state, controller, &looked_at, rest);
+        None
+    } else {
+        Some(Choice::TakeFromRevealed {
+            player: controller,
+            looked_at,
+            options,
+            rest_position: rest,
+        })
+    }
+}
+
+/// Whether a card definition satisfies a [`PlayFilter`] (cost ceiling + category).
+fn play_filter_matches(filter: &PlayFilter, def: &CardDefinition) -> bool {
+    filter.max_cost.is_none_or(|m| def.cost() <= m)
+        && filter
+            .category
+            .as_ref()
+            .is_none_or(|cat| category_matches(cat, def))
+}
+
+/// The top `count` cards of `player`'s deck, in deck order (bottom-to-top of the
+/// slice; the very top is last).
+fn peek_top(state: &GameState, player: PlayerId, count: u32) -> Vec<CardId> {
+    state
+        .player(player)
+        .map(|p| {
+            let deck = p.deck();
+            let skip = deck.len().saturating_sub(count as usize);
+            deck.iter().skip(skip).map(CardInstance::id).collect()
+        })
+        .unwrap_or_default()
+}
+
+/// The definition of a card currently in `player`'s deck, if present.
+fn deck_card_def(state: &GameState, player: PlayerId, card: CardId) -> Option<CardDefId> {
+    state
+        .player(player)?
+        .deck()
+        .iter()
+        .find(|c| c.id() == card)
+        .map(CardInstance::definition)
+}
+
+/// Move looked-at cards that weren't taken to the top/bottom of `player`'s deck
+/// (shuffling in if `DeckPosition::Shuffle`), §8.2.
+fn place_revealed_rest(
+    state: &mut GameState,
+    player: PlayerId,
+    ids: &[CardId],
+    position: DeckPosition,
+) {
+    for &id in ids {
+        if let Some(p) = state.player_mut(player)
+            && let Some(instance) = p.deck_mut().take(id)
+        {
+            match position {
+                DeckPosition::Bottom => p.deck_mut().insert_bottom(instance),
+                DeckPosition::Top | DeckPosition::Shuffle => p.deck_mut().push(instance),
+            }
+        }
+    }
+    if matches!(position, DeckPosition::Shuffle) {
+        state.shuffle_deck(player);
+    }
+}
+
+/// Answer a [`PendingDecision::ChooseFromRevealed`]: take the chosen looked-at
+/// card (if any) into hand, send the rest to `rest_position`, then resume (§8.2).
+#[allow(clippy::too_many_arguments)]
+fn apply_take_revealed_decision(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    player: PlayerId,
+    source: CardId,
+    looked_at: &[CardId],
+    options: &[CardId],
+    rest_position: DeckPosition,
+    choice: Option<CardId>,
+    rest: Vec<Effect>,
+    events: &mut Vec<GameEvent>,
+) -> Result<(), Rejected> {
+    if let Some(card) = choice
+        && !options.contains(&card)
+    {
+        return Err(Rejected::InvalidDecision);
+    }
+    let _ = state.take_pending();
+    if let Some(card) = choice
+        && let Some(p) = state.player_mut(player)
+        && let Some(mut instance) = p.deck_mut().take(card)
+    {
+        *instance.conditions_mut() = Conditions::faceup_idle();
+        p.hand_mut().push(instance);
+    }
+    let remaining: Vec<CardId> = looked_at
+        .iter()
+        .copied()
+        .filter(|&id| Some(id) != choice)
+        .collect();
+    place_revealed_rest(state, player, &remaining, rest_position);
+    resolve_effects(state, registry, player, source, rest, events);
+    events.extend(game_state_check_with_triggers(state, registry));
+    Ok(())
 }
 
 /// Play `card` from `player`'s hand **for free** (no ink, §6). Actions resolve
@@ -2580,6 +2732,7 @@ fn apply_effect_to(
         | Effect::EachOpponentLosesLore(_)
         | Effect::Discard(_)
         | Effect::PlayFreeFromHand { .. }
+        | Effect::LookAtTopAndTake { .. }
         | Effect::May(_)
         | Effect::IfControl { .. }
         | Effect::ScheduleDelayed { .. } => {}
@@ -2844,6 +2997,28 @@ fn apply_choice_decision(
             Decision::PlayFreeChoice(card),
         ) => apply_play_free_decision(
             state, registry, player, source, &options, card, rest, events,
+        ),
+        (
+            PendingDecision::ChooseFromRevealed {
+                player,
+                source,
+                looked_at,
+                options,
+                rest_position,
+                rest,
+            },
+            Decision::TakeRevealed(choice),
+        ) => apply_take_revealed_decision(
+            state,
+            registry,
+            player,
+            source,
+            &looked_at,
+            &options,
+            rest_position,
+            choice,
+            rest,
+            events,
         ),
         (
             PendingDecision::MayResolveEffect {

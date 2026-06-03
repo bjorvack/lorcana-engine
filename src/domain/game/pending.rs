@@ -1,7 +1,7 @@
 //! A decision the engine is waiting on before it can continue resolving.
 
 use super::bag::TriggerId;
-use crate::domain::effects::Effect;
+use crate::domain::effects::{DeckPosition, Effect};
 use crate::domain::types::ids::{CardId, PlayerId};
 use serde::{Deserialize, Serialize};
 
@@ -75,6 +75,23 @@ pub enum PendingDecision {
         /// The remaining effects, resolved in order after.
         rest: Vec<Effect>,
     },
+    /// A "look at the top N" effect is resolving; `player` chooses up to one of
+    /// `options` (the eligible looked-at cards) to take into hand, then the rest of
+    /// `looked_at` go to `rest_position` and `rest` resolves (§8.2).
+    ChooseFromRevealed {
+        /// The player who must choose.
+        player: PlayerId,
+        /// The effect's source card (continuation controller).
+        source: CardId,
+        /// All the looked-at cards (top of deck), in deck order.
+        looked_at: Vec<CardId>,
+        /// The subset of `looked_at` that may be taken into hand.
+        options: Vec<CardId>,
+        /// Where the cards that aren't taken go.
+        rest_position: DeckPosition,
+        /// The remaining effects, resolved in order after.
+        rest: Vec<Effect>,
+    },
     /// A `May` effect is resolving; `player` chooses whether to resolve `effect`
     /// ("you may …", §7.1.3). `rest` resolves afterwards either way.
     MayResolveEffect {
@@ -116,6 +133,7 @@ impl PendingDecision {
             | Self::ChooseTarget { player, .. }
             | Self::ChooseCardsToDiscard { player, .. }
             | Self::ChoosePlayFree { player, .. }
+            | Self::ChooseFromRevealed { player, .. }
             | Self::MayResolveEffect { player, .. }
             | Self::ChooseUpToN { player, .. } => *player,
         }

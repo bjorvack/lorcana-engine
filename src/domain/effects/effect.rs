@@ -159,6 +159,18 @@ pub enum Effect {
         /// Which hand cards are eligible.
         filter: PlayFilter,
     },
+    /// Look at the top `count` cards of the controller's deck; they may take **up
+    /// to one** matching `filter` into their hand; the rest go to `rest` (§8.2).
+    /// "Look at the top 4 cards … you may reveal a character card and put it into
+    /// your hand. Put the rest on the bottom of your deck."
+    LookAtTopAndTake {
+        /// How many cards to look at.
+        count: u32,
+        /// Which of the looked-at cards may be taken into hand.
+        filter: PlayFilter,
+        /// Where the cards that aren't taken go.
+        rest: DeckPosition,
+    },
     /// Optionally resolve `inner` ("you may …"): the controller is asked yes/no,
     /// and `inner` resolves only on yes (§7.1.3). Composes optionality onto any
     /// effect, so individual effects don't carry an `optional` flag.

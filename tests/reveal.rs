@@ -1,0 +1,196 @@
+//! Integration tests for Slice 8c: "look at the top N cards of your deck; you may
+//! take one matching a filter into your hand; put the rest on the bottom" — the
+//! scry/tutor pattern (Be Our Guest, Ariel, Develop Your Brain, §8.2).
+
+use lorcana_engine::{
+    CardCategory, CardDefId, CardDefinition, CardId, CardInstance, CardKind, CardRegistry,
+    CharacterStats, Conditions, Decision, DeckPosition, Effect, GameState, GameStatus, Input,
+    PendingDecision, PlayFilter, PlayerId, TriggerCondition, TriggeredAbility, apply, start,
+};
+
+const fn char_def(id: u32) -> CardDefinition {
+    CardDefinition::character(CardDefId::from_raw(id), 1, true, 2, 3, 1)
+}
+
+const fn item_def(id: u32) -> CardDefinition {
+    CardDefinition::new(CardDefId::from_raw(id), 1, true, CardKind::Item)
+}
+
+/// Build a registry from the given defs plus character fillers for deck/hand ids.
+fn registry(extra: Vec<CardDefinition>) -> CardRegistry {
+    let mut reg = CardRegistry::new();
+    for n in 0..30 {
+        reg.insert(char_def(n));
+    }
+    for def in extra {
+        reg.insert(def);
+    }
+    reg
+}
+
+fn started(reg: &CardRegistry) -> GameState {
+    let mut state = GameState::new(
+        vec![
+            (0..30).map(CardDefId::from_raw).collect(),
+            (0..30).map(CardDefId::from_raw).collect(),
+        ],
+        7,
+    );
+    let _ = start(&mut state).expect("start");
+    while let GameStatus::AwaitingMulligan(player) = *state.status() {
+        let _ = apply(
+            &mut state,
+            reg,
+            Input::Mulligan {
+                player,
+                put_back: Vec::new(),
+            },
+        )
+        .expect("mulligan");
+    }
+    state
+}
+
+/// Push a card onto the top of `owner`'s deck and return its (freshly allocated) id.
+fn push_top(state: &mut GameState, owner: PlayerId, def: u32) -> CardId {
+    let id = state.allocate_card_id();
+    let inst = CardInstance::new(id, CardDefId::from_raw(def), Conditions::in_deck());
+    state.player_mut(owner).unwrap().deck_mut().push(inst);
+    id
+}
+
+fn place_quester(state: &mut GameState, owner: PlayerId, def: u32) -> CardId {
+    let id = state.allocate_card_id();
+    let mut inst = CardInstance::new(
+        id,
+        CardDefId::from_raw(def),
+        Conditions {
+            ready: true,
+            damage: 0,
+            drying: false,
+            facedown: false,
+        },
+    );
+    inst.set_stats(Some(CharacterStats::new(1, 5, 1)));
+    state.player_mut(owner).unwrap().play_mut().push(inst);
+    id
+}
+
+fn look_quester(count: u32, category: Option<CardCategory>, rest: DeckPosition) -> CardDefinition {
+    char_def(100).with_abilities(vec![TriggeredAbility::new(
+        TriggerCondition::WhenThisQuests,
+        Effect::LookAtTopAndTake {
+            count,
+            filter: PlayFilter {
+                max_cost: None,
+                category,
+            },
+            rest,
+        },
+    )])
+}
+
+fn in_hand(state: &GameState, player: PlayerId, card: CardId) -> bool {
+    state
+        .player(player)
+        .unwrap()
+        .hand()
+        .iter()
+        .any(|c| c.id() == card)
+}
+fn in_deck(state: &GameState, player: PlayerId, card: CardId) -> bool {
+    state.player(player).unwrap().deck().contains(card)
+}
+
+#[test]
+fn look_at_top_and_take_a_matching_card_into_hand() {
+    let reg = registry(vec![
+        look_quester(3, Some(CardCategory::Character(None)), DeckPosition::Bottom),
+        item_def(900),
+        char_def(901),
+        item_def(902),
+    ]);
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let quester = place_quester(&mut state, me, 100);
+    let bottom_item = push_top(&mut state, me, 900);
+    let target = push_top(&mut state, me, 901); // the character among the top 3
+    let top_item = push_top(&mut state, me, 902);
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+    let Some(PendingDecision::ChooseFromRevealed { options, .. }) = state.pending() else {
+        panic!("expected a take-from-revealed choice");
+    };
+    assert_eq!(options, &vec![target], "only the character is takeable");
+
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(Decision::TakeRevealed(Some(target))),
+    )
+    .expect("take");
+
+    assert!(in_hand(&state, me, target), "the character went to hand");
+    assert!(!in_deck(&state, me, target));
+    assert!(
+        in_deck(&state, me, bottom_item) && in_deck(&state, me, top_item),
+        "the rest stay in the deck"
+    );
+}
+
+#[test]
+fn look_at_top_with_no_match_puts_everything_back_with_no_choice() {
+    let reg = registry(vec![
+        look_quester(2, Some(CardCategory::Character(None)), DeckPosition::Bottom),
+        item_def(900),
+        item_def(901),
+    ]);
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let quester = place_quester(&mut state, me, 100);
+    let a = push_top(&mut state, me, 900);
+    let b = push_top(&mut state, me, 901);
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+    assert!(
+        state.pending().is_none(),
+        "nothing matches; no choice is offered"
+    );
+    assert!(
+        !in_hand(&state, me, a) && !in_hand(&state, me, b),
+        "nothing taken"
+    );
+    assert!(
+        in_deck(&state, me, a) && in_deck(&state, me, b),
+        "rest stay in deck"
+    );
+}
+
+#[test]
+fn look_at_top_can_decline_to_take() {
+    let reg = registry(vec![
+        look_quester(2, Some(CardCategory::Character(None)), DeckPosition::Bottom),
+        char_def(900),
+        char_def(901),
+    ]);
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let quester = place_quester(&mut state, me, 100);
+    let a = push_top(&mut state, me, 900);
+    let b = push_top(&mut state, me, 901);
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+    assert!(state.pending().is_some());
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(Decision::TakeRevealed(None)),
+    )
+    .expect("decline");
+
+    assert!(
+        !in_hand(&state, me, a) && !in_hand(&state, me, b),
+        "declined: nothing taken"
+    );
+    assert!(in_deck(&state, me, a) && in_deck(&state, me, b));
+}
