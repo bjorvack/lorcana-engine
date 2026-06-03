@@ -2200,12 +2200,6 @@ fn resolve_effects(
                     remaining_players: remaining,
                     rest,
                 },
-                Choice::PlayFree { player, options } => PendingDecision::ChoosePlayFree {
-                    player,
-                    source,
-                    options,
-                    rest,
-                },
                 Choice::TakeFromRevealed {
                     player,
                     deck_owner,
@@ -2276,11 +2270,6 @@ enum Choice {
         count: u32,
         amount: DiscardAmount,
         remaining: Vec<PlayerId>,
-    },
-    /// `player` chooses one of `options` from hand to play for free (§6).
-    PlayFree {
-        player: PlayerId,
-        options: Vec<CardId>,
     },
     /// `player` takes up to one of `options` (looked-at cards) into hand; the rest
     /// of `looked_at` go to `rest_position` (§8.2).
@@ -2362,6 +2351,17 @@ fn choose_up_to(player: PlayerId, options: Vec<CardId>, max: u32, effect: &Effec
     }
 }
 
+/// Build a single-pick [`Choice::Choose`] that plays the chosen card for free (§6).
+fn choose_play_free(player: PlayerId, options: Vec<CardId>) -> Choice {
+    Choice::Choose {
+        player,
+        options: options.into_iter().map(ChoiceRef::Card).collect(),
+        min: 1,
+        max: 1,
+        then: ChoiceThen::PlayFree,
+    }
+}
+
 /// Build the [`Choice::NameCard`] for a [`Effect::NameThenReveal`].
 fn name_card_choice(player: PlayerId, effect: &Effect) -> Choice {
     let Effect::NameThenReveal {
@@ -2413,10 +2413,7 @@ fn execute_effect(
         // The controller plays an eligible card from hand for free (§6).
         Effect::PlayFreeFromHand { filter } => {
             let options = eligible_free_plays(state, registry, controller, filter);
-            return (!options.is_empty()).then_some(Choice::PlayFree {
-                player: controller,
-                options,
-            });
+            return (!options.is_empty()).then_some(choose_play_free(controller, options));
         }
         // Look at the top N; may take one matching `filter`, rest go to `rest` (§8.2).
         Effect::LookAtTopAndTake {
@@ -3528,17 +3525,6 @@ fn apply_choice_decision(
             chosen,
             events,
         ),
-        (
-            PendingDecision::ChoosePlayFree {
-                player,
-                source,
-                options,
-                rest,
-            },
-            Decision::PlayFreeChoice(card),
-        ) => apply_play_free_decision(
-            state, registry, player, source, &options, card, rest, events,
-        ),
         (pending, decision) => {
             apply_choice_decision_rest(state, registry, pending, decision, events)
         }
@@ -3742,7 +3728,7 @@ fn apply_choose_decision(
     events: &mut Vec<GameEvent>,
 ) -> Result<(), Rejected> {
     let picks: Vec<ChoiceRef> = match decision {
-        Decision::ChooseTarget(c) => vec![ChoiceRef::Card(*c)],
+        Decision::ChooseTarget(c) | Decision::PlayFreeChoice(c) => vec![ChoiceRef::Card(*c)],
         Decision::ChoosePlayer(p) => vec![ChoiceRef::Player(*p)],
         Decision::ChooseTargets(cs) => cs.iter().map(|c| ChoiceRef::Card(*c)).collect(),
         _ => return Err(Rejected::InvalidDecision),
@@ -3768,6 +3754,15 @@ fn apply_choose_decision(
             for pick in &picks {
                 if let ChoiceRef::Card(c) = pick {
                     apply_effect_to(state, registry, player, source, *c, effect, events);
+                }
+            }
+            resolve_effects(state, registry, player, source, rest, events);
+        }
+        // Play each picked card for free (a single pick), then the rest (§6).
+        ChoiceThen::PlayFree => {
+            for pick in &picks {
+                if let ChoiceRef::Card(c) = pick {
+                    play_card_free(state, registry, player, *c, events);
                 }
             }
             resolve_effects(state, registry, player, source, rest, events);
@@ -3798,29 +3793,6 @@ fn apply_may_decision(
     let _ = state.take_pending();
     resolve_effects(state, registry, player, source, effects, events);
     events.extend(game_state_check_with_triggers(state, registry));
-}
-
-/// Answer a [`PendingDecision::ChoosePlayFree`]: validate the chosen card is
-/// eligible, play it for free, then resume the continuation (§6).
-#[allow(clippy::too_many_arguments)]
-fn apply_play_free_decision(
-    state: &mut GameState,
-    registry: &CardRegistry,
-    player: PlayerId,
-    source: CardId,
-    options: &[CardId],
-    card: CardId,
-    rest: Vec<Effect>,
-    events: &mut Vec<GameEvent>,
-) -> Result<(), Rejected> {
-    if !options.contains(&card) {
-        return Err(Rejected::InvalidDecision);
-    }
-    let _ = state.take_pending();
-    play_card_free(state, registry, player, card, events);
-    resolve_effects(state, registry, player, source, rest, events);
-    events.extend(game_state_check_with_triggers(state, registry));
-    Ok(())
 }
 
 /// Answer a [`PendingDecision::EnterPlayExerted`] (Bodyguard, §10.3.2): optionally

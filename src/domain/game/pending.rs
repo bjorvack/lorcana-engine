@@ -26,6 +26,8 @@ pub enum ChoiceThen {
     /// Apply `effect` to each picked card, then resolve the rest ("chosen
     /// character … " / "up to N chosen characters …", §7.1 / §7.1.8).
     ApplyToEach(Box<Effect>),
+    /// Play each picked card for free (§6).
+    PlayFree,
 }
 
 /// A point in bag resolution that requires a player's input before the engine
@@ -90,19 +92,6 @@ pub enum PendingDecision {
         /// Players that still discard after this one (multi-player scope).
         remaining_players: Vec<PlayerId>,
         /// The remaining effects of the ability/action, resolved in order after.
-        rest: Vec<Effect>,
-    },
-    /// A "play a card for free" effect is resolving; `player` chooses one of
-    /// `options` (from hand) to play; then `rest` resolves (§6). Optionality is
-    /// expressed by wrapping in `Effect::May` (see `MayResolveEffect`).
-    ChoosePlayFree {
-        /// The player who must choose.
-        player: PlayerId,
-        /// The effect's source card (continuation controller).
-        source: CardId,
-        /// The eligible cards to play for free.
-        options: Vec<CardId>,
-        /// The remaining effects, resolved in order after.
         rest: Vec<Effect>,
     },
     /// A "look at the top N" effect is resolving; `player` chooses up to one of
@@ -174,7 +163,6 @@ impl PendingDecision {
             | Self::MayResolve { player, .. }
             | Self::EnterPlayExerted { player, .. }
             | Self::ChooseCardsToDiscard { player, .. }
-            | Self::ChoosePlayFree { player, .. }
             | Self::ChooseFromRevealed { player, .. }
             | Self::Choose { player, .. }
             | Self::NameCard { player, .. }
