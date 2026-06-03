@@ -280,6 +280,18 @@ pub enum Effect {
         /// Where the cards that aren't taken go (in the looked-at player's deck).
         rest: DeckPosition,
     },
+    /// "Name a card, then reveal the top card of your deck": the controller names
+    /// a card; if the revealed top card has that name it goes to `match_to` and the
+    /// controller gains `lore_on_match`, otherwise it goes to `otherwise_to` (§8.2;
+    /// Merlin / Bruno / The Sorcerer's Hat).
+    NameThenReveal {
+        /// Lore gained when the revealed card matches the named card.
+        lore_on_match: Amount,
+        /// Where the revealed card goes on a match (hand / inkwell / …).
+        match_to: Destination,
+        /// Where it goes otherwise (usually the bottom of the deck).
+        otherwise_to: Destination,
+    },
     /// Optionally resolve `inner` ("you may …"): the controller is asked yes/no,
     /// and `inner` resolves only on yes (§7.1.3). Composes optionality onto any
     /// effect, so individual effects don't carry an `optional` flag.

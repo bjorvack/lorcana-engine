@@ -247,3 +247,68 @@ fn look_at_a_chosen_players_deck_and_take_to_your_hand() {
         "it left the chosen player's deck"
     );
 }
+
+fn named_def(id: u32, name: &str) -> CardDefinition {
+    char_def(id).with_names(vec![name.to_string()])
+}
+
+fn lore(state: &GameState, player: PlayerId) -> u32 {
+    state.player(player).unwrap().lore()
+}
+
+fn name_reveal_quester() -> CardDefinition {
+    char_def(100).with_abilities(vec![TriggeredAbility::new(
+        TriggerCondition::WhenThisQuests,
+        Effect::NameThenReveal {
+            lore_on_match: lorcana_engine::Amount::fixed(3),
+            match_to: lorcana_engine::Destination::Hand,
+            otherwise_to: lorcana_engine::Destination::Deck(DeckPosition::Bottom),
+        },
+    )])
+}
+
+#[test]
+fn name_a_card_match_takes_to_hand_and_gains_lore() {
+    let reg = registry(vec![name_reveal_quester(), named_def(901, "Mickey Mouse")]);
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let quester = place_quester(&mut state, me, 100);
+    let top = push_top(&mut state, me, 901); // named "Mickey Mouse" atop the deck
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+    let lore_after_quest = lore(&state, me); // questing itself gained lore
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(Decision::NameCard("Mickey Mouse".to_string())),
+    )
+    .expect("name");
+
+    assert!(in_hand(&state, me, top), "matched card goes to hand");
+    assert_eq!(lore(&state, me), lore_after_quest + 3, "and gains 3 lore");
+}
+
+#[test]
+fn name_a_card_miss_goes_to_the_bottom() {
+    let reg = registry(vec![name_reveal_quester(), named_def(901, "Mickey Mouse")]);
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let quester = place_quester(&mut state, me, 100);
+    let top = push_top(&mut state, me, 901);
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+    let lore_after_quest = lore(&state, me);
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(Decision::NameCard("Donald Duck".to_string())),
+    )
+    .expect("name");
+
+    assert!(!in_hand(&state, me, top), "missed: not taken to hand");
+    assert!(
+        in_deck(&state, me, top),
+        "stays in the deck (on the bottom)"
+    );
+    assert_eq!(lore(&state, me), lore_after_quest, "no lore on a miss");
+}

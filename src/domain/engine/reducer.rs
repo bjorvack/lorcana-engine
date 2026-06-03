@@ -2113,6 +2113,19 @@ fn resolve_effects(
                     effect,
                     rest,
                 },
+                Choice::NameCard {
+                    player,
+                    lore_on_match,
+                    match_to,
+                    otherwise_to,
+                } => PendingDecision::NameCard {
+                    player,
+                    source,
+                    lore_on_match,
+                    match_to,
+                    otherwise_to,
+                    rest,
+                },
             };
             state.set_pending(pending);
             return;
@@ -2163,6 +2176,32 @@ enum Choice {
         options: Vec<PlayerId>,
         effect: Effect,
     },
+    /// `player` names a card; the named card is then matched against the revealed
+    /// top of their deck (§8.2).
+    NameCard {
+        player: PlayerId,
+        lore_on_match: Amount,
+        match_to: Destination,
+        otherwise_to: Destination,
+    },
+}
+
+/// Build the [`Choice::NameCard`] for a [`Effect::NameThenReveal`].
+fn name_card_choice(player: PlayerId, effect: &Effect) -> Choice {
+    let Effect::NameThenReveal {
+        lore_on_match,
+        match_to,
+        otherwise_to,
+    } = effect
+    else {
+        unreachable!("name_card_choice called with non-NameThenReveal effect");
+    };
+    Choice::NameCard {
+        player,
+        lore_on_match: lore_on_match.clone(),
+        match_to: *match_to,
+        otherwise_to: *otherwise_to,
+    }
 }
 
 /// Apply a built-in effect for `controller`. Returns `Some(Choice)` when the
@@ -2228,7 +2267,9 @@ fn execute_effect(
                 state, registry, controller, *whose, *count, filter, *rest, effect,
             );
         }
-        // "You may …": ask the controller, resolve `inner` only on yes (§7.1.3).
+        // "Name a card, then reveal the top of your deck" — ask for the name (§8.2).
+        Effect::NameThenReveal { .. } => return Some(name_card_choice(controller, effect)),
+        // "You may …": ask the controller; resolve `inner` only on yes (§7.1.3).
         Effect::May(inner) => {
             return Some(Choice::May {
                 player: controller,
@@ -3561,8 +3602,78 @@ fn apply_choice_decision_rest(
         ) => apply_choose_player_decision(
             state, registry, player, source, &options, &effect, rest, chosen, events,
         ),
+        (
+            PendingDecision::NameCard {
+                player,
+                source,
+                lore_on_match,
+                match_to,
+                otherwise_to,
+                rest,
+            },
+            Decision::NameCard(named),
+        ) => {
+            apply_name_card_decision(
+                state,
+                registry,
+                player,
+                source,
+                &named,
+                &lore_on_match,
+                match_to,
+                otherwise_to,
+                rest,
+                events,
+            );
+            Ok(())
+        }
         _ => Err(Rejected::InvalidDecision),
     }
+}
+
+/// Answer a [`PendingDecision::NameCard`]: reveal the top of `player`'s deck; if
+/// it has the `named` name, move it to `match_to` and gain `lore_on_match`, else
+/// move it to `otherwise_to`; then resume the continuation (§8.2).
+#[allow(clippy::too_many_arguments)]
+fn apply_name_card_decision(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    player: PlayerId,
+    source: CardId,
+    named: &str,
+    lore_on_match: &Amount,
+    match_to: Destination,
+    otherwise_to: Destination,
+    rest: Vec<Effect>,
+    events: &mut Vec<GameEvent>,
+) {
+    let _ = state.take_pending();
+    if let Some(&top) = peek_top(state, player, 1).first() {
+        let matched = deck_card_def(state, player, top)
+            .and_then(|d| registry.get(d))
+            .is_some_and(|def| def.has_name(named));
+        move_deck_top(
+            state,
+            player,
+            1,
+            if matched { match_to } else { otherwise_to },
+        );
+        if matched {
+            let gained = u32::try_from(
+                eval_amount(state, registry, player, source, source, lore_on_match).max(0),
+            )
+            .unwrap_or(0);
+            if let Some(p) = state.player_mut(player) {
+                p.add_lore(gained);
+            }
+            events.push(GameEvent::LoreGained {
+                player,
+                amount: gained,
+            });
+        }
+    }
+    resolve_effects(state, registry, player, source, rest, events);
+    events.extend(game_state_check_with_triggers(state, registry));
 }
 
 /// Answer a [`PendingDecision::ChoosePlayer`]: re-target the player-scoped effect

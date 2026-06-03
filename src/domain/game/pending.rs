@@ -1,7 +1,7 @@
 //! A decision the engine is waiting on before it can continue resolving.
 
 use super::bag::TriggerId;
-use crate::domain::effects::{DeckPosition, DiscardAmount, Effect};
+use crate::domain::effects::{Amount, DeckPosition, Destination, DiscardAmount, Effect};
 use crate::domain::types::ids::{CardId, PlayerId};
 use serde::{Deserialize, Serialize};
 
@@ -114,6 +114,22 @@ pub enum PendingDecision {
         /// The remaining effects, resolved in order after.
         rest: Vec<Effect>,
     },
+    /// A "name a card, then reveal the top of your deck" effect is resolving;
+    /// `player` names a card and the revealed top is matched against it (§8.2).
+    NameCard {
+        /// The player naming the card (and revealing their deck).
+        player: PlayerId,
+        /// The effect's source card.
+        source: CardId,
+        /// Lore gained on a match.
+        lore_on_match: Amount,
+        /// Where the revealed card goes on a match.
+        match_to: Destination,
+        /// Where it goes otherwise.
+        otherwise_to: Destination,
+        /// The remaining effects, resolved in order after.
+        rest: Vec<Effect>,
+    },
     /// A `May` effect is resolving; `player` chooses whether to resolve `effect`
     /// ("you may …", §7.1.3). `rest` resolves afterwards either way.
     MayResolveEffect {
@@ -157,6 +173,7 @@ impl PendingDecision {
             | Self::ChoosePlayFree { player, .. }
             | Self::ChooseFromRevealed { player, .. }
             | Self::ChoosePlayer { player, .. }
+            | Self::NameCard { player, .. }
             | Self::MayResolveEffect { player, .. }
             | Self::ChooseUpToN { player, .. } => *player,
         }
