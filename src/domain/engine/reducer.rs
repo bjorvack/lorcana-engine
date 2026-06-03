@@ -10,10 +10,10 @@ use crate::domain::effects::{
     Effect, MoveSource, PlayFilter, PlayerScope, Target, TargetSide, TriggerCondition,
 };
 use crate::domain::game::{
-    CardInstance, CharacterStats, Conditions, DelayedTrigger, GameEvent, GameState, GameStatus,
-    GrantedActivated, GrantedTrigger, LocationStats, ModifierDuration, ModifierTarget,
-    PendingDecision, Permission, PlayerState, Property, PropertyModifier, Restriction,
-    RuleModifier, Stat, StatModifier, TriggerId,
+    CardInstance, CharacterStats, ChoiceRef, ChoiceThen, Conditions, DelayedTrigger, GameEvent,
+    GameState, GameStatus, GrantedActivated, GrantedTrigger, LocationStats, ModifierDuration,
+    ModifierTarget, PendingDecision, Permission, PlayerState, Property, PropertyModifier,
+    Restriction, RuleModifier, Stat, StatModifier, TriggerId,
 };
 use crate::domain::rules::game_state_check;
 use crate::domain::types::card::Classification;
@@ -1058,11 +1058,7 @@ fn resolve_discard_effect(
 ) -> Option<Choice> {
     match resolve_scope(state, controller, who) {
         ScopeOutcome::Players(players) => resolve_scope_discard(state, &players, amount, events),
-        ScopeOutcome::Choose(options) => Some(Choice::ChoosePlayer {
-            player: controller,
-            options,
-            effect: effect.clone(),
-        }),
+        ScopeOutcome::Choose(options) => Some(choose_player(controller, options, effect)),
     }
 }
 
@@ -1104,11 +1100,7 @@ fn resolve_move_damage(
         (fixed_from, _) => {
             let target = if fixed_from.is_none() { from } else { to };
             let options = endpoint_options(state, registry, controller, source, target);
-            (!options.is_empty()).then(|| Choice::ChooseMoveTarget {
-                player: controller,
-                options,
-                effect: effect.clone(),
-            })
+            (!options.is_empty()).then(|| choose_card(controller, options, effect))
         }
     }
 }
@@ -2254,15 +2246,19 @@ fn resolve_effects(
                     effect: inner,
                     rest,
                 },
-                Choice::ChoosePlayer {
+                Choice::Choose {
                     player,
                     options,
-                    effect,
-                } => PendingDecision::ChoosePlayer {
+                    min,
+                    max,
+                    then,
+                } => PendingDecision::Choose {
                     player,
                     source,
                     options,
-                    effect,
+                    min,
+                    max,
+                    then,
                     rest,
                 },
                 Choice::NameCard {
@@ -2281,17 +2277,6 @@ fn resolve_effects(
                 Choice::NameThenRecur { player } => PendingDecision::NameThenRecur {
                     player,
                     source,
-                    rest,
-                },
-                Choice::ChooseMoveTarget {
-                    player,
-                    options,
-                    effect,
-                } => PendingDecision::ChooseMoveTarget {
-                    player,
-                    source,
-                    options,
-                    effect,
                     rest,
                 },
             };
@@ -2338,11 +2323,13 @@ enum Choice {
     },
     /// `player` is asked whether to resolve `inner` ("you may …", §7.1.3).
     May { player: PlayerId, inner: Effect },
-    /// `player` chooses one player from `options` for a `Chosen*`-scoped effect.
-    ChoosePlayer {
+    /// The general choose primitive: pick `min..=max` of `options`, then run `then`.
+    Choose {
         player: PlayerId,
-        options: Vec<PlayerId>,
-        effect: Effect,
+        options: Vec<ChoiceRef>,
+        min: u32,
+        max: u32,
+        then: ChoiceThen,
     },
     /// `player` names a card; the named card is then matched against the revealed
     /// top of their deck (§8.2).
@@ -2355,13 +2342,30 @@ enum Choice {
     /// `player` names a card; all character cards with that name in their discard
     /// return to their hand (§8.2).
     NameThenRecur { player: PlayerId },
-    /// `player` picks one of `options` as an endpoint of a two-target move-damage;
-    /// `effect` is re-run with that endpoint resolved (§9.3).
-    ChooseMoveTarget {
-        player: PlayerId,
-        options: Vec<CardId>,
-        effect: Effect,
-    },
+}
+
+/// Build a single-pick [`Choice::Choose`] that substitutes the chosen player into
+/// `effect` and re-resolves it (a `Chosen*` player scope, §7.1).
+fn choose_player(player: PlayerId, options: Vec<PlayerId>, effect: &Effect) -> Choice {
+    Choice::Choose {
+        player,
+        options: options.into_iter().map(ChoiceRef::Player).collect(),
+        min: 1,
+        max: 1,
+        then: ChoiceThen::SubstituteAndResolve(Box::new(effect.clone())),
+    }
+}
+
+/// Build a single-pick [`Choice::Choose`] that substitutes the chosen card into
+/// `effect` and re-resolves it (a move-damage endpoint, §9.3).
+fn choose_card(player: PlayerId, options: Vec<CardId>, effect: &Effect) -> Choice {
+    Choice::Choose {
+        player,
+        options: options.into_iter().map(ChoiceRef::Card).collect(),
+        min: 1,
+        max: 1,
+        then: ChoiceThen::SubstituteAndResolve(Box::new(effect.clone())),
+    }
 }
 
 /// Build the [`Choice::NameCard`] for a [`Effect::NameThenReveal`].
@@ -2654,11 +2658,7 @@ fn resolve_player_draw_lore(
             }
             None
         }
-        ScopeOutcome::Choose(options) => Some(Choice::ChoosePlayer {
-            player: controller,
-            options,
-            effect: effect.clone(),
-        }),
+        ScopeOutcome::Choose(options) => Some(choose_player(controller, options, effect)),
     }
 }
 
@@ -2795,11 +2795,7 @@ fn resolve_deck_move(
             }
             None
         }
-        ScopeOutcome::Choose(options) => Some(Choice::ChoosePlayer {
-            player: controller,
-            options,
-            effect: effect.clone(),
-        }),
+        ScopeOutcome::Choose(options) => Some(choose_player(controller, options, effect)),
     }
 }
 
@@ -2914,11 +2910,7 @@ fn resolve_look_at_top(
             None => return None,
         },
         ScopeOutcome::Choose(options) => {
-            return Some(Choice::ChoosePlayer {
-                player: controller,
-                options,
-                effect: effect.clone(),
-            });
+            return Some(choose_player(controller, options, effect));
         }
     };
     let looked_at = peek_top(state, owner, count);
@@ -3645,16 +3637,18 @@ fn apply_choice_decision_rest(
             Ok(())
         }
         (
-            PendingDecision::ChoosePlayer {
+            PendingDecision::Choose {
                 player,
                 source,
                 options,
-                effect,
+                min,
+                max,
+                then,
                 rest,
             },
-            Decision::ChoosePlayer(chosen),
-        ) => apply_choose_player_decision(
-            state, registry, player, source, &options, &effect, rest, chosen, events,
+            decision,
+        ) => apply_choose_decision(
+            state, registry, player, source, &options, min, max, &then, &decision, rest, events,
         ),
         (
             PendingDecision::NameCard {
@@ -3690,26 +3684,6 @@ fn apply_choice_decision_rest(
             Decision::NameCard(named),
         ) => {
             apply_name_then_recur_decision(state, registry, player, source, &named, rest, events);
-            Ok(())
-        }
-        (
-            PendingDecision::ChooseMoveTarget {
-                player,
-                source,
-                options,
-                effect,
-                rest,
-            },
-            Decision::ChooseTarget(chosen),
-        ) => {
-            if !options.contains(&chosen) {
-                return Err(Rejected::InvalidDecision);
-            }
-            let _ = state.take_pending();
-            let resolved = substitute_move_endpoint(&effect, chosen);
-            let effects: Vec<Effect> = std::iter::once(resolved).chain(rest).collect();
-            resolve_effects(state, registry, player, source, effects, events);
-            events.extend(game_state_check_with_triggers(state, registry));
             Ok(())
         }
         _ => Err(Rejected::InvalidDecision),
@@ -3794,27 +3768,44 @@ fn apply_name_card_decision(
     events.extend(game_state_check_with_triggers(state, registry));
 }
 
-/// Answer a [`PendingDecision::ChoosePlayer`]: re-target the player-scoped effect
-/// onto the chosen player, then resolve it and the continuation (§7.1).
+/// Answer the general [`PendingDecision::Choose`]: read the pick(s) from the
+/// decision, validate them against `options` and the `min..=max` count, then run
+/// the continuation `then` (§7.1).
 #[allow(clippy::too_many_arguments)]
-fn apply_choose_player_decision(
+fn apply_choose_decision(
     state: &mut GameState,
     registry: &CardRegistry,
     player: PlayerId,
     source: CardId,
-    options: &[PlayerId],
-    effect: &Effect,
+    options: &[ChoiceRef],
+    min: u32,
+    max: u32,
+    then: &ChoiceThen,
+    decision: &Decision,
     rest: Vec<Effect>,
-    chosen: PlayerId,
     events: &mut Vec<GameEvent>,
 ) -> Result<(), Rejected> {
-    if !options.contains(&chosen) {
+    let picks = match decision {
+        Decision::ChooseTarget(c) => vec![ChoiceRef::Card(*c)],
+        Decision::ChoosePlayer(p) => vec![ChoiceRef::Player(*p)],
+        _ => return Err(Rejected::InvalidDecision),
+    };
+    let n = u32::try_from(picks.len()).unwrap_or(u32::MAX);
+    if n < min || n > max || picks.iter().any(|r| !options.contains(r)) {
         return Err(Rejected::InvalidDecision);
     }
     let _ = state.take_pending();
-    let resolved = substitute_chosen_player(effect, chosen);
-    let effects: Vec<Effect> = std::iter::once(resolved).chain(rest).collect();
-    resolve_effects(state, registry, player, source, effects, events);
+    match then {
+        ChoiceThen::SubstituteAndResolve(effect) => {
+            // Single-pick continuation: substitute the pick into the effect.
+            let resolved = match picks[0] {
+                ChoiceRef::Card(c) => substitute_move_endpoint(effect, c),
+                ChoiceRef::Player(p) => substitute_chosen_player(effect, p),
+            };
+            let effects: Vec<Effect> = std::iter::once(resolved).chain(rest).collect();
+            resolve_effects(state, registry, player, source, effects, events);
+        }
+    }
     events.extend(game_state_check_with_triggers(state, registry));
     Ok(())
 }

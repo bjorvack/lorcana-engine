@@ -24,7 +24,7 @@ pub use modifier::{
     Condition, GrantedActivated, GrantedTrigger, ModifierDuration, ModifierTarget, Permission,
     Property, PropertyModifier, Restriction, RuleModifier, Stat, StatModifier,
 };
-pub use pending::PendingDecision;
+pub use pending::{ChoiceRef, ChoiceThen, PendingDecision};
 pub use player_state::PlayerState;
 pub use rng::SeededRng;
 pub use state::GameState;

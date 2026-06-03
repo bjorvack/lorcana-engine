@@ -4,9 +4,10 @@
 
 use lorcana_engine::{
     Amount, CardCategory, CardDefId, CardDefinition, CardId, CardInstance, CardRegistry,
-    CharacterFilter, CharacterStats, Classification, Conditions, Decision, DiscardAmount, Effect,
-    GameState, GameStatus, Input, NumericFilter, PendingDecision, PlayFilter, PlayerId,
-    PlayerScope, Target, TargetSide, TriggerCondition, TriggeredAbility, apply, start,
+    CharacterFilter, CharacterStats, ChoiceRef, Classification, Conditions, Decision,
+    DiscardAmount, Effect, GameState, GameStatus, Input, NumericFilter, PendingDecision,
+    PlayFilter, PlayerId, PlayerScope, Target, TargetSide, TriggerCondition, TriggeredAbility,
+    apply, start,
 };
 
 fn started(reg: &CardRegistry) -> GameState {
@@ -1285,14 +1286,21 @@ fn move_damage_second_pick_excludes_the_first() {
     .expect("from");
 
     // The second pick must exclude the donor (and the source quester via `another`).
-    let Some(PendingDecision::ChooseMoveTarget { options, .. }) = state.pending() else {
+    let Some(PendingDecision::Choose { options, .. }) = state.pending() else {
         panic!("expected a second move-target pick");
     };
+    let cards: Vec<_> = options
+        .iter()
+        .map(|r| match r {
+            ChoiceRef::Card(c) => *c,
+            ChoiceRef::Player(_) => panic!("expected card options"),
+        })
+        .collect();
     assert!(
-        !options.contains(&donor),
+        !cards.contains(&donor),
         "the donor can't also be the recipient"
     );
-    assert!(options.contains(&recipient));
+    assert!(cards.contains(&recipient));
 }
 
 fn set_class(state: &mut GameState, owner: PlayerId, card: CardId, class: &str) {

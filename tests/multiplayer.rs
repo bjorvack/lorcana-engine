@@ -3,9 +3,9 @@
 //! choose-a-player decision with 2+ candidates (3–4 player games), §7.1.
 
 use lorcana_engine::{
-    CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterStats, Conditions,
-    Decision, DiscardAmount, Effect, GameState, GameStatus, Input, PendingDecision, PlayerId,
-    PlayerScope, TriggerCondition, TriggeredAbility, apply, start,
+    CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterStats, ChoiceRef,
+    Conditions, Decision, DiscardAmount, Effect, GameState, GameStatus, Input, PendingDecision,
+    PlayerId, PlayerScope, TriggerCondition, TriggeredAbility, apply, start,
 };
 
 fn registry() -> CardRegistry {
@@ -98,14 +98,21 @@ fn chosen_opponent_prompts_a_choice_in_a_four_player_game() {
     let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
 
     // 3 opponents -> the controller must choose which one discards.
-    let Some(PendingDecision::ChoosePlayer {
+    let Some(PendingDecision::Choose {
         player, options, ..
     }) = state.pending()
     else {
         panic!("expected a choose-a-player decision with 3 opponents");
     };
     assert_eq!(*player, active);
-    assert_eq!(options, &opps);
+    let chosen: Vec<_> = options
+        .iter()
+        .map(|r| match r {
+            ChoiceRef::Player(p) => *p,
+            ChoiceRef::Card(_) => panic!("expected player options"),
+        })
+        .collect();
+    assert_eq!(chosen, opps);
 
     let target = opps[1];
     let before = hand_len(&state, target);
