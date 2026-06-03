@@ -1021,13 +1021,118 @@ fn add_damage(state: &mut GameState, owner: PlayerId, card: CardId, amount: u32)
     }
 }
 
-/// Resolve one endpoint of a move-damage effect: `SelfCard` is the source, any
-/// other (chosen) target is the resolved `chosen` card.
+/// Resolve one endpoint of a move-damage effect: `SelfCard` is the source, an
+/// already-resolved `Card` is itself, any other (chosen) target is `chosen`.
 const fn move_endpoint(t: &Target, source: CardId, chosen: CardId) -> CardId {
-    if matches!(t, Target::SelfCard) {
-        source
+    match t {
+        Target::SelfCard => source,
+        Target::Card(id) => *id,
+        _ => chosen,
+    }
+}
+
+/// Whether a target requires the controller to choose it at resolution (vs the
+/// already-resolved `SelfCard` / `Card`).
+const fn is_chosen_target(t: &Target) -> bool {
+    !matches!(t, Target::SelfCard | Target::Card(_))
+}
+
+/// Resolve a player-scoped discard: apply to each player in scope, or prompt a
+/// choose-a-player decision for a `Chosen*` scope with 2+ candidates (§8.4).
+fn resolve_discard_effect(
+    state: &mut GameState,
+    controller: PlayerId,
+    who: PlayerScope,
+    amount: DiscardAmount,
+    effect: &Effect,
+    events: &mut Vec<GameEvent>,
+) -> Option<Choice> {
+    match resolve_scope(state, controller, who) {
+        ScopeOutcome::Players(players) => resolve_scope_discard(state, &players, amount, events),
+        ScopeOutcome::Choose(options) => Some(Choice::ChoosePlayer {
+            player: controller,
+            options,
+            effect: effect.clone(),
+        }),
+    }
+}
+
+/// Resolve a move-damage effect, picking endpoints as needed (§9.3).
+#[allow(clippy::too_many_arguments)]
+fn resolve_move_damage(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    controller: PlayerId,
+    source: CardId,
+    from: &Target,
+    to: &Target,
+    amount: &Amount,
+    effect: &Effect,
+    events: &mut Vec<GameEvent>,
+) -> Option<Choice> {
+    match (is_chosen_target(from), is_chosen_target(to)) {
+        // Both endpoints already resolved (self / specific card): move now.
+        (false, false) => {
+            let max = eval_amount(state, registry, controller, source, source, amount).max(0);
+            move_damage(
+                state,
+                move_endpoint(from, source, source),
+                move_endpoint(to, source, source),
+                max,
+            );
+            None
+        }
+        // Two chosen: pick `from` first; the continuation re-runs for `to`.
+        (true, true) => {
+            let options = endpoint_options(state, registry, controller, source, from);
+            (!options.is_empty()).then(|| Choice::ChooseMoveTarget {
+                player: controller,
+                options,
+                effect: effect.clone(),
+            })
+        }
+        // Exactly one chosen: the standard single-target path resolves it.
+        _ => {
+            let target = if is_chosen_target(from) { from } else { to };
+            resolve_targeted(state, registry, controller, source, target, effect, events)
+        }
+    }
+}
+
+/// The cards a chosen move-damage endpoint (a `ChosenCharacter`) may pick from.
+fn endpoint_options(
+    state: &GameState,
+    registry: &CardRegistry,
+    controller: PlayerId,
+    source: CardId,
+    target: &Target,
+) -> Vec<CardId> {
+    if let Target::ChosenCharacter { filter, another } = target {
+        choosable_characters(state, registry, controller, source, filter, *another)
     } else {
-        chosen
+        Vec::new()
+    }
+}
+
+/// Re-target a two-target move-damage onto the just-chosen endpoint: the first
+/// still-chosen side becomes a resolved `Card`.
+fn substitute_move_endpoint(effect: &Effect, chosen: CardId) -> Effect {
+    if let Effect::MoveDamage { from, to, amount } = effect {
+        if is_chosen_target(from) {
+            Effect::MoveDamage {
+                from: Target::Card(chosen),
+                to: to.clone(),
+                amount: amount.clone(),
+            }
+        } else {
+            Effect::MoveDamage {
+                from: from.clone(),
+                to: Target::Card(chosen),
+                amount: amount.clone(),
+            }
+        }
+    } else {
+        effect.clone()
     }
 }
 
@@ -2039,6 +2144,7 @@ fn execute_trigger(
 /// needs a target choice, stash the remaining effects in a `ChooseTarget` pending
 /// and stop; `Decide` then applies the choice and resumes the `rest`. Effects with
 /// no eligible target fizzle and the sequence continues ("as much as possible").
+#[allow(clippy::too_many_lines)] // one big Choice -> PendingDecision dispatch
 fn resolve_effects(
     state: &mut GameState,
     registry: &CardRegistry,
@@ -2135,6 +2241,17 @@ fn resolve_effects(
                     otherwise_to,
                     rest,
                 },
+                Choice::ChooseMoveTarget {
+                    player,
+                    options,
+                    effect,
+                } => PendingDecision::ChooseMoveTarget {
+                    player,
+                    source,
+                    options,
+                    effect,
+                    rest,
+                },
             };
             state.set_pending(pending);
             return;
@@ -2193,6 +2310,13 @@ enum Choice {
         match_to: Destination,
         otherwise_to: Destination,
     },
+    /// `player` picks one of `options` as an endpoint of a two-target move-damage;
+    /// `effect` is re-run with that endpoint resolved (§9.3).
+    ChooseMoveTarget {
+        player: PlayerId,
+        options: Vec<CardId>,
+        effect: Effect,
+    },
 }
 
 /// Build the [`Choice::NameCard`] for a [`Effect::NameThenReveal`].
@@ -2231,21 +2355,11 @@ fn execute_effect(
                 state, registry, controller, source, *who, amount, effect, events,
             );
         }
-        // Players in `who` discard; each chooses which of their own cards unless
-        // their whole hand goes (§8.4). A `Chosen*` scope may first need a
-        // choose-a-player decision (3–4 player games).
-        Effect::Discard { who, amount } => match resolve_scope(state, controller, *who) {
-            ScopeOutcome::Players(players) => {
-                return resolve_scope_discard(state, &players, *amount, events);
-            }
-            ScopeOutcome::Choose(options) => {
-                return Some(Choice::ChoosePlayer {
-                    player: controller,
-                    options,
-                    effect: effect.clone(),
-                });
-            }
-        },
+        // Players in `who` discard; each chooses their own cards unless the whole
+        // hand goes (§8.4). A `Chosen*` scope may first prompt a player choice.
+        Effect::Discard { who, amount } => {
+            return resolve_discard_effect(state, controller, *who, *amount, effect, events);
+        }
         // Move the top `count` of each scoped player's deck to `to` (mill / dig).
         Effect::Move {
             what: MoveSource::DeckTop { who, count },
@@ -2258,12 +2372,10 @@ fn execute_effect(
         // The controller plays an eligible card from hand for free (§6).
         Effect::PlayFreeFromHand { filter } => {
             let options = eligible_free_plays(state, registry, controller, filter);
-            if !options.is_empty() {
-                return Some(Choice::PlayFree {
-                    player: controller,
-                    options,
-                });
-            }
+            return (!options.is_empty()).then_some(Choice::PlayFree {
+                player: controller,
+                options,
+            });
         }
         // Look at the top N; may take one matching `filter`, rest go to `rest` (§8.2).
         Effect::LookAtTopAndTake {
@@ -2306,15 +2418,13 @@ fn execute_effect(
                 return execute_effect(state, registry, controller, source, then, events);
             }
         }
-        // Move damage between two characters: resolve the non-`SelfCard` (chosen)
-        // side via targeting; the move itself happens in `apply_effect_to` (§9.3).
-        Effect::MoveDamage { from, to, .. } => {
-            let target = if matches!(from, Target::SelfCard) {
-                to
-            } else {
-                from
-            };
-            return resolve_targeted(state, registry, controller, source, target, effect, events);
+        // Move damage between two characters (§9.3): two chosen ⇒ pick `from`
+        // first (then re-run for `to`); one chosen ⇒ the standard targeting path;
+        // none ⇒ move immediately.
+        Effect::MoveDamage { from, to, amount } => {
+            return resolve_move_damage(
+                state, registry, controller, source, from, to, amount, effect, events,
+            );
         }
         // Targeted effects: resolve the target now (self / all) or report that a
         // choice is needed (§7.1).
@@ -2354,6 +2464,11 @@ fn resolve_targeted(
     match target {
         Target::SelfCard => {
             apply_effect_to(state, registry, controller, source, source, effect, events);
+            None
+        }
+        // An already-resolved card (e.g. a prior pick of a multi-target effect).
+        Target::Card(card) => {
+            apply_effect_to(state, registry, controller, source, *card, effect, events);
             None
         }
         Target::ChosenCharacter { filter, another } => {
@@ -3650,6 +3765,26 @@ fn apply_choice_decision_rest(
                 rest,
                 events,
             );
+            Ok(())
+        }
+        (
+            PendingDecision::ChooseMoveTarget {
+                player,
+                source,
+                options,
+                effect,
+                rest,
+            },
+            Decision::ChooseTarget(chosen),
+        ) => {
+            if !options.contains(&chosen) {
+                return Err(Rejected::InvalidDecision);
+            }
+            let _ = state.take_pending();
+            let resolved = substitute_move_endpoint(&effect, chosen);
+            let effects: Vec<Effect> = std::iter::once(resolved).chain(rest).collect();
+            resolve_effects(state, registry, player, source, effects, events);
+            events.extend(game_state_check_with_triggers(state, registry));
             Ok(())
         }
         _ => Err(Rejected::InvalidDecision),

@@ -1175,3 +1175,76 @@ fn move_damage_from_chosen_onto_this_character() {
     );
     assert_eq!(dmg(quester), 2, "...onto this character");
 }
+
+#[test]
+fn move_damage_between_two_chosen_characters() {
+    // "Move up to 2 damage counters from chosen character to chosen opposing
+    // character" (Belle): two separate picks — first `from`, then `to` (§9.3).
+    let mut reg = CardRegistry::new();
+    reg.insert(
+        CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 9, 1).with_abilities(vec![
+            TriggeredAbility::new(
+                TriggerCondition::WhenThisQuests,
+                Effect::MoveDamage {
+                    from: Target::ChosenCharacter {
+                        filter: CharacterFilter::any(TargetSide::Yours),
+                        another: true,
+                    },
+                    to: Target::ChosenCharacter {
+                        filter: CharacterFilter::any(TargetSide::Opposing),
+                        another: false,
+                    },
+                    amount: Amount::fixed(2),
+                },
+            ),
+        ]),
+    );
+    reg.insert(CardDefinition::character(
+        CardDefId::from_raw(200),
+        1,
+        true,
+        2,
+        9,
+        1,
+    ));
+    let mut state = started(&reg);
+    let active = state.active_player();
+    let foe = opponent_of(&state, active);
+    let quester = place(&mut state, active, 1000, 100, 9, 0);
+    let donor = place(&mut state, active, 1001, 200, 9, 3); // 3 damage (mine)
+    let recipient = place(&mut state, foe, 2000, 200, 9, 0); // opposing, undamaged
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+    // First pick: the `from` character (one of mine, not the quester).
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(Decision::ChooseTarget(donor)),
+    )
+    .expect("from");
+    // Second pick: the `to` character (an opposing one).
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(Decision::ChooseTarget(recipient)),
+    )
+    .expect("to");
+
+    let dmg = |owner, id| {
+        state
+            .player(owner)
+            .unwrap()
+            .play()
+            .iter()
+            .find(|c| c.id() == id)
+            .unwrap()
+            .conditions()
+            .damage
+    };
+    assert_eq!(dmg(active, donor), 1, "2 of 3 moved off the donor");
+    assert_eq!(
+        dmg(foe, recipient),
+        2,
+        "...onto the chosen opposing character"
+    );
+}

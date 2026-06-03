@@ -130,6 +130,20 @@ pub enum PendingDecision {
         /// The remaining effects, resolved in order after.
         rest: Vec<Effect>,
     },
+    /// A two-target move-damage is resolving; `player` picks one endpoint from
+    /// `options`, then `effect` is re-run with it resolved (§9.3).
+    ChooseMoveTarget {
+        /// The player choosing the endpoint.
+        player: PlayerId,
+        /// The effect's source card.
+        source: CardId,
+        /// The candidate cards.
+        options: Vec<CardId>,
+        /// The move-damage effect to re-run with this endpoint resolved.
+        effect: Effect,
+        /// The remaining effects, resolved in order after.
+        rest: Vec<Effect>,
+    },
     /// A `May` effect is resolving; `player` chooses whether to resolve `effect`
     /// ("you may …", §7.1.3). `rest` resolves afterwards either way.
     MayResolveEffect {
@@ -174,6 +188,7 @@ impl PendingDecision {
             | Self::ChooseFromRevealed { player, .. }
             | Self::ChoosePlayer { player, .. }
             | Self::NameCard { player, .. }
+            | Self::ChooseMoveTarget { player, .. }
             | Self::MayResolveEffect { player, .. }
             | Self::ChooseUpToN { player, .. } => *player,
         }

@@ -1,6 +1,7 @@
 //! Targets that an effect applies to (§7.1).
 
 use crate::domain::types::card::Classification;
+use crate::domain::types::ids::CardId;
 use serde::{Deserialize, Serialize};
 
 /// Which side a character may be on, relative to the effect's controller.
@@ -111,6 +112,10 @@ impl CharacterFilter {
 pub enum Target {
     /// The effect's source card itself ("this card/character").
     SelfCard,
+    /// A specific, already-resolved card — the outcome of resolving a chosen
+    /// target (e.g. the first pick of a two-target move-damage). Not authored on
+    /// cards directly.
+    Card(CardId),
     /// A single character the controller chooses at resolution (§7.1).
     ChosenCharacter {
         /// Which characters are eligible to be chosen.
