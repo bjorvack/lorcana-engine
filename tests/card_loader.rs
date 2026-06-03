@@ -3,8 +3,8 @@
 
 use lorcana_engine::{
     AbilityCost, ActivatedAbility, Amount, CardDefId, CardKind, CharacterFilter, Classification,
-    Effect, Keyword, PlayerScope, ShiftAbility, Stat, StaticAbility, StaticTarget, Target,
-    TargetSide, TriggerCondition, load_toml,
+    Condition, Effect, Keyword, PlayerScope, ShiftAbility, Stat, StaticAbility, StaticTarget,
+    Target, TargetSide, TriggerCondition, load_toml,
 };
 
 /// The committed example deck, compiled in so the test needs no runtime files.
@@ -13,7 +13,7 @@ const EXAMPLES: &str = include_str!("../cards/examples.toml");
 #[test]
 fn committed_example_cards_load_and_validate() {
     let defs = load_toml(EXAMPLES).expect("examples.toml loads");
-    assert_eq!(defs.len(), 10, "all example cards loaded");
+    assert_eq!(defs.len(), 12, "all example cards loaded");
 
     // ids are assigned sequentially by position.
     assert_eq!(defs[0].id(), CardDefId::from_raw(0));
@@ -283,5 +283,53 @@ fn a_dsl_authored_card_plays_through_the_engine() {
         state.player(me).unwrap().deck().iter().count(),
         deck_before - 1,
         "drew a card"
+    );
+}
+
+#[test]
+fn the_dsl_supports_dynamic_amounts_conditionals_and_static_per_while() {
+    let defs = load_toml(EXAMPLES).expect("loads");
+    let by_name = |name: &str| defs.iter().find(|d| d.has_name(name)).unwrap();
+    let villains = || {
+        CharacterFilter::any(TargetSide::Yours)
+            .and(CharacterFilter::Classification(Classification::new(
+                "Villain",
+            )))
+            .and(CharacterFilter::negate(CharacterFilter::IsSource))
+    };
+
+    // "if you have another Villain, gain 1 lore for each other Villain."
+    let mal = by_name("Maleficent");
+    assert_eq!(
+        mal.abilities()[0].effect,
+        Effect::IfControl {
+            filter: villains(),
+            then: Box::new(Effect::Lore {
+                who: PlayerScope::You,
+                amount: Amount::PerMatchingCharacter(villains()),
+            }),
+        }
+    );
+
+    // Static `per` (for-each) and `while` (condition).
+    let cruella = by_name("Cruella De Vil");
+    assert_eq!(
+        cruella.static_abilities(),
+        &[
+            StaticAbility {
+                target: StaticTarget::SelfCard,
+                stat: Stat::Strength,
+                delta: 1,
+                condition: None,
+                per: Some(Amount::PerMatchingCharacter(villains())),
+            },
+            StaticAbility {
+                target: StaticTarget::SelfCard,
+                stat: Stat::Lore,
+                delta: 1,
+                condition: Some(Condition::SourceExerted),
+                per: None,
+            },
+        ]
     );
 }

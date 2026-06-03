@@ -761,8 +761,14 @@ work, tracked separately.
   (`cost = { exert, ink }` + `do`) -> `ActivatedAbility`; `[[card.statics]]`
   (`strength/willpower/lore = N`, `to = "your other Hero characters"`) ->
   `StaticAbility`. Beast's Mirror ({E},1 -> draw) and Hercules (+1 {S} to other
-  Heroes) in `cards/examples.toml`. **Next:** dynamic amounts/conditionals + static
-  conditions (`per`/`while`) in the DSL surface.
+  Heroes) in `cards/examples.toml`.
+- [~] **Effect-DSL: dynamic amounts + conditionals + static per/while** — amounts
+  accept `"per <filter>"` (-> `PerMatchingCharacter`), `"cards in hand"`,
+  `"damage on self"`, `"<stat> of self"`, or the structured form, anywhere an
+  integer was allowed; `{ if_you_have = "<filter>", then = {..} }` -> `IfControl`;
+  statics take `per = "<filter>"` and `while = "exerted"`. Maleficent (conditional
+  + for-each lore) and Cruella (static `per` + `while`) in `cards/examples.toml`.
+  **Next:** more triggers/verbs as cards force them; conformance suite.
 - A conformance test suite: encode the rules examples (§7–§10) and a library of
   hand-authored interaction scenarios as golden tests.
 - **Trigger taxonomy completeness** (see

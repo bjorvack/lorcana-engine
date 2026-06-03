@@ -110,6 +110,41 @@ strength = 1
 to = "your other Hero characters"
 
 [[card]]
+name = "Maleficent"
+type = "Character"
+cost = 5
+inkwell = false
+strength = 3
+willpower = 5
+lore = 2
+classifications = ["Villain", "Sorcerer"]
+# "When you play this, if you have another Villain character, gain 1 lore for each
+#  other Villain character you have."
+[[card.abilities]]
+on = "play"
+do = { if_you_have = "your other Villain characters", then = { gain_lore = "per your other Villain characters" } }
+
+[[card]]
+name = "Cruella De Vil"
+type = "Character"
+cost = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Villain"]
+# "This character gets +1 {S} for each other Villain character you have."
+[[card.statics]]
+strength = 1
+to = "self"
+per = "your other Villain characters"
+# "While this character is exerted, it gets +1 {L}."
+[[card.statics]]
+lore = 1
+to = "self"
+while = "exerted"
+
+[[card]]
 name = "The Great Illuminary"
 type = "Location"
 cost = 2

@@ -28,7 +28,7 @@ use crate::domain::effects::{
     Amount, CardCategory, CharacterFilter, DiscardAmount, DiscardBy, Effect, PlayerScope, Target,
     TargetSide, TriggerCondition,
 };
-use crate::domain::game::{Property, Stat};
+use crate::domain::game::{Condition, Property, Stat};
 use crate::domain::types::card::Classification;
 use serde::Deserialize;
 use toml::Value;
@@ -101,7 +101,11 @@ fn effect_from_table(t: &toml::Table) -> Result<Effect, String> {
             .and_then(|n| i32::try_from(n).ok())
             .ok_or_else(|| format!("{key}: expected an integer"))
     };
-    let fixed = |key: &str| int(key).map(Amount::fixed);
+    // An amount that may be a literal int or a dynamic form (e.g. "per …").
+    let amt = |key: &str| -> Result<Amount, String> {
+        t.get(key)
+            .map_or_else(|| Err(format!("{key}: missing")), amount_from_value)
+    };
     // A target from `to` / `from` / `target` (default: the source itself).
     let tgt = || -> Result<Target, String> {
         t.get("to")
@@ -122,12 +126,12 @@ fn effect_from_table(t: &toml::Table) -> Result<Effect, String> {
     if t.contains_key("draw") {
         Ok(Effect::Draw {
             who: scope(PlayerScope::You)?,
-            amount: fixed("draw")?,
+            amount: amt("draw")?,
         })
     } else if t.contains_key("gain_lore") {
         Ok(Effect::Lore {
             who: scope(PlayerScope::You)?,
-            amount: fixed("gain_lore")?,
+            amount: amt("gain_lore")?,
         })
     } else if t.contains_key("lose_lore") {
         Ok(Effect::Lore {
@@ -137,17 +141,17 @@ fn effect_from_table(t: &toml::Table) -> Result<Effect, String> {
     } else if t.contains_key("deal_damage") {
         Ok(Effect::DealDamage {
             target: tgt()?,
-            amount: fixed("deal_damage")?,
+            amount: amt("deal_damage")?,
         })
     } else if t.contains_key("remove_damage") {
         Ok(Effect::RemoveDamage {
             target: tgt()?,
-            amount: fixed("remove_damage")?,
+            amount: amt("remove_damage")?,
         })
     } else if t.contains_key("give_strength") {
         Ok(Effect::GiveStrengthThisTurn {
             target: tgt()?,
-            amount: fixed("give_strength")?,
+            amount: amt("give_strength")?,
         })
     } else if let Some(v) = t.get("banish") {
         Ok(Effect::Banish(target_from_value(v)?))
@@ -162,6 +166,15 @@ fn effect_from_table(t: &toml::Table) -> Result<Effect, String> {
             who: scope(PlayerScope::You)?,
             amount: DiscardAmount::Count(u32::try_from(int("discard")?).unwrap_or(0)),
             by: DiscardBy::Owner,
+        })
+    } else if let Some(Value::String(cond)) = t.get("if_you_have") {
+        let filter = parse_filter(cond).ok_or_else(|| format!("unparseable filter {cond:?}"))?;
+        let then = t
+            .get("then")
+            .ok_or_else(|| "`if_you_have` needs a `then` effect".to_string())?;
+        Ok(Effect::IfControl {
+            filter,
+            then: Box::new(effect_from_value(then)?),
         })
     } else if let Some(Value::String(kw)) = t.get("grant_keyword") {
         let keyword = keyword_from(kw).ok_or_else(|| format!("unknown keyword {kw:?}"))?;
@@ -193,14 +206,28 @@ fn parse_selector(s: &str) -> Option<Target> {
     if lower == "self" || lower == "this" {
         return Some(Target::SelfCard);
     }
-    // Must name what's being selected, else it isn't a selector we understand.
+    let filter = parse_filter(s)?;
+    let is_permanent = lower.contains("item") || lower.contains("location");
+    Some(if is_permanent {
+        Target::ChosenPermanent { filter }
+    } else if lower.starts_with("all") {
+        Target::AllCharacters { filter }
+    } else {
+        Target::ChosenCharacter { filter }
+    })
+}
+
+/// Parse a compact card filter — side + category + classifications + `another` —
+/// e.g. `"your other Villain characters"`, `"opposing item"`. Requires a noun so
+/// it's distinguishable from free text.
+fn parse_filter(s: &str) -> Option<CharacterFilter> {
+    let lower = s.to_lowercase();
     if !["character", "item", "location", "permanent"]
         .iter()
         .any(|n| lower.contains(n))
     {
         return None;
     }
-    let all = lower.starts_with("all");
     let side = if lower.contains("opposing") {
         TargetSide::Opposing
     } else if lower.contains("your") || lower.contains("own") {
@@ -209,8 +236,13 @@ fn parse_selector(s: &str) -> Option<Target> {
         TargetSide::Any
     };
     let another = lower.contains("another") || lower.contains(" other ");
-
-    // The noun decides character vs item/location.
+    let category = if lower.contains("item") {
+        Some(CardCategory::Item)
+    } else if lower.contains("location") {
+        Some(CardCategory::Location)
+    } else {
+        None // characters (the default) need no Category gate
+    };
     let known = [
         "all",
         "chosen",
@@ -228,38 +260,64 @@ fn parse_selector(s: &str) -> Option<Target> {
         "permanent",
         "permanents",
     ];
-    let classifications: Vec<&str> = s
-        .split_whitespace()
-        .filter(|w| !known.contains(&w.to_lowercase().as_str()))
-        .collect();
-
-    let category = if lower.contains("item") {
-        Some(CardCategory::Item)
-    } else if lower.contains("location") {
-        Some(CardCategory::Location)
-    } else {
-        None // characters (the default) need no Category gate
-    };
-
-    let is_permanent = category.is_some();
     let mut filter = CharacterFilter::any(side);
     if let Some(cat) = category {
         filter = filter.and(CharacterFilter::Category(cat));
     }
-    for c in classifications {
+    for c in s
+        .split_whitespace()
+        .filter(|w| !known.contains(&w.to_lowercase().as_str()))
+    {
         filter = filter.and(CharacterFilter::Classification(Classification::new(c)));
     }
     if another {
         filter = filter.and(CharacterFilter::negate(CharacterFilter::IsSource));
     }
+    Some(filter)
+}
 
-    Some(if is_permanent {
-        Target::ChosenPermanent { filter }
-    } else if all {
-        Target::AllCharacters { filter }
-    } else {
-        Target::ChosenCharacter { filter }
-    })
+/// An amount: an integer (`Fixed`), a dynamic string, or the structured AST form.
+/// Strings: `"per <filter>"` (for-each), `"cards in hand"`, `"damage on self"`,
+/// `"<stat> of self"`.
+fn amount_from_value(v: &Value) -> Result<Amount, String> {
+    match v {
+        Value::Integer(n) => i32::try_from(*n)
+            .map(Amount::fixed)
+            .map_err(|_| format!("amount {n} out of range")),
+        Value::String(s) => amount_from_str(s).ok_or_else(|| format!("unparseable amount {s:?}")),
+        table @ Value::Table(_) => table
+            .clone()
+            .try_into::<Amount>()
+            .map_err(|e| format!("bad structured amount: {e}")),
+        other => Err(format!("expected an amount, got {other}")),
+    }
+}
+
+fn amount_from_str(s: &str) -> Option<Amount> {
+    let lower = s.to_lowercase();
+    if lower == "cards in hand" {
+        return Some(Amount::CardsInHand);
+    }
+    if lower == "damage on self" || lower == "damage on this" {
+        return Some(Amount::DamageOnSource);
+    }
+    if lower.starts_with("per ") {
+        // Slice the original (case-preserving) string so classifications keep case.
+        return parse_filter(s["per ".len()..].trim()).map(Amount::PerMatchingCharacter);
+    }
+    for (word, stat) in [
+        ("strength", Stat::Strength),
+        ("willpower", Stat::Willpower),
+        ("lore", Stat::Lore),
+    ] {
+        if lower.starts_with(word) {
+            return Some(Amount::StatOf {
+                stat,
+                target: Target::SelfCard,
+            });
+        }
+    }
+    None
 }
 
 /// Map a player-scope string to a [`PlayerScope`].
@@ -321,6 +379,11 @@ pub struct TomlStatic {
     /// Who it applies to: "this" / "your characters" / "your other Villain characters".
     #[serde(rename = "to")]
     pub target: String,
+    /// "+N for each …": scales the delta by a count of matching cards.
+    pub per: Option<String>,
+    /// A gating condition ("while …"); currently only "exerted".
+    #[serde(rename = "while")]
+    pub while_: Option<String>,
 }
 
 impl TomlStatic {
@@ -337,12 +400,29 @@ impl TomlStatic {
         };
         let target = static_target_from_str(&self.target)
             .ok_or_else(|| format!("unparseable static target {:?}", self.target))?;
+        let per = self
+            .per
+            .as_deref()
+            .map(|p| {
+                parse_filter(p)
+                    .map(Amount::PerMatchingCharacter)
+                    .ok_or_else(|| format!("unparseable `per` filter {p:?}"))
+            })
+            .transpose()?;
+        let condition = self
+            .while_
+            .as_deref()
+            .map(|w| match w.to_lowercase().as_str() {
+                "exerted" => Ok(Condition::SourceExerted),
+                other => Err(format!("unknown condition {other:?}")),
+            })
+            .transpose()?;
         Ok(StaticAbility {
             target,
             stat,
             delta,
-            condition: None,
-            per: None,
+            condition,
+            per,
         })
     }
 }
