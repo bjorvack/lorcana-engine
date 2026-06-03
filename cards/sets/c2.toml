@@ -8,11 +8,16 @@
 name = "Down In New Orleans"
 type = "Song"
 cost = 6
+# text:
+#   (A character with cost 6 or more can {E} to sing this song for free.)
+#   Look at the top 3 cards of your deck. You may reveal a character, item, or location card with cost 6 or less and play it for free. Put the rest on the bottom of your deck in any order.
 
 [[card]]
 name = "Dragon Fire"
 type = "Action"
 cost = 5
+# text:
+#   Banish chosen character.
 
 [[card]]
 name = "Elsa - Ice Maker"
@@ -23,12 +28,18 @@ willpower = 5
 lore = 2
 classifications = ["Floodborn", "Hero", "Queen", "Sorcerer"]
 keywords = ["Shift 4"]
+# text:
+#   Shift 4 {I} (You may pay 4 {I} to play this on top of one of your characters named Elsa.)
+#   WINTER WALL Whenever this character quests, you may exert chosen character. If you do and you have a character named Anna in play, the chosen character can’t ready at the start of their next turn.
 
 [[card]]
 name = "Let It Go"
 type = "Song"
 cost = 5
 inkwell = true
+# text:
+#   (A character with cost 5 or more can {E} to sing this song for free.)
+#   Put chosen character into their player's inkwell facedown and exerted.
 
 [[card]]
 name = "Pegasus - Gift for Hercules"
@@ -40,6 +51,8 @@ willpower = 1
 lore = 1
 classifications = ["Storyborn", "Ally"]
 keywords = ["Evasive"]
+# text:
+#   Evasive (Only characters with Evasive can challenge this character.)
 
 [[card]]
 name = "Simba - Pride Protector"
@@ -50,12 +63,18 @@ willpower = 4
 lore = 2
 classifications = ["Floodborn", "Hero", "Prince"]
 keywords = ["Shift 3"]
+# text:
+#   Shift 3 {I} (You may pay 3 {I} to play this on top of one of your characters named Simba.)
+#   UNDERSTAND THE BALANCE At the end of your turn, if this character is exerted, you may ready your other characters.
 
 [[card]]
 name = "Stand Out"
 type = "Song"
 cost = 3
 inkwell = true
+# text:
+#   (A character with cost 3 or more can {E} to sing this song for free.)
+#   Chosen character gets +3 {S} and gains Evasive until the start of your next turn. (Only characters with Evasive can challenge them.)
 
 [[card]]
 name = "The Headless Horseman - Cursed Rider"
@@ -67,6 +86,9 @@ willpower = 7
 lore = 2
 classifications = ["Floodborn", "Villain"]
 keywords = ["Shift 5"]
+# text:
+#   Shift 5 {I} (You may pay 5 {I} to play this on top of one of your characters named The Headless Horseman.)
+#   WITCHING HOUR When you play this character, each player draws 3 cards, then discards 3 cards at random. Choose an opposing character and deal 2 damage to them for each action card discarded this way.
 
 [[card]]
 name = "Tinker Bell - Insistent Fairy"
@@ -78,3 +100,6 @@ willpower = 1
 lore = 1
 classifications = ["Storyborn", "Ally", "Fairy"]
 keywords = ["Evasive"]
+# text:
+#   Evasive (Only characters with Evasive can challenge this character.)
+#   PAY ATTENTION Whenever you play a character with 5 {S} or more, you may exert them to gain 2 lore.

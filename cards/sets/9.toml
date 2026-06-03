@@ -10,6 +10,9 @@ type = "Song"
 cost = 6
 inkwell = true
 keywords = ["Sing Together 6"]
+# text:
+#   Sing Together 6 (Any number of your or your teammates’ characters with total cost 6 or more may to sing this song for free.)
+#   Each opponent loses 2 lore. You gain 2 lore.
 
 [[card]]
 name = "Agrabah - Marketplace"
@@ -30,6 +33,8 @@ willpower = 2
 lore = 1
 classifications = ["Storyborn", "Hero", "Prince"]
 keywords = ["Ward"]
+# text:
+#   Ward (Opponents can't choose this character except to challenge.)
 
 [[card]]
 name = "Alice - Accidentally Adrift"
@@ -40,6 +45,9 @@ strength = 2
 willpower = 3
 lore = 2
 classifications = ["Storyborn", "Hero"]
+# text:
+#   WASHED AWAY When you play this character, you may put chosen item into its player's inkwell facedown and exerted.
+#   MAKING WAVES Whenever this character quests, chosen opposing character gets -2 {S} this turn.
 
 [[card]]
 name = "Alice - Growing Girl"
@@ -50,6 +58,9 @@ strength = 1
 willpower = 4
 lore = 1
 classifications = ["Dreamborn", "Hero"]
+# text:
+#   GOOD ADVICE Your other characters gain Support. (Whenever they quest, you may add their {S} to another chosen character's {S} this turn.)
+#   WHAT DID I DO? While this character has 10 {S} or more, she gets +4 {L}.
 
 [[card]]
 name = "Anna - Braving the Storm"
@@ -60,6 +71,8 @@ strength = 1
 willpower = 4
 lore = 1
 classifications = ["Storyborn", "Hero", "Queen"]
+# text:
+#   I WAS BORN READY While you have another Hero character in play, this character gets +1 {L}.
 
 [[card]]
 name = "Anna - True-Hearted"
@@ -70,6 +83,8 @@ strength = 2
 willpower = 4
 lore = 2
 classifications = ["Dreamborn", "Hero", "Queen", "Knight"]
+# text:
+#   LET ME HELP YOU Whenever this character quests, your other Hero characters get +1 {L} this turn.
 
 [[card]]
 name = "Ariel - Adventurous Collector"
@@ -81,6 +96,8 @@ willpower = 3
 lore = 1
 classifications = ["Dreamborn", "Hero", "Princess"]
 keywords = ["Evasive"]
+# text:
+#   Evasive (Only characters with Evasive can challenge this character.) INSPIRING VOICE Whenever you play a song, chosen character of yours gains Evasive until the start of your next turn.
 
 [[card]]
 name = "Ariel - Determined Mermaid"
@@ -91,6 +108,8 @@ strength = 2
 willpower = 4
 lore = 1
 classifications = ["Storyborn", "Hero", "Princess"]
+# text:
+#   I WANT MORE Whenever you play a song, you may draw a card, then choose and discard a card.
 
 [[card]]
 name = "Ariel - Singing Mermaid"
@@ -102,6 +121,8 @@ willpower = 3
 lore = 2
 classifications = ["Storyborn", "Hero", "Princess"]
 keywords = ["Singer 7"]
+# text:
+#   Singer 7 (This character counts as cost 7 to sing songs.)
 
 [[card]]
 name = "Ariel - Sonic Warrior"
@@ -113,6 +134,9 @@ willpower = 8
 lore = 2
 classifications = ["Floodborn", "Hero", "Princess"]
 keywords = ["Shift 4"]
+# text:
+#   Shift 4 {I} (You may pay 4 {I} to play this on top of one of your characters named Ariel.)
+#   AMPLIFIED VOICE Whenever you play a song, you may pay 2 {I} to deal 3 damage to chosen character.
 
 [[card]]
 name = "Atlantica - Concert Hall"
@@ -122,12 +146,16 @@ inkwell = true
 move_cost = 2
 willpower = 6
 lore = 0
+# text:
+#   UNDERWATER ACOUSTICS Characters count as having +2 cost to sing songs while here.
 
 [[card]]
 name = "Aurelian Gyrosensor"
 type = "Item"
 cost = 2
 inkwell = true
+# text:
+#   SEEKING KNOWLEDGE Whenever one of your characters quests, you may look at the top card of your deck. Put it on either the top or the bottom of your deck.
 
 [[card]]
 name = "Aurora - Dreaming Guardian"
@@ -139,6 +167,9 @@ willpower = 5
 lore = 2
 classifications = ["Floodborn", "Hero", "Princess"]
 keywords = ["Shift 3"]
+# text:
+#   Shift 3 {I} (You may pay 3 {I} to play this on top of one of your characters named Aurora.)
+#   PROTECTIVE EMBRACE Your other characters gain Ward. (Opponents can't choose them except to challenge.)
 
 [[card]]
 name = "Aurora - Holding Court"
@@ -149,6 +180,8 @@ strength = 1
 willpower = 2
 lore = 1
 classifications = ["Storyborn", "Hero", "Princess"]
+# text:
+#   ROYAL WELCOME Whenever this character quests, you pay 1 {I} less for the next Princess or Queen character you play this turn.
 
 [[card]]
 name = "Aurora - Regal Princess"
@@ -170,17 +203,25 @@ willpower = 3
 lore = 1
 classifications = ["Dreamborn", "Hero", "Princess"]
 keywords = ["Ward"]
+# text:
+#   Ward (Opponents can't choose this character except to challenge.)
 
 [[card]]
 name = "Be King Undisputed"
 type = "Song"
 cost = 4
+# text:
+#   (A character with cost 4 or more can {E} to sing this song for free.)
+#   Each opponent chooses and banishes one of their characters.
 
 [[card]]
 name = "Be Our Guest"
 type = "Song"
 cost = 2
 inkwell = true
+# text:
+#   (A character with cost 2 or more can {E} to sing this song for free.)
+#   Look at the top 4 cards of your deck. You may reveal a character card and put it into your hand. Put the rest on the bottom of your deck in any order.
 
 [[card]]
 name = "Beast - Gracious Prince"
@@ -191,12 +232,16 @@ strength = 5
 willpower = 4
 lore = 1
 classifications = ["Storyborn", "Hero", "Prince"]
+# text:
+#   FULL DANCE CARD Your Princess characters get +1 {S} and +1 {W}.
 
 [[card]]
 name = "Beast's Mirror"
 type = "Item"
 cost = 2
 inkwell = true
+# text:
+#   SHOW ME {E}, 3 {I} — If you have no cards in your hand, draw a card.
 
 [[card]]
 name = "Belle - Accomplished Mystic"
@@ -208,6 +253,9 @@ willpower = 4
 lore = 2
 classifications = ["Floodborn", "Hero", "Princess", "Sorcerer"]
 keywords = ["Shift 3"]
+# text:
+#   Shift 3 {I} (You may pay 3 {I} to play this on top of one of your characters named Belle.)
+#   ENHANCED HEALING When you play this character, move up to 3 damage counters from chosen character to chosen opposing character.
 
 [[card]]
 name = "Belle - Inventive Engineer"
@@ -218,6 +266,8 @@ strength = 2
 willpower = 3
 lore = 2
 classifications = ["Dreamborn", "Hero", "Princess", "Inventor"]
+# text:
+#   TINKER Whenever this character quests, you pay 1 {I} less for the next item you play this turn.
 
 [[card]]
 name = "Belle - Untrained Mystic"
@@ -228,6 +278,8 @@ strength = 3
 willpower = 3
 lore = 1
 classifications = ["Dreamborn", "Hero", "Princess"]
+# text:
+#   HERE NOW, DON'T DO THAT When you play this character, move up to 1 damage counter from chosen character to chosen opposing character.
 
 [[card]]
 name = "Benja - Guardian of the Dragon Gem"
@@ -238,6 +290,8 @@ strength = 2
 willpower = 3
 lore = 2
 classifications = ["Storyborn", "Mentor", "King"]
+# text:
+#   WE HAVE A CHOICE When you play this character, you may banish chosen item.
 
 [[card]]
 name = "Bobby Zimuruski - Spray Cheese Kid"
@@ -248,6 +302,8 @@ strength = 1
 willpower = 2
 lore = 1
 classifications = ["Storyborn", "Ally"]
+# text:
+#   SO CHEESY When you play this character, you may draw a card, then choose and discard a card.
 
 [[card]]
 name = "Bruno Madrigal - Undetected Uncle"
@@ -259,11 +315,16 @@ willpower = 3
 lore = 1
 classifications = ["Storyborn", "Ally", "Madrigal"]
 keywords = ["Evasive"]
+# text:
+#   Evasive (Only characters with Evasive can challenge this character.)
+#   YOU JUST HAVE TO SEE IT {E} — Name a card, then reveal the top card of your deck. If it's the named card, put it into your hand and gain 3 lore. Otherwise, put it on the top of your deck.
 
 [[card]]
 name = "Bruno's Return"
 type = "Action"
 cost = 2
+# text:
+#   Return a character card from your discard to your hand. You may remove up to 2 damage from chosen character.
 
 [[card]]
 name = "Camilo Madrigal - Prankster"
@@ -274,6 +335,11 @@ strength = 2
 willpower = 5
 lore = 1
 classifications = ["Storyborn", "Ally", "Madrigal"]
+# text:
+#   MANY FORMS At the start of your turn, you may choose one:
+#   - This character gets +1 {L} this turn.
+#   - This character gains Challenger +2 this turn.
+#   (While challenging, this character gets +2 {S}.)
 
 [[card]]
 name = "Captain Hook - Captain of the Jolly Roger"
@@ -283,6 +349,8 @@ strength = 3
 willpower = 4
 lore = 1
 classifications = ["Storyborn", "Villain", "Pirate", "Captain"]
+# text:
+#   DOUBLE THE POWDER! When you play this character, you may return an action card named Fire the Cannons! from your discard to your hand.
 
 [[card]]
 name = "Card Soldiers - Full Deck"
@@ -302,6 +370,8 @@ inkwell = true
 move_cost = 1
 willpower = 6
 lore = 0
+# text:
+#   OUR HOME At the start of your turn, if you have a character here, gain 1 lore.
 
 [[card]]
 name = "Cinderella - Gentle and Kind"
@@ -313,6 +383,9 @@ willpower = 5
 lore = 2
 classifications = ["Storyborn", "Hero", "Princess"]
 keywords = ["Singer 5"]
+# text:
+#   Singer 5 (This character counts as cost 5 to sing songs.)
+#   A WONDERFUL DREAM {E} — Remove up to 3 damage from chosen Princess character.
 
 [[card]]
 name = "Circle of Life"
@@ -320,12 +393,16 @@ type = "Song"
 cost = 8
 inkwell = true
 keywords = ["Sing Together 8"]
+# text:
+#   Sing Together 8 (Any number of your or your teammates’ characters with total cost 8 or more may {E} to sing this song for free.) Play a character from your discard for free.
 
 [[card]]
 name = "Coconut Basket"
 type = "Item"
 cost = 2
 inkwell = true
+# text:
+#   CONSIDER THE COCONUT Whenever you play a character, you may remove up to 2 damage from chosen character.
 
 [[card]]
 name = "Cruella De Vil - Fashionable Cruiser"
@@ -336,6 +413,8 @@ strength = 3
 willpower = 2
 lore = 1
 classifications = ["Dreamborn", "Villain"]
+# text:
+#   NOW GET GOING During your turn, this character gains Evasive. (They can challenge characters with Evasive.)
 
 [[card]]
 name = "Cruella De Vil - Style Icon"
@@ -345,6 +424,9 @@ strength = 2
 willpower = 3
 lore = 1
 classifications = ["Storyborn", "Villain"]
+# text:
+#   OUT OF SEASON Once during your turn, whenever a character with cost 2 or less is banished, put the top card of your deck into your inkwell facedown and exerted.
+#   INSULTING REMARK During your turn, each opposing character with cost 2 or less gets -1 {S}.
 
 [[card]]
 name = "Cursed Merfolk - Ursula's Handiwork"
@@ -354,6 +436,8 @@ strength = 0
 willpower = 1
 lore = 2
 classifications = ["Storyborn"]
+# text:
+#   POOR SOULS Whenever this character is challenged, each opponent chooses and discards a card.
 
 [[card]]
 name = "Daisy Duck - Musketeer Spy"
@@ -364,6 +448,8 @@ strength = 2
 willpower = 3
 lore = 1
 classifications = ["Dreamborn", "Hero", "Musketeer"]
+# text:
+#   INFILTRATION When you play this character, each opponent chooses and discards a card.
 
 [[card]]
 name = "Daisy Duck - Secret Agent"
@@ -375,12 +461,16 @@ willpower = 3
 lore = 2
 classifications = ["Dreamborn", "Ally"]
 keywords = ["Evasive"]
+# text:
+#   THWART Whenever this character quests, each opponent chooses and discards a card.
 
 [[card]]
 name = "Develop Your Brain"
 type = "Action"
 cost = 1
 inkwell = true
+# text:
+#   Look at the top 2 cards of your deck. Put one into your hand and the other on the bottom of your deck.
 
 [[card]]
 name = "Dewey - Showy Nephew"
@@ -392,17 +482,23 @@ willpower = 3
 lore = 2
 classifications = ["Dreamborn", "Ally"]
 keywords = ["Support"]
+# text:
+#   Support (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)
 
 [[card]]
 name = "Dig a Little Deeper"
 type = "Song"
 cost = 8
 keywords = ["Sing Together 8"]
+# text:
+#   Sing Together 8 (Any number of your or your teammates’ characters with total cost 8 or more may {E} to sing this song for free.) Look at the top 7 cards of your deck. Put 2 into your hand and the rest on the bottom of your deck in any order.
 
 [[card]]
 name = "Dinner Bell"
 type = "Item"
 cost = 4
+# text:
+#   YOU KNOW WHAT HAPPENS {E}, 2 {I} — Draw cards equal to the damage on chosen character of yours, then banish them.
 
 [[card]]
 name = "Dolores Madrigal - Easy Listener"
@@ -413,6 +509,8 @@ strength = 3
 willpower = 3
 lore = 2
 classifications = ["Storyborn", "Ally", "Madrigal"]
+# text:
+#   MAGICAL INFORMANT When you play this character, if an opponent has an exerted character in play, you may draw a card.
 
 [[card]]
 name = "Donald Duck - Perfect Gentleman"
@@ -424,6 +522,9 @@ willpower = 5
 lore = 2
 classifications = ["Floodborn", "Ally"]
 keywords = ["Shift 3"]
+# text:
+#   Shift 3 {I} (You may pay 3 {I} to play this on top of one of your characters named Donald Duck.)
+#   ALLOW ME At the start of your turn, each player may draw a card.
 
 [[card]]
 name = "Donald Duck - Sleepwalker"
@@ -434,6 +535,8 @@ strength = 0
 willpower = 5
 lore = 1
 classifications = ["Storyborn"]
+# text:
+#   STARTLED AWAKE Whenever you play an action, this character gets +2 {S} this turn.
 
 [[card]]
 name = "Dumbo - Ninth Wonder of the Universe"
@@ -445,6 +548,10 @@ willpower = 3
 lore = 1
 classifications = ["Storyborn", "Hero"]
 keywords = ["Evasive"]
+# text:
+#   Evasive (Only characters with Evasive can challenge this character.)
+#   BREAKING RECORDS {E}, 1 {I} – Draw a card and gain 1 lore.
+#   MAKING HISTORY Your other characters with Evasive gain "{E}, 1 {I} – Draw a card and gain 1 lore."
 
 [[card]]
 name = "Dumbo - The Flying Elephant"
@@ -456,6 +563,9 @@ willpower = 2
 lore = 1
 classifications = ["Storyborn", "Hero"]
 keywords = ["Evasive"]
+# text:
+#   Evasive (Only characters with Evasive can challenge this character.)
+#   AERIAL DUO When you play this character, chosen character gains Evasive until the start of your next turn.
 
 [[card]]
 name = "Eeyore - Overstuffed Donkey"
@@ -467,6 +577,8 @@ willpower = 5
 lore = 1
 classifications = ["Storyborn", "Ally"]
 keywords = ["Resist 1"]
+# text:
+#   Resist +1 (Damage dealt to this character is reduced by 1.)
 
 [[card]]
 name = "Elsa - Gloves Off"
@@ -478,6 +590,8 @@ willpower = 4
 lore = 1
 classifications = ["Storyborn", "Hero", "Queen", "Sorcerer"]
 keywords = ["Challenger 3"]
+# text:
+#   Challenger +3 (While challenging, this character gets +3 {S})
 
 [[card]]
 name = "Elsa - Snow Queen"
@@ -488,6 +602,8 @@ strength = 2
 willpower = 3
 lore = 1
 classifications = ["Dreamborn", "Hero", "Queen", "Sorcerer"]
+# text:
+#   FREEZE {E} — Exert chosen opposing character.
 
 [[card]]
 name = "Elsa - Spirit of Winter"
@@ -498,6 +614,9 @@ willpower = 6
 lore = 3
 classifications = ["Floodborn", "Hero", "Queen", "Sorcerer"]
 keywords = ["Shift 6"]
+# text:
+#   Shift 6 {I} (You may pay 6 {I} to play this on top of one of your characters named Elsa.)
+#   DEEP FREEZE When you play this character, exert up to 2 chosen characters. They can’t ready at the start of their next turn.
 
 [[card]]
 name = "Enchantress - Unexpected Judge"
@@ -508,17 +627,24 @@ strength = 1
 willpower = 1
 lore = 2
 classifications = ["Dreamborn", "Sorcerer"]
+# text:
+#   TRUE FORM While being challenged, this character gets +2 {S}.
 
 [[card]]
 name = "Family Fishing Pole"
 type = "Item"
 cost = 2
 inkwell = true
+# text:
+#   WATCH CLOSELY This item enters play exerted.
+#   THE PERFECT CAST {E}, 1 {I}, Banish this item – Return chosen exerted character of yours to your hand to gain 2 lore.
 
 [[card]]
 name = "Fire the Cannons!"
 type = "Action"
 cost = 1
+# text:
+#   Deal 2 damage to chosen character.
 
 [[card]]
 name = "Flounder - Voice of Reason"
@@ -535,6 +661,9 @@ name = "Four Dozen Eggs"
 type = "Song"
 cost = 4
 inkwell = true
+# text:
+#   (A character with cost 4 or more can {E} to sing this song for free.)
+#   Your characters gain Resist +2 until the start of your next turn. (Damage dealt to them is reduced by 2.)
 
 [[card]]
 name = "Gaston - Arrogant Hunter"
@@ -546,6 +675,8 @@ willpower = 2
 lore = 0
 classifications = ["Storyborn", "Villain"]
 keywords = ["Reckless"]
+# text:
+#   Reckless (This character can't quest and must challenge each turn if able.)
 
 [[card]]
 name = "Genie - Of the Lamp"
@@ -557,6 +688,9 @@ willpower = 3
 lore = 2
 classifications = ["Dreamborn", "Ally"]
 keywords = ["Evasive"]
+# text:
+#   Evasive (Only characters with Evasive can challenge this character.)
+#   LET'S MAKE SOME MAGIC While this character is exerted, your other characters get +2 {S}.
 
 [[card]]
 name = "Genie - Supportive Friend"
@@ -566,6 +700,8 @@ strength = 3
 willpower = 5
 lore = 1
 classifications = ["Storyborn", "Ally"]
+# text:
+#   THREE WISHES Whenever this character quests, you may shuffle this card into your deck to draw 3 cards.
 
 [[card]]
 name = "Goofy - Set for Adventure"
@@ -576,6 +712,8 @@ strength = 2
 willpower = 2
 lore = 1
 classifications = ["Storyborn", "Hero"]
+# text:
+#   FAMILY VACATION Once during your turn, whenever this character moves to a location, you may move one of your other characters to that location for free. If you do, draw a card.
 
 [[card]]
 name = "Grand Pabbie - Oldest and Wisest"
@@ -585,6 +723,8 @@ strength = 3
 willpower = 6
 lore = 3
 classifications = ["Storyborn", "Mentor"]
+# text:
+#   ANCIENT INSIGHT Whenever you remove 1 or more damage from one of your characters, gain 2 lore.
 
 [[card]]
 name = "Hades - Infernal Schemer"
@@ -594,6 +734,8 @@ strength = 3
 willpower = 6
 lore = 2
 classifications = ["Dreamborn", "Villain", "Deity"]
+# text:
+#   IS THERE A DOWNSIDE TO THIS? When you play this character, you may put chosen opposing character into their player's inkwell facedown.
 
 [[card]]
 name = "Hans - Noble Scoundrel"
@@ -604,18 +746,25 @@ strength = 3
 willpower = 2
 lore = 2
 classifications = ["Storyborn", "Villain", "Prince"]
+# text:
+#   ROYAL SCHEMES When you play this character, if a Princess or Queen character is in play, gain 1 lore.
 
 [[card]]
 name = "Heal What Has Been Hurt"
 type = "Song"
 cost = 3
 inkwell = true
+# text:
+#   (A character with cost 3 or more can {E} to sing this song for free.)
+#   Remove up to 3 damage from chosen character. Draw a card.
 
 [[card]]
 name = "Heart of Te Fiti"
 type = "Item"
 cost = 3
 inkwell = true
+# text:
+#   CREATE LIFE {E}, 2 {I} — Put the top card of your deck into your inkwell facedown and exerted.
 
 [[card]]
 name = "Heihei - Bumbling Rooster"
@@ -626,6 +775,8 @@ strength = 2
 willpower = 3
 lore = 2
 classifications = ["Storyborn", "Ally"]
+# text:
+#   FATTEN YOU UP When you play this character, if an opponent has more cards in their inkwell than you, you may put the top card of your deck into your inkwell facedown and exerted.
 
 [[card]]
 name = "Hercules - Beloved Hero"
@@ -637,6 +788,9 @@ willpower = 5
 lore = 2
 classifications = ["Storyborn", "Hero", "Prince"]
 keywords = ["Bodyguard", "Resist 1"]
+# text:
+#   Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)
+#   Resist +1 (Damage dealt to this character is reduced by 1.)
 
 [[card]]
 name = "Hercules - True Hero"
@@ -648,6 +802,8 @@ willpower = 3
 lore = 1
 classifications = ["Dreamborn", "Hero", "Prince"]
 keywords = ["Bodyguard"]
+# text:
+#   Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)
 
 [[card]]
 name = "Hidden Cove - Tranquil Haven"
@@ -657,6 +813,8 @@ inkwell = true
 move_cost = 1
 willpower = 6
 lore = 0
+# text:
+#   REVITALIZING WATERS Characters get +1 {S} and +1 {W} while here.
 
 [[card]]
 name = "Huey - Savvy Nephew"
@@ -668,18 +826,26 @@ willpower = 2
 lore = 1
 classifications = ["Dreamborn", "Ally"]
 keywords = ["Support"]
+# text:
+#   Support (Whenever this character quests, you may add their {S} to another chosen character’s {S} this turn.)
+#   THREE NEPHEWS Whenever this character quests, if you have characters named Dewey and Louie in play, you may draw 3 cards.
 
 [[card]]
 name = "I Find 'Em, I Flatten 'Em"
 type = "Song"
 cost = 4
 inkwell = true
+# text:
+#   (A character with cost 4 or more can {E} to sing this song for free.)
+#   Banish all items.
 
 [[card]]
 name = "I'm Stuck!"
 type = "Action"
 cost = 1
 inkwell = true
+# text:
+#   Chosen exerted character can't ready at the start of their next turn.
 
 [[card]]
 name = "I2I"
@@ -687,12 +853,17 @@ type = "Song"
 cost = 9
 inkwell = true
 keywords = ["Sing Together 9"]
+# text:
+#   Sing Together 9 (Any number of your or your teammates’ characters with total cost 9 or more may {E} to sing this song for free.)
+#   Each player draws 2 cards and gains 2 lore. If 2 or more characters sang this song, ready them. They can’t quest for the rest of this turn.
 
 [[card]]
 name = "Improvise"
 type = "Action"
 cost = 1
 inkwell = true
+# text:
+#   Chosen character gets +1 {S} this turn. Draw a card.
 
 [[card]]
 name = "Jafar - Keeper of Secrets"
@@ -703,6 +874,8 @@ strength = 0
 willpower = 5
 lore = 2
 classifications = ["Dreamborn", "Villain", "Sorcerer"]
+# text:
+#   HIDDEN WONDERS This character gets +1 {S} for each card in your hand.
 
 [[card]]
 name = "Jafar - Lamp Thief"
@@ -713,6 +886,8 @@ strength = 2
 willpower = 2
 lore = 2
 classifications = ["Storyborn", "Villain", "Sorcerer"]
+# text:
+#   I AM YOUR MASTER NOW When you play this character, look at the top 2 cards of your deck. Put one on the top of your deck and the other on the bottom.
 
 [[card]]
 name = "Jafar - Royal Vizier"
@@ -723,6 +898,8 @@ strength = 3
 willpower = 2
 lore = 1
 classifications = ["Storyborn", "Villain", "Sorcerer"]
+# text:
+#   I DON'T TRUST HIM, SIRE During your turn, this character gains Evasive. (They can challenge characters with Evasive.)
 
 [[card]]
 name = "Jasmine - Fearless Princess"
@@ -733,6 +910,9 @@ strength = 3
 willpower = 7
 lore = 2
 classifications = ["Storyborn", "Hero", "Princess"]
+# text:
+#   TAKE THE LEAP During your turn, this character gains Evasive. (They can challenge characters with Evasive.)
+#   NOW'S MY CHANCE Choose and discard a card — This character gains Challenger +3 this turn. (They get +3 {S} while challenging.)
 
 [[card]]
 name = "Jasmine - Heir of Agrabah"
@@ -743,6 +923,8 @@ strength = 1
 willpower = 2
 lore = 1
 classifications = ["Storyborn", "Hero", "Princess"]
+# text:
+#   I'M A FAST LEARNER When you play this character, remove up to 1 damage from chosen character of yours.
 
 [[card]]
 name = "John Silver - Alien Pirate"
@@ -753,6 +935,8 @@ strength = 5
 willpower = 5
 lore = 2
 classifications = ["Storyborn", "Villain", "Alien", "Pirate", "Captain"]
+# text:
+#   PICK YOUR FIGHTS When you play this character and whenever he quests, chosen opposing character gains Reckless during their next turn. (They can't quest and must challenge if able.)
 
 [[card]]
 name = "John Silver - Greedy Treasure Seeker"
@@ -763,6 +947,8 @@ strength = 3
 willpower = 3
 lore = 1
 classifications = ["Dreamborn", "Villain", "Alien", "Pirate", "Captain"]
+# text:
+#   CHART YOUR OWN COURSE For each location you have in play, this character gains Resist +1 and gets +1 {L}. (Damage dealt to them is reduced by 1.)
 
 [[card]]
 name = "Judy Hopps - Optimistic Officer"
@@ -773,6 +959,8 @@ strength = 2
 willpower = 3
 lore = 2
 classifications = ["Storyborn", "Hero"]
+# text:
+#   DON'T CALL ME CUTE When you play this character, you may banish chosen item. If you do, its player draws a card.
 
 [[card]]
 name = "Julieta Madrigal - Excellent Cook"
@@ -783,6 +971,8 @@ strength = 1
 willpower = 4
 lore = 1
 classifications = ["Storyborn", "Mentor", "Madrigal"]
+# text:
+#   SIGNATURE RECIPE When you play this character, you may remove up to 2 damage from chosen character. If you removed damage this way, you may draw a card.
 
 [[card]]
 name = "Kuzco - Temperamental Emperor"
@@ -793,6 +983,9 @@ willpower = 4
 lore = 3
 classifications = ["Storyborn", "King"]
 keywords = ["Ward"]
+# text:
+#   Ward (Opponents can't choose this character except to challenge.)
+#   NO TOUCHY! When this character is challenged and banished, you may banish the challenging character.
 
 [[card]]
 name = "Kuzco - Wanted Llama"
@@ -803,16 +996,22 @@ strength = 1
 willpower = 2
 lore = 1
 classifications = ["Storyborn", "King"]
+# text:
+#   OK, WHERE AM I? When this character is banished, you may draw a card.
 
 [[card]]
 name = "Lantern"
 type = "Item"
 cost = 2
+# text:
+#   BIRTHDAY LIGHTS {E} — You pay 1 {I} less for the next character you play this turn.
 
 [[card]]
 name = "Last-Ditch Effort"
 type = "Action"
 cost = 3
+# text:
+#   Exert chosen opposing character. Chosen character of yours gains Challenger +2 this turn. (They get +2 {S} while challenging.)
 
 [[card]]
 name = "Lawrence - Jealous Manservant"
@@ -823,6 +1022,8 @@ strength = 0
 willpower = 4
 lore = 2
 classifications = ["Storyborn", "Ally"]
+# text:
+#   PAYBACK While this character has no damage, he gets +4 {S}.
 
 [[card]]
 name = "LeFou - Instigator"
@@ -833,6 +1034,8 @@ strength = 2
 willpower = 2
 lore = 1
 classifications = ["Dreamborn", "Ally"]
+# text:
+#   FAN THE FLAMES When you play this character, ready chosen character. They can't quest for the rest of this turn.
 
 [[card]]
 name = "Li Shang - Imperial Captain"
@@ -853,6 +1056,9 @@ strength = 2
 willpower = 2
 lore = 1
 classifications = ["Storyborn", "Hero"]
+# text:
+#   COME ON, PEOPLE, LET'S MOVE When you play this character, your other characters gain Challenger +2 this turn (They get +2 {S} while challenging.)
+#   GO GET 'EM Whenever this character quests, chosen Alien character gains Challenger +2 and "This character can challenge ready characters" this turn.
 
 [[card]]
 name = "Little John - Sir Reginald"
@@ -862,6 +1068,10 @@ strength = 2
 willpower = 2
 lore = 1
 classifications = ["Storyborn", "Ally"]
+# text:
+#   WHAT A BEAUTIFUL BRAWL! When you play this character, choose one:
+#   - Chosen Hero character gains Resist +2 this turn. (Damage dealt to them is reduced by 2.)
+#   - Deal 2 damage to chosen Villain character.
 
 [[card]]
 name = "Look at This Family"
@@ -869,12 +1079,18 @@ type = "Song"
 cost = 7
 inkwell = true
 keywords = ["Sing Together 7"]
+# text:
+#   Sing Together 7 (Any number of your or your teammates’ characters with total cost 7 or more may {E} to sing this song for free.)
+#   Look at the top 5 cards of your deck. You may reveal up to 2 character cards and put them into your hand. Put the rest on the bottom of your deck in any order.
 
 [[card]]
 name = "Lost in the Woods"
 type = "Song"
 cost = 4
 inkwell = true
+# text:
+#   (A character with cost 4 or more can {E} to sing this song for free.)
+#   All opposing characters get -2 {S} until the start of your next turn.
 
 [[card]]
 name = "Louie - Chill Nephew"
@@ -886,6 +1102,8 @@ willpower = 4
 lore = 2
 classifications = ["Dreamborn", "Ally"]
 keywords = ["Support"]
+# text:
+#   Support (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)
 
 [[card]]
 name = "Luisa Madrigal - Magically Strong One"
@@ -896,6 +1114,8 @@ willpower = 3
 lore = 1
 classifications = ["Storyborn", "Ally", "Madrigal"]
 keywords = ["Rush"]
+# text:
+#   Rush (This character can challenge the turn they're played.)
 
 [[card]]
 name = "Lumiere - Fiery Friend"
@@ -906,11 +1126,15 @@ strength = 2
 willpower = 2
 lore = 1
 classifications = ["Dreamborn", "Ally"]
+# text:
+#   FERVENT ADDRESS Your other characters get +1 {S}.
 
 [[card]]
 name = "Magic Mirror"
 type = "Item"
 cost = 2
+# text:
+#   SPEAK! {E}, 4 {I} — Draw a card.
 
 [[card]]
 name = "Maid Marian - Delightful Dreamer"
@@ -921,11 +1145,15 @@ strength = 4
 willpower = 4
 lore = 2
 classifications = ["Storyborn", "Princess"]
+# text:
+#   HIGHBORN LADY When you play this character, chosen character gets -2 {S} this turn.
 
 [[card]]
 name = "Make the Potion"
 type = "Action"
 cost = 2
+# text:
+#   Choose one: • Banish chosen item. • Deal 2 damage to chosen damaged character.
 
 [[card]]
 name = "Maleficent - Monstrous Dragon"
@@ -936,6 +1164,8 @@ strength = 7
 willpower = 5
 lore = 2
 classifications = ["Storyborn", "Villain", "Dragon"]
+# text:
+#   DRAGON FIRE When you play this character, you may banish chosen character.
 
 [[card]]
 name = "Mama Odie - Mystical Maven"
@@ -945,6 +1175,8 @@ strength = 1
 willpower = 3
 lore = 1
 classifications = ["Storyborn", "Mentor"]
+# text:
+#   THIS GOING TO BE GOOD Whenever you play a song, you may put the top card of your deck into your inkwell facedown and exerted.
 
 [[card]]
 name = "Mama Odie - Voice of Wisdom"
@@ -954,6 +1186,8 @@ strength = 3
 willpower = 6
 lore = 2
 classifications = ["Dreamborn", "Ally", "Sorcerer"]
+# text:
+#   LISTEN TO YOUR MAMA NOW Whenever this character quests, you may move up to 2 damage counters from chosen character to chosen opposing character.
 
 [[card]]
 name = "Maui - Whale"
@@ -964,6 +1198,9 @@ strength = 8
 willpower = 8
 lore = 1
 classifications = ["Storyborn", "Hero", "Deity"]
+# text:
+#   THIS MISSION IS CURSED This character can't ready at the start of your turn.
+#   I GOT YOUR BACK 2 {I} – Ready this character. He can't quest for the rest of this turn.
 
 [[card]]
 name = "Maui's Place of Exile - Hidden Island"
@@ -973,6 +1210,8 @@ inkwell = true
 move_cost = 1
 willpower = 5
 lore = 0
+# text:
+#   ISOLATED Characters gain Resist +1 while here. (Damage dealt to them is reduced by 1.)
 
 [[card]]
 name = "Max Goof - Chart Topper"
@@ -984,6 +1223,9 @@ willpower = 5
 lore = 2
 classifications = ["Floodborn", "Hero"]
 keywords = ["Shift 4"]
+# text:
+#   Shift 4 {I} (You may pay 4 {I} to play this on top of one of your characters named Max Goof.)
+#   NUMBER ONE HIT Whenever this character quests, you may play a song card with cost 4 or less from your discard for free, then put it on the bottom of your deck instead of into your discard.
 
 [[card]]
 name = "Max Goof - Rebellious Teen"
@@ -994,6 +1236,8 @@ strength = 2
 willpower = 2
 lore = 1
 classifications = ["Storyborn", "Hero"]
+# text:
+#   PERSONAL SOUNDTRACK When you play this character, you may pay 1 {I} to return a song card with cost 3 or less from your discard to your hand.
 
 [[card]]
 name = "Max Goof - Rockin' Teen"
@@ -1005,12 +1249,17 @@ willpower = 3
 lore = 1
 classifications = ["Storyborn", "Hero"]
 keywords = ["Singer 5"]
+# text:
+#   Singer 5 (This character counts as cost 5 to sing songs.)
+#   I JUST WANNA STAY HOME This character can't move to locations.
 
 [[card]]
 name = "Medallion Weights"
 type = "Item"
 cost = 2
 inkwell = true
+# text:
+#   DISCIPLINE AND STRENGTH {E}, 2 {I} — Chosen character gets +2 {S} this turn. Whenever they challenge another character this turn, you may draw a card.
 
 [[card]]
 name = "Megara - Pulling the Strings"
@@ -1021,6 +1270,8 @@ strength = 2
 willpower = 1
 lore = 1
 classifications = ["Dreamborn", "Ally"]
+# text:
+#   WONDER BOY When you play this character, chosen character gets +2 {S} this turn.
 
 [[card]]
 name = "Mickey Mouse - Brave Little Prince"
@@ -1032,6 +1283,10 @@ willpower = 2
 lore = 1
 classifications = ["Floodborn", "Hero", "Prince"]
 keywords = ["Evasive", "Shift 5"]
+# text:
+#   Shift 5 {I} (You may pay 5 {I} to play this on top of one of your characters named Mickey Mouse.)
+#   Evasive (Only characters with Evasive can challenge this character.)
+#   CROWNING ACHIEVEMENT While this character has a card under him, he gets +3 {S}, +3 {W}, and +3 {L}.
 
 [[card]]
 name = "Mickey Mouse - Standard Bearer"
@@ -1042,6 +1297,8 @@ strength = 1
 willpower = 3
 lore = 1
 classifications = ["Storyborn", "Hero"]
+# text:
+#   STAND STRONG When you play this character, chosen character gains Challenger +2 this turn. (They get +2 {S} while challenging.)
 
 [[card]]
 name = "Mickey Mouse - Steamboat Pilot"
@@ -1071,6 +1328,8 @@ strength = 0
 willpower = 1
 lore = 1
 classifications = ["Dreamborn", "Hero"]
+# text:
+#   SOUND THE CALL {E}, 2 {I} — Play a character for free.
 
 [[card]]
 name = "Minnie Mouse - Sweetheart Princess"
@@ -1081,6 +1340,9 @@ strength = 2
 willpower = 4
 lore = 2
 classifications = ["Dreamborn", "Hero", "Princess"]
+# text:
+#   ROYAL FAVOR Your characters named Mickey Mouse gain Support. (Whenever they quest, you may add their {S} to another chosen character's {S} this turn.)
+#   BYE BYE, NOW Whenever this character quests, you may banish chosen exerted character with 5 {S} or more.
 
 [[card]]
 name = "Moana - Of Motunui"
@@ -1091,6 +1353,8 @@ strength = 1
 willpower = 6
 lore = 3
 classifications = ["Storyborn", "Hero", "Princess"]
+# text:
+#   WE CAN FIX IT Whenever this character quests, you may ready your other exerted Princess characters. If you do, they can't quest for the rest of this turn.
 
 [[card]]
 name = "Moana - Undeterred Voyager"
@@ -1102,11 +1366,16 @@ willpower = 4
 lore = 1
 classifications = ["Storyborn", "Hero", "Princess"]
 keywords = ["Evasive"]
+# text:
+#   Evasive (Only characters with Evasive can challenge this character.)
 
 [[card]]
 name = "Mother Knows Best"
 type = "Song"
 cost = 3
+# text:
+#   (A character with cost 3 or more can {E} to sing this song for free.)
+#   Return chosen character to their player's hand.
 
 [[card]]
 name = "Motunui - Island Paradise"
@@ -1116,6 +1385,8 @@ inkwell = true
 move_cost = 1
 willpower = 5
 lore = 1
+# text:
+#   REINCARNATION Whenever a character is banished while here, you may put that card into your inkwell facedown and exerted.
 
 [[card]]
 name = "Mufasa - King of the Pride Lands"
@@ -1136,6 +1407,8 @@ strength = 3
 willpower = 5
 lore = 2
 classifications = ["Storyborn", "Hero", "Princess"]
+# text:
+#   IMPERIAL INVITATION Whenever this character quests, look at the top 4 cards of your deck. You may reveal a Princess character card and put it into your hand. Put the rest on the bottom of your deck in any order.
 
 [[card]]
 name = "Mulan - Elite Archer"
@@ -1147,6 +1420,10 @@ willpower = 6
 lore = 2
 classifications = ["Floodborn", "Hero", "Princess"]
 keywords = ["Shift 5"]
+# text:
+#   Shift 5 {I} (You may pay 5 {I} to play this on top of one of your characters named Mulan.)
+#   STRAIGHT SHOOTER When you play this character, if you used Shift to play her, she gets +3 {S} this turn.
+#   TRIPLE SHOT During your turn, whenever this character deals damage to another character in a challenge, deal the same amount of damage to up to 2 other chosen characters.
 
 [[card]]
 name = "Mulan - Free Spirit"
@@ -1158,6 +1435,8 @@ willpower = 3
 lore = 2
 classifications = ["Dreamborn", "Hero", "Princess"]
 keywords = ["Support"]
+# text:
+#   Support (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)
 
 [[card]]
 name = "Mulan - Injured Soldier"
@@ -1168,6 +1447,8 @@ strength = 2
 willpower = 3
 lore = 1
 classifications = ["Storyborn", "Hero", "Princess"]
+# text:
+#   BATTLE WOUND This character enters play with 2 damage.
 
 [[card]]
 name = "Nala - Undaunted Lioness"
@@ -1177,6 +1458,8 @@ strength = 0
 willpower = 2
 lore = 2
 classifications = ["Storyborn", "Ally"]
+# text:
+#   DETERMINED DIVERSION While this character has no damage, she gets +1 {L} and gains Resist +1. (Damage dealt to them is reduced by 1.)
 
 [[card]]
 name = "Nani - Protective Sister"
@@ -1188,6 +1471,8 @@ willpower = 6
 lore = 2
 classifications = ["Storyborn", "Hero"]
 keywords = ["Bodyguard"]
+# text:
+#   Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)
 
 [[card]]
 name = "Olaf - Friendly Snowman"
@@ -1203,11 +1488,17 @@ classifications = ["Storyborn", "Ally"]
 name = "One Jump Ahead"
 type = "Song"
 cost = 2
+# text:
+#   (A character with cost 2 or more can {E} to sing this song for free.)
+#   Put the top card of your deck into your inkwell facedown and exerted.
 
 [[card]]
 name = "One Last Hope"
 type = "Song"
 cost = 3
+# text:
+#   (A character with cost 3 or more can {E} to sing this song for free.)
+#   Chosen character gains Resist +2 until the start of your next turn. If a Hero character is chosen, they can also challenge ready characters this turn. (Damage dealt to them is reduced by 2.)
 
 [[card]]
 name = "P.J. Pete - Caught Up in the Music"
@@ -1218,6 +1509,8 @@ strength = 3
 willpower = 5
 lore = 1
 classifications = ["Storyborn", "Ally"]
+# text:
+#   SHOUT OUT LOUD! Whenever you play a song, this character gets +2 {S} this turn.
 
 [[card]]
 name = "Pegasus - Gift for Hercules"
@@ -1229,6 +1522,8 @@ willpower = 1
 lore = 1
 classifications = ["Storyborn", "Ally"]
 keywords = ["Evasive"]
+# text:
+#   Evasive (Only characters with Evasive can challenge this character.)
 
 [[card]]
 name = "Peter Pan's Shadow - Not Sewn On"
@@ -1239,6 +1534,10 @@ willpower = 3
 lore = 2
 classifications = ["Storyborn", "Ally"]
 keywords = ["Evasive", "Rush"]
+# text:
+#   Rush (This character can challenge the turn they're played.)
+#   Evasive (Only characters with Evasive can challenge this character.)
+#   TIPTOE Your other characters with Rush gain Evasive.
 
 [[card]]
 name = "Philoctetes - No-Nonsense Instructor"
@@ -1249,6 +1548,9 @@ strength = 2
 willpower = 3
 lore = 2
 classifications = ["Storyborn", "Ally"]
+# text:
+#   YOU GOTTA STAY FOCUSED Your Hero characters gain Challenger +1. (They get +1 {S} while challenging.)
+#   SHAMELESS PROMOTER Whenever you play a Hero character, gain 1 lore.
 
 [[card]]
 name = "Pluto - Determined Defender"
@@ -1260,6 +1562,10 @@ willpower = 8
 lore = 2
 classifications = ["Floodborn", "Ally"]
 keywords = ["Bodyguard", "Shift 5"]
+# text:
+#   Shift 5 {I} (You may pay 5 {I} to play this on top of one of your characters named Pluto.)
+#   Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)
+#   GUARD DOG At the start of your turn, remove up to 3 damage from this character.
 
 [[card]]
 name = "Pluto - Friendly Pooch"
@@ -1269,6 +1575,8 @@ strength = 0
 willpower = 2
 lore = 1
 classifications = ["Storyborn", "Ally"]
+# text:
+#   GOOD DOG {E} — You pay 1 {I} less for the next character you play this turn.
 
 [[card]]
 name = "Pluto - Rescue Dog"
@@ -1279,6 +1587,8 @@ strength = 4
 willpower = 5
 lore = 2
 classifications = ["Storyborn", "Ally"]
+# text:
+#   TO THE RESCUE When you play this character, you may remove up to 3 damage from chosen character of yours.
 
 [[card]]
 name = "Pongo - Determined Father"
@@ -1289,12 +1599,17 @@ strength = 3
 willpower = 2
 lore = 1
 classifications = ["Storyborn", "Hero"]
+# text:
+#   TWILIGHT BARK Once during your turn, you may pay 2 {I} to reveal the top card of your deck. If it's a character card, put it into your hand. Otherwise, put it on the bottom of your deck.
 
 [[card]]
 name = "Poor Unfortunate Souls"
 type = "Song"
 cost = 2
 inkwell = true
+# text:
+#   (A character with cost 2 or more can {E} to sing this song for free.)
+#   Return chosen character, item, or location with cost 2 or less to their player's hand.
 
 [[card]]
 name = "Powerline - Musical Superstar"
@@ -1305,6 +1620,8 @@ strength = 4
 willpower = 3
 lore = 1
 classifications = ["Storyborn"]
+# text:
+#   ELECTRIC MOVE If you've played a song this turn, this character gains Rush this turn. (They can challenge the turn they're played.)
 
 [[card]]
 name = "Powerline - Taking the Stage"
@@ -1316,6 +1633,8 @@ willpower = 2
 lore = 1
 classifications = ["Storyborn"]
 keywords = ["Singer 4"]
+# text:
+#   Singer 4 (This character counts as cost 4 to sing songs.)
 
 [[card]]
 name = "Powerline - World's Greatest Rock Star"
@@ -1327,6 +1646,10 @@ willpower = 4
 lore = 2
 classifications = ["Floodborn"]
 keywords = ["Shift 4"]
+# text:
+#   Shift 4 {I} (You may pay 4 {I} to play this on top of one of your characters named Powerline.)
+#   Singer 9
+#   MASH-UP Once during your turn, whenever this character sings a song, look at the top 4 cards of your deck. You may reveal a song card with cost 9 or less and play it for free. Put the rest on the bottom of your deck in any order.
 
 [[card]]
 name = "Prince Eric - Dashing and Brave"
@@ -1338,6 +1661,8 @@ willpower = 3
 lore = 1
 classifications = ["Storyborn", "Hero", "Prince"]
 keywords = ["Challenger 2"]
+# text:
+#   Challenger +2 (While challenging, this character gets +2 {S}).
 
 [[card]]
 name = "Prince Naveen - Penniless Royal"
@@ -1359,6 +1684,10 @@ willpower = 6
 lore = 3
 classifications = ["Floodborn", "Hero", "Prince"]
 keywords = ["Evasive", "Shift 6"]
+# text:
+#   Shift 6 {I} (You may pay 6 {I} to play this on top of one of your characters named Prince Phillip.)
+#   Evasive (Only characters with Evasive can challenge this character.)
+#   SWIFT AND SURE When you play this character, banish all opposing damaged characters.
 
 [[card]]
 name = "Prince Phillip - Warden of the Woods"
@@ -1368,6 +1697,8 @@ strength = 3
 willpower = 4
 lore = 2
 classifications = ["Dreamborn", "Hero", "Prince"]
+# text:
+#   SHINING BEACON Your other Hero characters gain Ward. (Opponents can’t choose them except to challenge.)
 
 [[card]]
 name = "Queen of Hearts - Impulsive Ruler"
@@ -1379,6 +1710,8 @@ willpower = 2
 lore = 1
 classifications = ["Storyborn", "Villain", "Queen"]
 keywords = ["Rush"]
+# text:
+#   Rush (This character can challenge the turn they're played.)
 
 [[card]]
 name = "Queen of Hearts - Sensing Weakness"
@@ -1390,6 +1723,9 @@ willpower = 3
 lore = 1
 classifications = ["Floodborn", "Villain", "Queen"]
 keywords = ["Shift 2"]
+# text:
+#   Shift 2 {I} (You may pay 2 {I} to play this on top of one of your characters named Queen of Hearts.)
+#   LET THE GAME BEGIN Whenever one of your characters challenges another character, you may draw a card.
 
 [[card]]
 name = "Queen of Hearts - Wonderland Empress"
@@ -1400,6 +1736,8 @@ strength = 3
 willpower = 3
 lore = 1
 classifications = ["Dreamborn", "Villain", "Queen"]
+# text:
+#   ALL WAYS HERE ARE MY WAYS Whenever this character quests, your other Villain characters get +1 {L} this turn.
 
 [[card]]
 name = "Rafiki - Mystical Fighter"
@@ -1411,6 +1749,9 @@ willpower = 2
 lore = 1
 classifications = ["Dreamborn", "Mentor", "Sorcerer"]
 keywords = ["Challenger 3"]
+# text:
+#   Challenger +3 (While challenging, this character gets +3 {S}.)
+#   ANCIENT SKILLS Whenever he challenges a Hyena character, this character takes no damage from the challenge.
 
 [[card]]
 name = "Rapunzel - Letting Down Her Hair"
@@ -1420,6 +1761,8 @@ strength = 5
 willpower = 4
 lore = 2
 classifications = ["Dreamborn", "Hero", "Princess"]
+# text:
+#   TANGLE When you play this character, each opponent loses 1 lore.
 
 [[card]]
 name = "Rapunzel - Sunshine"
@@ -1430,6 +1773,8 @@ strength = 1
 willpower = 4
 lore = 1
 classifications = ["Dreamborn", "Hero", "Princess"]
+# text:
+#   MAGIC HAIR {E} — Remove up to 2 damage from chosen character.
 
 [[card]]
 name = "Raya - Headstrong"
@@ -1440,6 +1785,8 @@ strength = 2
 willpower = 3
 lore = 1
 classifications = ["Storyborn", "Hero", "Princess"]
+# text:
+#   NOTE TO SELF, DON'T DIE During your turn, whenever this character banishes another character in a challenge, you may ready this character. If you do, she can't quest for the rest of this turn.
 
 [[card]]
 name = "Robin Hood - Capable Fighter"
@@ -1449,6 +1796,8 @@ strength = 1
 willpower = 3
 lore = 1
 classifications = ["Dreamborn", "Hero"]
+# text:
+#   SKIRMISH {E} — Deal 1 damage to chosen character.
 
 [[card]]
 name = "Robin Hood - Champion of Sherwood"
@@ -1460,6 +1809,10 @@ willpower = 6
 lore = 2
 classifications = ["Floodborn", "Hero"]
 keywords = ["Shift 3"]
+# text:
+#   Shift 3 {I} (You may pay 3 {I} to play this on top of one of your characters named Robin Hood.)
+#   SKILLED COMBATANT During your turn, whenever this character banishes another character in a challenge, gain 2 lore.
+#   THE GOOD OF OTHERS When this character is banished in a challenge, you may draw a card.
 
 [[card]]
 name = "Robin Hood - Daydreamer"
@@ -1480,12 +1833,17 @@ strength = 4
 willpower = 4
 lore = 2
 classifications = ["Storyborn", "Hero"]
+# text:
+#   FEED THE POOR When you play this character, if an opponent has more cards in their hand than you, you may draw a card.
+#   GOOD SHOT During your turn, this character gains Evasive. (They can challenge characters with Evasive.)
 
 [[card]]
 name = "Rose Lantern"
 type = "Item"
 cost = 2
 inkwell = true
+# text:
+#   MYSTICAL PETALS {E}, 2 {I} — Move 1 damage counter from chosen character to chosen opposing character.
 
 [[card]]
 name = "Roxanne - Powerline Fan"
@@ -1496,6 +1854,8 @@ strength = 2
 willpower = 3
 lore = 1
 classifications = ["Storyborn", "Ally"]
+# text:
+#   CONCERT LOVER While you have a character with Singer in play, this character gets +1 {S} and +1 {L}.
 
 [[card]]
 name = "Scar - Finally King"
@@ -1505,12 +1865,18 @@ strength = 5
 willpower = 4
 lore = 2
 classifications = ["Storyborn", "Villain", "King"]
+# text:
+#   BE GRATEFUL Your Ally characters get +1 {S}.
+#   STICK WITH ME At the end of your turn, if this character is exerted, you may draw cards equal to the {S} of chosen Ally character of yours. If you do, choose and discard 2 cards and banish that character.
 
 [[card]]
 name = "Second Star to the Right"
 type = "Song"
 cost = 10
 keywords = ["Sing Together 10"]
+# text:
+#   Sing Together 10 (Any number of your or your teammates’ characters with total cost 10 or more may {E} to sing this song for free.)
+#   Chosen player draws 5 cards.
 
 [[card]]
 name = "Sergeant Tibbs - Courageous Cat"
@@ -1531,6 +1897,9 @@ strength = 0
 willpower = 6
 lore = 1
 classifications = ["Storyborn", "Ally", "Hyena"]
+# text:
+#   I'LL HANDLE THIS While this character is at a location, she gets +3 {S}.
+#   WHAT'S THE HURRY? While this character is at a location, whenever she challenges another character, you may draw a card.
 
 [[card]]
 name = "Shere Khan - Menacing Predator"
@@ -1541,12 +1910,16 @@ strength = 3
 willpower = 3
 lore = 1
 classifications = ["Storyborn", "Villain"]
+# text:
+#   DON'T INSULT MY INTELLIGENCE Whenever one of your characters challenges another character, gain 1 lore.
 
 [[card]]
 name = "Signed Contract"
 type = "Item"
 cost = 2
 inkwell = true
+# text:
+#   FINE PRINT Whenever an opponent plays a song, you may draw a card.
 
 [[card]]
 name = "Simba - Scrappy Cub"
@@ -1566,6 +1939,9 @@ willpower = 1
 lore = 1
 classifications = ["Storyborn", "Hero", "Deity", "Dragon"]
 keywords = ["Evasive"]
+# text:
+#   Evasive (Only characters with Evasive can challenge this character.)
+#   BRING ON THE HEAT! When you play this character, banish chosen opposing character with 1 {S} or less.
 
 [[card]]
 name = "Sisu - Emboldened Warrior"
@@ -1576,18 +1952,25 @@ strength = 1
 willpower = 4
 lore = 2
 classifications = ["Storyborn", "Hero", "Deity", "Dragon"]
+# text:
+#   SURGE OF POWER This character gets +1 {S} for each card in opponents' hands.
 
 [[card]]
 name = "Smash"
 type = "Action"
 cost = 3
 inkwell = true
+# text:
+#   Deal 3 damage to chosen character.
 
 [[card]]
 name = "Stand Out"
 type = "Song"
 cost = 3
 inkwell = true
+# text:
+#   (A character with cost 3 or more can {E} to sing this song for free.)
+#   Chosen character gets +3 {S} and gains Evasive until the start of your next turn. (Only characters with Evasive can challenge them.)
 
 [[card]]
 name = "Stitch - Alien Dancer"
@@ -1608,6 +1991,8 @@ strength = 4
 willpower = 8
 lore = 2
 classifications = ["Dreamborn", "Hero", "Alien"]
+# text:
+#   OHANA When you play this character, if you have 2 or more other characters in play, you may draw 2 cards.
 
 [[card]]
 name = "Stitch - Rock Star"
@@ -1619,18 +2004,27 @@ willpower = 5
 lore = 3
 classifications = ["Floodborn", "Hero", "Alien"]
 keywords = ["Shift 4"]
+# text:
+#   Shift 4 {I} (You may pay 4 {I} to play this on top of one of your characters named Stitch.)
+#   ADORING FANS Whenever you play a character with cost 2 or less, you may exert them to draw a card.
 
 [[card]]
 name = "Strength of a Raging Fire"
 type = "Song"
 cost = 3
 inkwell = true
+# text:
+#   (A character with cost 3 or more can {E} to sing this song for free.)
+#   Deal damage to chosen character equal to the number of characters you have in play.
 
 [[card]]
 name = "Sudden Chill"
 type = "Song"
 cost = 2
 inkwell = true
+# text:
+#   (A character with cost 2 or more can {E} to sing this song for free.)
+#   Each opponent chooses and discards a card.
 
 [[card]]
 name = "Sven - Official Ice Deliverer"
@@ -1647,12 +2041,18 @@ name = "The Magic Feather"
 type = "Item"
 cost = 2
 inkwell = true
+# text:
+#   NOW YOU CAN FLY! When you play this item, choose a character of yours. While this item is in play, that character gains Evasive. (Only characters with Evasive can challenge them.)
+#   GROUNDED 3 {I} — Return this item to your hand.
 
 [[card]]
 name = "The Mob Song"
 type = "Song"
 cost = 10
 keywords = ["Sing Together 10"]
+# text:
+#   Sing Together 10 (Any number of your or your teammates’ characters with total cost 10 or more may {E} to sing this song for free.)
+#   Deal 3 damage to up to 3 chosen characters and/or locations.
 
 [[card]]
 name = "The Queen - Conceited Ruler"
@@ -1664,6 +2064,9 @@ willpower = 4
 lore = 1
 classifications = ["Storyborn", "Villain", "Queen", "Sorcerer"]
 keywords = ["Support"]
+# text:
+#   Support (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)
+#   ROYAL SUMMONS At the start of your turn, you may choose and discard a Princess or Queen character card to return a character card from your discard to your hand.
 
 [[card]]
 name = "The Queen - Mirror Seeker"
@@ -1674,6 +2077,8 @@ strength = 2
 willpower = 5
 lore = 1
 classifications = ["Storyborn", "Villain", "Queen", "Sorcerer"]
+# text:
+#   CALCULATING AND VAIN Whenever this character quests, you may look at the top 3 cards of your deck and put them back in any order.
 
 [[card]]
 name = "The Queen - Regal Monarch"
@@ -1694,6 +2099,8 @@ strength = 4
 willpower = 5
 lore = 1
 classifications = ["Storyborn", "Villain", "Queen"]
+# text:
+#   I SUMMON THEE {E} — Draw a card.
 
 [[card]]
 name = "Tiana - Diligent Waitress"
@@ -1715,6 +2122,8 @@ willpower = 7
 lore = 1
 classifications = ["Storyborn", "Ally"]
 keywords = ["Evasive"]
+# text:
+#   Evasive (Only characters with Evasive can challenge this character.)
 
 [[card]]
 name = "Timothy Q. Mouse - Flight Instructor"
@@ -1725,6 +2134,8 @@ strength = 1
 willpower = 4
 lore = 1
 classifications = ["Storyborn", "Mentor"]
+# text:
+#   LET'S SHOW 'EM, DUMBO! While you have a character with Evasive in play, this character gets +1 {L}.
 
 [[card]]
 name = "Tinker Bell - Generous Fairy"
@@ -1734,6 +2145,8 @@ strength = 1
 willpower = 4
 lore = 1
 classifications = ["Storyborn", "Ally", "Fairy"]
+# text:
+#   MAKE A NEW FRIEND When you play this character, look at the top 4 cards of your deck. You may reveal a character card and put it into your hand. Put the rest on the bottom of your deck in any order.
 
 [[card]]
 name = "Tinker Bell - Giant Fairy"
@@ -1745,6 +2158,10 @@ willpower = 5
 lore = 2
 classifications = ["Floodborn", "Ally", "Fairy"]
 keywords = ["Shift 4"]
+# text:
+#   Shift 4 {I} (You may pay 4 {I} to play this on top of one of your characters named Tinker Bell.)
+#   ROCK THE BOAT When you play this character, deal 1 damage to each opposing character.
+#   PUNY PIRATE! During your turn, whenever this character banishes another character in a challenge, you may deal 2 damage to chosen opposing character.
 
 [[card]]
 name = "Tinker Bell - Most Helpful"
@@ -1756,6 +2173,9 @@ willpower = 3
 lore = 2
 classifications = ["Storyborn", "Ally", "Fairy"]
 keywords = ["Evasive"]
+# text:
+#   Evasive (Only characters with Evasive can challenge this character.)
+#   PIXIE DUST When you play this character, chosen character gains Evasive this turn.
 
 [[card]]
 name = "Tinker Bell - Tiny Tactician"
@@ -1766,6 +2186,8 @@ strength = 2
 willpower = 4
 lore = 1
 classifications = ["Dreamborn", "Ally", "Fairy"]
+# text:
+#   BATTLE PLANS {E} — Draw a card, then choose and discard a card.
 
 [[card]]
 name = "Tuk Tuk - Lively Partner"
@@ -1777,12 +2199,17 @@ willpower = 3
 lore = 1
 classifications = ["Storyborn", "Ally"]
 keywords = ["Evasive"]
+# text:
+#   Evasive (Only characters with Evasive can challenge this character.) ON A ROLL When you play this character, you may move him and one of your other characters to the same location for free. If you do, the other character gets +2 {S} this turn.
 
 [[card]]
 name = "Under the Sea"
 type = "Song"
 cost = 8
 keywords = ["Sing Together 8"]
+# text:
+#   Sing Together 8 (Any number of your or your teammates’ characters with total cost 8 or more may {E} to sing this song for free.)
+#   Put all opposing characters with 2 {S} or less on the bottom of their players’ decks in any order.
 
 [[card]]
 name = "Ursula - Deceiver"
@@ -1793,6 +2220,8 @@ strength = 1
 willpower = 3
 lore = 1
 classifications = ["Storyborn", "Villain", "Sorcerer"]
+# text:
+#   YOU'LL NEVER EVEN MISS IT When you play this character, chosen opponent reveals their hand and discards a song card of your choice.
 
 [[card]]
 name = "Ursula - Sea Witch"
@@ -1802,6 +2231,8 @@ strength = 3
 willpower = 3
 lore = 1
 classifications = ["Dreamborn", "Villain", "Sorcerer"]
+# text:
+#   YOU'RE TOO LATE Whenever this character quests, chosen opposing character can’t ready at the start of their next turn.
 
 [[card]]
 name = "Ursula - Vanessa"
@@ -1813,6 +2244,8 @@ willpower = 4
 lore = 1
 classifications = ["Storyborn", "Villain", "Sorcerer"]
 keywords = ["Singer 4"]
+# text:
+#   Singer 4 (This character counts as cost 4 to sing songs.)
 
 [[card]]
 name = "Ursula - Voice Stealer"
@@ -1823,11 +2256,15 @@ strength = 3
 willpower = 4
 lore = 1
 classifications = ["Storyborn", "Villain", "Sorcerer"]
+# text:
+#   SING FOR ME When you play this character, exert chosen opposing ready character. Then, you may play a song with cost equal to or less than the exerted character's cost for free.
 
 [[card]]
 name = "Ursula's Shell Necklace"
 type = "Item"
 cost = 3
+# text:
+#   NOW, SING! Whenever you play a song, you may pay 1 {I} to draw a card.
 
 [[card]]
 name = "Virana - Fang Chief"
@@ -1844,6 +2281,8 @@ name = "White Rabbit's Pocket Watch"
 type = "Item"
 cost = 3
 inkwell = true
+# text:
+#   I'M LATE! {E}, 1 {I} — Chosen character gains Rush this turn. (They can challenge the turn they're played.)
 
 [[card]]
 name = "Wildcat - Mechanic"
@@ -1855,6 +2294,9 @@ willpower = 3
 lore = 1
 classifications = ["Storyborn", "Ally"]
 keywords = ["Evasive"]
+# text:
+#   Evasive (Only characters with Evasive can challenge this character.)
+#   DISASSEMBLE {E} – Banish chosen item.
 
 [[card]]
 name = "Winnie the Pooh - Having a Think"
@@ -1865,6 +2307,8 @@ strength = 2
 willpower = 3
 lore = 2
 classifications = ["Storyborn", "Hero"]
+# text:
+#   HUNNY POT Whenever this character quests, you may put a card from your hand into your inkwell facedown.
 
 [[card]]
 name = "Winnie the Pooh - Hunny Wizard"
@@ -1881,9 +2325,15 @@ name = "World's Greatest Criminal Mind"
 type = "Song"
 cost = 3
 inkwell = true
+# text:
+#   (A character with cost 3 or more can {E} to sing this song for free.)
+#   Banish chosen character with 5 {S} or more.
 
 [[card]]
 name = "You Can Fly!"
 type = "Song"
 cost = 2
 inkwell = true
+# text:
+#   (A character with cost 2 or more can {E} to sing this song for free.)
+#   Chosen character gains Evasive until the start of your next turn. (Only characters with Evasive can challenge them.)

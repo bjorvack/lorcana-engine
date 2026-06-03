@@ -180,6 +180,12 @@ def card_to_toml(card, skipped):
     keywords = map_keywords(card)
     if keywords:
         lines.append(f"keywords = {toml_str_array(keywords)}")
+    # The printed rules text, as a comment, to author the effect DSL from later.
+    text = (card.get("text") or "").strip()
+    if text:
+        lines.append("# text:")
+        for text_line in text.split("\n"):
+            lines.append(f"#   {text_line}")
     return "\n".join(lines)
 
 
