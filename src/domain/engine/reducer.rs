@@ -834,7 +834,8 @@ fn enqueue_support_trigger(
         true, // "you may"
         Effect::GiveStrengthThisTurn {
             target: Target::ChosenCharacter {
-                filter: CharacterFilter::any(TargetSide::Any).exclude_source(),
+                filter: CharacterFilter::any(TargetSide::Any)
+                    .and(CharacterFilter::negate(CharacterFilter::IsSource)),
             },
             amount: Amount::StatOf {
                 stat: Stat::Strength,
@@ -1089,17 +1090,11 @@ fn resolve_move_damage(
             move_damage(state, f, t, max);
             None
         }
-        // Pick the first unresolved endpoint, excluding the one already fixed.
-        (fixed_from, fixed_to) => {
-            let (target, already) = if fixed_from.is_none() {
-                (from, fixed_to)
-            } else {
-                (to, fixed_from)
-            };
-            let mut options = endpoint_options(state, registry, controller, source, target);
-            if let Some(other) = already {
-                options.retain(|c| *c != other);
-            }
+        // Pick the first unresolved endpoint. (Once `from` is fixed, the `to`
+        // filter already excludes it via `Not(IsCard(..))` — see substitution.)
+        (fixed_from, _) => {
+            let target = if fixed_from.is_none() { from } else { to };
+            let options = endpoint_options(state, registry, controller, source, target);
             (!options.is_empty()).then(|| Choice::ChooseMoveTarget {
                 player: controller,
                 options,
@@ -1129,9 +1124,11 @@ fn endpoint_options(
 fn substitute_move_endpoint(effect: &Effect, chosen: CardId) -> Effect {
     if let Effect::MoveDamage { from, to, amount } = effect {
         if is_chosen_target(from) {
+            // Fixing `from`: constrain the still-to-pick `to` to exclude it, so the
+            // two endpoints can't be the same card (via the filter, §9.3).
             Effect::MoveDamage {
                 from: Target::Card(chosen),
-                to: to.clone(),
+                to: exclude_card_from_target(to, chosen),
                 amount: amount.clone(),
             }
         } else {
@@ -1143,6 +1140,19 @@ fn substitute_move_endpoint(effect: &Effect, chosen: CardId) -> Effect {
         }
     } else {
         effect.clone()
+    }
+}
+
+/// Add a `Not(IsCard(card))` predicate to a chosen-character target's filter
+/// (so a later pick can't reselect an already-resolved card).
+fn exclude_card_from_target(target: &Target, card: CardId) -> Target {
+    match target {
+        Target::ChosenCharacter { filter } => Target::ChosenCharacter {
+            filter: filter
+                .clone()
+                .and(CharacterFilter::negate(CharacterFilter::IsCard(card))),
+        },
+        other => other.clone(),
     }
 }
 

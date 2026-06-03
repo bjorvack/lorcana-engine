@@ -62,7 +62,8 @@ fn granted_quest_trigger_fires_when_the_target_quests() {
                 TriggerCondition::WhenThisQuests,
                 Effect::GrantAbilityThisTurn {
                     target: Target::ChosenCharacter {
-                        filter: CharacterFilter::any(TargetSide::Yours).exclude_source(),
+                        filter: CharacterFilter::any(TargetSide::Yours)
+                            .and(CharacterFilter::negate(CharacterFilter::IsSource)),
                     },
                     condition: TriggerCondition::WhenThisQuests,
                     effect: Box::new(Effect::Lore {

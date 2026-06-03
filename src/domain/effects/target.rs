@@ -121,16 +121,10 @@ impl CharacterFilter {
         }
     }
 
-    /// Exclude the effect's source card ("another …").
+    /// Negate a filter (`Not`), boxing for you.
     #[must_use]
-    pub fn exclude_source(self) -> Self {
-        self.and(Self::Not(Box::new(Self::IsSource)))
-    }
-
-    /// Exclude a specific card (e.g. an already-chosen endpoint).
-    #[must_use]
-    pub fn excluding(self, card: CardId) -> Self {
-        self.and(Self::Not(Box::new(Self::IsCard(card))))
+    pub fn negate(inner: Self) -> Self {
+        Self::Not(Box::new(inner))
     }
 }
 

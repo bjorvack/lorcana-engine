@@ -175,7 +175,8 @@ fn remove_damage_heals_a_chosen_character() {
                 TriggerCondition::WhenThisQuests,
                 Effect::RemoveDamage {
                     target: Target::ChosenCharacter {
-                        filter: CharacterFilter::any(TargetSide::Yours).exclude_source(),
+                        filter: CharacterFilter::any(TargetSide::Yours)
+                            .and(CharacterFilter::negate(CharacterFilter::IsSource)),
                     },
                     amount: Amount::fixed(2),
                 },
@@ -536,7 +537,8 @@ fn all_your_other_characters_excludes_the_source() {
                 TriggerCondition::WhenThisQuests,
                 Effect::GiveStrengthThisTurn {
                     target: Target::AllCharacters {
-                        filter: CharacterFilter::any(TargetSide::Yours).exclude_source(),
+                        filter: CharacterFilter::any(TargetSide::Yours)
+                            .and(CharacterFilter::negate(CharacterFilter::IsSource)),
                     },
                     amount: Amount::fixed(1),
                 },
@@ -689,7 +691,8 @@ fn conditional_buffer(def: u32) -> CardDefinition {
             TriggerCondition::WhenThisQuests,
             Effect::IfTargetMatches {
                 target: Target::ChosenCharacter {
-                    filter: CharacterFilter::any(TargetSide::Any).exclude_source(),
+                    filter: CharacterFilter::any(TargetSide::Any)
+                        .and(CharacterFilter::negate(CharacterFilter::IsSource)),
                 },
                 filter: CharacterFilter::any(TargetSide::Any).and(CharacterFilter::Classification(
                     Classification::new("Villain"),
@@ -1110,7 +1113,8 @@ fn move_damage_from_chosen_onto_this_character() {
                 TriggerCondition::WhenThisQuests,
                 Effect::MoveDamage {
                     from: Target::ChosenCharacter {
-                        filter: CharacterFilter::any(TargetSide::Any).exclude_source(),
+                        filter: CharacterFilter::any(TargetSide::Any)
+                            .and(CharacterFilter::negate(CharacterFilter::IsSource)),
                     },
                     to: Target::SelfCard,
                     amount: Amount::fixed(2),
@@ -1169,7 +1173,8 @@ fn move_damage_between_two_chosen_characters() {
                 TriggerCondition::WhenThisQuests,
                 Effect::MoveDamage {
                     from: Target::ChosenCharacter {
-                        filter: CharacterFilter::any(TargetSide::Yours).exclude_source(),
+                        filter: CharacterFilter::any(TargetSide::Yours)
+                            .and(CharacterFilter::negate(CharacterFilter::IsSource)),
                     },
                     to: Target::ChosenCharacter {
                         filter: CharacterFilter::any(TargetSide::Opposing),
@@ -1240,10 +1245,12 @@ fn move_damage_second_pick_excludes_the_first() {
                 TriggerCondition::WhenThisQuests,
                 Effect::MoveDamage {
                     from: Target::ChosenCharacter {
-                        filter: CharacterFilter::any(TargetSide::Yours).exclude_source(),
+                        filter: CharacterFilter::any(TargetSide::Yours)
+                            .and(CharacterFilter::negate(CharacterFilter::IsSource)),
                     },
                     to: Target::ChosenCharacter {
-                        filter: CharacterFilter::any(TargetSide::Yours).exclude_source(),
+                        filter: CharacterFilter::any(TargetSide::Yours)
+                            .and(CharacterFilter::negate(CharacterFilter::IsSource)),
                     },
                     amount: Amount::fixed(2),
                 },

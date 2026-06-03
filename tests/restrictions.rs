@@ -203,7 +203,8 @@ fn an_effect_can_grant_a_permission_to_a_chosen_character() {
                 TriggerCondition::WhenThisQuests,
                 Effect::PermitThisTurn {
                     target: Target::ChosenCharacter {
-                        filter: CharacterFilter::any(TargetSide::Yours).exclude_source(),
+                        filter: CharacterFilter::any(TargetSide::Yours)
+                            .and(CharacterFilter::negate(CharacterFilter::IsSource)),
                     },
                     permission: Permission::ChallengeReady,
                 },

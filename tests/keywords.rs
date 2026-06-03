@@ -620,14 +620,15 @@ fn effect_granted_challenger_adds_strength_in_a_challenge() {
     let mut registry = CardRegistry::new();
     // Quester grants "Challenger +3 this turn" to another chosen character of yours.
     registry.insert(char_def(101).with_abilities(vec![TriggeredAbility::new(
-        TriggerCondition::WhenThisQuests,
-        Effect::GrantKeywordThisTurn {
-            target: Target::ChosenCharacter {
-                filter: CharacterFilter::any(TargetSide::Yours).exclude_source(),
+            TriggerCondition::WhenThisQuests,
+            Effect::GrantKeywordThisTurn {
+                target: Target::ChosenCharacter {
+                    filter: CharacterFilter::any(TargetSide::Yours)
+                        .and(CharacterFilter::negate(CharacterFilter::IsSource)),
+                },
+                keyword: Keyword::Challenger(3),
             },
-            keyword: Keyword::Challenger(3),
-        },
-    )]));
+        )]));
     registry.insert(char_def(100)); // the challenger
     registry.insert(char_def(200)); // the target
     let mut state = started(&registry);
@@ -744,15 +745,16 @@ fn your_own_warded_character_can_be_chosen_by_your_own_effect() {
     // Warded character ("deal damage to chosen character of yours", 75 cards).
     let mut registry = CardRegistry::new();
     registry.insert(char_def(100).with_abilities(vec![TriggeredAbility::new(
-        TriggerCondition::WhenThisQuests,
-        Effect::DealDamage {
-            target: Target::ChosenCharacter {
-                // exclude the quester, leaving only the Warded ally
-                filter: CharacterFilter::any(TargetSide::Yours).exclude_source(),
+            TriggerCondition::WhenThisQuests,
+            Effect::DealDamage {
+                target: Target::ChosenCharacter {
+                    // exclude the quester, leaving only the Warded ally
+                    filter: CharacterFilter::any(TargetSide::Yours)
+                        .and(CharacterFilter::negate(CharacterFilter::IsSource)),
+                },
+                amount: Amount::fixed(1),
             },
-            amount: Amount::fixed(1),
-        },
-    )]));
+        )]));
     registry.insert(char_def(200).with_keywords(vec![Keyword::Ward]));
     let mut state = started(&registry);
     let active = state.active_player();
