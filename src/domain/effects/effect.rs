@@ -359,8 +359,11 @@ pub enum Effect {
     /// Resolve `then` only if the controller has at least one in-play character
     /// matching `filter` ("if you have a character named X in play, …", §7.1).
     IfControl {
-        /// The board condition: the controller must have a matching character.
+        /// The board condition: the controller must have matching characters.
         filter: CharacterFilter,
+        /// How many matching characters are required ("if you have N or more …").
+        /// `1` is plain "if you have a …".
+        at_least: u32,
         /// The effect to resolve when the condition holds.
         then: Box<Self>,
     },

@@ -752,7 +752,9 @@ look-top/reveal 158, complex selectors 151).
 - [x] **Permanent keyword/property grants** — `Effect::Grant { target, property }`
   + `ModifierDuration::Permanent` (cleared when the target leaves play); DSL
   `grant_keyword … duration = "permanent"`. (top blocker: 180 cards)
-- [ ] look-top/reveal variants; count-threshold conditionals; second authoring pass.
+- [x] **Count-threshold conditionals** — `IfControl` gains `at_least: u32`
+  ("if you have N or more …"); DSL `if_you_have = "<filter>", at_least = N`.
+- [ ] look-top/reveal variants; ongoing authoring passes.
 
 ## Slice 9 — Real card data & conformance suite
 

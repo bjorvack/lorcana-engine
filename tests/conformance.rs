@@ -940,3 +940,56 @@ fn a_permanent_keyword_grant_persists_across_end_of_turn() {
         "Evasive persists into the next turn (not a this-turn grant)"
     );
 }
+
+/// §7.1 — a count-threshold conditional ("if you have N or more …") fires only
+/// when the controller has at least N matching characters.
+#[test]
+fn count_threshold_conditional_gates_on_how_many_you_have() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Rallier"
+        type = "Character"
+        cost = 1
+        strength = 1
+        willpower = 5
+        lore = 1
+        [[card.abilities]]
+        on = "quest"
+        do = { if_you_have = "your characters", at_least = 3, then = { gain_lore = 3 } }
+        [[card]]
+        name = "Friend"
+        type = "Character"
+        cost = 1
+        strength = 1
+        willpower = 5
+        lore = 1
+        "#,
+    );
+
+    // Rallier + 1 friend = 2 of your characters < 3 -> threshold not met.
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let rallier = place(&mut state, me, 100, 0, 1, 5, true);
+    let _f1 = place(&mut state, me, 101, 1, 1, 5, true);
+    let before = lore(&state, me);
+    let _ = apply(&mut state, &reg, Input::Quest { character: rallier }).expect("quest");
+    assert_eq!(
+        lore(&state, me),
+        before + 1,
+        "threshold not met -> only quest lore"
+    );
+
+    // Rallier + 2 friends = 3 -> threshold met -> +3 bonus.
+    let mut state2 = started(&reg);
+    let r2 = place(&mut state2, me, 100, 0, 1, 5, true);
+    let _a = place(&mut state2, me, 101, 1, 1, 5, true);
+    let _b = place(&mut state2, me, 102, 1, 1, 5, true);
+    let before2 = lore(&state2, me);
+    let _ = apply(&mut state2, &reg, Input::Quest { character: r2 }).expect("quest");
+    assert_eq!(
+        lore(&state2, me),
+        before2 + 1 + 3,
+        "threshold met -> bonus lore"
+    );
+}

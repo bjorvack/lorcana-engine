@@ -2525,9 +2525,13 @@ fn execute_effect(
         }
         // Conditional: resolve `then` only if the controller has a matching
         // in-play character. `then` may itself be targeted (delegated).
-        Effect::IfControl { filter, then } => {
-            let controls = !matching_characters(state, controller, source, filter).is_empty();
-            if controls {
+        Effect::IfControl {
+            filter,
+            at_least,
+            then,
+        } => {
+            let count = matching_characters(state, controller, source, filter).len();
+            if count >= *at_least as usize {
                 return execute_effect(state, registry, controller, source, then, events);
             }
         }

@@ -304,6 +304,7 @@ fn the_dsl_supports_dynamic_amounts_conditionals_and_static_per_while() {
         mal.abilities()[0].effect,
         Effect::IfControl {
             filter: villains(),
+            at_least: 1,
             then: Box::new(Effect::Lore {
                 who: PlayerScope::You,
                 amount: Amount::PerMatchingCharacter(villains()),

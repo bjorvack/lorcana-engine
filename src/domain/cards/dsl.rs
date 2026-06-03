@@ -187,8 +187,14 @@ fn effect_from_table(t: &toml::Table) -> Result<Effect, String> {
         let then = t
             .get("then")
             .ok_or_else(|| "`if_you_have` needs a `then` effect".to_string())?;
+        let at_least = t
+            .get("at_least")
+            .and_then(Value::as_integer)
+            .and_then(|n| u32::try_from(n).ok())
+            .unwrap_or(1);
         Ok(Effect::IfControl {
             filter,
+            at_least,
             then: Box::new(effect_from_value(then)?),
         })
     } else if let Some(Value::String(kw)) = t.get("grant_keyword") {

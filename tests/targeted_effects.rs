@@ -571,6 +571,7 @@ fn conditional_quester(def: u32) -> CardDefinition {
             Effect::IfControl {
                 filter: CharacterFilter::any(TargetSide::Yours)
                     .and(CharacterFilter::Named("Elsa".to_string())),
+                at_least: 1,
                 then: Box::new(Effect::Lore {
                     who: PlayerScope::You,
                     amount: Amount::fixed(3),
