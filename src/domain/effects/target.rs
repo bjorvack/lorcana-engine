@@ -163,14 +163,12 @@ pub enum Target {
         /// The maximum number that may be chosen.
         max: u32,
     },
-    /// A single in-play item the controller chooses ("banish chosen item", §6.4).
-    ChosenItem {
-        /// Which side the item may be on.
-        side: TargetSide,
-    },
-    /// A single in-play location the controller chooses ("chosen location", §6.5).
-    ChosenLocation {
-        /// Which side the location may be on.
-        side: TargetSide,
+    /// A single in-play **permanent** (character / item / location) the controller
+    /// chooses, described by the filter algebra — e.g. "chosen item" is
+    /// `Category(Item)`, "chosen opposing location" is
+    /// `And([Side(Opposing), Category(Location)])` (§6.4, §6.5).
+    ChosenPermanent {
+        /// Which permanents are eligible to be chosen.
+        filter: CharacterFilter,
     },
 }

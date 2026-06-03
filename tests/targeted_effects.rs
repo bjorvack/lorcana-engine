@@ -342,8 +342,8 @@ fn an_item_can_be_chosen_and_banished() {
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 5, 1).with_abilities(vec![
             TriggeredAbility::new(
                 TriggerCondition::WhenThisQuests,
-                Effect::Banish(Target::ChosenItem {
-                    side: TargetSide::Any,
+                Effect::Banish(Target::ChosenPermanent {
+                    filter: CharacterFilter::Category(CardCategory::Item),
                 }),
             ),
         ]),

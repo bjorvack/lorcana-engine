@@ -2528,55 +2528,40 @@ fn resolve_targeted(
             let options = choosable_characters(state, registry, controller, source, filter);
             (!options.is_empty()).then(|| choose_up_to(controller, options, *max, effect))
         }
-        Target::ChosenItem { side } => {
-            let options = chosen_permanent_options(state, controller, *side, PermanentKind::Item);
-            (!options.is_empty()).then(|| choose_one(controller, options, effect))
-        }
-        Target::ChosenLocation { side } => {
-            let options =
-                chosen_permanent_options(state, controller, *side, PermanentKind::Location);
+        Target::ChosenPermanent { filter } => {
+            let options = choosable_permanents(state, registry, controller, source, filter);
             (!options.is_empty()).then(|| choose_one(controller, options, effect))
         }
     }
 }
 
-/// A non-character permanent kind that can be a target.
-#[derive(Clone, Copy)]
-enum PermanentKind {
-    Item,
-    Location,
-}
-
-/// The in-play items / locations on the given `side` (relative to `controller`).
-fn chosen_permanent_options(
+/// The in-play **permanents** (characters / items / locations) `controller` may
+/// choose for a [`Target::ChosenPermanent`]: every in-play card matching the
+/// filter algebra, minus those an opponent can't choose (Ward, §10.15). Unlike
+/// [`choosable_characters`] there is no character gate — the filter's `Category`
+/// predicate decides the kind.
+fn choosable_permanents(
     state: &GameState,
+    registry: &CardRegistry,
     controller: PlayerId,
-    side: TargetSide,
-    kind: PermanentKind,
+    source: CardId,
+    filter: &CharacterFilter,
 ) -> Vec<CardId> {
     let mut out = Vec::new();
     for player in state.players() {
-        let is_yours = player.id() == controller;
-        let side_ok = match side {
-            TargetSide::Any => true,
-            TargetSide::Yours => is_yours,
-            TargetSide::Opposing => !is_yours,
-        };
-        if !side_ok {
-            continue;
-        }
+        let owner = player.id();
         for card in player.play().iter() {
-            let matches = match kind {
-                // An item is an in-play card that is neither a character nor a location.
-                PermanentKind::Item => !card.is_character() && !card.is_location(),
-                PermanentKind::Location => card.is_location(),
-            };
-            if matches {
+            if state.matches_filter(controller, source, owner, card, filter) {
                 out.push(card.id());
             }
         }
     }
-    out
+    out.into_iter()
+        .filter(|&card| {
+            state.card_owner_in_play(card) == Some(controller)
+                || !has_restriction(state, registry, card, Restriction::CantBeChosen)
+        })
+        .collect()
 }
 
 /// Map a move [`Destination`] to the internal self-move destination.
