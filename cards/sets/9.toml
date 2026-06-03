@@ -235,6 +235,14 @@ classifications = ["Storyborn", "Hero", "Prince"]
 # text:
 #   FULL DANCE CARD Your Princess characters get +1 {S} and +1 {W}.
 
+[[card.statics]]
+strength = 1
+to = "your Princess characters"
+
+[[card.statics]]
+willpower = 1
+to = "your Princess characters"
+
 [[card]]
 name = "Beast's Mirror"
 type = "Item"
@@ -308,6 +316,11 @@ lore = 1
 classifications = ["Storyborn", "Ally"]
 # text:
 #   SO CHEESY When you play this character, you may draw a card, then choose and discard a card.
+
+[[card.abilities]]
+on = "play"
+may = true
+do = [{ draw = 1 }, { discard = 1 }]
 
 [[card]]
 name = "Bruno Madrigal - Undetected Uncle"
@@ -468,6 +481,10 @@ keywords = ["Evasive"]
 # text:
 #   THWART Whenever this character quests, each opponent chooses and discards a card.
 
+[[card.abilities]]
+on = "quest"
+do = { discard = 1, who = "each opponent" }
+
 [[card]]
 name = "Develop Your Brain"
 type = "Action"
@@ -609,6 +626,10 @@ classifications = ["Dreamborn", "Hero", "Queen", "Sorcerer"]
 # text:
 #   FREEZE {E} — Exert chosen opposing character.
 
+[[card.activated]]
+cost = { exert = true }
+do = { exert = "chosen opposing character" }
+
 [[card]]
 name = "Elsa - Spirit of Winter"
 type = "Character"
@@ -698,6 +719,11 @@ keywords = ["Evasive"]
 # text:
 #   Evasive (Only characters with Evasive can challenge this character.)
 #   LET'S MAKE SOME MAGIC While this character is exerted, your other characters get +2 {S}.
+
+[[card.statics]]
+strength = 2
+to = "your other characters"
+while = "exerted"
 
 [[card]]
 name = "Genie - Supportive Friend"
@@ -871,6 +897,10 @@ cost = 1
 inkwell = true
 # text:
 #   Chosen character gets +1 {S} this turn. Draw a card.
+
+[[card.abilities]]
+on = "play"
+do = [{ give_strength = 1, to = "chosen character" }, { draw = 1 }]
 
 [[card]]
 name = "Jafar - Keeper of Secrets"
@@ -1145,6 +1175,10 @@ type = "Item"
 cost = 2
 # text:
 #   SPEAK! {E}, 4 {I} — Draw a card.
+
+[[card.activated]]
+cost = { exert = true, ink = 4 }
+do = { draw = 1 }
 
 [[card]]
 name = "Maid Marian - Delightful Dreamer"
@@ -1822,6 +1856,10 @@ classifications = ["Dreamborn", "Hero"]
 # text:
 #   SKIRMISH {E} — Deal 1 damage to chosen character.
 
+[[card.activated]]
+cost = { exert = true }
+do = { deal_damage = 1, to = "chosen character" }
+
 [[card]]
 name = "Robin Hood - Champion of Sherwood"
 type = "Character"
@@ -1891,6 +1929,10 @@ classifications = ["Storyborn", "Villain", "King"]
 # text:
 #   BE GRATEFUL Your Ally characters get +1 {S}.
 #   STICK WITH ME At the end of your turn, if this character is exerted, you may draw cards equal to the {S} of chosen Ally character of yours. If you do, choose and discard 2 cards and banish that character.
+
+[[card.statics]]
+strength = 1
+to = "your Ally characters"
 
 [[card]]
 name = "Second Star to the Right"
@@ -1965,6 +2007,10 @@ keywords = ["Evasive"]
 # text:
 #   Evasive (Only characters with Evasive can challenge this character.)
 #   BRING ON THE HEAT! When you play this character, banish chosen opposing character with 1 {S} or less.
+
+[[card.abilities]]
+on = "play"
+do = { banish = "chosen opposing character with 1 {S} or less" }
 
 [[card]]
 name = "Sisu - Emboldened Warrior"
@@ -2206,6 +2252,10 @@ keywords = ["Evasive"]
 #   Evasive (Only characters with Evasive can challenge this character.)
 #   PIXIE DUST When you play this character, chosen character gains Evasive this turn.
 
+[[card.abilities]]
+on = "play"
+do = { grant_keyword = "Evasive", to = "chosen character" }
+
 [[card]]
 name = "Tinker Bell - Tiny Tactician"
 type = "Character"
@@ -2217,6 +2267,10 @@ lore = 1
 classifications = ["Dreamborn", "Ally", "Fairy"]
 # text:
 #   BATTLE PLANS {E} — Draw a card, then choose and discard a card.
+
+[[card.activated]]
+cost = { exert = true }
+do = [{ draw = 1 }, { discard = 1 }]
 
 [[card]]
 name = "Tuk Tuk - Lively Partner"
@@ -2313,6 +2367,10 @@ inkwell = true
 # text:
 #   I'M LATE! {E}, 1 {I} — Chosen character gains Rush this turn. (They can challenge the turn they're played.)
 
+[[card.activated]]
+cost = { exert = true, ink = 1 }
+do = { grant_keyword = "Rush", to = "chosen character" }
+
 [[card]]
 name = "Wildcat - Mechanic"
 type = "Character"
@@ -2326,6 +2384,10 @@ keywords = ["Evasive"]
 # text:
 #   Evasive (Only characters with Evasive can challenge this character.)
 #   DISASSEMBLE {E} – Banish chosen item.
+
+[[card.activated]]
+cost = { exert = true }
+do = { banish = "chosen item" }
 
 [[card]]
 name = "Winnie the Pooh - Having a Think"

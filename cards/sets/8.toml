@@ -625,6 +625,11 @@ classifications = ["Storyborn", "Ally", "Pirate"]
 # text:
 #   LET ME AT 'EM When you play this character, you may deal 1 damage to chosen character.
 
+[[card.abilities]]
+on = "play"
+may = true
+do = { deal_damage = 1, to = "chosen character" }
+
 [[card]]
 name = "Elsa - Fierce Protector"
 type = "Character"
@@ -926,6 +931,10 @@ cost = 3
 inkwell = true
 # text:
 #   Banish chosen item. Draw a card.
+
+[[card.abilities]]
+on = "play"
+do = [{ banish = "chosen item" }, { draw = 1 }]
 
 [[card]]
 name = "Heads Held High"
@@ -1599,6 +1608,10 @@ classifications = ["Storyborn", "Ally", "Dragon"]
 # text:
 #   LET'S GET THIS SHOW ON THE ROAD {E} — Chosen character gains Rush this turn. (They can challenge the turn they're played.)
 
+[[card.activated]]
+cost = { exert = true }
+do = { grant_keyword = "Rush", to = "chosen character" }
+
 [[card]]
 name = "Mushu - Your Worst Nightmare"
 type = "Character"
@@ -1801,6 +1814,10 @@ inkwell = true
 # text:
 #   Chosen character gets -2 {S} this turn. Chosen character of yours gains Evasive this turn. (They can challenge characters with Evasive.)
 
+[[card.abilities]]
+on = "play"
+do = [{ give_strength = -2, to = "chosen character" }, { grant_keyword = "Evasive", to = "chosen character of yours" }]
+
 [[card]]
 name = "Prince Achmed - Rival Suitor"
 type = "Character"
@@ -1874,6 +1891,10 @@ type = "Action"
 cost = 2
 # text:
 #   Deal 1 damage to chosen character. Draw a card.
+
+[[card.abilities]]
+on = "play"
+do = [{ deal_damage = 1, to = "chosen character" }, { draw = 1 }]
 
 [[card]]
 name = "Rapunzel - High Climber"
@@ -2355,6 +2376,10 @@ lore = 1
 classifications = ["Storyborn", "Hero", "Racer"]
 # text:
 #   CHARGED UP When you play this character, chosen Racer character gets +4 {S} this turn.
+
+[[card.abilities]]
+on = "play"
+do = { give_strength = 4, to = "chosen Racer character" }
 
 [[card]]
 name = "Wreck-It Ralph - Big Lug"

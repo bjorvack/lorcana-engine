@@ -511,6 +511,10 @@ inkwell = true
 # text:
 #   Chosen character gets -2 {S} this turn. Draw a card.
 
+[[card.abilities]]
+on = "play"
+do = [{ give_strength = -2, to = "chosen character" }, { draw = 1 }]
+
 [[card]]
 name = "Do You Want to Build A Snowman?"
 type = "Song"
@@ -726,6 +730,10 @@ lore = 1
 classifications = ["Storyborn", "Alien", "Captain"]
 # text:
 #   EASY TARGET When you play this character, choose and discard a card.
+
+[[card.abilities]]
+on = "play"
+do = { discard = 1 }
 
 [[card]]
 name = "Genie - Magical Researcher"
@@ -1168,6 +1176,10 @@ lore = 2
 classifications = ["Storyborn", "Ally"]
 # text:
 #   BUILDING MUSCLES 1 {I} — Chosen character gets +1 {S} this turn.
+
+[[card.activated]]
+cost = { ink = 1 }
+do = { give_strength = 1, to = "chosen character" }
 
 [[card]]
 name = "Liquidator - Iced Over"
@@ -1728,6 +1740,10 @@ cost = 8
 # text:
 #   Banish all characters.
 
+[[card.abilities]]
+on = "play"
+do = { banish = "all characters" }
+
 [[card]]
 name = "Rapunzel - Ethereal Protector"
 type = "Character"
@@ -1890,6 +1906,10 @@ cost = 3
 # text:
 #   THE HIGH GROUND Your characters get +1 {S}.
 #   BARRICADE During opponents' turns, your characters gain Resist +1. (Damage dealt to them is reduced by 1.)
+
+[[card.statics]]
+strength = 1
+to = "your characters"
 
 [[card]]
 name = "Snowball Fight"
