@@ -112,6 +112,10 @@ pub enum Restriction {
     CantChallenge,
     /// The character/location can't be challenged ("can't be challenged while here").
     CantBeChallenged,
+    /// The card can't be **chosen** by an opponent's abilities/effects (Ward,
+    /// §10.15; or an effect-granted "can't be chosen this turn"). Challenges are
+    /// unaffected.
+    CantBeChosen,
     /// The character takes no damage from challenges (a §7.7 damage replacement —
     /// "takes no damage from challenges this turn", Noi / Nothing We Won't Do).
     TakesNoChallengeDamage,

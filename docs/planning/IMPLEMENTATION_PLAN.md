@@ -641,11 +641,17 @@ mechanics ranked by card count, with the remaining gaps to close in order:
       `MayResolveEffect`, reusable by any effect) rather than a per-effect flag.
       `tests/targeted_effects.rs`. **Remaining:** play from **discard**,
       cost-reduction (pay N less) alternate costs, free-played Bodyguard enter-exerted.
-- [x] **Ward / can't be chosen** (§10.15) — `chosen_character_options` excludes an
-      opponent's Warded characters (granted Ward counts too), so effects can't
-      target them; challenges still go through `can_challenge` unaffected.
-      `tests/keywords.rs`. (Ward on items/locations: minor follow-up — needs
-      registry threaded into `chosen_permanent_options`.)
+- [x] **Ward / can't be chosen** (§10.15) — modeled as `Restriction::CantBeChosen`
+      (Ward keyword maps to it via `has_restriction`, so effect-granted Ward works
+      too). Targeting splits into `matching_characters` (raw) and
+      `choosable_characters` (matching minus what an opponent can't choose); only
+      the *choosing* targets (`ChosenCharacter`/`UpToCharacters`) use the latter, so
+      Ward blocks *choosing* but not *all-characters* effects, and never your own
+      controller (§1.2.3). Challenges go through `can_challenge`, unaffected.
+      Conformance: `tests/keywords.rs` (choose/all/own/up-to) + `tests/actions.rs`
+      (§1.2.3 "deal damage to chosen char, draw" with a Warded target still draws).
+      (Ward on items/locations: minor follow-up — needs registry in
+      `chosen_permanent_options`.)
 - [ ] **reveal** (69) — reveal hand / top of deck; often gates a follow-up.
 - [ ] **search / look at top N** (59) — scry/tutor: look, take matching, reorder.
 - [ ] **freeze / "can't ready next turn"** (38) — an exert that skips the next

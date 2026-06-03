@@ -1089,6 +1089,8 @@ fn has_restriction(
     }
     match restriction {
         Restriction::CantQuest => character_has_keyword(state, registry, card, &Keyword::Reckless),
+        // Ward ⇒ can't be chosen by opponents (§10.15).
+        Restriction::CantBeChosen => character_has_keyword(state, registry, card, &Keyword::Ward),
         Restriction::CantChallenge
         | Restriction::CantBeChallenged
         | Restriction::TakesNoChallengeDamage => false,
@@ -2113,8 +2115,7 @@ fn execute_effect(
         // in-play character. `then` may itself be targeted (delegated).
         Effect::IfControl { filter, then } => {
             let controls =
-                !chosen_character_options(state, registry, controller, source, filter, false)
-                    .is_empty();
+                !matching_characters(state, registry, controller, source, filter, false).is_empty();
             if controls {
                 return execute_effect(state, registry, controller, source, then, events);
             }
@@ -2158,23 +2159,24 @@ fn resolve_targeted(
         }
         Target::ChosenCharacter { filter, another } => {
             let options =
-                chosen_character_options(state, registry, controller, source, filter, *another);
+                choosable_characters(state, registry, controller, source, filter, *another);
             (!options.is_empty()).then(|| Choice::One {
                 options,
                 effect: effect.clone(),
             })
         }
         Target::AllCharacters { filter, another } => {
+            // "All characters" affects every match — it does not *choose*, so Ward
+            // does not apply (§10.15); use the raw matching set.
             let targets =
-                chosen_character_options(state, registry, controller, source, filter, *another);
+                matching_characters(state, registry, controller, source, filter, *another);
             for card in targets {
                 apply_effect_to(state, registry, source, card, effect, events);
             }
             None
         }
         Target::UpToCharacters { filter, max } => {
-            let options =
-                chosen_character_options(state, registry, controller, source, filter, false);
+            let options = choosable_characters(state, registry, controller, source, filter, false);
             (!options.is_empty()).then(|| Choice::UpTo {
                 options,
                 max: *max,
@@ -2631,7 +2633,7 @@ fn banish_by_effect(
 /// The in-play characters eligible for a [`CharacterFilter`] from `controller`'s
 /// perspective (side, classifications, cost/`{S}`, damaged/exerted), optionally
 /// excluding the `source`.
-fn chosen_character_options(
+fn matching_characters(
     state: &GameState,
     registry: &CardRegistry,
     controller: PlayerId,
@@ -2653,7 +2655,6 @@ fn chosen_character_options(
         for card in player.play().iter() {
             if card.is_character()
                 && !(exclude_source && card.id() == source)
-                && (is_yours || !character_has_keyword(state, registry, card.id(), &Keyword::Ward))
                 && character_matches_filter(state, registry, card, filter)
             {
                 out.push(card.id());
@@ -2661,6 +2662,28 @@ fn chosen_character_options(
         }
     }
     out
+}
+
+/// The characters `controller` may **choose** as a target: the matching
+/// characters minus those an opponent can't choose (Ward / "can't be chosen",
+/// §10.15). Used only by the *choosing* targets (`ChosenCharacter`,
+/// `UpToCharacters`) — effects that affect all characters use
+/// [`matching_characters`] directly, since they don't choose.
+fn choosable_characters(
+    state: &GameState,
+    registry: &CardRegistry,
+    controller: PlayerId,
+    source: CardId,
+    filter: &CharacterFilter,
+    exclude_source: bool,
+) -> Vec<CardId> {
+    matching_characters(state, registry, controller, source, filter, exclude_source)
+        .into_iter()
+        .filter(|&card| {
+            state.card_owner_in_play(card) == Some(controller)
+                || !has_restriction(state, registry, card, Restriction::CantBeChosen)
+        })
+        .collect()
 }
 
 /// Whether an in-play character matches every set dimension of a filter.

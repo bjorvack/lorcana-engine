@@ -428,3 +428,79 @@ fn a_multi_effect_action_resolves_the_rest_after_the_choice() {
     );
     assert!(!state.is_awaiting_decision());
 }
+
+#[test]
+fn ward_target_does_as_much_as_you_can_still_draws() {
+    // §1.2.3 worked example (Cogsworth has Ward): "Deal 2 damage to chosen
+    // character. Draw a card." With only a Warded opposing character to choose,
+    // you can't deal the damage, so you do as much as you can — draw the card.
+    let mut reg: CardRegistry = (0..30)
+        .map(|n| {
+            action_card(
+                n,
+                0,
+                vec![
+                    Effect::DealDamage {
+                        target: Target::ChosenCharacter {
+                            filter: CharacterFilter::any(TargetSide::Opposing),
+                            another: false,
+                        },
+                        amount: 2,
+                    },
+                    Effect::DrawCards(1),
+                ],
+            )
+        })
+        .collect();
+    reg.insert(
+        CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 5, 1)
+            .with_keywords(vec![Keyword::Ward]),
+    );
+    let mut state = started(&reg);
+    let active = state.active_player();
+    let foe = opponent_of(&state, active);
+    let cogsworth = place_character(&mut state, foe, 1000, 100, true, false);
+    let hand_before = state.player(active).unwrap().hand().iter().count();
+    let card = hand_card(&state, 0);
+
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::PlayCard {
+            card,
+            shift_onto: None,
+        },
+    )
+    .expect("play action");
+
+    assert!(
+        state.pending().is_none(),
+        "no Warded target to choose; no decision"
+    );
+    let damage = state
+        .player(foe)
+        .unwrap()
+        .play()
+        .iter()
+        .find(|c| c.id() == cogsworth)
+        .unwrap()
+        .conditions()
+        .damage;
+    assert_eq!(damage, 0, "Ward prevented the damage being dealt");
+    // Played 1 (action -> discard) and drew 1: hand size is unchanged, proving
+    // the draw still resolved (§1.2.3 "do as much as you can").
+    assert_eq!(
+        state.player(active).unwrap().hand().iter().count(),
+        hand_before
+    );
+    assert!(state.player(active).unwrap().discard().contains(card));
+}
+
+fn opponent_of(state: &GameState, player: PlayerId) -> PlayerId {
+    state
+        .players()
+        .iter()
+        .map(lorcana_engine::PlayerState::id)
+        .find(|p| *p != player)
+        .unwrap()
+}

@@ -4,8 +4,9 @@
 
 use lorcana_engine::{
     CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterFilter, CharacterStats,
-    Conditions, Decision, Effect, GameState, GameStatus, Input, Keyword, LocationStats, PlayerId,
-    Target, TargetSide, TriggerCondition, TriggeredAbility, apply, start,
+    Conditions, Decision, Effect, GameState, GameStatus, Input, Keyword, LocationStats,
+    PendingDecision, PlayerId, Target, TargetSide, TriggerCondition, TriggeredAbility, apply,
+    start,
 };
 
 fn started(registry: &CardRegistry) -> GameState {
@@ -701,5 +702,107 @@ fn ward_prevents_being_chosen_by_an_opponents_effect() {
     assert!(
         state.pending().is_some(),
         "an un-Warded target can be chosen"
+    );
+}
+
+#[test]
+fn ward_does_not_protect_from_all_character_effects() {
+    // Quester deals 1 damage to ALL opposing characters on quest (no choosing).
+    let mut registry = CardRegistry::new();
+    registry.insert(char_def(100).with_abilities(vec![TriggeredAbility::new(
+        TriggerCondition::WhenThisQuests,
+        Effect::DealDamage {
+            target: Target::AllCharacters {
+                filter: CharacterFilter::any(TargetSide::Opposing),
+                another: false,
+            },
+            amount: 1,
+        },
+    )]));
+    registry.insert(char_def(200).with_keywords(vec![Keyword::Ward]));
+    let mut state = started(&registry);
+    let active = state.active_player();
+    let foe = opponent_of(&state, active);
+    let quester = place(&mut state, active, 1, 100, 1, 5, true, false);
+    let warded = place(&mut state, foe, 2, 200, 1, 5, true, false);
+
+    let _ = apply(&mut state, &registry, Input::Quest { character: quester }).expect("quest");
+    assert!(
+        state.pending().is_none(),
+        "an 'all characters' effect makes no choice"
+    );
+    assert_eq!(
+        damage(&state, foe, warded),
+        Some(1),
+        "Ward blocks choosing, not being affected by an all-characters effect (§10.15)"
+    );
+}
+
+#[test]
+fn your_own_warded_character_can_be_chosen_by_your_own_effect() {
+    // §10.15: Ward only stops *opponents* choosing it — you may choose your own
+    // Warded character ("deal damage to chosen character of yours", 75 cards).
+    let mut registry = CardRegistry::new();
+    registry.insert(char_def(100).with_abilities(vec![TriggeredAbility::new(
+        TriggerCondition::WhenThisQuests,
+        Effect::DealDamage {
+            target: Target::ChosenCharacter {
+                filter: CharacterFilter::any(TargetSide::Yours),
+                another: true, // exclude the quester, leaving only the Warded ally
+            },
+            amount: 1,
+        },
+    )]));
+    registry.insert(char_def(200).with_keywords(vec![Keyword::Ward]));
+    let mut state = started(&registry);
+    let active = state.active_player();
+    let quester = place(&mut state, active, 1, 100, 1, 5, true, false);
+    let my_warded = place(&mut state, active, 2, 200, 1, 5, true, false);
+
+    let _ = apply(&mut state, &registry, Input::Quest { character: quester }).expect("quest");
+    assert!(
+        state.pending().is_some(),
+        "your own Warded ally must be choosable by your effect"
+    );
+    let _ = apply(
+        &mut state,
+        &registry,
+        Input::Decide(Decision::ChooseTarget(my_warded)),
+    )
+    .expect("choose own warded");
+    assert_eq!(damage(&state, active, my_warded), Some(1));
+}
+
+#[test]
+fn up_to_targets_exclude_an_opponents_warded_character() {
+    // "Up to 2 chosen opposing characters" must not offer a Warded one (§10.15).
+    let mut registry = CardRegistry::new();
+    registry.insert(char_def(100).with_abilities(vec![TriggeredAbility::new(
+        TriggerCondition::WhenThisQuests,
+        Effect::DealDamage {
+            target: Target::UpToCharacters {
+                filter: CharacterFilter::any(TargetSide::Opposing),
+                max: 2,
+            },
+            amount: 1,
+        },
+    )]));
+    registry.insert(char_def(200).with_keywords(vec![Keyword::Ward]));
+    registry.insert(char_def(201)); // open
+    let mut state = started(&registry);
+    let active = state.active_player();
+    let foe = opponent_of(&state, active);
+    let quester = place(&mut state, active, 1, 100, 1, 5, true, false);
+    let warded = place(&mut state, foe, 2, 200, 1, 5, true, false);
+    let open = place(&mut state, foe, 3, 201, 1, 5, true, false);
+
+    let _ = apply(&mut state, &registry, Input::Quest { character: quester }).expect("quest");
+    let Some(PendingDecision::ChooseUpToN { options, .. }) = state.pending() else {
+        panic!("expected an up-to-N choice");
+    };
+    assert!(options.contains(&open), "the un-Warded target is offered");
+    assert!(
+        !options.contains(&warded),
+        "the Warded target is not offered"
     );
 }
