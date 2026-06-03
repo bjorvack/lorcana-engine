@@ -4,3 +4,7 @@ Cargo.lock
 .lefthook/
 .DS_Store
 .devin/
+
+# Local agent / tooling artifacts (not version-controlled)
+.playwright-mcp/
+AGENTS.md
