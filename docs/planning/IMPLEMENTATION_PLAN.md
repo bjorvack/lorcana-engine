@@ -802,7 +802,10 @@ pattern can collapse. Tracked and done one at a time:
 - [ ] **#4 fold `PlayFilter` into the filter algebra** — needs the same
       denormalization + a `Kind`/`Category` predicate; otherwise a second evaluator.
 - [ ] **#1b general `Choose { options, min, max, then }`** + sequential threading of
-      prior results; migrate the 6 bespoke choices onto it (large).
+      prior results; migrate the 6 bespoke choices onto it (large; best done
+      incrementally — introduce the primitive, migrate one bespoke choice per commit).
+- [ ] **#5 unify `Target` (card ref) and `PlayerScope` (player ref)** as a choosable
+      reference; remove `substitute_chosen_player`/`substitute_move_endpoint` (large).
 - [ ] **#2** collapse `GrantKeywordThisTurn`/`RestrictThisTurn`/`PermitThisTurn` →
       `GrantThisTurn { target, property }`.
 - [ ] **#3** fold `Count` into `Amount` (`ControlledCharacters` → `PerMatching(filter)`).
@@ -811,5 +814,6 @@ pattern can collapse. Tracked and done one at a time:
       reference; remove `substitute_chosen_player`/`substitute_move_endpoint`; fully
       remove `another`.
 
-Deferred card features still open: granted **activated** abilities (Aladdin/Dumbo);
-**Blast from Your Past** (name a card, recur all matching from discard).
+All previously-deferred card features are now done: granted **activated** abilities
+(`Effect::GrantActivatedThisTurn`, `tests/granted.rs`) and **Blast from Your Past**
+(`Effect::NameThenRecur`, `tests/reveal.rs`).
