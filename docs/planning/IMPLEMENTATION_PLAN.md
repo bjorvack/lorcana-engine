@@ -615,8 +615,9 @@ Challenge/banish triggers into the bag (see
       (Slice 8b-7 `tests/targeted_effects.rs`; "may" via `MayResolve`).
 - [x] A delayed trigger ("at the end of your turn, …") fires at the right moment
       (Slice 8b-18, `tests/turn_triggers.rs`).
-- [ ] An effect that returns/banishes a card removes its modifiers and a pending
-      win/loss/banishment resolves on the next check (parallels the Donald case).
+- [x] An effect that returns/banishes a card removes its modifiers and a pending
+      win/loss/banishment resolves on the next check (parallels the Donald case)
+      (Slice 8b-2/8b-15; `tests/win_loss_modifiers.rs` effect-banishes-Donald).
 - [x] A turn transition resumes correctly after a bag suspension, and a
       start/end-of-turn trigger fires (Slice 8b-9, `tests/turn_triggers.rs`).
 
