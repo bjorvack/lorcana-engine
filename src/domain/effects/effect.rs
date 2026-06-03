@@ -1,10 +1,39 @@
 //! Effects produced by abilities.
 
-use super::target::Target;
+use super::target::{CharacterFilter, Target};
 use super::trigger::CardCategory;
 use crate::domain::cards::Keyword;
-use crate::domain::game::{Permission, Restriction};
+use crate::domain::game::{Permission, Restriction, Stat};
 use serde::{Deserialize, Serialize};
+
+/// A numeric amount used by effects (damage, lore, draws, `{S}` change). Either a
+/// fixed value or one computed at resolution — "for each …" / "equal to …".
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub enum Amount {
+    /// A constant amount.
+    Fixed(i32),
+    /// The number of in-play characters matching `filter` (from the controller's
+    /// perspective) — "for each [character] you have in play", "equal to the
+    /// number of characters you have in play".
+    PerMatchingCharacter(CharacterFilter),
+    /// The current value of a characteristic on a character: the effect's source
+    /// (`Target::SelfCard` — "equal to this character's {S}") or the effect's
+    /// resolved target (any other `target` — "+{S} equal to their {W}"). §7.8.
+    StatOf {
+        /// Which characteristic to read.
+        stat: Stat,
+        /// Whose: `SelfCard` = the source; anything else = the resolved target.
+        target: Target,
+    },
+}
+
+impl Amount {
+    /// A constant amount (the common case).
+    #[must_use]
+    pub const fn fixed(n: i32) -> Self {
+        Self::Fixed(n)
+    }
+}
 
 /// Which cards in a zone are eligible to be played by a "play … for free" effect.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default)]
@@ -61,11 +90,11 @@ pub enum DeckPosition {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum Effect {
     /// The controller draws this many cards.
-    DrawCards(u32),
+    DrawCards(Amount),
     /// The controller gains this much lore.
-    GainLore(u32),
+    GainLore(Amount),
     /// Each opponent of the controller loses this much lore (clamped at 0).
-    EachOpponentLosesLore(u32),
+    EachOpponentLosesLore(Amount),
     /// Move the target card to its owner's hand (§7; e.g. Marshmallow "return
     /// this card to your hand"). For `Target::SelfCard` the source returns itself
     /// — including from the discard, where banishment leaves it.
@@ -87,23 +116,23 @@ pub enum Effect {
         /// Who is buffed/debuffed.
         target: Target,
         /// The signed `{S}` change.
-        amount: i32,
+        amount: Amount,
     },
     /// Deal `amount` damage to the target character (§4.3.6.16, §9). Lethal damage
     /// banishes it at the next game-state check.
     DealDamage {
         /// Who takes the damage.
         target: Target,
-        /// How much damage.
-        amount: u32,
+        /// How much damage (evaluated and clamped at 0).
+        amount: Amount,
     },
     /// Remove up to `amount` damage from the target character (§9.4; "remove up to
     /// N damage from chosen character").
     RemoveDamage {
         /// Whose damage is removed.
         target: Target,
-        /// How much damage to remove (clamped at 0).
-        amount: u32,
+        /// How much damage to remove (evaluated and clamped at 0).
+        amount: Amount,
     },
     /// Banish the target directly (not via damage) — "banish chosen character".
     Banish(Target),
@@ -147,7 +176,7 @@ pub enum Effect {
         /// Who is chosen.
         target: Target,
         /// The condition tested against the chosen target.
-        filter: super::target::CharacterFilter,
+        filter: CharacterFilter,
         /// Applied to the target when it matches.
         then: Box<Self>,
         /// Applied to the target when it doesn't.
@@ -191,7 +220,7 @@ pub enum Effect {
     /// matching `filter` ("if you have a character named X in play, …", §7.1).
     IfControl {
         /// The board condition: the controller must have a matching character.
-        filter: super::target::CharacterFilter,
+        filter: CharacterFilter,
         /// The effect to resolve when the condition holds.
         then: Box<Self>,
     },

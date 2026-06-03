@@ -2,13 +2,16 @@
 //! abilities can be used the turn they're played (§6.4).
 
 use lorcana_engine::{
-    AbilityCost, ActivatedAbility, CardDefId, CardDefinition, CardKind, CardRegistry, Effect,
-    GameState, GameStatus, Input, PlayerId, apply, start,
+    AbilityCost, ActivatedAbility, Amount, CardDefId, CardDefinition, CardKind, CardRegistry,
+    Effect, GameState, GameStatus, Input, PlayerId, apply, start,
 };
 
 fn item_card(id: u32) -> CardDefinition {
     CardDefinition::new(CardDefId::from_raw(id), 0, true, CardKind::Item).with_activated(vec![
-        ActivatedAbility::new(AbilityCost::new(false, 0), Effect::GainLore(1)),
+        ActivatedAbility::new(
+            AbilityCost::new(false, 0),
+            Effect::GainLore(Amount::fixed(1)),
+        ),
     ])
 }
 

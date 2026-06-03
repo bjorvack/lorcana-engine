@@ -3,9 +3,9 @@
 //! pauses the turn transition, and answering it resumes the remaining steps.
 
 use lorcana_engine::{
-    CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterFilter, CharacterStats,
-    Conditions, Decision, DelayedWhen, Effect, GameState, GameStatus, Input, Phase, PlayerId,
-    Target, TargetSide, TriggerCondition, TriggeredAbility, apply, start,
+    Amount, CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterFilter,
+    CharacterStats, Conditions, Decision, DelayedWhen, Effect, GameState, GameStatus, Input, Phase,
+    PlayerId, Target, TargetSide, TriggerCondition, TriggeredAbility, apply, start,
 };
 
 fn started(reg: &CardRegistry) -> GameState {
@@ -61,7 +61,10 @@ fn a_start_of_turn_trigger_fires_when_the_turn_comes_around() {
     let mut reg = CardRegistry::new();
     reg.insert(
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 1, 3, 1).with_abilities(vec![
-            TriggeredAbility::new(TriggerCondition::AtStartOfTurn, Effect::GainLore(2)),
+            TriggeredAbility::new(
+                TriggerCondition::AtStartOfTurn,
+                Effect::GainLore(Amount::fixed(2)),
+            ),
         ]),
     );
     let mut state = started(&reg);
@@ -81,7 +84,10 @@ fn an_end_of_turn_trigger_fires_before_the_turn_passes() {
     let mut reg = CardRegistry::new();
     reg.insert(
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 1, 3, 1).with_abilities(vec![
-            TriggeredAbility::new(TriggerCondition::AtEndOfTurn, Effect::GainLore(2)),
+            TriggeredAbility::new(
+                TriggerCondition::AtEndOfTurn,
+                Effect::GainLore(Amount::fixed(2)),
+            ),
         ]),
     );
     let mut state = started(&reg);
@@ -105,7 +111,10 @@ fn a_suspending_start_of_turn_trigger_pauses_then_resumes_the_turn() {
     // Optional ("you may") start-of-turn trigger — it suspends on a MayResolve.
     reg.insert(
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 1, 3, 1).with_abilities(vec![
-            TriggeredAbility::optional(TriggerCondition::AtStartOfTurn, Effect::GainLore(2)),
+            TriggeredAbility::optional(
+                TriggerCondition::AtStartOfTurn,
+                Effect::GainLore(Amount::fixed(2)),
+            ),
         ]),
     );
     let mut state = started(&reg);
@@ -143,7 +152,7 @@ fn a_delayed_end_of_turn_trigger_fires_at_the_end_of_the_turn() {
                 TriggerCondition::WhenThisQuests,
                 Effect::ScheduleDelayed {
                     when: DelayedWhen::EndOfTurn,
-                    effect: Box::new(Effect::GainLore(2)),
+                    effect: Box::new(Effect::GainLore(Amount::fixed(2))),
                 },
             ),
         ]),

@@ -3,10 +3,10 @@
 //! effect-driven banishment.
 
 use lorcana_engine::{
-    CardCategory, CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterFilter,
-    CharacterStats, Classification, Conditions, Decision, DiscardAmount, Effect, GameState,
-    GameStatus, Input, NumericFilter, PlayFilter, PlayerId, Target, TargetSide, TriggerCondition,
-    TriggeredAbility, apply, start,
+    Amount, CardCategory, CardDefId, CardDefinition, CardId, CardInstance, CardRegistry,
+    CharacterFilter, CharacterStats, Classification, Conditions, Decision, DiscardAmount, Effect,
+    GameState, GameStatus, Input, NumericFilter, PlayFilter, PlayerId, Target, TargetSide,
+    TriggerCondition, TriggeredAbility, apply, start,
 };
 
 fn started(reg: &CardRegistry) -> GameState {
@@ -77,7 +77,7 @@ fn damage_on(state: &GameState, owner: PlayerId, card: CardId) -> Option<u32> {
 
 /// A quester whose "whenever this quests" trigger deals `amount` damage to a
 /// chosen opposing character.
-fn quester_dealing(def: u32, amount: u32) -> CardDefinition {
+fn quester_dealing(def: u32, amount: i32) -> CardDefinition {
     CardDefinition::character(CardDefId::from_raw(def), 1, true, 2, 5, 1).with_abilities(vec![
         TriggeredAbility::new(
             TriggerCondition::WhenThisQuests,
@@ -86,7 +86,7 @@ fn quester_dealing(def: u32, amount: u32) -> CardDefinition {
                     filter: CharacterFilter::any(TargetSide::Opposing),
                     another: false,
                 },
-                amount,
+                amount: Amount::fixed(amount),
             },
         ),
     ])
@@ -132,7 +132,10 @@ fn lethal_effect_damage_banishes_and_fires_when_banished() {
     // Victim (willpower 2) with "when banished, gain 4 lore".
     reg.insert(
         CardDefinition::character(CardDefId::from_raw(200), 1, true, 2, 2, 1).with_abilities(vec![
-            TriggeredAbility::new(TriggerCondition::WhenBanished, Effect::GainLore(4)),
+            TriggeredAbility::new(
+                TriggerCondition::WhenBanished,
+                Effect::GainLore(Amount::fixed(4)),
+            ),
         ]),
     );
     let mut state = started(&reg);
@@ -173,7 +176,7 @@ fn remove_damage_heals_a_chosen_character() {
                         filter: CharacterFilter::any(TargetSide::Yours),
                         another: true,
                     },
-                    amount: 2,
+                    amount: Amount::fixed(2),
                 },
             ),
         ]),
@@ -225,7 +228,10 @@ fn a_trigger_banishes_a_chosen_character_and_fires_when_banished() {
     // banished, gain 3 lore".
     reg.insert(
         CardDefinition::character(CardDefId::from_raw(200), 1, true, 2, 9, 1).with_abilities(vec![
-            TriggeredAbility::new(TriggerCondition::WhenBanished, Effect::GainLore(3)),
+            TriggeredAbility::new(
+                TriggerCondition::WhenBanished,
+                Effect::GainLore(Amount::fixed(3)),
+            ),
         ]),
     );
     let mut state = started(&reg);
@@ -274,7 +280,7 @@ fn a_cost_filter_restricts_the_choosable_targets() {
                         },
                         another: false,
                     },
-                    amount: 2,
+                    amount: Amount::fixed(2),
                 },
             ),
         ]),
@@ -386,7 +392,7 @@ fn up_to_two_debuffer(def: u32) -> CardDefinition {
                     filter: CharacterFilter::any(TargetSide::Opposing),
                     max: 2,
                 },
-                amount: -1,
+                amount: Amount::fixed(-1),
             },
         ),
     ])
@@ -483,7 +489,7 @@ fn a_name_filter_restricts_the_choosable_targets() {
                         },
                         another: false,
                     },
-                    amount: 2,
+                    amount: Amount::fixed(2),
                 },
             ),
         ]),
@@ -536,7 +542,7 @@ fn all_your_other_characters_excludes_the_source() {
                         filter: CharacterFilter::any(TargetSide::Yours),
                         another: true,
                     },
-                    amount: 1,
+                    amount: Amount::fixed(1),
                 },
             ),
         ]),
@@ -565,7 +571,7 @@ fn conditional_quester(def: u32) -> CardDefinition {
                     names: vec!["Elsa".to_string()],
                     ..CharacterFilter::any(TargetSide::Yours)
                 },
-                then: Box::new(Effect::GainLore(3)),
+                then: Box::new(Effect::GainLore(Amount::fixed(3))),
             },
         ),
     ])
@@ -696,11 +702,11 @@ fn conditional_buffer(def: u32) -> CardDefinition {
                 },
                 then: Box::new(Effect::GiveStrengthThisTurn {
                     target: Target::SelfCard,
-                    amount: 3,
+                    amount: Amount::fixed(3),
                 }),
                 otherwise: Box::new(Effect::GiveStrengthThisTurn {
                     target: Target::SelfCard,
-                    amount: 2,
+                    amount: Amount::fixed(2),
                 }),
             },
         ),
@@ -946,7 +952,7 @@ fn play_a_character_from_hand_for_free() {
 
 #[test]
 fn may_wrapper_resolves_inner_only_on_yes() {
-    let reg = registry_with_quester(Effect::May(Box::new(Effect::DrawCards(1))));
+    let reg = registry_with_quester(Effect::May(Box::new(Effect::DrawCards(Amount::fixed(1)))));
     // Yes: draws.
     let mut state = started(&reg);
     let active = state.active_player();
@@ -992,4 +998,62 @@ fn may_composes_with_play_free() {
     .expect("play free");
 
     assert!(state.player(active).unwrap().play().contains(chosen));
+}
+
+#[test]
+fn deal_damage_equal_to_the_number_of_your_characters() {
+    // "Deal damage to chosen opposing character equal to the number of characters
+    // you have in play" (Amount::PerMatchingCharacter, evaluated at resolution).
+    let mut reg = CardRegistry::new();
+    reg.insert(
+        CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 5, 1).with_abilities(vec![
+            TriggeredAbility::new(
+                TriggerCondition::WhenThisQuests,
+                Effect::DealDamage {
+                    target: Target::ChosenCharacter {
+                        filter: CharacterFilter::any(TargetSide::Opposing),
+                        another: false,
+                    },
+                    amount: Amount::PerMatchingCharacter(CharacterFilter::any(TargetSide::Yours)),
+                },
+            ),
+        ]),
+    );
+    reg.insert(CardDefinition::character(
+        CardDefId::from_raw(200),
+        1,
+        true,
+        2,
+        9,
+        1,
+    ));
+    let mut state = started(&reg);
+    let active = state.active_player();
+    let foe = opponent_of(&state, active);
+    let quester = place(&mut state, active, 1000, 100, 5, 0);
+    let _ally1 = place(&mut state, active, 1001, 200, 5, 0);
+    let _ally2 = place(&mut state, active, 1002, 200, 5, 0); // 3 of my characters
+    let victim = place(&mut state, foe, 2000, 200, 9, 0);
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(Decision::ChooseTarget(victim)),
+    )
+    .expect("choose");
+
+    let dmg = state
+        .player(foe)
+        .unwrap()
+        .play()
+        .iter()
+        .find(|c| c.id() == victim)
+        .unwrap()
+        .conditions()
+        .damage;
+    assert_eq!(
+        dmg, 3,
+        "damage equals the 3 characters the controller has in play"
+    );
 }

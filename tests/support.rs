@@ -171,3 +171,27 @@ fn declining_support_does_nothing() {
     );
     assert!(!state.is_awaiting_decision());
 }
+
+#[test]
+fn chained_support_adds_the_combined_strength() {
+    // A (Support, {S} 1) buffs B (Support, {S} 2) -> B is now {S} 3. When B then
+    // quests, B's Support adds B's *combined* {S} (3) to C (§10.13, §7.8).
+    let reg = registry();
+    let mut state = started(&reg);
+    let active = state.active_player();
+    let a = place(&mut state, active, 1000, 100, 1); // Support {S} 1
+    let b = place(&mut state, active, 1001, 100, 2); // Support {S} 2
+    let c = place(&mut state, active, 1002, 200, 0); // plain {S} 0
+
+    // A quests and supports B.
+    let _ = apply(&mut state, &reg, Input::Quest { character: a }).expect("quest a");
+    let _ = apply(&mut state, &reg, Input::Decide(Decision::May(true))).expect("may a");
+    let _ = apply(&mut state, &reg, Input::Decide(Decision::ChooseTarget(b))).expect("a -> b");
+    assert_eq!(strength(&state, b), 3, "B now has its base 2 plus A's 1");
+
+    // B quests and supports C with B's *current* (combined) {S} of 3.
+    let _ = apply(&mut state, &reg, Input::Quest { character: b }).expect("quest b");
+    let _ = apply(&mut state, &reg, Input::Decide(Decision::May(true))).expect("may b");
+    let _ = apply(&mut state, &reg, Input::Decide(Decision::ChooseTarget(c))).expect("b -> c");
+    assert_eq!(strength(&state, c), 3, "C gains B's combined {{S}} (2 + 1)");
+}

@@ -3,9 +3,9 @@
 //! simultaneous triggers.
 
 use lorcana_engine::{
-    CardCategory, CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterStats,
-    Classification, Conditions, Decision, Effect, GameEvent, GameState, GameStatus, Input,
-    PendingDecision, TriggerCondition, TriggeredAbility, apply, start,
+    Amount, CardCategory, CardDefId, CardDefinition, CardId, CardInstance, CardRegistry,
+    CharacterStats, Classification, Conditions, Decision, Effect, GameEvent, GameState, GameStatus,
+    Input, PendingDecision, TriggerCondition, TriggeredAbility, apply, start,
 };
 
 fn two_decks(size: u32) -> Vec<Vec<CardDefId>> {
@@ -74,7 +74,7 @@ fn ink_then_play(state: &mut GameState, registry: &CardRegistry) -> Vec<GameEven
 fn enters_play_trigger_draws_a_card() {
     let registry = registry_with(&[TriggeredAbility::new(
         TriggerCondition::WhenYouPlayThis,
-        Effect::DrawCards(1),
+        Effect::DrawCards(Amount::fixed(1)),
     )]);
     let mut state = started(&registry);
     let active = state.active_player();
@@ -95,7 +95,7 @@ fn enters_play_trigger_draws_a_card() {
 fn optional_trigger_waits_for_a_may_decision() {
     let registry = registry_with(&[TriggeredAbility::optional(
         TriggerCondition::WhenYouPlayThis,
-        Effect::DrawCards(1),
+        Effect::DrawCards(Amount::fixed(1)),
     )]);
     let mut state = started(&registry);
     let active = state.active_player();
@@ -129,7 +129,7 @@ fn optional_trigger_waits_for_a_may_decision() {
 fn turn_actions_are_rejected_while_a_decision_is_pending() {
     let registry = registry_with(&[TriggeredAbility::optional(
         TriggerCondition::WhenYouPlayThis,
-        Effect::DrawCards(1),
+        Effect::DrawCards(Amount::fixed(1)),
     )]);
     let mut state = started(&registry);
     let _ = ink_then_play(&mut state, &registry);
@@ -142,8 +142,14 @@ fn turn_actions_are_rejected_while_a_decision_is_pending() {
 #[test]
 fn player_orders_two_simultaneous_triggers() {
     let registry = registry_with(&[
-        TriggeredAbility::new(TriggerCondition::WhenYouPlayThis, Effect::GainLore(1)),
-        TriggeredAbility::new(TriggerCondition::WhenYouPlayThis, Effect::DrawCards(1)),
+        TriggeredAbility::new(
+            TriggerCondition::WhenYouPlayThis,
+            Effect::GainLore(Amount::fixed(1)),
+        ),
+        TriggeredAbility::new(
+            TriggerCondition::WhenYouPlayThis,
+            Effect::DrawCards(Amount::fixed(1)),
+        ),
     ]);
     let mut state = started(&registry);
     let active = state.active_player();
@@ -187,7 +193,7 @@ fn whenever_you_play_a_classification_trigger_fires() {
                 TriggerCondition::WhenYouPlay(CardCategory::Character(Some(Classification::new(
                     "Villain",
                 )))),
-                Effect::GainLore(1),
+                Effect::GainLore(Amount::fixed(1)),
             )],
         ),
     );
@@ -231,7 +237,10 @@ fn quest_trigger_fires() {
     let mut registry = CardRegistry::new();
     registry.insert(
         CardDefinition::character(def, 1, true, 1, 1, 1).with_abilities(vec![
-            TriggeredAbility::new(TriggerCondition::WhenThisQuests, Effect::GainLore(2)),
+            TriggeredAbility::new(
+                TriggerCondition::WhenThisQuests,
+                Effect::GainLore(Amount::fixed(2)),
+            ),
         ]),
     );
     let mut state = started(&registry);
@@ -261,7 +270,7 @@ fn quest_trigger_fires() {
 fn same_seed_and_inputs_with_a_decision_are_deterministic() {
     let abilities = vec![TriggeredAbility::optional(
         TriggerCondition::WhenYouPlayThis,
-        Effect::DrawCards(1),
+        Effect::DrawCards(Amount::fixed(1)),
     )];
     let run = || {
         let registry = registry_with(&abilities);

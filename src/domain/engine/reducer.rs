@@ -6,8 +6,8 @@ use crate::domain::cards::{
     ShiftKind, StaticAbility, StaticTarget,
 };
 use crate::domain::effects::{
-    CardCategory, CharacterFilter, DeckPosition, DelayedWhen, DiscardAmount, Effect, PlayFilter,
-    Target, TargetSide, TriggerCondition,
+    Amount, CardCategory, CharacterFilter, DeckPosition, DelayedWhen, DiscardAmount, Effect,
+    PlayFilter, Target, TargetSide, TriggerCondition,
 };
 use crate::domain::game::{
     CardInstance, CharacterStats, Conditions, DelayedTrigger, GameEvent, GameState, GameStatus,
@@ -823,12 +823,10 @@ fn enqueue_support_trigger(
     if !character_has_keyword(state, registry, character, &Keyword::Support) {
         return;
     }
-    let strength = state
-        .current_character_stats(character)
-        .map_or(0, |s| s.strength);
-    if strength == 0 {
-        return; // adding 0 {S} is a no-op
-    }
+    // §10.13: add this character's `{S}` to another chosen character's `{S}`.
+    // Evaluated at resolution (`SourceStat`) so it reflects modifiers already on
+    // the source — e.g. if another Support buffed it earlier this turn, this
+    // Support adds the **combined** value (§7.8 current value at resolution).
     let _ = state.enqueue_trigger(
         controller,
         character,
@@ -838,7 +836,10 @@ fn enqueue_support_trigger(
                 filter: CharacterFilter::any(TargetSide::Any),
                 another: true,
             },
-            amount: i32::try_from(strength).unwrap_or(i32::MAX),
+            amount: Amount::StatOf {
+                stat: Stat::Strength,
+                target: Target::SelfCard,
+            },
         },
     );
 }
@@ -2087,7 +2088,8 @@ fn execute_effect(
 ) -> Option<Choice> {
     match effect {
         Effect::DrawCards(n) => {
-            for _ in 0..*n {
+            let count = eval_amount(state, registry, controller, source, source, n).max(0);
+            for _ in 0..count {
                 events.push(draw(state, controller));
             }
         }
@@ -2122,15 +2124,21 @@ fn execute_effect(
             });
         }
         Effect::GainLore(n) => {
+            let amount =
+                u32::try_from(eval_amount(state, registry, controller, source, source, n).max(0))
+                    .unwrap_or(0);
             if let Some(p) = state.player_mut(controller) {
-                p.add_lore(*n);
+                p.add_lore(amount);
             }
             events.push(GameEvent::LoreGained {
                 player: controller,
-                amount: *n,
+                amount,
             });
         }
         Effect::EachOpponentLosesLore(n) => {
+            let amount =
+                u32::try_from(eval_amount(state, registry, controller, source, source, n).max(0))
+                    .unwrap_or(0);
             let opponents: Vec<PlayerId> = state
                 .players()
                 .iter()
@@ -2139,11 +2147,11 @@ fn execute_effect(
                 .collect();
             for opponent in opponents {
                 if let Some(p) = state.player_mut(opponent) {
-                    p.lose_lore(*n);
+                    p.lose_lore(amount);
                 }
                 events.push(GameEvent::LoreLost {
                     player: opponent,
-                    amount: *n,
+                    amount,
                 });
             }
         }
@@ -2203,7 +2211,7 @@ fn resolve_targeted(
 ) -> Option<Choice> {
     match target {
         Target::SelfCard => {
-            apply_effect_to(state, registry, source, source, effect, events);
+            apply_effect_to(state, registry, controller, source, source, effect, events);
             None
         }
         Target::ChosenCharacter { filter, another } => {
@@ -2220,7 +2228,7 @@ fn resolve_targeted(
             let targets =
                 matching_characters(state, registry, controller, source, filter, *another);
             for card in targets {
-                apply_effect_to(state, registry, source, card, effect, events);
+                apply_effect_to(state, registry, controller, source, card, effect, events);
             }
             None
         }
@@ -2414,6 +2422,90 @@ fn resolve_look_at_top(
             options,
             rest_position: rest,
         })
+    }
+}
+
+/// Apply an amount-bearing targeted effect (give `{S}` / deal / remove damage) to
+/// `target_card`, evaluating its [`Amount`] at resolution.
+fn apply_amount_effect(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    controller: PlayerId,
+    source: CardId,
+    target_card: CardId,
+    effect: &Effect,
+    amount: &Amount,
+) {
+    let value = eval_amount(state, registry, controller, source, target_card, amount);
+    match effect {
+        Effect::GiveStrengthThisTurn { .. } => {
+            state.add_modifier(StatModifier::new(
+                source,
+                ModifierTarget::Card(target_card),
+                Stat::Strength,
+                value,
+                ModifierDuration::UntilEndOfTurn,
+            ));
+        }
+        Effect::DealDamage { .. } => {
+            if let Some(owner) = owner_holding(state, target_card) {
+                add_damage(
+                    state,
+                    owner,
+                    target_card,
+                    u32::try_from(value.max(0)).unwrap_or(0),
+                );
+            }
+        }
+        Effect::RemoveDamage { .. } => {
+            let remove = u32::try_from(value.max(0)).unwrap_or(0);
+            if let Some(owner) = owner_holding(state, target_card)
+                && let Some(c) = state
+                    .player_mut(owner)
+                    .and_then(|p| p.play_mut().iter_mut().find(|c| c.id() == target_card))
+            {
+                let conditions = c.conditions_mut();
+                conditions.damage = conditions.damage.saturating_sub(remove);
+            }
+        }
+        _ => {}
+    }
+}
+
+/// Evaluate an [`Amount`] to a concrete signed value at resolution: a constant,
+/// the number of in-play characters matching a filter (from `controller`'s view),
+/// or a characteristic of the effect's `source` ("for each …" / "equal to …").
+fn eval_amount(
+    state: &GameState,
+    registry: &CardRegistry,
+    controller: PlayerId,
+    source: CardId,
+    target_card: CardId,
+    amount: &Amount,
+) -> i32 {
+    match amount {
+        Amount::Fixed(n) => *n,
+        Amount::PerMatchingCharacter(filter) => {
+            let count =
+                matching_characters(state, registry, controller, source, filter, false).len();
+            i32::try_from(count).unwrap_or(i32::MAX)
+        }
+        // `SelfCard` reads the source; any other target reads the resolved target.
+        Amount::StatOf { stat, target } => {
+            let card = if matches!(target, Target::SelfCard) {
+                source
+            } else {
+                target_card
+            };
+            let value = state
+                .current_character_stats(card)
+                .map_or(0, |s| match stat {
+                    Stat::Strength => s.strength,
+                    Stat::Willpower => s.willpower,
+                    Stat::Lore => s.lore,
+                });
+            i32::try_from(value).unwrap_or(i32::MAX)
+        }
     }
 }
 
@@ -2674,6 +2766,7 @@ fn move_self_card(state: &mut GameState, owner: PlayerId, card: CardId, dest: Se
 fn apply_effect_to(
     state: &mut GameState,
     registry: &CardRegistry,
+    controller: PlayerId,
     source: CardId,
     target_card: CardId,
     effect: &Effect,
@@ -2687,29 +2780,18 @@ fn apply_effect_to(
                 move_self_card(state, owner, target_card, leave_play_destination(effect));
             }
         }
-        Effect::GiveStrengthThisTurn { amount, .. } => {
-            state.add_modifier(StatModifier::new(
+        Effect::GiveStrengthThisTurn { amount, .. }
+        | Effect::DealDamage { amount, .. }
+        | Effect::RemoveDamage { amount, .. } => {
+            apply_amount_effect(
+                state,
+                registry,
+                controller,
                 source,
-                ModifierTarget::Card(target_card),
-                Stat::Strength,
-                *amount,
-                ModifierDuration::UntilEndOfTurn,
-            ));
-        }
-        Effect::DealDamage { amount, .. } => {
-            if let Some(owner) = owner_holding(state, target_card) {
-                add_damage(state, owner, target_card, *amount);
-            }
-        }
-        Effect::RemoveDamage { amount, .. } => {
-            if let Some(owner) = owner_holding(state, target_card)
-                && let Some(c) = state
-                    .player_mut(owner)
-                    .and_then(|p| p.play_mut().iter_mut().find(|c| c.id() == target_card))
-            {
-                let conditions = c.conditions_mut();
-                conditions.damage = conditions.damage.saturating_sub(*amount);
-            }
+                target_card,
+                effect,
+                amount,
+            );
         }
         Effect::Banish(_) => {
             banish_by_effect(state, registry, target_card, events);
@@ -2761,7 +2843,15 @@ fn apply_effect_to(
                 .instance_in_play(target_card)
                 .is_some_and(|c| character_matches_filter(state, registry, c, filter));
             let branch = if matched { then } else { otherwise };
-            apply_effect_to(state, registry, source, target_card, branch, events);
+            apply_effect_to(
+                state,
+                registry,
+                controller,
+                source,
+                target_card,
+                branch,
+                events,
+            );
         }
         // Never reach here: these are resolved in `execute_effect`, not applied to
         // a concrete target.
@@ -3092,7 +3182,7 @@ fn apply_choose_target_decision(
         return Err(Rejected::InvalidDecision);
     }
     let _ = state.take_pending();
-    apply_effect_to(state, registry, source, chosen, effect, events);
+    apply_effect_to(state, registry, player, source, chosen, effect, events);
     resolve_effects(state, registry, player, source, rest, events);
     events.extend(game_state_check_with_triggers(state, registry));
     Ok(())
@@ -3192,7 +3282,7 @@ fn apply_up_to_n_decision(
     }
     let _ = state.take_pending();
     for target in chosen {
-        apply_effect_to(state, registry, source, target, effect, events);
+        apply_effect_to(state, registry, player, source, target, effect, events);
     }
     resolve_effects(state, registry, player, source, rest, events);
     events.extend(game_state_check_with_triggers(state, registry));

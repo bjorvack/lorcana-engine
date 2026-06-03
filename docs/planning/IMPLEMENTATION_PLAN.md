@@ -671,8 +671,19 @@ mechanics ranked by card count, with the remaining gaps to close in order:
       restriction with a `WhileSourceInPlay` modifier. `tests/turn_triggers.rs`.
       **Remaining:** exert+freeze on the same chosen target (needs multi-effect-
       per-target); continuous can't-ready statics; Anna-style is covered.
-- [ ] **+N for each …** (24) — dynamic amount counted over a filter (also "gain
-      lore equal to", "deal damage equal to", 15+1).
+- [~] **dynamic amounts — "+N for each / equal to"** (94 + 40) — a uniform
+      `Amount` enum (`Fixed` | `PerMatchingCharacter(filter)` | `StatOf { stat,
+      target }`) now backs every numeric effect field (`DrawCards`, `GainLore`,
+      `EachOpponentLosesLore`, `GiveStrengthThisTurn`, `DealDamage`, `RemoveDamage`),
+      evaluated at resolution via `eval_amount`. `StatOf` reads the source
+      (`SelfCard`) or the resolved target's `{S}/{W}/{L}`, so it composes "your own
+      / their / another's stat" — and Support now uses `StatOf{Strength,SelfCard}`,
+      so chained Support buffs add the **combined** value (§7.8). Tested:
+      `tests/targeted_effects.rs` (damage = number of your characters),
+      `tests/support.rs` (chained Support). **Remaining (dynamic STATICs):**
+      continuous "+1 {L} for each Villain" (Hades) needs a count-based
+      `StatModifier` delta (today fixed); "for each card in zone" counts; cost
+      reductions.
 - [ ] **chosen / each player targets** (12 + 7) — player-directed draw/discard/
       lore (needs a choose-a-player axis).
 - [ ] **grant an ability** (10) — "gains '\<ability text\>'" (a granted triggered/

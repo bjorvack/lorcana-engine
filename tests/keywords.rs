@@ -3,10 +3,10 @@
 //! challenge legality/damage seam.
 
 use lorcana_engine::{
-    CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterFilter, CharacterStats,
-    Conditions, Decision, Effect, GameState, GameStatus, Input, Keyword, LocationStats,
-    PendingDecision, PlayerId, Target, TargetSide, TriggerCondition, TriggeredAbility, apply,
-    start,
+    Amount, CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterFilter,
+    CharacterStats, Conditions, Decision, Effect, GameState, GameStatus, Input, Keyword,
+    LocationStats, PendingDecision, PlayerId, Target, TargetSide, TriggerCondition,
+    TriggeredAbility, apply, start,
 };
 
 fn started(registry: &CardRegistry) -> GameState {
@@ -504,7 +504,7 @@ fn boosting_fires_a_card_put_under_trigger() {
             .with_keywords(vec![Keyword::Boost(0)])
             .with_abilities(vec![TriggeredAbility::new(
                 TriggerCondition::WhenCardPutUnder,
-                Effect::GainLore(1),
+                Effect::GainLore(Amount::fixed(1)),
             )]),
     );
     let mut state = started(&registry);
@@ -669,7 +669,7 @@ fn ward_prevents_being_chosen_by_an_opponents_effect() {
                 filter: CharacterFilter::any(TargetSide::Opposing),
                 another: false,
             },
-            amount: 1,
+            amount: Amount::fixed(1),
         },
     )]));
     registry.insert(char_def(200).with_keywords(vec![Keyword::Ward]));
@@ -716,7 +716,7 @@ fn ward_does_not_protect_from_all_character_effects() {
                 filter: CharacterFilter::any(TargetSide::Opposing),
                 another: false,
             },
-            amount: 1,
+            amount: Amount::fixed(1),
         },
     )]));
     registry.insert(char_def(200).with_keywords(vec![Keyword::Ward]));
@@ -750,7 +750,7 @@ fn your_own_warded_character_can_be_chosen_by_your_own_effect() {
                 filter: CharacterFilter::any(TargetSide::Yours),
                 another: true, // exclude the quester, leaving only the Warded ally
             },
-            amount: 1,
+            amount: Amount::fixed(1),
         },
     )]));
     registry.insert(char_def(200).with_keywords(vec![Keyword::Ward]));
@@ -784,7 +784,7 @@ fn up_to_targets_exclude_an_opponents_warded_character() {
                 filter: CharacterFilter::any(TargetSide::Opposing),
                 max: 2,
             },
-            amount: 1,
+            amount: Amount::fixed(1),
         },
     )]));
     registry.insert(char_def(200).with_keywords(vec![Keyword::Ward]));

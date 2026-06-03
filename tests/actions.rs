@@ -3,7 +3,7 @@
 //! characters (Singer / Sing Together).
 
 use lorcana_engine::{
-    CardCategory, CardDefId, CardDefinition, CardId, CardInstance, CardKind, CardRegistry,
+    Amount, CardCategory, CardDefId, CardDefinition, CardId, CardInstance, CardKind, CardRegistry,
     CharacterFilter, CharacterStats, Classification, Conditions, Decision, Effect, GameState,
     GameStatus, Input, Keyword, PlayerId, Target, TargetSide, TriggerCondition, TriggeredAbility,
     apply, start,
@@ -103,7 +103,7 @@ fn is_ready(state: &GameState, player: PlayerId, card: CardId) -> bool {
 #[test]
 fn playing_an_action_resolves_its_effect_and_discards_it() {
     let reg: CardRegistry = (0..30)
-        .map(|n| action_card(n, 0, vec![Effect::GainLore(2)]))
+        .map(|n| action_card(n, 0, vec![Effect::GainLore(Amount::fixed(2))]))
         .collect();
     let mut state = started(&reg);
     let active = state.active_player();
@@ -134,7 +134,14 @@ fn playing_an_action_resolves_its_effect_and_discards_it() {
 /// A registry whose deck cards are the song under test, plus the given extra defs.
 fn song_reg(cost: u32, keywords: &[Keyword], extra: Vec<CardDefinition>) -> CardRegistry {
     let mut r: CardRegistry = (0..30)
-        .map(|n| song_card(n, cost, keywords.to_vec(), vec![Effect::GainLore(2)]))
+        .map(|n| {
+            song_card(
+                n,
+                cost,
+                keywords.to_vec(),
+                vec![Effect::GainLore(Amount::fixed(2))],
+            )
+        })
         .collect();
     for d in extra {
         r.insert(d);
@@ -263,7 +270,7 @@ fn singing_a_song_fires_a_play_a_song_watcher() {
     let watcher = CardDefinition::character(CardDefId::from_raw(300), 1, true, 1, 1, 1)
         .with_abilities(vec![TriggeredAbility::new(
             TriggerCondition::WhenYouPlay(CardCategory::Song),
-            Effect::GainLore(1),
+            Effect::GainLore(Amount::fixed(1)),
         )]);
     let reg = song_reg(3, &[], vec![singer_char(200, 4, None), watcher]);
     let mut state = started(&reg);
@@ -299,7 +306,7 @@ fn a_targeted_action_suspends_to_choose_then_resolves() {
                         filter: CharacterFilter::any(TargetSide::Opposing),
                         another: false,
                     },
-                    amount: 2,
+                    amount: Amount::fixed(2),
                 }],
             )
         })
@@ -366,9 +373,9 @@ fn a_multi_effect_action_resolves_the_rest_after_the_choice() {
                             filter: CharacterFilter::any(TargetSide::Opposing),
                             another: false,
                         },
-                        amount: 2,
+                        amount: Amount::fixed(2),
                     },
-                    Effect::GainLore(3),
+                    Effect::GainLore(Amount::fixed(3)),
                 ],
             )
         })
@@ -445,9 +452,9 @@ fn ward_target_does_as_much_as_you_can_still_draws() {
                             filter: CharacterFilter::any(TargetSide::Opposing),
                             another: false,
                         },
-                        amount: 2,
+                        amount: Amount::fixed(2),
                     },
-                    Effect::DrawCards(1),
+                    Effect::DrawCards(Amount::fixed(1)),
                 ],
             )
         })

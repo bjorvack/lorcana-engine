@@ -341,7 +341,7 @@ impl CardDefinition {
 #[cfg(test)]
 mod tests {
     use super::CardDefinition;
-    use crate::domain::effects::{Effect, TriggerCondition};
+    use crate::domain::effects::{Amount, Effect, TriggerCondition};
     use crate::domain::types::ids::CardDefId;
 
     #[test]
@@ -369,10 +369,13 @@ mod tests {
         use crate::domain::cards::TriggeredAbility;
         let def = CardDefinition::character(CardDefId::from_raw(2), 1, true, 1, 1, 1)
             .with_abilities(vec![
-                TriggeredAbility::new(TriggerCondition::WhenYouPlayThis, Effect::DrawCards(1)),
+                TriggeredAbility::new(
+                    TriggerCondition::WhenYouPlayThis,
+                    Effect::DrawCards(Amount::fixed(1)),
+                ),
                 TriggeredAbility::optional(
                     TriggerCondition::WhenThisQuests,
-                    Effect::EachOpponentLosesLore(1),
+                    Effect::EachOpponentLosesLore(Amount::fixed(1)),
                 ),
             ]);
 

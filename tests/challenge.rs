@@ -5,9 +5,9 @@
 //! can be exercised without playing through several turns.
 
 use lorcana_engine::{
-    CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterStats, Conditions,
-    Effect, GameEvent, GameState, GameStatus, Input, PlayerId, Target, TriggerCondition,
-    TriggeredAbility, apply, start,
+    Amount, CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterStats,
+    Conditions, Effect, GameEvent, GameState, GameStatus, Input, PlayerId, Target,
+    TriggerCondition, TriggeredAbility, apply, start,
 };
 
 /// Start a game (skipping mulligans) using the given registry.
@@ -281,13 +281,19 @@ fn challenge_triggers_fire_for_challenger_and_target() {
     // Challenger: "whenever this character challenges, gain 1 lore."
     registry.insert(
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 3, 1).with_abilities(vec![
-            TriggeredAbility::new(TriggerCondition::WhenThisChallenges, Effect::GainLore(1)),
+            TriggeredAbility::new(
+                TriggerCondition::WhenThisChallenges,
+                Effect::GainLore(Amount::fixed(1)),
+            ),
         ]),
     );
     // Target: "whenever this character is challenged, its controller gains 2 lore."
     registry.insert(
         CardDefinition::character(CardDefId::from_raw(200), 1, true, 1, 9, 1).with_abilities(vec![
-            TriggeredAbility::new(TriggerCondition::WhenChallenged, Effect::GainLore(2)),
+            TriggeredAbility::new(
+                TriggerCondition::WhenChallenged,
+                Effect::GainLore(Amount::fixed(2)),
+            ),
         ]),
     );
     let mut state = started_with(&registry);
@@ -323,7 +329,7 @@ fn banish_triggers_fire_for_both_banisher_and_banished() {
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 5, 9, 1).with_abilities(vec![
             TriggeredAbility::new(
                 TriggerCondition::WhenBanishesInChallenge,
-                Effect::GainLore(1),
+                Effect::GainLore(Amount::fixed(1)),
             ),
         ]),
     );
@@ -332,7 +338,7 @@ fn banish_triggers_fire_for_both_banisher_and_banished() {
         CardDefinition::character(CardDefId::from_raw(200), 1, true, 1, 2, 1).with_abilities(vec![
             TriggeredAbility::new(
                 TriggerCondition::WhenBanishedInChallenge,
-                Effect::GainLore(2),
+                Effect::GainLore(Amount::fixed(2)),
             ),
         ]),
     );

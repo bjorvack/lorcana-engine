@@ -2,9 +2,9 @@
 //! cost and resolving the effect immediately (§7.5).
 
 use lorcana_engine::{
-    AbilityCost, ActivatedAbility, CardDefId, CardDefinition, CardId, CardInstance, CardRegistry,
-    CharacterStats, Conditions, Effect, GameEvent, GameState, GameStatus, Input, PlayerId, apply,
-    start,
+    AbilityCost, ActivatedAbility, Amount, CardDefId, CardDefinition, CardId, CardInstance,
+    CardRegistry, CharacterStats, Conditions, Effect, GameEvent, GameState, GameStatus, Input,
+    PlayerId, apply, start,
 };
 
 fn two_decks(size: u32) -> Vec<Vec<CardDefId>> {
@@ -84,7 +84,7 @@ fn exert_ability_draws_and_exerts_the_source() {
     let mut registry = CardRegistry::new();
     registry.insert(
         CardDefinition::character(def, 1, true, 2, 3, 1).with_activated(vec![
-            ActivatedAbility::new(AbilityCost::exert(), Effect::DrawCards(1)),
+            ActivatedAbility::new(AbilityCost::exert(), Effect::DrawCards(Amount::fixed(1))),
         ]),
     );
     let mut state = started(&registry);
@@ -120,7 +120,10 @@ fn ink_ability_pays_ink() {
     let mut registry = CardRegistry::new();
     registry.insert(
         CardDefinition::character(def, 1, true, 2, 3, 1).with_activated(vec![
-            ActivatedAbility::new(AbilityCost::new(false, 1), Effect::GainLore(1)),
+            ActivatedAbility::new(
+                AbilityCost::new(false, 1),
+                Effect::GainLore(Amount::fixed(1)),
+            ),
         ]),
     );
     let mut state = started(&registry);
@@ -157,7 +160,10 @@ fn insufficient_ink_is_rejected() {
     let mut registry = CardRegistry::new();
     registry.insert(
         CardDefinition::character(def, 1, true, 2, 3, 1).with_activated(vec![
-            ActivatedAbility::new(AbilityCost::new(false, 1), Effect::GainLore(1)),
+            ActivatedAbility::new(
+                AbilityCost::new(false, 1),
+                Effect::GainLore(Amount::fixed(1)),
+            ),
         ]),
     );
     let mut state = started(&registry);
@@ -182,7 +188,7 @@ fn drying_or_exerted_source_cannot_pay_an_exert_cost() {
     let mut registry = CardRegistry::new();
     registry.insert(
         CardDefinition::character(def, 1, true, 2, 3, 1).with_activated(vec![
-            ActivatedAbility::new(AbilityCost::exert(), Effect::DrawCards(1)),
+            ActivatedAbility::new(AbilityCost::exert(), Effect::DrawCards(Amount::fixed(1))),
         ]),
     );
     let mut state = started(&registry);
