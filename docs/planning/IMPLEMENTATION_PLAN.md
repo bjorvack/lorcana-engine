@@ -802,8 +802,10 @@ Turn the rules library into something usable + hardened.
   action is accepted). **Next:** CLI host; self-play/fuzz harness; multi-pick &
   Shift/Sing enumeration.
 - [ ] **CLI host** (`src/main.rs`) — a thin text loop to play/inspect a game.
-- [ ] **Self-play / fuzz** — drive random legal actions to completion across seeds;
-  assert no panics + invariants hold.
+- [x] **Self-play / fuzz** (`tests/self_play.rs`) — drives random legal actions to
+  completion across 25 seeds; asserts every reported-legal action is accepted, no
+  panics, and invariants hold (per-player card count conserved at 30; reaching the
+  lore threshold ends the game).
 
 ## Cross-cutting tracks (run alongside slices)
 
