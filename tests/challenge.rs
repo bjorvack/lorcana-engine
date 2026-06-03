@@ -388,7 +388,10 @@ fn a_card_banished_in_a_challenge_can_return_itself_to_hand() {
         CardDefinition::character(CardDefId::from_raw(200), 1, true, 1, 2, 1).with_abilities(vec![
             TriggeredAbility::new(
                 TriggerCondition::WhenBanishedInChallenge,
-                Effect::ReturnToHand(Target::SelfCard),
+                Effect::Move {
+                    what: lorcana_engine::MoveSource::Card(Target::SelfCard),
+                    to: lorcana_engine::Destination::Hand,
+                },
             ),
         ]),
     );
@@ -435,7 +438,10 @@ fn a_banished_card_can_put_itself_into_the_inkwell() {
         CardDefinition::character(CardDefId::from_raw(200), 1, true, 1, 2, 1).with_abilities(vec![
             TriggeredAbility::new(
                 TriggerCondition::WhenBanished,
-                Effect::IntoInkwell(Target::SelfCard),
+                Effect::Move {
+                    what: lorcana_engine::MoveSource::Card(Target::SelfCard),
+                    to: lorcana_engine::Destination::Inkwell,
+                },
             ),
         ]),
     );

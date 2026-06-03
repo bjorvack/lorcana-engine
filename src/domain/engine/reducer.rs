@@ -6,8 +6,8 @@ use crate::domain::cards::{
     ShiftKind, StaticAbility, StaticTarget,
 };
 use crate::domain::effects::{
-    Amount, CardCategory, CharacterFilter, DeckPosition, DelayedWhen, DiscardAmount, Effect,
-    PlayFilter, PlayerScope, Target, TargetSide, TriggerCondition,
+    Amount, CardCategory, CharacterFilter, DeckPosition, DelayedWhen, Destination, DiscardAmount,
+    Effect, MoveSource, PlayFilter, PlayerScope, Target, TargetSide, TriggerCondition,
 };
 use crate::domain::game::{
     CardInstance, CharacterStats, Conditions, DelayedTrigger, GameEvent, GameState, GameStatus,
@@ -2138,6 +2138,15 @@ fn execute_effect(
                 });
             }
         },
+        // Move the top `count` of each scoped player's deck to `to` (mill / dig).
+        Effect::Move {
+            what: MoveSource::DeckTop { who, count },
+            to,
+        } => {
+            return resolve_deck_move(
+                state, registry, controller, source, *who, count, *to, effect,
+            );
+        }
         // The controller plays an eligible card from hand for free (§6).
         Effect::PlayFreeFromHand { filter } => {
             let options = eligible_free_plays(state, registry, controller, filter);
@@ -2192,9 +2201,10 @@ fn execute_effect(
         }
         // Targeted effects: resolve the target now (self / all) or report that a
         // choice is needed (§7.1).
-        Effect::ReturnToHand(target)
-        | Effect::IntoInkwell(target)
-        | Effect::ReturnToDeck { target, .. }
+        Effect::Move {
+            what: MoveSource::Card(target),
+            ..
+        }
         | Effect::GiveStrengthThisTurn { target, .. }
         | Effect::DealDamage { target, .. }
         | Effect::RemoveDamage { target, .. }
@@ -2311,17 +2321,15 @@ fn chosen_permanent_options(
     out
 }
 
-/// The destination zone for a leave-play move effect (return to hand / inkwell /
-/// deck), defaulting to hand.
-const fn leave_play_destination(effect: &Effect) -> SelfDestination {
-    match effect {
-        Effect::IntoInkwell(_) => SelfDestination::Inkwell,
-        Effect::ReturnToDeck { position, .. } => match position {
-            DeckPosition::Top => SelfDestination::TopOfDeck,
-            DeckPosition::Bottom => SelfDestination::BottomOfDeck,
-            DeckPosition::Shuffle => SelfDestination::ShuffleIntoDeck,
-        },
-        _ => SelfDestination::Hand,
+/// Map a move [`Destination`] to the internal self-move destination.
+const fn destination_to_self(to: Destination) -> SelfDestination {
+    match to {
+        Destination::Hand => SelfDestination::Hand,
+        Destination::Inkwell => SelfDestination::Inkwell,
+        Destination::Discard => SelfDestination::Discard,
+        Destination::Deck(DeckPosition::Top) => SelfDestination::TopOfDeck,
+        Destination::Deck(DeckPosition::Bottom) => SelfDestination::BottomOfDeck,
+        Destination::Deck(DeckPosition::Shuffle) => SelfDestination::ShuffleIntoDeck,
     }
 }
 
@@ -2428,7 +2436,81 @@ fn substitute_chosen_player(effect: &Effect, player: PlayerId) -> Effect {
             who: PlayerScope::Player(player),
             amount: *amount,
         },
+        Effect::Move {
+            what: MoveSource::DeckTop { count, .. },
+            to,
+        } => Effect::Move {
+            what: MoveSource::DeckTop {
+                who: PlayerScope::Player(player),
+                count: count.clone(),
+            },
+            to: *to,
+        },
         other => other.clone(),
+    }
+}
+
+/// Resolve a [`MoveSource::DeckTop`] move: each scoped player moves the top
+/// `count` cards of their deck to `to` (mill → discard, dig → hand, …), or a
+/// `Chosen*` scope prompts a player choice.
+#[allow(clippy::too_many_arguments)]
+fn resolve_deck_move(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    controller: PlayerId,
+    source: CardId,
+    who: PlayerScope,
+    count: &Amount,
+    to: Destination,
+    effect: &Effect,
+) -> Option<Choice> {
+    let n = usize::try_from(eval_amount(state, registry, controller, source, source, count).max(0))
+        .unwrap_or(0);
+    match resolve_scope(state, controller, who) {
+        ScopeOutcome::Players(players) => {
+            for p in players {
+                move_deck_top(state, p, n, to);
+            }
+            None
+        }
+        ScopeOutcome::Choose(options) => Some(Choice::ChoosePlayer {
+            player: controller,
+            options,
+            effect: effect.clone(),
+        }),
+    }
+}
+
+/// Move the top `n` cards of `player`'s deck to `to` (§8).
+fn move_deck_top(state: &mut GameState, player: PlayerId, n: usize, to: Destination) {
+    let dest = destination_to_self(to);
+    for _ in 0..n {
+        let Some(p) = state.player_mut(player) else {
+            return;
+        };
+        let Some(mut card) = p.deck_mut().pop_top() else {
+            return;
+        };
+        match dest {
+            SelfDestination::Discard => {
+                *card.conditions_mut() = Conditions::faceup_idle();
+                p.discard_mut().push(card);
+            }
+            SelfDestination::Hand => {
+                *card.conditions_mut() = Conditions::faceup_idle();
+                p.hand_mut().push(card);
+            }
+            SelfDestination::Inkwell => {
+                *card.conditions_mut() = Conditions::in_inkwell();
+                p.inkwell_mut().push(card);
+            }
+            SelfDestination::BottomOfDeck => {
+                p.deck_mut().insert_bottom(card);
+            }
+            SelfDestination::TopOfDeck | SelfDestination::ShuffleIntoDeck => {
+                p.deck_mut().push(card);
+            }
+        }
     }
 }
 
@@ -2800,6 +2882,7 @@ fn discard_card(
 enum SelfDestination {
     Hand,
     Inkwell,
+    Discard,
     TopOfDeck,
     BottomOfDeck,
     ShuffleIntoDeck,
@@ -2824,7 +2907,7 @@ fn move_self_card(state: &mut GameState, owner: PlayerId, card: CardId, dest: Se
             return;
         };
         let conditions = match dest {
-            SelfDestination::Hand => Conditions::faceup_idle(),
+            SelfDestination::Hand | SelfDestination::Discard => Conditions::faceup_idle(),
             // Facedown and exerted (Gramma Tala "facedown and exerted").
             SelfDestination::Inkwell => Conditions {
                 ready: false,
@@ -2841,6 +2924,7 @@ fn move_self_card(state: &mut GameState, owner: PlayerId, card: CardId, dest: Se
         for moved in instance.dissolve(conditions) {
             match dest {
                 SelfDestination::Hand => p.hand_mut().push(moved),
+                SelfDestination::Discard => p.discard_mut().push(moved),
                 SelfDestination::Inkwell => p.inkwell_mut().push(moved),
                 SelfDestination::TopOfDeck | SelfDestination::ShuffleIntoDeck => {
                     p.deck_mut().push(moved);
@@ -2873,9 +2957,12 @@ fn apply_effect_to(
     match effect {
         // Move the target out of play / discard to its owner's hand, inkwell, or
         // deck, dissolving any stack into the destination (§5.1.7).
-        Effect::ReturnToHand(_) | Effect::IntoInkwell(_) | Effect::ReturnToDeck { .. } => {
+        Effect::Move {
+            what: MoveSource::Card(_),
+            to,
+        } => {
             if let Some(owner) = owner_holding(state, target_card) {
-                move_self_card(state, owner, target_card, leave_play_destination(effect));
+                move_self_card(state, owner, target_card, destination_to_self(*to));
             }
         }
         Effect::GiveStrengthThisTurn { amount, .. }
@@ -2957,6 +3044,10 @@ fn apply_effect_to(
         | Effect::GainLore(_)
         | Effect::EachOpponentLosesLore(_)
         | Effect::Discard { .. }
+        | Effect::Move {
+            what: MoveSource::DeckTop { .. },
+            ..
+        }
         | Effect::PlayFreeFromHand { .. }
         | Effect::LookAtTopAndTake { .. }
         | Effect::May(_)

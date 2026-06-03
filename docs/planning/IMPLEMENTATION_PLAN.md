@@ -696,8 +696,15 @@ mechanics ranked by card count, with the remaining gaps to close in order:
     ChoosePlayer` re-targets the effect onto the chosen player. Wired into
     `Discard`. `tests/multiplayer.rs` (4-player prompts; 2-player auto-resolves).
     **Remaining:** player-scoped **draw/lore** onto `PlayerScope` ("each/chosen
-    player draws", "chosen opponent loses lore"); other-player **deck ops** (the
-    bulk of "chosen player": look-at/mill/shuffle another player's deck).
+    player draws", "chosen opponent loses lore").
+  - [x] **unified zone move + mill** — `Effect::Move { what: MoveSource, to:
+    Destination }` is the single card-move primitive: `MoveSource::Card(Target)`
+    (bounce / into-inkwell / return-to-deck — replaces the old `ReturnToHand`,
+    `IntoInkwell`, `ReturnToDeck`) and `MoveSource::DeckTop { who, count }`
+    (milling / digging). `Destination = Hand | Inkwell | Discard | Deck(pos)`.
+    Mill = `Move { DeckTop, Discard }`, threads `PlayerScope` (so "top N of chosen
+    player's deck into their discard" works in multiplayer). `tests/multiplayer.rs`.
+    **Remaining:** other-player look-at-top (scoped `LookAtTopAndTake`).
 - [ ] **grant an ability** (10) — "gains '\<ability text\>'" (a granted triggered/
       activated ability, not just a keyword).
 - [ ] **name a card** (6), **move damage** (15) — niche.

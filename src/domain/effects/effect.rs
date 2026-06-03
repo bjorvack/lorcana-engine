@@ -45,6 +45,34 @@ pub struct PlayFilter {
     pub category: Option<CardCategory>,
 }
 
+/// What a [`Effect::Move`] selects to move.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub enum MoveSource {
+    /// A target card (self / chosen / all-matching). Used for bounce, into-inkwell,
+    /// and return-to-deck.
+    Card(Target),
+    /// The top `count` cards of each player in `who`'s deck (milling / digging).
+    DeckTop {
+        /// Whose deck.
+        who: PlayerScope,
+        /// How many off the top.
+        count: Amount,
+    },
+}
+
+/// Where a [`Effect::Move`] sends cards.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum Destination {
+    /// The owner's hand ("return to hand" / bounce).
+    Hand,
+    /// The owner's inkwell, facedown and exerted.
+    Inkwell,
+    /// The owner's discard (e.g. milling the top of a deck).
+    Discard,
+    /// The owner's deck, at the given position.
+    Deck(DeckPosition),
+}
+
 /// Which players an effect applies to.
 ///
 /// The `Chosen*` variants require the controller to pick a player — a real
@@ -118,20 +146,14 @@ pub enum Effect {
     GainLore(Amount),
     /// Each opponent of the controller loses this much lore (clamped at 0).
     EachOpponentLosesLore(Amount),
-    /// Move the target card to its owner's hand (§7; e.g. Marshmallow "return
-    /// this card to your hand"). For `Target::SelfCard` the source returns itself
-    /// — including from the discard, where banishment leaves it.
-    ReturnToHand(Target),
-    /// Put the target card into its owner's inkwell facedown and exerted (Gramma
-    /// Tala "into your inkwell facedown and exerted").
-    IntoInkwell(Target),
-    /// Return the target card to its owner's deck (top / bottom / shuffled in),
-    /// e.g. "shuffle chosen character into their player's deck" (§8.2).
-    ReturnToDeck {
-        /// Who is returned.
-        target: Target,
-        /// Where in the deck.
-        position: DeckPosition,
+    /// Move card(s) from one zone to another (§7, §8): the single zone-move
+    /// primitive. Covers "return to hand" (bounce), "into your inkwell", "return
+    /// to deck", and milling — `what` selects the cards, `to` is the destination.
+    Move {
+        /// Which cards move (a target card, or the top of a player's deck).
+        what: MoveSource,
+        /// Where they go.
+        to: Destination,
     },
     /// Give the target character `amount` Strength `{S}` until end of turn (e.g.
     /// Support adds the source's current `{S}`; "gets +N {S} this turn").

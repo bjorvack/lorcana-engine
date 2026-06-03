@@ -158,3 +158,50 @@ fn chosen_opponent_auto_resolves_in_two_player() {
     };
     assert_eq!(*player, opp);
 }
+
+#[test]
+fn mill_is_a_card_move_from_deck_to_discard() {
+    // "Put the top 2 cards of your deck into your discard" — milling expressed as
+    // a zone move (MoveSource::DeckTop -> Destination::Discard).
+    let mut reg = CardRegistry::new();
+    reg.insert(
+        CardDefinition::character(CardDefId::from_raw(100), 1, true, 1, 5, 1).with_abilities(vec![
+            TriggeredAbility::new(
+                TriggerCondition::WhenThisQuests,
+                Effect::Move {
+                    what: lorcana_engine::MoveSource::DeckTop {
+                        who: PlayerScope::You,
+                        count: lorcana_engine::Amount::fixed(2),
+                    },
+                    to: lorcana_engine::Destination::Discard,
+                },
+            ),
+        ]),
+    );
+    for n in 0..30 {
+        if reg.get(CardDefId::from_raw(n)).is_none() {
+            reg.insert(CardDefinition::character(
+                CardDefId::from_raw(n),
+                1,
+                true,
+                1,
+                1,
+                1,
+            ));
+        }
+    }
+    let mut state = started_n(&reg, 2);
+    let active = state.active_player();
+    let quester = place_quester(&mut state, active);
+    let deck_before = state.player(active).unwrap().deck().len();
+    let discard_before = state.player(active).unwrap().discard().len();
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+
+    assert!(state.pending().is_none());
+    assert_eq!(state.player(active).unwrap().deck().len(), deck_before - 2);
+    assert_eq!(
+        state.player(active).unwrap().discard().len(),
+        discard_before + 2
+    );
+}

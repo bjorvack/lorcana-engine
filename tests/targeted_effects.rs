@@ -786,12 +786,12 @@ fn return_to_deck_moves_the_target_out_of_play_into_the_deck() {
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 5, 1).with_abilities(vec![
             TriggeredAbility::new(
                 TriggerCondition::WhenThisQuests,
-                Effect::ReturnToDeck {
-                    target: Target::ChosenCharacter {
+                Effect::Move {
+                    what: lorcana_engine::MoveSource::Card(Target::ChosenCharacter {
                         filter: CharacterFilter::any(TargetSide::Opposing),
                         another: false,
-                    },
-                    position: lorcana_engine::DeckPosition::Bottom,
+                    }),
+                    to: lorcana_engine::Destination::Deck(lorcana_engine::DeckPosition::Bottom),
                 },
             ),
         ]),
