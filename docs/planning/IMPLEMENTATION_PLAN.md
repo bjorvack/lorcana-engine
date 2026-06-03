@@ -819,7 +819,12 @@ pattern can collapse. Tracked and done one at a time:
       inside `Choose`. And `substitute_*` implement the clean "substitute the pick
       into the effect AST and re-resolve" pattern (reusing `execute_effect`);
       removing them would duplicate per-effect resolution. Net: would worsen the
-      code, so not pursued.
+      code, so not pursued. **However**, revisiting it after #4 surfaced a real,
+      bounded win in the same spirit: `Target::ChosenItem`/`ChosenLocation` are now
+      one `ChosenPermanent { filter }` (using the `Category` predicate), and the
+      parallel `chosen_permanent_options`/`PermanentKind` path is deleted —
+      item/location targeting now goes through the unified filter algebra like
+      everything else.
 - [ ] **#2** collapse `GrantKeywordThisTurn`/`RestrictThisTurn`/`PermitThisTurn` →
       `GrantThisTurn { target, property }`.
 - [ ] **#3** fold `Count` into `Amount` (`ControlledCharacters` → `PerMatching(filter)`).
