@@ -16,10 +16,10 @@ pub use domain::effects::{
 };
 pub use domain::engine::{Decision, Input, Rejected, apply, start};
 pub use domain::game::{
-    BagEntry, CardInstance, CharacterStats, Conditions, GameEvent, GameState, GameStatus,
-    LocationStats, ModifierDuration, ModifierTarget, PendingDecision, Permission, PlayerState,
-    Property, PropertyModifier, Restriction, RuleModifier, SeededRng, Stat, StatModifier,
-    TriggerId, Zone, ZoneKind,
+    BagEntry, CardInstance, CharacterStats, Condition, Conditions, GameEvent, GameState,
+    GameStatus, LocationStats, ModifierDuration, ModifierTarget, PendingDecision, Permission,
+    PlayerState, Property, PropertyModifier, Restriction, RuleModifier, SeededRng, Stat,
+    StatModifier, TriggerId, Zone, ZoneKind,
 };
 pub use domain::rules::{RequiredAction, check_win_loss, game_state_check, lore_to_win};
 pub use domain::types::{

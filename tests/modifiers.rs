@@ -4,8 +4,8 @@
 
 use lorcana_engine::{
     CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterStats, Classification,
-    Conditions, GameState, GameStatus, Input, ModifierDuration, ModifierTarget, PlayerId, Stat,
-    StatModifier, StaticAbility, apply, start,
+    Condition, Conditions, GameState, GameStatus, Input, ModifierDuration, ModifierTarget,
+    PlayerId, Stat, StatModifier, StaticAbility, apply, start,
 };
 
 fn started_with(registry: &CardRegistry) -> GameState {
@@ -277,4 +277,65 @@ fn selector_static_can_exclude_the_source() {
     // Each buffs the other (not itself): both at base 2 + 1 = 3.
     assert_eq!(state.current_character_stats(hand[0]).unwrap().strength, 3);
     assert_eq!(state.current_character_stats(hand[1]).unwrap().strength, 3);
+}
+
+#[test]
+fn a_while_exerted_static_applies_only_while_the_source_is_exerted() {
+    // Base-2 characters with "while this character is exerted, it gets +2 {S}".
+    let registry: CardRegistry = (0..30)
+        .map(|n| {
+            CardDefinition::character(CardDefId::from_raw(n), 1, true, 2, 3, 1).with_static(vec![
+                StaticAbility::self_modifier(Stat::Strength, 2)
+                    .with_condition(Condition::SourceExerted),
+            ])
+        })
+        .collect();
+    let mut state = started_with(&registry);
+    let active = state.active_player();
+    let hand: Vec<CardId> = state
+        .player(active)
+        .unwrap()
+        .hand()
+        .iter()
+        .map(CardInstance::id)
+        .collect();
+    let _ = apply(
+        &mut state,
+        &registry,
+        Input::PutCardInInkwell { card: hand[0] },
+    )
+    .expect("ink");
+    let _ = apply(
+        &mut state,
+        &registry,
+        Input::PlayCard {
+            card: hand[1],
+            shift_onto: None,
+        },
+    )
+    .expect("play");
+    let card = hand[1];
+
+    // Entered play ready → the condition doesn't hold → no buff.
+    assert_eq!(state.current_character_stats(card).unwrap().strength, 2);
+
+    // Exert it → condition holds → +2.
+    set_ready(&mut state, active, card, false);
+    assert_eq!(state.current_character_stats(card).unwrap().strength, 4);
+
+    // Ready again → buff gone.
+    set_ready(&mut state, active, card, true);
+    assert_eq!(state.current_character_stats(card).unwrap().strength, 2);
+}
+
+fn set_ready(state: &mut GameState, owner: PlayerId, card: CardId, ready: bool) {
+    state
+        .player_mut(owner)
+        .unwrap()
+        .play_mut()
+        .iter_mut()
+        .find(|c| c.id() == card)
+        .unwrap()
+        .conditions_mut()
+        .ready = ready;
 }

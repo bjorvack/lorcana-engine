@@ -28,6 +28,18 @@ pub enum Stat {
     Lore,
 }
 
+/// A condition that gates a continuous modifier — it applies only while the
+/// condition holds, evaluated on demand (§7.6 "while …" static abilities).
+///
+/// Grows as cards need it (stat thresholds, "while at a location", "while you
+/// have a … in play", …). The first cut is registry-free (state-only).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum Condition {
+    /// While the modifier's source card is exerted ("while this character is
+    /// exerted, …").
+    SourceExerted,
+}
+
 /// How long a modifier lasts.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum ModifierDuration {
@@ -143,10 +155,11 @@ pub struct PropertyModifier {
     target: ModifierTarget,
     property: Property,
     duration: ModifierDuration,
+    condition: Option<Condition>,
 }
 
 impl PropertyModifier {
-    /// Create a property modifier.
+    /// Create an (unconditional) property modifier.
     #[must_use]
     pub const fn new(
         source: CardId,
@@ -159,7 +172,21 @@ impl PropertyModifier {
             target,
             property,
             duration,
+            condition: None,
         }
+    }
+
+    /// Gate this modifier on a [`Condition`] (builder).
+    #[must_use]
+    pub const fn with_condition(mut self, condition: Condition) -> Self {
+        self.condition = Some(condition);
+        self
+    }
+
+    /// The condition gating this modifier, if any.
+    #[must_use]
+    pub const fn condition(&self) -> Option<Condition> {
+        self.condition
     }
 
     /// The card whose ability generates this modifier.
@@ -195,10 +222,11 @@ pub struct StatModifier {
     stat: Stat,
     delta: i32,
     duration: ModifierDuration,
+    condition: Option<Condition>,
 }
 
 impl StatModifier {
-    /// Create a stat modifier.
+    /// Create an (unconditional) stat modifier.
     #[must_use]
     pub const fn new(
         source: CardId,
@@ -213,7 +241,21 @@ impl StatModifier {
             stat,
             delta,
             duration,
+            condition: None,
         }
+    }
+
+    /// Gate this modifier on a [`Condition`] (builder).
+    #[must_use]
+    pub const fn with_condition(mut self, condition: Condition) -> Self {
+        self.condition = Some(condition);
+        self
+    }
+
+    /// The condition gating this modifier, if any.
+    #[must_use]
+    pub const fn condition(&self) -> Option<Condition> {
+        self.condition
     }
 
     /// The card whose ability generates this modifier.

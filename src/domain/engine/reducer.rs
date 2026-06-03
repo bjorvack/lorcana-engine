@@ -1821,13 +1821,17 @@ fn apply_enter_statics(
                 except: if *include_self { None } else { Some(card) },
             },
         };
-        state.add_modifier(StatModifier::new(
+        let mut modifier = StatModifier::new(
             card,
             target,
             ability.stat,
             ability.delta,
             ModifierDuration::WhileSourceInPlay,
-        ));
+        );
+        if let Some(condition) = ability.condition {
+            modifier = modifier.with_condition(condition);
+        }
+        state.add_modifier(modifier);
     }
 }
 

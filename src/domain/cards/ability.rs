@@ -1,7 +1,7 @@
 //! Card abilities.
 
 use crate::domain::effects::{Effect, TriggerCondition};
-use crate::domain::game::Stat;
+use crate::domain::game::{Condition, Stat};
 use crate::domain::types::card::Classification;
 use serde::{Deserialize, Serialize};
 
@@ -133,6 +133,9 @@ pub struct StaticAbility {
     pub stat: Stat,
     /// The signed amount (e.g. `+2` or `-1`).
     pub delta: i32,
+    /// A condition gating the modifier ("while this character is exerted, …"); it
+    /// applies only while the condition holds. `None` means always.
+    pub condition: Option<Condition>,
 }
 
 /// A static ability that modifies a **game rule** while the card is in play (the
@@ -158,6 +161,7 @@ impl StaticAbility {
             target: StaticTarget::SelfCard,
             stat,
             delta,
+            condition: None,
         }
     }
 
@@ -176,6 +180,14 @@ impl StaticAbility {
             },
             stat,
             delta,
+            condition: None,
         }
+    }
+
+    /// Gate this static ability on a [`Condition`] (builder).
+    #[must_use]
+    pub const fn with_condition(mut self, condition: Condition) -> Self {
+        self.condition = Some(condition);
+        self
     }
 }

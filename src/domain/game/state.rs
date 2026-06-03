@@ -1,7 +1,7 @@
 //! The authoritative game state.
 
 use super::{
-    BagEntry, CardInstance, CharacterStats, Conditions, GameStatus, ModifierDuration,
+    BagEntry, CardInstance, CharacterStats, Condition, Conditions, GameStatus, ModifierDuration,
     PendingDecision, Permission, PlayerState, Property, PropertyModifier, Restriction,
     RuleModifier, SeededRng, Stat, StatModifier, TriggerId, Zone,
 };
@@ -338,9 +338,7 @@ impl GameState {
     /// to its printed keywords, which live on the definition).
     #[must_use]
     pub fn granted_keywords(&self, card: CardId) -> Vec<Keyword> {
-        self.property_modifiers
-            .iter()
-            .filter(|m| self.target_matches(m.target(), card))
+        self.active_property_modifiers(card)
             .filter_map(|m| match m.property() {
                 Property::Keyword(k) => Some(k.clone()),
                 Property::Restriction(_) | Property::Permission(_) => None,
@@ -351,19 +349,23 @@ impl GameState {
     /// Whether `card` currently has the given [`Restriction`] (prevention).
     #[must_use]
     pub fn has_restriction(&self, card: CardId, restriction: Restriction) -> bool {
-        self.property_modifiers
-            .iter()
-            .filter(|m| self.target_matches(m.target(), card))
+        self.active_property_modifiers(card)
             .any(|m| matches!(m.property(), Property::Restriction(r) if *r == restriction))
     }
 
     /// Whether `card` currently has the given [`Permission`].
     #[must_use]
     pub fn has_permission(&self, card: CardId, permission: Permission) -> bool {
-        self.property_modifiers
-            .iter()
-            .filter(|m| self.target_matches(m.target(), card))
+        self.active_property_modifiers(card)
             .any(|m| matches!(m.property(), Property::Permission(p) if *p == permission))
+    }
+
+    /// The property modifiers that apply to `card` right now (target matches and
+    /// the gating condition holds).
+    fn active_property_modifiers(&self, card: CardId) -> impl Iterator<Item = &PropertyModifier> {
+        self.property_modifiers.iter().filter(move |m| {
+            self.condition_holds(m.condition(), m.source()) && self.target_matches(m.target(), card)
+        })
     }
 
     /// Add a game-rule modifier (e.g. a lore-to-win override).
@@ -430,9 +432,25 @@ impl GameState {
     pub fn stat_delta(&self, card: CardId, stat: Stat) -> i32 {
         self.modifiers
             .iter()
-            .filter(|m| m.stat() == stat && self.target_matches(m.target(), card))
+            .filter(|m| {
+                m.stat() == stat
+                    && self.condition_holds(m.condition(), m.source())
+                    && self.target_matches(m.target(), card)
+            })
             .map(StatModifier::delta)
             .sum()
+    }
+
+    /// Whether a modifier's gating [`Condition`] currently holds. `None` (an
+    /// unconditional modifier) always holds.
+    #[must_use]
+    pub fn condition_holds(&self, condition: Option<Condition>, source: CardId) -> bool {
+        match condition {
+            None => true,
+            Some(Condition::SourceExerted) => self
+                .instance_in_play(source)
+                .is_some_and(|c| !c.conditions().ready),
+        }
     }
 
     /// The player whose play area contains `card`, if any.

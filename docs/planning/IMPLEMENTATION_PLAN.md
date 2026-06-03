@@ -558,10 +558,17 @@ Challenge/banish triggers into the bag (see
     challenges this turn"). Tested in `tests/restrictions.rs`. NB: the "from **the**
     (current) challenge" variant (Raya/Peter Pan) still needs replacement timing
     (resolve the challenge trigger before damage) — deferred.
-  - **8b+ —** remaining: **conditional static abilities** ("while here / while
-    exerted" — the source for can't-be-challenged etc.), **player** targets,
-    floating & delayed triggers, the §7.7 "from the current challenge" timing,
-    §1.9.1.3 attribution, and modifiable location stats.
+  - [x] **8b-17 — conditional static abilities (foundation):** a `Condition`
+    (first: `SourceExerted`) gates `StatModifier` / `PropertyModifier`
+    (`with_condition`), evaluated on demand by `GameState::condition_holds`; the
+    stat/keyword/restriction/permission queries skip modifiers whose condition
+    fails. `StaticAbility` carries it ("while this character is exerted, …").
+    Tested in `tests/modifiers.rs`. Grows with more conditions (stat thresholds,
+    "while here", "while you have a … in play") + richer static targets (names /
+    at-location) to fully cover Tiana's Palace / The Wall / Kenai.
+  - **8b+ —** remaining: more `Condition` variants + static targets (the above),
+    **player** targets, floating & delayed triggers, the §7.7 "from the current
+    challenge" timing, §1.9.1.3 attribution, and modifiable location stats.
 
 ### Slice 8b+ — harder resolution rules
 - Replacement effects (§7.7): "instead"/"skip"/"enter"; self-replacement applied
