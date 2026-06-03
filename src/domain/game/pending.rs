@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 
 /// A reference a [`PendingDecision::Choose`] can pick — a card or a player. The
 /// unified currency for "choose from a set of options" decisions.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum ChoiceRef {
     /// An in-play / zoned card.
     Card(CardId),
@@ -23,6 +23,9 @@ pub enum ChoiceThen {
     /// Substitute the (single) pick into `effect`, then resolve it + the rest
     /// ("choose a player/character; the effect re-targets onto it", §7.1).
     SubstituteAndResolve(Box<Effect>),
+    /// Apply `effect` to each picked card, then resolve the rest ("chosen
+    /// character … " / "up to N chosen characters …", §7.1 / §7.1.8).
+    ApplyToEach(Box<Effect>),
 }
 
 /// A point in bag resolution that requires a player's input before the engine
@@ -71,22 +74,6 @@ pub enum PendingDecision {
         player: PlayerId,
         /// The Bodyguard character that just entered play.
         card: CardId,
-    },
-    /// A targeted effect is resolving and its controller must choose a target
-    /// from `options`; the stashed `effect` is applied to the pick, then any
-    /// `rest` effects resolve in order (§7.1.2, §7.1).
-    ChooseTarget {
-        /// The player who must choose.
-        player: PlayerId,
-        /// The effect's source card.
-        source: CardId,
-        /// The eligible targets.
-        options: Vec<CardId>,
-        /// The effect to apply to the chosen target.
-        effect: Effect,
-        /// The remaining effects of the same ability/action, resolved in order
-        /// after this one (the "[A] then [B]" continuation).
-        rest: Vec<Effect>,
     },
     /// A discard effect is resolving and `player` must choose exactly `count`
     /// cards from their own hand to discard. Afterwards the `remaining_players`
@@ -176,22 +163,6 @@ pub enum PendingDecision {
         /// The remaining effects, resolved in order after.
         rest: Vec<Effect>,
     },
-    /// "Up to N" — the controller chooses 0..`max` distinct targets from
-    /// `options`; `effect` applies to each, then `rest` resolves (§7.1.8).
-    ChooseUpToN {
-        /// The player who must choose.
-        player: PlayerId,
-        /// The effect's source card.
-        source: CardId,
-        /// The eligible targets.
-        options: Vec<CardId>,
-        /// The maximum number of distinct targets that may be chosen.
-        max: u32,
-        /// The effect applied to each chosen target.
-        effect: Effect,
-        /// The remaining effects of the ability/action, resolved in order after.
-        rest: Vec<Effect>,
-    },
 }
 
 impl PendingDecision {
@@ -202,15 +173,13 @@ impl PendingDecision {
             Self::OrderTriggers { player, .. }
             | Self::MayResolve { player, .. }
             | Self::EnterPlayExerted { player, .. }
-            | Self::ChooseTarget { player, .. }
             | Self::ChooseCardsToDiscard { player, .. }
             | Self::ChoosePlayFree { player, .. }
             | Self::ChooseFromRevealed { player, .. }
             | Self::Choose { player, .. }
             | Self::NameCard { player, .. }
             | Self::NameThenRecur { player, .. }
-            | Self::MayResolveEffect { player, .. }
-            | Self::ChooseUpToN { player, .. } => *player,
+            | Self::MayResolveEffect { player, .. } => *player,
         }
     }
 }

@@ -2187,25 +2187,6 @@ fn resolve_effects(
         if let Some(choice) = execute_effect(state, registry, controller, source, &effect, events) {
             let rest: Vec<Effect> = iter.collect();
             let pending = match choice {
-                Choice::One { options, effect } => PendingDecision::ChooseTarget {
-                    player: controller,
-                    source,
-                    options,
-                    effect,
-                    rest,
-                },
-                Choice::UpTo {
-                    options,
-                    max,
-                    effect,
-                } => PendingDecision::ChooseUpToN {
-                    player: controller,
-                    source,
-                    options,
-                    max,
-                    effect,
-                    rest,
-                },
                 Choice::Discard {
                     player,
                     count,
@@ -2288,17 +2269,6 @@ fn resolve_effects(
 
 /// A target choice an effect needs the controller to make at resolution.
 enum Choice {
-    /// Choose exactly one of `options`.
-    One {
-        options: Vec<CardId>,
-        effect: Effect,
-    },
-    /// Choose up to `max` distinct of `options` (§7.1.8).
-    UpTo {
-        options: Vec<CardId>,
-        max: u32,
-        effect: Effect,
-    },
     /// `player` must choose `count` cards from their hand to discard; afterwards
     /// the `remaining` players each discard per `amount` in turn (§8.4).
     Discard {
@@ -2365,6 +2335,30 @@ fn choose_card(player: PlayerId, options: Vec<CardId>, effect: &Effect) -> Choic
         min: 1,
         max: 1,
         then: ChoiceThen::SubstituteAndResolve(Box::new(effect.clone())),
+    }
+}
+
+/// Build a single-pick [`Choice::Choose`] that applies `effect` to the chosen
+/// card ("chosen character …", §7.1).
+fn choose_one(player: PlayerId, options: Vec<CardId>, effect: &Effect) -> Choice {
+    Choice::Choose {
+        player,
+        options: options.into_iter().map(ChoiceRef::Card).collect(),
+        min: 1,
+        max: 1,
+        then: ChoiceThen::ApplyToEach(Box::new(effect.clone())),
+    }
+}
+
+/// Build an "up to `max`" [`Choice::Choose`] that applies `effect` to each picked
+/// card (§7.1.8).
+fn choose_up_to(player: PlayerId, options: Vec<CardId>, max: u32, effect: &Effect) -> Choice {
+    Choice::Choose {
+        player,
+        options: options.into_iter().map(ChoiceRef::Card).collect(),
+        min: 0,
+        max,
+        then: ChoiceThen::ApplyToEach(Box::new(effect.clone())),
     }
 }
 
@@ -2519,10 +2513,7 @@ fn resolve_targeted(
         }
         Target::ChosenCharacter { filter } => {
             let options = choosable_characters(state, registry, controller, source, filter);
-            (!options.is_empty()).then(|| Choice::One {
-                options,
-                effect: effect.clone(),
-            })
+            (!options.is_empty()).then(|| choose_one(controller, options, effect))
         }
         Target::AllCharacters { filter } => {
             // "All characters" affects every match — it does not *choose*, so Ward
@@ -2535,26 +2526,16 @@ fn resolve_targeted(
         }
         Target::UpToCharacters { filter, max } => {
             let options = choosable_characters(state, registry, controller, source, filter);
-            (!options.is_empty()).then(|| Choice::UpTo {
-                options,
-                max: *max,
-                effect: effect.clone(),
-            })
+            (!options.is_empty()).then(|| choose_up_to(controller, options, *max, effect))
         }
         Target::ChosenItem { side } => {
             let options = chosen_permanent_options(state, controller, *side, PermanentKind::Item);
-            (!options.is_empty()).then(|| Choice::One {
-                options,
-                effect: effect.clone(),
-            })
+            (!options.is_empty()).then(|| choose_one(controller, options, effect))
         }
         Target::ChosenLocation { side } => {
             let options =
                 chosen_permanent_options(state, controller, *side, PermanentKind::Location);
-            (!options.is_empty()).then(|| Choice::One {
-                options,
-                effect: effect.clone(),
-            })
+            (!options.is_empty()).then(|| choose_one(controller, options, effect))
         }
     }
 }
@@ -3526,31 +3507,6 @@ fn apply_choice_decision(
 ) -> Result<(), Rejected> {
     match (pending, decision) {
         (
-            PendingDecision::ChooseTarget {
-                player,
-                source,
-                options,
-                effect,
-                rest,
-            },
-            Decision::ChooseTarget(chosen),
-        ) => apply_choose_target_decision(
-            state, registry, player, source, &options, &effect, rest, chosen, events,
-        ),
-        (
-            PendingDecision::ChooseUpToN {
-                player,
-                source,
-                options,
-                max,
-                effect,
-                rest,
-            },
-            Decision::ChooseTargets(chosen),
-        ) => apply_up_to_n_decision(
-            state, registry, player, source, &options, max, &effect, rest, chosen, events,
-        ),
-        (
             PendingDecision::ChooseCardsToDiscard {
                 player,
                 source,
@@ -3785,19 +3741,21 @@ fn apply_choose_decision(
     rest: Vec<Effect>,
     events: &mut Vec<GameEvent>,
 ) -> Result<(), Rejected> {
-    let picks = match decision {
+    let picks: Vec<ChoiceRef> = match decision {
         Decision::ChooseTarget(c) => vec![ChoiceRef::Card(*c)],
         Decision::ChoosePlayer(p) => vec![ChoiceRef::Player(*p)],
+        Decision::ChooseTargets(cs) => cs.iter().map(|c| ChoiceRef::Card(*c)).collect(),
         _ => return Err(Rejected::InvalidDecision),
     };
     let n = u32::try_from(picks.len()).unwrap_or(u32::MAX);
-    if n < min || n > max || picks.iter().any(|r| !options.contains(r)) {
+    let distinct = picks.iter().collect::<std::collections::HashSet<_>>().len() == picks.len();
+    if n < min || n > max || !distinct || picks.iter().any(|r| !options.contains(r)) {
         return Err(Rejected::InvalidDecision);
     }
     let _ = state.take_pending();
     match then {
+        // Single-pick: substitute the pick into the effect, then re-resolve.
         ChoiceThen::SubstituteAndResolve(effect) => {
-            // Single-pick continuation: substitute the pick into the effect.
             let resolved = match picks[0] {
                 ChoiceRef::Card(c) => substitute_move_endpoint(effect, c),
                 ChoiceRef::Player(p) => substitute_chosen_player(effect, p),
@@ -3805,31 +3763,16 @@ fn apply_choose_decision(
             let effects: Vec<Effect> = std::iter::once(resolved).chain(rest).collect();
             resolve_effects(state, registry, player, source, effects, events);
         }
+        // Apply the effect to each picked card (cards only), then the rest.
+        ChoiceThen::ApplyToEach(effect) => {
+            for pick in &picks {
+                if let ChoiceRef::Card(c) = pick {
+                    apply_effect_to(state, registry, player, source, *c, effect, events);
+                }
+            }
+            resolve_effects(state, registry, player, source, rest, events);
+        }
     }
-    events.extend(game_state_check_with_triggers(state, registry));
-    Ok(())
-}
-
-/// Answer a [`PendingDecision::ChooseTarget`]: validate the pick, apply `effect`
-/// to it, then resume the continuation (§7.1).
-#[allow(clippy::too_many_arguments)]
-fn apply_choose_target_decision(
-    state: &mut GameState,
-    registry: &CardRegistry,
-    player: PlayerId,
-    source: CardId,
-    options: &[CardId],
-    effect: &Effect,
-    rest: Vec<Effect>,
-    chosen: CardId,
-    events: &mut Vec<GameEvent>,
-) -> Result<(), Rejected> {
-    if !options.contains(&chosen) {
-        return Err(Rejected::InvalidDecision);
-    }
-    let _ = state.take_pending();
-    apply_effect_to(state, registry, player, source, chosen, effect, events);
-    resolve_effects(state, registry, player, source, rest, events);
     events.extend(game_state_check_with_triggers(state, registry));
     Ok(())
 }
@@ -3899,40 +3842,6 @@ fn apply_enter_exerted_decision(
     if let Some(definition_id) = state.instance_in_play(card).map(CardInstance::definition) {
         enqueue_enter_play_triggers(state, registry, player, card, definition_id);
     }
-}
-
-/// Answer a [`PendingDecision::ChooseUpToN`]: 0..`max` distinct eligible targets,
-/// apply `effect` to each, then resume the continuation (§7.1.8).
-#[allow(clippy::too_many_arguments)]
-fn apply_up_to_n_decision(
-    state: &mut GameState,
-    registry: &CardRegistry,
-    player: PlayerId,
-    source: CardId,
-    options: &[CardId],
-    max: u32,
-    effect: &Effect,
-    rest: Vec<Effect>,
-    chosen: Vec<CardId>,
-    events: &mut Vec<GameEvent>,
-) -> Result<(), Rejected> {
-    let distinct = chosen
-        .iter()
-        .collect::<std::collections::HashSet<_>>()
-        .len();
-    if chosen.len() > max as usize
-        || distinct != chosen.len()
-        || !chosen.iter().all(|c| options.contains(c))
-    {
-        return Err(Rejected::InvalidDecision);
-    }
-    let _ = state.take_pending();
-    for target in chosen {
-        apply_effect_to(state, registry, player, source, target, effect, events);
-    }
-    resolve_effects(state, registry, player, source, rest, events);
-    events.extend(game_state_check_with_triggers(state, registry));
-    Ok(())
 }
 
 /// Answer a [`PendingDecision::ChooseCardsToDiscard`]: validate the chosen cards

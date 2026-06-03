@@ -4,7 +4,7 @@
 
 use lorcana_engine::{
     Amount, CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterFilter,
-    CharacterStats, Conditions, Decision, Effect, GameState, GameStatus, Input, Keyword,
+    CharacterStats, ChoiceRef, Conditions, Decision, Effect, GameState, GameStatus, Input, Keyword,
     LocationStats, PendingDecision, PlayerId, PlayerScope, Property, Target, TargetSide,
     TriggerCondition, TriggeredAbility, apply, start,
 };
@@ -799,12 +799,16 @@ fn up_to_targets_exclude_an_opponents_warded_character() {
     let open = place(&mut state, foe, 3, 201, 1, 5, true, false);
 
     let _ = apply(&mut state, &registry, Input::Quest { character: quester }).expect("quest");
-    let Some(PendingDecision::ChooseUpToN { options, .. }) = state.pending() else {
+    let Some(PendingDecision::Choose { options, .. }) = state.pending() else {
         panic!("expected an up-to-N choice");
     };
-    assert!(options.contains(&open), "the un-Warded target is offered");
-    assert!(
-        !options.contains(&warded),
-        "the Warded target is not offered"
-    );
+    let cards: Vec<_> = options
+        .iter()
+        .filter_map(|r| match r {
+            ChoiceRef::Card(c) => Some(*c),
+            ChoiceRef::Player(_) => None,
+        })
+        .collect();
+    assert!(cards.contains(&open), "the un-Warded target is offered");
+    assert!(!cards.contains(&warded), "the Warded target is not offered");
 }

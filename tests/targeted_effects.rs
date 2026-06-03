@@ -1354,12 +1354,19 @@ fn filter_algebra_or_composes() {
     set_class(&mut state, foe, pirate, "Pirate");
 
     let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
-    let Some(PendingDecision::ChooseTarget { options, .. }) = state.pending() else {
+    let Some(PendingDecision::Choose { options, .. }) = state.pending() else {
         panic!("expected a target choice");
     };
-    assert!(options.contains(&villain) && options.contains(&hero));
+    let cards: Vec<_> = options
+        .iter()
+        .filter_map(|r| match r {
+            ChoiceRef::Card(c) => Some(*c),
+            ChoiceRef::Player(_) => None,
+        })
+        .collect();
+    assert!(cards.contains(&villain) && cards.contains(&hero));
     assert!(
-        !options.contains(&pirate),
+        !cards.contains(&pirate),
         "Pirate matches neither Villain nor Hero"
     );
 }
