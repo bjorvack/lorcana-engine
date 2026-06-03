@@ -201,12 +201,12 @@ fn an_effect_can_grant_a_permission_to_a_chosen_character() {
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 5, 1).with_abilities(vec![
             TriggeredAbility::new(
                 TriggerCondition::WhenThisQuests,
-                Effect::PermitThisTurn {
+                Effect::GrantThisTurn {
                     target: Target::ChosenCharacter {
                         filter: CharacterFilter::any(TargetSide::Yours)
                             .and(CharacterFilter::negate(CharacterFilter::IsSource)),
                     },
-                    permission: Permission::ChallengeReady,
+                    property: Property::Permission(Permission::ChallengeReady),
                 },
             ),
         ]),

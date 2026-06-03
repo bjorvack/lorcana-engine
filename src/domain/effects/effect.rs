@@ -2,8 +2,7 @@
 
 use super::target::{CharacterFilter, Target};
 use super::trigger::{CardCategory, TriggerCondition};
-use crate::domain::cards::Keyword;
-use crate::domain::game::{Permission, Restriction, Stat};
+use crate::domain::game::{Property, Stat};
 use crate::domain::types::ids::PlayerId;
 use serde::{Deserialize, Serialize};
 
@@ -225,29 +224,14 @@ pub enum Effect {
         /// Whether the granted trigger is a "you may" (optional).
         optional: bool,
     },
-    /// Give the target a keyword until end of turn ("chosen character gains
-    /// Challenger +2 this turn", "gains Evasive", §10).
-    GrantKeywordThisTurn {
-        /// Who gains the keyword.
+    /// Grant the target a continuous [`Property`] (keyword / restriction /
+    /// permission) until end of turn — "gains Evasive", "can't quest", "can
+    /// challenge ready characters this turn" (§10, §1.2.2).
+    GrantThisTurn {
+        /// Who is affected.
         target: Target,
-        /// The granted keyword.
-        keyword: Keyword,
-    },
-    /// Place a prevention on the target until end of turn ("can't quest", "can't
-    /// be challenged this turn", §1.2.2).
-    RestrictThisTurn {
-        /// Who is restricted.
-        target: Target,
-        /// The prevention.
-        restriction: Restriction,
-    },
-    /// Grant the target a permission until end of turn ("can challenge ready
-    /// characters this turn", Pick a Fight).
-    PermitThisTurn {
-        /// Who gains the permission.
-        target: Target,
-        /// The permission.
-        permission: Permission,
+        /// The granted property.
+        property: Property,
     },
     /// Choose `target`, then apply `then` to it if it matches `filter`, else
     /// `otherwise` ("Chosen character gets +2 {S}; if a Villain character is

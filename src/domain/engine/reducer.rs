@@ -2459,9 +2459,7 @@ fn execute_effect(
         | Effect::Ready(target)
         | Effect::Freeze(target)
         | Effect::GrantAbilityThisTurn { target, .. }
-        | Effect::GrantKeywordThisTurn { target, .. }
-        | Effect::RestrictThisTurn { target, .. }
-        | Effect::PermitThisTurn { target, .. }
+        | Effect::GrantThisTurn { target, .. }
         | Effect::IfTargetMatches { target, .. } => {
             return resolve_targeted(state, registry, controller, source, target, effect, events);
         }
@@ -3372,29 +3370,8 @@ fn apply_effect_to_rest(
         }
         // Grant a keyword / restriction / permission to the target until end of
         // turn (a single `UntilEndOfTurn` property modifier).
-        Effect::GrantKeywordThisTurn { keyword, .. } => {
-            grant_property(
-                state,
-                source,
-                target_card,
-                Property::Keyword(keyword.clone()),
-            );
-        }
-        Effect::RestrictThisTurn { restriction, .. } => {
-            grant_property(
-                state,
-                source,
-                target_card,
-                Property::Restriction(*restriction),
-            );
-        }
-        Effect::PermitThisTurn { permission, .. } => {
-            grant_property(
-                state,
-                source,
-                target_card,
-                Property::Permission(*permission),
-            );
+        Effect::GrantThisTurn { property, .. } => {
+            grant_property(state, source, target_card, property.clone());
         }
         Effect::IfTargetMatches {
             filter,

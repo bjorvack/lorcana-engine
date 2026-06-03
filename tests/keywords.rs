@@ -5,8 +5,8 @@
 use lorcana_engine::{
     Amount, CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterFilter,
     CharacterStats, Conditions, Decision, Effect, GameState, GameStatus, Input, Keyword,
-    LocationStats, PendingDecision, PlayerId, PlayerScope, Target, TargetSide, TriggerCondition,
-    TriggeredAbility, apply, start,
+    LocationStats, PendingDecision, PlayerId, PlayerScope, Property, Target, TargetSide,
+    TriggerCondition, TriggeredAbility, apply, start,
 };
 
 fn started(registry: &CardRegistry) -> GameState {
@@ -621,12 +621,12 @@ fn effect_granted_challenger_adds_strength_in_a_challenge() {
     // Quester grants "Challenger +3 this turn" to another chosen character of yours.
     registry.insert(char_def(101).with_abilities(vec![TriggeredAbility::new(
             TriggerCondition::WhenThisQuests,
-            Effect::GrantKeywordThisTurn {
+            Effect::GrantThisTurn {
                 target: Target::ChosenCharacter {
                     filter: CharacterFilter::any(TargetSide::Yours)
                         .and(CharacterFilter::negate(CharacterFilter::IsSource)),
                 },
-                keyword: Keyword::Challenger(3),
+                property: Property::Keyword(Keyword::Challenger(3)),
             },
         )]));
     registry.insert(char_def(100)); // the challenger
