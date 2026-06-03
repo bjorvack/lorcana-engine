@@ -12,7 +12,7 @@ pub use domain::cards::{
 };
 pub use domain::effects::{
     Amount, CardCategory, CharacterFilter, Comparison, DeckPosition, DelayedWhen, DiscardAmount,
-    Effect, NumericFilter, PlayFilter, Target, TargetSide, TriggerCondition,
+    Effect, NumericFilter, PlayFilter, PlayerScope, Target, TargetSide, TriggerCondition,
 };
 pub use domain::engine::{Decision, Input, Rejected, apply, start};
 pub use domain::game::{

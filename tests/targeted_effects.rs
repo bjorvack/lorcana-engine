@@ -5,8 +5,8 @@
 use lorcana_engine::{
     Amount, CardCategory, CardDefId, CardDefinition, CardId, CardInstance, CardRegistry,
     CharacterFilter, CharacterStats, Classification, Conditions, Decision, DiscardAmount, Effect,
-    GameState, GameStatus, Input, NumericFilter, PlayFilter, PlayerId, Target, TargetSide,
-    TriggerCondition, TriggeredAbility, apply, start,
+    GameState, GameStatus, Input, NumericFilter, PlayFilter, PlayerId, PlayerScope, Target,
+    TargetSide, TriggerCondition, TriggeredAbility, apply, start,
 };
 
 fn started(reg: &CardRegistry) -> GameState {
@@ -847,7 +847,10 @@ fn choose_and_discard_n_removes_the_chosen_cards() {
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 5, 1).with_abilities(vec![
             TriggeredAbility::new(
                 TriggerCondition::WhenThisQuests,
-                Effect::Discard(DiscardAmount::Count(2)),
+                Effect::Discard {
+                    who: PlayerScope::You,
+                    amount: DiscardAmount::Count(2),
+                },
             ),
         ]),
     );
@@ -880,7 +883,10 @@ fn discard_your_whole_hand_needs_no_choice() {
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 5, 1).with_abilities(vec![
             TriggeredAbility::new(
                 TriggerCondition::WhenThisQuests,
-                Effect::Discard(DiscardAmount::WholeHand),
+                Effect::Discard {
+                    who: PlayerScope::You,
+                    amount: DiscardAmount::WholeHand,
+                },
             ),
         ]),
     );
@@ -1056,4 +1062,44 @@ fn deal_damage_equal_to_the_number_of_your_characters() {
         dmg, 3,
         "damage equals the 3 characters the controller has in play"
     );
+}
+
+#[test]
+fn each_opponent_chooses_and_discards() {
+    // "When you play this, each opponent chooses and discards a card." The
+    // *opponent* makes the discard choice (the pending is theirs).
+    let mut reg = CardRegistry::new();
+    reg.insert(
+        CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 5, 1).with_abilities(vec![
+            TriggeredAbility::new(
+                TriggerCondition::WhenThisQuests,
+                Effect::Discard {
+                    who: PlayerScope::EachOpponent,
+                    amount: DiscardAmount::Count(1),
+                },
+            ),
+        ]),
+    );
+    let mut state = started(&reg);
+    let active = state.active_player();
+    let foe = opponent_of(&state, active);
+    let quester = place(&mut state, active, 1000, 100, 5, 0);
+    let foe_hand = hand_ids(&state, foe);
+    let before = foe_hand.len();
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+    assert_eq!(
+        state.pending().map(lorcana_engine::PendingDecision::player),
+        Some(foe),
+        "the opponent makes their own discard choice"
+    );
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(Decision::DiscardCards(vec![foe_hand[0]])),
+    )
+    .expect("opponent discards");
+
+    assert_eq!(hand_ids(&state, foe).len(), before - 1);
+    assert!(state.player(foe).unwrap().discard().contains(foe_hand[0]));
 }

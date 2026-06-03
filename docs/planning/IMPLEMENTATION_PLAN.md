@@ -684,8 +684,13 @@ mechanics ranked by card count, with the remaining gaps to close in order:
       continuous "+1 {L} for each Villain" (Hades) needs a count-based
       `StatModifier` delta (today fixed); "for each card in zone" counts; cost
       reductions.
-- [ ] **chosen / each player targets** (12 + 7) — player-directed draw/discard/
-      lore (needs a choose-a-player axis).
+- [~] **player-scoped effects** — `PlayerScope { You, EachOpponent, EachPlayer }`
+      backs `Effect::Discard { who, amount }`: each player in scope discards,
+      sequenced (each is its own `ChooseCardsToDiscard`, the *discarding* player
+      chooses; whole-hand needs no choice). Closes the deferred "each opponent
+      chooses and discards" (35). `tests/targeted_effects.rs`. **Remaining:**
+      `PlayerScope::ChosenPlayer` (choose-a-player axis — "chosen player draws/
+      discards", 12+ incl. deck-manip); player-scoped draw ("each player draws", 8).
 - [ ] **grant an ability** (10) — "gains '\<ability text\>'" (a granted triggered/
       activated ability, not just a keyword).
 - [ ] **name a card** (6), **move damage** (15) — niche.

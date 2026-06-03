@@ -7,12 +7,12 @@ use crate::domain::cards::{
 };
 use crate::domain::effects::{
     Amount, CardCategory, CharacterFilter, DeckPosition, DelayedWhen, DiscardAmount, Effect,
-    PlayFilter, Target, TargetSide, TriggerCondition,
+    PlayFilter, PlayerScope, Target, TargetSide, TriggerCondition,
 };
 use crate::domain::game::{
     CardInstance, CharacterStats, Conditions, DelayedTrigger, GameEvent, GameState, GameStatus,
-    LocationStats, ModifierDuration, ModifierTarget, PendingDecision, Permission, Property,
-    PropertyModifier, Restriction, RuleModifier, Stat, StatModifier, TriggerId,
+    LocationStats, ModifierDuration, ModifierTarget, PendingDecision, Permission, PlayerState,
+    Property, PropertyModifier, Restriction, RuleModifier, Stat, StatModifier, TriggerId,
 };
 use crate::domain::rules::game_state_check;
 use crate::domain::types::card::Classification;
@@ -1310,7 +1310,7 @@ fn opposing_owner_of(state: &GameState, active: PlayerId, card: CardId) -> Optio
         .iter()
         .filter(|p| p.id() != active)
         .find(|p| p.play().contains(card))
-        .map(super::super::game::PlayerState::id)
+        .map(PlayerState::id)
 }
 
 /// Find the definition id of a card in the active player's hand, or reject.
@@ -1643,7 +1643,7 @@ fn next_active_player(state: &GameState, from: PlayerId) -> PlayerId {
         let candidate = seat(index);
         if !state
             .player(candidate)
-            .is_some_and(super::super::game::PlayerState::is_eliminated)
+            .is_some_and(PlayerState::is_eliminated)
         {
             return candidate;
         }
@@ -1878,7 +1878,7 @@ fn apply_enter_rule_statics(
     let opponents: Vec<PlayerId> = state
         .players()
         .iter()
-        .map(super::super::game::PlayerState::id)
+        .map(PlayerState::id)
         .filter(|id| *id != controller)
         .collect();
     for rule in rule_statics {
@@ -2005,10 +2005,17 @@ fn resolve_effects(
                     effect,
                     rest,
                 },
-                Choice::Discard { player, count } => PendingDecision::ChooseCardsToDiscard {
+                Choice::Discard {
+                    player,
+                    count,
+                    amount,
+                    remaining,
+                } => PendingDecision::ChooseCardsToDiscard {
                     player,
                     source,
                     count,
+                    amount,
+                    remaining_players: remaining,
                     rest,
                 },
                 Choice::PlayFree { player, options } => PendingDecision::ChoosePlayFree {
@@ -2056,8 +2063,14 @@ enum Choice {
         max: u32,
         effect: Effect,
     },
-    /// `player` must choose `count` cards from their hand to discard (§8.4).
-    Discard { player: PlayerId, count: u32 },
+    /// `player` must choose `count` cards from their hand to discard; afterwards
+    /// the `remaining` players each discard per `amount` in turn (§8.4).
+    Discard {
+        player: PlayerId,
+        count: u32,
+        amount: DiscardAmount,
+        remaining: Vec<PlayerId>,
+    },
     /// `player` chooses one of `options` from hand to play for free (§6).
     PlayFree {
         player: PlayerId,
@@ -2093,10 +2106,11 @@ fn execute_effect(
                 events.push(draw(state, controller));
             }
         }
-        // The controller discards from their hand; they choose which cards unless
-        // the whole hand goes (§8.4).
-        Effect::Discard(amount) => {
-            return resolve_discard(state, controller, *amount, events);
+        // Players in `who` discard; each chooses which of their own cards unless
+        // their whole hand goes (§8.4).
+        Effect::Discard { who, amount } => {
+            let players = scope_players(state, controller, *who);
+            return resolve_scope_discard(state, &players, *amount, events);
         }
         // The controller plays an eligible card from hand for free (§6).
         Effect::PlayFreeFromHand { filter } => {
@@ -2123,37 +2137,11 @@ fn execute_effect(
                 inner: (**inner).clone(),
             });
         }
-        Effect::GainLore(n) => {
+        Effect::GainLore(n) | Effect::EachOpponentLosesLore(n) => {
             let amount =
                 u32::try_from(eval_amount(state, registry, controller, source, source, n).max(0))
                     .unwrap_or(0);
-            if let Some(p) = state.player_mut(controller) {
-                p.add_lore(amount);
-            }
-            events.push(GameEvent::LoreGained {
-                player: controller,
-                amount,
-            });
-        }
-        Effect::EachOpponentLosesLore(n) => {
-            let amount =
-                u32::try_from(eval_amount(state, registry, controller, source, source, n).max(0))
-                    .unwrap_or(0);
-            let opponents: Vec<PlayerId> = state
-                .players()
-                .iter()
-                .map(super::super::game::PlayerState::id)
-                .filter(|id| *id != controller)
-                .collect();
-            for opponent in opponents {
-                if let Some(p) = state.player_mut(opponent) {
-                    p.lose_lore(amount);
-                }
-                events.push(GameEvent::LoreLost {
-                    player: opponent,
-                    amount,
-                });
-            }
+            apply_lore_effect(state, controller, effect, amount, events);
         }
         // Schedule a one-shot delayed trigger to fire later (§7.4.7).
         Effect::ScheduleDelayed {
@@ -2339,33 +2327,87 @@ fn grant_property(state: &mut GameState, source: CardId, target: CardId, propert
     ));
 }
 
-/// Resolve a [`DiscardAmount`] for `controller`: discard the whole hand outright
-/// when the count covers it, else ask the controller to choose (§8.4).
-fn resolve_discard(
+/// Apply a lore gain/loss: `GainLore` adds to the controller; `EachOpponentLosesLore`
+/// subtracts from each opponent. The `amount` is pre-evaluated.
+fn apply_lore_effect(
     state: &mut GameState,
     controller: PlayerId,
+    effect: &Effect,
+    amount: u32,
+    events: &mut Vec<GameEvent>,
+) {
+    if matches!(effect, Effect::GainLore(_)) {
+        if let Some(p) = state.player_mut(controller) {
+            p.add_lore(amount);
+        }
+        events.push(GameEvent::LoreGained {
+            player: controller,
+            amount,
+        });
+        return;
+    }
+    let opponents: Vec<PlayerId> = state
+        .players()
+        .iter()
+        .map(PlayerState::id)
+        .filter(|id| *id != controller)
+        .collect();
+    for opponent in opponents {
+        if let Some(p) = state.player_mut(opponent) {
+            p.lose_lore(amount);
+        }
+        events.push(GameEvent::LoreLost {
+            player: opponent,
+            amount,
+        });
+    }
+}
+
+/// The players a [`PlayerScope`] resolves to, in resolution order (controller
+/// first for `EachPlayer`).
+fn scope_players(state: &GameState, controller: PlayerId, who: PlayerScope) -> Vec<PlayerId> {
+    let all: Vec<PlayerId> = state.players().iter().map(PlayerState::id).collect();
+    match who {
+        PlayerScope::You => vec![controller],
+        PlayerScope::EachOpponent => all.into_iter().filter(|p| *p != controller).collect(),
+        PlayerScope::EachPlayer => std::iter::once(controller)
+            .chain(all.into_iter().filter(|p| *p != controller))
+            .collect(),
+    }
+}
+
+/// Resolve a discard across `players` in order: discard the whole hand outright
+/// when `amount` covers it, else ask the first such player to choose (carrying the
+/// remaining players to discard afterwards), §8.4.
+fn resolve_scope_discard(
+    state: &mut GameState,
+    players: &[PlayerId],
     amount: DiscardAmount,
     events: &mut Vec<GameEvent>,
 ) -> Option<Choice> {
-    let hand: Vec<CardId> = state
-        .player(controller)
-        .map(|p| p.hand().iter().map(CardInstance::id).collect())
-        .unwrap_or_default();
-    let count = match amount {
-        DiscardAmount::WholeHand => u32::try_from(hand.len()).unwrap_or(u32::MAX),
-        DiscardAmount::Count(n) => n,
-    };
-    if count as usize >= hand.len() {
-        for card in hand {
-            discard_card(state, controller, card, events);
+    for (i, &player) in players.iter().enumerate() {
+        let hand: Vec<CardId> = state
+            .player(player)
+            .map(|p| p.hand().iter().map(CardInstance::id).collect())
+            .unwrap_or_default();
+        let count = match amount {
+            DiscardAmount::WholeHand => u32::try_from(hand.len()).unwrap_or(u32::MAX),
+            DiscardAmount::Count(n) => n,
+        };
+        if count as usize >= hand.len() {
+            for card in hand {
+                discard_card(state, player, card, events);
+            }
+        } else {
+            return Some(Choice::Discard {
+                player,
+                count,
+                amount,
+                remaining: players[i + 1..].to_vec(),
+            });
         }
-        None
-    } else {
-        Some(Choice::Discard {
-            player: controller,
-            count,
-        })
     }
+    None
 }
 
 /// The cards in `player`'s hand that a "play for free" effect with `filter` may
@@ -2858,7 +2900,7 @@ fn apply_effect_to(
         Effect::DrawCards(_)
         | Effect::GainLore(_)
         | Effect::EachOpponentLosesLore(_)
-        | Effect::Discard(_)
+        | Effect::Discard { .. }
         | Effect::PlayFreeFromHand { .. }
         | Effect::LookAtTopAndTake { .. }
         | Effect::May(_)
@@ -3025,7 +3067,7 @@ fn owner_holding(state: &GameState, card: CardId) -> Option<PlayerId> {
         .players()
         .iter()
         .find(|p| p.play().contains(card) || p.discard().contains(card))
-        .map(super::super::game::PlayerState::id)
+        .map(PlayerState::id)
 }
 
 /// Answer the pending bag decision and continue resolving (§8.7).
@@ -3111,10 +3153,23 @@ fn apply_choice_decision(
                 player,
                 source,
                 count,
+                amount,
+                remaining_players,
                 rest,
             },
             Decision::DiscardCards(chosen),
-        ) => apply_discard_decision(state, registry, player, source, count, rest, chosen, events),
+        ) => apply_discard_decision(
+            state,
+            registry,
+            player,
+            source,
+            count,
+            amount,
+            &remaining_players,
+            rest,
+            chosen,
+            events,
+        ),
         (
             PendingDecision::ChoosePlayFree {
                 player,
@@ -3299,6 +3354,8 @@ fn apply_discard_decision(
     player: PlayerId,
     source: CardId,
     count: u32,
+    amount: DiscardAmount,
+    remaining_players: &[PlayerId],
     rest: Vec<Effect>,
     chosen: Vec<CardId>,
     events: &mut Vec<GameEvent>,
@@ -3318,6 +3375,25 @@ fn apply_discard_decision(
     let _ = state.take_pending();
     for card in chosen {
         discard_card(state, player, card, events);
+    }
+    // Continue the scope: the next player who must choose suspends again (carrying
+    // `rest`); once all have discarded, the continuation resolves.
+    if let Some(Choice::Discard {
+        player: next,
+        count: next_count,
+        amount: next_amount,
+        remaining,
+    }) = resolve_scope_discard(state, remaining_players, amount, events)
+    {
+        state.set_pending(PendingDecision::ChooseCardsToDiscard {
+            player: next,
+            source,
+            count: next_count,
+            amount: next_amount,
+            remaining_players: remaining,
+            rest,
+        });
+        return Ok(());
     }
     resolve_effects(state, registry, player, source, rest, events);
     events.extend(game_state_check_with_triggers(state, registry));

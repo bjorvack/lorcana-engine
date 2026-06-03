@@ -5,6 +5,8 @@ pub mod target;
 pub mod trigger;
 
 // Re-export for convenience
-pub use effect::{Amount, DeckPosition, DelayedWhen, DiscardAmount, Effect, PlayFilter};
+pub use effect::{
+    Amount, DeckPosition, DelayedWhen, DiscardAmount, Effect, PlayFilter, PlayerScope,
+};
 pub use target::{CharacterFilter, Comparison, NumericFilter, Target, TargetSide};
 pub use trigger::{CardCategory, TriggerCondition};

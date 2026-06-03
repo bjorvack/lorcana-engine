@@ -1,7 +1,7 @@
 //! A decision the engine is waiting on before it can continue resolving.
 
 use super::bag::TriggerId;
-use crate::domain::effects::{DeckPosition, Effect};
+use crate::domain::effects::{DeckPosition, DiscardAmount, Effect};
 use crate::domain::types::ids::{CardId, PlayerId};
 use serde::{Deserialize, Serialize};
 
@@ -51,7 +51,8 @@ pub enum PendingDecision {
         rest: Vec<Effect>,
     },
     /// A discard effect is resolving and `player` must choose exactly `count`
-    /// cards from their own hand to discard; then `rest` resolves (§8.4, §7.1).
+    /// cards from their own hand to discard. Afterwards the `remaining_players`
+    /// each discard per `amount` in turn; then `rest` resolves (§8.4, §7.1).
     ChooseCardsToDiscard {
         /// The player who must choose (the discarding player).
         player: PlayerId,
@@ -59,6 +60,10 @@ pub enum PendingDecision {
         source: CardId,
         /// How many cards must be chosen.
         count: u32,
+        /// How much each remaining player discards.
+        amount: DiscardAmount,
+        /// Players that still discard after this one (multi-player scope).
+        remaining_players: Vec<PlayerId>,
         /// The remaining effects of the ability/action, resolved in order after.
         rest: Vec<Effect>,
     },

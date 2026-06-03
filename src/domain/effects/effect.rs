@@ -44,6 +44,17 @@ pub struct PlayFilter {
     pub category: Option<CardCategory>,
 }
 
+/// Which players an effect applies to.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum PlayerScope {
+    /// The controller only ("you").
+    You,
+    /// Each opponent of the controller.
+    EachOpponent,
+    /// Every player (controller and opponents).
+    EachPlayer,
+}
+
 /// How many cards a discard effect removes from a hand (§8.4).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum DiscardAmount {
@@ -182,9 +193,15 @@ pub enum Effect {
         /// Applied to the target when it doesn't.
         otherwise: Box<Self>,
     },
-    /// The controller discards cards from their hand ("choose and discard 2
-    /// cards"; "discard your hand"). The discarding player chooses which (§8.4).
-    Discard(DiscardAmount),
+    /// Players in `who` discard cards from their hand ("choose and discard 2
+    /// cards"; "each opponent chooses and discards a card"; "discard your hand").
+    /// Each discarding player chooses which of their own cards (§8.4).
+    Discard {
+        /// Which players discard.
+        who: PlayerScope,
+        /// How many each discards.
+        amount: DiscardAmount,
+    },
     /// The controller plays a card matching `filter` from their hand **for free**
     /// (no ink), choosing which eligible card (§6). Wrap in [`Effect::May`] for
     /// "you may play …".
