@@ -801,7 +801,9 @@ Turn the rules library into something usable + hardened.
   turn moves enumerated. `tests/api.rs` (incl. the invariant: every reported
   action is accepted). **Next:** CLI host; self-play/fuzz harness; multi-pick &
   Shift/Sing enumeration.
-- [ ] **CLI host** (`src/main.rs`) — a thin text loop to play/inspect a game.
+- [x] **CLI host** (`application::host` + `src/main.rs`) — `render` (state + numbered
+  legal actions), an interactive stdin loop, and a deterministic `demo` auto-play
+  (`cargo run -- demo [seed]`). `tests/cli_demo.rs` runs a full game to completion.
 - [x] **Self-play / fuzz** (`tests/self_play.rs`) — drives random legal actions to
   completion across 25 seeds; asserts every reported-legal action is accepted, no
   panics, and invariants hold (per-player card count conserved at 30; reaching the

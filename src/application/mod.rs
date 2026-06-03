@@ -2,5 +2,6 @@
 //! the engine in a host (CLI, server, AI).
 
 pub mod api;
+pub mod host;
 
 pub use api::Game;
