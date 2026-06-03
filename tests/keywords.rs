@@ -656,3 +656,50 @@ fn effect_granted_challenger_adds_strength_in_a_challenge() {
         "2 base {{S}} + granted Challenger +3"
     );
 }
+
+#[test]
+fn ward_prevents_being_chosen_by_an_opponents_effect() {
+    // Quester deals 1 damage to a chosen opposing character on quest.
+    let mut registry = CardRegistry::new();
+    registry.insert(char_def(100).with_abilities(vec![TriggeredAbility::new(
+        TriggerCondition::WhenThisQuests,
+        Effect::DealDamage {
+            target: Target::ChosenCharacter {
+                filter: CharacterFilter::any(TargetSide::Opposing),
+                another: false,
+            },
+            amount: 1,
+        },
+    )]));
+    registry.insert(char_def(200).with_keywords(vec![Keyword::Ward]));
+    registry.insert(char_def(201)); // no Ward
+
+    // Only a Warded opposing character: it can't be chosen, so no target / damage.
+    let mut state = started(&registry);
+    let active = state.active_player();
+    let foe = opponent_of(&state, active);
+    let quester = place(&mut state, active, 1, 100, 1, 5, true, false);
+    let warded = place(&mut state, foe, 2, 200, 1, 5, true, false);
+    let _ = apply(&mut state, &registry, Input::Quest { character: quester }).expect("quest");
+    assert!(
+        state.pending().is_none(),
+        "no eligible (Warded) target to choose"
+    );
+    assert_eq!(
+        damage(&state, foe, warded),
+        Some(0),
+        "Ward prevented the targeting"
+    );
+
+    // A non-Warded opposing character can be chosen (a target decision is pending).
+    let mut state = started(&registry);
+    let active = state.active_player();
+    let foe = opponent_of(&state, active);
+    let quester = place(&mut state, active, 1, 100, 1, 5, true, false);
+    let _open = place(&mut state, foe, 3, 201, 1, 5, true, false);
+    let _ = apply(&mut state, &registry, Input::Quest { character: quester }).expect("quest");
+    assert!(
+        state.pending().is_some(),
+        "an un-Warded target can be chosen"
+    );
+}

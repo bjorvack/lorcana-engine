@@ -641,8 +641,11 @@ mechanics ranked by card count, with the remaining gaps to close in order:
       `MayResolveEffect`, reusable by any effect) rather than a per-effect flag.
       `tests/targeted_effects.rs`. **Remaining:** play from **discard**,
       cost-reduction (pay N less) alternate costs, free-played Bodyguard enter-exerted.
-- [ ] **Ward / can't be chosen** (86, incl. reminder) — targeting restriction
-      (can't be chosen except to challenge); a targeting-legality property.
+- [x] **Ward / can't be chosen** (§10.15) — `chosen_character_options` excludes an
+      opponent's Warded characters (granted Ward counts too), so effects can't
+      target them; challenges still go through `can_challenge` unaffected.
+      `tests/keywords.rs`. (Ward on items/locations: minor follow-up — needs
+      registry threaded into `chosen_permanent_options`.)
 - [ ] **reveal** (69) — reveal hand / top of deck; often gates a follow-up.
 - [ ] **search / look at top N** (59) — scry/tutor: look, take matching, reorder.
 - [ ] **freeze / "can't ready next turn"** (38) — an exert that skips the next

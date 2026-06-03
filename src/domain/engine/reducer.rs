@@ -2653,6 +2653,7 @@ fn chosen_character_options(
         for card in player.play().iter() {
             if card.is_character()
                 && !(exclude_source && card.id() == source)
+                && (is_yours || !character_has_keyword(state, registry, card.id(), &Keyword::Ward))
                 && character_matches_filter(state, registry, card, filter)
             {
                 out.push(card.id());
