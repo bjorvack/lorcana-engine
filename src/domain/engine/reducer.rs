@@ -331,6 +331,7 @@ fn place_permanent(
         } => {
             let character_stats = CharacterStats::new(strength, willpower, lore);
             let classifications = definition.classifications().to_vec();
+            let names = definition.names().to_vec();
             if let Some(target) = shift_onto {
                 let ability = definition
                     .shift()
@@ -345,6 +346,7 @@ fn place_permanent(
                     target,
                     &ability,
                     &shift_names,
+                    ink_cost,
                     character_stats,
                     classifications,
                 )
@@ -356,6 +358,7 @@ fn place_permanent(
                     ink_cost,
                     character_stats,
                     classifications,
+                    names,
                 )
             }
         }
@@ -413,6 +416,7 @@ fn place_normally(
     ink_cost: u32,
     character_stats: CharacterStats,
     classifications: Vec<Classification>,
+    names: Vec<String>,
 ) -> Result<(), Rejected> {
     if state
         .player(active)
@@ -428,6 +432,8 @@ fn place_normally(
     *instance.conditions_mut() = Conditions::entering_play();
     instance.set_stats(Some(character_stats));
     instance.set_classifications(classifications);
+    instance.set_printed_cost(ink_cost);
+    instance.set_names(names);
     p.play_mut().push(instance);
     Ok(())
 }
@@ -470,6 +476,7 @@ fn place_via_shift(
     target: CardId,
     ability: &ShiftAbility,
     shift_names: &[String],
+    printed_cost: u32,
     character_stats: CharacterStats,
     classifications: Vec<Classification>,
 ) -> Result<(), Rejected> {
@@ -513,6 +520,8 @@ fn place_via_shift(
         *top.conditions_mut() = inherited;
         top.set_stats(Some(character_stats));
         top.set_classifications(classifications);
+        top.set_printed_cost(printed_cost);
+        top.set_names(shift_names.to_vec());
         top.stack_onto(underlying);
         p.play_mut().push(top);
     }
@@ -1086,7 +1095,7 @@ fn resolve_move_damage(
         resolved_endpoint(to, source),
     ) {
         (Some(f), Some(t)) => {
-            let max = eval_amount(state, registry, controller, source, source, amount).max(0);
+            let max = state.eval_amount(controller, source, source, amount).max(0);
             move_damage(state, f, t, max);
             None
         }
@@ -1161,7 +1170,6 @@ fn exclude_card_from_target(target: &Target, card: CardId) -> Target {
 #[allow(clippy::too_many_arguments)]
 fn apply_move_damage(
     state: &mut GameState,
-    registry: &CardRegistry,
     controller: PlayerId,
     source: CardId,
     target_card: CardId,
@@ -1169,7 +1177,9 @@ fn apply_move_damage(
     to: &Target,
     amount: &Amount,
 ) {
-    let max = eval_amount(state, registry, controller, source, target_card, amount).max(0);
+    let max = state
+        .eval_amount(controller, source, target_card, amount)
+        .max(0);
     let from_card = move_endpoint(from, source, target_card);
     let to_card = move_endpoint(to, source, target_card);
     move_damage(state, from_card, to_card, max);
@@ -2372,7 +2382,7 @@ fn execute_effect(
         // Each player in `who` draws / changes lore (may prompt a player choice).
         Effect::Draw { who, amount } | Effect::Lore { who, amount } => {
             return resolve_player_draw_lore(
-                state, registry, controller, source, *who, amount, effect, events,
+                state, controller, source, *who, amount, effect, events,
             );
         }
         // Players in `who` discard; each chooses their own cards unless the whole
@@ -2385,9 +2395,7 @@ fn execute_effect(
             what: MoveSource::DeckTop { who, count },
             to,
         } => {
-            return resolve_deck_move(
-                state, registry, controller, source, *who, count, *to, effect,
-            );
+            return resolve_deck_move(state, controller, source, *who, count, *to, effect);
         }
         // The controller plays an eligible card from hand for free (§6).
         Effect::PlayFreeFromHand { filter } => {
@@ -2432,8 +2440,7 @@ fn execute_effect(
         // Conditional: resolve `then` only if the controller has a matching
         // in-play character. `then` may itself be targeted (delegated).
         Effect::IfControl { filter, then } => {
-            let controls =
-                !matching_characters(state, registry, controller, source, filter).is_empty();
+            let controls = !matching_characters(state, controller, source, filter).is_empty();
             if controls {
                 return execute_effect(state, registry, controller, source, then, events);
             }
@@ -2498,7 +2505,7 @@ fn resolve_targeted(
         Target::AllCharacters { filter } => {
             // "All characters" affects every match — it does not *choose*, so Ward
             // does not apply (§10.15); use the raw matching set.
-            let targets = matching_characters(state, registry, controller, source, filter);
+            let targets = matching_characters(state, controller, source, filter);
             for card in targets {
                 apply_effect_to(state, registry, controller, source, card, effect, events);
             }
@@ -2614,7 +2621,6 @@ fn grant_property(state: &mut GameState, source: CardId, target: CardId, propert
 #[allow(clippy::too_many_arguments)]
 fn resolve_player_draw_lore(
     state: &mut GameState,
-    registry: &CardRegistry,
     controller: PlayerId,
     source: CardId,
     who: PlayerScope,
@@ -2622,7 +2628,7 @@ fn resolve_player_draw_lore(
     effect: &Effect,
     events: &mut Vec<GameEvent>,
 ) -> Option<Choice> {
-    let n = eval_amount(state, registry, controller, source, source, amount);
+    let n = state.eval_amount(controller, source, source, amount);
     match resolve_scope(state, controller, who) {
         ScopeOutcome::Players(players) => {
             for p in players {
@@ -2755,7 +2761,6 @@ fn substitute_chosen_player(effect: &Effect, player: PlayerId) -> Effect {
 #[allow(clippy::too_many_arguments)]
 fn resolve_deck_move(
     state: &mut GameState,
-    registry: &CardRegistry,
     controller: PlayerId,
     source: CardId,
     who: PlayerScope,
@@ -2763,8 +2768,8 @@ fn resolve_deck_move(
     to: Destination,
     effect: &Effect,
 ) -> Option<Choice> {
-    let n = usize::try_from(eval_amount(state, registry, controller, source, source, count).max(0))
-        .unwrap_or(0);
+    let n =
+        usize::try_from(state.eval_amount(controller, source, source, count).max(0)).unwrap_or(0);
     match resolve_scope(state, controller, who) {
         ScopeOutcome::Players(players) => {
             for p in players {
@@ -2927,14 +2932,13 @@ fn resolve_look_at_top(
 /// `target_card`, evaluating its [`Amount`] at resolution.
 fn apply_amount_effect(
     state: &mut GameState,
-    registry: &CardRegistry,
     controller: PlayerId,
     source: CardId,
     target_card: CardId,
     effect: &Effect,
     amount: &Amount,
 ) {
-    let value = eval_amount(state, registry, controller, source, target_card, amount);
+    let value = state.eval_amount(controller, source, target_card, amount);
     match effect {
         Effect::GiveStrengthThisTurn { .. } => {
             state.add_modifier(StatModifier::new(
@@ -2967,42 +2971,6 @@ fn apply_amount_effect(
             }
         }
         _ => {}
-    }
-}
-
-/// Evaluate an [`Amount`] to a concrete signed value at resolution: a constant,
-/// the number of in-play characters matching a filter (from `controller`'s view),
-/// or a characteristic of the effect's `source` ("for each …" / "equal to …").
-fn eval_amount(
-    state: &GameState,
-    registry: &CardRegistry,
-    controller: PlayerId,
-    source: CardId,
-    target_card: CardId,
-    amount: &Amount,
-) -> i32 {
-    match amount {
-        Amount::Fixed(n) => *n,
-        Amount::PerMatchingCharacter(filter) => {
-            let count = matching_characters(state, registry, controller, source, filter).len();
-            i32::try_from(count).unwrap_or(i32::MAX)
-        }
-        // `SelfCard` reads the source; any other target reads the resolved target.
-        Amount::StatOf { stat, target } => {
-            let card = if matches!(target, Target::SelfCard) {
-                source
-            } else {
-                target_card
-            };
-            let value = state
-                .current_character_stats(card)
-                .map_or(0, |s| match stat {
-                    Stat::Strength => s.strength,
-                    Stat::Willpower => s.willpower,
-                    Stat::Lore => s.lore,
-                });
-            i32::try_from(value).unwrap_or(i32::MAX)
-        }
     }
 }
 
@@ -3180,6 +3148,8 @@ fn place_permanent_free(
         instance.set_stats(char_stats);
         instance.set_location_stats(loc_stats);
         instance.set_classifications(classifications);
+        instance.set_printed_cost(definition.cost());
+        instance.set_names(definition.names().to_vec());
         p.play_mut().push(instance);
     }
 }
@@ -3290,28 +3260,11 @@ fn apply_effect_to(
         // Move damage from `from` to `to` (§9.3).
         Effect::MoveDamage {
             from, to, amount, ..
-        } => apply_move_damage(
-            state,
-            registry,
-            controller,
-            source,
-            target_card,
-            from,
-            to,
-            amount,
-        ),
+        } => apply_move_damage(state, controller, source, target_card, from, to, amount),
         Effect::GiveStrengthThisTurn { amount, .. }
         | Effect::DealDamage { amount, .. }
         | Effect::RemoveDamage { amount, .. } => {
-            apply_amount_effect(
-                state,
-                registry,
-                controller,
-                source,
-                target_card,
-                effect,
-                amount,
-            );
+            apply_amount_effect(state, controller, source, target_card, effect, amount);
         }
         Effect::Banish(_) => {
             banish_by_effect(state, registry, target_card, events);
@@ -3380,9 +3333,9 @@ fn apply_effect_to_rest(
             ..
         } => {
             let owner = state.card_owner_in_play(target_card).unwrap_or(controller);
-            let matched = state.instance_in_play(target_card).is_some_and(|c| {
-                eval_filter(state, registry, controller, source, owner, c, filter)
-            });
+            let matched = state
+                .instance_in_play(target_card)
+                .is_some_and(|c| state.matches_filter(controller, source, owner, c, filter));
             let branch = if matched { then } else { otherwise };
             apply_effect_to(
                 state,
@@ -3448,7 +3401,6 @@ fn banish_by_effect(
 /// perspective (the algebra is evaluated per card).
 fn matching_characters(
     state: &GameState,
-    registry: &CardRegistry,
     controller: PlayerId,
     source: CardId,
     filter: &CharacterFilter,
@@ -3457,8 +3409,7 @@ fn matching_characters(
     for player in state.players() {
         let owner = player.id();
         for card in player.play().iter() {
-            if card.is_character()
-                && eval_filter(state, registry, controller, source, owner, card, filter)
+            if card.is_character() && state.matches_filter(controller, source, owner, card, filter)
             {
                 out.push(card.id());
             }
@@ -3478,54 +3429,13 @@ fn choosable_characters(
     source: CardId,
     filter: &CharacterFilter,
 ) -> Vec<CardId> {
-    matching_characters(state, registry, controller, source, filter)
+    matching_characters(state, controller, source, filter)
         .into_iter()
         .filter(|&card| {
             state.card_owner_in_play(card) == Some(controller)
                 || !has_restriction(state, registry, card, Restriction::CantBeChosen)
         })
         .collect()
-}
-
-/// Evaluate the [`CharacterFilter`] algebra against an in-play `card` owned by
-/// `owner`, from the effect `controller`/`source`'s perspective (§7.1).
-fn eval_filter(
-    state: &GameState,
-    registry: &CardRegistry,
-    controller: PlayerId,
-    source: CardId,
-    owner: PlayerId,
-    card: &CardInstance,
-    filter: &CharacterFilter,
-) -> bool {
-    let recurse =
-        |f: &CharacterFilter| eval_filter(state, registry, controller, source, owner, card, f);
-    match filter {
-        CharacterFilter::Any | CharacterFilter::Side(TargetSide::Any) => true,
-        CharacterFilter::Side(TargetSide::Yours) => owner == controller,
-        CharacterFilter::Side(TargetSide::Opposing) => owner != controller,
-        CharacterFilter::Classification(c) => card.has_classification(c),
-        CharacterFilter::Named(n) => registry
-            .get(card.definition())
-            .is_some_and(|d| d.has_name(n)),
-        CharacterFilter::Cost(nf) => nf.matches(
-            registry
-                .get(card.definition())
-                .map_or(0, CardDefinition::cost),
-        ),
-        CharacterFilter::Strength(nf) => nf.matches(
-            state
-                .current_character_stats(card.id())
-                .map_or(0, |s| s.strength),
-        ),
-        CharacterFilter::Damaged(b) => (card.conditions().damage > 0) == *b,
-        CharacterFilter::Exerted(b) => card.conditions().ready != *b,
-        CharacterFilter::IsSource => card.id() == source,
-        CharacterFilter::IsCard(id) => card.id() == *id,
-        CharacterFilter::And(fs) => fs.iter().all(recurse),
-        CharacterFilter::Or(fs) => fs.iter().any(recurse),
-        CharacterFilter::Not(f) => !recurse(f),
-    }
 }
 
 /// The player whose play area or discard currently holds `card`.
@@ -3790,7 +3700,9 @@ fn apply_name_card_decision(
         );
         if matched {
             let gained = u32::try_from(
-                eval_amount(state, registry, player, source, source, lore_on_match).max(0),
+                state
+                    .eval_amount(player, source, source, lore_on_match)
+                    .max(0),
             )
             .unwrap_or(0);
             if let Some(p) = state.player_mut(player) {

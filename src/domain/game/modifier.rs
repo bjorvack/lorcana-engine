@@ -8,7 +8,7 @@
 //! combining further modifiers (§7.8.1.2/§7.8.2/§7.8.3).
 
 use crate::domain::cards::Keyword;
-use crate::domain::effects::{Effect, TriggerCondition};
+use crate::domain::effects::{Amount, Effect, TriggerCondition};
 use crate::domain::types::card::Classification;
 use crate::domain::types::ids::{CardId, PlayerId};
 use crate::domain::types::turn::Step;
@@ -264,28 +264,7 @@ pub struct StatModifier {
     condition: Option<Condition>,
     /// If set, the effective delta is `delta × count` (a dynamic "+N for each …"),
     /// evaluated live; `None` means a flat `delta`.
-    per: Option<Count>,
-}
-
-/// A registry-free count for a dynamic "+N {stat} for each …" static (§7.6). All
-/// variants are derived from game state alone, so they can be evaluated inside
-/// `GameState` on every stat query.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-pub enum Count {
-    /// The source controller's in-play characters with any of `classifications`
-    /// (empty ⇒ all characters), optionally counting the source itself ("for each
-    /// [other] [classification] character you have in play").
-    ControlledCharacters {
-        /// Required classifications (any-of); empty matches every character.
-        classifications: Vec<Classification>,
-        /// Whether the source counts itself.
-        include_self: bool,
-    },
-    /// The number of cards in the source controller's hand ("for each card in your
-    /// hand").
-    CardsInHand,
-    /// The number of damage counters on the source ("for each 1 damage on her").
-    DamageOnSelf,
+    per: Option<Amount>,
 }
 
 impl StatModifier {
@@ -316,16 +295,16 @@ impl StatModifier {
         self
     }
 
-    /// Make the effective delta scale by a live [`Count`] (builder).
+    /// Make the effective delta scale by a live [`Amount`] (builder).
     #[must_use]
-    pub fn with_count(mut self, per: Count) -> Self {
+    pub fn with_count(mut self, per: Amount) -> Self {
         self.per = Some(per);
         self
     }
 
     /// The dynamic count this modifier scales by, if any.
     #[must_use]
-    pub const fn per(&self) -> Option<&Count> {
+    pub const fn per(&self) -> Option<&Amount> {
         self.per.as_ref()
     }
 

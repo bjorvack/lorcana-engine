@@ -308,6 +308,8 @@ fn a_cost_filter_restricts_the_choosable_targets() {
     let quester = place(&mut state, active, 1000, 100, 5, 0);
     let cheap = place(&mut state, foe, 3000, 300, 5, 0);
     let pricey = place(&mut state, foe, 4000, 400, 5, 0);
+    set_cost(&mut state, foe, cheap, 2);
+    set_cost(&mut state, foe, pricey, 5);
 
     let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
     // The cost-5 character is not an eligible target.
@@ -506,6 +508,8 @@ fn a_name_filter_restricts_the_choosable_targets() {
     let quester = place(&mut state, active, 1000, 100, 5, 0);
     let stitch = place(&mut state, foe, 2000, 200, 5, 0);
     let scar = place(&mut state, foe, 3000, 300, 5, 0);
+    set_named(&mut state, foe, stitch, "Stitch");
+    set_named(&mut state, foe, scar, "Scar");
 
     let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
     assert!(
@@ -587,7 +591,8 @@ fn a_conditional_effect_resolves_when_the_board_condition_holds() {
     let mut state = started(&reg);
     let active = state.active_player();
     let quester = place(&mut state, active, 1000, 100, 5, 0);
-    let _elsa = place(&mut state, active, 1001, 200, 5, 0);
+    let elsa = place(&mut state, active, 1001, 200, 5, 0);
+    set_named(&mut state, active, elsa, "Elsa");
 
     let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
 
@@ -1349,4 +1354,26 @@ fn filter_algebra_or_composes() {
         !options.contains(&pirate),
         "Pirate matches neither Villain nor Hero"
     );
+}
+
+fn set_cost(state: &mut GameState, owner: PlayerId, card: CardId, cost: u32) {
+    state
+        .player_mut(owner)
+        .unwrap()
+        .play_mut()
+        .iter_mut()
+        .find(|c| c.id() == card)
+        .unwrap()
+        .set_printed_cost(cost);
+}
+
+fn set_named(state: &mut GameState, owner: PlayerId, card: CardId, name: &str) {
+    state
+        .player_mut(owner)
+        .unwrap()
+        .play_mut()
+        .iter_mut()
+        .find(|c| c.id() == card)
+        .unwrap()
+        .set_names(vec![name.to_string()]);
 }

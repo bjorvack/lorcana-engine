@@ -26,6 +26,11 @@ pub struct CardInstance {
     /// The location this character has been moved to, if any (§4.3.7).
     at_location: Option<CardId>,
     classifications: Vec<Classification>,
+    /// The printed ink cost, denormalized from the definition (so filtering by
+    /// cost needs no registry, §6.2.6).
+    printed_cost: u32,
+    /// The card's names, denormalized from the definition ("named X").
+    names: Vec<String>,
     /// Cards stacked **under** this one (§5.1.5–5.1.7). Only the top (this
     /// instance) is in play; under-cards are inert (not in play, can't be chosen).
     /// The pile is flat (deepest last) and the **whole** stack moves with the top
@@ -51,8 +56,32 @@ impl CardInstance {
             location: None,
             at_location: None,
             classifications: Vec::new(),
+            printed_cost: 0,
+            names: Vec::new(),
             under: Vec::new(),
         }
+    }
+
+    /// The denormalized printed ink cost (§6.2.6).
+    #[must_use]
+    pub const fn printed_cost(&self) -> u32 {
+        self.printed_cost
+    }
+
+    /// Set the denormalized printed cost (from the definition when entering play).
+    pub const fn set_printed_cost(&mut self, cost: u32) {
+        self.printed_cost = cost;
+    }
+
+    /// Whether this instance counts as having `name` ("named X").
+    #[must_use]
+    pub fn has_name(&self, name: &str) -> bool {
+        self.names.iter().any(|n| n == name)
+    }
+
+    /// Set the denormalized names (from the definition when entering play).
+    pub fn set_names(&mut self, names: Vec<String>) {
+        self.names = names;
     }
 
     /// The instance id (unique within the game).

@@ -25,6 +25,11 @@ pub enum Amount {
         /// Whose: `SelfCard` = the source; anything else = the resolved target.
         target: Target,
     },
+    /// The number of cards in the controller's hand ("for each card in your hand").
+    CardsInHand,
+    /// The number of damage counters on the effect's source ("for each 1 damage on
+    /// her").
+    DamageOnSource,
 }
 
 impl Amount {

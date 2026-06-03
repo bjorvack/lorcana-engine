@@ -1,7 +1,8 @@
 //! Card abilities.
 
+use crate::domain::effects::Amount;
 use crate::domain::effects::{Effect, TriggerCondition};
-use crate::domain::game::{Condition, Count, Stat};
+use crate::domain::game::{Condition, Stat};
 use crate::domain::types::card::Classification;
 use serde::{Deserialize, Serialize};
 
@@ -138,7 +139,7 @@ pub struct StaticAbility {
     pub condition: Option<Condition>,
     /// If set, the effective delta is `delta × count` — a dynamic "+N {stat} for
     /// each …" static (e.g. "+1 {L} for each other Villain you have in play").
-    pub per: Option<Count>,
+    pub per: Option<Amount>,
 }
 
 /// A static ability that modifies a **game rule** while the card is in play (the
@@ -196,10 +197,10 @@ impl StaticAbility {
         self
     }
 
-    /// Make this static's delta scale by a live [`Count`] (builder), for "+N
+    /// Make this static's delta scale by a live [`Amount`] (builder), for "+N
     /// {stat} for each …".
     #[must_use]
-    pub fn with_count(mut self, per: Count) -> Self {
+    pub fn with_count(mut self, per: Amount) -> Self {
         self.per = Some(per);
         self
     }

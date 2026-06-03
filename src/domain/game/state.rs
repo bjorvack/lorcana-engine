@@ -1,13 +1,12 @@
 //! The authoritative game state.
 
 use super::{
-    BagEntry, CardInstance, CharacterStats, Condition, Conditions, Count, DelayedTrigger,
-    GameStatus, GrantedTrigger, ModifierDuration, PendingDecision, Permission, PlayerState,
-    Property, PropertyModifier, Restriction, RuleModifier, SeededRng, Stat, StatModifier,
-    TriggerId, Zone,
+    BagEntry, CardInstance, CharacterStats, Condition, Conditions, DelayedTrigger, GameStatus,
+    GrantedTrigger, ModifierDuration, PendingDecision, Permission, PlayerState, Property,
+    PropertyModifier, Restriction, RuleModifier, SeededRng, Stat, StatModifier, TriggerId, Zone,
 };
 use crate::domain::cards::Keyword;
-use crate::domain::effects::{DelayedWhen, Effect};
+use crate::domain::effects::{Amount, CharacterFilter, DelayedWhen, Effect, Target, TargetSide};
 use crate::domain::types::ids::{CardDefId, CardId, PlayerId};
 use crate::domain::types::turn::{Phase, Step};
 use serde::{Deserialize, Serialize};
@@ -485,6 +484,92 @@ impl GameState {
         ))
     }
 
+    /// Evaluate the [`CharacterFilter`] algebra against an in-play `card` owned by
+    /// `owner`, from the effect `controller`/`source`'s perspective (§7.1).
+    /// Registry-free — cost/names are denormalized onto the instance.
+    #[must_use]
+    pub fn matches_filter(
+        &self,
+        controller: PlayerId,
+        source: CardId,
+        owner: PlayerId,
+        card: &CardInstance,
+        filter: &CharacterFilter,
+    ) -> bool {
+        let recurse = |f: &CharacterFilter| self.matches_filter(controller, source, owner, card, f);
+        match filter {
+            CharacterFilter::Any | CharacterFilter::Side(TargetSide::Any) => true,
+            CharacterFilter::Side(TargetSide::Yours) => owner == controller,
+            CharacterFilter::Side(TargetSide::Opposing) => owner != controller,
+            CharacterFilter::Classification(c) => card.has_classification(c),
+            CharacterFilter::Named(n) => card.has_name(n),
+            CharacterFilter::Cost(nf) => nf.matches(card.printed_cost()),
+            CharacterFilter::Strength(nf) => nf.matches(
+                self.current_character_stats(card.id())
+                    .map_or(0, |s| s.strength),
+            ),
+            CharacterFilter::Damaged(b) => (card.conditions().damage > 0) == *b,
+            CharacterFilter::Exerted(b) => card.conditions().ready != *b,
+            CharacterFilter::IsSource => card.id() == source,
+            CharacterFilter::IsCard(id) => card.id() == *id,
+            CharacterFilter::And(fs) => fs.iter().all(recurse),
+            CharacterFilter::Or(fs) => fs.iter().any(recurse),
+            CharacterFilter::Not(f) => !recurse(f),
+        }
+    }
+
+    /// Evaluate an [`Amount`] to a concrete signed value at resolution (§7.8):
+    /// constant, count of matching in-play characters, a characteristic of the
+    /// source/target, hand size, or damage on the source. Registry-free.
+    #[must_use]
+    pub fn eval_amount(
+        &self,
+        controller: PlayerId,
+        source: CardId,
+        target_card: CardId,
+        amount: &Amount,
+    ) -> i32 {
+        match amount {
+            Amount::Fixed(n) => *n,
+            Amount::PerMatchingCharacter(filter) => {
+                let mut count: i32 = 0;
+                for player in &self.players {
+                    let owner = player.id();
+                    for card in player.play().iter() {
+                        if card.is_character()
+                            && self.matches_filter(controller, source, owner, card, filter)
+                        {
+                            count += 1;
+                        }
+                    }
+                }
+                count
+            }
+            // `SelfCard` reads the source; any other target reads the resolved target.
+            Amount::StatOf { stat, target } => {
+                let card = if matches!(target, Target::SelfCard) {
+                    source
+                } else {
+                    target_card
+                };
+                let value = self
+                    .current_character_stats(card)
+                    .map_or(0, |s| match stat {
+                        Stat::Strength => s.strength,
+                        Stat::Willpower => s.willpower,
+                        Stat::Lore => s.lore,
+                    });
+                i32::try_from(value).unwrap_or(i32::MAX)
+            }
+            Amount::CardsInHand => self.player(controller).map_or(0, |p| {
+                i32::try_from(p.hand().iter().count()).unwrap_or(i32::MAX)
+            }),
+            Amount::DamageOnSource => self.instance_in_play(source).map_or(0, |c| {
+                i32::try_from(c.conditions().damage).unwrap_or(i32::MAX)
+            }),
+        }
+    }
+
     /// The combined (signed) modifier delta applying to a card's characteristic.
     #[must_use]
     pub fn stat_delta(&self, card: CardId, stat: Stat) -> i32 {
@@ -499,36 +584,16 @@ impl GameState {
             .sum()
     }
 
-    /// The live multiplier for a modifier's delta: 1 unless it scales by a
-    /// dynamic [`Count`] ("+N for each …"), evaluated from state alone (§7.6).
+    /// The live multiplier for a modifier's delta: 1 unless it scales by a dynamic
+    /// [`Amount`] ("+N for each …"), evaluated from state alone (§7.6).
     fn modifier_count(&self, m: &StatModifier) -> i32 {
         let Some(per) = m.per() else { return 1 };
-        let count = match per {
-            Count::ControlledCharacters {
-                classifications,
-                include_self,
-            } => self.card_owner_in_play(m.source()).map_or(0, |owner| {
-                self.player(owner).map_or(0, |p| {
-                    p.play()
-                        .iter()
-                        .filter(|c| c.is_character())
-                        .filter(|c| *include_self || c.id() != m.source())
-                        .filter(|c| {
-                            classifications.is_empty()
-                                || classifications.iter().any(|cl| c.has_classification(cl))
-                        })
-                        .count()
-                })
-            }),
-            Count::CardsInHand => self
-                .card_owner_in_play(m.source())
-                .and_then(|owner| self.player(owner))
-                .map_or(0, |p| p.hand().iter().count()),
-            Count::DamageOnSelf => self
-                .instance_in_play(m.source())
-                .map_or(0, |c| usize::try_from(c.conditions().damage).unwrap_or(0)),
+        // The count is evaluated from the source's controller's view; if the source
+        // has left play the (now-stale) modifier contributes nothing.
+        let Some(controller) = self.card_owner_in_play(m.source()) else {
+            return 0;
         };
-        i32::try_from(count).unwrap_or(i32::MAX)
+        self.eval_amount(controller, m.source(), m.source(), per)
     }
 
     /// Whether a modifier's gating [`Condition`] currently holds. `None` (an

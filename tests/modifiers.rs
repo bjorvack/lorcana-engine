@@ -355,10 +355,15 @@ fn lore_scales_with_each_other_villain_in_play() {
             1,
             ModifierDuration::WhileSourceInPlay,
         )
-        .with_count(lorcana_engine::Count::ControlledCharacters {
-            classifications: vec![Classification::new("Villain")],
-            include_self: false,
-        }),
+        .with_count(lorcana_engine::Amount::PerMatchingCharacter(
+            lorcana_engine::CharacterFilter::any(lorcana_engine::TargetSide::Yours)
+                .and(lorcana_engine::CharacterFilter::Classification(
+                    Classification::new("Villain"),
+                ))
+                .and(lorcana_engine::CharacterFilter::negate(
+                    lorcana_engine::CharacterFilter::IsSource,
+                )),
+        )),
     );
 
     // No other Villains yet: just the base lore.
