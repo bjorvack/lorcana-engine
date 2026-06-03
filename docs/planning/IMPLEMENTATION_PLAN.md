@@ -807,8 +807,15 @@ pattern can collapse. Tracked and done one at a time:
       `Choose` over `ChoiceRef = Card | Player` with five `ChoiceThen`
       continuations (SubstituteAndResolve, ApplyToEach, PlayFree, TakeRevealed,
       Discard). One `apply_choose_decision` + `choice_to_pending`.
-- [ ] **#5 unify `Target` (card ref) and `PlayerScope` (player ref)** as a choosable
-      reference; remove `substitute_chosen_player`/`substitute_move_endpoint` (large).
+- [~] **#5 unify `Target`/`PlayerScope`; remove `substitute_*`** — **declined after
+      assessment.** `Target` (card-shaped: filters/all/up-to/items/locations) and
+      `PlayerScope` (player-shaped: You/Each*/Chosen*/Player) are structurally
+      different; a unified type would add "invalid-here" variants — *more* specific
+      code. Their real shared point already exists: `ChoiceRef = Card | Player`
+      inside `Choose`. And `substitute_*` implement the clean "substitute the pick
+      into the effect AST and re-resolve" pattern (reusing `execute_effect`);
+      removing them would duplicate per-effect resolution. Net: would worsen the
+      code, so not pursued.
 - [ ] **#2** collapse `GrantKeywordThisTurn`/`RestrictThisTurn`/`PermitThisTurn` →
       `GrantThisTurn { target, property }`.
 - [ ] **#3** fold `Count` into `Amount` (`ControlledCharacters` → `PerMatching(filter)`).
