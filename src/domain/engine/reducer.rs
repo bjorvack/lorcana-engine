@@ -1862,6 +1862,9 @@ fn apply_enter_statics(
         if let Some(condition) = ability.condition {
             modifier = modifier.with_condition(condition);
         }
+        if let Some(per) = &ability.per {
+            modifier = modifier.with_count(per.clone());
+        }
         state.add_modifier(modifier);
     }
 }

@@ -1,9 +1,9 @@
 //! The authoritative game state.
 
 use super::{
-    BagEntry, CardInstance, CharacterStats, Condition, Conditions, DelayedTrigger, GameStatus,
-    ModifierDuration, PendingDecision, Permission, PlayerState, Property, PropertyModifier,
-    Restriction, RuleModifier, SeededRng, Stat, StatModifier, TriggerId, Zone,
+    BagEntry, CardInstance, CharacterStats, Condition, Conditions, Count, DelayedTrigger,
+    GameStatus, ModifierDuration, PendingDecision, Permission, PlayerState, Property,
+    PropertyModifier, Restriction, RuleModifier, SeededRng, Stat, StatModifier, TriggerId, Zone,
 };
 use crate::domain::cards::Keyword;
 use crate::domain::effects::{DelayedWhen, Effect};
@@ -478,8 +478,40 @@ impl GameState {
                     && self.condition_holds(m.condition(), m.source())
                     && self.target_matches(m.target(), card)
             })
-            .map(StatModifier::delta)
+            .map(|m| m.delta() * self.modifier_count(m))
             .sum()
+    }
+
+    /// The live multiplier for a modifier's delta: 1 unless it scales by a
+    /// dynamic [`Count`] ("+N for each …"), evaluated from state alone (§7.6).
+    fn modifier_count(&self, m: &StatModifier) -> i32 {
+        let Some(per) = m.per() else { return 1 };
+        let count = match per {
+            Count::ControlledCharacters {
+                classifications,
+                include_self,
+            } => self.card_owner_in_play(m.source()).map_or(0, |owner| {
+                self.player(owner).map_or(0, |p| {
+                    p.play()
+                        .iter()
+                        .filter(|c| c.is_character())
+                        .filter(|c| *include_self || c.id() != m.source())
+                        .filter(|c| {
+                            classifications.is_empty()
+                                || classifications.iter().any(|cl| c.has_classification(cl))
+                        })
+                        .count()
+                })
+            }),
+            Count::CardsInHand => self
+                .card_owner_in_play(m.source())
+                .and_then(|owner| self.player(owner))
+                .map_or(0, |p| p.hand().iter().count()),
+            Count::DamageOnSelf => self
+                .instance_in_play(m.source())
+                .map_or(0, |c| usize::try_from(c.conditions().damage).unwrap_or(0)),
+        };
+        i32::try_from(count).unwrap_or(i32::MAX)
     }
 
     /// Whether a modifier's gating [`Condition`] currently holds. `None` (an

@@ -21,7 +21,7 @@ pub use character_stats::{CharacterStats, LocationStats};
 pub use conditions::Conditions;
 pub use events::GameEvent;
 pub use modifier::{
-    Condition, ModifierDuration, ModifierTarget, Permission, Property, PropertyModifier,
+    Condition, Count, ModifierDuration, ModifierTarget, Permission, Property, PropertyModifier,
     Restriction, RuleModifier, Stat, StatModifier,
 };
 pub use pending::PendingDecision;

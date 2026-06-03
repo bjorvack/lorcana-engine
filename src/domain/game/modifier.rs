@@ -242,6 +242,30 @@ pub struct StatModifier {
     delta: i32,
     duration: ModifierDuration,
     condition: Option<Condition>,
+    /// If set, the effective delta is `delta × count` (a dynamic "+N for each …"),
+    /// evaluated live; `None` means a flat `delta`.
+    per: Option<Count>,
+}
+
+/// A registry-free count for a dynamic "+N {stat} for each …" static (§7.6). All
+/// variants are derived from game state alone, so they can be evaluated inside
+/// `GameState` on every stat query.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub enum Count {
+    /// The source controller's in-play characters with any of `classifications`
+    /// (empty ⇒ all characters), optionally counting the source itself ("for each
+    /// [other] [classification] character you have in play").
+    ControlledCharacters {
+        /// Required classifications (any-of); empty matches every character.
+        classifications: Vec<Classification>,
+        /// Whether the source counts itself.
+        include_self: bool,
+    },
+    /// The number of cards in the source controller's hand ("for each card in your
+    /// hand").
+    CardsInHand,
+    /// The number of damage counters on the source ("for each 1 damage on her").
+    DamageOnSelf,
 }
 
 impl StatModifier {
@@ -261,6 +285,7 @@ impl StatModifier {
             delta,
             duration,
             condition: None,
+            per: None,
         }
     }
 
@@ -269,6 +294,19 @@ impl StatModifier {
     pub const fn with_condition(mut self, condition: Condition) -> Self {
         self.condition = Some(condition);
         self
+    }
+
+    /// Make the effective delta scale by a live [`Count`] (builder).
+    #[must_use]
+    pub fn with_count(mut self, per: Count) -> Self {
+        self.per = Some(per);
+        self
+    }
+
+    /// The dynamic count this modifier scales by, if any.
+    #[must_use]
+    pub const fn per(&self) -> Option<&Count> {
+        self.per.as_ref()
     }
 
     /// The condition gating this modifier, if any.

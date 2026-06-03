@@ -339,3 +339,38 @@ fn set_ready(state: &mut GameState, owner: PlayerId, card: CardId, ready: bool) 
         .conditions_mut()
         .ready = ready;
 }
+
+#[test]
+fn lore_scales_with_each_other_villain_in_play() {
+    // "This character gets +1 {L} for each other Villain character you have in
+    // play" (Hades) — a dynamic static whose delta scales with a live count.
+    let mut state = started();
+    let active = state.active_player();
+    let lord = place_classed(&mut state, active, 200, 2, &["Villain"]); // base {L} 1
+    state.add_modifier(
+        StatModifier::new(
+            lord,
+            ModifierTarget::Card(lord),
+            Stat::Lore,
+            1,
+            ModifierDuration::WhileSourceInPlay,
+        )
+        .with_count(lorcana_engine::Count::ControlledCharacters {
+            classifications: vec![Classification::new("Villain")],
+            include_self: false,
+        }),
+    );
+
+    // No other Villains yet: just the base lore.
+    assert_eq!(state.current_character_stats(lord).unwrap().lore, 1);
+
+    // Two more Villains enter -> +2 {L}; a Hero doesn't count.
+    let _ = place_classed(&mut state, active, 201, 2, &["Villain"]);
+    let _ = place_classed(&mut state, active, 202, 2, &["Villain"]);
+    let _ = place_classed(&mut state, active, 203, 2, &["Hero"]);
+    assert_eq!(
+        state.current_character_stats(lord).unwrap().lore,
+        1 + 2,
+        "live count: +1 {{L}} per other Villain"
+    );
+}
