@@ -3,9 +3,11 @@
 //! A headless, deterministic game engine for Disney's Lorcana trading card game.
 
 // Domain modules
+pub mod application;
 pub mod domain;
 
 // Re-export commonly used types for convenience
+pub use application::Game;
 pub use domain::cards::{
     AbilityCost, ActivatedAbility, CardDefinition, CardKind, CardRegistry, GameRuleStatic, Keyword,
     LoadError, ShiftAbility, ShiftCost, ShiftKind, StaticAbility, StaticTarget, TomlCard,

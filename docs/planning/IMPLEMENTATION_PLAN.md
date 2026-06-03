@@ -790,6 +790,21 @@ work, tracked separately.
 
 ---
 
+## Slice 10 — Playable host & robustness
+
+Turn the rules library into something usable + hardened.
+
+- [~] **Public API facade** (`application::Game`) — `new`, `submit`, `state`/
+  `status`/`pending`, and `legal_actions()` (the engine's first action
+  *enumeration*; it validates by trying each candidate on a clone, so it can't
+  drift from `apply`). Pending-decision answers read from the decision; mulligan +
+  turn moves enumerated. `tests/api.rs` (incl. the invariant: every reported
+  action is accepted). **Next:** CLI host; self-play/fuzz harness; multi-pick &
+  Shift/Sing enumeration.
+- [ ] **CLI host** (`src/main.rs`) — a thin text loop to play/inspect a game.
+- [ ] **Self-play / fuzz** — drive random legal actions to completion across seeds;
+  assert no panics + invariants hold.
+
 ## Cross-cutting tracks (run alongside slices)
 
 - **Public API** (`application/api`): grow `new_game`, `submit(Action|Choice)`,
