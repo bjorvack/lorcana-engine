@@ -102,14 +102,22 @@ pub enum Restriction {
     CantBeChallenged,
 }
 
-/// A continuous **permission** an effect grants a card ("can …"). Kept distinct
-/// from [`Restriction`] so the two never get conflated (and §1.2.2: a prevention
-/// still beats a permission).
+/// A continuous **permission** an effect grants a card ("may …").
+///
+/// Kept distinct from [`Restriction`] so the two never get conflated (and §1.2.2:
+/// a prevention still beats a permission). Some overlap the Alert/Rush keywords;
+/// the legality checks OR the two together.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum Permission {
-    /// The character may challenge **ready** characters, not just exerted ones
-    /// (Pick a Fight).
+    /// May challenge **ready** (non-exerted) characters (Pick a Fight, §4.3.6.7).
     ChallengeReady,
+    /// May challenge **Evasive** characters (like Alert, §10.2/§10.6).
+    ChallengeEvasive,
+    /// May **challenge** the turn it entered play, while still drying (like Rush,
+    /// §10.9).
+    ChallengeWhileDrying,
+    /// May **quest** the turn it entered play, while still drying.
+    QuestWhileDrying,
 }
 
 /// A continuous boolean property an effect/ability grants to one or more in-play

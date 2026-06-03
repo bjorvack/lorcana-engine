@@ -10,8 +10,8 @@ use crate::domain::effects::{
 };
 use crate::domain::game::{
     CardInstance, CharacterStats, Conditions, GameEvent, GameState, GameStatus, LocationStats,
-    ModifierDuration, ModifierTarget, PendingDecision, Property, PropertyModifier, RuleModifier,
-    Stat, StatModifier, TriggerId,
+    ModifierDuration, ModifierTarget, PendingDecision, Permission, Property, PropertyModifier,
+    Restriction, RuleModifier, Stat, StatModifier, TriggerId,
 };
 use crate::domain::rules::game_state_check;
 use crate::domain::types::card::Classification;
@@ -755,15 +755,15 @@ fn apply_quest(
     if !instance.is_character() {
         return Err(Rejected::NotACharacter(character));
     }
-    // Reckless characters can't quest (§10.7.2).
-    if character_has_keyword(state, registry, character, &Keyword::Reckless) {
-        return Err(Rejected::RecklessCannotQuest(character));
+    // Can't-quest prevention — Reckless (§10.7.2) or an effect (§1.2.2).
+    if has_restriction(state, registry, character, Restriction::CantQuest) {
+        return Err(Rejected::CharacterCannotQuest(character));
     }
-    // Questing requires a dry, ready character (§4.3.5.5).
-    // TODO(effects — Slice 8): effects can also forbid a specific character from
-    // questing (e.g. Cobra Bubbles "...must quest during their next turn" forces
-    // it; others may prevent it).
-    if instance.conditions().drying {
+    // Questing requires a dry, ready character (§4.3.5.5), unless permitted to
+    // quest while drying.
+    if instance.conditions().drying
+        && !has_permission(state, registry, character, Permission::QuestWhileDrying)
+    {
         return Err(Rejected::CharacterStillDrying(character));
     }
     if !instance.conditions().ready {
@@ -1053,6 +1053,47 @@ fn character_has_keyword(
     printed || state.granted_keywords(card).iter().any(|k| k == keyword)
 }
 
+/// Whether `card` has a [`Permission`] — granted by an effect **or** implied by a
+/// keyword (Alert ⇒ may challenge Evasive §10.2; Rush ⇒ may challenge while drying
+/// §10.9), so the legality checks consult a single authority per permission.
+fn has_permission(
+    state: &GameState,
+    registry: &CardRegistry,
+    card: CardId,
+    permission: Permission,
+) -> bool {
+    if state.has_permission(card, permission) {
+        return true;
+    }
+    match permission {
+        Permission::ChallengeEvasive => {
+            character_has_keyword(state, registry, card, &Keyword::Alert)
+        }
+        Permission::ChallengeWhileDrying => {
+            character_has_keyword(state, registry, card, &Keyword::Rush)
+        }
+        Permission::ChallengeReady | Permission::QuestWhileDrying => false,
+    }
+}
+
+/// Whether `card` has a [`Restriction`] — granted by an effect **or** implied by a
+/// keyword (Reckless ⇒ can't quest, §10.7.2). A single authority per restriction,
+/// mirroring [`has_permission`].
+fn has_restriction(
+    state: &GameState,
+    registry: &CardRegistry,
+    card: CardId,
+    restriction: Restriction,
+) -> bool {
+    if state.has_restriction(card, restriction) {
+        return true;
+    }
+    match restriction {
+        Restriction::CantQuest => character_has_keyword(state, registry, card, &Keyword::Reckless),
+        Restriction::CantChallenge | Restriction::CantBeChallenged => false,
+    }
+}
+
 /// The card's effective Challenger +N: printed plus any effect-granted Challenger.
 fn effective_challenger_bonus(state: &GameState, registry: &CardRegistry, card: CardId) -> u32 {
     let printed = state
@@ -1115,12 +1156,21 @@ fn target_legal_basic(
     if !instance.is_character() {
         return Err(Rejected::TargetNotACharacter(target));
     }
-    if instance.conditions().ready {
+    // "Can't be challenged" effect/keyword (§1.2.2) — preventions win.
+    if has_restriction(state, registry, target, Restriction::CantBeChallenged) {
+        return Err(Rejected::TargetCannotBeChallenged(target));
+    }
+    // Must be exerted, unless the challenger may challenge ready characters (§4.3.6.7).
+    if instance.conditions().ready
+        && !has_permission(state, registry, challenger, Permission::ChallengeReady)
+    {
         return Err(Rejected::TargetNotExerted(target));
     }
+    // Evasive: only an Evasive challenger, or one permitted to challenge Evasive
+    // (Alert / effect), may challenge it (§10.6/§10.2).
     if character_has_keyword(state, registry, target, &Keyword::Evasive)
         && !character_has_keyword(state, registry, challenger, &Keyword::Evasive)
-        && !character_has_keyword(state, registry, challenger, &Keyword::Alert)
+        && !has_permission(state, registry, challenger, Permission::ChallengeEvasive)
     {
         return Err(Rejected::TargetEvasive(target));
     }
@@ -1142,13 +1192,23 @@ fn can_challenge(
     challenger: CardId,
     target: CardId,
 ) -> Result<(), Rejected> {
-    // Challenger side: a ready character, dry unless it has Rush (§4.3.6.6, §10.9).
+    // Challenger side: a ready character, dry unless permitted to challenge while
+    // drying (Rush or effect, §4.3.6.6/§10.9), and not under a "can't challenge"
+    // prevention (§1.2.2).
     let challenger_instance = find_in_play(state, active, challenger)?;
     if !challenger_instance.is_character() {
         return Err(Rejected::NotACharacter(challenger));
     }
+    if has_restriction(state, registry, challenger, Restriction::CantChallenge) {
+        return Err(Rejected::CharacterCannotChallenge(challenger));
+    }
     if challenger_instance.conditions().drying
-        && !character_has_keyword(state, registry, challenger, &Keyword::Rush)
+        && !has_permission(
+            state,
+            registry,
+            challenger,
+            Permission::ChallengeWhileDrying,
+        )
     {
         return Err(Rejected::CharacterStillDrying(challenger));
     }
@@ -1975,7 +2035,9 @@ fn execute_effect(
         | Effect::Banish(target)
         | Effect::Exert(target)
         | Effect::Ready(target)
-        | Effect::GrantKeywordThisTurn { target, .. } => {
+        | Effect::GrantKeywordThisTurn { target, .. }
+        | Effect::RestrictThisTurn { target, .. }
+        | Effect::PermitThisTurn { target, .. } => {
             return resolve_targeted(state, registry, controller, source, target, effect, events);
         }
     }
@@ -2191,6 +2253,22 @@ fn apply_effect_to(
                 source,
                 ModifierTarget::Card(target_card),
                 Property::Keyword(keyword.clone()),
+                ModifierDuration::UntilEndOfTurn,
+            ));
+        }
+        Effect::RestrictThisTurn { restriction, .. } => {
+            state.add_property_modifier(PropertyModifier::new(
+                source,
+                ModifierTarget::Card(target_card),
+                Property::Restriction(*restriction),
+                ModifierDuration::UntilEndOfTurn,
+            ));
+        }
+        Effect::PermitThisTurn { permission, .. } => {
+            state.add_property_modifier(PropertyModifier::new(
+                source,
+                ModifierTarget::Card(target_card),
+                Property::Permission(*permission),
                 ModifierDuration::UntilEndOfTurn,
             ));
         }

@@ -528,12 +528,26 @@ Challenge/banish triggers into the bag (see
     `Ready(Target)` ("exert chosen opposing character" — 49; "ready this/chosen" —
     67) toggle the target's `ready` condition, composing with all target shapes.
     Tested in `tests/targeted_effects.rs`.
+  - [x] **8b-12 — continuous property modifiers + granted keywords:** a
+    `PropertyModifier` layer (granted `Keyword` / `Restriction` / `Permission`,
+    parallel to `StatModifier`). `character_has_keyword` and effective Challenger/
+    Resist OR in granted keywords; `Effect::GrantKeywordThisTurn`. Tested in
+    `tests/keywords.rs`.
+  - [x] **8b-13 — effect-driven challenge/quest legality:** `Restriction`
+    (CantQuest/CantChallenge/CantBeChallenged) and `Permission` (ChallengeReady/
+    ChallengeEvasive/ChallengeWhileDrying/QuestWhileDrying) are split types routed
+    through unified `has_restriction` / `has_permission` authorities — granted by
+    effect **or** implied by a keyword (Alert⇒ChallengeEvasive, Rush⇒
+    ChallengeWhileDrying, Reckless⇒CantQuest). Preventions beat permissions
+    (§1.2.2, verified). `Effect::RestrictThisTurn` / `PermitThisTurn`. Tested in
+    `tests/restrictions.rs`. This completes the effect-driven-challenge-legality
+    deferral (Tiana's Palace/The Wall etc. now need only a conditional-static source).
   - **8b+ —** the card survey shows true §7.7 **replacement** effects are rare
     (~16, mostly "takes no damage"); higher-value remaining: **conditional on the
-    chosen target** ("if a Villain is chosen, +3 instead"), **effect-driven "can't
-    be challenged"** (25 — Tiana's Palace/The Wall, the `can_challenge` TODO),
-    **damage prevention** ("takes no damage"), **player** targets, and floating &
-    delayed triggers.
+    chosen target** ("if a Villain is chosen, +3 instead"), **conditional static
+    abilities** ("while here / while exerted" — the source for can't-be-challenged
+    etc.), **damage prevention**, **player** targets, and floating & delayed
+    triggers.
 
 ### Slice 8b+ — harder resolution rules
 - Replacement effects (§7.7): "instead"/"skip"/"enter"; self-replacement applied

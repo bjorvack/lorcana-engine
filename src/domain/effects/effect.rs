@@ -2,6 +2,7 @@
 
 use super::target::Target;
 use crate::domain::cards::Keyword;
+use crate::domain::game::{Permission, Restriction};
 use serde::{Deserialize, Serialize};
 
 /// A built-in effect an ability or action can produce.
@@ -72,6 +73,22 @@ pub enum Effect {
         target: Target,
         /// The granted keyword.
         keyword: Keyword,
+    },
+    /// Place a prevention on the target until end of turn ("can't quest", "can't
+    /// be challenged this turn", §1.2.2).
+    RestrictThisTurn {
+        /// Who is restricted.
+        target: Target,
+        /// The prevention.
+        restriction: Restriction,
+    },
+    /// Grant the target a permission until end of turn ("can challenge ready
+    /// characters this turn", Pick a Fight).
+    PermitThisTurn {
+        /// Who gains the permission.
+        target: Target,
+        /// The permission.
+        permission: Permission,
     },
     /// Resolve `then` only if the controller has at least one in-play character
     /// matching `filter` ("if you have a character named X in play, …", §7.1).

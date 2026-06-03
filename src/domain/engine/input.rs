@@ -212,9 +212,16 @@ pub enum Rejected {
     /// name, or classification) (§10.10).
     #[error("{0:?} is not a valid Shift target")]
     InvalidShiftTarget(CardId),
-    /// A Reckless character can't quest (§10.7.2).
-    #[error("Reckless character {0:?} can't quest")]
-    RecklessCannotQuest(CardId),
+    /// A prevention stops this character from questing — Reckless (§10.7.2) or an
+    /// effect (§1.2.2).
+    #[error("character {0:?} can't quest")]
+    CharacterCannotQuest(CardId),
+    /// A prevention stops this character from challenging (§1.2.2).
+    #[error("character {0:?} can't challenge")]
+    CharacterCannotChallenge(CardId),
+    /// The challenge target can't be challenged (§1.2.2).
+    #[error("challenge target {0:?} can't be challenged")]
+    TargetCannotBeChallenged(CardId),
     /// The turn can't end while Reckless character {0:?} can still challenge
     /// (§10.7.3).
     #[error("Reckless character {0:?} must challenge before the turn can end")]
