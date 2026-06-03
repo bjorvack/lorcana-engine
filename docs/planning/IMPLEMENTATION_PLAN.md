@@ -738,6 +738,22 @@ work, tracked separately.
 
 ---
 
+## Card-functionalization (post-Slice-9, ongoing)
+
+Turning the loaded card pool into functional cards, driven by the expressibility
+triage (≈47% playable today; top blockers: permanent keyword grants 180,
+look-top/reveal 158, complex selectors 151).
+
+- [x] **DSL selector predicates** — `parse_filter` now parses by-name / by-cost /
+  by-stat-threshold (`"named X"`, `"with cost N or less"`, `"with N {S} or more"`),
+  adding `CharacterFilter::Willpower`/`Lore`. (selector blocker)
+- [x] **Authored abilities for sets 1-12** (107 cards) via parallel worktrees;
+  action/song play-abilities route to `action_effects`.
+- [x] **Permanent keyword/property grants** — `Effect::Grant { target, property }`
+  + `ModifierDuration::Permanent` (cleared when the target leaves play); DSL
+  `grant_keyword … duration = "permanent"`. (top blocker: 180 cards)
+- [ ] look-top/reveal variants; count-threshold conditionals; second authoring pass.
+
 ## Slice 9 — Real card data & conformance suite
 
 **Goal**: scale beyond hand-written cards and lock in correctness.

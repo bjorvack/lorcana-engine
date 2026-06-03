@@ -193,10 +193,15 @@ fn effect_from_table(t: &toml::Table) -> Result<Effect, String> {
         })
     } else if let Some(Value::String(kw)) = t.get("grant_keyword") {
         let keyword = keyword_from(kw).ok_or_else(|| format!("unknown keyword {kw:?}"))?;
-        Ok(Effect::GrantThisTurn {
-            target: tgt()?,
-            property: Property::Keyword(keyword),
-        })
+        let property = Property::Keyword(keyword);
+        let target = tgt()?;
+        // `duration = "permanent"` ("gains X") vs the default this-turn ("gains X
+        // this turn").
+        match t.get("duration").and_then(Value::as_str) {
+            Some("permanent") => Ok(Effect::Grant { target, property }),
+            Some("this_turn") | None => Ok(Effect::GrantThisTurn { target, property }),
+            Some(other) => Err(format!("unknown grant duration {other:?}")),
+        }
     } else {
         Err(format!("no known effect verb in {t:?}"))
     }

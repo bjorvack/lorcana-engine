@@ -2554,6 +2554,7 @@ fn execute_effect(
         | Effect::GrantAbilityThisTurn { target, .. }
         | Effect::GrantActivatedThisTurn { target, .. }
         | Effect::GrantThisTurn { target, .. }
+        | Effect::Grant { target, .. }
         | Effect::IfTargetMatches { target, .. } => {
             return resolve_targeted(state, registry, controller, source, target, effect, events);
         }
@@ -3385,6 +3386,16 @@ fn apply_effect_to_rest(
         // turn (a single `UntilEndOfTurn` property modifier).
         Effect::GrantThisTurn { property, .. } => {
             grant_property(state, source, target_card, property.clone());
+        }
+        // Grant a property permanently (lasts while the target is in play, §7.6):
+        // source = the target, so the leave-play sweep clears it.
+        Effect::Grant { property, .. } => {
+            state.add_property_modifier(PropertyModifier::new(
+                target_card,
+                ModifierTarget::Card(target_card),
+                property.clone(),
+                ModifierDuration::Permanent,
+            ));
         }
         // Grant an activated ability to the target until end of turn (§7.5).
         Effect::GrantActivatedThisTurn {

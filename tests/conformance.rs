@@ -900,3 +900,43 @@ fn dsl_strength_threshold_selector_filters_choices() {
         "the below-threshold character survives"
     );
 }
+
+/// §7.6 — a permanent keyword grant ("gains Evasive") persists across turns,
+/// unlike a this-turn grant which expires at end of turn.
+#[test]
+fn a_permanent_keyword_grant_persists_across_end_of_turn() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Empowerer"
+        type = "Character"
+        cost = 1
+        strength = 1
+        willpower = 5
+        lore = 1
+        [[card.abilities]]
+        on = "quest"
+        do = { grant_keyword = "Evasive", to = "self", duration = "permanent" }
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let hero = place(&mut state, me, 100, 0, 1, 5, true);
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: hero }).expect("quest");
+    assert!(
+        state
+            .granted_keywords(hero)
+            .contains(&lorcana_engine::Keyword::Evasive),
+        "the character gained Evasive"
+    );
+
+    // End the turn; a permanent grant must survive the end-of-turn sweep.
+    let _ = apply(&mut state, &reg, Input::EndTurn).expect("end turn");
+    assert!(
+        state
+            .granted_keywords(hero)
+            .contains(&lorcana_engine::Keyword::Evasive),
+        "Evasive persists into the next turn (not a this-turn grant)"
+    );
+}

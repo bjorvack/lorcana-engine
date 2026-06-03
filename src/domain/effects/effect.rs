@@ -240,6 +240,15 @@ pub enum Effect {
         /// The granted property.
         property: Property,
     },
+    /// Grant a property (keyword / restriction / permission) to the target
+    /// **permanently** — it lasts while the target is in play ("gains Evasive",
+    /// §7.6). Contrast [`Effect::GrantThisTurn`] (until end of turn).
+    Grant {
+        /// Who is affected.
+        target: Target,
+        /// The granted property.
+        property: Property,
+    },
     /// Grant the target an **activated** ability until end of turn ("gains '{E} —
     /// Draw a card' this turn", §7.5). Usable like a printed activated ability.
     GrantActivatedThisTurn {

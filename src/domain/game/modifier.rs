@@ -85,6 +85,10 @@ pub enum Condition {
 pub enum ModifierDuration {
     /// Active for as long as the source card is in play (§7.6.4).
     WhileSourceInPlay,
+    /// A permanent grant: never expires on a turn/step boundary. Removed only when
+    /// the affected card leaves play (model it with `source` = the affected card,
+    /// so the leave-play modifier sweep clears it). E.g. "gains Evasive".
+    Permanent,
     /// Active until the end of the current turn; expires at cleanup.
     UntilEndOfTurn,
     /// Active until `player` next reaches `step` (consumed when that player
