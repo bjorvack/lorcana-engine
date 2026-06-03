@@ -778,8 +778,11 @@ work, tracked separately.
   `TriggerCondition` TODO should be empty after this slice.
 
 **Acceptance**
-- [ ] A meaningful subset of a real set loads and validates.
-- [ ] The conformance suite passes and runs in CI.
+- [x] A meaningful subset of cards loads and validates (`tests/card_loader.rs`).
+- [~] The conformance suite passes and runs in CI — `tests/conformance.rs` holds
+  rule-cited (§7–§10) **end-to-end** golden tests; every card is authored in the
+  TOML DSL and loaded, so they exercise loader → engine. Runs under the existing
+  CI `cargo test`. Growing as mechanics are covered.
 - [ ] No remaining items in the `TriggerCondition` TODO.
 
 ---
