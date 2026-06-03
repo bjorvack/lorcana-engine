@@ -25,8 +25,8 @@
 use super::loader::keyword_from;
 use super::{AbilityCost, ActivatedAbility, StaticAbility, StaticTarget, TriggeredAbility};
 use crate::domain::effects::{
-    Amount, CardCategory, CharacterFilter, DiscardAmount, DiscardBy, Effect, PlayerScope, Target,
-    TargetSide, TriggerCondition,
+    Amount, CardCategory, CharacterFilter, Destination, DiscardAmount, DiscardBy, Effect,
+    MoveSource, PlayerScope, Target, TargetSide, TriggerCondition,
 };
 use crate::domain::game::{Condition, Property, Stat};
 use crate::domain::types::card::Classification;
@@ -161,6 +161,11 @@ fn effect_from_table(t: &toml::Table) -> Result<Effect, String> {
         Ok(Effect::Ready(target_from_value(v)?))
     } else if let Some(v) = t.get("freeze") {
         Ok(Effect::Freeze(target_from_value(v)?))
+    } else if let Some(v) = t.get("return_to_hand") {
+        Ok(Effect::Move {
+            what: MoveSource::Card(target_from_value(v)?),
+            to: Destination::Hand,
+        })
     } else if t.contains_key("discard") {
         Ok(Effect::Discard {
             who: scope(PlayerScope::You)?,

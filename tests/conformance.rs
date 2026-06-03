@@ -450,3 +450,152 @@ fn alert_may_challenge_an_evasive_character() {
         "challenge damage was dealt"
     );
 }
+
+fn in_hand(state: &GameState, owner: PlayerId, card: CardId) -> bool {
+    state
+        .player(owner)
+        .unwrap()
+        .hand()
+        .iter()
+        .any(|c| c.id() == card)
+}
+
+fn place_drying(
+    state: &mut GameState,
+    owner: PlayerId,
+    raw: u32,
+    def: u32,
+    strength: u32,
+    willpower: u32,
+) -> CardId {
+    let id = CardId::from_raw(raw);
+    let mut instance = CardInstance::new(
+        id,
+        CardDefId::from_raw(def),
+        Conditions {
+            ready: true,
+            damage: 0,
+            drying: true,
+            facedown: false,
+        },
+    );
+    instance.set_stats(Some(CharacterStats::new(strength, willpower, 1)));
+    state.player_mut(owner).unwrap().play_mut().push(instance);
+    id
+}
+
+/// §8 — "return to hand": a bounced character leaves play for its owner's hand.
+#[test]
+fn return_to_hand_bounces_a_character() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Bouncer"
+        type = "Character"
+        cost = 1
+        strength = 1
+        willpower = 5
+        lore = 1
+        [[card.abilities]]
+        on = "quest"
+        do = { return_to_hand = "chosen opposing character" }
+        [[card]]
+        name = "Victim"
+        type = "Character"
+        cost = 1
+        strength = 1
+        willpower = 5
+        lore = 1
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let foe = opponent_of(&state, me);
+    let bouncer = place(&mut state, me, 100, 0, 1, 5, true);
+    let victim = place(&mut state, foe, 200, 1, 1, 5, false);
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: bouncer }).expect("quest");
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(lorcana_engine::Decision::ChooseTarget(victim)),
+    )
+    .expect("choose target");
+
+    assert!(!in_play(&state, foe, victim), "left play");
+    assert!(in_hand(&state, foe, victim), "returned to its owner's hand");
+}
+
+/// §10.7 — "Reckless": this character can't quest.
+#[test]
+fn reckless_cannot_quest() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Berserker"
+        type = "Character"
+        cost = 1
+        strength = 3
+        willpower = 5
+        lore = 2
+        keywords = ["Reckless"]
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let berserker = place(&mut state, me, 100, 0, 3, 5, true);
+
+    assert!(
+        apply(
+            &mut state,
+            &reg,
+            Input::Quest {
+                character: berserker
+            }
+        )
+        .is_err(),
+        "a Reckless character can't be sent to quest"
+    );
+}
+
+/// §10.9 — "Rush": this character can challenge the turn it's played (ignores drying).
+#[test]
+fn rush_can_challenge_while_drying() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Charger"
+        type = "Character"
+        cost = 1
+        strength = 3
+        willpower = 9
+        lore = 1
+        keywords = ["Rush"]
+        [[card]]
+        name = "Bystander"
+        type = "Character"
+        cost = 1
+        strength = 1
+        willpower = 9
+        lore = 1
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let foe = opponent_of(&state, me);
+    let charger = place_drying(&mut state, me, 100, 0, 3, 9); // just "played" -> drying
+    let bystander = place(&mut state, foe, 200, 1, 1, 9, false);
+
+    assert!(
+        apply(
+            &mut state,
+            &reg,
+            Input::Challenge {
+                challenger: charger,
+                target: bystander,
+            },
+        )
+        .is_ok(),
+        "Rush lets a drying character challenge"
+    );
+}
