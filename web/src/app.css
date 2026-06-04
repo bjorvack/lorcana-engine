@@ -21,9 +21,15 @@
   --surface-2: color-mix(in srgb, var(--kelp) 64%, var(--lorcana-indigo));
   --surface-3: color-mix(in srgb, var(--kelp) 50%, var(--lorcana-indigo));
 
-  /* Gold hairlines: refined, low-contrast frames that read as premium. */
+  /* Gold hairlines: used sparingly — card frames, the centre divider, focus. */
   --border: color-mix(in srgb, var(--illuminary-gold) 22%, transparent);
   --border-strong: color-mix(in srgb, var(--illuminary-gold) 40%, transparent);
+
+  /* Zones are grouped with spacing + faint tints + soft shadows, not borders. */
+  --zone-tint: color-mix(in srgb, var(--lorcana-indigo) 16%, transparent);
+  --zone-tint-soft: color-mix(in srgb, var(--lorcana-indigo) 9%, transparent);
+  --divider: color-mix(in srgb, var(--illuminary-gold) 13%, transparent);
+  --pill: color-mix(in srgb, var(--kelp) 45%, transparent);
 
   --text: var(--parchment);
   --muted: color-mix(in srgb, var(--parchment) 55%, var(--kelp));

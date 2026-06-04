@@ -1268,3 +1268,209 @@ fn damage_trigger_mimics_watch_the_teeth() {
         "target was banished (took 9 damage vs 3 willpower)"
     );
 }
+
+/// Aladdin - Street Rat (set 1): "When you play this character, each opponent loses 1 lore."
+/// Plays the card for real and verifies the *named* opponent actually loses 1 lore.
+#[test]
+fn aladdin_street_rat_play_makes_each_opponent_lose_lore() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Aladdin - Street Rat"
+        type = "Character"
+        cost = 3
+        ink = ["Ruby"]
+        strength = 2
+        willpower = 2
+        lore = 1
+        [[card.abilities]]
+        on = "play"
+        do = { lose_lore = 1, who = "each opponent" }
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let foe = opponent_of(&state, me);
+
+    // Opponent starts with some lore so the loss is observable (clamps at 0).
+    state.player_mut(foe).unwrap().add_lore(3);
+    let my_lore_before = lore(&state, me);
+
+    // Put Aladdin (def 0) in hand and 3 ready ink to pay his cost.
+    let aladdin = CardId::from_raw(300);
+    state
+        .player_mut(me)
+        .unwrap()
+        .hand_mut()
+        .push(CardInstance::new(
+            aladdin,
+            CardDefId::from_raw(0),
+            Conditions::faceup_idle(),
+        ));
+    for raw in 301..304 {
+        state
+            .player_mut(me)
+            .unwrap()
+            .inkwell_mut()
+            .push(CardInstance::new(
+                CardId::from_raw(raw),
+                CardDefId::from_raw(0),
+                Conditions::faceup_idle(),
+            ));
+    }
+
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::PlayCard {
+            card: aladdin,
+            shift_onto: None,
+        },
+    )
+    .expect("play Aladdin - Street Rat");
+
+    assert_eq!(
+        lore(&state, foe),
+        2,
+        "the opponent lost exactly 1 lore (3 -> 2) on play"
+    );
+    assert_eq!(
+        lore(&state, me),
+        my_lore_before,
+        "playing the character did not change my own lore"
+    );
+}
+
+/// Aladdin - Heroic Outlaw (set 1): "Whenever this character banishes another character
+/// in a challenge, you gain 2 lore and each opponent loses 2 lore."
+/// Drives a real challenge that banishes the target and checks both lore swings.
+#[test]
+fn aladdin_heroic_outlaw_banish_in_challenge_swings_lore_both_ways() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Aladdin - Heroic Outlaw"
+        type = "Character"
+        cost = 7
+        ink = ["Ruby"]
+        strength = 5
+        willpower = 5
+        lore = 2
+        [[card.abilities]]
+        on = "banishes_in_challenge"
+        do = [
+            { gain_lore = 2 },
+            { lose_lore = 2, who = "each opponent" }
+        ]
+        [[card]]
+        name = "Target Dummy"
+        type = "Character"
+        cost = 1
+        ink = ["Ruby"]
+        strength = 1
+        willpower = 1
+        lore = 1
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let foe = opponent_of(&state, me);
+
+    // Aladdin (def 0) ready for me; weak target (def 1) exerted for the foe so
+    // it's a legal challenge and dies (strength 5 >= willpower 1).
+    let aladdin = place(&mut state, me, 100, 0, 5, 5, true);
+    let target = place(&mut state, foe, 200, 1, 1, 1, false);
+
+    // Opponent starts with lore so their loss is observable; my lore starts at 0.
+    state.player_mut(foe).unwrap().add_lore(5);
+    assert_eq!(lore(&state, me), 0, "I start at 0 lore");
+
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Challenge {
+            challenger: aladdin,
+            target,
+        },
+    )
+    .expect("challenge");
+
+    // The trigger only fires because the challenge banished the target.
+    assert!(
+        state
+            .player(foe)
+            .unwrap()
+            .play()
+            .iter()
+            .all(|c| c.id() != target),
+        "target was banished by the challenge"
+    );
+    assert_eq!(lore(&state, me), 2, "I gained 2 lore from the trigger");
+    assert_eq!(
+        lore(&state, foe),
+        3,
+        "the opponent lost 2 lore from the trigger (5 -> 3)"
+    );
+}
+
+/// Guard: Aladdin - Heroic Outlaw's trigger must NOT fire on a challenge that
+/// fails to banish the target (the text is gated on a banish).
+#[test]
+fn aladdin_heroic_outlaw_no_lore_when_challenge_does_not_banish() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Aladdin - Heroic Outlaw"
+        type = "Character"
+        cost = 7
+        ink = ["Ruby"]
+        strength = 5
+        willpower = 5
+        lore = 2
+        [[card.abilities]]
+        on = "banishes_in_challenge"
+        do = [
+            { gain_lore = 2 },
+            { lose_lore = 2, who = "each opponent" }
+        ]
+        [[card]]
+        name = "Tough Wall"
+        type = "Character"
+        cost = 1
+        ink = ["Ruby"]
+        strength = 1
+        willpower = 9
+        lore = 1
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let foe = opponent_of(&state, me);
+
+    // Target has willpower 9 > Aladdin's strength 5, so it survives the challenge.
+    let aladdin = place(&mut state, me, 100, 0, 5, 5, true);
+    let target = place(&mut state, foe, 200, 1, 1, 9, false);
+    state.player_mut(foe).unwrap().add_lore(5);
+
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Challenge {
+            challenger: aladdin,
+            target,
+        },
+    )
+    .expect("challenge");
+
+    assert!(
+        state
+            .player(foe)
+            .unwrap()
+            .play()
+            .iter()
+            .any(|c| c.id() == target),
+        "target survived the challenge"
+    );
+    assert_eq!(lore(&state, me), 0, "no lore gained: nothing was banished");
+    assert_eq!(lore(&state, foe), 5, "opponent kept their lore");
+}

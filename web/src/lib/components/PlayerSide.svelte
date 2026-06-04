@@ -226,9 +226,13 @@
     overflow: visible;
   }
 
+  /* Active seat is shown with a soft warm glow, not a hard outline. */
   .side.active {
-    background: oklch(80% 0.15 85deg / 8%);
-    outline: 1px solid oklch(80% 0.15 85deg / 30%);
+    background: radial-gradient(
+      120% 90% at 50% 50%,
+      color-mix(in srgb, var(--illuminary-gold) 10%, transparent),
+      transparent 70%
+    );
   }
 
   /*
@@ -288,38 +292,35 @@
     direction: ltr;
   }
 
+  /* The play mat is one soft surface — grouped by tint + shadow, no frame. */
   .play-regions {
     display: flex;
     flex-direction: column;
     gap: var(--gap);
     background: var(--bg-felt);
-    border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: var(--gap);
+    padding: calc(var(--gap) * 1.25);
     flex: 1;
     min-block-size: 0;
     overflow: hidden;
-    box-shadow:
-      var(--shadow-panel),
-      inset 0 1px 0 color-mix(in srgb, var(--illuminary-gold) 14%, transparent);
+    box-shadow: var(--shadow-panel);
   }
 
   .play-region {
     flex: 1;
     min-block-size: 0;
-    padding: calc(var(--gap) * 0.5);
-    border-radius: calc(var(--radius) - 0.2rem);
-    background: color-mix(in srgb, var(--kelp) 30%, transparent);
-    border: 1px solid color-mix(in srgb, var(--illuminary-gold) 10%, transparent);
     overflow: hidden;
   }
 
+  /* One purposeful divider separates the character row from items/locations. */
   .play-bottom-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--gap);
+    gap: calc(var(--gap) * 2);
     flex: 1;
     min-block-size: 0;
+    padding-block-start: calc(var(--gap) * 0.75);
+    border-block-start: 1px solid var(--divider);
   }
 
   .play-region.characters {
@@ -351,12 +352,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: clamp(0.75rem, 2vw, 2rem);
+    gap: clamp(1rem, 3vw, 2.5rem);
     padding-block: 0.35rem;
     padding-inline: var(--gap);
-    border-radius: var(--radius);
-    background: color-mix(in srgb, var(--surface) 45%, transparent);
-    border: 1px solid color-mix(in srgb, var(--illuminary-gold) 10%, transparent);
   }
 
   .ink-group {
@@ -384,8 +382,7 @@
     padding-inline: 0.4rem;
     padding-block: 0.15rem;
     border-radius: 1rem;
-    background: color-mix(in srgb, var(--illuminary-gold) 16%, transparent);
-    border: 1px solid var(--border);
+    background: var(--pill);
     color: var(--parchment);
     font-weight: 700;
     font-size: 0.75rem;
@@ -434,22 +431,18 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.3rem;
+    gap: 0.25rem;
     cursor: pointer;
-    padding: 0.5rem;
+    padding: 0.25rem;
     border-radius: var(--radius);
-    background: color-mix(in srgb, var(--surface) 70%, transparent);
-    border: 1px solid var(--border);
     transition:
       background 0.2s,
-      border-color 0.2s,
       box-shadow 0.2s;
   }
 
   .discard-pile:hover {
-    background: var(--surface-3);
-    border-color: var(--border-strong);
-    box-shadow: 0 0 0 1px color-mix(in srgb, var(--illuminary-gold) 25%, transparent);
+    background: var(--zone-tint);
+    box-shadow: 0 0 14px color-mix(in srgb, var(--illuminary-gold) 22%, transparent);
   }
 
   .discard-pile:focus-visible {
@@ -475,7 +468,7 @@
   .empty-discard {
     inline-size: var(--card-w);
     aspect-ratio: 1 / 1;
-    background: var(--surface-3);
+    background: var(--zone-tint-soft);
     border-radius: 0.4rem;
     display: grid;
     place-items: center;

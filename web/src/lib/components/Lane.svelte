@@ -60,8 +60,7 @@
     padding-inline: 0.4rem;
     padding-block: 0.05rem;
     border-radius: 1rem;
-    background: color-mix(in srgb, var(--illuminary-gold) 16%, transparent);
-    border: 1px solid var(--border);
+    background: var(--pill);
     color: var(--parchment);
     font-variant-numeric: tabular-nums;
   }

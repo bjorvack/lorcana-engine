@@ -27,8 +27,8 @@
     display: grid;
     place-items: center;
     border-radius: 0.4rem;
-    border: 1px solid var(--border);
     background: var(--surface-2);
+    box-shadow: var(--shadow-soft);
   }
 
   .stack.back {
@@ -40,8 +40,10 @@
   }
 
   .stack.empty {
-    opacity: 0.4;
-    border-style: dashed;
+    background: var(--zone-tint-soft);
+    border: 1px dashed var(--border);
+    box-shadow: none;
+    opacity: 0.7;
   }
 
   .count {
