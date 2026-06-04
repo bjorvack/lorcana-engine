@@ -266,11 +266,25 @@ pub(crate) fn keyword_from(s: &str) -> Option<Keyword> {
 /// # Errors
 /// Returns [`LoadError`] on invalid TOML or any card that can't be mapped.
 pub fn load_toml(toml_str: &str) -> Result<Vec<CardDefinition>, LoadError> {
+    load_toml_from(toml_str, 0)
+}
+
+/// Like [`load_toml`] but assigns ids starting at `first_id`.
+///
+/// Lets multiple files load into one registry with **unique** ids (cards span
+/// sets, e.g. starter-deck reprints).
+///
+/// # Errors
+/// Returns [`LoadError`] on invalid TOML or any card that can't be mapped.
+pub fn load_toml_from(toml_str: &str, first_id: u32) -> Result<Vec<CardDefinition>, LoadError> {
     let file: CardFile = toml::from_str(toml_str).map_err(|e| LoadError::Toml(e.to_string()))?;
     file.card
         .iter()
         .enumerate()
-        .map(|(i, c)| c.to_definition(CardDefId::from_raw(u32::try_from(i).unwrap_or(u32::MAX))))
+        .map(|(i, c)| {
+            let id = first_id.saturating_add(u32::try_from(i).unwrap_or(u32::MAX));
+            c.to_definition(CardDefId::from_raw(id))
+        })
         .collect()
 }
 

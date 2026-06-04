@@ -16,5 +16,5 @@ pub use card_kind::CardKind;
 pub use definition::CardDefinition;
 pub use dsl::TomlAbility;
 pub use keyword::{Keyword, ShiftAbility, ShiftCost, ShiftKind};
-pub use loader::{LoadError, TomlCard, load_toml};
+pub use loader::{LoadError, TomlCard, load_toml, load_toml_from};
 pub use registry::CardRegistry;
