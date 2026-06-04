@@ -581,3 +581,70 @@ fn an_action_authored_in_the_dsl_resolves_its_effect_on_play() {
         }]
     );
 }
+
+#[test]
+fn the_dsl_exposes_move_damage() {
+    use lorcana_engine::{Amount, Effect, Target};
+    let defs = load_toml(
+        r#"
+        [[card]]
+        name = "Healer"
+        type = "Character"
+        cost = 2
+        strength = 1
+        willpower = 3
+        lore = 1
+        [[card.abilities]]
+        on = "quest"
+        do = { move_damage = 2, from = "chosen character", to = "chosen opposing character" }
+        "#,
+    )
+    .expect("loads");
+    assert_eq!(defs[0].abilities().len(), 1);
+    let Effect::MoveDamage { from, to, amount } = &defs[0].abilities()[0].effect else {
+        panic!("expected MoveDamage");
+    };
+    assert_eq!(*amount, Amount::fixed(2));
+    assert!(matches!(from, Target::ChosenCharacter { .. }));
+    assert!(matches!(
+        to,
+        Target::ChosenCharacter { filter } if format!("{filter:?}").contains("Opposing")
+    ));
+}
+
+#[test]
+fn the_dsl_exposes_restriction_grants() {
+    use lorcana_engine::{Effect, Property, Restriction};
+    let defs = load_toml(
+        r#"
+        [[card]]
+        name = "Binder"
+        type = "Character"
+        cost = 2
+        strength = 2
+        willpower = 2
+        lore = 1
+        [[card.abilities]]
+        on = "play"
+        do = { restrict = "cant_challenge", to = "chosen opposing character", duration = "this_turn" }
+        [[card.abilities]]
+        on = "quest"
+        do = { restrict = "cant_quest", to = "chosen opposing character", duration = "permanent" }
+        "#,
+    )
+    .expect("loads");
+    assert!(matches!(
+        &defs[0].abilities()[0].effect,
+        Effect::GrantThisTurn {
+            property: Property::Restriction(Restriction::CantChallenge),
+            ..
+        }
+    ));
+    assert!(matches!(
+        &defs[0].abilities()[1].effect,
+        Effect::Grant {
+            property: Property::Restriction(Restriction::CantQuest),
+            ..
+        }
+    ));
+}

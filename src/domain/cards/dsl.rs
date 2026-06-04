@@ -28,7 +28,7 @@ use crate::domain::effects::{
     Amount, CardCategory, CharacterFilter, Comparison, Destination, DiscardAmount, DiscardBy,
     Effect, MoveSource, NumericFilter, PlayerScope, Target, TargetSide, TriggerCondition,
 };
-use crate::domain::game::{Condition, Property, Stat};
+use crate::domain::game::{Condition, Property, Restriction, Stat};
 use crate::domain::types::card::Classification;
 use serde::Deserialize;
 use toml::Value;
@@ -208,9 +208,44 @@ fn effect_from_table(t: &toml::Table) -> Result<Effect, String> {
             Some("this_turn") | None => Ok(Effect::GrantThisTurn { target, property }),
             Some(other) => Err(format!("unknown grant duration {other:?}")),
         }
+    } else if t.contains_key("move_damage") {
+        // "Move up to N damage from <a> to <b>."
+        let from = t
+            .get("from")
+            .ok_or_else(|| "`move_damage` needs a `from` target".to_string())?;
+        let to = t
+            .get("to")
+            .ok_or_else(|| "`move_damage` needs a `to` target".to_string())?;
+        Ok(Effect::MoveDamage {
+            from: target_from_value(from)?,
+            to: target_from_value(to)?,
+            amount: amt("move_damage")?,
+        })
+    } else if let Some(Value::String(r)) = t.get("restrict") {
+        // Grant a restriction ("can't quest/challenge/…"), this turn or permanently.
+        let property = Property::Restriction(restriction_from(r)?);
+        let target = tgt()?;
+        match t.get("duration").and_then(Value::as_str) {
+            Some("permanent") => Ok(Effect::Grant { target, property }),
+            Some("this_turn") | None => Ok(Effect::GrantThisTurn { target, property }),
+            Some(other) => Err(format!("unknown grant duration {other:?}")),
+        }
     } else {
         Err(format!("no known effect verb in {t:?}"))
     }
+}
+
+/// Map a restriction name to a [`Restriction`].
+fn restriction_from(s: &str) -> Result<Restriction, String> {
+    Ok(match s {
+        "cant_quest" => Restriction::CantQuest,
+        "cant_challenge" => Restriction::CantChallenge,
+        "cant_be_challenged" => Restriction::CantBeChallenged,
+        "cant_be_chosen" => Restriction::CantBeChosen,
+        "cant_ready" => Restriction::CantReady,
+        "takes_no_challenge_damage" => Restriction::TakesNoChallengeDamage,
+        other => return Err(format!("unknown restriction {other:?}")),
+    })
 }
 
 /// A target: a compact selector string, or the structured AST form (a table).

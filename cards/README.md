@@ -70,7 +70,10 @@ to = "your other Hero characters"
 **Effect verbs** (`do`): `draw`, `gain_lore`, `lose_lore`, `deal_damage`,
 `remove_damage`, `give_strength`, `banish`, `exert`, `ready`, `freeze`, `discard`,
 `return_to_hand`, `into_inkwell`, `grant_keyword` (`duration = "this_turn"`
-default | `"permanent"`), and `if_you_have` (`+ at_least = N`, `then = {…}`).
+default | `"permanent"`), `if_you_have` (`+ at_least = N`, `then = {…}`),
+`move_damage` (`= N, from = "…", to = "…"`), and `restrict` (`= "cant_quest" |
+"cant_challenge" | "cant_be_challenged" | "cant_be_chosen" | "cant_ready" |
+"takes_no_challenge_damage"`, with the same `duration`).
 
 **Amounts** (numbers, or a dynamic string): an integer, `"per <filter>"`,
 `"cards in hand"`, `"damage on self"`.
