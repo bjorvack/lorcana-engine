@@ -1627,3 +1627,136 @@ fn watch_the_teeth_deals_back_the_damage_just_taken() {
         "wall banished by 6 combat + 3 'that much' trigger damage"
     );
 }
+
+/// Yours-scoped quest trigger (set 1/3/9/11): "Whenever one of your characters
+/// quests, gain 1 lore." A *different* character of mine questing fires the
+/// watcher's trigger.
+#[test]
+fn yours_quests_trigger_fires_when_another_of_your_characters_quests() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Watcher"
+        type = "Character"
+        cost = 2
+        ink = ["Amber"]
+        strength = 1
+        willpower = 3
+        lore = 1
+        [[card.abilities]]
+        on = "yours_quests"
+        do = { gain_lore = 1 }
+        [[card]]
+        name = "Quester"
+        type = "Character"
+        cost = 1
+        ink = ["Amber"]
+        strength = 1
+        willpower = 1
+        lore = 1
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+
+    let _watcher = place(&mut state, me, 100, 0, 1, 3, true);
+    let quester = place(&mut state, me, 200, 1, 1, 1, true);
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+
+    // Quester adds its own 1 lore on questing, plus 1 from the watcher's trigger.
+    assert_eq!(
+        lore(&state, me),
+        2,
+        "quest lore (1) + yours-quest trigger (1)"
+    );
+}
+
+/// The watcher itself is "one of your characters", so its own quest also fires it.
+#[test]
+fn yours_quests_trigger_fires_when_the_watcher_itself_quests() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Watcher"
+        type = "Character"
+        cost = 2
+        ink = ["Amber"]
+        strength = 1
+        willpower = 3
+        lore = 1
+        [[card.abilities]]
+        on = "yours_quests"
+        do = { gain_lore = 1 }
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let watcher = place(&mut state, me, 100, 0, 1, 3, true);
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: watcher }).expect("quest");
+
+    // Its own quest adds 1 lore + 1 from its own yours-quest trigger.
+    assert_eq!(
+        lore(&state, me),
+        2,
+        "self-quest lore (1) + yours-quest trigger (1)"
+    );
+}
+
+/// Guard: an opponent's character questing must NOT fire my yours-scoped trigger
+/// (it watches *my* characters).
+#[test]
+fn yours_quests_trigger_does_not_fire_on_opponents_quest() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Watcher"
+        type = "Character"
+        cost = 2
+        ink = ["Amber"]
+        strength = 1
+        willpower = 3
+        lore = 1
+        [[card.abilities]]
+        on = "yours_quests"
+        do = { gain_lore = 1 }
+        [[card]]
+        name = "Foe Quester"
+        type = "Character"
+        cost = 1
+        ink = ["Amber"]
+        strength = 1
+        willpower = 1
+        lore = 1
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let foe = opponent_of(&state, me);
+
+    let _watcher = place(&mut state, me, 100, 0, 1, 3, true);
+    let foe_quester = place(&mut state, foe, 200, 1, 1, 1, true);
+
+    // Hand the turn to the opponent, then have them quest.
+    let _ = apply(&mut state, &reg, Input::EndTurn).expect("end turn");
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Quest {
+            character: foe_quester,
+        },
+    )
+    .expect("quest");
+
+    assert_eq!(
+        lore(&state, me),
+        0,
+        "my yours-quest trigger ignores the opponent's quest"
+    );
+    assert_eq!(
+        lore(&state, foe),
+        1,
+        "the opponent only got their own quest lore"
+    );
+}

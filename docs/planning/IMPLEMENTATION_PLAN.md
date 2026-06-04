@@ -210,6 +210,13 @@ fires for each singer in `apply_sing`, resolved from the bag after the song's
 effect. `tests/actions.rs::a_sing_a_song_trigger_fires_for_the_singer`. (The
 "one of *your* characters sings" yours-scope variant is a follow-up.)
 
+Also done: first **yours-scoped** trigger — `WhenYoursQuests` ("whenever one of
+your characters quests", DSL `"yours_quests"`). `apply_quest` scans the
+controller's in-play characters (including the quester) and routes each through
+`enqueue_triggers_for_def`, so `during_your_turn` gating + granted triggers are
+honored. `tests/conformance.rs::yours_quests_trigger_*` (fires for another
+character, fires for the quester itself, ignores the opponent's quest).
+
 **Structural item (don't forget):** today only *self*-scoped triggers are detected
 at the action site (`enqueue_self_triggers`). Watching *other* cards' events
 (scope filters: one of your / a / an opposing character) requires a general

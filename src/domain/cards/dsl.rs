@@ -103,6 +103,7 @@ fn trigger_from(s: &str) -> Result<TriggerCondition, String> {
         "play_item" => TriggerCondition::WhenYouPlay(CardCategory::Item),
         "play_location" => TriggerCondition::WhenYouPlay(CardCategory::Location),
         "quest" => TriggerCondition::WhenThisQuests,
+        "yours_quests" | "your_character_quests" => TriggerCondition::WhenYoursQuests,
         "challenge" => TriggerCondition::WhenThisChallenges,
         "challenged" => TriggerCondition::WhenChallenged,
         "banish" | "banished" => TriggerCondition::WhenBanished,

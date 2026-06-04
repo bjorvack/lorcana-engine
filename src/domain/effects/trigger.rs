@@ -62,6 +62,10 @@ pub enum TriggerCondition {
     WhenYouPlayThisWithShift,
     /// "Whenever this character quests" (~200 cards).
     WhenThisQuests,
+    /// "Whenever one of your characters quests" — a **yours-scoped** quest trigger:
+    /// fires for the watcher whenever any character its controller owns quests
+    /// (including the quester itself, since it is "one of your characters").
+    WhenYoursQuests,
     /// "Whenever you play a [category]" — fires on another card the controller
     /// plays that matches the category (~90 cards).
     WhenYouPlay(CardCategory),

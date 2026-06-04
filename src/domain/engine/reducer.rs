@@ -851,6 +851,9 @@ fn apply_quest(
             character,
             &TriggerCondition::WhenThisQuests,
         );
+        // "Whenever one of your characters quests" — fires for each of the
+        // controller's characters that watches for it (including the quester).
+        enqueue_yours_quests_triggers(state, registry, active);
         enqueue_support_trigger(state, registry, active, character);
         events.extend(resolve_bag(state, registry));
     }
@@ -1990,6 +1993,35 @@ fn seat(index: usize) -> PlayerId {
 // ---------------------------------------------------------------------------
 // The bag: enqueueing and resolving triggered abilities (§8.7).
 // ---------------------------------------------------------------------------
+
+/// Enqueue "whenever one of your characters quests" triggers: for each of the
+/// controller's in-play characters that watches for it, enqueue its effect
+/// (reusing `enqueue_triggers_for_def`, so `during_your_turn` gating and granted
+/// triggers are honored). The quester is included — it is "one of your
+/// characters" (§4.3.5.9).
+fn enqueue_yours_quests_triggers(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    controller: PlayerId,
+) {
+    let watchers: Vec<(CardId, CardDefId)> = state.player(controller).map_or_else(Vec::new, |p| {
+        p.play()
+            .iter()
+            .filter(|c| c.is_character())
+            .map(|c| (c.id(), c.definition()))
+            .collect()
+    });
+    for (id, def) in watchers {
+        enqueue_triggers_for_def(
+            state,
+            registry,
+            controller,
+            id,
+            def,
+            &TriggerCondition::WhenYoursQuests,
+        );
+    }
+}
 
 /// Enqueue the source card's own triggers whose condition matches (e.g. a
 /// character's "when you play this character" or "whenever this character
