@@ -199,6 +199,10 @@ fn effect_from_table(t: &toml::Table) -> Result<Effect, String> {
         Ok(Effect::Banish(target_from_value(v)?))
     } else if let Some(v) = t.get("exert") {
         Ok(Effect::Exert(target_from_value(v)?))
+    } else if t.contains_key("boost") {
+        Ok(Effect::Boost {
+            count: amt("boost")?,
+        })
     } else if let Some(v) = t.get("ready") {
         Ok(Effect::Ready(target_from_value(v)?))
     } else if let Some(v) = t.get("freeze") {

@@ -1215,3 +1215,36 @@ fn real_card_donald_duck_shift_conditional() {
         .any(|a| matches!(a.condition, TriggerCondition::WhenYouPlayThisWithShift));
     assert!(has_shift_trigger, "should have shift-conditional trigger");
 }
+
+#[test]
+fn real_card_aladdin_boost_activated_ability() {
+    // Aladdin - 10/123: Boost 1 {I} (Once during your turn, you may pay 1 {I} to put the top card of your deck facedown under this character.)
+    // Boost can be expressed as an activated ability in the DSL
+    let defs = load_toml(
+        r#"
+        [[card]]
+        name = "Aladdin"
+        type = "Character"
+        cost = 5
+        strength = 3
+        willpower = 4
+        lore = 1
+        ink = ["Steel"]
+        [[card.activated]]
+        cost = { ink = 1 }
+        do = { boost = 1 }
+        keywords = ["Reckless"]
+        "#,
+    )
+    .expect("loads");
+
+    // Check for activated ability with Boost effect
+    let has_boost_ability = defs[0]
+        .activated_abilities()
+        .iter()
+        .any(|a| matches!(a.effect, Effect::Boost { .. }));
+    assert!(
+        has_boost_ability,
+        "should have activated ability with Boost effect"
+    );
+}

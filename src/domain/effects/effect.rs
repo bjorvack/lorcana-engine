@@ -286,6 +286,12 @@ pub enum Effect {
         /// What the activated ability does.
         effect: Box<Self>,
     },
+    /// Put the top `count` cards of the controller's deck under this character,
+    /// facedown (Boost keyword, §10.4). Cards under a character are not in play.
+    Boost {
+        /// How many cards to put under (typically 1, but could be dynamic).
+        count: Amount,
+    },
     /// Choose `target`, then apply `then` to it if it matches `filter`, else
     /// `otherwise` ("Chosen character gets +2 {S}; if a Villain character is
     /// chosen, they get +3 instead"). `then`/`otherwise` apply to the **chosen

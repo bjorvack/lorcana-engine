@@ -117,7 +117,7 @@
 
   button[aria-pressed='true'] {
     background: var(--accent);
-    color: oklch(20% 0.02 280);
+    color: oklch(20% 0.02 280deg);
     border-color: var(--accent);
   }
 

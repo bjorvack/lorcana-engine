@@ -52,6 +52,7 @@
     display: flex;
     gap: var(--gap);
     align-items: center;
+    justify-content: center;
     min-block-size: calc(var(--card-w) * 7 / 5);
     padding-block: 0.25rem;
     overflow-x: auto;

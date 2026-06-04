@@ -37,7 +37,8 @@ export function toDisplayCard(card: CardView, cards: ReadonlyMap<number, CardDef
   const strength = card.strength ?? def?.strength;
   const willpower = card.willpower ?? def?.willpower;
   const lore = card.lore ?? def?.lore;
-  const willpowerRemaining = willpower === undefined ? undefined : Math.max(0, willpower - card.damage);
+  const willpowerRemaining =
+    willpower === undefined ? undefined : Math.max(0, willpower - card.damage);
 
   return {
     instanceId: card.instanceId,

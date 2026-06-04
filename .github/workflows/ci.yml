@@ -26,6 +26,57 @@ jobs:
       - name: Test
         run: cargo test --all-targets --all-features
 
+  wasm:
+    name: wasm · clippy · build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+          components: clippy
+      - uses: Swatinem/rust-cache@v2
+      - name: Clippy (wasm target)
+        run: cargo clippy -p lorcana-wasm --target wasm32-unknown-unknown --all-features -- -D warnings
+      - name: Unit tests (host)
+        run: cargo test -p lorcana-wasm
+      - uses: jetli/wasm-pack-action@v0.4.0
+      - name: Build wasm package
+        run: bash scripts/build-wasm.sh
+
+  web:
+    name: web · lint · test · build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+      - uses: jetli/wasm-pack-action@v0.4.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Build wasm package
+        run: bash scripts/build-wasm.sh
+      - name: Install web deps
+        working-directory: web
+        run: npm ci
+      - name: Lint
+        working-directory: web
+        run: npm run lint
+      - name: Type-check
+        working-directory: web
+        run: npm run check
+      - name: Test
+        working-directory: web
+        run: npm test
+      - name: Build
+        working-directory: web
+        run: npx vite build
+
   coverage:
     name: coverage
     runs-on: ubuntu-latest

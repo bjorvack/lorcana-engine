@@ -1,6 +1,9 @@
 <script lang="ts">
-  let { label, count, faceDown = true }: { label: string; count: number; faceDown?: boolean } =
-    $props();
+  let {
+    label,
+    count,
+    faceDown = true,
+  }: { label: string; count: number; faceDown?: boolean } = $props();
 </script>
 
 <section class="pile" aria-label={`${label}: ${count}`}>
@@ -29,8 +32,11 @@
   }
 
   .stack.back {
-    background:
-      repeating-linear-gradient(45deg, oklch(40% 0.07 280) 0 6px, oklch(34% 0.06 280) 6px 12px);
+    background: repeating-linear-gradient(
+      45deg,
+      oklch(40% 0.07 280deg) 0 6px,
+      oklch(34% 0.06 280deg) 6px 12px
+    );
   }
 
   .stack.empty {
@@ -43,7 +49,7 @@
     font-size: 0.95rem;
     padding-inline: 0.4rem;
     border-radius: 0.5rem;
-    background: oklch(15% 0.02 280 / 75%);
+    background: oklch(15% 0.02 280deg / 75%);
   }
 
   .name {

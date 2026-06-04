@@ -2611,6 +2611,39 @@ fn execute_effect(
                 return execute_effect(state, registry, controller, source, then, events);
             }
         }
+        // Boost: put top cards of deck under this character, facedown (§10.4).
+        Effect::Boost { count } => {
+            let count = state.eval_amount(controller, source, source, count);
+            if count > 0 {
+                let deck_len = state.player(controller).map_or(0, |p| p.deck().len());
+                let actual_count = count.min(i32::try_from(deck_len).unwrap_or(i32::MAX));
+                if actual_count > 0 {
+                    let mut cards_to_add = Vec::new();
+                    {
+                        let player = state.player_mut(controller).unwrap();
+                        let player_deck = player.deck_mut();
+                        for _ in 0..actual_count {
+                            if let Some(mut card) = player_deck.pop_top() {
+                                card.conditions_mut().facedown = true;
+                                cards_to_add.push(card);
+                            }
+                        }
+                    }
+                    if let Some(character) = state
+                        .player_mut(controller)
+                        .and_then(|p| p.play_mut().iter_mut().find(|c| c.id() == source))
+                    {
+                        for card in cards_to_add {
+                            character.push_under(card);
+                        }
+                        events.push(GameEvent::Boosted {
+                            player: controller,
+                            card: source,
+                        });
+                    }
+                }
+            }
+        }
         // Modal "choose one": present the options to the controller (§7.1.9).
         Effect::ChooseOne { options, optional } => {
             if *optional {

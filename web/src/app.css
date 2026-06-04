@@ -1,21 +1,42 @@
 :root {
   color-scheme: dark;
 
-  --bg: oklch(22% 0.03 280);
-  --bg-felt: oklch(33% 0.06 155);
-  --surface: oklch(28% 0.03 280);
-  --surface-2: oklch(34% 0.03 280);
-  --border: oklch(45% 0.03 280);
-  --text: oklch(94% 0.01 280);
-  --muted: oklch(72% 0.02 280);
-  --accent: oklch(80% 0.15 85);
-  --ink: oklch(70% 0.12 250);
-  --lore: oklch(82% 0.16 95);
-  --danger: oklch(63% 0.21 25);
+  /* ── Disney Lorcana brand palette ───────────────────────────────
+     Source: official Disney Lorcana Media Guide (brand.ravensburger-group.com).
+     Lorcana Indigo, Illuminary Gold, Parchment, Kelp. */
+  --lorcana-indigo: #373b70;
+  --illuminary-gold: #d3ba84;
+  --parchment: #e3caa8;
+  --kelp: #1c1c1a;
+
+  /* ── Derived surfaces ──────────────────────────────────────────
+     A deep Kelp base, lifted with a hint of Lorcana Indigo for panels. */
+  --bg: color-mix(in srgb, var(--kelp) 88%, var(--lorcana-indigo));
+  --bg-felt: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--lorcana-indigo) 42%, var(--kelp)),
+    color-mix(in srgb, var(--lorcana-indigo) 22%, var(--kelp))
+  );
+  --surface: color-mix(in srgb, var(--kelp) 78%, var(--lorcana-indigo));
+  --surface-2: color-mix(in srgb, var(--kelp) 64%, var(--lorcana-indigo));
+
+  /* Gold hairlines: refined, low-contrast frames that read as premium. */
+  --border: color-mix(in srgb, var(--illuminary-gold) 22%, transparent);
+  --border-strong: color-mix(in srgb, var(--illuminary-gold) 40%, transparent);
+
+  --text: var(--parchment);
+  --muted: color-mix(in srgb, var(--parchment) 55%, var(--kelp));
+  --accent: var(--illuminary-gold);
+  --ink: oklch(72% 0.11 265deg);
+  --lore: var(--illuminary-gold);
+  --danger: oklch(63% 0.21 25deg);
 
   --radius: 0.6rem;
   --card-w: clamp(3.4rem, 6vw, 5.4rem);
   --gap: clamp(0.25rem, 0.8vw, 0.6rem);
+
+  --shadow-soft: 0 1px 2px rgb(0 0 0 / 35%);
+  --shadow-panel: 0 6px 20px -8px rgb(0 0 0 / 55%);
 
   font-family:
     system-ui,

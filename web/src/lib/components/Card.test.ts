@@ -35,10 +35,10 @@ describe('Card', () => {
   });
 
   it('hides details for a facedown card', () => {
-    const { queryByText, getByLabelText } = render(Card, {
+    const { queryByText, getByAltText } = render(Card, {
       card: display({ facedown: true }),
     });
-    expect(getByLabelText('Facedown card')).toBeInTheDocument();
+    expect(getByAltText('Card back')).toBeInTheDocument();
     expect(queryByText('2/2')).not.toBeInTheDocument();
   });
 

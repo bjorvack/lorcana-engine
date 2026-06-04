@@ -1064,3 +1064,91 @@ fn choose_one_effect_allows_selection() {
     // This test validates that choose_one parses correctly
     let _ = place(&mut state, me, 100, 0, 2, 3, true);
 }
+
+#[test]
+fn boost_moves_deck_card_under_character() {
+    // Test: Boost activated ability moves top deck card under character, facedown
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Booster"
+        type = "Character"
+        cost = 3
+        strength = 2
+        willpower = 3
+        lore = 1
+        [[card.activated]]
+        cost = { ink = 1 }
+        do = { boost = 1 }
+        [[card]]
+        name = "Friend"
+        type = "Character"
+        cost = 1
+        strength = 1
+        willpower = 5
+        lore = 1
+        "#,
+    );
+
+    let mut state = started(&reg);
+    let me = state.active_player();
+
+    // Play the Booster character
+    let booster_id = place(&mut state, me, 100, 0, 2, 3, true);
+
+    // Add ink to pay for Boost (put a card in inkwell)
+    let ink_id = CardId::from_raw(999);
+    let ink_instance = CardInstance::new(
+        ink_id,
+        CardDefId::from_raw(1),
+        Conditions {
+            ready: true,
+            damage: 0,
+            drying: false,
+            facedown: true,
+        },
+    );
+    state
+        .player_mut(me)
+        .unwrap()
+        .inkwell_mut()
+        .push(ink_instance);
+
+    // Get initial deck size
+    let before_deck = state.player(me).unwrap().deck().len();
+
+    // Activate Boost ability (as a UseAbility since it's an activated ability in the DSL)
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::UseAbility {
+            card: booster_id,
+            ability: 0,
+        },
+    );
+
+    // Verify: deck decreased by 1
+    assert_eq!(
+        state.player(me).unwrap().deck().len(),
+        before_deck - 1,
+        "deck should have 1 fewer card"
+    );
+
+    // Verify: character has 1 card under it, facedown
+    let booster_card = state
+        .player(me)
+        .unwrap()
+        .play()
+        .iter()
+        .find(|c| c.id() == booster_id)
+        .unwrap();
+    assert_eq!(
+        booster_card.under().len(),
+        1,
+        "character should have 1 card under it"
+    );
+    assert!(
+        booster_card.under().first().unwrap().conditions().facedown,
+        "card under should be facedown"
+    );
+}

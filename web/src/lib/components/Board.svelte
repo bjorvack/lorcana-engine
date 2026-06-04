@@ -46,12 +46,7 @@
   </div>
 
   {#if you}
-    <PlayerSide
-      player={you}
-      {cards}
-      revealHand={true}
-      active={view.activePlayer === you.id}
-    />
+    <PlayerSide player={you} {cards} revealHand={true} active={view.activePlayer === you.id} />
   {/if}
 </div>
 
@@ -83,9 +78,11 @@
   .lore.you {
     color: var(--lore);
   }
+
   .lore.opp {
     color: var(--accent);
   }
+
   .vs {
     color: var(--muted);
     font-weight: 400;

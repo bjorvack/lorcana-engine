@@ -1,0 +1,62 @@
+name: Deploy web viewer to GitHub Pages
+
+# Builds the Svelte board viewer (engine compiled to WASM) and publishes it to
+# GitHub Pages.
+#
+# NOTE on private repositories: publishing Pages from a *private* repo requires a
+# paid plan (GitHub Pro/Team/Enterprise) — it is not available on GitHub Free.
+# Even on a paid plan the published site is PUBLIC on the internet by default;
+# access-controlled ("private") Pages is GitHub Enterprise Cloud only. The card
+# art is loaded from a public CDN and the bundle contains only public card data,
+# so a public Pages site is acceptable here.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Allow only one concurrent deployment; don't cancel an in-progress run.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+      - uses: jetli/wasm-pack-action@v0.4.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Build wasm package
+        run: bash scripts/build-wasm.sh
+      - name: Install web deps
+        working-directory: web
+        run: npm ci
+      - name: Build site
+        working-directory: web
+        run: npx vite build
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
