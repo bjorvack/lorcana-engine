@@ -14,6 +14,10 @@ keywords = ["Sing Together 6"]
 #   Sing Together 6 (Any number of your or your teammates' characters with total cost 6 or more may {E} to sing this song for free.)
 #   Each opponent loses 2 lore. You gain 2 lore.
 
+[[card.abilities]]
+on = "play"
+do = [{ lose_lore = 2 }, { gain_lore = 2 }]
+
 [[card]]
 name = "Agustin Madrigal - Clumsy Dad"
 type = "Character"
@@ -266,6 +270,10 @@ inkwell = true
 # text:
 #   Banish chosen character with 2 {S} or less.
 
+[[card.abilities]]
+on = "play"
+do = { banish = "chosen character with 2 {S} or less" }
+
 [[card]]
 name = "Bruno Madrigal - Out of the Shadows"
 type = "Character"
@@ -375,6 +383,10 @@ classifications = ["Storyborn", "Ally"]
 # text:
 #   SPREADING GOOD FORTUNE When you play this character, your other characters get +3 {S} this turn.
 
+[[card.abilities]]
+on = "play"
+do = { give_strength = 3, to = "all your other characters" }
+
 [[card]]
 name = "Daisy Duck - Lovely Lady"
 type = "Character"
@@ -396,6 +408,10 @@ lore = 1
 classifications = ["Dreamborn", "Hero", "Musketeer"]
 # text:
 #   INFILTRATION When you play this character, each opponent chooses and discards a card.
+
+[[card.abilities]]
+on = "play"
+do = { discard = 1, who = "each opponent" }
 
 [[card]]
 name = "Dang Hu - Talon Chief"
@@ -539,6 +555,10 @@ cost = 1
 inkwell = true
 # text:
 #   Remove up to 1 damage from each of your characters.
+
+[[card.abilities]]
+on = "play"
+do = { remove_damage = 1, to = "all your characters" }
 
 [[card]]
 name = "Flotsam - Ursula's \"Baby\""
@@ -1199,6 +1219,10 @@ keywords = ["Support"]
 #   Support (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)
 #   STRIKE UP THE MUSIC When you play this character, chosen character gains Support this turn.
 
+[[card.abilities]]
+on = "play"
+do = { grant_keyword = "Support", to = "chosen character" }
+
 [[card]]
 name = "Mickey Mouse - Musketeer Captain"
 type = "Character"
@@ -1228,6 +1252,10 @@ keywords = ["Resist 1", "Shift 3"]
 #   Resist +1 (Damage dealt to this character is reduced by 1.)
 #   SWEEP AWAY When you play this character, deal damage to chosen character equal to the number of Broom characters you have in play.
 
+[[card.abilities]]
+on = "play"
+do = { deal_damage = "per your Broom characters", to = "chosen character" }
+
 [[card]]
 name = "Mickey Mouse - Standard Bearer"
 type = "Character"
@@ -1239,6 +1267,10 @@ lore = 1
 classifications = ["Storyborn", "Hero"]
 # text:
 #   STAND STRONG When you play this character, chosen character gains Challenger +2 this turn. (They get +2 {S} while challenging.)
+
+[[card.abilities]]
+on = "play"
+do = { grant_keyword = "Challenger 2", to = "chosen character" }
 
 [[card]]
 name = "Minnie Mouse - Musketeer Champion"
@@ -1252,6 +1284,10 @@ keywords = ["Bodyguard"]
 # text:
 #   Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)
 #   DRAMATIC ENTRANCE When you play this character, banish chosen opposing character with 5 {S} or more.
+
+[[card.abilities]]
+on = "play"
+do = { banish = "chosen opposing character with 5 {S} or more" }
 
 [[card]]
 name = "Mirabel Madrigal - Gift of the Family"
@@ -1335,6 +1371,10 @@ lore = 1
 classifications = ["Storyborn", "Hero", "Princess"]
 # text:
 #   TIME TO SHINE Whenever you play an action, this character gets +2 {S} this turn.
+
+[[card.abilities]]
+on = "play_action"
+do = { give_strength = 2 }
 
 [[card]]
 name = "Mulan - Injured Soldier"
@@ -1776,6 +1816,10 @@ keywords = ["Sing Together 10"]
 #   Sing Together 10 (Any number of your or your teammates' characters with total cost 10 or more may {E} to sing this song for free.)
 #   Chosen player draws 5 cards.
 
+[[card.abilities]]
+on = "play"
+do = { draw = 5, who = "chosen player" }
+
 [[card]]
 name = "Seldom All They Seem"
 type = "Song"
@@ -1784,6 +1828,10 @@ inkwell = true
 # text:
 #   (A character with cost 2 or more can {E} to sing this song for free.)
 #   Chosen character gets -3 {S} this turn.
+
+[[card.abilities]]
+on = "play"
+do = { give_strength = -3, target = "chosen character" }
 
 [[card]]
 name = "Sign the Scroll"
@@ -1813,6 +1861,10 @@ keywords = ["Evasive"]
 #   Evasive (Only characters with Evasive can challenge this character.)
 #   BRING ON THE HEAT! When you play this character, banish chosen opposing character with 1 {S} or less.
 
+[[card.abilities]]
+on = "play"
+do = { banish = "chosen opposing character with 1 {S} or less" }
+
 [[card]]
 name = "Sisu - Emboldened Warrior"
 type = "Character"
@@ -1837,6 +1889,10 @@ keywords = ["Shift 6"]
 # text:
 #   Shift 6 (You may pay 6 {I} to play this on top of one of your characters named Sisu.)
 #   I GOT THIS! When you play this character, banish all opposing characters with 2 {S} or less.
+
+[[card.abilities]]
+on = "play"
+do = { banish = "all opposing characters with 2 {S} or less" }
 
 [[card]]
 name = "Sisu - Wise Friend"
@@ -1865,6 +1921,10 @@ cost = 1
 inkwell = true
 # text:
 #   Chosen character gains Rush this turn. (They can challenge the turn they're played.)
+
+[[card.abilities]]
+on = "play"
+do = { grant_keyword = "Rush", to = "chosen character" }
 
 [[card]]
 name = "The Fates - Only One Eye"
@@ -1900,6 +1960,11 @@ keywords = ["Ward"]
 # text:
 #   Ward (Opponents can't choose this character except to challenge.)
 #   THE GOSPEL TRUTH Whenever you play a song, you may return chosen character with 2 {S} or less to their player's hand.
+
+[[card.abilities]]
+on = "play_song"
+may = true
+do = { return_to_hand = "chosen character with 2 {S} or less" }
 
 [[card]]
 name = "The Plank"

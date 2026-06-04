@@ -158,6 +158,10 @@ inkwell = true
 # text:
 #   Chosen character gains Support this turn. (Whenever they quest, you may add their {S} to another chosen character's {S} this turn.)
 
+[[card.abilities]]
+on = "play"
+do = { grant_keyword = "Support", to = "chosen character" }
+
 [[card]]
 name = "Captain Amelia - First in Command"
 type = "Character"
@@ -256,6 +260,10 @@ classifications = ["Storyborn"]
 # text:
 #   POOR SOULS Whenever this character is challenged, each opponent chooses and discards a card.
 
+[[card.abilities]]
+on = "challenged"
+do = { discard = 1, who = "each opponent" }
+
 [[card]]
 name = "Dalmatian Puppy - Tail Wagger"
 type = "Character"
@@ -321,6 +329,10 @@ cost = 2
 inkwell = true
 # text:
 #   Chosen character gets -2 {S} this turn. Draw a card.
+
+[[card.abilities]]
+on = "play"
+do = [{ give_strength = -2, target = "chosen character" }, { draw = 1 }]
 
 [[card]]
 name = "Divebomb"
@@ -522,6 +534,10 @@ inkwell = true
 #   (A character with cost 2 or more can {E} to sing this song for free.)
 #   Banish chosen item.
 
+[[card.abilities]]
+on = "play"
+do = { banish = "chosen item" }
+
 [[card]]
 name = "Heal What Has Been Hurt"
 type = "Song"
@@ -530,6 +546,10 @@ inkwell = true
 # text:
 #   (A character with cost 3 or more can {E} to sing this song for free.)
 #   Remove up to 3 damage from chosen character. Draw a card.
+
+[[card.abilities]]
+on = "play"
+do = [{ remove_damage = 3, to = "chosen character" }, { draw = 1 }]
 
 [[card]]
 name = "Heart of Atlantis"
@@ -886,6 +906,11 @@ classifications = ["Storyborn", "Ally"]
 # text:
 #   SKYSURFING When you play this character, you may return chosen opposing character with 2 {S} or less to their player's hand.
 
+[[card.abilities]]
+on = "play"
+may = true
+do = { return_to_hand = "chosen opposing character with 2 {S} or less" }
+
 [[card]]
 name = "Kuzco's Palace - Home of the Emperor"
 type = "Location"
@@ -903,6 +928,10 @@ type = "Action"
 cost = 3
 # text:
 #   Exert chosen opposing character. Then chosen character of yours gains Challenger +2 this turn. (They get +2 {S} while challenging.)
+
+[[card.abilities]]
+on = "play"
+do = [{ exert = "chosen opposing character" }, { grant_keyword = "Challenger 2", to = "chosen character of yours" }]
 
 [[card]]
 name = "Lena Sabrewing - Rebellious Teenager"
@@ -1003,6 +1032,10 @@ keywords = ["Resist 2"]
 #   Resist +2 (Damage dealt to this character is reduced by 2.)
 #   STONE SKIN {E} — Chosen character gains Resist +2 this turn.
 
+[[card.activated]]
+cost = { exert = true }
+do = { grant_keyword = "Resist 2", to = "chosen character" }
+
 [[card]]
 name = "Madame Medusa - The Boss"
 type = "Character"
@@ -1013,6 +1046,10 @@ lore = 1
 classifications = ["Storyborn", "Villain"]
 # text:
 #   THAT TERRIBLE WOMAN When you play this character, banish chosen opposing character with 3 {S} or less.
+
+[[card.abilities]]
+on = "play"
+do = { banish = "chosen opposing character with 3 {S} or less" }
 
 [[card]]
 name = "Magic Broom - Dancing Duster"
@@ -1261,6 +1298,10 @@ keywords = ["Shift 4"]
 # text:
 #   Shift 4 (You may pay 4 {I} to play this on top of one of your characters named Milo Thatch.)
 #   TAKE THEM BY SURPRISE When this character is banished, return all opposing characters to their players' hands.
+
+[[card.abilities]]
+on = "banish"
+do = { return_to_hand = "all opposing characters" }
 
 [[card]]
 name = "Milo Thatch - Spirited Scholar"
@@ -1677,6 +1718,10 @@ inkwell = true
 # text:
 #   Remove up to 3 damage from chosen location.
 
+[[card.abilities]]
+on = "play"
+do = { remove_damage = 3, to = "chosen location" }
+
 [[card]]
 name = "RLS Legacy - Solar Galleon"
 type = "Location"
@@ -1996,6 +2041,10 @@ keywords = ["Evasive"]
 #   Evasive (Only characters with Evasive can challenge this character.)
 #   CYCLONE {E} — Gain lore equal to the number of Titan characters you have in play.
 
+[[card.activated]]
+cost = { exert = true }
+do = { gain_lore = "per your Titan characters" }
+
 [[card]]
 name = "Strike a Good Match"
 type = "Song"
@@ -2004,6 +2053,10 @@ inkwell = true
 # text:
 #   (A character with cost 2 or more can {E} to sing this song for free.)
 #   Draw 2 cards, then choose and discard a card.
+
+[[card.abilities]]
+on = "play"
+do = [{ draw = 2 }, { discard = 1 }]
 
 [[card]]
 name = "Sumerian Talisman"
@@ -2290,6 +2343,10 @@ cost = 2
 inkwell = true
 # text:
 #   REBUILD {E} — Remove up to 2 damage from chosen location.
+
+[[card.activated]]
+cost = { exert = true }
+do = { remove_damage = 2, to = "chosen location" }
 
 [[card]]
 name = "Zazu - Steward of the Pride Lands"

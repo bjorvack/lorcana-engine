@@ -24,6 +24,10 @@ inkwell = true
 # text:
 #   Put chosen character of yours into your inkwell facedown and exerted.
 
+[[card.abilities]]
+on = "play"
+do = { into_inkwell = "chosen character of yours" }
+
 [[card]]
 name = "Amber Chromicon"
 type = "Item"
@@ -31,6 +35,10 @@ cost = 2
 inkwell = true
 # text:
 #   AMBER LIGHT {E} — Remove up to 1 damage from each of your characters.
+
+[[card.activated]]
+cost = { exert = true }
+do = { remove_damage = 1, to = "all your characters" }
 
 [[card]]
 name = "Amethyst Chromicon"
@@ -77,6 +85,10 @@ keywords = ["Shift 4"]
 # text:
 #   Shift 4 (You may pay 4 {I} to play this on top of one of your characters named Anna.)
 #   EXCEPTIONAL POWER When you play this character, exert all opposing characters.
+
+[[card.abilities]]
+on = "play"
+do = { exert = "all opposing characters" }
 
 [[card]]
 name = "Archimedes - Electrified Owl"
@@ -339,6 +351,10 @@ classifications = ["Dreamborn", "Ally"]
 # text:
 #   TIME TO MOVE IT! When you play this character, chosen character gains Rush this turn. (They can challenge the turn they're played.)
 
+[[card.abilities]]
+on = "play"
+do = { grant_keyword = "Rush", to = "chosen character" }
+
 [[card]]
 name = "Daisy Duck - Donald's Date"
 type = "Character"
@@ -404,6 +420,10 @@ classifications = ["Storyborn", "Ally"]
 # text:
 #   PLUCKY PLAY Whenever this character challenges another character, each opponent loses 1 lore.
 
+[[card.abilities]]
+on = "challenge"
+do = { lose_lore = 1 }
+
 [[card]]
 name = "Donald Duck - Focused Flatfoot"
 type = "Character"
@@ -462,6 +482,10 @@ lore = 2
 classifications = ["Storyborn", "Ally"]
 # text:
 #   UNEARTHED When you play this character, each opponent draws a card.
+
+[[card.abilities]]
+on = "play"
+do = { draw = 1, who = "each opponent" }
 
 [[card]]
 name = "Ed - Hysterical Partygoer"
@@ -556,6 +580,10 @@ inkwell = true
 # text:
 #   Draw 3 cards.
 
+[[card.abilities]]
+on = "play"
+do = { draw = 3 }
+
 [[card]]
 name = "Fix-It Felix, Jr. - Delighted Sightseer"
 type = "Character"
@@ -646,6 +674,10 @@ cost = 2
 # text:
 #   Gain 2 lore.
 
+[[card.abilities]]
+on = "play"
+do = { gain_lore = 2 }
+
 [[card]]
 name = "Gazelle - Pop Star"
 type = "Character"
@@ -698,6 +730,10 @@ cost = 6
 #   AN UNEXPECTED FIND {E}, 2 {I} — Draw a card.
 #   A PERILOUS POWER {E}, 2 {I}, Discard a card — Exert chosen character.
 
+[[card.activated]]
+cost = { exert = true, ink = 2 }
+do = { draw = 1 }
+
 [[card]]
 name = "Happy - Lively Knight"
 type = "Character"
@@ -729,6 +765,10 @@ cost = 3
 inkwell = true
 # text:
 #   Remove up to 4 damage from chosen character. Draw a card.
+
+[[card.abilities]]
+on = "play"
+do = [{ remove_damage = 4, to = "chosen character" }, { draw = 1 }]
 
 [[card]]
 name = "HeiHei - Protective Rooster"
@@ -766,6 +806,10 @@ cost = 2
 inkwell = true
 # text:
 #   Draw a card. Chosen character gains Challenger +2 this turn. (They get +2 {S} while challenging.)
+
+[[card.abilities]]
+on = "play"
+do = [{ draw = 1 }, { grant_keyword = "Challenger 2", to = "chosen character" }]
 
 [[card]]
 name = "Iago - Fake Flamingo"
@@ -1701,6 +1745,11 @@ classifications = ["Storyborn", "Villain"]
 # text:
 #   LONG LIVE THE KING When you play this character, you may banish chosen character named Mufasa.
 
+[[card.abilities]]
+on = "play"
+may = true
+do = { banish = "chosen character named Mufasa" }
+
 [[card]]
 name = "Scar - Vengeful Lion"
 type = "Character"
@@ -1887,6 +1936,10 @@ lore = 1
 classifications = ["Dreamborn", "Ally", "Knight", "Seven Dwarfs"]
 # text:
 #   HEADWIND When you play this character, chosen Knight character gains Challenger +2 this turn. (They get +2 {S} while challenging.)
+
+[[card.abilities]]
+on = "play"
+do = { grant_keyword = "Challenger 2", to = "chosen Knight character" }
 
 [[card]]
 name = "Snow White - Fair-Hearted"

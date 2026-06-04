@@ -362,6 +362,11 @@ classifications = ["Dreamborn", "Hero", "Princess", "Knight"]
 # text:
 #   HAVE COURAGE When you play this character, you may draw a card, then choose and discard a card.
 
+[[card.abilities]]
+on = "play"
+may = true
+do = [{ draw = 1 }, { discard = 1 }]
+
 [[card]]
 name = "Cinderella - Stouthearted"
 type = "Character"
@@ -463,6 +468,10 @@ classifications = ["Dreamborn", "Ally"]
 # text:
 #   THWART Whenever this character quests, each opponent chooses and discards a card.
 
+[[card.abilities]]
+on = "quest"
+do = { discard = 1, who = "each opponent" }
+
 [[card]]
 name = "Dinner Bell"
 type = "Item"
@@ -531,6 +540,10 @@ lore = 1
 classifications = ["Storyborn"]
 # text:
 #   STARTLED AWAKE Whenever you play an action, this character gets +2 {S} this turn.
+
+[[card.abilities]]
+on = "play_action"
+do = { give_strength = 2 }
 
 [[card]]
 name = "Dopey - Always Playful"
@@ -687,6 +700,10 @@ inkwell = true
 # text:
 #   CAREFUL AIM {E}, 2 {I} — Chosen character gets -2 {S} this turn.
 #   STAY BACK! {E}, Banish this item — Banish chosen Dragon character.
+
+[[card.activated]]
+cost = { exert = true, ink = 2 }
+do = { give_strength = -2, target = "chosen character" }
 
 [[card]]
 name = "Felicia - Always Hungry"
@@ -928,6 +945,10 @@ inkwell = true
 # text:
 #   Remove up to 4 damage from chosen character.
 
+[[card.abilities]]
+on = "play"
+do = { remove_damage = 4, to = "chosen character" }
+
 [[card]]
 name = "Honest John - Not That Honest"
 type = "Character"
@@ -947,6 +968,10 @@ inkwell = true
 # text:
 #   Each opponent chooses and discards a card. Draw a card.
 
+[[card.abilities]]
+on = "play"
+do = [{ discard = 1, who = "each opponent" }, { draw = 1 }]
+
 [[card]]
 name = "I'm Stuck!"
 type = "Action"
@@ -962,6 +987,10 @@ cost = 1
 inkwell = true
 # text:
 #   Chosen character gets +1 {S} this turn. Draw a card.
+
+[[card.abilities]]
+on = "play"
+do = [{ give_strength = 1, target = "chosen character" }, { draw = 1 }]
 
 [[card]]
 name = "Jafar - Dreadnought"
@@ -1011,6 +1040,10 @@ lore = 1
 classifications = ["Storyborn", "Hero", "Princess"]
 # text:
 #   I'M A FAST LEARNER When you play this character, remove up to 1 damage from chosen character of yours.
+
+[[card.abilities]]
+on = "play"
+do = { remove_damage = 1, to = "chosen character of yours" }
 
 [[card]]
 name = "Jiminy Cricket - Pinocchio's Conscience"
@@ -1148,6 +1181,10 @@ inkwell = true
 #   (A character with cost 2 or more can {E} to sing this song for free.)
 #   Chosen character gains Challenger +3 this turn. (They get +3 {S} while challenging.)
 
+[[card.abilities]]
+on = "play"
+do = { grant_keyword = "Challenger 3", to = "chosen character" }
+
 [[card]]
 name = "Let the Storm Rage On"
 type = "Song"
@@ -1155,6 +1192,10 @@ cost = 3
 # text:
 #   (A character with cost 3 or more can {E} to sing this song for free.)
 #   Deal 2 damage to chosen character. Draw a card.
+
+[[card.abilities]]
+on = "play"
+do = [{ deal_damage = 2, to = "chosen character" }, { draw = 1 }]
 
 [[card]]
 name = "Li Shang - Archery Instructor"
@@ -1167,6 +1208,10 @@ lore = 2
 classifications = ["Storyborn", "Hero"]
 # text:
 #   ARCHERY LESSON Whenever this character quests, your characters gain Evasive this turn. (They can challenge characters with Evasive.)
+
+[[card.abilities]]
+on = "quest"
+do = { grant_keyword = "Evasive", to = "all your characters" }
 
 [[card]]
 name = "Little John - Loyal Friend"
@@ -2048,6 +2093,10 @@ inkwell = true
 #   (A character with cost 3 or more can {E} to sing this song for free.)
 #   Deal damage to chosen character equal to the number of characters you have in play.
 
+[[card.abilities]]
+on = "play"
+do = { deal_damage = "per your characters", to = "chosen character" }
+
 [[card]]
 name = "Sword in the Stone"
 type = "Item"
@@ -2274,6 +2323,10 @@ inkwell = true
 # text:
 #   (A character with cost 3 or more can {E} to sing this song for free.)
 #   Banish chosen character with 5 {S} or more.
+
+[[card.abilities]]
+on = "play"
+do = { banish = "chosen character with 5 {S} or more" }
 
 [[card]]
 name = "You Can Fly!"
