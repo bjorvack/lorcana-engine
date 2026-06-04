@@ -86,6 +86,11 @@ classifications = ["Storyborn", "Mentor", "Madrigal"]
 # text:
 #   PROTECTING THE FAMILY When you play this character, if you have another Madrigal character in play, you may exert chosen opposing character.
 
+[[card.abilities]]
+on = "play"
+may = true
+do = { if_you_have = "your other Madrigal characters", then = { exert = "chosen opposing character" } }
+
 [[card]]
 name = "Amazu's Inkcaster"
 type = "Item"
@@ -319,6 +324,11 @@ lore = 2
 classifications = ["Dreamborn", "Hero"]
 # text:
 #   RANGER RESOURCEFULNESS When you play this character, if you have another character with 4 {W} or more in play, you may draw a card.
+
+[[card.abilities]]
+on = "play"
+may = true
+do = { if_you_have = "your other characters with 4 {W} or more", then = { draw = 1 } }
 
 [[card]]
 name = "Cinderella - Resourceful Traveler"
@@ -688,6 +698,11 @@ keywords = ["Rush"]
 #   Rush (This character can challenge the turn they're played.)
 #   JUST CHILL When you play this character, if you have another Super character in play, you may exert chosen opposing character.
 
+[[card.abilities]]
+on = "play"
+may = true
+do = { if_you_have = "your other Super characters", then = { exert = "chosen opposing character" } }
+
 [[card]]
 name = "Frozone - Super Slick"
 type = "Character"
@@ -1011,6 +1026,11 @@ classifications = ["Storyborn", "Hero", "Toy"]
 #   PART OF A FAMILY Whenever this character quests, if you have 2 or more other Toy characters in play, you may draw a card.
 #   YODEL-AY-HEE-HOO! Whenever you pay 2 {I} or less to play a card, chosen opposing character gets -1 {S} until the start of your next turn.
 
+[[card.abilities]]
+on = "quest"
+may = true
+do = { if_you_have = "your other Toy characters", at_least = 2, then = { draw = 1 } }
+
 [[card]]
 name = "Jingle Joe - Sid's Toy"
 type = "Character"
@@ -1063,6 +1083,10 @@ cost = 1
 # text:
 #   FLAVORFUL CURE At the start of your turn, if you have a Madrigal character in play, remove up to 2 damage from chosen character.
 #   THAT DID THE TRICK {E} — If you removed damage from a character this turn, gain 1 lore.
+
+[[card.abilities]]
+on = "start_of_turn"
+do = { if_you_have = "your Madrigal characters", then = { remove_damage = 2, to = "chosen character" } }
 
 [[card]]
 name = "Kashekim - Wise King"
@@ -1631,6 +1655,11 @@ classifications = ["Storyborn", "Ally", "Madrigal"]
 # text:
 #   DIFFICULT JOURNEY This character enters play with 1 damage.
 #   DEVOTED FAMILY When you play this character, if you have another Madrigal character in play, you may remove up to 1 damage from him.
+
+[[card.abilities]]
+on = "play"
+may = true
+do = { if_you_have = "your other Madrigal characters", then = { remove_damage = 1 } }
 
 [[card]]
 name = "Pegasus - Searching High and Low"
