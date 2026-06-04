@@ -1250,6 +1250,118 @@ fn real_card_aladdin_boost_activated_ability() {
 }
 
 #[test]
+fn real_card_aladdin_heroic_outlaw_banishes_in_challenge_trigger() {
+    // Aladdin - Heroic Outlaw (set 1): "During your turn, whenever this character banishes another character in a challenge, you gain 2 lore and each opponent loses 2 lore."
+    // Converted to DSL with banishes_in_challenge trigger
+    let defs = load_toml(
+        r#"
+        [[card]]
+        name = "Aladdin - Heroic Outlaw"
+        type = "Character"
+        cost = 7
+        strength = 5
+        willpower = 5
+        lore = 2
+        ink = ["Ruby"]
+        keywords = ["Shift 5"]
+        [[card.abilities]]
+        on = "banishes_in_challenge"
+        do = [
+            { gain_lore = 2 },
+            { lose_lore = 2, who = "each opponent" }
+        ]
+        "#,
+    )
+    .expect("loads");
+
+    // Check for banishes_in_challenge trigger
+    let has_banish_trigger = defs[0]
+        .abilities()
+        .iter()
+        .any(|a| matches!(a.condition, TriggerCondition::WhenBanishesInChallenge));
+    assert!(
+        has_banish_trigger,
+        "should have banishes_in_challenge trigger"
+    );
+
+    // Check for lore effects
+    let effect = defs[0]
+        .abilities()
+        .first()
+        .map(|a| &a.effect)
+        .expect("should have ability");
+    if let Effect::All(effects) = effect {
+        assert_eq!(effects.len(), 2, "should have 2 effects");
+        assert!(
+            effects.iter().any(|e| matches!(
+                e,
+                Effect::Lore {
+                    who: PlayerScope::You,
+                    amount: Amount::Fixed(2)
+                }
+            )),
+            "should have gain_lore effect"
+        );
+        assert!(
+            effects.iter().any(|e| matches!(
+                e,
+                Effect::Lore {
+                    who: PlayerScope::EachOpponent,
+                    amount: Amount::Fixed(-2)
+                }
+            )),
+            "should have lose_lore effect"
+        );
+    } else {
+        panic!("expected Effect::All with multiple effects");
+    }
+}
+
+#[test]
+fn real_card_aladdin_street_rat_play_trigger() {
+    // Aladdin - Street Rat (set 1): "When you play this character, each opponent loses 1 lore."
+    // Converted to DSL with play trigger
+    let defs = load_toml(
+        r#"
+        [[card]]
+        name = "Aladdin - Street Rat"
+        type = "Character"
+        cost = 3
+        strength = 2
+        willpower = 2
+        lore = 1
+        ink = ["Ruby"]
+        [[card.abilities]]
+        on = "play"
+        do = { lose_lore = 1, who = "each opponent" }
+        "#,
+    )
+    .expect("loads");
+
+    // Check for play trigger
+    let ability = defs[0].abilities().first().expect("should have ability");
+    let has_play_trigger = matches!(ability.condition, TriggerCondition::WhenYouPlayThis);
+    assert!(has_play_trigger, "should have play trigger");
+
+    // Check for lose_lore effect with each opponent scope
+    let effect = defs[0]
+        .abilities()
+        .first()
+        .map(|a| &a.effect)
+        .expect("should have ability");
+    if let Effect::Lore { who, amount } = effect {
+        assert_eq!(
+            *who,
+            PlayerScope::EachOpponent,
+            "should affect each opponent"
+        );
+        assert_eq!(amount, &Amount::fixed(-1), "should lose 1 lore");
+    } else {
+        panic!("expected Lore effect");
+    }
+}
+
+#[test]
 fn damage_triggers_parse_correctly() {
     // Test damage trigger DSL parsing
     let defs = load_toml(
