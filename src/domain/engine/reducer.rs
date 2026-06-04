@@ -3294,6 +3294,91 @@ mod tests {
             CountCondition::LoreMoreThan(0)
         ));
     }
+
+    #[test]
+    fn test_count_condition_lore_vs_opponent() {
+        let mut state = GameState::new(
+            vec![
+                (0..30).map(CardDefId::from_raw).collect(),
+                (0..30).map(CardDefId::from_raw).collect(),
+            ],
+            7,
+        );
+
+        let player1 = PlayerId::from_index(0);
+        let player2 = PlayerId::from_index(1);
+
+        // Player 1 has more lore
+        state.player_mut(player1).unwrap().add_lore(5);
+        state.player_mut(player2).unwrap().add_lore(2);
+
+        assert!(count_condition_holds(
+            &state,
+            player1,
+            CountCondition::LoreMoreThanOpponent
+        ));
+        assert!(!count_condition_holds(
+            &state,
+            player2,
+            CountCondition::LoreMoreThanOpponent
+        ));
+
+        // Equal lore
+        state.player_mut(player2).unwrap().add_lore(3);
+        assert!(!count_condition_holds(
+            &state,
+            player1,
+            CountCondition::LoreMoreThanOpponent
+        ));
+    }
+
+    #[test]
+    fn test_count_condition_boundary_values() {
+        let mut state = GameState::new(
+            vec![
+                (0..30).map(CardDefId::from_raw).collect(),
+                (0..30).map(CardDefId::from_raw).collect(),
+            ],
+            7,
+        );
+
+        let player = PlayerId::from_index(0);
+
+        // Exactly at threshold
+        for i in 0..3 {
+            let card = CardInstance::new(
+                CardId::from_raw(100 + i),
+                CardDefId::from_raw(999),
+                Conditions::in_deck(),
+            );
+            state.player_mut(player).unwrap().hand_mut().push(card);
+        }
+
+        assert!(count_condition_holds(
+            &state,
+            player,
+            CountCondition::HandSizeAtLeast(3)
+        ));
+        assert!(!count_condition_holds(
+            &state,
+            player,
+            CountCondition::HandSizeMoreThan(3)
+        ));
+
+        // One above threshold
+        let card = CardInstance::new(
+            CardId::from_raw(103),
+            CardDefId::from_raw(999),
+            Conditions::in_deck(),
+        );
+        state.player_mut(player).unwrap().hand_mut().push(card);
+
+        assert!(count_condition_holds(
+            &state,
+            player,
+            CountCondition::HandSizeMoreThan(3)
+        ));
+    }
 }
 
 /// Apply an amount-bearing targeted effect (give `{S}` / deal / remove damage) to

@@ -1184,4 +1184,10 @@ mod tests {
             Ok(CountCondition::LoreMoreThanOpponent)
         );
     }
+
+    #[test]
+    fn parse_count_condition_invalid() {
+        assert!(parse_count_condition("invalid condition").is_err());
+        assert!(parse_count_condition("").is_err());
+    }
 }

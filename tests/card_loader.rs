@@ -1078,3 +1078,41 @@ fn shift_conditional_trigger() {
     };
     assert_eq!(*amount, Amount::Fixed(2));
 }
+
+#[test]
+fn invalid_trigger_syntax_is_rejected() {
+    let result = load_toml(
+        r#"
+        [[card]]
+        name = "Invalid Trigger"
+        type = "Character"
+        cost = 3
+        strength = 2
+        willpower = 3
+        lore = 1
+        [[card.abilities]]
+        on = "unknown_trigger"
+        do = { draw = 2 }
+        "#,
+    );
+    assert!(result.is_err(), "should reject unknown trigger");
+}
+
+#[test]
+fn invalid_count_condition_is_rejected() {
+    let result = load_toml(
+        r#"
+        [[card]]
+        name = "Invalid Count"
+        type = "Character"
+        cost = 3
+        strength = 2
+        willpower = 3
+        lore = 1
+        [[card.abilities]]
+        on = "play"
+        do = { if_count = "invalid condition", then = { draw = 2 } }
+        "#,
+    );
+    assert!(result.is_err(), "should reject invalid count condition");
+}
