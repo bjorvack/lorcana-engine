@@ -1093,6 +1093,10 @@ inkwell = true
 #   (A character with cost 5 or more can {E} to sing this song for free.)
 #   Put chosen character into their player’s inkwell facedown and exerted.
 
+[[card.abilities]]
+on = "play"
+do = { into_inkwell = "chosen character" }
+
 [[card]]
 name = "Let's Get Dangerous"
 type = "Song"
@@ -1562,6 +1566,10 @@ classifications = ["Storyborn", "Ally"]
 #   ABOUT TIME! For each action card in your discard, you pay 1 {I} less to play this character.
 #   CHAOTIC COLLISION When you play this character, each opponent loses 2 lore.
 
+[[card.abilities]]
+on = "play"
+do = { lose_lore = 2 }
+
 [[card]]
 name = "Percy - Pupsicle"
 type = "Character"
@@ -1623,6 +1631,10 @@ lore = 1
 classifications = ["Dreamborn", "Ally", "Alien"]
 # text:
 #   SIGNS OF LIFE When you play this character, if you have another Alien character in play, draw a card.
+
+[[card.abilities]]
+on = "play"
+do = { if_you_have = "your other Alien characters", then = { draw = 1 } }
 
 [[card]]
 name = "Pocahontas - Finding the Way"
@@ -1711,6 +1723,10 @@ lore = 2
 classifications = ["Storyborn", "Ally"]
 # text:
 #   SHAKE THINGS UP When you play this character, each opponent chooses and discards a card.
+
+[[card.abilities]]
+on = "play"
+do = { discard = 1, who = "each opponent" }
 
 [[card]]
 name = "Rabbit - Fed Up"
@@ -1980,6 +1996,11 @@ lore = 2
 classifications = ["Storyborn", "Hero", "Alien"]
 # text:
 #   BRING YOUR FRIENDS Whenever this character quests, if you have 2 or more other characters in play, you may draw a card.
+
+[[card.abilities]]
+on = "quest"
+may = true
+do = { if_you_have = "your other characters", at_least = 2, then = { draw = 1 } }
 
 [[card]]
 name = "Stitch - High Badness Level"

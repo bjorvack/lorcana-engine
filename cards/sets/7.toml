@@ -611,6 +611,10 @@ classifications = ["Storyborn", "Hero", "Queen", "Sorcerer"]
 # text:
 #   WHAT DO WE DO NOW? Whenever this character quests, if you have a character named Anna in play, gain 1 lore.
 
+[[card.abilities]]
+on = "quest"
+do = { if_you_have = "your character named Anna", then = { gain_lore = 1 } }
+
 [[card]]
 name = "Emerald Coil"
 type = "Item"
@@ -1623,6 +1627,10 @@ classifications = ["Storyborn", "Ally"]
 # text:
 #   CAPTIVE AUDIENCE {E} — If you have 3 or more other characters in play, draw a card.
 
+[[card.activated]]
+cost = { exert = true }
+do = { if_you_have = "your other characters", at_least = 3, then = { draw = 1 } }
+
 [[card]]
 name = "Penny - Bolt's Person"
 type = "Character"
@@ -1808,6 +1816,11 @@ classifications = ["Dreamborn", "Ally", "Captain"]
 # text:
 #   MY ORDERS COME FROM JAFAR When you play this character, if you have a character named Jafar in play, you may banish chosen item.
 
+[[card.abilities]]
+on = "play"
+may = true
+do = { if_you_have = "your character named Jafar", then = { banish = "chosen item" } }
+
 [[card]]
 name = "Restoring Atlantis"
 type = "Action"
@@ -1963,6 +1976,10 @@ type = "Item"
 cost = 2
 # text:
 #   FINE DINING {E}, 1 {I} — If you have 2 or more characters in play, gain 1 lore.
+
+[[card.activated]]
+cost = { exert = true, ink = 1 }
+do = { if_you_have = "your characters", at_least = 2, then = { gain_lore = 1 } }
 
 [[card]]
 name = "Stabbington Brother - With a Patch"
@@ -2275,6 +2292,11 @@ lore = 2
 classifications = ["Storyborn"]
 # text:
 #   UNTOLD TREASURE When you play this character, if you have an Illusion character in play, you may draw a card.
+
+[[card.abilities]]
+on = "play"
+may = true
+do = { if_you_have = "your Illusion characters", then = { draw = 1 } }
 
 [[card]]
 name = "Trusty - Loyal Bloodhound"

@@ -404,6 +404,10 @@ keywords = ["Singer 5"]
 #   Singer 5 (This character counts as cost 5 to sing songs.)
 #   A WONDERFUL DREAM {E} — Remove up to 3 damage from chosen Princess character.
 
+[[card.activated]]
+cost = { exert = true }
+do = { remove_damage = 3, to = "chosen Princess character" }
+
 [[card]]
 name = "Circle of Life"
 type = "Song"
@@ -456,6 +460,10 @@ classifications = ["Storyborn"]
 # text:
 #   POOR SOULS Whenever this character is challenged, each opponent chooses and discards a card.
 
+[[card.abilities]]
+on = "challenged"
+do = { discard = 1, who = "each opponent" }
+
 [[card]]
 name = "Daisy Duck - Musketeer Spy"
 type = "Character"
@@ -467,6 +475,10 @@ lore = 1
 classifications = ["Dreamborn", "Hero", "Musketeer"]
 # text:
 #   INFILTRATION When you play this character, each opponent chooses and discards a card.
+
+[[card.abilities]]
+on = "play"
+do = { discard = 1, who = "each opponent" }
 
 [[card]]
 name = "Daisy Duck - Secret Agent"
@@ -558,6 +570,10 @@ lore = 1
 classifications = ["Storyborn"]
 # text:
 #   STARTLED AWAKE Whenever you play an action, this character gets +2 {S} this turn.
+
+[[card.abilities]]
+on = "play_action"
+do = { give_strength = 2 }
 
 [[card]]
 name = "Dumbo - Ninth Wonder of the Universe"
@@ -770,6 +786,11 @@ classifications = ["Dreamborn", "Villain", "Deity"]
 # text:
 #   IS THERE A DOWNSIDE TO THIS? When you play this character, you may put chosen opposing character into their player's inkwell facedown.
 
+[[card.abilities]]
+on = "play"
+may = true
+do = { into_inkwell = "chosen opposing character" }
+
 [[card]]
 name = "Hans - Noble Scoundrel"
 type = "Character"
@@ -790,6 +811,10 @@ inkwell = true
 # text:
 #   (A character with cost 3 or more can {E} to sing this song for free.)
 #   Remove up to 3 damage from chosen character. Draw a card.
+
+[[card.abilities]]
+on = "play"
+do = [{ remove_damage = 3, to = "chosen character" }, { draw = 1 }]
 
 [[card]]
 name = "Heart of Te Fiti"
@@ -963,6 +988,10 @@ classifications = ["Storyborn", "Hero", "Princess"]
 # text:
 #   I'M A FAST LEARNER When you play this character, remove up to 1 damage from chosen character of yours.
 
+[[card.abilities]]
+on = "play"
+do = { remove_damage = 1, to = "chosen character of yours" }
+
 [[card]]
 name = "John Silver - Alien Pirate"
 type = "Character"
@@ -1036,6 +1065,11 @@ classifications = ["Storyborn", "King"]
 # text:
 #   OK, WHERE AM I? When this character is banished, you may draw a card.
 
+[[card.abilities]]
+on = "banish"
+may = true
+do = { draw = 1 }
+
 [[card]]
 name = "Lantern"
 type = "Item"
@@ -1049,6 +1083,10 @@ type = "Action"
 cost = 3
 # text:
 #   Exert chosen opposing character. Chosen character of yours gains Challenger +2 this turn. (They get +2 {S} while challenging.)
+
+[[card.abilities]]
+on = "play"
+do = [{ exert = "chosen opposing character" }, { grant_keyword = "Challenger 2", to = "chosen character of yours" }]
 
 [[card]]
 name = "Lawrence - Jealous Manservant"
@@ -1354,6 +1392,10 @@ classifications = ["Storyborn", "Hero"]
 # text:
 #   STAND STRONG When you play this character, chosen character gains Challenger +2 this turn. (They get +2 {S} while challenging.)
 
+[[card.abilities]]
+on = "play"
+do = { grant_keyword = "Challenger 2", to = "chosen character" }
+
 [[card]]
 name = "Mickey Mouse - Steamboat Pilot"
 type = "Character"
@@ -1430,6 +1472,10 @@ cost = 3
 # text:
 #   (A character with cost 3 or more can {E} to sing this song for free.)
 #   Return chosen character to their player's hand.
+
+[[card.abilities]]
+on = "play"
+do = { return_to_hand = "chosen character" }
 
 [[card]]
 name = "Motunui - Island Paradise"
@@ -1818,6 +1864,10 @@ classifications = ["Dreamborn", "Hero", "Princess"]
 # text:
 #   TANGLE When you play this character, each opponent loses 1 lore.
 
+[[card.abilities]]
+on = "play"
+do = { lose_lore = 1 }
+
 [[card]]
 name = "Rapunzel - Sunshine"
 type = "Character"
@@ -1943,6 +1993,10 @@ keywords = ["Sing Together 10"]
 #   Sing Together 10 (Any number of your or your teammates’ characters with total cost 10 or more may {E} to sing this song for free.)
 #   Chosen player draws 5 cards.
 
+[[card.abilities]]
+on = "play"
+do = { draw = 5, who = "chosen player" }
+
 [[card]]
 name = "Sergeant Tibbs - Courageous Cat"
 type = "Character"
@@ -2066,6 +2120,11 @@ classifications = ["Dreamborn", "Hero", "Alien"]
 # text:
 #   OHANA When you play this character, if you have 2 or more other characters in play, you may draw 2 cards.
 
+[[card.abilities]]
+on = "play"
+may = true
+do = { if_you_have = "your other characters", at_least = 2, then = { draw = 2 } }
+
 [[card]]
 name = "Stitch - Rock Star"
 type = "Character"
@@ -2089,6 +2148,10 @@ inkwell = true
 #   (A character with cost 3 or more can {E} to sing this song for free.)
 #   Deal damage to chosen character equal to the number of characters you have in play.
 
+[[card.abilities]]
+on = "play"
+do = { deal_damage = "per your characters", to = "chosen character" }
+
 [[card]]
 name = "Sudden Chill"
 type = "Song"
@@ -2097,6 +2160,10 @@ inkwell = true
 # text:
 #   (A character with cost 2 or more can {E} to sing this song for free.)
 #   Each opponent chooses and discards a card.
+
+[[card.abilities]]
+on = "play"
+do = { discard = 1, who = "each opponent" }
 
 [[card]]
 name = "Sven - Official Ice Deliverer"
@@ -2237,6 +2304,10 @@ keywords = ["Shift 4"]
 #   Shift 4 {I} (You may pay 4 {I} to play this on top of one of your characters named Tinker Bell.)
 #   ROCK THE BOAT When you play this character, deal 1 damage to each opposing character.
 #   PUNY PIRATE! During your turn, whenever this character banishes another character in a challenge, you may deal 2 damage to chosen opposing character.
+
+[[card.abilities]]
+on = "play"
+do = { deal_damage = 1, to = "all opposing characters" }
 
 [[card]]
 name = "Tinker Bell - Most Helpful"
@@ -2419,6 +2490,10 @@ inkwell = true
 # text:
 #   (A character with cost 3 or more can {E} to sing this song for free.)
 #   Banish chosen character with 5 {S} or more.
+
+[[card.abilities]]
+on = "play"
+do = { banish = "chosen character with 5 {S} or more" }
 
 [[card]]
 name = "You Can Fly!"

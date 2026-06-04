@@ -1416,6 +1416,11 @@ classifications = ["Storyborn", "Villain"]
 # text:
 #   SCRAM! When you play this character, if you have another character named Pete in play, you may banish chosen opposing character.
 
+[[card.abilities]]
+on = "play"
+may = true
+do = { if_you_have = "your other character named Pete", then = { banish = "chosen opposing character" } }
+
 [[card]]
 name = "Pete - Wrestling Champ"
 type = "Character"
