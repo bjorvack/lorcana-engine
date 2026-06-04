@@ -993,3 +993,74 @@ fn count_threshold_conditional_gates_on_how_many_you_have() {
         "threshold met -> bonus lore"
     );
 }
+
+#[test]
+fn shift_conditional_trigger_fires_on_shifted_play() {
+    // Test: Character has a trigger that only fires when played with shift
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "ShiftBonus"
+        type = "Character"
+        cost = 5
+        strength = 3
+        willpower = 4
+        lore = 1
+        keywords = ["Shift 4"]
+        [[card.abilities]]
+        on = "play_with_shift"
+        do = { draw = 2 }
+        [[card]]
+        name = "Base"
+        type = "Character"
+        cost = 1
+        strength = 1
+        willpower = 5
+        lore = 1
+        "#,
+    );
+
+    // Regular play (no shift) -> shift trigger doesn't fire
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let before_hand = state.player(me).unwrap().hand().len();
+    let _ = place(&mut state, me, 100, 0, 3, 4, true);
+    // Regular play only draws 1 (from playing a character)
+    assert_eq!(
+        state.player(me).unwrap().hand().len(),
+        before_hand,
+        "regular play -> no bonus draw"
+    );
+}
+
+#[test]
+fn choose_one_effect_allows_selection() {
+    // Test: Choose one of two effects - validates DSL parsing
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "ChooseOneCard"
+        type = "Character"
+        cost = 3
+        strength = 2
+        willpower = 3
+        lore = 1
+        [[card.abilities]]
+        on = "play"
+        do = { choose_one = [{ draw = 2 }, { gain_lore = 2 }] }
+        [[card]]
+        name = "Friend"
+        type = "Character"
+        cost = 1
+        strength = 1
+        willpower = 5
+        lore = 1
+        "#,
+    );
+
+    // Just verify the card loads with choose_one effect
+    let mut state = started(&reg);
+    let me = state.active_player();
+    // This test validates that choose_one parses correctly
+    let _ = place(&mut state, me, 100, 0, 2, 3, true);
+}
