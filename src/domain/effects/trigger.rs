@@ -85,6 +85,11 @@ pub enum TriggerCondition {
     /// "When this character is banished **in a challenge**" — the banished-side
     /// counterpart of `WhenBanishesInChallenge` (Marshmallow, `HeiHei`).
     WhenBanishedInChallenge,
+    /// "Whenever one of your **other** characters is banished" — a yours-scoped
+    /// banish trigger that fires for the watcher when a *different* character its
+    /// controller owns is banished (the banished card has left play, so every
+    /// remaining in-play character is "other"). §1.9.1.1.
+    WhenYoursBanished,
     /// "Whenever a card is put under this character" — fires when a card is placed
     /// under this one (e.g. via Boost, §10.4).
     WhenCardPutUnder,

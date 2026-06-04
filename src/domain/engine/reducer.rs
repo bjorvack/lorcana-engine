@@ -2175,6 +2175,38 @@ fn enqueue_banish_triggers(
                 &TriggerCondition::WhenBanishedInChallenge,
             );
         }
+        // "Whenever one of your other characters is banished" — fires for the
+        // owner's remaining in-play characters (the banished card has left play,
+        // so each is "other").
+        enqueue_yours_banished_triggers(state, registry, owner);
+    }
+}
+
+/// Enqueue "whenever one of your other characters is banished" triggers: for each
+/// of `owner`'s in-play characters watching for it, enqueue its effect (via
+/// `enqueue_triggers_for_def`, so gating + granted triggers are honored). The
+/// just-banished card has already left play, so every watcher is "other".
+fn enqueue_yours_banished_triggers(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    owner: PlayerId,
+) {
+    let watchers: Vec<(CardId, CardDefId)> = state.player(owner).map_or_else(Vec::new, |p| {
+        p.play()
+            .iter()
+            .filter(|c| c.is_character())
+            .map(|c| (c.id(), c.definition()))
+            .collect()
+    });
+    for (id, def) in watchers {
+        enqueue_triggers_for_def(
+            state,
+            registry,
+            owner,
+            id,
+            def,
+            &TriggerCondition::WhenYoursBanished,
+        );
     }
 }
 

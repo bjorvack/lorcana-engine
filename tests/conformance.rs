@@ -1760,3 +1760,144 @@ fn yours_quests_trigger_does_not_fire_on_opponents_quest() {
         "the opponent only got their own quest lore"
     );
 }
+
+/// Yours-scoped banish trigger (set 3/7/8/11/12): "Whenever one of your other
+/// characters is banished, gain 1 lore." A different character of mine being
+/// banished (here in a challenge) fires the watcher.
+#[test]
+fn yours_banished_trigger_fires_when_another_of_your_characters_is_banished() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Watcher"
+        type = "Character"
+        cost = 2
+        ink = ["Amber"]
+        strength = 1
+        willpower = 3
+        lore = 1
+        [[card.abilities]]
+        on = "yours_banished"
+        do = { gain_lore = 1 }
+        [[card]]
+        name = "Fragile"
+        type = "Character"
+        cost = 1
+        ink = ["Amber"]
+        strength = 1
+        willpower = 1
+        lore = 1
+        [[card]]
+        name = "Wall"
+        type = "Character"
+        cost = 3
+        ink = ["Amber"]
+        strength = 5
+        willpower = 9
+        lore = 1
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let foe = opponent_of(&state, me);
+
+    let _watcher = place(&mut state, me, 100, 0, 1, 3, true);
+    let fragile = place(&mut state, me, 200, 1, 1, 1, true);
+    let wall = place(&mut state, foe, 300, 2, 5, 9, false); // exerted, survives
+
+    // My fragile (1 WP) challenges the wall: the wall's 5 return damage banishes it.
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Challenge {
+            challenger: fragile,
+            target: wall,
+        },
+    )
+    .expect("challenge");
+
+    assert!(
+        state
+            .player(me)
+            .unwrap()
+            .play()
+            .iter()
+            .all(|c| c.id() != fragile),
+        "my fragile character was banished"
+    );
+    assert_eq!(
+        lore(&state, me),
+        1,
+        "the watcher's yours-banished trigger gained 1 lore"
+    );
+}
+
+/// Guard: an opponent's character being banished must NOT fire my yours-scoped
+/// banish trigger (it watches *my* characters).
+#[test]
+fn yours_banished_trigger_does_not_fire_on_opponents_banish() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Watcher"
+        type = "Character"
+        cost = 2
+        ink = ["Amber"]
+        strength = 1
+        willpower = 3
+        lore = 1
+        [[card.abilities]]
+        on = "yours_banished"
+        do = { gain_lore = 1 }
+        [[card]]
+        name = "Bruiser"
+        type = "Character"
+        cost = 3
+        ink = ["Amber"]
+        strength = 5
+        willpower = 5
+        lore = 1
+        [[card]]
+        name = "Foe Fragile"
+        type = "Character"
+        cost = 1
+        ink = ["Amber"]
+        strength = 1
+        willpower = 1
+        lore = 1
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let foe = opponent_of(&state, me);
+
+    let _watcher = place(&mut state, me, 100, 0, 1, 3, true);
+    let bruiser = place(&mut state, me, 200, 1, 5, 5, true);
+    let foe_fragile = place(&mut state, foe, 300, 2, 1, 1, false); // exerted
+
+    // My bruiser banishes the opponent's fragile character in a challenge.
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Challenge {
+            challenger: bruiser,
+            target: foe_fragile,
+        },
+    )
+    .expect("challenge");
+
+    assert!(
+        state
+            .player(foe)
+            .unwrap()
+            .play()
+            .iter()
+            .all(|c| c.id() != foe_fragile),
+        "the opponent's character was banished"
+    );
+    assert_eq!(
+        lore(&state, me),
+        0,
+        "my yours-banished trigger ignores the opponent's character being banished"
+    );
+}

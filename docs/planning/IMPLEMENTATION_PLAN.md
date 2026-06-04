@@ -217,6 +217,14 @@ controller's in-play characters (including the quester) and routes each through
 honored. `tests/conformance.rs::yours_quests_trigger_*` (fires for another
 character, fires for the quester itself, ignores the opponent's quest).
 
+Also done: `WhenYoursBanished` ("whenever one of your **other** characters is
+banished", DSL `"yours_banished"`). `enqueue_banish_triggers` scans the banished
+card's owner's remaining in-play characters (each is "other", since the banished
+card has left play). Works for both challenge and effect-driven banishment.
+`tests/conformance.rs::yours_banished_trigger_*` (fires for another character,
+ignores the opponent's banish). (The "in a challenge" / "during the opponent's
+turn" banish variants are follow-ups.)
+
 **Structural item (don't forget):** today only *self*-scoped triggers are detected
 at the action site (`enqueue_self_triggers`). Watching *other* cards' events
 (scope filters: one of your / a / an opposing character) requires a general

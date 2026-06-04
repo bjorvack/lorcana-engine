@@ -107,6 +107,7 @@ fn trigger_from(s: &str) -> Result<TriggerCondition, String> {
         "challenge" => TriggerCondition::WhenThisChallenges,
         "challenged" => TriggerCondition::WhenChallenged,
         "banish" | "banished" => TriggerCondition::WhenBanished,
+        "yours_banished" | "your_other_character_banished" => TriggerCondition::WhenYoursBanished,
         "banished_in_challenge" => TriggerCondition::WhenBanishedInChallenge,
         "banishes_in_challenge" => TriggerCondition::WhenBanishesInChallenge,
         "start_of_turn" => TriggerCondition::AtStartOfTurn,
