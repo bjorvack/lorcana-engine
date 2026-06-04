@@ -404,6 +404,10 @@ classifications = ["Storyborn", "Ally", "Madrigal"]
 # text:
 #   STANDING TALL When you play this character, chosen opposing character can't ready at the start of their next turn.
 
+[[card.abilities]]
+on = "play"
+do = { restrict = "cant_ready", to = "chosen opposing character", duration = "next_turn" }
+
 [[card]]
 name = "Brutus - Fearsome Crocodile"
 type = "Character"
@@ -1990,6 +1994,10 @@ classifications = ["Storyborn", "Ally"]
 # text:
 #   AND MEAN {E} — Move 1 damage counter from this character to chosen opposing character.
 
+[[card.activated]]
+cost = { exert = true }
+do = { move_damage = 1, from = "self", to = "chosen opposing character" }
+
 [[card]]
 name = "Nothing We Won't Do"
 type = "Song"
@@ -2001,6 +2009,14 @@ keywords = ["Sing Together 8"]
 # text:
 #   Sing Together 8 (Any number of your or your teammates’ characters with total cost 8 or more may {E} to sing this song for free.)
 #   Ready all your characters. For the rest of this turn, they take no damage from challenges and can't quest.
+
+[[card.abilities]]
+on = "play"
+do = [
+  { ready = "all your characters" },
+  { restrict = "takes_no_challenge_damage", to = "all your characters", duration = "this_turn" },
+  { restrict = "cant_quest", to = "all your characters", duration = "this_turn" },
+]
 
 [[card]]
 name = "Olaf - Recapping the Story"

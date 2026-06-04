@@ -640,6 +640,10 @@ classifications = ["Dreamborn", "Hero", "Detective"]
 # text:
 #   RAISE A RUCKUS When you play this character, chosen Detective character gains Challenger +2 this turn. (They get +2 {S} while challenging.)
 
+[[card.abilities]]
+on = "play"
+do = { grant_keyword = "Challenger 2", to = "chosen Detective character", duration = "this_turn" }
+
 [[card]]
 name = "Donald Duck - Ruby Champion"
 type = "Character"

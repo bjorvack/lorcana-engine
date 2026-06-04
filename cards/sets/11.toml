@@ -804,6 +804,10 @@ classifications = ["Storyborn", "Ally"]
 # text:
 #   LOOK OUT! When you play this character, move up to 1 damage from chosen character to chosen opposing character.
 
+[[card.abilities]]
+on = "play"
+do = { move_damage = 1, from = "chosen character", to = "chosen opposing character" }
+
 [[card]]
 name = "Force of a Great Typhoon"
 type = "Song"
@@ -2407,6 +2411,10 @@ inkwell = true
 # text:
 #   Chosen character gains Challenger +3 this turn. (They get +3 {S} while challenging.)
 
+[[card.abilities]]
+on = "play"
+do = { grant_keyword = "Challenger 3", to = "chosen character", duration = "this_turn" }
+
 [[card]]
 name = "Tamatoa - Seeker of Shine"
 type = "Character"
@@ -2572,6 +2580,10 @@ image = "https://cards.lorcast.io/card/digital/large/crd_f87c783d2fe2456687533d4
 inkwell = true
 # text:
 #   AT YOUR SIDE {E} — Chosen character gains Support this turn. (Whenever they quest, you may add their {S} to another chosen character's {S} this turn.)
+
+[[card.activated]]
+cost = { exert = true }
+do = { grant_keyword = "Support", to = "chosen character", duration = "this_turn" }
 
 [[card]]
 name = "Tod - All Alone"

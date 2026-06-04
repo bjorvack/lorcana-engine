@@ -309,6 +309,10 @@ keywords = ["Shift 3"]
 #   Shift 3 {I} (You may pay 3 {I} to play this on top of one of your characters named Belle.)
 #   ENHANCED HEALING When you play this character, move up to 3 damage counters from chosen character to chosen opposing character.
 
+[[card.abilities]]
+on = "play"
+do = { move_damage = 3, from = "chosen character", to = "chosen opposing character" }
+
 [[card]]
 name = "Belle - Inventive Engineer"
 type = "Character"
@@ -336,6 +340,10 @@ lore = 1
 classifications = ["Dreamborn", "Hero", "Princess"]
 # text:
 #   HERE NOW, DON'T DO THAT When you play this character, move up to 1 damage counter from chosen character to chosen opposing character.
+
+[[card.abilities]]
+on = "play"
+do = { move_damage = 1, from = "chosen character", to = "chosen opposing character" }
 
 [[card]]
 name = "Benja - Guardian of the Dragon Gem"
@@ -1321,6 +1329,10 @@ classifications = ["Storyborn", "Hero"]
 #   COME ON, PEOPLE, LET'S MOVE When you play this character, your other characters gain Challenger +2 this turn (They get +2 {S} while challenging.)
 #   GO GET 'EM Whenever this character quests, chosen Alien character gains Challenger +2 and "This character can challenge ready characters" this turn.
 
+[[card.abilities]]
+on = "play"
+do = { grant_keyword = "Challenger 2", to = "all your other characters", duration = "this_turn" }
+
 [[card]]
 name = "Little John - Sir Reginald"
 type = "Character"
@@ -1488,6 +1500,11 @@ classifications = ["Dreamborn", "Ally", "Sorcerer"]
 # text:
 #   LISTEN TO YOUR MAMA NOW Whenever this character quests, you may move up to 2 damage counters from chosen character to chosen opposing character.
 
+[[card.abilities]]
+on = "quest"
+may = true
+do = { move_damage = 2, from = "chosen character", to = "chosen opposing character" }
+
 [[card]]
 name = "Maui - Whale"
 type = "Character"
@@ -1502,6 +1519,13 @@ classifications = ["Storyborn", "Hero", "Deity"]
 # text:
 #   THIS MISSION IS CURSED This character can't ready at the start of your turn.
 #   I GOT YOUR BACK 2 {I} – Ready this character. He can't quest for the rest of this turn.
+
+[[card.activated]]
+cost = { ink = 2 }
+do = [
+  { ready = "self" },
+  { restrict = "cant_quest", to = "self", duration = "this_turn" },
+]
 
 [[card]]
 name = "Maui's Place of Exile - Hidden Island"
@@ -2276,6 +2300,10 @@ inkwell = true
 # text:
 #   MYSTICAL PETALS {E}, 2 {I} — Move 1 damage counter from chosen character to chosen opposing character.
 
+[[card.activated]]
+cost = { exert = true, ink = 2 }
+do = { move_damage = 1, from = "chosen character", to = "chosen opposing character" }
+
 [[card]]
 name = "Roxanne - Powerline Fan"
 type = "Character"
@@ -2777,6 +2805,10 @@ lore = 1
 classifications = ["Dreamborn", "Villain", "Sorcerer"]
 # text:
 #   YOU'RE TOO LATE Whenever this character quests, chosen opposing character can’t ready at the start of their next turn.
+
+[[card.abilities]]
+on = "quest"
+do = { restrict = "cant_ready", to = "chosen opposing character", duration = "next_turn" }
 
 [[card]]
 name = "Ursula - Vanessa"

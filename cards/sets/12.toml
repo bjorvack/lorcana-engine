@@ -68,6 +68,10 @@ classifications = ["Storyborn", "Mentor", "Madrigal"]
 # text:
 #   FIND A WAY Whenever this character quests, move up to 1 damage from chosen character of yours to chosen opposing character.
 
+[[card.abilities]]
+on = "quest"
+do = { move_damage = 1, from = "chosen character of yours", to = "chosen opposing character" }
+
 [[card]]
 name = "Alma Madrigal - Keeper of the Flame"
 type = "Character"
@@ -1438,6 +1442,11 @@ classifications = ["Dreamborn", "Ally", "Madrigal"]
 # text:
 #   SHOULDER THE BURDEN Whenever this character quests, you may move up to 3 damage from chosen character to this character.
 
+[[card.abilities]]
+on = "quest"
+may = true
+do = { move_damage = 3, from = "chosen character", to = "self" }
+
 [[card]]
 name = "Luisa Madrigal - Pushing Through"
 type = "Character"
@@ -1840,6 +1849,10 @@ lore = 2
 classifications = ["Storyborn", "Super", "Hero"]
 # text:
 #   PEP TALK When you play this character, chosen character gains Challenger +2 this turn. (They get +2 {S} while challenging.)
+
+[[card.abilities]]
+on = "play"
+do = { grant_keyword = "Challenger 2", to = "chosen character", duration = "this_turn" }
 
 [[card]]
 name = "Mrs. Incredible - Super Stretchy"
@@ -2628,6 +2641,11 @@ keywords = ["Evasive"]
 # text:
 #   Evasive (Only characters with Evasive can challenge this character.)
 #   DEFLECT When you play this character, you may move 1 damage from chosen character to chosen opposing character.
+
+[[card.abilities]]
+on = "play"
+may = true
+do = { move_damage = 1, from = "chosen character", to = "chosen opposing character" }
 
 [[card]]
 name = "Wee Dingwall - Scrappy Lad"
