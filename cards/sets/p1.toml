@@ -40,6 +40,10 @@ lore = 1
 classifications = ["Dreamborn", "Hero", "Princess", "Knight"]
 # text:
 #   HAVE COURAGE When you play this character, you may draw a card, then choose and discard a card.
+[[card.abilities]]
+on = "play"
+may = true
+do = [{ draw = 1 }, { discard = 1 }]
 
 [[card]]
 name = "Cruella De Vil - Miserable As Usual"
@@ -52,6 +56,10 @@ lore = 1
 classifications = ["Storyborn", "Villain"]
 # text:
 #   YOU'LL BE SORRY! When this character is challenged and banished, you may return chosen character to their player’s hand.
+[[card.abilities]]
+on = "banished_in_challenge"
+may = true
+do = { return_to_hand = "chosen character" }
 
 [[card]]
 name = "Donald Duck - Musketeer"
@@ -91,6 +99,9 @@ lore = 1
 classifications = ["Dreamborn", "Hero", "Queen", "Sorcerer"]
 # text:
 #   FREEZE {E} – Exert chosen opposing character.
+[[card.activated]]
+cost = { exert = true }
+do = { exert = "chosen opposing character" }
 
 [[card]]
 name = "Flotsam & Jetsam - Entangling Eels"
@@ -154,6 +165,10 @@ keywords = ["Bodyguard"]
 # text:
 #   Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)
 #   AND TWO FOR TEA! When you play this character, you may remove up to 2 damage from each of your Musketeer characters.
+[[card.abilities]]
+on = "play"
+may = true
+do = { remove_damage = 2, target = "all your Musketeer characters" }
 
 [[card]]
 name = "HeiHei - Boat Snack"
@@ -218,6 +233,10 @@ lore = 1
 classifications = ["Storyborn", "Ally"]
 # text:
 #   SKYSURFING When you play this character, you may return chosen opposing character with 2 {S} or less to their player’s hand.
+[[card.abilities]]
+on = "play"
+may = true
+do = { return_to_hand = "chosen opposing character with 2 {S} or less" }
 
 [[card]]
 name = "Maleficent - Monstrous Dragon"
@@ -230,6 +249,10 @@ lore = 2
 classifications = ["Storyborn", "Villain", "Dragon"]
 # text:
 #   DRAGON FIRE When you play this character, you may banish chosen opposing character.
+[[card.abilities]]
+on = "play"
+may = true
+do = { banish = "chosen opposing character" }
 
 [[card]]
 name = "Maleficent - Uninvited"
@@ -300,6 +323,9 @@ keywords = ["Support"]
 # text:
 #   Support (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)
 #   STRIKE UP THE MUSIC When you play this character, chosen character gains Support this turn.
+[[card.abilities]]
+on = "play"
+do = { grant_keyword = "Support", target = "chosen character" }
 
 [[card]]
 name = "Mickey Mouse - Musketeer"
@@ -314,6 +340,9 @@ keywords = ["Bodyguard"]
 # text:
 #   Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)
 #   ALL FOR ONE Your other Musketeer characters get +1 {S}.
+[[card.statics]]
+strength = 1
+to = "your other Musketeer characters"
 
 [[card]]
 name = "Mickey Mouse - True Friend"
@@ -351,6 +380,9 @@ lore = 1
 classifications = ["Storyborn", "Hero", "Princess"]
 # text:
 #   TIME TO SHINE Whenever you play an action, this character gets +2 {S} this turn.
+[[card.abilities]]
+on = "play_action"
+do = { give_strength = 2 }
 
 [[card]]
 name = "Pinocchio - Talkative Puppet"
@@ -362,6 +394,10 @@ lore = 1
 classifications = ["Storyborn", "Hero"]
 # text:
 #   TELLING LIES When you play this character, you may exert chosen opposing character.
+[[card.abilities]]
+on = "play"
+may = true
+do = { exert = "chosen opposing character" }
 
 [[card]]
 name = "Rapunzel - Gifted Artist"
@@ -387,6 +423,9 @@ lore = 1
 classifications = ["Dreamborn", "Hero"]
 # text:
 #   SKIRMISH {E} - Deal 1 damage to chosen character.
+[[card.activated]]
+cost = { exert = true }
+do = { deal_damage = 1, target = "chosen character" }
 
 [[card]]
 name = "Robin Hood - Unrivaled Archer"
@@ -451,6 +490,9 @@ keywords = ["Shift 5"]
 #   Shift 5 (You may pay 5 {I} to play this on top of one of your characters named Ursula.)
 #   NOW I AM THE RULER! Whenever this character quests, exert chosen character.
 #   YOU'LL LISTEN TO ME! Other characters can't exert to sing songs.
+[[card.abilities]]
+on = "quest"
+do = { exert = "chosen character" }
 
 [[card]]
 name = "Ursula's Lair - Eye of the Storm"
