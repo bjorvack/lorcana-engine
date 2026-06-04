@@ -533,6 +533,9 @@ lore = 2
 classifications = ["Floodborn", "Mentor"]
 keywords = ["Shift 5"]
 text = "Shift 5 (You may pay 5 {I} to play this on top of one of your characters named Gramma Tala.)\nDO YOU KNOW WHO YOU ARE? Whenever a card is put into your inkwell, gain 1 lore."
+[[card.abilities]]
+on = "card_put_in_inkwell"
+do = { gain_lore = 1 }
 
 [[card]]
 name = "Gustav the Giant - Terror of the Kingdom"
@@ -702,6 +705,10 @@ willpower = 5
 lore = 2
 classifications = ["Storyborn"]
 text = "WATCH THE TEETH Whenever this character is dealt damage, deal that much damage to chosen opposing character."
+# TODO: Convert to DSL once "damage_dealt" dynamic amount is supported
+# [[card.abilities]]
+# on = "dealt_damage"
+# do = { deal_damage = { to = "chosen opposing character", amount = "damage_dealt" } }
 
 [[card]]
 name = "Hydros - Ice Titan"

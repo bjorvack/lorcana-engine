@@ -323,13 +323,14 @@
     grid-column: 2;
     grid-row: 1;
     display: flex;
-    align-items: flex-end;
+    align-items: flex-start;
+    overflow: hidden;
   }
 
   .piles-vertical {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.35rem;
   }
 
   .ink-zone {

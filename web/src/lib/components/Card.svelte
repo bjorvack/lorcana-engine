@@ -59,7 +59,7 @@
 </article>
 
 {#if isHovered && !card.facedown && card.image}
-  <div class="card-preview" style="left: {mouseX + 15}px; top: {mouseY + 15}px;">
+  <div class="card-preview" style="left: {mouseX}px; top: {mouseY}px;">
     <img src={card.image} alt={card.name} loading="eager" decoding="sync" />
     <div class="preview-stats">
       <span class="preview-cost">{card.cost}</span>
