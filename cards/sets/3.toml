@@ -621,7 +621,7 @@ classifications = ["Storyborn", "Villain", "Deity"]
 #   CALL THE TITANS {E} — Ready your Titan characters.
 
 [[card]]
-name = "Has Set My Heaaaaaaart . . ."
+name = "Has Set My Heaaaaaaart . . ."
 type = "Song"
 cost = 2
 ink = ["Emerald"]

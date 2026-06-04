@@ -133,11 +133,17 @@ def map_keywords(card):
     return result
 
 
+def normalize_name(value: str) -> str:
+    """Normalize punctuation in a card name to ASCII (typographic apostrophes and
+    non-breaking spaces); proper letter accents (é, ü, …) are kept as printed."""
+    return value.replace("\u2019", "'").replace("\u2018", "'").replace("\u00a0", " ")
+
+
 def card_to_toml(card, skipped):
     """Render one card as a ``[[card]]`` table, or None if it must be skipped."""
     name = card.get("name")
     version = card.get("version")
-    full_name = f"{name} - {version}" if version else name
+    full_name = normalize_name(f"{name} - {version}" if version else name)
     kind = map_type(card.get("type"))
     if kind is None:
         skipped.append((full_name, f"unmappable type {card.get('type')!r}"))

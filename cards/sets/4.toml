@@ -5,7 +5,7 @@
 # by hand via the effect DSL.
 
 [[card]]
-name = "A Pirate’s Life"
+name = "A Pirate's Life"
 type = "Song"
 cost = 6
 ink = ["Ruby"]
@@ -604,7 +604,7 @@ classifications = ["Storyborn", "Hero", "Queen", "Sorcerer"]
 #   TEMPEST {E} — Chosen character gains Challenger +2 and Rush this turn. (They get +2 {S} while challenging. They can challenge the turn they're played.)
 
 [[card]]
-name = "Fa Li - Mulan’s Mother"
+name = "Fa Li - Mulan's Mother"
 type = "Character"
 cost = 1
 ink = ["Sapphire"]
@@ -684,7 +684,7 @@ classifications = ["Floodborn", "Ally"]
 #   (This character counts as being named both Flotsam and Jetsam.)
 
 [[card]]
-name = "Flounder - Collector’s Companion"
+name = "Flounder - Collector's Companion"
 type = "Character"
 cost = 3
 ink = ["Sapphire"]
@@ -966,7 +966,7 @@ image = "https://cards.lorcast.io/card/digital/large/crd_8bea9b8848964337b64e2ce
 #   UNEXPECTED TREASURE All cards in your hand count as having {IW}.
 
 [[card]]
-name = "I Find ’Em, I Flatten ’Em"
+name = "I Find 'Em, I Flatten 'Em"
 type = "Song"
 cost = 4
 ink = ["Steel"]
@@ -1136,7 +1136,7 @@ classifications = ["Dreamborn", "Ally"]
 #   I LEARNED FROM THE BEST During your turn, you may play this character for free if an opposing character was banished in a challenge this turn.
 
 [[card]]
-name = "Li Shang - General’s Son"
+name = "Li Shang - General's Son"
 type = "Character"
 cost = 1
 ink = ["Ruby"]
@@ -2568,7 +2568,7 @@ keywords = ["Singer 4"]
 #   Singer 4 (This character counts as cost 4 to sing songs.)
 
 [[card]]
-name = "Ursula’s Garden - Full of the Unfortunate"
+name = "Ursula's Garden - Full of the Unfortunate"
 type = "Location"
 cost = 4
 ink = ["Emerald"]
@@ -2581,7 +2581,7 @@ lore = 1
 #   ABANDON HOPE While you have an exerted character here, opposing characters get -1 {L}.
 
 [[card]]
-name = "Ursula’s Lair - Eye of the Storm"
+name = "Ursula's Lair - Eye of the Storm"
 type = "Location"
 cost = 3
 ink = ["Amethyst"]
@@ -2594,7 +2594,7 @@ lore = 1
 #   SEAT OF POWER Characters named Ursula get +1 {L} while here.
 
 [[card]]
-name = "Ursula’s Plan"
+name = "Ursula's Plan"
 type = "Action"
 cost = 3
 ink = ["Amethyst"]
@@ -2603,7 +2603,7 @@ image = "https://cards.lorcast.io/card/digital/large/crd_d06befe89918438384a8d38
 #   Each opponent chooses and exerts one of their characters. Those characters can't ready at the start of their next turn.
 
 [[card]]
-name = "Ursula’s Trickery"
+name = "Ursula's Trickery"
 type = "Action"
 cost = 1
 ink = ["Emerald"]
@@ -2633,7 +2633,7 @@ inkwell = true
 #   EXTRACT OF RUBY 1 {I}, Banish this item — Chosen character gains Rush and gets +2 {S} this turn. (They can challenge the turn they're played.)
 
 [[card]]
-name = "We Don’t Talk About Bruno"
+name = "We Don't Talk About Bruno"
 type = "Song"
 cost = 5
 ink = ["Emerald"]
