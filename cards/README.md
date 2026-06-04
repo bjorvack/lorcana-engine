@@ -71,7 +71,7 @@ to = "your other Hero characters"
 `remove_damage`, `give_strength`, `banish`, `exert`, `ready`, `freeze`, `discard`,
 `return_to_hand`, `into_inkwell`, `grant_keyword` (`duration = "this_turn"`
 default | `"permanent"`), `if_you_have` (`+ at_least = N`, `then = {…}`),
-`move_damage` (`= N, from = "…", to = "…"`), and `restrict` (`= "cant_quest" |
+`move_damage` (`= N, from = "…", to = "…"`), `look_at_top` (`= N, take = "<filter>", rest = "bottom"|"top"|"shuffle"`), and `restrict` (`= "cant_quest" |
 "cant_challenge" | "cant_be_challenged" | "cant_be_chosen" | "cant_ready" |
 "takes_no_challenge_damage"`, with the same `duration`).
 

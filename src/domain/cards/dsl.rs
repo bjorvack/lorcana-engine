@@ -25,8 +25,9 @@
 use super::loader::keyword_from;
 use super::{AbilityCost, ActivatedAbility, StaticAbility, StaticTarget, TriggeredAbility};
 use crate::domain::effects::{
-    Amount, CardCategory, CharacterFilter, Comparison, Destination, DiscardAmount, DiscardBy,
-    Effect, MoveSource, NumericFilter, PlayerScope, Target, TargetSide, TriggerCondition,
+    Amount, CardCategory, CharacterFilter, Comparison, DeckPosition, Destination, DiscardAmount,
+    DiscardBy, Effect, MoveSource, NumericFilter, PlayerScope, Target, TargetSide,
+    TriggerCondition,
 };
 use crate::domain::game::{Condition, Property, Restriction, Stat};
 use crate::domain::types::card::Classification;
@@ -229,6 +230,28 @@ fn effect_from_table(t: &toml::Table) -> Result<Effect, String> {
             Some("this_turn") | None => Ok(Effect::GrantThisTurn { target, property }),
             Some(other) => Err(format!("unknown grant duration {other:?}")),
         }
+    } else if t.contains_key("look_at_top") {
+        // "Look at the top N cards. You may take a <filter> to your hand. Put the
+        // rest on the bottom/top, or shuffle." `take` defaults to any card; `rest`
+        // to the bottom; `who` to the controller's own deck.
+        let count = u32::try_from(int("look_at_top")?).unwrap_or(0);
+        let any = || CharacterFilter::any(TargetSide::Any);
+        let filter = t
+            .get("take")
+            .and_then(Value::as_str)
+            .map_or_else(any, |s| parse_filter(s).unwrap_or_else(any));
+        let rest = match t.get("rest").and_then(Value::as_str) {
+            Some("top") => DeckPosition::Top,
+            Some("shuffle") => DeckPosition::Shuffle,
+            Some("bottom") | None => DeckPosition::Bottom,
+            Some(other) => return Err(format!("unknown rest position {other:?}")),
+        };
+        Ok(Effect::LookAtTopAndTake {
+            whose: scope(PlayerScope::You)?,
+            count,
+            filter,
+            rest,
+        })
     } else if t.contains_key("move_damage") {
         // "Move up to N damage from <a> to <b>."
         let from = t

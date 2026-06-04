@@ -693,3 +693,32 @@ fn a_card_counts_as_its_base_name_for_named_matching() {
     assert!(defs[0].has_name("Peter Pan - Never Landing"), "full name");
     assert!(!defs[0].has_name("Peter"), "not a partial token");
 }
+
+#[test]
+fn the_dsl_exposes_look_at_top() {
+    use lorcana_engine::{DeckPosition, Effect, PlayerScope};
+    let defs = load_toml(
+        r#"
+        [[card]]
+        name = "Seer"
+        type = "Character"
+        cost = 3
+        strength = 2
+        willpower = 3
+        lore = 1
+        [[card.abilities]]
+        on = "play"
+        do = { look_at_top = 4, take = "an item card", rest = "bottom" }
+        "#,
+    )
+    .expect("loads");
+    let Effect::LookAtTopAndTake {
+        whose, count, rest, ..
+    } = &defs[0].abilities()[0].effect
+    else {
+        panic!("expected LookAtTopAndTake");
+    };
+    assert_eq!(*count, 4);
+    assert_eq!(*whose, PlayerScope::You);
+    assert_eq!(*rest, DeckPosition::Bottom);
+}
