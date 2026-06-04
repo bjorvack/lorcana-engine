@@ -648,3 +648,27 @@ fn the_dsl_exposes_restriction_grants() {
         }
     ));
 }
+
+#[test]
+fn restrict_supports_next_turn_duration() {
+    use lorcana_engine::{Effect, Property, Restriction};
+    let defs = load_toml(
+        r#"
+        [[card]]
+        name = "Sleep"
+        type = "Action"
+        cost = 1
+        [[card.abilities]]
+        on = "play"
+        do = { restrict = "cant_ready", to = "chosen opposing character", duration = "next_turn" }
+        "#,
+    )
+    .expect("loads");
+    assert!(matches!(
+        &defs[0].action_effects()[0],
+        Effect::GrantNextTurn {
+            property: Property::Restriction(Restriction::CantReady),
+            ..
+        }
+    ));
+}

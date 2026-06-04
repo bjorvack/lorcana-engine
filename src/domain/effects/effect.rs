@@ -249,6 +249,15 @@ pub enum Effect {
         /// The granted property.
         property: Property,
     },
+    /// Grant a property to the target until its controller's **next ready step**
+    /// — the timing for "can't ready / can't quest at the start of their next
+    /// turn" effects (like freeze's `CantReady`, surviving the granter leaving).
+    GrantNextTurn {
+        /// Who is affected.
+        target: Target,
+        /// The granted property.
+        property: Property,
+    },
     /// Grant the target an **activated** ability until end of turn ("gains '{E} —
     /// Draw a card' this turn", §7.5). Usable like a printed activated ability.
     GrantActivatedThisTurn {

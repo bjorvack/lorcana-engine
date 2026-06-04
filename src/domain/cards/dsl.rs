@@ -205,6 +205,7 @@ fn effect_from_table(t: &toml::Table) -> Result<Effect, String> {
         // this turn").
         match t.get("duration").and_then(Value::as_str) {
             Some("permanent") => Ok(Effect::Grant { target, property }),
+            Some("next_turn") => Ok(Effect::GrantNextTurn { target, property }),
             Some("this_turn") | None => Ok(Effect::GrantThisTurn { target, property }),
             Some(other) => Err(format!("unknown grant duration {other:?}")),
         }
@@ -227,6 +228,7 @@ fn effect_from_table(t: &toml::Table) -> Result<Effect, String> {
         let target = tgt()?;
         match t.get("duration").and_then(Value::as_str) {
             Some("permanent") => Ok(Effect::Grant { target, property }),
+            Some("next_turn") => Ok(Effect::GrantNextTurn { target, property }),
             Some("this_turn") | None => Ok(Effect::GrantThisTurn { target, property }),
             Some(other) => Err(format!("unknown grant duration {other:?}")),
         }

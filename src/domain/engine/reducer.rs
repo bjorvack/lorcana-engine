@@ -2559,6 +2559,7 @@ fn execute_effect(
         | Effect::GrantActivatedThisTurn { target, .. }
         | Effect::GrantThisTurn { target, .. }
         | Effect::Grant { target, .. }
+        | Effect::GrantNextTurn { target, .. }
         | Effect::IfTargetMatches { target, .. } => {
             return resolve_targeted(state, registry, controller, source, target, effect, events);
         }
@@ -3400,6 +3401,21 @@ fn apply_effect_to_rest(
                 property.clone(),
                 ModifierDuration::Permanent,
             ));
+        }
+        // Grant until the target's controller next readies ("at the start of their
+        // next turn"); sourced to the target so it survives the granter leaving.
+        Effect::GrantNextTurn { property, .. } => {
+            if let Some(owner) = state.card_owner_in_play(target_card) {
+                state.add_property_modifier(PropertyModifier::new(
+                    target_card,
+                    ModifierTarget::Card(target_card),
+                    property.clone(),
+                    ModifierDuration::UntilStep {
+                        step: Step::Ready,
+                        player: owner,
+                    },
+                ));
+            }
         }
         // Grant an activated ability to the target until end of turn (§7.5).
         Effect::GrantActivatedThisTurn {
