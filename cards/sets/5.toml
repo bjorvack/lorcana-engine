@@ -1183,6 +1183,11 @@ classifications = ["Storyborn", "Villain", "Sorcerer"]
 #   A LITTLE GAME When you play this character, banish her or return another chosen character of yours to your hand.
 #   SNEAKY MOVE At the start of your turn, you may move up to 2 damage counters from this character to chosen opposing character.
 
+[[card.abilities]]
+on = "start_of_turn"
+may = true
+do = { move_damage = 2, from = "self", to = "chosen opposing character" }
+
 [[card]]
 name = "Magica De Spell - Cruel Sorceress"
 type = "Character"
@@ -2457,6 +2462,11 @@ lore = 1
 classifications = ["Storyborn", "Ally"]
 # text:
 #   TURNING TIDES When you play this character, you may move up to 2 damage counters from chosen character to chosen opposing character.
+
+[[card.abilities]]
+on = "play"
+may = true
+do = { move_damage = 2, from = "chosen character", to = "chosen opposing character" }
 
 [[card]]
 name = "The Queen - Crown of the Council"
