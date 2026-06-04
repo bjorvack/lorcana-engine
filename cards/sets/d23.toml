@@ -85,6 +85,10 @@ keywords = ["Resist 1", "Shift 3"]
 #   Resist +1 (Damage dealt to this character is reduced by 1.)
 #   SWEEP AWAY When you play this character, deal damage to chosen character equal to the number of Broom characters you have in play.
 
+[[card.abilities]]
+on = "play"
+do = { deal_damage = "per your Broom characters", to = "chosen character" }
+
 [[card]]
 name = "Oswald - The Lucky Rabbit"
 type = "Character"

@@ -19,6 +19,10 @@ cost = 5
 # text:
 #   Banish chosen character.
 
+[[card.abilities]]
+on = "play"
+do = { banish = "chosen character" }
+
 [[card]]
 name = "Elsa - Ice Maker"
 type = "Character"
@@ -40,6 +44,10 @@ inkwell = true
 # text:
 #   (A character with cost 5 or more can {E} to sing this song for free.)
 #   Put chosen character into their player's inkwell facedown and exerted.
+
+[[card.abilities]]
+on = "play"
+do = { into_inkwell = "chosen character" }
 
 [[card]]
 name = "Pegasus - Gift for Hercules"
