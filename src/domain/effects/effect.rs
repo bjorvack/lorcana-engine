@@ -40,6 +40,22 @@ impl Amount {
     }
 }
 
+/// Count-based conditions for effect gating ("if you have more than 3 cards in
+/// your hand", "if you have more lore than each opponent", etc.).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum CountCondition {
+    /// Controller has at least N cards in hand ("if you have 3 or more cards").
+    HandSizeAtLeast(u32),
+    /// Controller has more than N cards in hand ("if you have more than 3 cards").
+    HandSizeMoreThan(u32),
+    /// Controller has at least N lore ("if you have 3 or more lore").
+    LoreAtLeast(u32),
+    /// Controller has more than N lore ("if you have more than 3 lore").
+    LoreMoreThan(u32),
+    /// Controller has more lore than opponent ("if you have more lore than each opponent").
+    LoreMoreThanOpponent,
+}
+
 /// What a [`Effect::Move`] selects to move.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum MoveSource {
@@ -395,6 +411,14 @@ pub enum Effect {
         /// How many matching characters are required ("if you have N or more …").
         /// `1` is plain "if you have a …".
         at_least: u32,
+        /// The effect to resolve when the condition holds.
+        then: Box<Self>,
+    },
+    /// Resolve `then` only if a count-based condition holds (hand size, lore,
+    /// comparisons, etc.).
+    IfCount {
+        /// The count condition to check.
+        condition: CountCondition,
         /// The effect to resolve when the condition holds.
         then: Box<Self>,
     },

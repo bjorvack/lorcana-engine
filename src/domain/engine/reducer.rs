@@ -6,8 +6,9 @@ use crate::domain::cards::{
     ShiftKind, StaticAbility, StaticTarget,
 };
 use crate::domain::effects::{
-    Amount, CardCategory, CharacterFilter, DeckPosition, DelayedWhen, Destination, DiscardAmount,
-    DiscardBy, Effect, MoveSource, PlayerScope, Target, TargetSide, TriggerCondition,
+    Amount, CardCategory, CharacterFilter, CountCondition, DeckPosition, DelayedWhen, Destination,
+    DiscardAmount, DiscardBy, Effect, MoveSource, PlayerScope, Target, TargetSide,
+    TriggerCondition,
 };
 use crate::domain::game::{
     CardInstance, CharacterStats, ChoiceRef, ChoiceThen, Conditions, DelayedTrigger, GameEvent,
@@ -2588,6 +2589,11 @@ fn execute_effect(
                 return execute_effect(state, registry, controller, source, then, events);
             }
         }
+        Effect::IfCount { condition, then } => {
+            if count_condition_holds(state, controller, *condition) {
+                return execute_effect(state, registry, controller, source, then, events);
+            }
+        }
         // Modal "choose one": present the options to the controller (§7.1.9).
         Effect::ChooseOne { options, optional } => {
             if *optional {
@@ -3161,6 +3167,41 @@ fn resolve_search_deck(
             max: take_count,
             then: ChoiceThen::SearchDeckTake { deck_owner: owner },
         })
+    }
+}
+
+/// Evaluate whether a count-based condition holds for the controller.
+fn count_condition_holds(
+    state: &GameState,
+    controller: PlayerId,
+    condition: CountCondition,
+) -> bool {
+    use crate::domain::effects::CountCondition;
+    let opponents = || -> Vec<PlayerId> {
+        state
+            .players()
+            .iter()
+            .map(PlayerState::id)
+            .filter(|p| *p != controller)
+            .collect()
+    };
+    match condition {
+        CountCondition::HandSizeAtLeast(n) => state
+            .player(controller)
+            .is_some_and(|p| u32::try_from(p.hand().len()).unwrap_or(0) >= n),
+        CountCondition::HandSizeMoreThan(n) => state
+            .player(controller)
+            .is_some_and(|p| u32::try_from(p.hand().len()).unwrap_or(0) > n),
+        CountCondition::LoreAtLeast(n) => state.player(controller).is_some_and(|p| p.lore() >= n),
+        CountCondition::LoreMoreThan(n) => state.player(controller).is_some_and(|p| p.lore() > n),
+        CountCondition::LoreMoreThanOpponent => {
+            let my_lore = state.player(controller).map_or(0, PlayerState::lore);
+            let opp_lore = opponents()
+                .first()
+                .and_then(|p| state.player(*p).map(PlayerState::lore))
+                .unwrap_or(0);
+            my_lore > opp_lore
+        }
     }
 }
 

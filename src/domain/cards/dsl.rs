@@ -25,8 +25,8 @@
 use super::loader::keyword_from;
 use super::{AbilityCost, ActivatedAbility, StaticAbility, StaticTarget, TriggeredAbility};
 use crate::domain::effects::{
-    Amount, CardCategory, CharacterFilter, Comparison, DeckPosition, Destination, DiscardAmount,
-    DiscardBy, Effect, MoveSource, NumericFilter, PlayerScope, Target, TargetSide,
+    Amount, CardCategory, CharacterFilter, Comparison, CountCondition, DeckPosition, Destination,
+    DiscardAmount, DiscardBy, Effect, MoveSource, NumericFilter, PlayerScope, Target, TargetSide,
     TriggerCondition,
 };
 use crate::domain::game::{Condition, Property, Restriction, Stat};
@@ -231,6 +231,16 @@ fn effect_from_table(t: &toml::Table) -> Result<Effect, String> {
         Ok(Effect::IfControl {
             filter,
             at_least,
+            then: Box::new(effect_from_value(then)?),
+        })
+    } else if let Some(Value::String(cond)) = t.get("if_count") {
+        // Count-based conditions: "if you have more than 3 cards in your hand", etc.
+        let condition = parse_count_condition(cond)?;
+        let then = t
+            .get("then")
+            .ok_or_else(|| "`if_count` needs a `then` effect".to_string())?;
+        Ok(Effect::IfCount {
+            condition,
             then: Box::new(effect_from_value(then)?),
         })
     } else if let Some(Value::String(kw)) = t.get("grant_keyword") {
@@ -909,10 +919,58 @@ fn static_target_from_str(s: &str) -> Option<StaticTarget> {
     })
 }
 
+/// Parse a count-based condition string like "more than 3 cards in your hand".
+fn parse_count_condition(s: &str) -> Result<CountCondition, String> {
+    use crate::domain::effects::CountCondition;
+    let s = s.to_lowercase();
+
+    // Parse patterns like:
+    // - "3 or more cards in your hand" -> HandSizeAtLeast(3)
+    // - "more than 3 cards in your hand" -> HandSizeMoreThan(3)
+    // - "3 or more lore" -> LoreAtLeast(3)
+    // - "more than 3 lore" -> LoreMoreThan(3)
+    // - "more lore than opponent" -> LoreMoreThanOpponent
+
+    if s.contains("cards in your hand") || s.contains("cards in hand") {
+        let n = extract_number(&s)?;
+        if s.contains("or more") {
+            Ok(CountCondition::HandSizeAtLeast(n))
+        } else if s.contains("more than") {
+            Ok(CountCondition::HandSizeMoreThan(n))
+        } else {
+            Err(format!("unknown hand size condition: {s}"))
+        }
+    } else if s.contains("lore") {
+        if s.contains("than opponent") {
+            Ok(CountCondition::LoreMoreThanOpponent)
+        } else {
+            let n = extract_number(&s)?;
+            if s.contains("or more") {
+                Ok(CountCondition::LoreAtLeast(n))
+            } else if s.contains("more than") {
+                Ok(CountCondition::LoreMoreThan(n))
+            } else {
+                Err(format!("unknown lore condition: {s}"))
+            }
+        }
+    } else {
+        Err(format!("unknown count condition: {s}"))
+    }
+}
+
+/// Extract the first number from a string.
+fn extract_number(s: &str) -> Result<u32, String> {
+    s.split_whitespace()
+        .find_map(|word| word.parse::<u32>().ok())
+        .ok_or_else(|| format!("no number found in {s}"))
+}
+
 #[cfg(test)]
 mod tests {
-    use super::{parse_filter, parse_selector, with_classifications};
-    use crate::domain::effects::{CharacterFilter, Comparison, NumericFilter, Target, TargetSide};
+    use super::{parse_count_condition, parse_filter, parse_selector, with_classifications};
+    use crate::domain::effects::{
+        CharacterFilter, Comparison, CountCondition, NumericFilter, Target, TargetSide,
+    };
     use crate::domain::types::card::Classification;
 
     const fn at_least(value: u32) -> NumericFilter {
@@ -1100,5 +1158,29 @@ mod tests {
         let your_action = format!("{:?}", parse_filter("your action cards").unwrap());
         assert!(your_action.contains("Category(Action)"), "{your_action}");
         assert!(your_action.contains("Yours"), "{your_action}");
+    }
+
+    #[test]
+    fn parses_count_conditions() {
+        assert_eq!(
+            parse_count_condition("3 or more cards in your hand"),
+            Ok(CountCondition::HandSizeAtLeast(3))
+        );
+        assert_eq!(
+            parse_count_condition("more than 3 cards in hand"),
+            Ok(CountCondition::HandSizeMoreThan(3))
+        );
+        assert_eq!(
+            parse_count_condition("3 or more lore"),
+            Ok(CountCondition::LoreAtLeast(3))
+        );
+        assert_eq!(
+            parse_count_condition("more than 3 lore"),
+            Ok(CountCondition::LoreMoreThan(3))
+        );
+        assert_eq!(
+            parse_count_condition("more lore than opponent"),
+            Ok(CountCondition::LoreMoreThanOpponent)
+        );
     }
 }

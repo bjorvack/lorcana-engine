@@ -1,0 +1,135 @@
+<script lang="ts">
+  import Board from './lib/components/Board.svelte';
+  import { Engine, type GameView } from './lib/engine';
+
+  let engine = $state<Engine | null>(null);
+  let view = $state<GameView | null>(null);
+  let error = $state<string | null>(null);
+  let loading = $state(false);
+  let seed = $state(1);
+  let auto = $state(false);
+
+  async function newGame(): Promise<void> {
+    loading = true;
+    error = null;
+    auto = false;
+    try {
+      const created = await Engine.create(BigInt(seed));
+      // Advance a handful of turns so the opening board isn't empty.
+      let n = 0;
+      while (n < 24 && created.step()) n += 1;
+      engine = created;
+      view = created.view();
+    } catch (err) {
+      error = err instanceof Error ? err.message : String(err);
+    } finally {
+      loading = false;
+    }
+  }
+
+  function step(): void {
+    if (!engine) return;
+    engine.step();
+    view = engine.view();
+  }
+
+  // Auto-play: tick while enabled and the game can still progress.
+  $effect(() => {
+    if (!auto || !engine) return;
+    const handle = setInterval(() => {
+      if (!engine) return;
+      const advanced = engine.step();
+      view = engine.view();
+      if (!advanced || engine.finished) auto = false;
+    }, 400);
+    return () => clearInterval(handle);
+  });
+
+  void newGame();
+</script>
+
+<header class="topbar">
+  <h1>Lorcana Board Viewer</h1>
+  <div class="controls">
+    <label>
+      Seed
+      <input type="number" min="0" bind:value={seed} />
+    </label>
+    <button onclick={() => void newGame()} disabled={loading}>New game</button>
+    <button onclick={step} disabled={!engine || loading || auto}>Step</button>
+    <button onclick={() => (auto = !auto)} disabled={!engine || loading} aria-pressed={auto}>
+      {auto ? 'Pause' : 'Auto-play'}
+    </button>
+  </div>
+</header>
+
+<main>
+  {#if error}
+    <p class="error" role="alert">Failed to start: {error}</p>
+  {:else if loading || !view}
+    <p class="loading">Loading engine…</p>
+  {:else if engine}
+    <Board {view} cards={engine.cards} />
+  {/if}
+</main>
+
+<style>
+  .topbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.7rem 1rem;
+    border-block-end: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  h1 {
+    margin: 0;
+    font-size: 1.1rem;
+    letter-spacing: 0.01em;
+  }
+
+  .controls {
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+  }
+
+  label {
+    display: inline-flex;
+    gap: 0.35rem;
+    align-items: center;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  input {
+    inline-size: 5rem;
+    font: inherit;
+    color: var(--text);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.3rem 0.5rem;
+  }
+
+  button[aria-pressed='true'] {
+    background: var(--accent);
+    color: oklch(20% 0.02 280);
+    border-color: var(--accent);
+  }
+
+  main {
+    padding: 1rem;
+  }
+
+  .error {
+    color: var(--danger);
+  }
+
+  .loading {
+    color: var(--muted);
+  }
+</style>

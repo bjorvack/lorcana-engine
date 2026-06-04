@@ -1,3 +1,13 @@
+[workspace]
+# The engine (this root package) plus the WebAssembly bindings consumed by the
+# web UI. Future members (e.g. an `lorcana-ai` crate for self-play/training) slot
+# in here against the same core.
+members = ["crates/lorcana-wasm"]
+# Keep the engine the default target of bare `cargo build/test/clippy` at the
+# root, so the existing engine workflow (and CI commands in AGENTS.md) is
+# unchanged. The WASM crate is built explicitly via `wasm-pack` / `-p`.
+default-members = ["."]
+
 [package]
 name = "lorcana-engine"
 version = "0.1.0"
@@ -26,7 +36,12 @@ uuid = { version = "1.8", features = ["v4", "serde"] }
 [dev-dependencies]
 serde_json = "1.0"
 
-[lints.rust]
+# The engine inherits the shared workspace lint config below, so every crate in
+# the workspace (engine + WASM bindings) is held to the same strict standard.
+[lints]
+workspace = true
+
+[workspace.lints.rust]
 dead_code = "warn"
 missing_copy_implementations = "warn"
 missing_debug_implementations = "warn"
@@ -39,7 +54,7 @@ unused_lifetimes = "warn"
 unused_qualifications = "warn"
 unused_results = "warn"
 
-[lints.clippy]
+[workspace.lints.clippy]
 all = "warn"
 pedantic = "warn"
 nursery = "warn"

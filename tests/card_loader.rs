@@ -1026,3 +1026,27 @@ fn player_scoped_lore_with_who() {
     assert_eq!(*who, PlayerScope::EachPlayer);
     assert_eq!(*amount, Amount::Fixed(2));
 }
+
+#[test]
+fn count_condition_effects() {
+    use lorcana_engine::{CountCondition, Effect};
+    let defs = load_toml(
+        r#"
+        [[card]]
+        name = "Hand Size Master"
+        type = "Character"
+        cost = 3
+        strength = 2
+        willpower = 3
+        lore = 1
+        [[card.abilities]]
+        on = "play"
+        do = { if_count = "3 or more cards in your hand", then = { draw = 2 } }
+        "#,
+    )
+    .expect("loads");
+    let Effect::IfCount { condition, .. } = &defs[0].abilities()[0].effect else {
+        panic!("expected IfCount");
+    };
+    assert_eq!(*condition, CountCondition::HandSizeAtLeast(3));
+}
