@@ -103,7 +103,7 @@ classifications = ["Storyborn", "Hero", "Queen"]
 
 [[card.abilities]]
 on = "play"
-do = { if_you_have = "character named Elsa", then = { restrict = "cant_ready", to = "chosen opposing character", duration = "this_turn" } }
+do = { if_you_have = "character named Elsa", then = { restrict = "cant_ready", to = "chosen opposing character", duration = "next_turn" } }
 
 [[card]]
 name = "Archimedes - Highly Educated Owl"

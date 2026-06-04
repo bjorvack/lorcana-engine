@@ -2677,7 +2677,7 @@ classifications = ["Dreamborn", "Villain", "Sorcerer"]
 
 [[card.abilities]]
 on = "quest"
-do = { restrict = "cant_ready", to = "chosen opposing character", duration = "this_turn" }
+do = { restrict = "cant_ready", to = "chosen opposing character", duration = "next_turn" }
 
 [[card]]
 name = "Vault Door"
