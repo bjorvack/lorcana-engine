@@ -148,6 +148,18 @@ pub enum PendingDecision {
         /// The remaining effects, resolved in order after.
         rest: Vec<Effect>,
     },
+    /// A "Choose one" modal effect is resolving; `player` picks one of the
+    /// offered effects to resolve (§7.1.9). `rest` resolves afterwards.
+    ChooseOne {
+        /// The player who must choose.
+        player: PlayerId,
+        /// The effect's source card (continuation controller).
+        source: CardId,
+        /// The offered effects (2–4 options in practice).
+        options: Vec<Effect>,
+        /// The remaining effects, resolved in order after.
+        rest: Vec<Effect>,
+    },
 }
 
 impl PendingDecision {
@@ -161,7 +173,8 @@ impl PendingDecision {
             | Self::Choose { player, .. }
             | Self::NameCard { player, .. }
             | Self::NameThenRecur { player, .. }
-            | Self::MayResolveEffect { player, .. } => *player,
+            | Self::MayResolveEffect { player, .. }
+            | Self::ChooseOne { player, .. } => *player,
         }
     }
 }

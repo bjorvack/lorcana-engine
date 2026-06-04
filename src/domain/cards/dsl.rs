@@ -321,6 +321,51 @@ fn effect_from_table(t: &toml::Table) -> Result<Effect, String> {
             Some("this_turn") | None => Ok(Effect::GrantThisTurn { target, property }),
             Some(other) => Err(format!("unknown grant duration {other:?}")),
         }
+    } else if t.contains_key("choose_one") {
+        // "Choose one: [A] • [B] • [C]" — pick one effect to resolve.
+        // `choose_one` is an array of effect tables; `optional` defaults to false.
+        let optional = t.get("optional").and_then(Value::as_bool).unwrap_or(false);
+        let options_array = t.get("choose_one").ok_or("`choose_one` needs an array")?;
+        let options: Vec<_> = if let Value::Array(arr) = options_array {
+            arr.iter()
+                .map(effect_from_value)
+                .collect::<Result<_, _>>()?
+        } else {
+            return Err(format!(
+                "`choose_one` must be an array, got {options_array:?}"
+            ));
+        };
+        if options.len() < 2 {
+            return Err(format!(
+                "`choose_one` needs at least 2 options, got {}",
+                options.len()
+            ));
+        }
+        Ok(Effect::ChooseOne { options, optional })
+    } else if t.contains_key("may_choose_one") {
+        // "You may choose one: [A] • [B]" — optional variant.
+        let options_array = t
+            .get("may_choose_one")
+            .ok_or("`may_choose_one` needs an array")?;
+        let options: Vec<_> = if let Value::Array(arr) = options_array {
+            arr.iter()
+                .map(effect_from_value)
+                .collect::<Result<_, _>>()?
+        } else {
+            return Err(format!(
+                "`may_choose_one` must be an array, got {options_array:?}"
+            ));
+        };
+        if options.len() < 2 {
+            return Err(format!(
+                "`may_choose_one` needs at least 2 options, got {}",
+                options.len()
+            ));
+        }
+        Ok(Effect::ChooseOne {
+            options,
+            optional: true,
+        })
     } else {
         Err(format!("no known effect verb in {t:?}"))
     }

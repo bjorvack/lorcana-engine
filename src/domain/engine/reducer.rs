@@ -2235,6 +2235,11 @@ enum Choice {
     /// `player` names a card; all character cards with that name in their discard
     /// return to their hand (§8.2).
     NameThenRecur { player: PlayerId },
+    /// `player` picks one of the offered effects to resolve (§7.1.9).
+    ChooseOne {
+        player: PlayerId,
+        options: Vec<Effect>,
+    },
 }
 
 /// Map a [`Choice`] to the [`PendingDecision`] that stashes it with its `source`
@@ -2278,6 +2283,12 @@ fn choice_to_pending(choice: Choice, source: CardId, rest: Vec<Effect>) -> Pendi
         Choice::NameThenRecur { player } => PendingDecision::NameThenRecur {
             player,
             source,
+            rest,
+        },
+        Choice::ChooseOne { player, options } => PendingDecision::ChooseOne {
+            player,
+            source,
+            options,
             rest,
         },
     }
@@ -2564,6 +2575,22 @@ fn execute_effect(
                 return execute_effect(state, registry, controller, source, then, events);
             }
         }
+        // Modal "choose one": present the options to the controller (§7.1.9).
+        Effect::ChooseOne { options, optional } => {
+            if *optional {
+                return Some(Choice::May {
+                    player: controller,
+                    inner: Effect::ChooseOne {
+                        options: options.clone(),
+                        optional: false,
+                    },
+                });
+            }
+            return Some(Choice::ChooseOne {
+                player: controller,
+                options: options.clone(),
+            });
+        }
         // Move damage between two characters (§9.3): resolve endpoints one at a
         // time (each pick excludes the already-fixed endpoint), then move.
         Effect::MoveDamage { from, to, amount } => {
@@ -2849,6 +2876,10 @@ fn substitute_chosen_player(effect: &Effect, player: PlayerId) -> Effect {
             whose: PlayerScope::Player(player),
             take_count: *take_count,
             filter: filter.clone(),
+        },
+        Effect::ChooseOne { options, optional } => Effect::ChooseOne {
+            options: options.clone(),
+            optional: *optional,
         },
         Effect::Move {
             what: MoveSource::DeckTop { count, .. },
@@ -3760,6 +3791,20 @@ fn apply_choice_decision(
             apply_name_then_recur_decision(state, registry, player, source, &named, rest, events);
             Ok(())
         }
+        (
+            PendingDecision::ChooseOne {
+                player,
+                source,
+                options,
+                rest,
+            },
+            Decision::ChooseOption(index),
+        ) => {
+            apply_choose_one_decision(
+                state, registry, player, source, &options, index, rest, events,
+            );
+            Ok(())
+        }
         _ => Err(Rejected::InvalidDecision),
     }
 }
@@ -3838,6 +3883,29 @@ fn apply_name_card_decision(
             });
         }
     }
+    resolve_effects(state, registry, player, source, rest, events);
+    events.extend(game_state_check_with_triggers(state, registry));
+}
+
+/// Answer a [`PendingDecision::ChooseOne`]: execute the chosen effect option
+/// (§7.1.9).
+#[allow(clippy::too_many_arguments)]
+fn apply_choose_one_decision(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    player: PlayerId,
+    source: CardId,
+    options: &[Effect],
+    index: u32,
+    rest: Vec<Effect>,
+    events: &mut Vec<GameEvent>,
+) {
+    let _ = state.take_pending();
+    let chosen_effect = options
+        .get(index as usize)
+        .cloned()
+        .unwrap_or_else(|| Effect::All(vec![])); // Default to no-op if index is invalid
+    resolve_effects(state, registry, player, source, vec![chosen_effect], events);
     resolve_effects(state, registry, player, source, rest, events);
     events.extend(game_state_check_with_triggers(state, registry));
 }

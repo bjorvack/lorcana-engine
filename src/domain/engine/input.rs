@@ -106,6 +106,8 @@ pub enum Decision {
     ChoosePlayer(PlayerId),
     /// For `NameCard`: the card name the player names (§8.2).
     NameCard(String),
+    /// For `ChooseOne`: the index of the chosen effect option (§7.1.9).
+    ChooseOption(u32),
 }
 
 /// Why an [`Input`] was rejected. When an input is rejected the game state is

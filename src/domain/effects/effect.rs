@@ -392,4 +392,12 @@ pub enum Effect {
         /// The effect to resolve when the condition holds.
         then: Box<Self>,
     },
+    /// "Choose one: [A] • [B] • [C]" — the controller picks one of the offered
+    /// effects to resolve (Anna / Baloo / Baymax's Healthcare Chip, §7.1.9).
+    ChooseOne {
+        /// The offered effects (2–4 options in practice; 2 is most common).
+        options: Vec<Self>,
+        /// Whether the choice is optional ("you may choose one" vs mandatory).
+        optional: bool,
+    },
 }

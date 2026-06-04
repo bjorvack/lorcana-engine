@@ -830,3 +830,113 @@ fn the_dsl_exposes_search_deck() {
     assert_eq!(*whose, PlayerScope::You);
     assert_eq!(*take_count, 2);
 }
+
+#[test]
+fn the_dsl_exposes_choose_one() {
+    use lorcana_engine::Effect;
+    let defs = load_toml(
+        r#"
+        [[card]]
+        name = "Diplomat"
+        type = "Character"
+        cost = 3
+        strength = 2
+        willpower = 3
+        lore = 1
+        [[card.abilities]]
+        on = "play"
+        do = { choose_one = [{ draw = 1 }, { gain_lore = 1 }] }
+        "#,
+    )
+    .expect("loads");
+    let Effect::ChooseOne { options, optional } = &defs[0].abilities()[0].effect else {
+        panic!("expected ChooseOne");
+    };
+    assert_eq!(options.len(), 2);
+    assert!(!*optional, "choose_one is mandatory by default");
+}
+
+#[test]
+fn the_dsl_exposes_may_choose_one() {
+    use lorcana_engine::Effect;
+    let defs = load_toml(
+        r#"
+        [[card]]
+        name = "Flexible"
+        type = "Character"
+        cost = 2
+        strength = 2
+        willpower = 2
+        lore = 1
+        [[card.abilities]]
+        on = "play"
+        do = { may_choose_one = [{ draw = 1 }, { gain_lore = 1 }] }
+        "#,
+    )
+    .expect("loads");
+    let Effect::ChooseOne { options, optional } = &defs[0].abilities()[0].effect else {
+        panic!("expected ChooseOne");
+    };
+    assert_eq!(options.len(), 2);
+    assert!(*optional, "may_choose_one is optional");
+}
+
+#[test]
+fn the_dsl_exposes_choose_one_with_optional_flag() {
+    use lorcana_engine::Effect;
+    let defs = load_toml(
+        r#"
+        [[card]]
+        name = "Optional"
+        type = "Character"
+        cost = 2
+        strength = 2
+        willpower = 2
+        lore = 1
+        [[card.abilities]]
+        on = "play"
+        do = { choose_one = [{ draw = 1 }, { gain_lore = 1 }], optional = true }
+        "#,
+    )
+    .expect("loads");
+    let Effect::ChooseOne { options, optional } = &defs[0].abilities()[0].effect else {
+        panic!("expected ChooseOne");
+    };
+    assert_eq!(options.len(), 2);
+    assert!(*optional, "explicit optional flag works");
+}
+
+#[test]
+fn anna_royal_resolution_choose_one() {
+    // Anna - Diplomatic Queen: "When you play this character, you may pay 2 {I}
+    // to choose one: • Each opponent chooses and discards a card. • Chosen
+    // character gets +2 {S} this turn. • Banish chosen damaged character."
+    use lorcana_engine::Effect;
+    let defs = load_toml(
+        r#"
+        [[card]]
+        name = "Anna"
+        type = "Character"
+        cost = 5
+        strength = 3
+        willpower = 4
+        lore = 2
+        [[card.abilities]]
+        on = "play"
+        do = { choose_one = [
+            { draw = 1 },
+            { gain_lore = 1 },
+            { banish = "chosen character" }
+        ]}
+        "#,
+    )
+    .expect("loads");
+    let Effect::ChooseOne { options, optional } = &defs[0].abilities()[0].effect else {
+        panic!("expected ChooseOne");
+    };
+    assert_eq!(options.len(), 3);
+    assert!(
+        !*optional,
+        "Anna's choose one is mandatory (the 'may' is for the ink cost)"
+    );
+}

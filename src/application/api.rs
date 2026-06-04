@@ -215,6 +215,15 @@ fn decision_actions(pending: &PendingDecision) -> Vec<Input> {
         } => choose_actions(options, *min, *max),
         // Open-ended: the host supplies the named card.
         PendingDecision::NameCard { .. } | PendingDecision::NameThenRecur { .. } => Vec::new(),
+        PendingDecision::ChooseOne { options, .. } => {
+            let decide = |d: Decision| Input::Decide(d);
+            options
+                .iter()
+                .enumerate()
+                .filter_map(|(i, _)| u32::try_from(i).ok())
+                .map(|i| decide(Decision::ChooseOption(i)))
+                .collect()
+        }
     }
 }
 
