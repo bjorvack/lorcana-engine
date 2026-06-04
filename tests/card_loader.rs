@@ -1248,3 +1248,67 @@ fn real_card_aladdin_boost_activated_ability() {
         "should have activated ability with Boost effect"
     );
 }
+
+#[test]
+fn damage_triggers_parse_correctly() {
+    // Test damage trigger DSL parsing
+    let defs = load_toml(
+        r#"
+        [[card]]
+        name = "DamageTriggerCard"
+        type = "Character"
+        cost = 3
+        strength = 2
+        willpower = 3
+        lore = 1
+        [[card.abilities]]
+        on = "dealt_damage"
+        do = { gain_lore = 1 }
+        [[card]]
+        name = "OpponentDamageTriggerCard"
+        type = "Character"
+        cost = 3
+        strength = 2
+        willpower = 3
+        lore = 1
+        [[card.abilities]]
+        on = "opposing_dealt_damage"
+        do = { draw = 1 }
+        [[card]]
+        name = "DamageRemovalTriggerCard"
+        type = "Character"
+        cost = 3
+        strength = 2
+        willpower = 3
+        lore = 1
+        [[card.abilities]]
+        on = "damage_removed"
+        do = { give_strength = 1 }
+        "#,
+    )
+    .expect("loads");
+
+    // Check for dealt_damage trigger
+    let has_dealt_damage = defs[0]
+        .abilities()
+        .iter()
+        .any(|a| matches!(a.condition, TriggerCondition::WhenThisIsDealtDamage));
+    assert!(has_dealt_damage, "should have dealt_damage trigger");
+
+    // Check for opposing_dealt_damage trigger
+    let has_opposing_dealt_damage = defs[1]
+        .abilities()
+        .iter()
+        .any(|a| matches!(a.condition, TriggerCondition::WhenOpposingIsDealtDamage));
+    assert!(
+        has_opposing_dealt_damage,
+        "should have opposing_dealt_damage trigger"
+    );
+
+    // Check for damage_removed trigger
+    let has_damage_removed = defs[2]
+        .abilities()
+        .iter()
+        .any(|a| matches!(a.condition, TriggerCondition::WhenDamageRemovedFromThis));
+    assert!(has_damage_removed, "should have damage_removed trigger");
+}

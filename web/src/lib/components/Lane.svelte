@@ -35,17 +35,21 @@
     display: flex;
     align-items: center;
     gap: 0.4rem;
-    font-size: 0.7rem;
-    color: var(--muted);
+    font-size: 0.66rem;
+    font-weight: 600;
+    color: color-mix(in srgb, var(--illuminary-gold) 80%, var(--parchment));
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.12em;
   }
 
   .count {
-    padding-inline: 0.35rem;
+    padding-inline: 0.4rem;
+    padding-block: 0.05rem;
     border-radius: 1rem;
-    background: var(--surface-2);
-    color: var(--text);
+    background: color-mix(in srgb, var(--illuminary-gold) 16%, transparent);
+    border: 1px solid var(--border);
+    color: var(--parchment);
+    font-variant-numeric: tabular-nums;
   }
 
   .row {

@@ -257,24 +257,31 @@
   .play-regions {
     display: flex;
     flex-direction: column;
-    gap: var(--gap);
+    gap: calc(var(--gap) * 1.5);
     background: var(--bg-felt);
+    border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding-inline: var(--gap);
-    padding-block: var(--gap);
+    padding: calc(var(--gap) * 1.5);
     flex: 1;
     min-block-size: 280px;
+    box-shadow:
+      var(--shadow-panel),
+      inset 0 1px 0 color-mix(in srgb, var(--illuminary-gold) 14%, transparent);
   }
 
   .play-region {
     flex: 1;
     min-block-size: 0;
+    padding: calc(var(--gap) * 0.75);
+    border-radius: calc(var(--radius) - 0.2rem);
+    background: color-mix(in srgb, var(--kelp) 30%, transparent);
+    border: 1px solid color-mix(in srgb, var(--illuminary-gold) 10%, transparent);
   }
 
   .play-bottom-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--gap);
+    gap: calc(var(--gap) * 1.5);
     flex: 1;
     min-block-size: 0;
   }
@@ -308,8 +315,12 @@
     justify-content: center;
     align-items: center;
     gap: 2rem;
-    padding-block: 0.5rem;
+    padding-block: 0.6rem;
+    padding-inline: var(--gap);
     min-block-size: 120px;
+    border-radius: var(--radius);
+    background: color-mix(in srgb, var(--surface) 45%, transparent);
+    border: 1px solid color-mix(in srgb, var(--illuminary-gold) 10%, transparent);
   }
 
   .ink-group {
@@ -325,21 +336,23 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    font-size: 0.7rem;
+    font-size: 0.66rem;
     font-weight: 600;
-    color: var(--muted);
+    color: color-mix(in srgb, var(--illuminary-gold) 80%, var(--parchment));
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.12em;
   }
 
   .ink-count {
     padding-inline: 0.4rem;
     padding-block: 0.15rem;
     border-radius: 1rem;
-    background: var(--surface-2);
-    color: var(--ink);
+    background: color-mix(in srgb, var(--illuminary-gold) 16%, transparent);
+    border: 1px solid var(--border);
+    color: var(--parchment);
     font-weight: 700;
     font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
   }
 
   .ink-cards {

@@ -19,6 +19,7 @@
   );
   --surface: color-mix(in srgb, var(--kelp) 78%, var(--lorcana-indigo));
   --surface-2: color-mix(in srgb, var(--kelp) 64%, var(--lorcana-indigo));
+  --surface-3: color-mix(in srgb, var(--kelp) 50%, var(--lorcana-indigo));
 
   /* Gold hairlines: refined, low-contrast frames that read as premium. */
   --border: color-mix(in srgb, var(--illuminary-gold) 22%, transparent);
@@ -60,7 +61,12 @@ body {
 
 body {
   min-block-size: 100dvh;
-  background: var(--bg);
+  /* Official Disney Lorcana "Evergreen" cosmic backdrop, anchored on the
+     Kelp base so UI panels float above it with a subtle vignette. */
+  background:
+    radial-gradient(circle at 50% 0%, rgb(0 0 0 / 35%), rgb(0 0 0 / 78%) 70%),
+    url('/brand/evergreen-bg.webp') center / cover fixed no-repeat,
+    var(--bg);
   color: var(--text);
 }
 

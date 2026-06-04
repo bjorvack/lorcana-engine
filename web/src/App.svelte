@@ -49,7 +49,10 @@
 </script>
 
 <header class="topbar">
-  <h1>Lorcana Board Viewer</h1>
+  <div class="brand">
+    <img class="logo" src="/brand/logo.png" alt="Disney Lorcana" />
+    <span class="subtitle">Board Viewer</span>
+  </div>
   <div class="controls">
     <label>
       Seed
@@ -80,15 +83,32 @@
     gap: 1rem;
     align-items: center;
     justify-content: space-between;
-    padding: 0.7rem 1rem;
+    padding: 0.6rem 1.2rem;
     border-block-end: 1px solid var(--border);
-    background: var(--surface);
+    background: color-mix(in srgb, var(--surface) 72%, transparent);
+    backdrop-filter: blur(10px);
+    box-shadow: var(--shadow-soft);
   }
 
-  h1 {
-    margin: 0;
-    font-size: 1.1rem;
-    letter-spacing: 0.01em;
+  .brand {
+    display: flex;
+    align-items: baseline;
+    gap: 0.7rem;
+  }
+
+  .logo {
+    block-size: 2.1rem;
+    inline-size: auto;
+    display: block;
+    filter: drop-shadow(0 1px 3px rgb(0 0 0 / 55%));
+  }
+
+  .subtitle {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--muted);
   }
 
   .controls {
@@ -117,7 +137,7 @@
 
   button[aria-pressed='true'] {
     background: var(--accent);
-    color: oklch(20% 0.02 280deg);
+    color: var(--kelp);
     border-color: var(--accent);
   }
 

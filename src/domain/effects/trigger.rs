@@ -90,4 +90,13 @@ pub enum TriggerCondition {
     /// "At the end of your turn" — fires for the active player's cards and
     /// resolves in the End of Turn phase (§4.4.1).
     AtEndOfTurn,
+    /// "Whenever this character is dealt damage" — fires when damage is marked
+    /// on the character (~16 cards).
+    WhenThisIsDealtDamage,
+    /// "Whenever an opposing character is dealt damage" — fires when an opponent's
+    /// character takes damage.
+    WhenOpposingIsDealtDamage,
+    /// "Whenever you remove damage from this character" — fires when damage
+    /// counters are removed from the character.
+    WhenDamageRemovedFromThis,
 }

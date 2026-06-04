@@ -901,6 +901,7 @@ fn enqueue_support_trigger(
 ///     this is banished" ride the banishment path (`game_state_check`).
 ///   - Resist damage reduction is applied (Slice 6a); "takes no damage from the
 ///     challenge" and other damage replacement is Slice 8.
+#[allow(clippy::too_many_lines)]
 fn apply_challenge(
     state: &mut GameState,
     registry: &CardRegistry,
@@ -953,6 +954,62 @@ fn apply_challenge(
     }
     add_damage(state, target_owner, target, damage_to_target);
     add_damage(state, active, challenger, damage_to_challenger);
+
+    // Enqueue damage triggers
+    if damage_to_target > 0 {
+        enqueue_self_triggers(
+            state,
+            registry,
+            target_owner,
+            target,
+            &TriggerCondition::WhenThisIsDealtDamage,
+        );
+        let opponent = active; // The challenger dealt damage to the target
+        let opp_cards: Vec<_> = state
+            .player(opponent)
+            .expect("opponent exists")
+            .play()
+            .iter()
+            .map(|c| (c.id(), c.definition()))
+            .collect();
+        for (card_id, def_id) in opp_cards {
+            enqueue_triggers_for_def(
+                state,
+                registry,
+                opponent,
+                card_id,
+                def_id,
+                &TriggerCondition::WhenOpposingIsDealtDamage,
+            );
+        }
+    }
+    if damage_to_challenger > 0 {
+        enqueue_self_triggers(
+            state,
+            registry,
+            active,
+            challenger,
+            &TriggerCondition::WhenThisIsDealtDamage,
+        );
+        let opponent = target_owner; // The target dealt damage to the challenger
+        let opp_cards: Vec<_> = state
+            .player(opponent)
+            .expect("opponent exists")
+            .play()
+            .iter()
+            .map(|c| (c.id(), c.definition()))
+            .collect();
+        for (card_id, def_id) in opp_cards {
+            enqueue_triggers_for_def(
+                state,
+                registry,
+                opponent,
+                card_id,
+                def_id,
+                &TriggerCondition::WhenOpposingIsDealtDamage,
+            );
+        }
+    }
 
     let mut events = vec![GameEvent::Challenged {
         player: active,
@@ -3418,6 +3475,7 @@ mod tests {
 /// `target_card`, evaluating its [`Amount`] at resolution.
 fn apply_amount_effect(
     state: &mut GameState,
+    registry: &CardRegistry,
     controller: PlayerId,
     source: CardId,
     target_card: CardId,
@@ -3447,13 +3505,22 @@ fn apply_amount_effect(
         }
         Effect::RemoveDamage { .. } => {
             let remove = u32::try_from(value.max(0)).unwrap_or(0);
-            if let Some(owner) = owner_holding(state, target_card)
+            if remove > 0
+                && let Some(owner) = owner_holding(state, target_card)
                 && let Some(c) = state
                     .player_mut(owner)
                     .and_then(|p| p.play_mut().iter_mut().find(|c| c.id() == target_card))
             {
                 let conditions = c.conditions_mut();
                 conditions.damage = conditions.damage.saturating_sub(remove);
+                // Enqueue "whenever you remove damage from this character" triggers
+                enqueue_self_triggers(
+                    state,
+                    registry,
+                    owner,
+                    target_card,
+                    &TriggerCondition::WhenDamageRemovedFromThis,
+                );
             }
         }
         _ => {}
@@ -3755,7 +3822,15 @@ fn apply_effect_to(
         Effect::GiveStrengthThisTurn { amount, .. }
         | Effect::DealDamage { amount, .. }
         | Effect::RemoveDamage { amount, .. } => {
-            apply_amount_effect(state, controller, source, target_card, effect, amount);
+            apply_amount_effect(
+                state,
+                registry,
+                controller,
+                source,
+                target_card,
+                effect,
+                amount,
+            );
         }
         Effect::Banish(_) => {
             banish_by_effect(state, registry, target_card, events);

@@ -101,6 +101,9 @@ fn trigger_from(s: &str) -> Result<TriggerCondition, String> {
         "banishes_in_challenge" => TriggerCondition::WhenBanishesInChallenge,
         "start_of_turn" => TriggerCondition::AtStartOfTurn,
         "end_of_turn" => TriggerCondition::AtEndOfTurn,
+        "dealt_damage" => TriggerCondition::WhenThisIsDealtDamage,
+        "opposing_dealt_damage" => TriggerCondition::WhenOpposingIsDealtDamage,
+        "damage_removed" => TriggerCondition::WhenDamageRemovedFromThis,
         other => return Err(format!("unknown trigger {other:?}")),
     })
 }
