@@ -1050,3 +1050,31 @@ fn count_condition_effects() {
     };
     assert_eq!(*condition, CountCondition::HandSizeAtLeast(3));
 }
+
+#[test]
+fn shift_conditional_trigger() {
+    use lorcana_engine::{Effect, TriggerCondition};
+    let defs = load_toml(
+        r#"
+        [[card]]
+        name = "Shift Test"
+        type = "Character"
+        cost = 3
+        strength = 2
+        willpower = 3
+        lore = 1
+        [[card.abilities]]
+        on = "play_with_shift"
+        do = { draw = 2 }
+        "#,
+    )
+    .expect("loads");
+    assert_eq!(
+        defs[0].abilities()[0].condition,
+        TriggerCondition::WhenYouPlayThisWithShift
+    );
+    let Effect::Draw { amount, who: _ } = &defs[0].abilities()[0].effect else {
+        panic!("expected Draw");
+    };
+    assert_eq!(*amount, Amount::Fixed(2));
+}

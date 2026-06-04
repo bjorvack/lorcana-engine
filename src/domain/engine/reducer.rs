@@ -281,7 +281,14 @@ fn apply_play_card(
         });
         return Ok(events);
     }
-    enqueue_enter_play_triggers(state, registry, active, card, definition_id);
+    enqueue_enter_play_triggers(
+        state,
+        registry,
+        active,
+        card,
+        definition_id,
+        shift_onto.is_some(),
+    );
     events.extend(resolve_bag(state, registry));
     Ok(events)
 }
@@ -301,6 +308,7 @@ fn enqueue_enter_play_triggers(
     controller: PlayerId,
     card: CardId,
     definition_id: CardDefId,
+    was_shifted: bool,
 ) {
     enqueue_self_triggers(
         state,
@@ -309,6 +317,15 @@ fn enqueue_enter_play_triggers(
         card,
         &TriggerCondition::WhenYouPlayThis,
     );
+    if was_shifted {
+        enqueue_self_triggers(
+            state,
+            registry,
+            controller,
+            card,
+            &TriggerCondition::WhenYouPlayThisWithShift,
+        );
+    }
     enqueue_play_a_card_triggers(state, registry, controller, card, definition_id);
 }
 
@@ -3389,7 +3406,7 @@ fn play_card_free(
     apply_enter_statics(state, player, card, &statics);
     apply_enter_rule_statics(state, player, card, &rule_statics);
     events.push(GameEvent::CardPlayed { player, card });
-    enqueue_enter_play_triggers(state, registry, player, card, def_id);
+    enqueue_enter_play_triggers(state, registry, player, card, def_id, false);
 }
 
 /// Put a permanent into play from `player`'s hand without paying its cost
@@ -4222,6 +4239,6 @@ fn apply_enter_exerted_decision(
         c.conditions_mut().ready = false;
     }
     if let Some(definition_id) = state.instance_in_play(card).map(CardInstance::definition) {
-        enqueue_enter_play_triggers(state, registry, player, card, definition_id);
+        enqueue_enter_play_triggers(state, registry, player, card, definition_id, false);
     }
 }

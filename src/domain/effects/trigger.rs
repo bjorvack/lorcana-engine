@@ -57,6 +57,9 @@ pub enum TriggerCondition {
     /// "When you play this character/item/location" — fires on the source card
     /// entering play (the dominant trigger, ~480 cards).
     WhenYouPlayThis,
+    /// "When you play this character/item/location via Shift" — fires only if
+    /// the card was played using its Shift ability (~23 cards).
+    WhenYouPlayThisWithShift,
     /// "Whenever this character quests" (~200 cards).
     WhenThisQuests,
     /// "Whenever you play a [category]" — fires on another card the controller
