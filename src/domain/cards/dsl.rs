@@ -790,6 +790,13 @@ fn amount_from_str(s: &str) -> Option<Amount> {
     if lower == "damage on self" || lower == "damage on this" {
         return Some(Amount::DamageOnSource);
     }
+    // "that much" / "that many" / "damage dealt" — the amount the trigger carries.
+    if matches!(
+        lower.as_str(),
+        "that much" | "that many" | "damage dealt" | "damage_dealt"
+    ) {
+        return Some(Amount::TriggerAmount);
+    }
     if lower.starts_with("per ") {
         // Slice the original (case-preserving) string so classifications keep case.
         return parse_filter(s["per ".len()..].trim()).map(Amount::PerMatchingCharacter);

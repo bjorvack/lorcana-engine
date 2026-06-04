@@ -30,6 +30,11 @@ pub enum Amount {
     /// The number of damage counters on the effect's source ("for each 1 damage on
     /// her").
     DamageOnSource,
+    /// The amount carried by the triggering event — "deal **that much** damage",
+    /// "draw **that many** cards". Only meaningful inside a triggered ability whose
+    /// trigger supplies a number (e.g. damage dealt); the firing site substitutes
+    /// the concrete value when the trigger is enqueued. Evaluates to 0 otherwise.
+    TriggerAmount,
 }
 
 impl Amount {
@@ -37,6 +42,17 @@ impl Amount {
     #[must_use]
     pub const fn fixed(n: i32) -> Self {
         Self::Fixed(n)
+    }
+
+    /// Substitute the triggering event's value for [`Amount::TriggerAmount`] ("that
+    /// much"), turning it into a concrete [`Amount::Fixed`]. Other amounts are
+    /// unchanged.
+    #[must_use]
+    pub fn with_trigger_amount(self, value: i32) -> Self {
+        match self {
+            Self::TriggerAmount => Self::Fixed(value),
+            other => other,
+        }
     }
 }
 
@@ -436,4 +452,132 @@ pub enum Effect {
         /// Whether the choice is optional ("you may choose one" vs mandatory).
         optional: bool,
     },
+}
+
+impl Effect {
+    /// Substitute the triggering event's value for every [`Amount::TriggerAmount`]
+    /// ("that much" / "that many") in this effect, recursing into nested effects.
+    /// Called once when a triggered ability that references the trigger's amount is
+    /// enqueued, so the bagged effect carries a concrete value.
+    #[must_use]
+    #[allow(clippy::too_many_lines)] // one variant-dispatch match over a large enum
+    pub fn with_trigger_amount(self, value: i32) -> Self {
+        let recur = |e: Box<Self>| Box::new(e.with_trigger_amount(value));
+        match self {
+            // Amount-bearing leaves: substitute the amount.
+            Self::Draw { who, amount } => Self::Draw {
+                who,
+                amount: amount.with_trigger_amount(value),
+            },
+            Self::Lore { who, amount } => Self::Lore {
+                who,
+                amount: amount.with_trigger_amount(value),
+            },
+            Self::GiveStrengthThisTurn { target, amount } => Self::GiveStrengthThisTurn {
+                target,
+                amount: amount.with_trigger_amount(value),
+            },
+            Self::DealDamage { target, amount } => Self::DealDamage {
+                target,
+                amount: amount.with_trigger_amount(value),
+            },
+            Self::RemoveDamage { target, amount } => Self::RemoveDamage {
+                target,
+                amount: amount.with_trigger_amount(value),
+            },
+            Self::MoveDamage { from, to, amount } => Self::MoveDamage {
+                from,
+                to,
+                amount: amount.with_trigger_amount(value),
+            },
+            Self::Boost { count } => Self::Boost {
+                count: count.with_trigger_amount(value),
+            },
+            Self::Move {
+                what: MoveSource::DeckTop { who, count },
+                to,
+            } => Self::Move {
+                what: MoveSource::DeckTop {
+                    who,
+                    count: count.with_trigger_amount(value),
+                },
+                to,
+            },
+            Self::NameThenReveal {
+                lore_on_match,
+                match_to,
+                otherwise_to,
+            } => Self::NameThenReveal {
+                lore_on_match: lore_on_match.with_trigger_amount(value),
+                match_to,
+                otherwise_to,
+            },
+            // Nested-effect variants: recurse.
+            Self::All(seq) => Self::All(
+                seq.into_iter()
+                    .map(|e| e.with_trigger_amount(value))
+                    .collect(),
+            ),
+            Self::May(inner) => Self::May(recur(inner)),
+            Self::ScheduleDelayed { when, effect } => Self::ScheduleDelayed {
+                when,
+                effect: recur(effect),
+            },
+            Self::IfControl {
+                filter,
+                at_least,
+                then,
+            } => Self::IfControl {
+                filter,
+                at_least,
+                then: recur(then),
+            },
+            Self::IfCount { condition, then } => Self::IfCount {
+                condition,
+                then: recur(then),
+            },
+            Self::IfTargetMatches {
+                target,
+                filter,
+                then,
+                otherwise,
+            } => Self::IfTargetMatches {
+                target,
+                filter,
+                then: recur(then),
+                otherwise: recur(otherwise),
+            },
+            Self::GrantAbilityThisTurn {
+                target,
+                condition,
+                effect,
+                optional,
+            } => Self::GrantAbilityThisTurn {
+                target,
+                condition,
+                effect: recur(effect),
+                optional,
+            },
+            Self::GrantActivatedThisTurn {
+                target,
+                ink,
+                exert_self,
+                effect,
+            } => Self::GrantActivatedThisTurn {
+                target,
+                ink,
+                exert_self,
+                effect: recur(effect),
+            },
+            Self::ChooseOne { options, optional } => Self::ChooseOne {
+                options: options
+                    .into_iter()
+                    .map(|e| e.with_trigger_amount(value))
+                    .collect(),
+                optional,
+            },
+            // No amount and no nested effect: unchanged.
+            other => other,
+        }
+    }
 }

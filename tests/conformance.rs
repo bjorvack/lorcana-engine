@@ -1199,7 +1199,8 @@ fn ready_trigger_fires_on_turn_start() {
 
 /// Damage trigger mimics WATCH THE TEETH (Hydra - Deadly Serpent, set 3):
 /// "Whenever this character is dealt damage, deal that much damage to chosen opposing character."
-/// Note: Simplified to use fixed amount since DSL doesn't support `damage_dealt` dynamic amount yet.
+/// This variant uses a fixed amount; `watch_the_teeth_deals_back_the_damage_just_taken`
+/// covers the dynamic "that much" trigger-context amount.
 #[test]
 fn damage_trigger_mimics_watch_the_teeth() {
     let reg = registry_from(
@@ -1554,5 +1555,75 @@ fn aladdin_heroic_outlaw_trigger_is_gated_to_your_turn() {
         lore(&state, foe),
         5,
         "the opponent's lore is untouched (trigger gated out)"
+    );
+}
+
+/// Hydra - Deadly Serpent (set 3) WATCH THE TEETH: "Whenever this character is dealt
+/// damage, deal **that much** damage to chosen opposing character." Exercises the
+/// trigger-context amount — the damage dealt back equals the damage just taken.
+#[test]
+fn watch_the_teeth_deals_back_the_damage_just_taken() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Hydra - Deadly Serpent"
+        type = "Character"
+        cost = 6
+        ink = ["Ruby"]
+        strength = 6
+        willpower = 5
+        lore = 2
+        [[card.abilities]]
+        on = "dealt_damage"
+        do = { deal_damage = "that much", to = "chosen opposing character" }
+        [[card]]
+        name = "Wall"
+        type = "Character"
+        cost = 3
+        ink = ["Ruby"]
+        strength = 3
+        willpower = 9
+        lore = 1
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let foe = opponent_of(&state, me);
+
+    // My Hydra (def 0) ready; the foe's wall (def 1) exerted so I can challenge it.
+    let hydra = place(&mut state, me, 100, 0, 6, 5, true);
+    let wall = place(&mut state, foe, 200, 1, 3, 9, false);
+
+    // Challenge: Hydra deals 6 to the wall (survives, 9 WP), the wall deals 3 back
+    // to Hydra — which fires WATCH THE TEETH for "that much" (3) damage.
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Challenge {
+            challenger: hydra,
+            target: wall,
+        },
+    )
+    .expect("challenge");
+
+    // The trigger wants a chosen opposing character; the only one is the wall.
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(lorcana_engine::Decision::ChooseTarget(wall)),
+    )
+    .expect("choose opposing character");
+
+    // Hydra kept exactly the 3 damage it took.
+    assert_eq!(damage(&state, me, hydra), Some(3), "hydra took 3 damage");
+    // Wall took 6 (combat) + 3 (the trigger's "that much") = 9 == willpower -> banished.
+    assert!(
+        state
+            .player(foe)
+            .unwrap()
+            .play()
+            .iter()
+            .all(|c| c.id() != wall),
+        "wall banished by 6 combat + 3 'that much' trigger damage"
     );
 }

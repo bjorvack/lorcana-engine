@@ -744,8 +744,14 @@ Turning the loaded card pool into functional cards, driven by a recurring
 expressibility triage. Latest triage: ~40% of cards fully functional (vanilla +
 keyword-only + authored/expressible); ~300 cards now have authored abilities
 across sets 1–12 + promos (multiple parallel worktree passes). Top remaining
-blockers: look-at-top/reveal (~180), modal "choose one" (~80), trigger-context
-amounts ("equal to / that much").
+blockers: look-at-top/reveal (~180), modal "choose one" (~80).
+
+- [x] **trigger-context amounts ("that much" / "that many")** — `Amount::TriggerAmount`
+  (DSL `"that much"` / `"damage dealt"`); the firing site substitutes the concrete
+  value into the enqueued effect via `Effect::with_trigger_amount`, so the bagged
+  effect carries a constant (resolution pipeline untouched). Wired for damage
+  triggers (`WhenThisIsDealtDamage`); authors Hydra - Deadly Serpent's WATCH THE
+  TEETH (set 3). `tests/conformance.rs::watch_the_teeth_deals_back_the_damage_just_taken`.
 
 - [x] **DSL selector predicates** — `parse_filter` parses by-name / by-cost /
   by-stat-threshold (`"named X"`, `"with cost N or less"`, `"with N {S} or more"`),

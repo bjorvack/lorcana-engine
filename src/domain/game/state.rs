@@ -605,6 +605,9 @@ impl GameState {
             Amount::DamageOnSource => self.instance_in_play(source).map_or(0, |c| {
                 i32::try_from(c.conditions().damage).unwrap_or(i32::MAX)
             }),
+            // The firing site substitutes the concrete value at enqueue time; an
+            // unsubstituted trigger amount (outside a numbered trigger) is 0.
+            Amount::TriggerAmount => 0,
         }
     }
 

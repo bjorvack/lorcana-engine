@@ -965,12 +965,13 @@ fn apply_challenge(
 
     // Enqueue damage triggers
     if damage_to_target > 0 {
-        enqueue_self_triggers(
+        enqueue_self_triggers_with_context(
             state,
             registry,
             target_owner,
             target,
             &TriggerCondition::WhenThisIsDealtDamage,
+            Some(i32::try_from(damage_to_target).unwrap_or(i32::MAX)),
         );
         let opponent = active; // The challenger dealt damage to the target
         let opp_cards: Vec<_> = state
@@ -992,12 +993,13 @@ fn apply_challenge(
         }
     }
     if damage_to_challenger > 0 {
-        enqueue_self_triggers(
+        enqueue_self_triggers_with_context(
             state,
             registry,
             active,
             challenger,
             &TriggerCondition::WhenThisIsDealtDamage,
+            Some(i32::try_from(damage_to_challenger).unwrap_or(i32::MAX)),
         );
         let opponent = target_owner; // The target dealt damage to the challenger
         let opp_cards: Vec<_> = state
@@ -1989,16 +1991,30 @@ fn enqueue_self_triggers(
     source: CardId,
     condition: &TriggerCondition,
 ) {
+    enqueue_self_triggers_with_context(state, registry, controller, source, condition, None);
+}
+
+/// Like [`enqueue_self_triggers`] but supplies the triggering event's amount
+/// ("that much") so effects referencing [`Amount::TriggerAmount`] resolve to it.
+fn enqueue_self_triggers_with_context(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    controller: PlayerId,
+    source: CardId,
+    condition: &TriggerCondition,
+    context: Option<i32>,
+) {
     let Ok(instance) = find_in_play(state, controller, source) else {
         return;
     };
-    enqueue_triggers_for_def(
+    enqueue_triggers_for_def_with_context(
         state,
         registry,
         controller,
         source,
         instance.definition(),
         condition,
+        context,
     );
 }
 
@@ -2012,6 +2028,28 @@ fn enqueue_triggers_for_def(
     source: CardId,
     definition_id: CardDefId,
     condition: &TriggerCondition,
+) {
+    enqueue_triggers_for_def_with_context(
+        state,
+        registry,
+        controller,
+        source,
+        definition_id,
+        condition,
+        None,
+    );
+}
+
+/// Like [`enqueue_triggers_for_def`] but, when `context` is `Some(n)`, substitutes
+/// `n` for every [`Amount::TriggerAmount`] ("that much") in the enqueued effects.
+fn enqueue_triggers_for_def_with_context(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    controller: PlayerId,
+    source: CardId,
+    definition_id: CardDefId,
+    condition: &TriggerCondition,
+    context: Option<i32>,
 ) {
     let Some(definition) = registry.get(definition_id) else {
         return;
@@ -2035,6 +2073,11 @@ fn enqueue_triggers_for_def(
             .map(|g| (g.optional, g.effect.clone())),
     );
     for (optional, effect) in matches {
+        // Bind "that much" / "that many" to the triggering event's amount.
+        let effect = match context {
+            Some(n) => effect.with_trigger_amount(n),
+            None => effect,
+        };
         let _ = state.enqueue_trigger(controller, source, optional, effect);
     }
 }

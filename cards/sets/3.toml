@@ -705,10 +705,9 @@ willpower = 5
 lore = 2
 classifications = ["Storyborn"]
 text = "WATCH THE TEETH Whenever this character is dealt damage, deal that much damage to chosen opposing character."
-# TODO: Convert to DSL once "damage_dealt" dynamic amount is supported
-# [[card.abilities]]
-# on = "dealt_damage"
-# do = { deal_damage = { to = "chosen opposing character", amount = "damage_dealt" } }
+[[card.abilities]]
+on = "dealt_damage"
+do = { deal_damage = "that much", to = "chosen opposing character" }
 
 [[card]]
 name = "Hydros - Ice Titan"
