@@ -212,6 +212,8 @@
     position: fixed;
     z-index: 9999;
     pointer-events: none;
+    /* Centred on the cursor's location. */
+    translate: -50% -50%;
     inline-size: 280px;
     background: var(--surface);
     border-radius: 0.5rem;

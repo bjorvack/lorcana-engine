@@ -162,7 +162,13 @@
 
   <!-- Hand -->
   <div class="hand-zone">
-    <Lane label={revealHand ? 'Hand' : 'Hand (hidden)'} cards={hand} empty="Empty hand" clip />
+    <Lane
+      label={revealHand ? 'Hand' : 'Hand (hidden)'}
+      cards={hand}
+      empty="Empty hand"
+      clip={mirrored}
+      bleed={!mirrored}
+    />
   </div>
 </section>
 
@@ -212,6 +218,12 @@
     border-radius: var(--radius);
     min-block-size: 0;
     overflow: hidden;
+  }
+
+  /* Your seat lets the hand spill past its bottom edge so it can reach the
+     screen border (clipped by the viewport, not by this container). */
+  .side:not(.mirrored) {
+    overflow: visible;
   }
 
   .side.active {

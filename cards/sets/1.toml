@@ -49,6 +49,10 @@ lore = 2
 classifications = ["Floodborn", "Hero"]
 keywords = ["Shift 5"]
 text = "Shift 5 (You may pay 5 {I} to play this on top of one of your characters named Aladdin.)\nDARING EXPLOIT During your turn, whenever this character banishes another character in a challenge, you gain 2 lore and each opponent loses 2 lore."
+[[card.abilities]]
+on = "banishes_in_challenge"
+do = { gain_lore = 2, lose_lore = { amount = 2, who = "each opponent" } }
+# TODO: Add "During your turn" qualifier when DSL supports it
 
 [[card]]
 name = "Aladdin - Prince Ali"
@@ -76,10 +80,9 @@ willpower = 2
 lore = 1
 classifications = ["Storyborn", "Hero"]
 text = "IMPROVISE When you play this character, each opponent loses 1 lore."
-
 [[card.abilities]]
 on = "play"
-do = { lose_lore = 1 }
+do = { lose_lore = 1, who = "each opponent" }
 
 [[card]]
 name = "Anna - Heir to Arendelle"

@@ -147,8 +147,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0.5rem 1rem;
-    overflow: hidden;
+    padding: 0.5rem 1rem 0;
+    /* Your hand bleeds to the bottom of the screen; #app clips at the viewport. */
+    overflow: visible;
   }
 
   .error {

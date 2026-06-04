@@ -59,12 +59,15 @@
     flex: 1;
     min-block-size: 0;
     padding: clamp(0.5rem, 1.2vw, 1rem);
+    padding-block-end: 0;
     border-radius: calc(var(--radius) * 1.5);
     background: color-mix(in srgb, var(--surface) 55%, transparent);
     border: 1px solid var(--border);
+    border-block-end: none;
     backdrop-filter: blur(6px);
     box-shadow: var(--shadow-panel);
-    overflow: hidden;
+    /* Let your hand spill out the bottom to the screen edge. */
+    overflow: visible;
   }
 
   /* Each player's mat shares the height equally; the centre strip is fixed. */

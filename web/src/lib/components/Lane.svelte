@@ -8,18 +8,21 @@
     empty = '—',
     variant = 'full',
     clip = false,
+    bleed = false,
   }: {
     label: string;
     cards: DisplayCard[];
     empty?: string;
     /** How each card renders: square art crop (`art`) or whole card (`full`). */
     variant?: 'full' | 'art';
-    /** Show only the top of the cards (used for the hand to save space). */
+    /** Show only the top of the cards, clipped within the lane (opponent hand). */
     clip?: boolean;
+    /** Full-size cards that overflow downward, clipped by the screen edge. */
+    bleed?: boolean;
   } = $props();
 </script>
 
-<section class="lane" class:art={variant === 'art'} class:clip aria-label={label}>
+<section class="lane" class:art={variant === 'art'} class:clip class:bleed aria-label={label}>
   <header>
     <span class="name">{label}</span>
     <span class="count">{cards.length}</span>
@@ -82,12 +85,21 @@
     block-size: var(--card-w);
   }
 
-  /* Clipped lane (the hand): only the top of each card shows, freeing space
-     for the rest of the mat. The full card is available on hover. */
+  /* Clipped lane (opponent hand): only the top of each card shows, clipped
+     within the lane. The full card is available on hover. */
   .lane.clip .row {
     block-size: calc(var(--card-h) * 0.5);
     align-items: flex-start;
     overflow: visible hidden;
+  }
+
+  /* Bleed lane (your hand): reserve only a sliver in layout; render full-size
+     cards that overflow downward and are clipped by the screen edge, so no
+     vertical space is wasted on the rest of the mat. */
+  .lane.bleed .row {
+    block-size: calc(var(--card-h) * 0.42);
+    align-items: flex-start;
+    overflow: visible;
   }
 
   .empty {
