@@ -33,6 +33,22 @@ impl CardRegistry {
     pub fn get(&self, id: CardDefId) -> Option<&CardDefinition> {
         self.definitions.get(&id)
     }
+
+    /// Iterate all `(id, definition)` pairs (ascending id).
+    pub fn iter(&self) -> impl Iterator<Item = (CardDefId, &CardDefinition)> {
+        self.definitions.iter().map(|(id, def)| (*id, def))
+    }
+
+    /// The id of a card whose full name (or one of its names) matches `name` —
+    /// the lowest such id, since printings share a name (§2.1.1.3). Used to
+    /// resolve a plain-text deck list (which carries names, not printings).
+    #[must_use]
+    pub fn find_by_name(&self, name: &str) -> Option<CardDefId> {
+        self.definitions
+            .iter()
+            .find(|(_, def)| def.has_name(name))
+            .map(|(id, _)| *id)
+    }
 }
 
 impl FromIterator<CardDefinition> for CardRegistry {

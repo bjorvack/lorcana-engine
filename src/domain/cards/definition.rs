@@ -11,7 +11,7 @@ use super::ability::{ActivatedAbility, GameRuleStatic, StaticAbility, TriggeredA
 use super::card_kind::CardKind;
 use super::keyword::{Keyword, ShiftAbility};
 use crate::domain::effects::Effect;
-use crate::domain::types::card::{CardType, Classification};
+use crate::domain::types::card::{CardType, Classification, InkType};
 use crate::domain::types::ids::CardDefId;
 use serde::{Deserialize, Serialize};
 
@@ -49,6 +49,15 @@ pub struct CardDefinition {
     /// abilities. Resolved directly when the action is played (not via the bag,
     /// §6.3.1.2), then the card goes to discard. Empty for non-actions.
     action_effects: Vec<Effect>,
+    /// The card's ink type(s) (§6.2.3) — one, or two for dual-ink cards. Both of a
+    /// dual-ink card's colours count toward a deck's ≤2-ink identity (§2.1.1.2).
+    ink_types: Vec<InkType>,
+    /// Deck-building copy limit override (§2.1.1.3). `None` = the default 4; some
+    /// cards print their own (e.g. 99 for Dalmatian Puppy, 2 for The Glass Slipper).
+    max_deck_copies: Option<u32>,
+    /// Relative path to the card's image **stored within the project** (e.g.
+    /// `assets/cards/1/195.avif`), for display. Never an external URL. `None` if unset.
+    image: Option<String>,
 }
 
 impl CardDefinition {
@@ -68,6 +77,9 @@ impl CardDefinition {
             keywords: Vec::new(),
             names: Vec::new(),
             action_effects: Vec::new(),
+            ink_types: Vec::new(),
+            max_deck_copies: None,
+            image: None,
         }
     }
 
@@ -146,6 +158,27 @@ impl CardDefinition {
     #[must_use]
     pub fn with_action_effects(mut self, action_effects: Vec<Effect>) -> Self {
         self.action_effects = action_effects;
+        self
+    }
+
+    /// Set the card's ink type(s) (builder).
+    #[must_use]
+    pub fn with_ink_types(mut self, ink_types: Vec<InkType>) -> Self {
+        self.ink_types = ink_types;
+        self
+    }
+
+    /// Set a deck-building copy-limit override (builder).
+    #[must_use]
+    pub const fn with_max_deck_copies(mut self, max: Option<u32>) -> Self {
+        self.max_deck_copies = max;
+        self
+    }
+
+    /// Set the card's display image URL/path (builder).
+    #[must_use]
+    pub fn with_image(mut self, image: Option<String>) -> Self {
+        self.image = image;
         self
     }
 
@@ -329,6 +362,27 @@ impl CardDefinition {
     #[must_use]
     pub fn action_effects(&self) -> &[Effect] {
         &self.action_effects
+    }
+
+    /// The card's ink type(s) — one, or two for dual-ink (§6.2.3).
+    #[must_use]
+    pub fn ink_types(&self) -> &[InkType] {
+        &self.ink_types
+    }
+
+    /// The deck-building copy limit for this card (its override, or the default 4).
+    #[must_use]
+    pub const fn max_deck_copies(&self) -> u32 {
+        match self.max_deck_copies {
+            Some(n) => n,
+            None => 4,
+        }
+    }
+
+    /// The card's image: a project-relative asset path, if set (never external).
+    #[must_use]
+    pub fn image(&self) -> Option<&str> {
+        self.image.as_deref()
     }
 
     /// Whether this card is a song (an action with the "Song" classification,

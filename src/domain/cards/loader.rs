@@ -25,7 +25,7 @@
 
 use super::{CardDefinition, CardKind, Keyword, ShiftAbility};
 use crate::domain::effects::{Effect, TriggerCondition};
-use crate::domain::types::card::Classification;
+use crate::domain::types::card::{Classification, InkType};
 use crate::domain::types::ids::CardDefId;
 use serde::Deserialize;
 
@@ -63,6 +63,13 @@ pub struct TomlCard {
     /// Keyword abilities, value inline where applicable ("Challenger 2", "Shift 5").
     #[serde(default)]
     pub keywords: Vec<String>,
+    /// Ink type(s): one, or two for dual-ink (e.g. `ink = ["Ruby", "Sapphire"]`).
+    #[serde(default)]
+    pub ink: Vec<String>,
+    /// Deck-building copy-limit override (§2.1.1.3); omit for the default 4.
+    pub max_copies: Option<u32>,
+    /// Project-relative path to the card's image asset (never an external URL).
+    pub image: Option<String>,
     /// Triggered abilities authored in the effect DSL (see [`super::dsl`]).
     #[serde(default)]
     pub abilities: Vec<super::dsl::TomlAbility>,
@@ -172,6 +179,16 @@ impl TomlCard {
             .iter()
             .map(|s| s.to_static().map_err(&bad))
             .collect::<Result<_, _>>()?;
+        let ink_types = self
+            .ink
+            .iter()
+            .map(|s| {
+                ink_from(s).ok_or_else(|| LoadError::BadAbility {
+                    name: self.name.clone(),
+                    detail: format!("unknown ink type {s:?}"),
+                })
+            })
+            .collect::<Result<_, _>>()?;
         Ok(CardDefinition::new(id, self.cost, self.inkwell, kind)
             .with_classifications(classifications)
             .with_names(vec![self.name.clone()])
@@ -179,7 +196,10 @@ impl TomlCard {
             .with_abilities(abilities)
             .with_activated(activated)
             .with_static(statics)
-            .with_action_effects(action_effects))
+            .with_action_effects(action_effects)
+            .with_ink_types(ink_types)
+            .with_max_deck_copies(self.max_copies)
+            .with_image(self.image.clone()))
     }
 
     fn stat(&self, value: Option<u32>, stat: &'static str) -> Result<u32, LoadError> {
@@ -252,4 +272,17 @@ pub fn load_toml(toml_str: &str) -> Result<Vec<CardDefinition>, LoadError> {
         .enumerate()
         .map(|(i, c)| c.to_definition(CardDefId::from_raw(u32::try_from(i).unwrap_or(u32::MAX))))
         .collect()
+}
+
+/// Map an ink-type name to an [`InkType`].
+fn ink_from(s: &str) -> Option<InkType> {
+    Some(match s {
+        "Amber" => InkType::Amber,
+        "Amethyst" => InkType::Amethyst,
+        "Emerald" => InkType::Emerald,
+        "Ruby" => InkType::Ruby,
+        "Sapphire" => InkType::Sapphire,
+        "Steel" => InkType::Steel,
+        _ => return None,
+    })
 }

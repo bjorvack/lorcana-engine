@@ -13,6 +13,7 @@ pub use domain::cards::{
     LoadError, ShiftAbility, ShiftCost, ShiftKind, StaticAbility, StaticTarget, TomlCard,
     TriggeredAbility, load_toml,
 };
+pub use domain::deck::{Deck, DeckCard, DeckError};
 pub use domain::effects::{
     Amount, CardCategory, CharacterFilter, Comparison, DeckPosition, DelayedWhen, Destination,
     DiscardAmount, DiscardBy, Effect, MoveSource, NumericFilter, PlayerScope, Target, TargetSide,
