@@ -61,6 +61,10 @@ keywords = ["Shift 2"]
 #   Shift 2 (You may pay 2 {I} to play this on top of one of your characters named Aladdin.)
 #   REMEMBER YOUR TRAINING When you play this character, your characters get +2 {S} this turn.
 
+[[card.abilities]]
+on = "play"
+do = { give_strength = 2, to = "all your characters" }
+
 [[card]]
 name = "Alice - Savvy Sailor"
 type = "Character"
@@ -428,6 +432,10 @@ type = "Action"
 cost = 7
 # text:
 #   Banish chosen character. Draw a card.
+
+[[card.abilities]]
+on = "play"
+do = [{ banish = "chosen character" }, { draw = 1 }]
 
 [[card]]
 name = "Fairy Ship - Royal Vessel"
@@ -1131,6 +1139,10 @@ inkwell = true
 # text:
 #   Your characters get +2 {S} this turn.
 
+[[card.abilities]]
+on = "play"
+do = { give_strength = 2, to = "all your characters" }
+
 [[card]]
 name = "Lilo - Escape Artist"
 type = "Character"
@@ -1413,6 +1425,10 @@ cost = 1
 inkwell = true
 # text:
 #   Put 1 damage counter on chosen character.
+
+[[card.abilities]]
+on = "play"
+do = { deal_damage = 1, to = "chosen character" }
 
 [[card]]
 name = "Mr. Arrow - Legacy's First Mate"
@@ -1869,6 +1885,10 @@ cost = 5
 #   For each Sorcerer character you have in play, you pay 1 {I} less to play this action.
 #   Draw 2 cards.
 
+[[card.abilities]]
+on = "play"
+do = { draw = 2 }
+
 [[card]]
 name = "Simba - Happy-Go-Lucky"
 type = "Character"
@@ -1969,6 +1989,10 @@ classifications = ["Storyborn", "Hero", "Alien"]
 # text:
 #   NEED A HAND? 1 {I} - This character gets +1 {S} this turn.
 
+[[card.activated]]
+cost = { ink = 1 }
+do = { give_strength = 1 }
+
 [[card]]
 name = "Sugar Rush Speedway - Finish Line"
 type = "Location"
@@ -1986,6 +2010,10 @@ cost = 4
 inkwell = true
 # text:
 #   SPYCRAFT {E} - Draw a card, then choose and discard a card.
+
+[[card.activated]]
+cost = { exert = true }
+do = [{ draw = 1 }, { discard = 1 }]
 
 [[card]]
 name = "Tadashi Hamada - Baymax Inventor"
@@ -2068,6 +2096,10 @@ cost = 1
 inkwell = true
 # text:
 #   Chosen opponent loses 1 lore. Gain 1 lore.
+
+[[card.abilities]]
+on = "play"
+do = [{ lose_lore = 1, who = "chosen opponent" }, { gain_lore = 1 }]
 
 [[card]]
 name = "Tiana - Restaurant Owner"
@@ -2298,6 +2330,10 @@ type = "Action"
 cost = 3
 # text:
 #   Ready chosen character.
+
+[[card.abilities]]
+on = "play"
+do = { ready = "chosen character" }
 
 [[card]]
 name = "Yzma - Conniving Chemist"

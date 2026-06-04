@@ -191,6 +191,10 @@ cost = 7
 #   (A character with cost 7 or more can {E} to sing this song for free.)
 #   Banish all characters.
 
+[[card.abilities]]
+on = "play"
+do = { banish = "all characters" }
+
 [[card]]
 name = "Beast - Hardheaded"
 type = "Character"
@@ -269,6 +273,10 @@ cost = 2
 inkwell = true
 # text:
 #   Banish chosen item.
+
+[[card.abilities]]
+on = "play"
+do = { banish = "chosen item" }
 
 [[card]]
 name = "Captain - Colonel's Lieutenant"
@@ -380,6 +388,10 @@ keywords = ["Singer 5"]
 #   Singer 5 (This character counts as cost 5 to sing songs.)
 #   A WONDERFUL DREAM {E} — Remove up to 3 damage from chosen Princess character.
 
+[[card.activated]]
+cost = { exert = true }
+do = { remove_damage = 3, to = "chosen Princess character" }
+
 [[card]]
 name = "Coconut Basket"
 type = "Item"
@@ -395,6 +407,10 @@ cost = 1
 inkwell = true
 # text:
 #   Chosen character gets -2 {S} this turn.
+
+[[card.abilities]]
+on = "play"
+do = { give_strength = -2, target = "chosen character" }
 
 [[card]]
 name = "Cruella De Vil - Miserable as Usual"
@@ -415,6 +431,10 @@ cost = 2
 inkwell = true
 # text:
 #   Chosen character gains Rush this turn. (They can challenge the turn they're played.)
+
+[[card.abilities]]
+on = "play"
+do = { grant_keyword = "Rush", to = "chosen character" }
 
 [[card]]
 name = "Develop Your Brain"
@@ -532,6 +552,10 @@ cost = 5
 # text:
 #   Banish chosen character.
 
+[[card.abilities]]
+on = "play"
+do = { banish = "chosen character" }
+
 [[card]]
 name = "Duke of Weselton - Opportunistic Official"
 type = "Character"
@@ -616,6 +640,10 @@ cost = 1
 # text:
 #   Deal 2 damage to chosen character.
 
+[[card.abilities]]
+on = "play"
+do = { deal_damage = 2, to = "chosen character" }
+
 [[card]]
 name = "Fishbone Quill"
 type = "Item"
@@ -666,6 +694,10 @@ cost = 2
 # text:
 #   Exert chosen opposing character.
 
+[[card.abilities]]
+on = "play"
+do = { exert = "chosen opposing character" }
+
 [[card]]
 name = "Friends on the Other Side"
 type = "Song"
@@ -674,6 +706,10 @@ inkwell = true
 # text:
 #   (A character with cost 3 or more can {E} to sing this song for free.)
 #   Draw 2 cards.
+
+[[card.abilities]]
+on = "play"
+do = { draw = 2 }
 
 [[card]]
 name = "Frying Pan"
@@ -777,6 +813,11 @@ keywords = ["Bodyguard"]
 #   Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)
 #   AND TWO FOR TEA! When you play this character, you may remove up to 2 damage from each of your Musketeer characters.
 
+[[card.abilities]]
+on = "play"
+may = true
+do = { remove_damage = 2, to = "all your Musketeer characters" }
+
 [[card]]
 name = "Goons - Maleficent's Underlings"
 type = "Character"
@@ -794,6 +835,10 @@ cost = 5
 # text:
 #   (A character with cost 5 or more can {E} to sing this song for free.)
 #   Deal 2 damage to each opposing character.
+
+[[card.abilities]]
+on = "play"
+do = { deal_damage = 2, to = "all opposing characters" }
 
 [[card]]
 name = "Gramma Tala - Storyteller"
@@ -896,6 +941,10 @@ inkwell = true
 # text:
 #   Chosen character gets +2 {S} this turn.
 
+[[card.abilities]]
+on = "play"
+do = { give_strength = 2, target = "chosen character" }
+
 [[card]]
 name = "Healing Glow"
 type = "Action"
@@ -903,6 +952,10 @@ cost = 1
 inkwell = true
 # text:
 #   Remove up to 2 damage from chosen character.
+
+[[card.abilities]]
+on = "play"
+do = { remove_damage = 2, to = "chosen character" }
 
 [[card]]
 name = "HeiHei - Boat Snack"
@@ -1146,6 +1199,10 @@ inkwell = true
 # text:
 #   (A character with cost 5 or more can {E} to sing this song for free.)
 #   Put chosen character into their player's inkwell facedown and exerted.
+
+[[card.abilities]]
+on = "play"
+do = { into_inkwell = "chosen character" }
 
 [[card]]
 name = "Lilo - Galactic Hero"
@@ -1536,6 +1593,10 @@ cost = 3
 #   (A character with cost 3 or more can {E} to sing this song for free.)
 #   Return chosen character to their player's hand.
 
+[[card.abilities]]
+on = "play"
+do = { return_to_hand = "chosen character" }
+
 [[card]]
 name = "Mr. Smee - Loyal First Mate"
 type = "Character"
@@ -1736,6 +1797,10 @@ inkwell = true
 # text:
 #   Draw 2 cards, then choose and discard 2 cards.
 
+[[card.abilities]]
+on = "play"
+do = [{ draw = 2 }, { discard = 2 }]
+
 [[card]]
 name = "Rapunzel - Gifted with Healing"
 type = "Character"
@@ -1832,6 +1897,10 @@ inkwell = true
 # text:
 #   COMMAND {E} — Chosen character gains Support this turn. (Whenever they quest, you may add their {S} to another chosen character's {S} this turn.)
 
+[[card.activated]]
+cost = { exert = true }
+do = { grant_keyword = "Support", to = "chosen character" }
+
 [[card]]
 name = "Sebastian - Court Composer"
 type = "Character"
@@ -1874,6 +1943,11 @@ lore = 1
 classifications = ["Storyborn", "Hero", "Prince"]
 # text:
 #   GUESS WHAT? When you play this character, you may draw a card, then choose and discard a card.
+
+[[card.abilities]]
+on = "play"
+may = true
+do = [{ draw = 1 }, { discard = 1 }]
 
 [[card]]
 name = "Simba - Protective Cub"
@@ -1920,6 +1994,10 @@ cost = 3
 inkwell = true
 # text:
 #   Deal 3 damage to chosen character.
+
+[[card.abilities]]
+on = "play"
+do = { deal_damage = 3, to = "chosen character" }
 
 [[card]]
 name = "Stampede"
@@ -2010,6 +2088,10 @@ inkwell = true
 #   (A character with cost 2 or more can {E} to sing this song for free.)
 #   Each opponent chooses and discards a card.
 
+[[card.abilities]]
+on = "play"
+do = { discard = 1, who = "each opponent" }
+
 [[card]]
 name = "Sven - Official Ice Deliverer"
 type = "Character"
@@ -2057,6 +2139,10 @@ cost = 2
 inkwell = true
 # text:
 #   Each opponent loses 1 lore.
+
+[[card.abilities]]
+on = "play"
+do = { lose_lore = 1 }
 
 [[card]]
 name = "Te Kā - Heartless"
@@ -2161,6 +2247,10 @@ keywords = ["Shift 4"]
 #   ROCK THE BOAT When you play this character, deal 1 damage to each opposing character.
 #   PUNY PIRATE! During your turn, whenever this character banishes another character in a challenge, you may deal 2 damage to chosen opposing character.
 
+[[card.abilities]]
+on = "play"
+do = { deal_damage = 1, to = "all opposing characters" }
+
 [[card]]
 name = "Tinker Bell - Most Helpful"
 type = "Character"
@@ -2174,6 +2264,10 @@ keywords = ["Evasive"]
 # text:
 #   Evasive (Only characters with Evasive can challenge this character.)
 #   PIXIE DUST When you play this character, chosen character gains Evasive this turn.
+
+[[card.abilities]]
+on = "play"
+do = { grant_keyword = "Evasive", to = "chosen character" }
 
 [[card]]
 name = "Tinker Bell - Peter Pan's Ally"
@@ -2199,6 +2293,10 @@ lore = 1
 classifications = ["Dreamborn", "Ally", "Fairy"]
 # text:
 #   BATTLE PLANS {E} — Draw a card, then choose and discard a card.
+
+[[card.activated]]
+cost = { exert = true }
+do = [{ draw = 1 }, { discard = 1 }]
 
 [[card]]
 name = "Triton - The Sea King"
@@ -2251,6 +2349,10 @@ inkwell = true
 # text:
 #   I'M LATE! {E}, 1 {I} — Chosen character gains Rush this turn. (They can challenge the turn they're played.)
 
+[[card.activated]]
+cost = { exert = true, ink = 1 }
+do = { grant_keyword = "Rush", to = "chosen character" }
+
 [[card]]
 name = "Work Together"
 type = "Action"
@@ -2259,6 +2361,10 @@ inkwell = true
 # text:
 #   Chosen character gains Support this turn. (Whenever they quest, you may add their {S} to another chosen character's {S} this turn.)
 
+[[card.abilities]]
+on = "play"
+do = { grant_keyword = "Support", to = "chosen character" }
+
 [[card]]
 name = "You Have Forgotten Me"
 type = "Action"
@@ -2266,6 +2372,10 @@ cost = 4
 inkwell = true
 # text:
 #   Each opponent chooses and discards 2 cards.
+
+[[card.abilities]]
+on = "play"
+do = { discard = 2, who = "each opponent" }
 
 [[card]]
 name = "Yzma - Alchemist"
