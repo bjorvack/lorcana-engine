@@ -740,21 +740,31 @@ work, tracked separately.
 
 ## Card-functionalization (post-Slice-9, ongoing)
 
-Turning the loaded card pool into functional cards, driven by the expressibility
-triage (≈47% playable today; top blockers: permanent keyword grants 180,
-look-top/reveal 158, complex selectors 151).
+Turning the loaded card pool into functional cards, driven by a recurring
+expressibility triage. Latest triage: ~40% of cards fully functional (vanilla +
+keyword-only + authored/expressible); ~300 cards now have authored abilities
+across sets 1–12 + promos (multiple parallel worktree passes). Top remaining
+blockers: look-at-top/reveal (~180), modal "choose one" (~80), trigger-context
+amounts ("equal to / that much").
 
-- [x] **DSL selector predicates** — `parse_filter` now parses by-name / by-cost /
+- [x] **DSL selector predicates** — `parse_filter` parses by-name / by-cost /
   by-stat-threshold (`"named X"`, `"with cost N or less"`, `"with N {S} or more"`),
-  adding `CharacterFilter::Willpower`/`Lore`. (selector blocker)
-- [x] **Authored abilities for sets 1-12** (107 cards) via parallel worktrees;
-  action/song play-abilities route to `action_effects`.
+  adding `CharacterFilter::Willpower`/`Lore`.
+- [x] **Authored abilities for sets 1-12 + promos** (~300 cards) via parallel
+  worktrees; action/song play-abilities route to `action_effects`.
 - [x] **Permanent keyword/property grants** — `Effect::Grant { target, property }`
   + `ModifierDuration::Permanent` (cleared when the target leaves play); DSL
-  `grant_keyword … duration = "permanent"`. (top blocker: 180 cards)
+  `grant_keyword … duration = "permanent"`.
 - [x] **Count-threshold conditionals** — `IfControl` gains `at_least: u32`
   ("if you have N or more …"); DSL `if_you_have = "<filter>", at_least = N`.
-- [ ] look-top/reveal variants; ongoing authoring passes.
+- [x] **DSL exposures of existing engine effects** — `move_damage = N, from, to`
+  (`Effect::MoveDamage`); `restrict = "cant_quest"|"cant_challenge"|… ` (granted
+  `Property::Restriction`); and a proper `duration = "next_turn"`
+  (`Effect::GrantNextTurn`, `UntilStep{Ready, owner}` — the "at the start of their
+  next turn" timing, mirrors freeze).
+- [ ] **look-at-top/reveal variants** (expose/extend `LookAtTopAndTake` +
+  shuffle/reveal/search), **modal "choose one"**, trigger-context amounts; ongoing
+  authoring passes as each feature lands.
 
 ## Slice 9 — Real card data & conformance suite
 
@@ -812,20 +822,51 @@ look-top/reveal 158, complex selectors 151).
 
 Turn the rules library into something usable + hardened.
 
-- [~] **Public API facade** (`application::Game`) — `new`, `submit`, `state`/
+- [x] **Public API facade** (`application::Game`) — `new`, `from_decks` (validate
+  decks §2.1.1 → expand → start, returning `SetupError`), `submit`, `state`/
   `status`/`pending`, and `legal_actions()` (the engine's first action
   *enumeration*; it validates by trying each candidate on a clone, so it can't
   drift from `apply`). Pending-decision answers read from the decision; mulligan +
-  turn moves enumerated. `tests/api.rs` (incl. the invariant: every reported
-  action is accepted). **Next:** CLI host; self-play/fuzz harness; multi-pick &
-  Shift/Sing enumeration.
+  turn moves enumerated. `tests/api.rs`, `tests/play_from_decks.rs` (incl. the
+  invariant: every reported action is accepted). **Next:** multi-pick &
+  Shift/Sing enumeration; perspective-aware state view.
 - [x] **CLI host** (`application::host` + `src/main.rs`) — `render` (state + numbered
-  legal actions), an interactive stdin loop, and a deterministic `demo` auto-play
-  (`cargo run -- demo [seed]`). `tests/cli_demo.rs` runs a full game to completion.
-- [x] **Self-play / fuzz** (`tests/self_play.rs`) — drives random legal actions to
-  completion across 25 seeds; asserts every reported-legal action is accepted, no
-  panics, and invariants hold (per-player card count conserved at 30; reaching the
-  lore threshold ends the game).
+  legal actions), an interactive stdin loop, a deterministic `demo` auto-play
+  (`cargo run -- demo [seed]`), and **`play <d1.txt> <d2.txt> [seed]`** which builds
+  the combined card pool from `cards/sets/`, loads two decklists, and auto-plays a
+  full real game (`registry_from_dir`/`play_from_files`). `tests/cli_demo.rs` +
+  `tests/play_from_decks.rs` run full games to completion.
+- [x] **Self-play / fuzz** — `tests/self_play.rs` (25 seeds, tiny decks) **and**
+  `tests/self_play_official.rs` (30 full games across the real official decklists +
+  matchups): every reported-legal action accepted, no panics, 60-card conservation
+  per player, no win-threshold-without-game-over, most games finish.
+
+## Slice 11 — Deck construction, decklists & behaviour auditing
+
+- [x] **Card metadata for deck-building/display** — `CardDefinition` gains
+  `ink_types` (1–2; dual-ink commits both colours), `max_deck_copies` (override of
+  the default 4 — Dalmatian Puppy 99, The Glass Slipper 2), `image` (URL), and
+  `text` (printed rules text). All optional TOML fields; backfilled pool-wide from
+  the research dump (`cards/scripts/backfill_meta.py` / `backfill_text.py`) without
+  disturbing authored abilities. Punctuation normalized to ASCII (apostrophes/NBSP;
+  accents kept) + `Heihei→HeiHei`; baked into `from_lorcast.py`.
+- [x] **`Deck` + validation** (`domain::deck`) — a deck is `[(CardDefId, count)]`;
+  `validate(&registry)` enforces §2.1.1 (≥60 cards, ≤2 ink types, per-**full-name**
+  copy limit with overrides), `expand()` for `GameState`, and `from_text`/`to_text`
+  for the community `count name` share format (printing-lossy; printings collapse
+  by name). `tests/deck.rs`. `CardRegistry` gained `iter()`/`find_by_name()` and
+  `load_toml_from` (unique ids across files → one combined cross-set registry).
+- [x] **Official decklists** — all 21 starter decks for sets 1–10 (Mushu Report
+  wiki), stored under `decks/` as `count name` text. `tests/official_decks.rs`
+  validates each resolves against the combined pool, is exactly 60, and is legal.
+  Surfaced + fixed a card-pool gap (5 lore-less locations; generator no longer
+  skips them) — pool is complete vs the dump (unique-name diff = 0).
+- [x] **Behaviour audit log** (feature `audit-log`, off in release) —
+  `application::audit::play_and_log`/`audit_from_files` emit a transcript pairing
+  each acting card's printed `text` with the events it produced (CardId tokens
+  resolved to names), for AI/human review of "did the card do what it says".
+  `cargo run --features audit-log -- audit <d1> <d2> [seed]`; `tests/audit_log.rs`
+  (cfg-gated). Generated logs are git-ignored.
 
 ## Cross-cutting tracks (run alongside slices)
 

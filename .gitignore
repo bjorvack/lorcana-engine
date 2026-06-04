@@ -8,3 +8,8 @@ Cargo.lock
 # Local agent / tooling artifacts (not version-controlled)
 .playwright-mcp/
 AGENTS.md
+
+# Audit / debug log output (generated, never committed)
+/logs/
+*.log
+*.audit.md
