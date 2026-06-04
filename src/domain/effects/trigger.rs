@@ -102,6 +102,9 @@ pub enum TriggerCondition {
     /// "Whenever this character is readied" — fires when the character becomes
     /// ready (at the start of turn, or via an effect).
     WhenThisReadies,
+    /// "Whenever this character sings a song" — fires for each singing character
+    /// when a song is sung by exerting it (§6.3.3, §10.11).
+    WhenThisSings,
     /// "Whenever a card is put into your inkwell" — fires when a card is moved
     /// to the inkwell zone.
     WhenCardPutInInkwell,

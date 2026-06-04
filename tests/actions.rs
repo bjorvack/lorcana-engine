@@ -184,6 +184,42 @@ fn a_song_can_be_sung_by_exerting_an_eligible_character() {
     assert!(state.player(active).unwrap().discard().contains(song));
 }
 
+/// §6.3.3 — "Whenever this character sings a song" fires for the singer when it
+/// sings (e.g. set 4 Ariel, set 9 Snow White). Here a singer with "gain 1 lore on
+/// sing" sings a song that itself gains 2 lore: 2 + 1 = 3.
+#[test]
+fn a_sing_a_song_trigger_fires_for_the_singer() {
+    let singer_def = CardDefinition::character(CardDefId::from_raw(200), 4, true, 1, 1, 1)
+        .with_abilities(vec![TriggeredAbility::new(
+            TriggerCondition::WhenThisSings,
+            Effect::Lore {
+                who: PlayerScope::You,
+                amount: Amount::fixed(1),
+            },
+        )]);
+    let reg = song_reg(3, &[], vec![singer_def]);
+    let mut state = started(&reg);
+    let active = state.active_player();
+    let singer = place_character(&mut state, active, 100, 200, true, false);
+    let song = hand_card(&state, 0);
+
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Sing {
+            song,
+            singers: vec![singer],
+        },
+    )
+    .expect("sing");
+
+    assert_eq!(
+        lore(&state, active),
+        3,
+        "song effect (2) + the singer's sing trigger (1)"
+    );
+}
+
 #[test]
 fn singing_rejects_a_character_whose_cost_is_too_low() {
     let reg = song_reg(3, &[], vec![singer_char(200, 2, None)]); // cost 2 < song 3

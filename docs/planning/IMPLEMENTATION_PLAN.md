@@ -205,6 +205,11 @@ no single "done" moment. Each addition follows the same recipe: add the variant
 | Damage / ready / leaves-play / draw (and any stragglers) | as needed, Slices 6–8 |
 | Full taxonomy + scope filters completeness | guaranteed by **Slice 9** (real card data + conformance) |
 
+Done since: self-scoped **sing-a-song** trigger (`WhenThisSings`, DSL `"sings"`) —
+fires for each singer in `apply_sing`, resolved from the bag after the song's
+effect. `tests/actions.rs::a_sing_a_song_trigger_fires_for_the_singer`. (The
+"one of *your* characters sings" yours-scope variant is a follow-up.)
+
 **Structural item (don't forget):** today only *self*-scoped triggers are detected
 at the action site (`enqueue_self_triggers`). Watching *other* cards' events
 (scope filters: one of your / a / an opposing character) requires a general

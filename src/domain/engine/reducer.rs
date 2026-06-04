@@ -672,6 +672,17 @@ fn apply_sing(
             c.conditions_mut().ready = false;
         }
     }
+    // "Whenever this character sings a song" fires for each singer (§6.3.3); the
+    // triggers wait in the bag and resolve after the song's own effect.
+    for &singer in singers {
+        enqueue_self_triggers(
+            state,
+            registry,
+            active,
+            singer,
+            &TriggerCondition::WhenThisSings,
+        );
+    }
     Ok(resolve_action_play(
         state,
         registry,
