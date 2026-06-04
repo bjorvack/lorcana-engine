@@ -82,6 +82,15 @@ fn classification_vocab(root: &Path) -> HashSet<String> {
 fn bogus_tokens(selector: &str, vocab: &HashSet<String>) -> Vec<String> {
     let toks: Vec<&str> = selector.split_whitespace().collect();
     let low: Vec<String> = toks.iter().map(|t| t.to_lowercase()).collect();
+    // Multi-word classifications (lowercased token runs), longest first, mirroring
+    // the parser's data-driven matching.
+    let mut multiword: Vec<Vec<String>> = vocab
+        .iter()
+        .filter(|c| c.contains(' '))
+        .map(|c| c.split_whitespace().map(str::to_string).collect())
+        .collect();
+    multiword.sort_by_key(|p| std::cmp::Reverse(p.len()));
+
     let mut bad = Vec::new();
     let mut i = 0;
     while i < toks.len() {
@@ -90,8 +99,11 @@ fn bogus_tokens(selector: &str, vocab: &HashSet<String>) -> Vec<String> {
             i += 2; // the name token is consumed
             continue;
         }
-        if i + 1 < low.len() && t == "seven" && low[i + 1] == "dwarfs" {
-            i += 2; // the one parser-known multi-word classification
+        if let Some(parts) = multiword
+            .iter()
+            .find(|parts| low[i..].starts_with(parts.as_slice()))
+        {
+            i += parts.len(); // a known multi-word classification
             continue;
         }
         if KNOWN.contains(&t.as_str()) || t.chars().all(|c| c.is_ascii_digit()) {

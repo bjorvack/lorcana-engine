@@ -31,7 +31,27 @@ use crate::domain::effects::{
 use crate::domain::game::{Condition, Property, Restriction, Stat};
 use crate::domain::types::card::Classification;
 use serde::Deserialize;
+use std::cell::RefCell;
 use toml::Value;
+
+thread_local! {
+    /// Classifications known to the current parse, set by the loader from the
+    /// cards being loaded. Lets `parse_filter` match **multi-word**
+    /// classifications (e.g. "Seven Dwarfs", or any a future set introduces)
+    /// without hardcoding — derived from the data, scoped to a `load_toml*` call.
+    /// Not game state; purely loader-time parse context.
+    static KNOWN_CLASSIFICATIONS: RefCell<Vec<String>> = const { RefCell::new(Vec::new()) };
+}
+
+/// Run `f` with `classes` registered as the parse's known classifications,
+/// restoring the previous set afterwards. The loader wraps card parsing in this
+/// so selectors can resolve multi-word classification names dynamically.
+pub(crate) fn with_classifications<R>(classes: Vec<String>, f: impl FnOnce() -> R) -> R {
+    let prev = KNOWN_CLASSIFICATIONS.with(|c| std::mem::replace(&mut *c.borrow_mut(), classes));
+    let result = f();
+    KNOWN_CLASSIFICATIONS.with(|c| *c.borrow_mut() = prev);
+    result
+}
 
 /// One `[[card.abilities]]` table.
 #[derive(Debug, Clone, Deserialize)]
@@ -380,15 +400,31 @@ fn push_state_and_multiword_predicates(
         predicates.push(predicate);
         consumed[i] = true;
     }
-    for i in 0..lower_tokens.len().saturating_sub(1) {
-        if lower_tokens[i] == "seven" && lower_tokens[i + 1] == "dwarfs" {
-            predicates.push(CharacterFilter::Classification(Classification::new(
-                "Seven Dwarfs",
-            )));
-            consumed[i] = true;
-            consumed[i + 1] = true;
+    // Multi-word classifications (e.g. "Seven Dwarfs") known to the current parse:
+    // greedily match a run of consecutive unconsumed tokens that forms one, so the
+    // whitespace tokenizer doesn't split it into bogus single-word classifications.
+    KNOWN_CLASSIFICATIONS.with(|vocab| {
+        for class in vocab.borrow().iter() {
+            let parts: Vec<String> = class.split_whitespace().map(str::to_lowercase).collect();
+            if parts.len() < 2 {
+                continue;
+            }
+            for start in 0..=lower_tokens.len().saturating_sub(parts.len()) {
+                let matches = parts
+                    .iter()
+                    .enumerate()
+                    .all(|(k, p)| !consumed[start + k] && &lower_tokens[start + k] == p);
+                if matches {
+                    predicates.push(CharacterFilter::Classification(Classification::new(
+                        class.clone(),
+                    )));
+                    for k in 0..parts.len() {
+                        consumed[start + k] = true;
+                    }
+                }
+            }
         }
-    }
+    });
 }
 
 /// Parse a compact card filter. Combines side + category + classifications +
@@ -666,7 +702,7 @@ fn static_target_from_str(s: &str) -> Option<StaticTarget> {
 
 #[cfg(test)]
 mod tests {
-    use super::{parse_filter, parse_selector};
+    use super::{parse_filter, parse_selector, with_classifications};
     use crate::domain::effects::{CharacterFilter, Comparison, NumericFilter, Target, TargetSide};
     use crate::domain::types::card::Classification;
 
@@ -805,11 +841,15 @@ mod tests {
         assert!(of_yours.contains("Yours"), "{of_yours}");
         assert!(!of_yours.contains("Classification"), "{of_yours}");
 
-        // "Seven Dwarfs" is one classification, not two bogus tokens.
-        let dwarfs = format!(
-            "{:?}",
-            parse_filter("your other Seven Dwarfs characters").unwrap()
-        );
+        // A multi-word classification known to the parse ("Seven Dwarfs", or any a
+        // future set adds) is matched as one classification, not split into bogus
+        // tokens — driven by the registered vocabulary, nothing hardcoded.
+        let dwarfs = with_classifications(vec!["Seven Dwarfs".to_string()], || {
+            format!(
+                "{:?}",
+                parse_filter("your other Seven Dwarfs characters").unwrap()
+            )
+        });
         assert!(dwarfs.contains("Seven Dwarfs"), "{dwarfs}");
         assert!(!dwarfs.contains("\"Seven\""), "{dwarfs}");
     }

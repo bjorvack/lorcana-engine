@@ -281,14 +281,25 @@ pub fn load_toml(toml_str: &str) -> Result<Vec<CardDefinition>, LoadError> {
 /// Returns [`LoadError`] on invalid TOML or any card that can't be mapped.
 pub fn load_toml_from(toml_str: &str, first_id: u32) -> Result<Vec<CardDefinition>, LoadError> {
     let file: CardFile = toml::from_str(toml_str).map_err(|e| LoadError::Toml(e.to_string()))?;
-    file.card
+    // Register the classifications declared in this document so the DSL can match
+    // multi-word classification names in selectors (data-driven, no hardcoding).
+    let mut classes: Vec<String> = file
+        .card
         .iter()
-        .enumerate()
-        .map(|(i, c)| {
-            let id = first_id.saturating_add(u32::try_from(i).unwrap_or(u32::MAX));
-            c.to_definition(CardDefId::from_raw(id))
-        })
-        .collect()
+        .flat_map(|c| c.classifications.iter().cloned())
+        .collect();
+    classes.sort_unstable();
+    classes.dedup();
+    super::dsl::with_classifications(classes, || {
+        file.card
+            .iter()
+            .enumerate()
+            .map(|(i, c)| {
+                let id = first_id.saturating_add(u32::try_from(i).unwrap_or(u32::MAX));
+                c.to_definition(CardDefId::from_raw(id))
+            })
+            .collect()
+    })
 }
 
 /// Map an ink-type name to an [`InkType`].
