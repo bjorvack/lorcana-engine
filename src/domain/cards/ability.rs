@@ -24,6 +24,10 @@ pub struct TriggeredAbility {
     pub condition: TriggerCondition,
     /// `true` if the effect is a "you may" (optional) effect.
     pub optional: bool,
+    /// `true` if the trigger is gated to the controller's own turn ("During your
+    /// turn, whenever …"): it only fires while its controller is the active
+    /// player (§4.1, ~110 cards). `false` means it fires on any player's turn.
+    pub during_your_turn: bool,
     /// What the ability does when it resolves.
     pub effect: Effect,
 }
@@ -35,6 +39,7 @@ impl TriggeredAbility {
         Self {
             condition,
             optional: false,
+            during_your_turn: false,
             effect,
         }
     }
@@ -45,8 +50,16 @@ impl TriggeredAbility {
         Self {
             condition,
             optional: true,
+            during_your_turn: false,
             effect,
         }
+    }
+
+    /// Gate this trigger to the controller's own turn ("During your turn, …").
+    #[must_use]
+    pub const fn during_your_turn(mut self) -> Self {
+        self.during_your_turn = true;
+        self
     }
 }
 

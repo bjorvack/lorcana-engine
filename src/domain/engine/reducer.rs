@@ -2016,10 +2016,14 @@ fn enqueue_triggers_for_def(
     let Some(definition) = registry.get(definition_id) else {
         return;
     };
+    // "During your turn" triggers only fire while their controller is the active
+    // player (§4.1); skip them on any other player's turn.
+    let active = state.active_player();
     let mut matches: Vec<(bool, Effect)> = definition
         .abilities()
         .iter()
         .filter(|a| a.condition == *condition)
+        .filter(|a| !a.during_your_turn || controller == active)
         .map(|a| (a.optional, a.effect.clone()))
         .collect();
     // Also fire any triggered abilities granted to this card by an effect (§7.6).

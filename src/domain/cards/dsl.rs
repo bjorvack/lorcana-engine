@@ -62,6 +62,10 @@ pub struct TomlAbility {
     /// "You may …" — optional ability.
     #[serde(default)]
     pub may: bool,
+    /// "During your turn, …" — the trigger only fires while its controller is the
+    /// active player.
+    #[serde(default)]
+    pub during_your_turn: bool,
     /// The effect: a verb table `{ draw = 1 }`, or an array of them (a sequence).
     #[serde(rename = "do")]
     pub effect: Value,
@@ -75,10 +79,15 @@ impl TomlAbility {
     pub fn to_ability(&self) -> Result<TriggeredAbility, String> {
         let condition = trigger_from(&self.on)?;
         let effect = effect_from_value(&self.effect)?;
-        Ok(if self.may {
+        let ability = if self.may {
             TriggeredAbility::optional(condition, effect)
         } else {
             TriggeredAbility::new(condition, effect)
+        };
+        Ok(if self.during_your_turn {
+            ability.during_your_turn()
+        } else {
+            ability
         })
     }
 }

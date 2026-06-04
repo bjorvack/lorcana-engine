@@ -1341,9 +1341,9 @@ fn aladdin_street_rat_play_makes_each_opponent_lose_lore() {
     );
 }
 
-/// Aladdin - Heroic Outlaw (set 1): "Whenever this character banishes another character
-/// in a challenge, you gain 2 lore and each opponent loses 2 lore."
-/// Drives a real challenge that banishes the target and checks both lore swings.
+/// Aladdin - Heroic Outlaw (set 1): "During your turn, whenever this character banishes
+/// another character in a challenge, you gain 2 lore and each opponent loses 2 lore."
+/// On MY turn the trigger fires and swings lore both ways.
 #[test]
 fn aladdin_heroic_outlaw_banish_in_challenge_swings_lore_both_ways() {
     let reg = registry_from(
@@ -1358,6 +1358,7 @@ fn aladdin_heroic_outlaw_banish_in_challenge_swings_lore_both_ways() {
         lore = 2
         [[card.abilities]]
         on = "banishes_in_challenge"
+        during_your_turn = true
         do = [
             { gain_lore = 2 },
             { lose_lore = 2, who = "each opponent" }
@@ -1473,4 +1474,85 @@ fn aladdin_heroic_outlaw_no_lore_when_challenge_does_not_banish() {
     );
     assert_eq!(lore(&state, me), 0, "no lore gained: nothing was banished");
     assert_eq!(lore(&state, foe), 5, "opponent kept their lore");
+}
+
+/// Aladdin - Heroic Outlaw (set 1): the "During your turn" qualifier must gate the
+/// trigger. On the OPPONENT's turn, the opponent challenges my exerted Aladdin with a
+/// fragile attacker; Aladdin's return damage banishes the attacker — "this character
+/// banishes another in a challenge" — but because it is NOT my turn the lore swing
+/// must not happen.
+#[test]
+fn aladdin_heroic_outlaw_trigger_is_gated_to_your_turn() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Aladdin - Heroic Outlaw"
+        type = "Character"
+        cost = 7
+        ink = ["Ruby"]
+        strength = 5
+        willpower = 5
+        lore = 2
+        [[card.abilities]]
+        on = "banishes_in_challenge"
+        during_your_turn = true
+        do = [
+            { gain_lore = 2 },
+            { lose_lore = 2, who = "each opponent" }
+        ]
+        [[card]]
+        name = "Fragile Attacker"
+        type = "Character"
+        cost = 1
+        ink = ["Ruby"]
+        strength = 1
+        willpower = 1
+        lore = 1
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let foe = opponent_of(&state, me);
+
+    // My Aladdin (def 0) exerted so it's a legal challenge target on the foe's turn.
+    let aladdin = place(&mut state, me, 100, 0, 5, 5, false);
+    // The foe's fragile attacker (def 1), ready to challenge.
+    let attacker = place(&mut state, foe, 200, 1, 1, 1, true);
+    state.player_mut(foe).unwrap().add_lore(5);
+
+    // Hand the turn to the opponent, then have them challenge Aladdin.
+    let _ = apply(&mut state, &reg, Input::EndTurn).expect("end turn");
+    assert_eq!(state.active_player(), foe, "it is now the opponent's turn");
+
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Challenge {
+            challenger: attacker,
+            target: aladdin,
+        },
+    )
+    .expect("challenge");
+
+    // Aladdin's return damage (5) banishes the 1-willpower attacker...
+    assert!(
+        state
+            .player(foe)
+            .unwrap()
+            .play()
+            .iter()
+            .all(|c| c.id() != attacker),
+        "the attacker was banished by Aladdin's return damage"
+    );
+    // ...but the "During your turn" trigger must NOT fire on the opponent's turn.
+    assert_eq!(
+        lore(&state, me),
+        0,
+        "my during-your-turn trigger did not fire on the opponent's turn"
+    );
+    assert_eq!(
+        lore(&state, foe),
+        5,
+        "the opponent's lore is untouched (trigger gated out)"
+    );
 }
