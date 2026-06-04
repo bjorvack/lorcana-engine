@@ -7,7 +7,7 @@ pub mod application;
 pub mod domain;
 
 // Re-export commonly used types for convenience
-pub use application::Game;
+pub use application::{Game, SetupError};
 pub use domain::cards::{
     AbilityCost, ActivatedAbility, CardDefinition, CardKind, CardRegistry, GameRuleStatic, Keyword,
     LoadError, ShiftAbility, ShiftCost, ShiftKind, StaticAbility, StaticTarget, TomlCard,

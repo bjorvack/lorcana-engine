@@ -6,11 +6,28 @@
 //! accepted. Pending-decision options are read directly from the decision.
 
 use crate::domain::cards::CardRegistry;
+use crate::domain::deck::{Deck, DeckError};
 use crate::domain::engine::{Decision, Input, Rejected, apply, start};
 use crate::domain::game::{
     CardInstance, ChoiceRef, GameEvent, GameState, GameStatus, PendingDecision,
 };
 use crate::domain::types::ids::{CardDefId, CardId};
+
+/// Why building a game from decks failed.
+#[derive(Debug, Clone, PartialEq, Eq, thiserror::Error)]
+pub enum SetupError {
+    /// A deck (by index) violated the deck-building rules (§2.1.1).
+    #[error("deck {index} is illegal: {errors:?}")]
+    IllegalDeck {
+        /// Index of the offending deck in the input slice.
+        index: usize,
+        /// The violations found.
+        errors: Vec<DeckError>,
+    },
+    /// The game couldn't be started.
+    #[error("could not start the game: {0:?}")]
+    Start(Rejected),
+}
 
 /// A playable game: the [`GameState`] plus the [`CardRegistry`] it's played with.
 #[derive(Debug, Clone)]
@@ -32,6 +49,25 @@ impl Game {
         let mut state = GameState::new(decks, seed);
         let _ = start(&mut state)?;
         Ok(Self { state, registry })
+    }
+
+    /// Validate each [`Deck`] against `registry` (§2.1.1), then build and start a
+    /// game from them — the ergonomic entry point for real decklists.
+    ///
+    /// # Errors
+    /// [`SetupError::IllegalDeck`] if any deck is illegal; [`SetupError::Start`]
+    /// if starting fails.
+    pub fn from_decks(
+        decks: &[Deck],
+        seed: u64,
+        registry: CardRegistry,
+    ) -> Result<Self, SetupError> {
+        for (index, deck) in decks.iter().enumerate() {
+            deck.validate(&registry)
+                .map_err(|errors| SetupError::IllegalDeck { index, errors })?;
+        }
+        let lists = decks.iter().map(Deck::expand).collect();
+        Self::new(lists, seed, registry).map_err(SetupError::Start)
     }
 
     /// Apply an action, returning the events it produced.

@@ -4,4 +4,4 @@
 pub mod api;
 pub mod host;
 
-pub use api::Game;
+pub use api::{Game, SetupError};
