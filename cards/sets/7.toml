@@ -95,6 +95,10 @@ keywords = ["Support"]
 #   Support (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)
 #   WINTER AMBUSH When you play this character, chosen opposing character can't ready at the start of their next turn.
 
+[[card.abilities]]
+on = "play"
+do = { restrict = "cant_ready", to = "chosen opposing character", duration = "next_turn" }
+
 [[card]]
 name = "Archimedes - Exceptional Owl"
 type = "Character"
@@ -911,6 +915,10 @@ inkwell = true
 #   (A character with cost 1 or more can {E} to sing this song for free.)
 #   Chosen character gets +1 {S} this turn for each character you have in play.
 
+[[card.abilities]]
+on = "play"
+do = { give_strength = "per your character", to = "chosen character" }
+
 [[card]]
 name = "HeiHei - Expanded Consciousness"
 type = "Character"
@@ -1064,6 +1072,10 @@ lore = 2
 classifications = ["Dreamborn", "Villain", "Sorcerer"]
 # text:
 #   THAT'S BETTER When you play this character, chosen character gains Challenger +2 this turn. (They get +2 {S} while challenging.)
+
+[[card.abilities]]
+on = "play"
+do = { grant_keyword = "Challenger 2", to = "chosen character", duration = "this_turn" }
 
 [[card]]
 name = "Jafar - Newly Crowned"
@@ -1869,6 +1881,11 @@ classifications = ["Storyborn", "Ally"]
 # text:
 #   STARTLED SHRIEK When you play this character, you may move up to 2 damage counters from chosen character to chosen opposing character.
 
+[[card.abilities]]
+on = "play"
+may = true
+do = { move_damage = 2, from = "chosen character", to = "chosen opposing character" }
+
 [[card]]
 name = "Pascal - Garden Chameleon"
 type = "Character"
@@ -2636,6 +2653,10 @@ inkwell = true
 # text:
 #   PRECISION STRIKE {E}, 1 {I} — Chosen character gains Challenger +2 this turn. (They get +2 {S} while challenging.)
 
+[[card.activated]]
+cost = { exert = true, ink = 1 }
+do = { grant_keyword = "Challenger 2", to = "chosen character", duration = "this_turn" }
+
 [[card]]
 name = "Tramp - Enterprising Dog"
 type = "Character"
@@ -2650,6 +2671,10 @@ classifications = ["Storyborn", "Hero"]
 # text:
 #   HEY, PIDGE If you have a character named Lady in play, you pay 1 {I} less to play this character.
 #   NO TIME FOR WISECRACKS When you play this character, chosen character of yours gets +1 {S} this turn for each other character you have in play.
+
+[[card.abilities]]
+on = "play"
+do = { give_strength = "per your other character", to = "chosen character of yours" }
 
 [[card]]
 name = "Tramp - Street-Smart Dog"
