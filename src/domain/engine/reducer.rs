@@ -3222,6 +3222,80 @@ fn count_condition_holds(
     }
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::domain::effects::CountCondition;
+
+    #[test]
+    fn test_count_condition_hands() {
+        let mut state = GameState::new(
+            vec![
+                (0..30).map(CardDefId::from_raw).collect(),
+                (0..30).map(CardDefId::from_raw).collect(),
+            ],
+            7,
+        );
+
+        let player = PlayerId::from_index(0);
+
+        // Add cards to hand
+        for i in 0..5 {
+            let card = CardInstance::new(
+                CardId::from_raw(100 + i),
+                CardDefId::from_raw(999),
+                Conditions::in_deck(),
+            );
+            state.player_mut(player).unwrap().hand_mut().push(card);
+        }
+
+        assert!(count_condition_holds(
+            &state,
+            player,
+            CountCondition::HandSizeAtLeast(3)
+        ));
+        assert!(count_condition_holds(
+            &state,
+            player,
+            CountCondition::HandSizeMoreThan(2)
+        ));
+        assert!(!count_condition_holds(
+            &state,
+            player,
+            CountCondition::HandSizeMoreThan(10)
+        ));
+    }
+
+    #[test]
+    fn test_count_condition_lore() {
+        let state = GameState::new(
+            vec![
+                (0..30).map(CardDefId::from_raw).collect(),
+                (0..30).map(CardDefId::from_raw).collect(),
+            ],
+            7,
+        );
+
+        let player = PlayerId::from_index(0);
+
+        assert!(count_condition_holds(
+            &state,
+            player,
+            CountCondition::LoreAtLeast(0)
+        ));
+        assert!(!count_condition_holds(
+            &state,
+            player,
+            CountCondition::LoreAtLeast(1)
+        ));
+        assert!(!count_condition_holds(
+            &state,
+            player,
+            CountCondition::LoreMoreThan(0)
+        ));
+    }
+}
+
 /// Apply an amount-bearing targeted effect (give `{S}` / deal / remove damage) to
 /// `target_card`, evaluating its [`Amount`] at resolution.
 fn apply_amount_effect(
