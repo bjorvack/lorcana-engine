@@ -9,6 +9,12 @@ readme = "README.md"
 keywords = ["lorcana", "game", "engine", "trading-card-game"]
 categories = ["game-development"]
 
+[features]
+# Behaviour audit logging (named transcripts pairing a card's printed text with
+# the events it produced). Off by default — not compiled into release builds;
+# enable for debugging/testing: `cargo test --features audit-log`.
+audit-log = []
+
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }
 toml = "0.8"

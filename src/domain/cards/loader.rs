@@ -70,6 +70,8 @@ pub struct TomlCard {
     pub max_copies: Option<u32>,
     /// URL (or path) to the card's image, for display.
     pub image: Option<String>,
+    /// Printed rules text (display / auditing).
+    pub text: Option<String>,
     /// Triggered abilities authored in the effect DSL (see [`super::dsl`]).
     #[serde(default)]
     pub abilities: Vec<super::dsl::TomlAbility>,
@@ -199,7 +201,8 @@ impl TomlCard {
             .with_action_effects(action_effects)
             .with_ink_types(ink_types)
             .with_max_deck_copies(self.max_copies)
-            .with_image(self.image.clone()))
+            .with_image(self.image.clone())
+            .with_text(self.text.clone()))
     }
 
     fn stat(&self, value: Option<u32>, stat: &'static str) -> Result<u32, LoadError> {

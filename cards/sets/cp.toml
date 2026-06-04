@@ -10,9 +10,7 @@ type = "Song"
 cost = 5
 ink = ["Steel"]
 image = "https://cards.lorcast.io/card/digital/large/crd_94aea01bdb0a49a4aff52b8802388bb1.avif?1755566321"
-# text:
-#   (A character with cost 5 or more can {E} to sing this song for free.)
-#   Each player discards their hand and draws 7 cards.
+text = "(A character with cost 5 or more can {E} to sing this song for free.)\nEach player discards their hand and draws 7 cards."
 
 [[card]]
 name = "Baymax - Armored Companion"
@@ -25,8 +23,7 @@ strength = 2
 willpower = 6
 lore = 2
 classifications = ["Storyborn", "Hero", "Robot"]
-# text:
-#   THE TREATMENT IS WORKING When you play this character and whenever he quests, you may remove up to 2 damage from another chosen character of yours. Gain 1 lore for each 1 damage removed this way.
+text = "THE TREATMENT IS WORKING When you play this character and whenever he quests, you may remove up to 2 damage from another chosen character of yours. Gain 1 lore for each 1 damage removed this way."
 
 [[card]]
 name = "Cinderella - Stouthearted"
@@ -40,10 +37,7 @@ willpower = 5
 lore = 3
 classifications = ["Floodborn", "Hero", "Princess", "Knight"]
 keywords = ["Resist 2", "Shift 5"]
-# text:
-#   Shift 5 (You may pay 5 {I} to play this on top of one of your characters named Cinderella.)
-#   Resist +2 (Damage dealt to this character is reduced by 2.)
-#   THE SINGING SWORD Whenever you play a song, this character may challenge ready characters this turn.
+text = "Shift 5 (You may pay 5 {I} to play this on top of one of your characters named Cinderella.)\nResist +2 (Damage dealt to this character is reduced by 2.)\nTHE SINGING SWORD Whenever you play a song, this character may challenge ready characters this turn."
 
 [[card]]
 name = "Dragon Fire"
@@ -51,8 +45,7 @@ type = "Action"
 cost = 5
 ink = ["Ruby"]
 image = "https://cards.lorcast.io/card/digital/large/crd_01d7e6fed9f74da6910769c8b8780f17.avif?1709690747"
-# text:
-#   Banish chosen character.
+text = "Banish chosen character."
 
 [[card.abilities]]
 on = "play"
@@ -67,8 +60,7 @@ image = "https://cards.lorcast.io/card/digital/large/crd_30598adaf21345729b49247
 move_cost = 1
 willpower = 4
 lore = 1
-# text:
-#   ETERNAL WINTER When you play this location, choose an exerted character. While this location is in play, that character can't ready at the start of their turn.
+text = "ETERNAL WINTER When you play this location, choose an exerted character. While this location is in play, that character can't ready at the start of their turn."
 
 [[card]]
 name = "Invited to the Ball"
@@ -76,8 +68,7 @@ type = "Action"
 cost = 2
 ink = ["Amber"]
 image = "https://cards.lorcast.io/card/digital/large/crd_50f9f3e358124c8bbe7714840adb4a45.avif?1755565874"
-# text:
-#   Reveal the top 2 cards of your deck. Put revealed character cards into your hand. Put the rest on the bottom of your deck in any order.
+text = "Reveal the top 2 cards of your deck. Put revealed character cards into your hand. Put the rest on the bottom of your deck in any order."
 
 [[card]]
 name = "Kuzco - Temperamental Emperor"
@@ -90,9 +81,7 @@ willpower = 4
 lore = 3
 classifications = ["Storyborn", "King"]
 keywords = ["Ward"]
-# text:
-#   Ward (Opponents can't choose this character except to challenge.)
-#   NO TOUCHY! When this character is challenged and banished, you may banish the challenging character.
+text = "Ward (Opponents can't choose this character except to challenge.)\nNO TOUCHY! When this character is challenged and banished, you may banish the challenging character."
 
 [[card]]
 name = "Let It Go"
@@ -101,9 +90,7 @@ cost = 5
 ink = ["Sapphire"]
 image = "https://cards.lorcast.io/card/digital/large/crd_49923766da0445deab289bad2cde7662.avif?1709690747"
 inkwell = true
-# text:
-#   (A character with cost 5 or more can {E} to sing this song for free.)
-#   Put chosen character into their player's inkwell facedown and exerted.
+text = "(A character with cost 5 or more can {E} to sing this song for free.)\nPut chosen character into their player's inkwell facedown and exerted."
 
 [[card.abilities]]
 on = "play"
@@ -120,5 +107,4 @@ strength = 1
 willpower = 5
 lore = 2
 classifications = ["Storyborn", "Hero", "Princess"]
-# text:
-#   GLEAM AND GLOW When you play this character, remove up to 3 damage from one of your characters. Draw a card for each 1 damage removed this way.
+text = "GLEAM AND GLOW When you play this character, remove up to 3 damage from one of your characters. Draw a card for each 1 damage removed this way."

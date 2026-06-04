@@ -6,6 +6,9 @@
 //!   cargo run -- play <d1.txt> <d2.txt> [seed]
 //!                                          # auto-play a real game from two
 //!                                          # decklists, using cards/sets/
+//!   cargo run --features audit-log -- audit <d1.txt> <d2.txt> [seed]
+//!                                          # like `play`, but emit a behaviour
+//!                                          # audit log (card text vs. events)
 
 use std::path::Path;
 
@@ -30,6 +33,27 @@ fn main() {
                 10_000,
             ) {
                 Ok(transcript) => print!("{transcript}"),
+                Err(e) => {
+                    eprintln!("error: {e}");
+                    std::process::exit(1);
+                }
+            }
+        }
+        #[cfg(feature = "audit-log")]
+        Some("audit") => {
+            let (Some(d1), Some(d2)) = (args.get(2), args.get(3)) else {
+                eprintln!("usage: audit <deck1.txt> <deck2.txt> [seed]");
+                std::process::exit(2);
+            };
+            let seed = args.get(4).and_then(|s| s.parse().ok()).unwrap_or(7);
+            match lorcana_engine::application::audit::audit_from_files(
+                Path::new("cards/sets"),
+                Path::new(d1),
+                Path::new(d2),
+                seed,
+                10_000,
+            ) {
+                Ok(log) => print!("{log}"),
                 Err(e) => {
                     eprintln!("error: {e}");
                     std::process::exit(1);

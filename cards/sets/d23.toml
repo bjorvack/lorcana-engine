@@ -16,9 +16,7 @@ willpower = 3
 lore = 1
 classifications = ["Storyborn", "Ally", "Madrigal"]
 keywords = ["Evasive"]
-# text:
-#   Evasive (Only characters with Evasive can challenge this character.)
-#   YOU JUST HAVE TO SEE IT {E} – Name a card, then reveal the top card of your deck. If it’s the named card, put that card into your hand and gain 3 lore. Otherwise, put it on the top of your deck.
+text = "Evasive (Only characters with Evasive can challenge this character.)\nYOU JUST HAVE TO SEE IT {E} – Name a card, then reveal the top card of your deck. If it's the named card, put that card into your hand and gain 3 lore. Otherwise, put it on the top of your deck."
 
 [[card]]
 name = "Cinderella - Stouthearted"
@@ -32,10 +30,7 @@ willpower = 5
 lore = 3
 classifications = ["Floodborn", "Hero", "Princess", "Knight"]
 keywords = ["Resist 2", "Shift 5"]
-# text:
-#   Shift 5 (You may pay 5 {I} to play this on top of one of your characters named Cinderella.)
-#   Resist +2 (Damage dealt to this character is reduced by 2.)
-#   THE SINGING SWORD Whenever you play a song, this character can challenge ready characters this turn.
+text = "Shift 5 (You may pay 5 {I} to play this on top of one of your characters named Cinderella.)\nResist +2 (Damage dealt to this character is reduced by 2.)\nTHE SINGING SWORD Whenever you play a song, this character can challenge ready characters this turn."
 
 [[card]]
 name = "Iago - Out of Reach"
@@ -48,8 +43,7 @@ strength = 3
 willpower = 3
 lore = 2
 classifications = ["Storyborn", "Ally"]
-# text:
-#   SELF-PRESERVATION While you have another exerted character in play, this character can't be challenged.
+text = "SELF-PRESERVATION While you have another exerted character in play, this character can't be challenged."
 
 [[card]]
 name = "Mad Hatter - Unruly Eccentric"
@@ -62,8 +56,7 @@ strength = 3
 willpower = 5
 lore = 2
 classifications = ["Storyborn"]
-# text:
-#   UNBIRTHDAY PRESENT Whenever a damaged character challenges another character, you may draw a card.
+text = "UNBIRTHDAY PRESENT Whenever a damaged character challenges another character, you may draw a card."
 
 [[card]]
 name = "Mickey Mouse - Brave Little Tailor"
@@ -77,8 +70,7 @@ willpower = 5
 lore = 4
 classifications = ["Dreamborn", "Hero"]
 keywords = ["Evasive"]
-# text:
-#   Evasive (Only characters with Evasive can challenge this character.)
+text = "Evasive (Only characters with Evasive can challenge this character.)"
 
 [[card]]
 name = "Mickey Mouse - Playful Sorcerer"
@@ -92,10 +84,7 @@ willpower = 4
 lore = 2
 classifications = ["Floodborn", "Hero", "Sorcerer"]
 keywords = ["Resist 1", "Shift 3"]
-# text:
-#   Shift 3 (You may pay 3 {I} to play this on top of one of your characters named Mickey Mouse.)
-#   Resist +1 (Damage dealt to this character is reduced by 1.)
-#   SWEEP AWAY When you play this character, deal damage to chosen character equal to the number of Broom characters you have in play.
+text = "Shift 3 (You may pay 3 {I} to play this on top of one of your characters named Mickey Mouse.)\nResist +1 (Damage dealt to this character is reduced by 1.)\nSWEEP AWAY When you play this character, deal damage to chosen character equal to the number of Broom characters you have in play."
 
 [[card.abilities]]
 on = "play"
@@ -111,8 +100,7 @@ strength = 2
 willpower = 1
 lore = 2
 classifications = ["Storyborn", "Hero"]
-# text:
-#   FAVORABLE CHANCE During your turn, whenever a card is put into your inkwell, you may reveal the top card of your deck. If it's an item card, you may play that item for free and they enter play exerted. Otherwise, put it on the bottom of your deck.
+text = "FAVORABLE CHANCE During your turn, whenever a card is put into your inkwell, you may reveal the top card of your deck. If it's an item card, you may play that item for free and they enter play exerted. Otherwise, put it on the bottom of your deck."
 
 [[card]]
 name = "Ursula - Deceiver"
@@ -125,8 +113,7 @@ strength = 1
 willpower = 3
 lore = 1
 classifications = ["Storyborn", "Villain", "Sorcerer"]
-# text:
-#   YOU'LL NEVER EVEN MISS IT When you play this card, chosen opponent reveals their hand and discards a song card of your choice.
+text = "YOU'LL NEVER EVEN MISS IT When you play this card, chosen opponent reveals their hand and discards a song card of your choice."
 
 [[card]]
 name = "Vanellope Von Schweetz - Sugar Rush Princess"
@@ -140,6 +127,4 @@ willpower = 4
 lore = 2
 classifications = ["Floodborn", "Hero", "Princess", "Racer"]
 keywords = ["Shift 2"]
-# text:
-#   Shift 2 (You may pay 2 {I} to play this on top of one of your characters named Vanellope von Schweetz.)
-#   I HEREBY DECREE Whenever you play another Princess character, all opposing characters get -1 {S} until the start of your next turn.
+text = "Shift 2 (You may pay 2 {I} to play this on top of one of your characters named Vanellope von Schweetz.)\nI HEREBY DECREE Whenever you play another Princess character, all opposing characters get -1 {S} until the start of your next turn."

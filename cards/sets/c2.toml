@@ -10,9 +10,7 @@ type = "Song"
 cost = 6
 ink = ["Sapphire"]
 image = "https://cards.lorcast.io/card/digital/large/crd_3334bebad6e7424c80c2b8c0e157f654.avif?1776533296"
-# text:
-#   (A character with cost 6 or more can {E} to sing this song for free.)
-#   Look at the top 3 cards of your deck. You may reveal a character, item, or location card with cost 6 or less and play it for free. Put the rest on the bottom of your deck in any order.
+text = "(A character with cost 6 or more can {E} to sing this song for free.)\nLook at the top 3 cards of your deck. You may reveal a character, item, or location card with cost 6 or less and play it for free. Put the rest on the bottom of your deck in any order."
 
 [[card]]
 name = "Dragon Fire"
@@ -20,8 +18,7 @@ type = "Action"
 cost = 5
 ink = ["Ruby"]
 image = "https://cards.lorcast.io/card/digital/large/crd_f54b0e3b38d340ffa793953c49e6cb56.avif?1776533276"
-# text:
-#   Banish chosen character.
+text = "Banish chosen character."
 
 [[card.abilities]]
 on = "play"
@@ -38,9 +35,7 @@ willpower = 5
 lore = 2
 classifications = ["Floodborn", "Hero", "Queen", "Sorcerer"]
 keywords = ["Shift 4"]
-# text:
-#   Shift 4 {I} (You may pay 4 {I} to play this on top of one of your characters named Elsa.)
-#   WINTER WALL Whenever this character quests, you may exert chosen character. If you do and you have a character named Anna in play, the chosen character can’t ready at the start of their next turn.
+text = "Shift 4 {I} (You may pay 4 {I} to play this on top of one of your characters named Elsa.)\nWINTER WALL Whenever this character quests, you may exert chosen character. If you do and you have a character named Anna in play, the chosen character can't ready at the start of their next turn."
 
 [[card]]
 name = "Let It Go"
@@ -49,9 +44,7 @@ cost = 5
 ink = ["Sapphire"]
 image = "https://cards.lorcast.io/card/digital/large/crd_bd1327a61be84346b595f07ccf1df0e6.avif?1776533283"
 inkwell = true
-# text:
-#   (A character with cost 5 or more can {E} to sing this song for free.)
-#   Put chosen character into their player's inkwell facedown and exerted.
+text = "(A character with cost 5 or more can {E} to sing this song for free.)\nPut chosen character into their player's inkwell facedown and exerted."
 
 [[card.abilities]]
 on = "play"
@@ -69,8 +62,7 @@ willpower = 1
 lore = 1
 classifications = ["Storyborn", "Ally"]
 keywords = ["Evasive"]
-# text:
-#   Evasive (Only characters with Evasive can challenge this character.)
+text = "Evasive (Only characters with Evasive can challenge this character.)"
 
 [[card]]
 name = "Simba - Pride Protector"
@@ -83,9 +75,7 @@ willpower = 4
 lore = 2
 classifications = ["Floodborn", "Hero", "Prince"]
 keywords = ["Shift 3"]
-# text:
-#   Shift 3 {I} (You may pay 3 {I} to play this on top of one of your characters named Simba.)
-#   UNDERSTAND THE BALANCE At the end of your turn, if this character is exerted, you may ready your other characters.
+text = "Shift 3 {I} (You may pay 3 {I} to play this on top of one of your characters named Simba.)\nUNDERSTAND THE BALANCE At the end of your turn, if this character is exerted, you may ready your other characters."
 
 [[card]]
 name = "Stand Out"
@@ -94,9 +84,7 @@ cost = 3
 ink = ["Emerald"]
 image = "https://cards.lorcast.io/card/digital/large/crd_d0049d68c901455c94c76afdd99a2745.avif?1776533289"
 inkwell = true
-# text:
-#   (A character with cost 3 or more can {E} to sing this song for free.)
-#   Chosen character gets +3 {S} and gains Evasive until the start of your next turn. (Only characters with Evasive can challenge them.)
+text = "(A character with cost 3 or more can {E} to sing this song for free.)\nChosen character gets +3 {S} and gains Evasive until the start of your next turn. (Only characters with Evasive can challenge them.)"
 
 [[card]]
 name = "The Headless Horseman - Cursed Rider"
@@ -110,9 +98,7 @@ willpower = 7
 lore = 2
 classifications = ["Floodborn", "Villain"]
 keywords = ["Shift 5"]
-# text:
-#   Shift 5 {I} (You may pay 5 {I} to play this on top of one of your characters named The Headless Horseman.)
-#   WITCHING HOUR When you play this character, each player draws 3 cards, then discards 3 cards at random. Choose an opposing character and deal 2 damage to them for each action card discarded this way.
+text = "Shift 5 {I} (You may pay 5 {I} to play this on top of one of your characters named The Headless Horseman.)\nWITCHING HOUR When you play this character, each player draws 3 cards, then discards 3 cards at random. Choose an opposing character and deal 2 damage to them for each action card discarded this way."
 
 [[card]]
 name = "Tinker Bell - Insistent Fairy"
@@ -126,6 +112,4 @@ willpower = 1
 lore = 1
 classifications = ["Storyborn", "Ally", "Fairy"]
 keywords = ["Evasive"]
-# text:
-#   Evasive (Only characters with Evasive can challenge this character.)
-#   PAY ATTENTION Whenever you play a character with 5 {S} or more, you may exert them to gain 2 lore.
+text = "Evasive (Only characters with Evasive can challenge this character.)\nPAY ATTENTION Whenever you play a character with 5 {S} or more, you may exert them to gain 2 lore."

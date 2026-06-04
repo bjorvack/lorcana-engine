@@ -15,9 +15,7 @@ strength = 2
 willpower = 3
 lore = 2
 classifications = ["Storyborn", "Hero"]
-# text:
-#   WASHED AWAY When you play this character, you may put chosen item into its player's inkwell facedown and exerted.
-#   MAKING WAVES Whenever this character quests, chosen opposing character gets -2 {S} this turn.
+text = "WASHED AWAY When you play this character, you may put chosen item into its player's inkwell facedown and exerted.\nMAKING WAVES Whenever this character quests, chosen opposing character gets -2 {S} this turn."
 [[card.abilities]]
 on = "play"
 may = true
@@ -38,8 +36,7 @@ strength = 3
 willpower = 3
 lore = 2
 classifications = ["Dreamborn", "Hero", "Princess"]
-# text:
-#   FAMILIAR GROUND Whenever this character quests, if you played another character this turn, chosen opposing character can't challenge and must quest during their next turn if able.
+text = "FAMILIAR GROUND Whenever this character quests, if you played another character this turn, chosen opposing character can't challenge and must quest during their next turn if able."
 
 [[card]]
 name = "Beast - Gracious Prince"
@@ -52,8 +49,7 @@ strength = 5
 willpower = 4
 lore = 1
 classifications = ["Storyborn", "Hero", "Prince"]
-# text:
-#   FULL DANCE CARD Your Princess characters get +1 {S} and +1 {W}.
+text = "FULL DANCE CARD Your Princess characters get +1 {S} and +1 {W}."
 [[card.statics]]
 strength = 1
 to = "your Princess characters"
@@ -74,9 +70,7 @@ willpower = 1
 lore = 1
 classifications = ["Storyborn", "Hero", "Prince"]
 keywords = ["Rush"]
-# text:
-#   Rush (This character can challenge the turn they're played.)
-#   DYNAMIC MANEUVER Whenever this character challenges, if he’s at a location, he takes no damage from the challenge.
+text = "Rush (This character can challenge the turn they're played.)\nDYNAMIC MANEUVER Whenever this character challenges, if he's at a location, he takes no damage from the challenge."
 
 [[card]]
 name = "Belle - Accomplished Mystic"
@@ -90,9 +84,7 @@ willpower = 4
 lore = 2
 classifications = ["Floodborn", "Hero", "Princess", "Sorcerer"]
 keywords = ["Shift 3"]
-# text:
-#   Shift 3 (You may pay 3 {I} to play this on top of one of your characters named Belle.)
-#   ENHANCED HEALING When you play this character, move up to 3 damage counters from chosen character to chosen opposing character.
+text = "Shift 3 (You may pay 3 {I} to play this on top of one of your characters named Belle.)\nENHANCED HEALING When you play this character, move up to 3 damage counters from chosen character to chosen opposing character."
 
 [[card]]
 name = "Belle - Apprentice Inventor"
@@ -105,8 +97,7 @@ strength = 3
 willpower = 3
 lore = 1
 classifications = ["Storyborn", "Hero", "Princess", "Inventor"]
-# text:
-#   WHAT A MESS During your turn, you may banish chosen item of yours to play this character for free.
+text = "WHAT A MESS During your turn, you may banish chosen item of yours to play this character for free."
 
 [[card]]
 name = "Cinderella - Resourceful Traveler"
@@ -119,8 +110,7 @@ strength = 1
 willpower = 4
 lore = 2
 classifications = ["Dreamborn", "Hero", "Princess"]
-# text:
-#   THIS AND THAT Whenever this character quests, if you played another character this turn, you may put the top card of your deck into your inkwell facedown and exerted.
+text = "THIS AND THAT Whenever this character quests, if you played another character this turn, you may put the top card of your deck into your inkwell facedown and exerted."
 
 [[card]]
 name = "Cruella De Vil - Judgmental Traveler"
@@ -133,8 +123,7 @@ strength = 4
 willpower = 4
 lore = 4
 classifications = ["Dreamborn", "Villain"]
-# text:
-#   YOU'RE OUT OF FASHION Whenever this character quests, if you played another character this turn, you may banish chosen damaged character.
+text = "YOU'RE OUT OF FASHION Whenever this character quests, if you played another character this turn, you may banish chosen damaged character."
 
 [[card]]
 name = "Cursed Merfolk - Ursula's Handiwork"
@@ -146,8 +135,7 @@ strength = 0
 willpower = 1
 lore = 2
 classifications = ["Storyborn"]
-# text:
-#   POOR SOULS Whenever this character is challenged, each opponent chooses and discards a card.
+text = "POOR SOULS Whenever this character is challenged, each opponent chooses and discards a card."
 [[card.abilities]]
 on = "challenged"
 do = { discard = 1, who = "each opponent" }
@@ -164,10 +152,7 @@ willpower = 6
 lore = 2
 classifications = ["Floodborn", "Hero", "Detective"]
 keywords = ["Shift 4", "Support"]
-# text:
-#   Shift 4 {I} (You may pay 4 {I} to play this on top of one of your characters named Daisy Duck.)
-#   Support (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)
-#   STRANGE HAPPENINGS While this character is exerted, cards enter opponents' inkwells exerted.
+text = "Shift 4 {I} (You may pay 4 {I} to play this on top of one of your characters named Daisy Duck.)\nSupport (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)\nSTRANGE HAPPENINGS While this character is exerted, cards enter opponents' inkwells exerted."
 
 [[card]]
 name = "Daisy Duck - Pirate Captain"
@@ -180,8 +165,7 @@ strength = 3
 willpower = 3
 lore = 2
 classifications = ["Dreamborn", "Hero", "Pirate", "Captain"]
-# text:
-#   DISTANT SHORES Whenever one of your Pirate characters quests while at a location, draw a card.
+text = "DISTANT SHORES Whenever one of your Pirate characters quests while at a location, draw a card."
 
 [[card]]
 name = "Donald Duck - Buccaneer"
@@ -194,8 +178,7 @@ strength = 3
 willpower = 4
 lore = 1
 classifications = ["Dreamborn", "Hero", "Pirate", "Captain"]
-# text:
-#   BOARDING PARTY During your turn, whenever this character banishes another character in a challenge, your other characters get +1 {L} this turn.
+text = "BOARDING PARTY During your turn, whenever this character banishes another character in a challenge, your other characters get +1 {L} this turn."
 
 [[card]]
 name = "Dumbo - The Flying Elephant"
@@ -209,9 +192,7 @@ willpower = 2
 lore = 1
 classifications = ["Storyborn", "Hero"]
 keywords = ["Evasive"]
-# text:
-#   Evasive (Only characters with Evasive can challenge this character.)
-#   AERIAL DUO When you play this character, chosen character gains Evasive until the start of your next turn.
+text = "Evasive (Only characters with Evasive can challenge this character.)\nAERIAL DUO When you play this character, chosen character gains Evasive until the start of your next turn."
 
 [[card]]
 name = "Elisa Maza - Transformed Gargoyle"
@@ -224,9 +205,7 @@ strength = 4
 willpower = 4
 lore = 1
 classifications = ["Storyborn", "Hero", "Gargoyle", "Detective"]
-# text:
-#   FOREVER STRONG Your characters' {S} can't be reduced below their printed value.
-#   STONE BY DAY If you have 3 or more cards in your hand, this character can't ready.
+text = "FOREVER STRONG Your characters' {S} can't be reduced below their printed value.\nSTONE BY DAY If you have 3 or more cards in your hand, this character can't ready."
 
 [[card]]
 name = "Elsa - Exploring the Unknown"
@@ -239,8 +218,7 @@ strength = 1
 willpower = 3
 lore = 1
 classifications = ["Dreamborn", "Hero", "Queen", "Sorcerer"]
-# text:
-#   CLOSER LOOK When you play this character, you may draw a card.
+text = "CLOSER LOOK When you play this character, you may draw a card."
 [[card.abilities]]
 on = "play"
 may = true
@@ -258,10 +236,7 @@ willpower = 5
 lore = 1
 classifications = ["Dreamborn", "Hero", "Queen", "Sorcerer"]
 keywords = ["Evasive", "Rush"]
-# text:
-#   Rush (This character can challenge the turn they're played.)
-#   Evasive (Only characters with Evasive can challenge this character.)
-#   CRYSTALLIZE When you play this character, exert chosen opposing character.
+text = "Rush (This character can challenge the turn they're played.)\nEvasive (Only characters with Evasive can challenge this character.)\nCRYSTALLIZE When you play this character, exert chosen opposing character."
 [[card.abilities]]
 on = "play"
 do = { exert = "chosen opposing character" }
@@ -276,9 +251,7 @@ strength = 3
 willpower = 5
 lore = 2
 classifications = ["Dreamborn", "Hero"]
-# text:
-#   EVEN THE SCORE Whenever one of your other Emerald characters is challenged and banished, banish the challenging character.
-#   PROVIDE COVER Your other Emerald characters gain Ward. (Opponents can’t choose them except to challenge.)
+text = "EVEN THE SCORE Whenever one of your other Emerald characters is challenged and banished, banish the challenging character.\nPROVIDE COVER Your other Emerald characters gain Ward. (Opponents can't choose them except to challenge.)"
 
 [[card]]
 name = "Goofy - Expert Shipwright"
@@ -292,9 +265,7 @@ willpower = 4
 lore = 3
 classifications = ["Dreamborn", "Hero", "Inventor"]
 keywords = ["Ward"]
-# text:
-#   Ward (Opponents can't choose this character except to challenge.)
-#   CLEVER DESIGN Whenever this character quests, chosen character gains Ward until the start of your next turn.
+text = "Ward (Opponents can't choose this character except to challenge.)\nCLEVER DESIGN Whenever this character quests, chosen character gains Ward until the start of your next turn."
 
 [[card]]
 name = "Goofy - Set for Adventure"
@@ -307,8 +278,7 @@ strength = 2
 willpower = 2
 lore = 1
 classifications = ["Storyborn", "Hero"]
-# text:
-#   FAMILY VACATION Once during your turn, whenever this character moves to a location, you may move one of your other characters to that location for free. If you do, draw a card.
+text = "FAMILY VACATION Once during your turn, whenever this character moves to a location, you may move one of your other characters to that location for free. If you do, draw a card."
 
 [[card]]
 name = "Gramma Tala - Connected to Nature"
@@ -320,8 +290,7 @@ strength = 6
 willpower = 6
 lore = 2
 classifications = ["Storyborn", "Mentor"]
-# text:
-#   ANCESTORS' GIFT For each card in your inkwell, you pay 1 {I} less to play this character.
+text = "ANCESTORS' GIFT For each card in your inkwell, you pay 1 {I} less to play this character."
 
 [[card]]
 name = "Jasmine - Soothing Princess"
@@ -335,9 +304,7 @@ willpower = 5
 lore = 2
 classifications = ["Storyborn", "Hero", "Princess", "Whisper"]
 keywords = ["Boost 2"]
-# text:
-#   Boost 2 {I} (Once during your turn, you may pay 2 {I} to put the top card of your deck facedown under this character.)
-#   UPLIFTING AURA Whenever this character quests, if there’s a card under her, remove up to 3 damage from each of your characters.
+text = "Boost 2 {I} (Once during your turn, you may pay 2 {I} to put the top card of your deck facedown under this character.)\nUPLIFTING AURA Whenever this character quests, if there's a card under her, remove up to 3 damage from each of your characters."
 
 [[card]]
 name = "Lenny - Toy Binoculars"
@@ -350,9 +317,7 @@ strength = 0
 willpower = 2
 lore = 1
 classifications = ["Storyborn", "Ally", "Toy"]
-# text:
-#   TAKE A GOOD LOOK When you play this character, chosen opponent reveals their hand and discards an action card of your choice.
-#   COMIN' UP FAST Once during your turn, whenever you play an action, you may ready this character.
+text = "TAKE A GOOD LOOK When you play this character, chosen opponent reveals their hand and discards an action card of your choice.\nCOMIN' UP FAST Once during your turn, whenever you play an action, you may ready this character."
 
 [[card]]
 name = "Maleficent - Imperious Traveler"
@@ -365,8 +330,7 @@ strength = 3
 willpower = 5
 lore = 2
 classifications = ["Dreamborn", "Villain", "Sorcerer"]
-# text:
-#   HEED MY WORDS Whenever this character quests, if you played another character this turn, you may exert chosen opposing character.
+text = "HEED MY WORDS Whenever this character quests, if you played another character this turn, you may exert chosen opposing character."
 
 [[card]]
 name = "Maleficent - Monstrous Dragon"
@@ -379,8 +343,7 @@ strength = 7
 willpower = 5
 lore = 2
 classifications = ["Storyborn", "Villain", "Dragon"]
-# text:
-#   DRAGON FIRE When you play this character, you may banish chosen character.
+text = "DRAGON FIRE When you play this character, you may banish chosen character."
 [[card.abilities]]
 on = "play"
 may = true
@@ -398,9 +361,7 @@ willpower = 4
 lore = 2
 classifications = ["Floodborn", "Hero", "Pirate", "Captain"]
 keywords = ["Shift 3"]
-# text:
-#   Shift 3 (You may pay 3 {I} to play this on top of one of your characters named Mickey Mouse.)
-#   MARINER'S MIGHT Whenever this character quests, chosen Pirate character gets +2 {S} and gains "This character takes no damage from challenges" this turn.
+text = "Shift 3 (You may pay 3 {I} to play this on top of one of your characters named Mickey Mouse.)\nMARINER'S MIGHT Whenever this character quests, chosen Pirate character gets +2 {S} and gains \"This character takes no damage from challenges\" this turn."
 
 [[card]]
 name = "Mickey Mouse - True Friend"
@@ -424,8 +385,7 @@ strength = 3
 willpower = 2
 lore = 1
 classifications = ["Dreamborn", "Hero", "Pirate"]
-# text:
-#   LAND, HO! Once during your turn, whenever a card is put into your inkwell, you may return a location card from your discard to your hand.
+text = "LAND, HO! Once during your turn, whenever a card is put into your inkwell, you may return a location card from your discard to your hand."
 
 [[card]]
 name = "Mulan - Disguised Soldier"
@@ -438,8 +398,7 @@ strength = 2
 willpower = 1
 lore = 1
 classifications = ["Storyborn", "Hero", "Princess"]
-# text:
-#   WHERE DO I SIGN IN? When you play this character, you may draw a card, then choose and discard a card.
+text = "WHERE DO I SIGN IN? When you play this character, you may draw a card, then choose and discard a card."
 [[card.abilities]]
 on = "play"
 may = true
@@ -456,8 +415,7 @@ strength = 4
 willpower = 5
 lore = 1
 classifications = ["Dreamborn", "Hero", "Princess"]
-# text:
-#   WANDERING SPIRIT Whenever this character quests, if you played another character this turn, return a location card from your discard to your hand.
+text = "WANDERING SPIRIT Whenever this character quests, if you played another character this turn, return a location card from your discard to your hand."
 
 [[card]]
 name = "Putting It All Together"
@@ -466,8 +424,7 @@ cost = 2
 ink = ["Steel"]
 image = "https://cards.lorcast.io/card/digital/large/crd_a5f4037f0c50462380ba6db7a516cd7a.avif?1773508842"
 inkwell = true
-# text:
-#   Chosen opposing character can't challenge during their next turn. Draw a card.
+text = "Chosen opposing character can't challenge during their next turn. Draw a card."
 
 [[card]]
 name = "Queen of Hearts - Impatient Traveler"
@@ -480,8 +437,7 @@ strength = 4
 willpower = 2
 lore = 2
 classifications = ["Dreamborn", "Villain", "Queen"]
-# text:
-#   ROYAL COMMAND Whenever this character quests, if you played another character this turn, chosen character gains Rush this turn. (They can challenge the turn they're played.)
+text = "ROYAL COMMAND Whenever this character quests, if you played another character this turn, chosen character gains Rush this turn. (They can challenge the turn they're played.)"
 
 [[card]]
 name = "Scar - Eerily Prepared"
@@ -494,9 +450,7 @@ willpower = 5
 lore = 2
 classifications = ["Storyborn", "Villain", "Whisper"]
 keywords = ["Boost 2"]
-# text:
-#   Boost 2 {I} (Once during your turn, you may pay 2 {I} to put the top card of your deck facedown under this character.)
-#   SURVIVAL OF THE FITTEST Whenever you put a card under this character, chosen opposing character gets -5 {S} this turn.
+text = "Boost 2 {I} (Once during your turn, you may pay 2 {I} to put the top card of your deck facedown under this character.)\nSURVIVAL OF THE FITTEST Whenever you put a card under this character, chosen opposing character gets -5 {S} this turn."
 
 [[card]]
 name = "Scrooge McDuck - S.H.U.S.H. Agent"
@@ -508,9 +462,7 @@ strength = 0
 willpower = 2
 lore = 2
 classifications = ["Storyborn", "Hero"]
-# text:
-#   BACKUP PLAN When you play this character, draw a card, then choose and discard a card.
-#   ON THE MOVE When this character is challenged, return this card to your hand. (No damage is dealt in that challenge.)
+text = "BACKUP PLAN When you play this character, draw a card, then choose and discard a card.\nON THE MOVE When this character is challenged, return this card to your hand. (No damage is dealt in that challenge.)"
 [[card.abilities]]
 on = "play"
 do = [{ draw = 1 }, { discard = 1 }]
@@ -530,9 +482,7 @@ willpower = 1
 lore = 1
 classifications = ["Storyborn", "Hero", "Deity", "Dragon"]
 keywords = ["Evasive"]
-# text:
-#   Evasive (Only characters with Evasive can challenge this character.)
-#   BRING ON THE HEAT! When you play this character, banish chosen opposing character with 1 {S} or less.
+text = "Evasive (Only characters with Evasive can challenge this character.)\nBRING ON THE HEAT! When you play this character, banish chosen opposing character with 1 {S} or less."
 [[card.abilities]]
 on = "play"
 do = { banish = "chosen opposing character with 1 {S} or less" }
@@ -548,8 +498,7 @@ strength = 4
 willpower = 5
 lore = 2
 classifications = ["Storyborn", "Hero", "Alien"]
-# text:
-#   BRING YOUR FRIENDS Whenever this character quests, if you have 2 or more other characters in play, you may draw a card.
+text = "BRING YOUR FRIENDS Whenever this character quests, if you have 2 or more other characters in play, you may draw a card."
 [[card.abilities]]
 on = "quest"
 may = true
@@ -566,8 +515,7 @@ strength = 3
 willpower = 2
 lore = 1
 classifications = ["Storyborn", "Hero", "Alien"]
-# text:
-#   AMPED UP While you have a character named Lilo in play, this character gains Challenger +3. (They get +3 {S} while challenging.)
+text = "AMPED UP While you have a character named Lilo in play, this character gains Challenger +3. (They get +3 {S} while challenging.)"
 
 [[card]]
 name = "Strength of a Raging Fire"
@@ -576,9 +524,7 @@ cost = 3
 ink = ["Steel"]
 image = "https://cards.lorcast.io/card/digital/large/crd_3036fc62622b43fda13f6021ab5401a5.avif?1773508732"
 inkwell = true
-# text:
-#   (A character with cost 3 or more can {E} to sing this song for free.)
-#   Deal damage to chosen character equal to the number of characters you have in play.
+text = "(A character with cost 3 or more can {E} to sing this song for free.)\nDeal damage to chosen character equal to the number of characters you have in play."
 [[card.abilities]]
 on = "play"
 do = { deal_damage = "per your characters", target = "chosen character" }
@@ -593,8 +539,7 @@ inkwell = true
 move_cost = 1
 willpower = 3
 lore = 1
-# text:
-#   STARTLING DISCOVERY Characters gain " — Draw a card" while here.
+text = "STARTLING DISCOVERY Characters gain \" — Draw a card\" while here."
 
 [[card]]
 name = "The Horseman Strikes!"
@@ -603,8 +548,7 @@ cost = 3
 ink = ["Amber"]
 image = "https://cards.lorcast.io/card/digital/large/crd_bee6f97742e542d2b3d1beed86b61049.avif?1773508802"
 inkwell = true
-# text:
-#   Draw a card. You may banish chosen character with Evasive.
+text = "Draw a card. You may banish chosen character with Evasive."
 
 [[card]]
 name = "The Queen - Conceited Ruler"
@@ -618,9 +562,7 @@ willpower = 4
 lore = 1
 classifications = ["Storyborn", "Villain", "Queen", "Sorcerer"]
 keywords = ["Support"]
-# text:
-#   Support (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)
-#   ROYAL SUMMONS At the start of your turn, you may choose and discard a Princess or Queen character card to return a character card from your discard to your hand.
+text = "Support (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)\nROYAL SUMMONS At the start of your turn, you may choose and discard a Princess or Queen character card to return a character card from your discard to your hand."
 
 [[card]]
 name = "The Queen - Mirror Seeker"
@@ -633,8 +575,7 @@ strength = 2
 willpower = 5
 lore = 1
 classifications = ["Storyborn", "Villain", "Queen", "Sorcerer"]
-# text:
-#   CALCULATING AND VAIN Whenever this character quests, you may look at the top 3 cards of your deck and put them back in any order.
+text = "CALCULATING AND VAIN Whenever this character quests, you may look at the top 3 cards of your deck and put them back in any order."
 
 [[card]]
 name = "Timon - Snowball Swiper"
@@ -646,8 +587,7 @@ strength = 2
 willpower = 3
 lore = 1
 classifications = ["Storyborn", "Ally"]
-# text:
-#   GET RID OF THAT When you play this character, chosen opponent reveals their hand and discards a non-character card of your choice.
+text = "GET RID OF THAT When you play this character, chosen opponent reveals their hand and discards a non-character card of your choice."
 
 [[card]]
 name = "Tinker Bell - Giant Fairy"
@@ -661,10 +601,7 @@ willpower = 5
 lore = 2
 classifications = ["Floodborn", "Ally", "Fairy"]
 keywords = ["Shift 4"]
-# text:
-#   Shift 4 {I} (You may pay 4 {I} to play this on top of one of your characters named Tinker Bell.)
-#   ROCK THE BOAT When you play this character, deal 1 damage to each opposing character.
-#   PUN PIRATE! During your turn, whenever this character banishes another character in a challenge, you may deal 2 damage to chosen opposing character.
+text = "Shift 4 {I} (You may pay 4 {I} to play this on top of one of your characters named Tinker Bell.)\nROCK THE BOAT When you play this character, deal 1 damage to each opposing character.\nPUN PIRATE! During your turn, whenever this character banishes another character in a challenge, you may deal 2 damage to chosen opposing character."
 [[card.abilities]]
 on = "play"
 do = { deal_damage = 1, target = "all opposing characters" }
@@ -680,9 +617,7 @@ strength = 3
 willpower = 3
 lore = 1
 classifications = ["Dreamborn", "Ally", "Fairy"]
-# text:
-#   FLURRY OF DELIGHT While you have 4 or more cards in your hand, this character gains Evasive. (Only characters with Evasive can challenge them.)
-#   SPECTACULAR FIND While you have 7 or more cards in your hand, this character gets +3 {L}.
+text = "FLURRY OF DELIGHT While you have 4 or more cards in your hand, this character gains Evasive. (Only characters with Evasive can challenge them.)\nSPECTACULAR FIND While you have 7 or more cards in your hand, this character gets +3 {L}."
 
 [[card]]
 name = "White Rabbit - Late Again"
@@ -696,9 +631,7 @@ willpower = 2
 lore = 1
 classifications = ["Storyborn", "Ally"]
 keywords = ["Evasive"]
-# text:
-#   UNDERDOG If this is your first turn and you're not the first player, you pay 1 {I} less to play this character.
-#   Evasive (Only characters with Evasive can challenge this character.)
+text = "UNDERDOG If this is your first turn and you're not the first player, you pay 1 {I} less to play this character.\nEvasive (Only characters with Evasive can challenge this character.)"
 
 [[card]]
 name = "Will o' the Wisp - Forest Spirit"
@@ -711,8 +644,7 @@ strength = 0
 willpower = 3
 lore = 1
 classifications = ["Storyborn"]
-# text:
-#   COME ON OUT When this character is banished in a challenge, you may return this card to your hand.
+text = "COME ON OUT When this character is banished in a challenge, you may return this card to your hand."
 [[card.abilities]]
 on = "banished_in_challenge"
 may = true
@@ -730,9 +662,7 @@ willpower = 3
 lore = 2
 classifications = ["Storyborn", "King", "Deity", "Whisper"]
 keywords = ["Boost 2"]
-# text:
-#   Boost 2 {I} (Once during your turn, you may pay 2 {I} to put the top card of your deck facedown under this character.)
-#   I NEED MORE THUNDERBOLTS! While there’s a card under this character, he gets +2 {S} and +2 {W}.
+text = "Boost 2 {I} (Once during your turn, you may pay 2 {I} to put the top card of your deck facedown under this character.)\nI NEED MORE THUNDERBOLTS! While there's a card under this character, he gets +2 {S} and +2 {W}."
 
 [[card]]
 name = "Zipper - Tiny Helper"

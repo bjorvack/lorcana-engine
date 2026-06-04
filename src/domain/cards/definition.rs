@@ -57,6 +57,9 @@ pub struct CardDefinition {
     max_deck_copies: Option<u32>,
     /// URL (or path) to the card's image, for display (engine-opaque). `None` if unset.
     image: Option<String>,
+    /// The card's printed rules text, for display / behaviour auditing. `None` if
+    /// the card has no text (vanilla).
+    text: Option<String>,
 }
 
 impl CardDefinition {
@@ -79,6 +82,7 @@ impl CardDefinition {
             ink_types: Vec::new(),
             max_deck_copies: None,
             image: None,
+            text: None,
         }
     }
 
@@ -178,6 +182,13 @@ impl CardDefinition {
     #[must_use]
     pub fn with_image(mut self, image: Option<String>) -> Self {
         self.image = image;
+        self
+    }
+
+    /// Set the card's printed rules text (builder).
+    #[must_use]
+    pub fn with_text(mut self, text: Option<String>) -> Self {
+        self.text = text;
         self
     }
 
@@ -382,6 +393,12 @@ impl CardDefinition {
     #[must_use]
     pub fn image(&self) -> Option<&str> {
         self.image.as_deref()
+    }
+
+    /// The card's printed rules text, if any.
+    #[must_use]
+    pub fn text(&self) -> Option<&str> {
+        self.text.as_deref()
     }
 
     /// Whether this card is a song (an action with the "Song" classification,
