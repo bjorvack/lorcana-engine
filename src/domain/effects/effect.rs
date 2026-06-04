@@ -335,9 +335,15 @@ pub enum Effect {
         /// Which of the looked-at cards the controller may take into hand.
         filter: CharacterFilter,
         /// Where the cards that aren't taken go (in the looked-at player's deck).
+        /// If `rest_per_card` is Some, this field is ignored.
         rest: DeckPosition,
         /// Whether the controller may reorder the looked-at cards before taking.
         reorder: bool,
+        /// Optional per-card destinations (for split top/bottom effects like
+        /// Dr. Facilier). If Some, specifies the destination for each looked-at card
+        /// in order; cards taken to hand are not included. If None, `rest` is used
+        /// for all non-taken cards.
+        rest_per_card: Option<Vec<DeckPosition>>,
     },
     /// Search `whose` deck for up to `take_count` cards matching `filter`, take them
     /// into hand, then shuffle the deck. Unlike look-at-top, this searches the entire

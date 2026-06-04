@@ -38,6 +38,16 @@ pub enum ChoiceThen {
         /// Where the non-taken cards go.
         rest_position: DeckPosition,
     },
+    /// Take a picked card from `deck_owner`'s deck into hand; the rest of
+    /// `looked_at` go to per-card destinations (split top/bottom, §8.2).
+    TakeRevealedPerCard {
+        /// Whose deck the looked-at cards came from.
+        deck_owner: PlayerId,
+        /// All looked-at cards (the non-taken ones return to the deck).
+        looked_at: Vec<CardId>,
+        /// Per-card destinations for each looked-at card (in order).
+        destinations: Vec<DeckPosition>,
+    },
     /// Discard the picked cards, then continue the discard down `remaining_players`
     /// (each discards per `amount` in turn, §8.4).
     Discard {

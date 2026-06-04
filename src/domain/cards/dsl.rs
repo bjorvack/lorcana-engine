@@ -271,6 +271,26 @@ fn effect_from_table(t: &toml::Table) -> Result<Effect, String> {
             Some(other) => return Err(format!("unknown rest position {other:?}")),
         };
         let reorder = t.get("reorder").and_then(Value::as_bool).unwrap_or(false);
+        // Parse rest_per_card if present (for split top/bottom effects like Dr. Facilier)
+        let rest_per_card = if let Some(Value::Array(arr)) = t.get("rest_per_card") {
+            let positions: Result<Vec<DeckPosition>, String> = arr
+                .iter()
+                .map(|v| {
+                    if let Value::String(s) = v {
+                        match s.as_str() {
+                            "top" => Ok(DeckPosition::Top),
+                            "bottom" => Ok(DeckPosition::Bottom),
+                            other => Err(format!("unknown rest_per_card position {other:?}")),
+                        }
+                    } else {
+                        Err("rest_per_card must be an array of strings".to_string())
+                    }
+                })
+                .collect();
+            Some(positions?)
+        } else {
+            None
+        };
         Ok(Effect::LookAtTopAndTake {
             whose: scope(PlayerScope::You)?,
             count,
@@ -278,6 +298,7 @@ fn effect_from_table(t: &toml::Table) -> Result<Effect, String> {
             filter,
             rest,
             reorder,
+            rest_per_card,
         })
     } else if t.contains_key("search") {
         // "Search your deck for up to N <filter> and take them into hand, then shuffle."

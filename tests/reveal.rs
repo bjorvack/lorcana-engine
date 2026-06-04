@@ -87,6 +87,7 @@ fn look_quester(count: u32, category: Option<CardCategory>, rest: DeckPosition) 
             filter: category.map_or(CharacterFilter::Any, CharacterFilter::Category),
             rest,
             reorder: false,
+            rest_per_card: None,
         },
     )])
 }
@@ -219,6 +220,7 @@ fn look_at_a_chosen_players_deck_and_take_to_your_hand() {
                 filter: CharacterFilter::Category(CardCategory::Character(None)),
                 rest: DeckPosition::Bottom,
                 reorder: false,
+                rest_per_card: None,
             },
         )]),
     ]);

@@ -940,3 +940,39 @@ fn anna_royal_resolution_choose_one() {
         "Anna's choose one is mandatory (the 'may' is for the ink cost)"
     );
 }
+
+#[test]
+fn dr_facilier_split_top_bottom() {
+    // Dr. Facilier - Remarkable Gentleman: "Whenever you play a song, you may
+    // look at the top 2 cards of your deck. Put one on the top of your deck
+    // and the other on the bottom."
+    use lorcana_engine::{DeckPosition, Effect};
+    let defs = load_toml(
+        r#"
+        [[card]]
+        name = "Dr. Facilier"
+        type = "Character"
+        cost = 3
+        strength = 2
+        willpower = 3
+        lore = 1
+        [[card.abilities]]
+        on = "play"
+        do = { look_at_top = 2, rest_per_card = ["top", "bottom"] }
+        "#,
+    )
+    .expect("loads");
+    let Effect::LookAtTopAndTake {
+        count,
+        rest_per_card,
+        ..
+    } = &defs[0].abilities()[0].effect
+    else {
+        panic!("expected LookAtTopAndTake");
+    };
+    assert_eq!(*count, 2);
+    assert_eq!(
+        rest_per_card.as_ref().unwrap(),
+        &vec![DeckPosition::Top, DeckPosition::Bottom]
+    );
+}

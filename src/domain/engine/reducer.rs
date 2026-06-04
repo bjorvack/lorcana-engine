@@ -2390,6 +2390,7 @@ fn choose_discard_from(chooser: PlayerId, owner: PlayerId, options: Vec<CardId>)
 
 /// Build an "up to `take_count`" [`Choice::Choose`] that takes the picked looked-at
 /// cards to hand and returns the rest to `deck_owner`'s deck (look-at-top, §8.2).
+#[allow(clippy::too_many_arguments)]
 fn choose_take_revealed(
     player: PlayerId,
     deck_owner: PlayerId,
@@ -2398,17 +2399,27 @@ fn choose_take_revealed(
     rest_position: DeckPosition,
     take_count: u32,
     _reorder: bool,
+    rest_per_card: Option<Vec<DeckPosition>>,
 ) -> Choice {
+    let then = if let Some(destinations) = rest_per_card {
+        ChoiceThen::TakeRevealedPerCard {
+            deck_owner,
+            looked_at,
+            destinations,
+        }
+    } else {
+        ChoiceThen::TakeRevealed {
+            deck_owner,
+            looked_at,
+            rest_position,
+        }
+    };
     Choice::Choose {
         player,
         options: options.into_iter().map(ChoiceRef::Card).collect(),
         min: 0,
         max: take_count,
-        then: ChoiceThen::TakeRevealed {
-            deck_owner,
-            looked_at,
-            rest_position,
-        },
+        then,
     }
 }
 
@@ -2498,6 +2509,7 @@ fn execute_effect(
             filter,
             rest,
             reorder,
+            rest_per_card,
         } => {
             return resolve_look_at_top(
                 state,
@@ -2509,6 +2521,7 @@ fn execute_effect(
                 filter,
                 *rest,
                 *reorder,
+                rest_per_card.clone(),
                 effect,
             );
         }
@@ -2861,6 +2874,7 @@ fn substitute_chosen_player(effect: &Effect, player: PlayerId) -> Effect {
             filter,
             rest,
             reorder,
+            rest_per_card,
             ..
         } => Effect::LookAtTopAndTake {
             whose: PlayerScope::Player(player),
@@ -2869,6 +2883,7 @@ fn substitute_chosen_player(effect: &Effect, player: PlayerId) -> Effect {
             filter: filter.clone(),
             rest: *rest,
             reorder: *reorder,
+            rest_per_card: rest_per_card.clone(),
         },
         Effect::SearchDeckAndTake {
             take_count, filter, ..
@@ -3053,6 +3068,7 @@ fn resolve_look_at_top(
     filter: &CharacterFilter,
     rest: DeckPosition,
     reorder: bool,
+    rest_per_card: Option<Vec<DeckPosition>>,
     effect: &Effect,
 ) -> Option<Choice> {
     // The deck looked at: resolve the scope to a single owner (prompt if needed).
@@ -3076,12 +3092,24 @@ fn resolve_look_at_top(
         })
         .collect();
     if options.is_empty() {
-        place_revealed_rest(state, owner, &looked_at, rest);
+        // Use per-card destinations if specified, otherwise use the single rest position
+        if let Some(destinations) = rest_per_card {
+            place_revealed_rest_per_card(state, owner, &looked_at, &destinations);
+        } else {
+            place_revealed_rest(state, owner, &looked_at, rest);
+        }
         None
     } else {
         // `controller` chooses and receives; `owner`'s deck holds the rest.
         Some(choose_take_revealed(
-            controller, owner, looked_at, options, rest, take_count, reorder,
+            controller,
+            owner,
+            looked_at,
+            options,
+            rest,
+            take_count,
+            reorder,
+            rest_per_card,
         ))
     }
 }
@@ -3259,6 +3287,30 @@ fn place_revealed_rest(
     }
     if matches!(position, DeckPosition::Shuffle) {
         state.shuffle_deck(player);
+    }
+}
+
+/// Place revealed cards back into the deck according to per-card destinations
+/// (for split top/bottom effects like Dr. Facilier).
+fn place_revealed_rest_per_card(
+    state: &mut GameState,
+    player: PlayerId,
+    ids: &[CardId],
+    destinations: &[DeckPosition],
+) {
+    for (&id, &dest) in ids.iter().zip(destinations.iter()) {
+        if let Some(p) = state.player_mut(player)
+            && let Some(instance) = p.deck_mut().take(id)
+        {
+            match dest {
+                DeckPosition::Bottom => p.deck_mut().insert_bottom(instance),
+                DeckPosition::Top => p.deck_mut().push(instance),
+                DeckPosition::Shuffle => {
+                    p.deck_mut().push(instance);
+                    state.shuffle_deck(player);
+                }
+            }
+        }
     }
 }
 
@@ -3998,6 +4050,44 @@ fn apply_choose_decision(
                 .filter(|&id| Some(id) != taken)
                 .collect();
             place_revealed_rest(state, *deck_owner, &remaining, *rest_position);
+            resolve_effects(state, registry, player, source, rest, events);
+        }
+        ChoiceThen::TakeRevealedPerCard {
+            deck_owner,
+            looked_at,
+            destinations,
+        } => {
+            let taken = match picks.first() {
+                Some(ChoiceRef::Card(c)) => Some(*c),
+                _ => None,
+            };
+            // Take the chosen card to hand if any
+            if let Some(card) = taken
+                && let Some(mut instance) = state
+                    .player_mut(*deck_owner)
+                    .and_then(|p| p.deck_mut().take(card))
+            {
+                *instance.conditions_mut() = Conditions::faceup_idle();
+                if let Some(p) = state.player_mut(player) {
+                    p.hand_mut().push(instance);
+                }
+            }
+            // Place remaining cards according to their destinations
+            for (card, dest) in looked_at.iter().zip(destinations.iter()) {
+                if Some(*card) != taken
+                    && let Some(p) = state.player_mut(*deck_owner)
+                    && let Some(instance) = p.deck_mut().take(*card)
+                {
+                    match dest {
+                        DeckPosition::Bottom => p.deck_mut().insert_bottom(instance),
+                        DeckPosition::Top => p.deck_mut().push(instance),
+                        DeckPosition::Shuffle => {
+                            p.deck_mut().push(instance);
+                            state.shuffle_deck(*deck_owner);
+                        }
+                    }
+                }
+            }
             resolve_effects(state, registry, player, source, rest, events);
         }
         // Take the picked cards from the deck into hand, then shuffle (search deck, §8.2).
