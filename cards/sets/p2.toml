@@ -17,6 +17,9 @@ keywords = ["Shift 2"]
 # text:
 #   Shift 2 (You may pay 2 {I} to play this on top of one of your characters named Aladdin.)
 #   REMEMBER YOUR TRAINING When you play this character, your characters get +2 {S} this turn.
+[[card.abilities]]
+on = "play"
+do = { give_strength = 2, target = "all your characters" }
 
 [[card]]
 name = "Aladdin - Vigilant Guard"
@@ -82,6 +85,9 @@ lore = 1
 classifications = ["Dreamborn", "Hero", "Queen", "Sorcerer"]
 # text:
 #   FREEZE {E} - Exert chosen opposing character.
+[[card.activated]]
+cost = { exert = true }
+do = { exert = "chosen opposing character" }
 
 [[card]]
 name = "Finders Keepers"
@@ -90,6 +96,9 @@ cost = 5
 inkwell = true
 # text:
 #   Draw 3 cards.
+[[card.abilities]]
+on = "play"
+do = { draw = 3 }
 
 [[card]]
 name = "Hiro Hamada - Armor Designer"
@@ -165,6 +174,9 @@ classifications = ["Storyborn", "Hero"]
 # text:
 #   PACK OF HER OWN Whenever you play a character, this character gets +1 {S} this turn.
 #   TAKE THE LEAD While this character has 3 {S} or more, she gets +2 {L}.
+[[card.abilities]]
+on = "play_character"
+do = { give_strength = 1 }
 
 [[card]]
 name = "Li Shang - Newly Promoted"
@@ -398,6 +410,10 @@ lore = 1
 classifications = ["Storyborn", "Hero", "Alien"]
 # text:
 #   HEAVE HO! When you play this character, you may deal 2 damage to chosen character.
+[[card.abilities]]
+on = "play"
+may = true
+do = { deal_damage = 2, target = "chosen character" }
 
 [[card]]
 name = "Wasabi - Methodical Engineer"

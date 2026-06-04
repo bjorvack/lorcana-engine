@@ -16,6 +16,14 @@ classifications = ["Storyborn", "Hero"]
 # text:
 #   WASHED AWAY When you play this character, you may put chosen item into its player's inkwell facedown and exerted.
 #   MAKING WAVES Whenever this character quests, chosen opposing character gets -2 {S} this turn.
+[[card.abilities]]
+on = "play"
+may = true
+do = { into_inkwell = "chosen item" }
+
+[[card.abilities]]
+on = "quest"
+do = { give_strength = -2, target = "chosen opposing character" }
 
 [[card]]
 name = "Ariel - Curious Traveler"
@@ -40,6 +48,13 @@ lore = 1
 classifications = ["Storyborn", "Hero", "Prince"]
 # text:
 #   FULL DANCE CARD Your Princess characters get +1 {S} and +1 {W}.
+[[card.statics]]
+strength = 1
+to = "your Princess characters"
+
+[[card.statics]]
+willpower = 1
+to = "your Princess characters"
 
 [[card]]
 name = "Beast - Snowfield Troublemaker"
@@ -115,6 +130,9 @@ lore = 2
 classifications = ["Storyborn"]
 # text:
 #   POOR SOULS Whenever this character is challenged, each opponent chooses and discards a card.
+[[card.abilities]]
+on = "challenged"
+do = { discard = 1, who = "each opponent" }
 
 [[card]]
 name = "Daisy Duck - Paranormal Investigator"
@@ -193,6 +211,10 @@ lore = 1
 classifications = ["Dreamborn", "Hero", "Queen", "Sorcerer"]
 # text:
 #   CLOSER LOOK When you play this character, you may draw a card.
+[[card.abilities]]
+on = "play"
+may = true
+do = { draw = 1 }
 
 [[card]]
 name = "Elsa - The Fifth Spirit"
@@ -208,6 +230,9 @@ keywords = ["Evasive", "Rush"]
 #   Rush (This character can challenge the turn they're played.)
 #   Evasive (Only characters with Evasive can challenge this character.)
 #   CRYSTALLIZE When you play this character, exert chosen opposing character.
+[[card.abilities]]
+on = "play"
+do = { exert = "chosen opposing character" }
 
 [[card]]
 name = "Goofy - Emerald Champion"
@@ -308,6 +333,10 @@ lore = 2
 classifications = ["Storyborn", "Villain", "Dragon"]
 # text:
 #   DRAGON FIRE When you play this character, you may banish chosen character.
+[[card.abilities]]
+on = "play"
+may = true
+do = { banish = "chosen character" }
 
 [[card]]
 name = "Mickey Mouse - Pirate Captain"
@@ -355,6 +384,10 @@ lore = 1
 classifications = ["Storyborn", "Hero", "Princess"]
 # text:
 #   WHERE DO I SIGN IN? When you play this character, you may draw a card, then choose and discard a card.
+[[card.abilities]]
+on = "play"
+may = true
+do = [{ draw = 1 }, { discard = 1 }]
 
 [[card]]
 name = "Pocahontas - Steadfast Traveler"
@@ -412,6 +445,13 @@ classifications = ["Storyborn", "Hero"]
 # text:
 #   BACKUP PLAN When you play this character, draw a card, then choose and discard a card.
 #   ON THE MOVE When this character is challenged, return this card to your hand. (No damage is dealt in that challenge.)
+[[card.abilities]]
+on = "play"
+do = [{ draw = 1 }, { discard = 1 }]
+
+[[card.abilities]]
+on = "challenged"
+do = { return_to_hand = "self" }
 
 [[card]]
 name = "Sisu - Daring Visitor"
@@ -425,6 +465,9 @@ keywords = ["Evasive"]
 # text:
 #   Evasive (Only characters with Evasive can challenge this character.)
 #   BRING ON THE HEAT! When you play this character, banish chosen opposing character with 1 {S} or less.
+[[card.abilities]]
+on = "play"
+do = { banish = "chosen opposing character with 1 {S} or less" }
 
 [[card]]
 name = "Stitch - Carefree Snowboarder"
@@ -437,6 +480,10 @@ lore = 2
 classifications = ["Storyborn", "Hero", "Alien"]
 # text:
 #   BRING YOUR FRIENDS Whenever this character quests, if you have 2 or more other characters in play, you may draw a card.
+[[card.abilities]]
+on = "quest"
+may = true
+do = { if_you_have = "your other characters", at_least = 2, then = { draw = 1 } }
 
 [[card]]
 name = "Stitch - High Badness Level"
@@ -458,6 +505,9 @@ inkwell = true
 # text:
 #   (A character with cost 3 or more can {E} to sing this song for free.)
 #   Deal damage to chosen character equal to the number of characters you have in play.
+[[card.abilities]]
+on = "play"
+do = { deal_damage = "per your characters", target = "chosen character" }
 
 [[card]]
 name = "The Great Illuminary - Abandoned Laboratory"
@@ -529,6 +579,9 @@ keywords = ["Shift 4"]
 #   Shift 4 {I} (You may pay 4 {I} to play this on top of one of your characters named Tinker Bell.)
 #   ROCK THE BOAT When you play this character, deal 1 damage to each opposing character.
 #   PUN PIRATE! During your turn, whenever this character banishes another character in a challenge, you may deal 2 damage to chosen opposing character.
+[[card.abilities]]
+on = "play"
+do = { deal_damage = 1, target = "all opposing characters" }
 
 [[card]]
 name = "Tinker Bell - Snowflake Collector"
@@ -568,6 +621,10 @@ lore = 1
 classifications = ["Storyborn"]
 # text:
 #   COME ON OUT When this character is banished in a challenge, you may return this card to your hand.
+[[card.abilities]]
+on = "banished_in_challenge"
+may = true
+do = { return_to_hand = "self" }
 
 [[card]]
 name = "Zeus - Missing His Spark"
