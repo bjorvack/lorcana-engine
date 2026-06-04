@@ -231,26 +231,72 @@ fn effect_from_table(t: &toml::Table) -> Result<Effect, String> {
             Some(other) => Err(format!("unknown grant duration {other:?}")),
         }
     } else if t.contains_key("look_at_top") {
-        // "Look at the top N cards. You may take a <filter> to your hand. Put the
-        // rest on the bottom/top, or shuffle." `take` defaults to any card; `rest`
-        // to the bottom; `who` to the controller's own deck.
+        // "Look at the top N cards. You may take up to M <filter> to your hand. Put the
+        // rest on the bottom/top, or shuffle. You may reorder before taking."
+        // `take` can be a string filter or an integer count; defaults to 1 any card.
+        // `rest` defaults to bottom; `who` defaults to the controller's own deck.
+        // `reorder` defaults to false.
         let count = u32::try_from(int("look_at_top")?).unwrap_or(0);
-        let any = || CharacterFilter::any(TargetSide::Any);
-        let filter = t
-            .get("take")
-            .and_then(Value::as_str)
-            .map_or_else(any, |s| parse_filter(s).unwrap_or_else(any));
+        // Handle `take` as either a filter string or an integer count
+        let (take_count, filter) = match t.get("take") {
+            Some(Value::String(s)) => {
+                // `take = "a character"` -> filter, default take_count = 1
+                let f = parse_filter(s).unwrap_or_else(|| CharacterFilter::any(TargetSide::Any));
+                (1, f)
+            }
+            Some(Value::Integer(n)) => {
+                // `take = 2` -> take count, default filter = any
+                (
+                    u32::try_from(*n).unwrap_or(1),
+                    CharacterFilter::any(TargetSide::Any),
+                )
+            }
+            None => (1, CharacterFilter::any(TargetSide::Any)),
+            Some(other) => {
+                return Err(format!(
+                    "expected `take` to be a string or integer, got {other}"
+                ));
+            }
+        };
+        // Override take_count if explicitly set
+        let take_count = t
+            .get("take_count")
+            .and_then(Value::as_integer)
+            .and_then(|n| u32::try_from(n).ok())
+            .unwrap_or(take_count);
         let rest = match t.get("rest").and_then(Value::as_str) {
             Some("top") => DeckPosition::Top,
             Some("shuffle") => DeckPosition::Shuffle,
             Some("bottom") | None => DeckPosition::Bottom,
             Some(other) => return Err(format!("unknown rest position {other:?}")),
         };
+        let reorder = t.get("reorder").and_then(Value::as_bool).unwrap_or(false);
         Ok(Effect::LookAtTopAndTake {
             whose: scope(PlayerScope::You)?,
             count,
+            take_count,
             filter,
             rest,
+            reorder,
+        })
+    } else if t.contains_key("search") {
+        // "Search your deck for up to N <filter> and take them into hand, then shuffle."
+        // `search` is the filter; `take` is the count (defaults to 1).
+        let filter_str = t
+            .get("search")
+            .and_then(Value::as_str)
+            .ok_or_else(|| "`search` needs a filter string".to_string())?;
+        let filter = parse_filter(filter_str)
+            .ok_or_else(|| format!("unparseable search filter {filter_str:?}"))?;
+        let take_count = t
+            .get("take")
+            .and_then(Value::as_integer)
+            .and_then(|n| u32::try_from(n).ok())
+            .unwrap_or(1);
+        Ok(Effect::SearchDeckAndTake {
+            whose: scope(PlayerScope::You)?,
+            take_count,
+            filter,
         })
     } else if t.contains_key("move_damage") {
         // "Move up to N damage from <a> to <b>."
@@ -344,6 +390,12 @@ const STRUCTURAL: &[&str] = &[
     "locations",
     "permanent",
     "permanents",
+    "action",
+    "actions",
+    "song",
+    "songs",
+    "card",
+    "cards",
     // name + numeric-threshold vocabulary
     "named",
     "with",
@@ -450,6 +502,32 @@ fn push_state_and_multiword_predicates(
     });
 }
 
+/// Push card type predicates (action/song/character/item/location) into the
+/// predicates list, marking their tokens consumed. This handles cases where the
+/// category appears in a position that wouldn't be caught by the early detection.
+fn push_card_type_predicates(
+    lower_tokens: &[String],
+    consumed: &mut [bool],
+    predicates: &mut Vec<CharacterFilter>,
+) {
+    for i in 0..lower_tokens.len() {
+        if consumed[i] {
+            continue;
+        }
+        let predicate = match lower_tokens[i].as_str() {
+            "action" => Some(CharacterFilter::Category(CardCategory::Action)),
+            "song" => Some(CharacterFilter::Category(CardCategory::Song)),
+            "item" => Some(CharacterFilter::Category(CardCategory::Item)),
+            "location" => Some(CharacterFilter::Category(CardCategory::Location)),
+            _ => None,
+        };
+        if let Some(p) = predicate {
+            predicates.push(p);
+            consumed[i] = true;
+        }
+    }
+}
+
 /// Parse a compact card filter. Combines side + category + classifications +
 /// `another` with the richer leaf predicates: a name (`named X`), state
 /// (`damaged`/`exerted`), and numeric thresholds on cost / `{S}` / `{W}` / `{L}`
@@ -457,11 +535,20 @@ fn push_state_and_multiword_predicates(
 /// `"another Villain character with cost 3 or less"`. Requires a noun so it's
 /// distinguishable from free text. Anything the grammar can't express still
 /// round-trips via the structured AST fallback.
+#[allow(clippy::too_many_lines)]
 fn parse_filter(s: &str) -> Option<CharacterFilter> {
     let lower = s.to_lowercase();
-    if !["character", "item", "location", "permanent"]
-        .iter()
-        .any(|n| lower.contains(n))
+    if ![
+        "character",
+        "item",
+        "location",
+        "permanent",
+        "action",
+        "song",
+        "card",
+    ]
+    .iter()
+    .any(|n| lower.contains(n))
     {
         return None;
     }
@@ -477,6 +564,10 @@ fn parse_filter(s: &str) -> Option<CharacterFilter> {
         Some(CardCategory::Item)
     } else if lower.contains("location") {
         Some(CardCategory::Location)
+    } else if lower.contains("song") {
+        Some(CardCategory::Song)
+    } else if lower.contains("action") && !lower.contains("song") {
+        Some(CardCategory::Action)
     } else {
         None // characters (the default) need no Category gate
     };
@@ -513,6 +604,7 @@ fn parse_filter(s: &str) -> Option<CharacterFilter> {
     }
 
     push_state_and_multiword_predicates(&lower_tokens, &mut consumed, &mut predicates);
+    push_card_type_predicates(&lower_tokens, &mut consumed, &mut predicates);
 
     // Numeric thresholds: a stat keyword adjacent to an integer, optionally
     // followed by `or less` / `or more` (else exactly N), §7.1.
@@ -903,5 +995,29 @@ mod tests {
             parse_filter("your characters named Peter Pan").unwrap()
         );
         assert!(g.contains("Named(\"Peter Pan\")"), "{g}");
+    }
+
+    #[test]
+    fn parses_card_type_predicates() {
+        // "an action card" should parse with Category(Action)
+        let action = format!("{:?}", parse_filter("an action card").unwrap());
+        assert!(action.contains("Category(Action)"), "{action}");
+
+        // "a song" should parse with Category(Song)
+        let song = format!("{:?}", parse_filter("a song").unwrap());
+        assert!(song.contains("Category(Song)"), "{song}");
+
+        // "an item" should parse with Category(Item)
+        let item = format!("{:?}", parse_filter("an item").unwrap());
+        assert!(item.contains("Category(Item)"), "{item}");
+
+        // "a location" should parse with Category(Location)
+        let location = format!("{:?}", parse_filter("a location").unwrap());
+        assert!(location.contains("Category(Location)"), "{location}");
+
+        // "your action cards" should combine side and category
+        let your_action = format!("{:?}", parse_filter("your action cards").unwrap());
+        assert!(your_action.contains("Category(Action)"), "{your_action}");
+        assert!(your_action.contains("Yours"), "{your_action}");
     }
 }

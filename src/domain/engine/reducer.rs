@@ -2377,20 +2377,22 @@ fn choose_discard_from(chooser: PlayerId, owner: PlayerId, options: Vec<CardId>)
     }
 }
 
-/// Build an "up to one" [`Choice::Choose`] that takes the picked looked-at card to
-/// hand and returns the rest to `deck_owner`'s deck (look-at-top, §8.2).
+/// Build an "up to `take_count`" [`Choice::Choose`] that takes the picked looked-at
+/// cards to hand and returns the rest to `deck_owner`'s deck (look-at-top, §8.2).
 fn choose_take_revealed(
     player: PlayerId,
     deck_owner: PlayerId,
     looked_at: Vec<CardId>,
     options: Vec<CardId>,
     rest_position: DeckPosition,
+    take_count: u32,
+    _reorder: bool,
 ) -> Choice {
     Choice::Choose {
         player,
         options: options.into_iter().map(ChoiceRef::Card).collect(),
         min: 0,
-        max: 1,
+        max: take_count,
         then: ChoiceThen::TakeRevealed {
             deck_owner,
             looked_at,
@@ -2477,15 +2479,42 @@ fn execute_effect(
             let options = eligible_free_plays(state, registry, controller, filter);
             return (!options.is_empty()).then_some(choose_play_free(controller, options));
         }
-        // Look at the top N; may take one matching `filter`, rest go to `rest` (§8.2).
+        // Look at the top N; may take up to `take_count` matching `filter`, rest go to `rest` (§8.2).
         Effect::LookAtTopAndTake {
             whose,
             count,
+            take_count,
             filter,
             rest,
+            reorder,
         } => {
             return resolve_look_at_top(
-                state, registry, controller, *whose, *count, filter, *rest, effect,
+                state,
+                registry,
+                controller,
+                *whose,
+                *count,
+                *take_count,
+                filter,
+                *rest,
+                *reorder,
+                effect,
+            );
+        }
+        // Search deck for up to `take_count` matching cards, take to hand, then shuffle.
+        Effect::SearchDeckAndTake {
+            whose,
+            take_count,
+            filter,
+        } => {
+            return resolve_search_deck(
+                state,
+                registry,
+                controller,
+                *whose,
+                *take_count,
+                filter,
+                effect,
             );
         }
         // "Name a card, then reveal the top of your deck" — ask for the name (§8.2).
@@ -2801,14 +2830,25 @@ fn substitute_chosen_player(effect: &Effect, player: PlayerId) -> Effect {
         },
         Effect::LookAtTopAndTake {
             count,
+            take_count,
             filter,
             rest,
+            reorder,
             ..
         } => Effect::LookAtTopAndTake {
             whose: PlayerScope::Player(player),
             count: *count,
+            take_count: *take_count,
             filter: filter.clone(),
             rest: *rest,
+            reorder: *reorder,
+        },
+        Effect::SearchDeckAndTake {
+            take_count, filter, ..
+        } => Effect::SearchDeckAndTake {
+            whose: PlayerScope::Player(player),
+            take_count: *take_count,
+            filter: filter.clone(),
         },
         Effect::Move {
             what: MoveSource::DeckTop { count, .. },
@@ -2969,8 +3009,8 @@ fn eligible_free_plays(
     hand_matching(state, registry, player, player, filter)
 }
 
-/// Resolve "look at the top N": offer up to one matching card to take into hand,
-/// or (if none match) send the looked-at cards to `rest` immediately (§8.2).
+/// Resolve "look at the top N": offer up to `take_count` matching cards to take
+/// into hand, or (if none match) send the looked-at cards to `rest` immediately (§8.2).
 #[allow(clippy::too_many_arguments)]
 fn resolve_look_at_top(
     state: &mut GameState,
@@ -2978,8 +3018,10 @@ fn resolve_look_at_top(
     controller: PlayerId,
     whose: PlayerScope,
     count: u32,
+    take_count: u32,
     filter: &CharacterFilter,
     rest: DeckPosition,
+    reorder: bool,
     effect: &Effect,
 ) -> Option<Choice> {
     // The deck looked at: resolve the scope to a single owner (prompt if needed).
@@ -3008,8 +3050,58 @@ fn resolve_look_at_top(
     } else {
         // `controller` chooses and receives; `owner`'s deck holds the rest.
         Some(choose_take_revealed(
-            controller, owner, looked_at, options, rest,
+            controller, owner, looked_at, options, rest, take_count, reorder,
         ))
+    }
+}
+
+/// Resolve "search deck": find all cards matching `filter` in `whose` deck, offer up
+/// to `take_count` to take into hand, then shuffle the deck (§8.2).
+#[allow(clippy::too_many_arguments)]
+fn resolve_search_deck(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    controller: PlayerId,
+    whose: PlayerScope,
+    take_count: u32,
+    filter: &CharacterFilter,
+    effect: &Effect,
+) -> Option<Choice> {
+    // The deck searched: resolve the scope to a single owner (prompt if needed).
+    let owner = match resolve_scope(state, controller, whose) {
+        ScopeOutcome::Players(players) => match players.first() {
+            Some(p) => *p,
+            None => return None,
+        },
+        ScopeOutcome::Choose(options) => {
+            return Some(choose_player(controller, options, effect));
+        }
+    };
+    // Find all cards in the deck matching the filter.
+    let options: Vec<CardId> = state
+        .player(owner)
+        .map(|p| p.deck().iter().map(CardInstance::id).collect::<Vec<_>>())
+        .unwrap_or_default()
+        .into_iter()
+        .filter(|&id| {
+            deck_card_def(state, owner, id)
+                .and_then(|d| registry.get(d))
+                .is_some_and(|def| def_matches_filter(controller, owner, def, filter))
+        })
+        .collect();
+    if options.is_empty() {
+        // No matches: shuffle the deck and continue.
+        state.shuffle_deck(owner);
+        None
+    } else {
+        // Offer the player to choose up to `take_count` cards.
+        Some(Choice::Choose {
+            player: controller,
+            options: options.into_iter().map(ChoiceRef::Card).collect(),
+            min: 0,
+            max: take_count,
+            then: ChoiceThen::SearchDeckTake { deck_owner: owner },
+        })
     }
 }
 
@@ -3754,6 +3846,7 @@ fn apply_name_card_decision(
 /// decision, validate them against `options` and the `min..=max` count, then run
 /// the continuation `then` (§7.1).
 #[allow(clippy::too_many_arguments)]
+#[allow(clippy::too_many_lines)]
 fn apply_choose_decision(
     state: &mut GameState,
     registry: &CardRegistry,
@@ -3837,6 +3930,23 @@ fn apply_choose_decision(
                 .filter(|&id| Some(id) != taken)
                 .collect();
             place_revealed_rest(state, *deck_owner, &remaining, *rest_position);
+            resolve_effects(state, registry, player, source, rest, events);
+        }
+        // Take the picked cards from the deck into hand, then shuffle (search deck, §8.2).
+        ChoiceThen::SearchDeckTake { deck_owner } => {
+            for pick in &picks {
+                if let ChoiceRef::Card(c) = pick
+                    && let Some(mut instance) = state
+                        .player_mut(*deck_owner)
+                        .and_then(|p| p.deck_mut().take(*c))
+                {
+                    *instance.conditions_mut() = Conditions::faceup_idle();
+                    if let Some(p) = state.player_mut(player) {
+                        p.hand_mut().push(instance);
+                    }
+                }
+            }
+            state.shuffle_deck(*deck_owner);
             resolve_effects(state, registry, player, source, rest, events);
         }
         // Discard the picked cards, then continue down the remaining players; the

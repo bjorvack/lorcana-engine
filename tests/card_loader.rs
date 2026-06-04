@@ -713,12 +713,120 @@ fn the_dsl_exposes_look_at_top() {
     )
     .expect("loads");
     let Effect::LookAtTopAndTake {
-        whose, count, rest, ..
+        whose,
+        count,
+        take_count,
+        rest,
+        reorder,
+        ..
     } = &defs[0].abilities()[0].effect
     else {
         panic!("expected LookAtTopAndTake");
     };
     assert_eq!(*count, 4);
+    assert_eq!(*take_count, 1, "default take_count is 1");
     assert_eq!(*whose, PlayerScope::You);
     assert_eq!(*rest, DeckPosition::Bottom);
+    assert!(!*reorder, "default reorder is false");
+}
+
+#[test]
+fn the_dsl_exposes_take_count_and_reorder() {
+    use lorcana_engine::{DeckPosition, Effect, PlayerScope};
+    let defs = load_toml(
+        r#"
+        [[card]]
+        name = "Archivist"
+        type = "Character"
+        cost = 4
+        strength = 2
+        willpower = 4
+        lore = 2
+        [[card.abilities]]
+        on = "play"
+        do = { look_at_top = 5, take = 2, rest = "top", reorder = true }
+        "#,
+    )
+    .expect("loads");
+    let Effect::LookAtTopAndTake {
+        whose,
+        count,
+        take_count,
+        rest,
+        reorder,
+        ..
+    } = &defs[0].abilities()[0].effect
+    else {
+        panic!("expected LookAtTopAndTake");
+    };
+    assert_eq!(*count, 5);
+    assert_eq!(*take_count, 2, "explicit take_count");
+    assert_eq!(*whose, PlayerScope::You);
+    assert_eq!(*rest, DeckPosition::Top);
+    assert!(*reorder, "reorder enabled");
+}
+
+#[test]
+fn the_dsl_exposes_take_with_filter_and_count() {
+    use lorcana_engine::{DeckPosition, Effect, PlayerScope};
+    let defs = load_toml(
+        r#"
+        [[card]]
+        name = "Collector"
+        type = "Character"
+        cost = 3
+        strength = 2
+        willpower = 3
+        lore = 1
+        [[card.abilities]]
+        on = "play"
+        do = { look_at_top = 4, take = "an action card", take_count = 2, rest = "shuffle" }
+        "#,
+    )
+    .expect("loads");
+    let Effect::LookAtTopAndTake {
+        whose,
+        count,
+        take_count,
+        rest,
+        ..
+    } = &defs[0].abilities()[0].effect
+    else {
+        panic!("expected LookAtTopAndTake");
+    };
+    assert_eq!(*count, 4);
+    assert_eq!(
+        *take_count, 2,
+        "take_count overrides implicit 1 from filter"
+    );
+    assert_eq!(*whose, PlayerScope::You);
+    assert_eq!(*rest, DeckPosition::Shuffle);
+}
+
+#[test]
+fn the_dsl_exposes_search_deck() {
+    use lorcana_engine::{Effect, PlayerScope};
+    let defs = load_toml(
+        r#"
+        [[card]]
+        name = "Librarian"
+        type = "Character"
+        cost = 3
+        strength = 2
+        willpower = 3
+        lore = 1
+        [[card.abilities]]
+        on = "play"
+        do = { search = "an action card", take = 2 }
+        "#,
+    )
+    .expect("loads");
+    let Effect::SearchDeckAndTake {
+        whose, take_count, ..
+    } = &defs[0].abilities()[0].effect
+    else {
+        panic!("expected SearchDeckAndTake");
+    };
+    assert_eq!(*whose, PlayerScope::You);
+    assert_eq!(*take_count, 2);
 }

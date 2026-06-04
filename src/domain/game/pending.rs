@@ -54,6 +54,12 @@ pub enum ChoiceThen {
         /// Whose hand the picked cards are discarded from.
         owner: PlayerId,
     },
+    /// Take the picked cards from `deck_owner`'s deck into hand, then shuffle the deck
+    /// (search deck, §8.2).
+    SearchDeckTake {
+        /// Whose deck the cards were taken from.
+        deck_owner: PlayerId,
+    },
 }
 
 /// A point in bag resolution that requires a player's input before the engine

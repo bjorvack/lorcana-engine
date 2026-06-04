@@ -83,8 +83,10 @@ fn look_quester(count: u32, category: Option<CardCategory>, rest: DeckPosition) 
         Effect::LookAtTopAndTake {
             whose: lorcana_engine::PlayerScope::You,
             count,
+            take_count: 1,
             filter: category.map_or(CharacterFilter::Any, CharacterFilter::Category),
             rest,
+            reorder: false,
         },
     )])
 }
@@ -213,8 +215,10 @@ fn look_at_a_chosen_players_deck_and_take_to_your_hand() {
             Effect::LookAtTopAndTake {
                 whose: lorcana_engine::PlayerScope::ChosenPlayer,
                 count: 1,
+                take_count: 1,
                 filter: CharacterFilter::Category(CardCategory::Character(None)),
                 rest: DeckPosition::Bottom,
+                reorder: false,
             },
         )]),
     ]);

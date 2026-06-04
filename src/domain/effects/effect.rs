@@ -320,19 +320,35 @@ pub enum Effect {
         /// Which hand cards are eligible.
         filter: CharacterFilter,
     },
-    /// Look at the top `count` cards of `whose` deck; the controller may take **up
-    /// to one** matching `filter` into their hand; the rest go to `rest` (§8.2).
+    /// Look at the top `count` cards of `whose` deck; the controller may take up to
+    /// `take_count` matching `filter` into their hand; the rest go to `rest` (§8.2).
     /// "Look at the top 4 cards … put a character into your hand, rest on the
     /// bottom"; `whose` is usually `You` but can be a chosen player's deck.
+    /// `take_count` defaults to 1 for backward compatibility.
     LookAtTopAndTake {
         /// Whose deck is looked at (resolved to a single deck owner).
         whose: PlayerScope,
         /// How many cards to look at.
         count: u32,
+        /// How many matching cards the controller may take (defaults to 1).
+        take_count: u32,
         /// Which of the looked-at cards the controller may take into hand.
         filter: CharacterFilter,
         /// Where the cards that aren't taken go (in the looked-at player's deck).
         rest: DeckPosition,
+        /// Whether the controller may reorder the looked-at cards before taking.
+        reorder: bool,
+    },
+    /// Search `whose` deck for up to `take_count` cards matching `filter`, take them
+    /// into hand, then shuffle the deck. Unlike look-at-top, this searches the entire
+    /// deck (§8.2).
+    SearchDeckAndTake {
+        /// Whose deck to search (resolved to a single deck owner).
+        whose: PlayerScope,
+        /// How many matching cards the controller may take.
+        take_count: u32,
+        /// Which cards in the deck are eligible to be taken.
+        filter: CharacterFilter,
     },
     /// "Name a card, then reveal the top card of your deck": the controller names
     /// a card; if the revealed top card has that name it goes to `match_to` and the
