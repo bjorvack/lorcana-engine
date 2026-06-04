@@ -9,6 +9,7 @@ Thank you for your interest in contributing to lorcana-engine! This document pro
 - Rust latest stable version (use `rustup update stable` to ensure you have the latest)
 - Cargo (comes with Rust)
 - Git
+- cargo-tarpaulin (for coverage checking): `cargo install cargo-tarpaulin`
 
 ### Installation
 
@@ -236,6 +237,22 @@ Test organization:
 - Integration tests should be placed in the `tests/` directory
 - Use descriptive test names that explain what is being tested
 
+### Test Coverage
+
+The project maintains a minimum of **85% code coverage**. New features should include tests that maintain or improve coverage.
+
+Check coverage with:
+```bash
+cargo tarpaulin --out Stdout --skip-clean
+```
+
+Coverage guidelines:
+- Don't drop below the 85% baseline
+- Add focused unit tests for new functions and logic
+- Add integration tests for new features in realistic scenarios
+- Test error paths and edge cases where practical
+- If coverage drops, add tests to bring it back up before committing
+
 ### Test-driven development (required)
 
 We develop engine behaviour **test-first**. For every behaviour change or bug fix:
@@ -462,11 +479,12 @@ fn process_card(input: &str) -> Result<Card, LorcanaError> {
 
 ## Submitting Changes
 
-1. Ensure all tests pass: `cargo test`
+1. Ensure all tests pass: `cargo test --all-targets --all-features`
 2. Ensure code is formatted: `cargo fmt --all -- --check`
 3. Ensure no linter warnings: `cargo clippy --all-targets --all-features -- -D warnings`
-4. Update relevant documentation as per the [Keeping Documentation Updated](#keeping-documentation-updated) section
-5. Push your branch and create a pull request
+4. Ensure coverage doesn't drop below 85%: `cargo tarpaulin --out Stdout --skip-clean`
+5. Update relevant documentation as per the [Keeping Documentation Updated](#keeping-documentation-updated) section
+6. Push your branch and create a pull request
 
 ## Getting Help
 
