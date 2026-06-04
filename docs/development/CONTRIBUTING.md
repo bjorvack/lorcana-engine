@@ -253,6 +253,8 @@ Coverage guidelines:
 - Test error paths and edge cases where practical
 - If coverage drops, add tests to bring it back up before committing
 
+**Note:** The 85% baseline focuses on core game logic and real gameplay scenarios. Error handling paths for impossible states may remain uncovered if they don't reflect realistic game states.
+
 ### Test-driven development (required)
 
 We develop engine behaviour **test-first**. For every behaviour change or bug fix:
