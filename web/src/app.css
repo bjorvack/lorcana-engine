@@ -33,14 +33,17 @@
   --danger: oklch(63% 0.21 25deg);
 
   --radius: 0.6rem;
-  --card-w: clamp(3.4rem, 6vw, 5.4rem);
+  /* Cards scale with viewport *height* (as well as width) so both player mats
+     always fit on screen without page scrolling. */
+  --card-w: clamp(2.2rem, min(5.5vw, 7.2vh), 5.4rem);
   --card-h: calc(var(--card-w) * 7 / 5);
-  --gap: clamp(0.25rem, 0.8vw, 0.6rem);
+  --gap: clamp(0.2rem, 0.7vw, 0.55rem);
 
-  /* Reserved capacity per zone, so rows never grow/shrink as cards come and
-     go — overflow scrolls instead. A "reasonable" board's worth of cards. */
-  --ink-card-w: clamp(2.2rem, 3.4vw, 3rem);
+  /* Ink uses smaller cards that fan/stack within a fixed band, so the inkwell
+     never grows the zone no matter how much ink is banked. */
+  --ink-card-w: clamp(1.7rem, min(3.2vw, 4.6vh), 3rem);
   --ink-card-h: calc(var(--ink-card-w) * 7 / 5);
+  --ink-band: 13rem;
 
   --shadow-soft: 0 1px 2px rgb(0 0 0 / 35%);
   --shadow-panel: 0 6px 20px -8px rgb(0 0 0 / 55%);
@@ -77,7 +80,10 @@ body {
 }
 
 #app {
-  min-block-size: 100dvh;
+  display: flex;
+  flex-direction: column;
+  block-size: 100dvh;
+  overflow: hidden;
 }
 
 button {

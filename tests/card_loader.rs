@@ -1339,3 +1339,33 @@ fn ready_trigger_parses_correctly() {
         .any(|a| matches!(a.condition, TriggerCondition::WhenThisReadies));
     assert!(has_readies, "should have readies trigger");
 }
+
+#[test]
+fn inkwell_trigger_parses_correctly() {
+    // Test inkwell trigger DSL parsing
+    let defs = load_toml(
+        r#"
+        [[card]]
+        name = "InkwellTriggerCard"
+        type = "Character"
+        cost = 3
+        strength = 2
+        willpower = 3
+        lore = 1
+        [[card.abilities]]
+        on = "card_put_in_inkwell"
+        do = { draw = 1 }
+        "#,
+    )
+    .expect("loads");
+
+    // Check for card_put_in_inkwell trigger
+    let has_inkwell_trigger = defs[0]
+        .abilities()
+        .iter()
+        .any(|a| matches!(a.condition, TriggerCondition::WhenCardPutInInkwell));
+    assert!(
+        has_inkwell_trigger,
+        "should have card_put_in_inkwell trigger"
+    );
+}

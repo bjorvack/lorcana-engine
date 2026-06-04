@@ -55,7 +55,7 @@
       lethal: false,
       isLocation: false,
       underCount: 0,
-    }))
+    })),
   );
 
   const exertedInkCards = $derived<DisplayCard[]>(
@@ -77,19 +77,19 @@
       lethal: false,
       isLocation: false,
       underCount: 0,
-    }))
+    })),
   );
 
   // Top card of discard (faceup)
   const topDiscardCard = $derived<DisplayCard | undefined>(
     player.discard.length > 0
       ? { ...toDisplayCard(player.discard[player.discard.length - 1], cards), facedown: false }
-      : undefined
+      : undefined,
   );
 
   // All discard cards for modal (faceup)
   const discardCards = $derived<DisplayCard[]>(
-    player.discard.map((c) => ({ ...toDisplayCard(c, cards), facedown: false }))
+    player.discard.map((c) => ({ ...toDisplayCard(c, cards), facedown: false })),
   );
 </script>
 
@@ -115,7 +115,14 @@
   <div class="right-zone">
     <div class="piles-vertical">
       <Pile label="Deck" count={player.deckCount} />
-      <div class="discard-pile" onclick={() => (showDiscardModal = true)} onkeydown={(e) => e.key === 'Enter' && (showDiscardModal = true)} role="button" tabindex="0" title="Click to view discard pile">
+      <div
+        class="discard-pile"
+        onclick={() => (showDiscardModal = true)}
+        onkeydown={(e) => e.key === 'Enter' && (showDiscardModal = true)}
+        role="button"
+        tabindex="0"
+        title="Click to view discard pile"
+      >
         <span class="pile-label">Discard</span>
         {#if topDiscardCard}
           <Card card={topDiscardCard} />
@@ -134,7 +141,7 @@
         <span>Ready</span>
         <span class="ink-count">{player.inkwell.ready}/{player.inkwell.total}</span>
       </div>
-      <div class="ink-cards">
+      <div class="ink-cards" style="--ink-count-n: {readyInkCards.length}">
         {#each readyInkCards as card (card.instanceId)}
           <Card {card} />
         {/each}
@@ -145,7 +152,7 @@
         <span>Exerted</span>
         <span class="ink-count">{player.inkwell.exerted}</span>
       </div>
-      <div class="ink-cards">
+      <div class="ink-cards" style="--ink-count-n: {exertedInkCards.length}">
         {#each exertedInkCards as card (card.instanceId)}
           <Card {card} />
         {/each}
@@ -160,11 +167,23 @@
 </section>
 
 {#if showDiscardModal}
-  <div class="modal-backdrop" onclick={() => (showDiscardModal = false)} onkeydown={(e) => e.key === 'Escape' && (showDiscardModal = false)} role="dialog" aria-modal="true" tabindex="-1">
+  <div
+    class="modal-backdrop"
+    onclick={() => (showDiscardModal = false)}
+    onkeydown={(e) => e.key === 'Escape' && (showDiscardModal = false)}
+    role="dialog"
+    aria-modal="true"
+    tabindex="-1"
+  >
     <div class="modal-content" role="document">
       <div class="modal-header">
         <h2>Discard Pile</h2>
-        <button class="close-button" onclick={() => (showDiscardModal = false)} aria-label="Close" type="button">✕</button>
+        <button
+          class="close-button"
+          onclick={() => (showDiscardModal = false)}
+          aria-label="Close"
+          type="button">✕</button
+        >
       </div>
       <div class="modal-body">
         {#if discardCards.length > 0}
@@ -189,7 +208,9 @@
     gap: var(--gap);
     padding: var(--gap);
     border-radius: var(--radius);
-    min-block-size: 280px;
+    block-size: 100%;
+    min-block-size: 0;
+    overflow: hidden;
   }
 
   .side.active {
@@ -257,13 +278,14 @@
   .play-regions {
     display: flex;
     flex-direction: column;
-    gap: calc(var(--gap) * 1.5);
+    gap: var(--gap);
     background: var(--bg-felt);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: calc(var(--gap) * 1.5);
+    padding: var(--gap);
     flex: 1;
-    min-block-size: 280px;
+    min-block-size: 0;
+    overflow: hidden;
     box-shadow:
       var(--shadow-panel),
       inset 0 1px 0 color-mix(in srgb, var(--illuminary-gold) 14%, transparent);
@@ -272,16 +294,17 @@
   .play-region {
     flex: 1;
     min-block-size: 0;
-    padding: calc(var(--gap) * 0.75);
+    padding: calc(var(--gap) * 0.5);
     border-radius: calc(var(--radius) - 0.2rem);
     background: color-mix(in srgb, var(--kelp) 30%, transparent);
     border: 1px solid color-mix(in srgb, var(--illuminary-gold) 10%, transparent);
+    overflow: hidden;
   }
 
   .play-bottom-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: calc(var(--gap) * 1.5);
+    gap: var(--gap);
     flex: 1;
     min-block-size: 0;
   }
@@ -314,10 +337,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 2rem;
-    padding-block: 0.6rem;
+    gap: clamp(0.75rem, 2vw, 2rem);
+    padding-block: 0.35rem;
     padding-inline: var(--gap);
-    min-block-size: 120px;
     border-radius: var(--radius);
     background: color-mix(in srgb, var(--surface) 45%, transparent);
     border: 1px solid color-mix(in srgb, var(--illuminary-gold) 10%, transparent);
@@ -327,9 +349,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.5rem;
-    flex: 1;
-    max-inline-size: 45%;
+    gap: 0.3rem;
+    flex: 0 1 auto;
+    min-inline-size: 0;
+    overflow: hidden;
   }
 
   .ink-label {
@@ -356,29 +379,33 @@
   }
 
   .ink-cards {
+    --card-w: var(--ink-card-w);
+    /* Normal spacing between ink cards before they start to overlap. */
+    --ink-step-full: calc(var(--ink-card-w) + 0.25rem);
+    /* Step needed to fit every card inside the fixed band; clamp to the full
+       step so a few cards sit side-by-side and a banked inkwell fans/stacks. */
+    --ink-step: min(
+      var(--ink-step-full),
+      calc((var(--ink-band) - var(--ink-card-w)) / max(var(--ink-count-n) - 1, 1))
+    );
+
     display: flex;
-    gap: 0.25rem;
+    flex-wrap: nowrap;
     align-items: center;
     justify-content: center;
-    flex-wrap: wrap;
-    max-inline-size: 100%;
-    overflow-x: auto;
-    padding-inline: 0.5rem;
-    scrollbar-width: thin;
+    block-size: var(--ink-card-h);
+    max-inline-size: var(--ink-band);
+    padding-inline: 0.25rem;
   }
 
-  .ink-cards::-webkit-scrollbar {
-    block-size: 4px;
+  /* Overlap cards by shifting each one back by (card width − step). When the
+     step equals a full card+gap there is no overlap; tighter steps fan them. */
+  .ink-cards > :global(.card) {
+    margin-inline-start: calc(var(--ink-step) - var(--ink-card-w));
   }
 
-  .ink-cards::-webkit-scrollbar-track {
-    background: var(--surface-2);
-    border-radius: 2px;
-  }
-
-  .ink-cards::-webkit-scrollbar-thumb {
-    background: var(--muted);
-    border-radius: 2px;
+  .ink-cards > :global(.card):first-child {
+    margin-inline-start: 0;
   }
 
   .hand-zone {
@@ -399,7 +426,10 @@
     border-radius: var(--radius);
     background: color-mix(in srgb, var(--surface) 70%, transparent);
     border: 1px solid var(--border);
-    transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+    transition:
+      background 0.2s,
+      border-color 0.2s,
+      box-shadow 0.2s;
   }
 
   .discard-pile:hover {
@@ -484,7 +514,9 @@
     padding: 0.25rem;
     line-height: 1;
     border-radius: 0.25rem;
-    transition: color 0.2s, background 0.2s;
+    transition:
+      color 0.2s,
+      background 0.2s;
   }
 
   .close-button:hover {

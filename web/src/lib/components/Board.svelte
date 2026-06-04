@@ -56,13 +56,21 @@
     flex-direction: column;
     gap: var(--gap);
     inline-size: min(100%, 1100px);
+    block-size: 100%;
     margin-inline: auto;
-    padding: clamp(0.6rem, 1.5vw, 1.2rem);
+    padding: clamp(0.5rem, 1.2vw, 1rem);
     border-radius: calc(var(--radius) * 1.5);
     background: color-mix(in srgb, var(--surface) 55%, transparent);
     border: 1px solid var(--border);
     backdrop-filter: blur(6px);
     box-shadow: var(--shadow-panel);
+    overflow: hidden;
+  }
+
+  /* Each player's mat shares the height equally; the centre strip is fixed. */
+  .board > :global(.side) {
+    flex: 1 1 0;
+    min-block-size: 0;
   }
 
   .center {
@@ -73,13 +81,12 @@
     padding-block: 0.6rem;
     /* Gold hairline divider between the two seats. */
     border-block: 1px solid var(--border);
-    background:
-      linear-gradient(
-        90deg,
-        transparent,
-        color-mix(in srgb, var(--illuminary-gold) 8%, transparent),
-        transparent
-      );
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in srgb, var(--illuminary-gold) 8%, transparent),
+      transparent
+    );
   }
 
   .score {

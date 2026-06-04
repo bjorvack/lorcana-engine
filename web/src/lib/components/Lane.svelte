@@ -56,14 +56,14 @@
     display: flex;
     gap: var(--gap);
     align-items: center;
-    justify-content: center;
+    justify-content: safe center;
+
     /* Fixed height: one full card tall, always. Cards never wrap; extra
        cards scroll horizontally so the zone never changes size. */
     block-size: var(--card-h);
     flex-wrap: nowrap;
     padding-block: 0.25rem;
-    overflow-x: auto;
-    overflow-y: hidden;
+    overflow: auto hidden;
     scrollbar-width: thin;
   }
 

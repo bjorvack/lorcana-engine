@@ -9,7 +9,9 @@
   "rules": {
     "selector-class-pattern": null,
     "custom-property-empty-line-before": null,
-    "no-descending-specificity": null
+    "comment-empty-line-before": null,
+    "no-descending-specificity": null,
+    "selector-pseudo-class-no-unknown": [true, { "ignorePseudoClasses": ["global"] }]
   },
   "ignoreFiles": ["dist/**", "src/lib/wasm/**"]
 }

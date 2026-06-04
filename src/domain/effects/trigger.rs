@@ -102,4 +102,7 @@ pub enum TriggerCondition {
     /// "Whenever this character is readied" — fires when the character becomes
     /// ready (at the start of turn, or via an effect).
     WhenThisReadies,
+    /// "Whenever a card is put into your inkwell" — fires when a card is moved
+    /// to the inkwell zone.
+    WhenCardPutInInkwell,
 }

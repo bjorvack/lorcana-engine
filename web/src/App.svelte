@@ -142,7 +142,11 @@
   }
 
   main {
-    padding: 1rem;
+    flex: 1;
+    min-block-size: 0;
+    display: flex;
+    padding: 0.6rem 1rem;
+    overflow: hidden;
   }
 
   .error {

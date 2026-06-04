@@ -197,6 +197,14 @@ fn apply_put_in_inkwell(
     }
     state.set_inked_this_turn(true);
 
+    // Enqueue "whenever a card is put into your inkwell" triggers
+    enqueue_turn_triggers(
+        state,
+        registry,
+        active,
+        &TriggerCondition::WhenCardPutInInkwell,
+    );
+
     let mut events = vec![GameEvent::CardPutInInkwell {
         player: active,
         card,
@@ -2602,7 +2610,9 @@ fn execute_effect(
             what: MoveSource::DeckTop { who, count },
             to,
         } => {
-            return resolve_deck_move(state, controller, source, *who, count, *to, effect);
+            return resolve_deck_move(
+                state, registry, controller, source, *who, count, *to, effect,
+            );
         }
         // The controller plays an eligible card from hand for free (§6).
         Effect::PlayFreeFromHand { filter } => {
@@ -3062,6 +3072,7 @@ fn substitute_chosen_player(effect: &Effect, player: PlayerId) -> Effect {
 #[allow(clippy::too_many_arguments)]
 fn resolve_deck_move(
     state: &mut GameState,
+    registry: &CardRegistry,
     controller: PlayerId,
     source: CardId,
     who: PlayerScope,
@@ -3073,8 +3084,21 @@ fn resolve_deck_move(
         usize::try_from(state.eval_amount(controller, source, source, count).max(0)).unwrap_or(0);
     match resolve_scope(state, controller, who) {
         ScopeOutcome::Players(players) => {
+            let mut all_cards_to_inkwell: Vec<(PlayerId, CardId)> = Vec::new();
             for p in players {
-                move_deck_top(state, p, n, to);
+                let cards = move_deck_top(state, p, n, to);
+                for card_id in cards {
+                    all_cards_to_inkwell.push((p, card_id));
+                }
+            }
+            // Enqueue inkwell triggers for cards moved to inkwell
+            for (player, _card_id) in all_cards_to_inkwell {
+                enqueue_turn_triggers(
+                    state,
+                    registry,
+                    player,
+                    &TriggerCondition::WhenCardPutInInkwell,
+                );
             }
             None
         }
@@ -3083,14 +3107,21 @@ fn resolve_deck_move(
 }
 
 /// Move the top `n` cards of `player`'s deck to `to` (§8).
-fn move_deck_top(state: &mut GameState, player: PlayerId, n: usize, to: Destination) {
+/// Returns the IDs of cards moved to inkwell (for trigger enqueueing).
+fn move_deck_top(
+    state: &mut GameState,
+    player: PlayerId,
+    n: usize,
+    to: Destination,
+) -> Vec<CardId> {
     let dest = destination_to_self(to);
+    let mut cards_moved_to_inkwell = Vec::new();
     for _ in 0..n {
         let Some(p) = state.player_mut(player) else {
-            return;
+            return cards_moved_to_inkwell;
         };
         let Some(mut card) = p.deck_mut().pop_top() else {
-            return;
+            return cards_moved_to_inkwell;
         };
         match dest {
             SelfDestination::Discard => {
@@ -3103,6 +3134,7 @@ fn move_deck_top(state: &mut GameState, player: PlayerId, n: usize, to: Destinat
             }
             SelfDestination::Inkwell => {
                 *card.conditions_mut() = Conditions::in_inkwell();
+                cards_moved_to_inkwell.push(card.id());
                 p.inkwell_mut().push(card);
             }
             SelfDestination::BottomOfDeck => {
@@ -3113,6 +3145,7 @@ fn move_deck_top(state: &mut GameState, player: PlayerId, n: usize, to: Destinat
             }
         }
     }
+    cards_moved_to_inkwell
 }
 
 /// Resolve a discard across `players` in order: discard the whole hand outright
@@ -3774,7 +3807,13 @@ enum SelfDestination {
 /// Move `card` (the effect's source) from play or the discard to `owner`'s hand
 /// or inkwell, dissolving any stack into the destination (§5.1.7). If it was in
 /// play, its continuous modifiers end (§7.6.4).
-fn move_self_card(state: &mut GameState, owner: PlayerId, card: CardId, dest: SelfDestination) {
+fn move_self_card(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    owner: PlayerId,
+    card: CardId,
+    dest: SelfDestination,
+) {
     let was_in_play;
     {
         let Some(p) = state.player_mut(owner) else {
@@ -3819,6 +3858,15 @@ fn move_self_card(state: &mut GameState, owner: PlayerId, card: CardId, dest: Se
     if was_in_play {
         state.remove_modifiers_from_source(card);
     }
+    // Enqueue inkwell triggers if cards were moved to inkwell
+    if matches!(dest, SelfDestination::Inkwell) {
+        enqueue_turn_triggers(
+            state,
+            registry,
+            owner,
+            &TriggerCondition::WhenCardPutInInkwell,
+        );
+    }
     // §8.2.4.1: a shuffled-in stack's cards take a free (RNG) order.
     if matches!(dest, SelfDestination::ShuffleIntoDeck) {
         state.shuffle_deck(owner);
@@ -3845,7 +3893,13 @@ fn apply_effect_to(
             to,
         } => {
             if let Some(owner) = owner_holding(state, target_card) {
-                move_self_card(state, owner, target_card, destination_to_self(*to));
+                move_self_card(
+                    state,
+                    registry,
+                    owner,
+                    target_card,
+                    destination_to_self(*to),
+                );
             }
         }
         // Move damage from `from` to `to` (§9.3).
@@ -4255,7 +4309,7 @@ fn apply_name_then_recur_decision(
             .collect()
     });
     for card in matching {
-        move_self_card(state, player, card, SelfDestination::Hand);
+        move_self_card(state, registry, player, card, SelfDestination::Hand);
     }
     resolve_effects(state, registry, player, source, rest, events);
     events.extend(game_state_check_with_triggers(state, registry));
@@ -4282,7 +4336,7 @@ fn apply_name_card_decision(
         let matched = deck_card_def(state, player, top)
             .and_then(|d| registry.get(d))
             .is_some_and(|def| def.has_name(named));
-        move_deck_top(
+        let _ = move_deck_top(
             state,
             player,
             1,
