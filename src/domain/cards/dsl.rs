@@ -466,13 +466,26 @@ fn parse_filter(s: &str) -> Option<CharacterFilter> {
     let mut consumed = vec![false; tokens.len()];
     let mut predicates: Vec<CharacterFilter> = Vec::new();
 
-    // `named X`: the following token is the name (a single token; multi-word
-    // names use the structured form). Matches the card's counts-as names (§6.2.1).
+    // `named X`: capture the (possibly multi-word) name following "named" — all
+    // tokens up to the next structural/numeric word (e.g. "named Peter Pan",
+    // "named Mr. Smee"). Matches the card's counts-as names (§6.2.1).
     for i in 0..tokens.len() {
-        if lower_tokens[i] == "named" && i + 1 < tokens.len() {
-            predicates.push(CharacterFilter::Named(tokens[i + 1].to_string()));
-            consumed[i] = true;
-            consumed[i + 1] = true;
+        if lower_tokens[i] != "named" || consumed[i] {
+            continue;
+        }
+        consumed[i] = true;
+        let mut parts = Vec::new();
+        let mut j = i + 1;
+        while j < tokens.len()
+            && !STRUCTURAL.contains(&lower_tokens[j].as_str())
+            && token_u32(&lower_tokens, j).is_none()
+        {
+            parts.push(tokens[j]);
+            consumed[j] = true;
+            j += 1;
+        }
+        if !parts.is_empty() {
+            predicates.push(CharacterFilter::Named(parts.join(" ")));
         }
     }
 
@@ -852,5 +865,20 @@ mod tests {
         });
         assert!(dwarfs.contains("Seven Dwarfs"), "{dwarfs}");
         assert!(!dwarfs.contains("\"Seven\""), "{dwarfs}");
+    }
+
+    #[test]
+    fn parses_multiword_named() {
+        let f = format!(
+            "{:?}",
+            parse_filter("chosen character named Peter Pan").unwrap()
+        );
+        assert!(f.contains("Named(\"Peter Pan\")"), "{f}");
+        // multi-word name followed by a structural word stops correctly
+        let g = format!(
+            "{:?}",
+            parse_filter("your characters named Peter Pan").unwrap()
+        );
+        assert!(g.contains("Named(\"Peter Pan\")"), "{g}");
     }
 }

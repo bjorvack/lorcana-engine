@@ -96,7 +96,15 @@ fn bogus_tokens(selector: &str, vocab: &HashSet<String>) -> Vec<String> {
     while i < toks.len() {
         let t = &low[i];
         if t == "named" {
-            i += 2; // the name token is consumed
+            // "named" consumes the (possibly multi-word) name: every following
+            // token up to the next structural/numeric word.
+            i += 1;
+            while i < low.len()
+                && !KNOWN.contains(&low[i].as_str())
+                && !low[i].chars().all(|c| c.is_ascii_digit())
+            {
+                i += 1;
+            }
             continue;
         }
         if let Some(parts) = multiword

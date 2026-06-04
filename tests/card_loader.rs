@@ -672,3 +672,24 @@ fn restrict_supports_next_turn_duration() {
         }
     ));
 }
+
+#[test]
+fn a_card_counts_as_its_base_name_for_named_matching() {
+    // "named X" matches the base character name (before " - "), not just the full
+    // name — and the full name still resolves (decklists / copy rule).
+    let defs = load_toml(
+        r#"
+        [[card]]
+        name = "Peter Pan - Never Landing"
+        type = "Character"
+        cost = 4
+        strength = 4
+        willpower = 4
+        lore = 2
+        "#,
+    )
+    .expect("loads");
+    assert!(defs[0].has_name("Peter Pan"), "base name");
+    assert!(defs[0].has_name("Peter Pan - Never Landing"), "full name");
+    assert!(!defs[0].has_name("Peter"), "not a partial token");
+}

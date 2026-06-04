@@ -191,9 +191,16 @@ impl TomlCard {
                 })
             })
             .collect::<Result<_, _>>()?;
+        // Names the card counts as (§6.2.1): the full name (used for the deck
+        // copy rule + decklist resolution) plus the base character name (the part
+        // before " - "), which is what "named X" / Shift's same-name rule match.
+        let mut names = vec![self.name.clone()];
+        if let Some((base, _version)) = self.name.split_once(" - ") {
+            names.push(base.to_string());
+        }
         Ok(CardDefinition::new(id, self.cost, self.inkwell, kind)
             .with_classifications(classifications)
-            .with_names(vec![self.name.clone()])
+            .with_names(names)
             .with_keywords(keywords)
             .with_abilities(abilities)
             .with_activated(activated)
