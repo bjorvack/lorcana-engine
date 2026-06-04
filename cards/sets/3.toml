@@ -166,6 +166,10 @@ inkwell = true
 # text:
 #   Move 1 damage counter from chosen character to chosen opposing character.
 
+[[card.abilities]]
+on = "play"
+do = { move_damage = 1, from = "chosen character", to = "chosen opposing character" }
+
 [[card]]
 name = "Billy Bones - Keeper of the Map"
 type = "Character"
@@ -1394,6 +1398,11 @@ lore = 2
 classifications = ["Dreamborn", "Ally", "Sorcerer"]
 # text:
 #   LISTEN TO YOUR MAMA NOW Whenever this character quests, you may move up to 2 damage counters from chosen character to chosen opposing character.
+
+[[card.abilities]]
+on = "quest"
+may = true
+do = { move_damage = 2, from = "chosen character", to = "chosen opposing character" }
 
 [[card]]
 name = "Map of Treasure Planet"
@@ -2665,6 +2674,10 @@ lore = 1
 classifications = ["Dreamborn", "Villain", "Sorcerer"]
 # text:
 #   YOU'RE TOO LATE Whenever this character quests, chosen opposing character can't ready at the start of their next turn.
+
+[[card.abilities]]
+on = "quest"
+do = { restrict = "cant_ready", to = "chosen opposing character", duration = "this_turn" }
 
 [[card]]
 name = "Vault Door"

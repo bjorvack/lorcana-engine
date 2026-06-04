@@ -280,6 +280,10 @@ keywords = ["Shift 3"]
 #   Shift 3 (You may pay 3 {I} to play this on top of one of your characters named Belle.)
 #   ENHANCED HEALING When you play this character, move up to 3 damage counters from chosen character to chosen opposing character.
 
+[[card.abilities]]
+on = "play"
+do = { move_damage = 3, from = "chosen character", to = "chosen opposing character" }
+
 [[card]]
 name = "Belle - Untrained Mystic"
 type = "Character"
@@ -293,6 +297,10 @@ lore = 1
 classifications = ["Dreamborn", "Hero", "Princess"]
 # text:
 #   HERE NOW, DON'T DO THAT When you play this character, move up to 1 damage counter from chosen character to chosen opposing character.
+
+[[card.abilities]]
+on = "play"
+do = { move_damage = 1, from = "chosen character", to = "chosen opposing character" }
 
 [[card]]
 name = "Benja - Bold Uniter"
@@ -1669,6 +1677,10 @@ classifications = ["Storyborn", "Ally"]
 # text:
 #   FANCY FOOTWORK Whenever you play an action, this character takes no damage from challenges this turn.
 
+[[card.abilities]]
+on = "play_action"
+do = { restrict = "takes_no_challenge_damage", to = "self", duration = "this_turn" }
+
 [[card]]
 name = "Olaf - Carrot Enthusiast"
 type = "Character"
@@ -2096,6 +2108,10 @@ image = "https://cards.lorcast.io/card/digital/large/crd_61d6a3538b6e40389baa451
 inkwell = true
 # text:
 #   MYSTICAL PETALS {E}, 2 {I} — Move 1 damage counter from chosen character to chosen opposing character.
+
+[[card.activated]]
+cost = { exert = true, ink = 2 }
+do = { move_damage = 1, from = "chosen character", to = "chosen opposing character" }
 
 [[card]]
 name = "Scuttle - Expert on Humans"

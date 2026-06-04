@@ -1212,6 +1212,10 @@ classifications = ["Storyborn", "Ally"]
 # text:
 #   BEES' KNEES When you play this character, move 1 damage counter from chosen character to chosen opposing character.
 
+[[card.abilities]]
+on = "play"
+do = { move_damage = 1, from = "chosen character", to = "chosen opposing character" }
+
 [[card]]
 name = "Jumbo Pop"
 type = "Item"
@@ -1445,6 +1449,13 @@ inkwell = true
 # text:
 #   Move 1 damage counter from chosen character to chosen opposing character. Draw a card.
 
+[[card.abilities]]
+on = "play"
+do = [
+  { move_damage = 1, from = "chosen character", to = "chosen opposing character" },
+  { draw = 1 },
+]
+
 [[card]]
 name = "Maleficent's Staff"
 type = "Item"
@@ -1467,6 +1478,11 @@ lore = 1
 classifications = ["Storyborn", "Ally", "Sorcerer"]
 # text:
 #   I HAVE TO DO EVERYTHING AROUND HERE Whenever you play a song, you may move up to 2 damage counters from chosen character to chosen opposing character.
+
+[[card.abilities]]
+on = "play_song"
+may = true
+do = { move_damage = 2, from = "chosen character", to = "chosen opposing character" }
 
 [[card]]
 name = "March Hare - Absurd Host"
