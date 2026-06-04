@@ -8,6 +8,8 @@
 name = "Down In New Orleans"
 type = "Song"
 cost = 6
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3334bebad6e7424c80c2b8c0e157f654.avif?1776533296"
 # text:
 #   (A character with cost 6 or more can {E} to sing this song for free.)
 #   Look at the top 3 cards of your deck. You may reveal a character, item, or location card with cost 6 or less and play it for free. Put the rest on the bottom of your deck in any order.
@@ -16,6 +18,8 @@ cost = 6
 name = "Dragon Fire"
 type = "Action"
 cost = 5
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f54b0e3b38d340ffa793953c49e6cb56.avif?1776533276"
 # text:
 #   Banish chosen character.
 
@@ -27,6 +31,8 @@ do = { banish = "chosen character" }
 name = "Elsa - Ice Maker"
 type = "Character"
 cost = 7
+ink = ["Amethyst", "Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_eecd3c671cd84d7d8a3700c687e1e362.avif?1776533217"
 strength = 5
 willpower = 5
 lore = 2
@@ -40,6 +46,8 @@ keywords = ["Shift 4"]
 name = "Let It Go"
 type = "Song"
 cost = 5
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_bd1327a61be84346b595f07ccf1df0e6.avif?1776533283"
 inkwell = true
 # text:
 #   (A character with cost 5 or more can {E} to sing this song for free.)
@@ -53,6 +61,8 @@ do = { into_inkwell = "chosen character" }
 name = "Pegasus - Gift for Hercules"
 type = "Character"
 cost = 1
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6fdc49b664264148aab790e83e3466a7.avif?1776533209"
 inkwell = true
 strength = 1
 willpower = 1
@@ -66,6 +76,8 @@ keywords = ["Evasive"]
 name = "Simba - Pride Protector"
 type = "Character"
 cost = 5
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_57f0cec68b0a49d7879d72637f8cb9e5.avif?1776533247"
 strength = 4
 willpower = 4
 lore = 2
@@ -79,6 +91,8 @@ keywords = ["Shift 3"]
 name = "Stand Out"
 type = "Song"
 cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d0049d68c901455c94c76afdd99a2745.avif?1776533289"
 inkwell = true
 # text:
 #   (A character with cost 3 or more can {E} to sing this song for free.)
@@ -88,6 +102,8 @@ inkwell = true
 name = "The Headless Horseman - Cursed Rider"
 type = "Character"
 cost = 8
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f64c2b670af947f8bca5f1ce7a5a88d9.avif?1776533301"
 inkwell = true
 strength = 5
 willpower = 7
@@ -102,6 +118,8 @@ keywords = ["Shift 5"]
 name = "Tinker Bell - Insistent Fairy"
 type = "Character"
 cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f49776538d7247e998024421be5f5a18.avif?1776533307"
 inkwell = true
 strength = 1
 willpower = 1

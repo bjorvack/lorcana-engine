@@ -27,6 +27,22 @@ fn every_set_file_loads_with_cards() {
             "{} should contain at least one card",
             path.display()
         );
+        // Backfilled metadata: every card carries 1-2 ink types and an image.
+        for def in &defs {
+            let n = def.ink_types().len();
+            assert!(
+                (1..=2).contains(&n),
+                "{} card {:?} has {n} ink types (expected 1-2)",
+                path.display(),
+                def.names().first()
+            );
+            assert!(
+                def.image().is_some(),
+                "{} card {:?} is missing an image",
+                path.display(),
+                def.names().first()
+            );
+        }
         checked += 1;
     }
     assert!(

@@ -68,7 +68,7 @@ pub struct TomlCard {
     pub ink: Vec<String>,
     /// Deck-building copy-limit override (§2.1.1.3); omit for the default 4.
     pub max_copies: Option<u32>,
-    /// Project-relative path to the card's image asset (never an external URL).
+    /// URL (or path) to the card's image, for display.
     pub image: Option<String>,
     /// Triggered abilities authored in the effect DSL (see [`super::dsl`]).
     #[serde(default)]

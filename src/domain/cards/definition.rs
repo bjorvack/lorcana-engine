@@ -55,8 +55,7 @@ pub struct CardDefinition {
     /// Deck-building copy limit override (§2.1.1.3). `None` = the default 4; some
     /// cards print their own (e.g. 99 for Dalmatian Puppy, 2 for The Glass Slipper).
     max_deck_copies: Option<u32>,
-    /// Relative path to the card's image **stored within the project** (e.g.
-    /// `assets/cards/1/195.avif`), for display. Never an external URL. `None` if unset.
+    /// URL (or path) to the card's image, for display (engine-opaque). `None` if unset.
     image: Option<String>,
 }
 
@@ -379,7 +378,7 @@ impl CardDefinition {
         }
     }
 
-    /// The card's image: a project-relative asset path, if set (never external).
+    /// The card's image URL/path, if set (engine-opaque).
     #[must_use]
     pub fn image(&self) -> Option<&str> {
         self.image.as_deref()
