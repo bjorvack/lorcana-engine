@@ -834,7 +834,7 @@ inkwell = true
 #   Chosen opposing character can't quest during their next turn. Draw a card.
 
 [[card]]
-name = "Heihei - Not-So-Tricky Chicken"
+name = "HeiHei - Not-So-Tricky Chicken"
 type = "Character"
 cost = 2
 ink = ["Sapphire"]

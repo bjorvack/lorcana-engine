@@ -1007,7 +1007,7 @@ lore = 1
 #   ANOTHER CHANCE At the start of your turn, you may put all cards from under this location into your hand. If you do, banish this location.
 
 [[card]]
-name = "Heihei - Persistent Presence"
+name = "HeiHei - Persistent Presence"
 type = "Character"
 cost = 2
 ink = ["Amethyst"]

@@ -959,7 +959,7 @@ inkwell = true
 #   CREATE LIFE {E}, 2 {I} — Put the top card of your deck into your inkwell facedown and exerted.
 
 [[card]]
-name = "Heihei - Bumbling Rooster"
+name = "HeiHei - Bumbling Rooster"
 type = "Character"
 cost = 3
 ink = ["Emerald"]

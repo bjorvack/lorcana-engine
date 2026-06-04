@@ -912,7 +912,7 @@ inkwell = true
 #   Chosen character gets +1 {S} this turn for each character you have in play.
 
 [[card]]
-name = "Heihei - Expanded Consciousness"
+name = "HeiHei - Expanded Consciousness"
 type = "Character"
 cost = 5
 ink = ["Sapphire", "Steel"]
@@ -929,7 +929,7 @@ keywords = ["Shift 3"]
 #   CLEAR YOUR MIND When you play this character, put all cards from your hand into your inkwell facedown and exerted.
 
 [[card]]
-name = "Heihei - Rambling Rooster"
+name = "HeiHei - Rambling Rooster"
 type = "Character"
 cost = 1
 ink = ["Steel"]
