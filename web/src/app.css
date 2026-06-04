@@ -34,7 +34,13 @@
 
   --radius: 0.6rem;
   --card-w: clamp(3.4rem, 6vw, 5.4rem);
+  --card-h: calc(var(--card-w) * 7 / 5);
   --gap: clamp(0.25rem, 0.8vw, 0.6rem);
+
+  /* Reserved capacity per zone, so rows never grow/shrink as cards come and
+     go — overflow scrolls instead. A "reasonable" board's worth of cards. */
+  --ink-card-w: clamp(2.2rem, 3.4vw, 3rem);
+  --ink-card-h: calc(var(--ink-card-w) * 7 / 5);
 
   --shadow-soft: 0 1px 2px rgb(0 0 0 / 35%);
   --shadow-panel: 0 6px 20px -8px rgb(0 0 0 / 55%);

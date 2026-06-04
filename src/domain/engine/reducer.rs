@@ -1739,7 +1739,7 @@ fn begin_turn(state: &mut GameState, registry: &CardRegistry, first_turn: bool) 
     state.set_phase(Phase::Beginning);
     state.set_step(Step::Ready);
     events.push(GameEvent::StepEntered { step: Step::Ready });
-    ready_all(state, active);
+    ready_all(state, registry, active);
     events.extend(game_state_check(state));
     if state.is_finished() {
         return events;
@@ -1875,7 +1875,7 @@ fn draw(state: &mut GameState, player: PlayerId) -> GameEvent {
 }
 
 /// Ready all of a player's cards in play and in their inkwell (§4.2.1.1).
-fn ready_all(state: &mut GameState, player: PlayerId) {
+fn ready_all(state: &mut GameState, registry: &CardRegistry, player: PlayerId) {
     // A card with the "can't ready" restriction (freeze / continuous) stays
     // exerted this turn (§"can't ready"). Computed before the mutable pass.
     let frozen: std::collections::HashSet<CardId> = state
@@ -1889,13 +1889,46 @@ fn ready_all(state: &mut GameState, player: PlayerId) {
         })
         .unwrap_or_default();
     if let Some(p) = state.player_mut(player) {
-        for card in p.play_mut().iter_mut() {
-            if !frozen.contains(&card.id()) {
-                card.conditions_mut().ready = true;
-            }
+        // Collect cards to ready and their IDs first
+        let play_cards_to_ready: Vec<_> = p
+            .play_mut()
+            .iter_mut()
+            .filter(|c| !frozen.contains(&c.id()))
+            .filter_map(|c| {
+                let was_not_ready = !c.conditions().ready;
+                c.conditions_mut().ready = true;
+                if was_not_ready { Some(c.id()) } else { None }
+            })
+            .collect();
+
+        let inkwell_cards_to_ready: Vec<_> = p
+            .inkwell_mut()
+            .iter_mut()
+            .filter_map(|c| {
+                let was_not_ready = !c.conditions().ready;
+                c.conditions_mut().ready = true;
+                if was_not_ready { Some(c.id()) } else { None }
+            })
+            .collect();
+
+        // Now enqueue triggers (outside the mutable borrow)
+        for card_id in play_cards_to_ready {
+            enqueue_self_triggers(
+                state,
+                registry,
+                player,
+                card_id,
+                &TriggerCondition::WhenThisReadies,
+            );
         }
-        for card in p.inkwell_mut().iter_mut() {
-            card.conditions_mut().ready = true;
+        for card_id in inkwell_cards_to_ready {
+            enqueue_self_triggers(
+                state,
+                registry,
+                player,
+                card_id,
+                &TriggerCondition::WhenThisReadies,
+            );
         }
     }
     // One-shot freezes (UntilStep { Ready, player }) are consumed now; continuous
@@ -3842,7 +3875,18 @@ fn apply_effect_to(
                     .player_mut(owner)
                     .and_then(|p| p.play_mut().iter_mut().find(|c| c.id() == target_card))
             {
+                let was_not_ready = !c.conditions().ready;
                 c.conditions_mut().ready = ready;
+                if ready && was_not_ready {
+                    // Enqueue "whenever this character is readied" triggers
+                    enqueue_self_triggers(
+                        state,
+                        registry,
+                        owner,
+                        target_card,
+                        &TriggerCondition::WhenThisReadies,
+                    );
+                }
             }
         }
         Effect::Freeze(_) => freeze_card(state, target_card),

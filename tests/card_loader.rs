@@ -1312,3 +1312,30 @@ fn damage_triggers_parse_correctly() {
         .any(|a| matches!(a.condition, TriggerCondition::WhenDamageRemovedFromThis));
     assert!(has_damage_removed, "should have damage_removed trigger");
 }
+
+#[test]
+fn ready_trigger_parses_correctly() {
+    // Test ready trigger DSL parsing
+    let defs = load_toml(
+        r#"
+        [[card]]
+        name = "ReadyTriggerCard"
+        type = "Character"
+        cost = 3
+        strength = 2
+        willpower = 3
+        lore = 1
+        [[card.abilities]]
+        on = "readies"
+        do = { gain_lore = 1 }
+        "#,
+    )
+    .expect("loads");
+
+    // Check for readies trigger
+    let has_readies = defs[0]
+        .abilities()
+        .iter()
+        .any(|a| matches!(a.condition, TriggerCondition::WhenThisReadies));
+    assert!(has_readies, "should have readies trigger");
+}

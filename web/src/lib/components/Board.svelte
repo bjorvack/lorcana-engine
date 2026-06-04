@@ -57,6 +57,12 @@
     gap: var(--gap);
     inline-size: min(100%, 1100px);
     margin-inline: auto;
+    padding: clamp(0.6rem, 1.5vw, 1.2rem);
+    border-radius: calc(var(--radius) * 1.5);
+    background: color-mix(in srgb, var(--surface) 55%, transparent);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(6px);
+    box-shadow: var(--shadow-panel);
   }
 
   .center {
@@ -64,8 +70,16 @@
     flex-direction: column;
     align-items: center;
     gap: 0.2rem;
-    padding-block: 0.4rem;
+    padding-block: 0.6rem;
+    /* Gold hairline divider between the two seats. */
     border-block: 1px solid var(--border);
+    background:
+      linear-gradient(
+        90deg,
+        transparent,
+        color-mix(in srgb, var(--illuminary-gold) 8%, transparent),
+        transparent
+      );
   }
 
   .score {

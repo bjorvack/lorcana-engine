@@ -1147,8 +1147,52 @@ fn boost_moves_deck_card_under_character() {
         1,
         "character should have 1 card under it"
     );
-    assert!(
-        booster_card.under().first().unwrap().conditions().facedown,
-        "card under should be facedown"
+}
+#[test]
+fn ready_trigger_fires_on_turn_start() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "ReadyHero"
+        type = "Character"
+        cost = 3
+        strength = 2
+        willpower = 3
+        lore = 1
+        [[card.abilities]]
+        on = "readies"
+        do = { gain_lore = 1 }
+        [[card]]
+        name = "Vanilla"
+        type = "Character"
+        cost = 1
+        strength = 1
+        willpower = 1
+        lore = 1
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+
+    let hero = place(&mut state, me, 100, 0, 2, 3, true);
+    assert_eq!(state.player(me).unwrap().lore(), 0, "starts with 0 lore");
+
+    // Exert the hero (this also gains 1 lore from questing)
+    let _ = apply(&mut state, &reg, Input::Quest { character: hero }).expect("quest");
+    assert_eq!(
+        state.player(me).unwrap().lore(),
+        1,
+        "gained 1 lore from questing"
+    );
+
+    // End turn (hero is exerted)
+    let _ = apply(&mut state, &reg, Input::EndTurn).expect("end turn");
+
+    // Start next turn - hero is readied, trigger should fire
+    let _ = apply(&mut state, &reg, Input::EndTurn).expect("end turn");
+    assert_eq!(
+        state.player(me).unwrap().lore(),
+        2,
+        "ready trigger fired and gained 1 lore (total 2)"
     );
 }

@@ -397,32 +397,35 @@
     cursor: pointer;
     padding: 0.5rem;
     border-radius: var(--radius);
-    background: var(--surface-2);
+    background: color-mix(in srgb, var(--surface) 70%, transparent);
     border: 1px solid var(--border);
-    transition: background 0.2s, border-color 0.2s;
+    transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
   }
 
   .discard-pile:hover {
     background: var(--surface-3);
-    border-color: var(--accent);
+    border-color: var(--border-strong);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--illuminary-gold) 25%, transparent);
   }
 
-  .discard-pile:focus {
+  .discard-pile:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
   }
 
   .pile-label {
-    font-size: 0.65rem;
+    font-size: 0.62rem;
     font-weight: 600;
-    color: var(--muted);
+    color: color-mix(in srgb, var(--illuminary-gold) 80%, var(--parchment));
     text-transform: uppercase;
+    letter-spacing: 0.12em;
   }
 
   .pile-count {
     font-size: 0.7rem;
     font-weight: 700;
-    color: var(--text);
+    color: var(--parchment);
+    font-variant-numeric: tabular-nums;
   }
 
   .empty-discard {

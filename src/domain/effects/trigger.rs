@@ -99,4 +99,7 @@ pub enum TriggerCondition {
     /// "Whenever you remove damage from this character" — fires when damage
     /// counters are removed from the character.
     WhenDamageRemovedFromThis,
+    /// "Whenever this character is readied" — fires when the character becomes
+    /// ready (at the start of turn, or via an effect).
+    WhenThisReadies,
 }

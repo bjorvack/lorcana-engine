@@ -104,6 +104,7 @@ fn trigger_from(s: &str) -> Result<TriggerCondition, String> {
         "dealt_damage" => TriggerCondition::WhenThisIsDealtDamage,
         "opposing_dealt_damage" => TriggerCondition::WhenOpposingIsDealtDamage,
         "damage_removed" => TriggerCondition::WhenDamageRemovedFromThis,
+        "readies" => TriggerCondition::WhenThisReadies,
         other => return Err(format!("unknown trigger {other:?}")),
     })
 }

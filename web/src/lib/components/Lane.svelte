@@ -57,9 +57,13 @@
     gap: var(--gap);
     align-items: center;
     justify-content: center;
-    min-block-size: calc(var(--card-w) * 7 / 5);
+    /* Fixed height: one full card tall, always. Cards never wrap; extra
+       cards scroll horizontally so the zone never changes size. */
+    block-size: var(--card-h);
+    flex-wrap: nowrap;
     padding-block: 0.25rem;
     overflow-x: auto;
+    overflow-y: hidden;
     scrollbar-width: thin;
   }
 
