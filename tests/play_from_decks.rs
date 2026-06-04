@@ -76,3 +76,20 @@ fn an_illegal_deck_is_rejected_by_from_decks() {
     let err = Game::from_decks(&[legal, tiny], 1, registry).unwrap_err();
     assert!(matches!(err, SetupError::IllegalDeck { index: 1, .. }));
 }
+
+#[test]
+fn the_host_plays_a_full_game_from_two_decklists() {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR"));
+    let transcript = lorcana_engine::application::host::play_from_files(
+        &root.join("cards/sets"),
+        &root.join("decks/set01-amber-amethyst.txt"),
+        &root.join("decks/set01-emerald-ruby.txt"),
+        7,
+        10_000,
+    )
+    .expect("real decklists play");
+    assert!(
+        transcript.contains("Game over:"),
+        "transcript should end with a game-over line"
+    );
+}

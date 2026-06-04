@@ -5,11 +5,63 @@
 //! interactive loop is for humans).
 
 use super::Game;
-use crate::domain::cards::{CardDefinition, CardRegistry};
+use crate::domain::cards::{CardDefinition, CardRegistry, load_toml_from};
+use crate::domain::deck::Deck;
 use crate::domain::game::GameStatus;
 use crate::domain::types::ids::CardDefId;
 use std::fmt::Write as _;
 use std::io::Write as _;
+use std::path::Path;
+
+/// Build a combined card registry from every `*.toml` under `sets_dir`, assigning
+/// unique ids across files (cards span sets).
+///
+/// # Errors
+/// I/O or load errors are surfaced as a message string.
+pub fn registry_from_dir(sets_dir: &Path) -> Result<CardRegistry, String> {
+    let mut registry = CardRegistry::new();
+    let mut next_id = 0u32;
+    let mut files: Vec<_> = std::fs::read_dir(sets_dir)
+        .map_err(|e| format!("read {}: {e}", sets_dir.display()))?
+        .filter_map(|e| e.ok().map(|e| e.path()))
+        .filter(|p| p.extension().and_then(|x| x.to_str()) == Some("toml"))
+        .collect();
+    files.sort();
+    for path in files {
+        let toml =
+            std::fs::read_to_string(&path).map_err(|e| format!("{}: {e}", path.display()))?;
+        let defs =
+            load_toml_from(&toml, next_id).map_err(|e| format!("{}: {e}", path.display()))?;
+        next_id += u32::try_from(defs.len()).unwrap_or(0) + 1;
+        for def in defs {
+            registry.insert(def);
+        }
+    }
+    Ok(registry)
+}
+
+/// Load the card pool from `sets_dir`, the two decklists from `p1`/`p2` (the
+/// community `count name` text format), build a game, and auto-play it to a
+/// transcript.
+///
+/// # Errors
+/// Returns a message if the pool/decklists can't be loaded or a deck is illegal.
+pub fn play_from_files(
+    sets_dir: &Path,
+    p1: &Path,
+    p2: &Path,
+    seed: u64,
+    max_steps: usize,
+) -> Result<String, String> {
+    let registry = registry_from_dir(sets_dir)?;
+    let read = |p: &Path| -> Result<Deck, String> {
+        let text = std::fs::read_to_string(p).map_err(|e| format!("{}: {e}", p.display()))?;
+        Deck::from_text(&text, &registry).map_err(|e| format!("{}: {e}", p.display()))
+    };
+    let decks = [read(p1)?, read(p2)?];
+    let mut game = Game::from_decks(&decks, seed, registry).map_err(|e| format!("{e}"))?;
+    Ok(auto_play(&mut game, seed, max_steps))
+}
 
 /// A self-contained demo registry: 30 vanilla 2/2 cost-1 characters.
 fn demo_registry() -> CardRegistry {
@@ -72,6 +124,15 @@ pub fn render(game: &Game) -> String {
 #[must_use]
 pub fn demo(seed: u64, max_steps: usize) -> String {
     let mut game = Game::new(demo_decks(), seed, demo_registry()).expect("new game");
+    auto_play(&mut game, seed, max_steps)
+}
+
+/// Drive `game` by submitting a deterministic random legal action each step until
+/// it finishes or `max_steps`, returning the transcript.
+///
+/// # Panics
+/// Panics if a reported-legal action is rejected (a `legal_actions`/`apply` bug).
+fn auto_play(game: &mut Game, seed: u64, max_steps: usize) -> String {
     let mut state = seed.wrapping_add(1);
     let mut next = |bound: usize| -> usize {
         state = state
@@ -82,7 +143,7 @@ pub fn demo(seed: u64, max_steps: usize) -> String {
 
     let mut out = String::new();
     for step in 0..max_steps {
-        if is_finished(&game) {
+        if is_finished(game) {
             break;
         }
         let actions = game.legal_actions();
