@@ -15,9 +15,9 @@
     auto = false;
     try {
       const created = await Engine.create(BigInt(seed));
-      // Advance a handful of turns so the opening board isn't empty.
-      let n = 0;
-      while (n < 24 && created.step()) n += 1;
+      // Start at the opening: both players have drawn 7 and kept their hands
+      // (mulligans auto-resolved), the fields are empty, and it's turn 1.
+      // Use Step / Auto-play to drive the game from here.
       engine = created;
       view = created.view();
     } catch (err) {
