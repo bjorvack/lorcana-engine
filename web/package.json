@@ -4,6 +4,9 @@
   "version": "0.1.0",
   "type": "module",
   "description": "Web board viewer for the Lorcana engine (Svelte + WASM).",
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
     "wasm": "bash ../scripts/build-wasm.sh",
     "dev": "vite",
