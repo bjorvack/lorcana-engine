@@ -1196,3 +1196,75 @@ fn ready_trigger_fires_on_turn_start() {
         "ready trigger fired and gained 1 lore (total 2)"
     );
 }
+
+/// Damage trigger mimics WATCH THE TEETH (Hydra - Deadly Serpent, set 3):
+/// "Whenever this character is dealt damage, deal that much damage to chosen opposing character."
+/// Note: Simplified to use fixed amount since DSL doesn't support `damage_dealt` dynamic amount yet.
+#[test]
+fn damage_trigger_mimics_watch_the_teeth() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Hydra"
+        type = "Character"
+        cost = 6
+        strength = 6
+        willpower = 5
+        lore = 2
+        [[card.abilities]]
+        on = "dealt_damage"
+        do = { deal_damage = 3, to = "chosen opposing character" }
+        [[card]]
+        name = "Opponent"
+        type = "Character"
+        cost = 1
+        strength = 1
+        willpower = 3
+        lore = 1
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let opponent = opponent_of(&state, me);
+
+    let hydra = place(&mut state, me, 100, 0, 6, 5, true);
+    let target = place(&mut state, opponent, 200, 0, 1, 3, true);
+
+    // Exert hydra so it can be challenged
+    let _ = apply(&mut state, &reg, Input::Quest { character: hydra }).expect("quest");
+
+    // Pass turn so opponent can challenge
+    let _ = apply(&mut state, &reg, Input::EndTurn).expect("end turn");
+
+    // Opponent challenges hydra for 1 damage
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Challenge {
+            challenger: target,
+            target: hydra,
+        },
+    )
+    .expect("challenge");
+
+    // Hydra should take 1 damage (target's strength), target should be banished (took 9 damage, has 3 willpower)
+    let hydra_card = state
+        .player(me)
+        .unwrap()
+        .play()
+        .iter()
+        .find(|c| c.id() == hydra)
+        .unwrap();
+    let target_in_play = state
+        .player(opponent)
+        .unwrap()
+        .play()
+        .iter()
+        .find(|c| c.id() == target);
+
+    assert_eq!(hydra_card.conditions().damage, 1, "hydra took 1 damage");
+    assert!(
+        target_in_play.is_none(),
+        "target was banished (took 9 damage vs 3 willpower)"
+    );
+}

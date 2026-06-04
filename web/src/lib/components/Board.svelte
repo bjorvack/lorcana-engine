@@ -56,8 +56,8 @@
     flex-direction: column;
     gap: var(--gap);
     inline-size: min(100%, 1100px);
-    block-size: 100%;
-    margin-inline: auto;
+    flex: 1;
+    min-block-size: 0;
     padding: clamp(0.5rem, 1.2vw, 1rem);
     border-radius: calc(var(--radius) * 1.5);
     background: color-mix(in srgb, var(--surface) 55%, transparent);
@@ -77,8 +77,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.2rem;
-    padding-block: 0.6rem;
+    gap: 0.1rem;
+    padding-block: 0.35rem;
     /* Gold hairline divider between the two seats. */
     border-block: 1px solid var(--border);
     background: linear-gradient(

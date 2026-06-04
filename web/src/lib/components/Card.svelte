@@ -1,7 +1,9 @@
 <script lang="ts">
   import type { DisplayCard } from '../cardModel';
 
-  let { card }: { card: DisplayCard } = $props();
+  // `art` shows only the square art crop (top of the card); rotating it 90°
+  // keeps the exact same footprint. `full` shows the whole 5/7 card.
+  let { card, variant = 'full' }: { card: DisplayCard; variant?: 'full' | 'art' } = $props();
 
   let isHovered = $state(false);
   let mouseX = $state(0);
@@ -15,6 +17,7 @@
 
 <article
   class="card"
+  class:art-mode={variant === 'art'}
   class:exerted={card.exerted}
   class:drying={card.drying}
   class:lethal={card.lethal}
@@ -95,8 +98,25 @@
     inline-size: calc(var(--card-w) * 1.4);
   }
 
+  /* Art crop: a square showing the top of the card art. A square's bounding
+     box is unchanged by a 90° rotation, so exerting never resizes the slot. */
+  .card.art-mode,
+  .card.art-mode.location {
+    aspect-ratio: 1 / 1;
+    inline-size: var(--card-w);
+  }
+
+  .card.art-mode .art {
+    object-position: top center;
+  }
+
   .card.exerted {
     transform: rotate(90deg) scale(0.82);
+  }
+
+  .card.art-mode.exerted {
+    /* No scale: a rotated square fits its own footprint exactly. */
+    transform: rotate(90deg);
   }
 
   .card.drying {

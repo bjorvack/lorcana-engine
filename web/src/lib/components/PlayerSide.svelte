@@ -98,14 +98,14 @@
   <div class="left-zone">
     <div class="play-regions">
       <div class="play-region characters">
-        <Lane label="Characters" cards={characters} empty="No characters" />
+        <Lane label="Characters" cards={characters} empty="No characters" variant="art" />
       </div>
       <div class="play-bottom-row">
         <div class="play-region locations">
-          <Lane label="Locations" cards={locations} empty="No locations" />
+          <Lane label="Locations" cards={locations} empty="No locations" variant="art" />
         </div>
         <div class="play-region items">
-          <Lane label="Items" cards={items} empty="No items" />
+          <Lane label="Items" cards={items} empty="No items" variant="art" />
         </div>
       </div>
     </div>
@@ -125,7 +125,7 @@
       >
         <span class="pile-label">Discard</span>
         {#if topDiscardCard}
-          <Card card={topDiscardCard} />
+          <Card card={topDiscardCard} variant="art" />
         {:else}
           <div class="empty-discard">Empty</div>
         {/if}
@@ -143,7 +143,7 @@
       </div>
       <div class="ink-cards" style="--ink-count-n: {readyInkCards.length}">
         {#each readyInkCards as card (card.instanceId)}
-          <Card {card} />
+          <Card {card} variant="art" />
         {/each}
       </div>
     </div>
@@ -154,7 +154,7 @@
       </div>
       <div class="ink-cards" style="--ink-count-n: {exertedInkCards.length}">
         {#each exertedInkCards as card (card.instanceId)}
-          <Card {card} />
+          <Card {card} variant="art" />
         {/each}
       </div>
     </div>
@@ -162,7 +162,7 @@
 
   <!-- Hand -->
   <div class="hand-zone">
-    <Lane label={revealHand ? 'Hand' : 'Hand (hidden)'} cards={hand} empty="Empty hand" />
+    <Lane label={revealHand ? 'Hand' : 'Hand (hidden)'} cards={hand} empty="Empty hand" clip />
   </div>
 </section>
 
@@ -204,11 +204,12 @@
   .side {
     display: grid;
     grid-template-columns: 1fr auto;
-    grid-template-rows: 1fr auto auto;
+    /* minmax(0, …) lets the play row actually shrink to fit instead of forcing
+       its min-content height (which would push the hand off-screen). */
+    grid-template-rows: minmax(0, 1fr) auto auto;
     gap: var(--gap);
     padding: var(--gap);
     border-radius: var(--radius);
-    block-size: 100%;
     min-block-size: 0;
     overflow: hidden;
   }
@@ -226,7 +227,7 @@
    */
   .side.mirrored {
     grid-template-columns: auto 1fr;
-    grid-template-rows: auto auto 1fr;
+    grid-template-rows: auto auto minmax(0, 1fr);
   }
 
   .left-zone {
@@ -393,7 +394,7 @@
     flex-wrap: nowrap;
     align-items: center;
     justify-content: center;
-    block-size: var(--ink-card-h);
+    block-size: var(--ink-card-w);
     max-inline-size: var(--ink-band);
     padding-inline: 0.25rem;
   }
@@ -460,7 +461,7 @@
 
   .empty-discard {
     inline-size: var(--card-w);
-    aspect-ratio: 5 / 7;
+    aspect-ratio: 1 / 1;
     background: var(--surface-3);
     border-radius: 0.4rem;
     display: grid;

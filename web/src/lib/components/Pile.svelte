@@ -23,7 +23,7 @@
 
   .stack {
     inline-size: var(--card-w);
-    aspect-ratio: 5 / 7;
+    aspect-ratio: 1 / 1;
     display: grid;
     place-items: center;
     border-radius: 0.4rem;

@@ -6,17 +6,27 @@
     label,
     cards,
     empty = '—',
-  }: { label: string; cards: DisplayCard[]; empty?: string } = $props();
+    variant = 'full',
+    clip = false,
+  }: {
+    label: string;
+    cards: DisplayCard[];
+    empty?: string;
+    /** How each card renders: square art crop (`art`) or whole card (`full`). */
+    variant?: 'full' | 'art';
+    /** Show only the top of the cards (used for the hand to save space). */
+    clip?: boolean;
+  } = $props();
 </script>
 
-<section class="lane" aria-label={label}>
+<section class="lane" class:art={variant === 'art'} class:clip aria-label={label}>
   <header>
     <span class="name">{label}</span>
     <span class="count">{cards.length}</span>
   </header>
   <div class="row">
     {#each cards as card (card.instanceId)}
-      <Card {card} />
+      <Card {card} {variant} />
     {:else}
       <p class="empty">{empty}</p>
     {/each}
@@ -27,7 +37,7 @@
   .lane {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 0.15rem;
     min-inline-size: 0;
   }
 
@@ -35,11 +45,12 @@
     display: flex;
     align-items: center;
     gap: 0.4rem;
-    font-size: 0.66rem;
+    font-size: 0.6rem;
     font-weight: 600;
     color: color-mix(in srgb, var(--illuminary-gold) 80%, var(--parchment));
     text-transform: uppercase;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.1em;
+    line-height: 1.1;
   }
 
   .count {
@@ -58,13 +69,25 @@
     align-items: center;
     justify-content: safe center;
 
-    /* Fixed height: one full card tall, always. Cards never wrap; extra
-       cards scroll horizontally so the zone never changes size. */
+    /* Fixed height so the zone never changes size as cards come and go; extra
+       cards scroll horizontally. `full` reserves a whole card, `art` a square. */
     block-size: var(--card-h);
     flex-wrap: nowrap;
-    padding-block: 0.25rem;
+    padding-block: 0.1rem;
     overflow: auto hidden;
     scrollbar-width: thin;
+  }
+
+  .lane.art .row {
+    block-size: var(--card-w);
+  }
+
+  /* Clipped lane (the hand): only the top of each card shows, freeing space
+     for the rest of the mat. The full card is available on hover. */
+  .lane.clip .row {
+    block-size: calc(var(--card-h) * 0.5);
+    align-items: flex-start;
+    overflow: visible hidden;
   }
 
   .empty {
