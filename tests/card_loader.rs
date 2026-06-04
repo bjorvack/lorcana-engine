@@ -976,3 +976,53 @@ fn dr_facilier_split_top_bottom() {
         &vec![DeckPosition::Top, DeckPosition::Bottom]
     );
 }
+
+#[test]
+fn player_scoped_draw_with_who() {
+    use lorcana_engine::{Amount, Effect, PlayerScope};
+    let defs = load_toml(
+        r#"
+        [[card]]
+        name = "Card Sharer"
+        type = "Character"
+        cost = 3
+        strength = 2
+        willpower = 3
+        lore = 1
+        [[card.abilities]]
+        on = "play"
+        do = { draw = 2, who = "each opponent" }
+        "#,
+    )
+    .expect("loads");
+    let Effect::Draw { who, amount } = &defs[0].abilities()[0].effect else {
+        panic!("expected Draw");
+    };
+    assert_eq!(*who, PlayerScope::EachOpponent);
+    assert_eq!(*amount, Amount::Fixed(2));
+}
+
+#[test]
+fn player_scoped_lore_with_who() {
+    use lorcana_engine::{Amount, Effect, PlayerScope};
+    let defs = load_toml(
+        r#"
+        [[card]]
+        name = "Lore Stealer"
+        type = "Character"
+        cost = 3
+        strength = 2
+        willpower = 3
+        lore = 1
+        [[card.abilities]]
+        on = "play"
+        do = { gain_lore = 2, who = "each player" }
+        "#,
+    )
+    .expect("loads");
+    let Effect::Lore { who, amount } = &defs[0].abilities()[0].effect else {
+        panic!("expected Lore");
+    };
+    assert_eq!(*who, PlayerScope::EachPlayer);
+    assert_eq!(*amount, Amount::Fixed(2));
+}

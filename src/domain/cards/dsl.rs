@@ -150,18 +150,33 @@ fn effect_from_table(t: &toml::Table) -> Result<Effect, String> {
     };
 
     if t.contains_key("draw") {
+        let who = t.get("who").and_then(Value::as_str);
         Ok(Effect::Draw {
-            who: scope(PlayerScope::You)?,
+            who: if let Some(s) = who {
+                scope_from_str(s).ok_or_else(|| format!("unknown scope {s:?}"))?
+            } else {
+                PlayerScope::You
+            },
             amount: amt("draw")?,
         })
     } else if t.contains_key("gain_lore") {
+        let who = t.get("who").and_then(Value::as_str);
         Ok(Effect::Lore {
-            who: scope(PlayerScope::You)?,
+            who: if let Some(s) = who {
+                scope_from_str(s).ok_or_else(|| format!("unknown scope {s:?}"))?
+            } else {
+                PlayerScope::You
+            },
             amount: amt("gain_lore")?,
         })
     } else if t.contains_key("lose_lore") {
+        let who = t.get("who").and_then(Value::as_str);
         Ok(Effect::Lore {
-            who: scope(PlayerScope::EachOpponent)?,
+            who: if let Some(s) = who {
+                scope_from_str(s).ok_or_else(|| format!("unknown scope {s:?}"))?
+            } else {
+                PlayerScope::EachOpponent
+            },
             amount: Amount::fixed(-int("lose_lore")?),
         })
     } else if t.contains_key("deal_damage") {
