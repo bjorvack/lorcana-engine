@@ -2712,3 +2712,55 @@ move_cost = 1
 image = "https://cards.lorcast.io/card/digital/large/crd_d30e4b994223457c8b38bc696aa91e06.avif?1716052430"
 # text:
 #   IF YOU CAN MAKE IT HERE... During your turn, whenever a character banishes another character in a challenge while here, gain 2 lore.
+
+[[card]]
+name = "Ariel's Grotto - A Secret Place"
+type = "Location"
+cost = 2
+ink = ["Sapphire"]
+inkwell = true
+willpower = 7
+lore = 0
+move_cost = 2
+image = "https://cards.lorcast.io/card/digital/large/crd_e993888b82a845c698effa4248c9a980.avif?1716052430"
+# text:
+#   TREASURE TROVE While you have 3 or more items in play, this location gets +2 {L}.
+
+[[card]]
+name = "Snuggly Duckling - Disreputable Pub"
+type = "Location"
+cost = 2
+ink = ["Ruby"]
+inkwell = true
+willpower = 9
+lore = 0
+move_cost = 2
+image = "https://cards.lorcast.io/card/digital/large/crd_af45f5f03d0944e79c47f0375cc9597a.avif?1716052430"
+# text:
+#   ROUTINE RUCKUS Whenever a character with 3 {S} or more challenges another character while here, gain 1 lore. If the challenging character has 6 {S} or more, gain 3 lore instead.
+
+[[card]]
+name = "The Wall - Border Fortress"
+type = "Location"
+cost = 4
+ink = ["Steel"]
+inkwell = true
+willpower = 8
+lore = 0
+move_cost = 2
+image = "https://cards.lorcast.io/card/digital/large/crd_a8ad84833e7f41d5bf65fe1787c65fe3.avif?1716052430"
+# text:
+#   PROTECT THE REALM While you have an exerted character here, your other locations can't be challenged.
+
+[[card]]
+name = "Training Grounds - Impossible Pillar"
+type = "Location"
+cost = 1
+ink = ["Ruby"]
+inkwell = true
+willpower = 5
+lore = 0
+move_cost = 1
+image = "https://cards.lorcast.io/card/digital/large/crd_ed931c16cb0142469bd6f7571576d61a.avif?1716052430"
+# text:
+#   STRENGTH OF MIND 1 {I} — Chosen character here gets +1 {S} this turn.

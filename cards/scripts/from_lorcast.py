@@ -162,9 +162,12 @@ def card_to_toml(card, skipped):
     if kind == "Character" and (strength is None or willpower is None or lore is None):
         skipped.append((full_name, "Character missing strength/willpower/lore"))
         return None
-    if kind == "Location" and (willpower is None or lore is None or move_cost is None):
-        skipped.append((full_name, "Location missing willpower/lore/move_cost"))
+    if kind == "Location" and (willpower is None or move_cost is None):
+        skipped.append((full_name, "Location missing willpower/move_cost"))
         return None
+    # Locations need not print a lore value; treat a missing one as 0.
+    if kind == "Location" and lore is None:
+        lore = 0
 
     lines = ["[[card]]"]
     lines.append(f"name = {toml_str(full_name)}")
