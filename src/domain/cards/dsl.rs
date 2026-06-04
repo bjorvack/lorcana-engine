@@ -289,6 +289,9 @@ const STRUCTURAL: &[&str] = &[
     "other",
     "opposing",
     "your",
+    "yours",
+    "mine",
+    "of",
     "own",
     "character",
     "characters",
@@ -359,11 +362,39 @@ fn comparison_after(tokens: &[String], from: usize) -> Comparison {
     Comparison::Exactly
 }
 
+/// Push state predicates ("damaged"/"exerted"/"ready") and the one multi-word
+/// classification ("Seven Dwarfs"), marking their tokens consumed so the leftover
+/// pass doesn't misread them as single-word classifications.
+fn push_state_and_multiword_predicates(
+    lower_tokens: &[String],
+    consumed: &mut [bool],
+    predicates: &mut Vec<CharacterFilter>,
+) {
+    for i in 0..lower_tokens.len() {
+        let predicate = match lower_tokens[i].as_str() {
+            "damaged" => CharacterFilter::Damaged(true),
+            "exerted" => CharacterFilter::Exerted(true),
+            "ready" => CharacterFilter::Exerted(false),
+            _ => continue,
+        };
+        predicates.push(predicate);
+        consumed[i] = true;
+    }
+    for i in 0..lower_tokens.len().saturating_sub(1) {
+        if lower_tokens[i] == "seven" && lower_tokens[i + 1] == "dwarfs" {
+            predicates.push(CharacterFilter::Classification(Classification::new(
+                "Seven Dwarfs",
+            )));
+            consumed[i] = true;
+            consumed[i + 1] = true;
+        }
+    }
+}
+
 /// Parse a compact card filter. Combines side + category + classifications +
-/// `another` with the richer leaf predicates: a name (`named X`) and numeric
-/// thresholds on cost / `{S}` / `{W}` / `{L}` — `"with cost 3 or less"`,
-/// `"with 3 {S} or more"`, `"with strength 2 or more"`, `"with 2 {W} or more"`,
-/// `"with 1 lore or more"`. These compose with everything else, e.g.
+/// `another` with the richer leaf predicates: a name (`named X`), state
+/// (`damaged`/`exerted`), and numeric thresholds on cost / `{S}` / `{W}` / `{L}`
+/// (`"with cost 3 or less"`, `"with 3 {S} or more"`). These compose, e.g.
 /// `"another Villain character with cost 3 or less"`. Requires a noun so it's
 /// distinguishable from free text. Anything the grammar can't express still
 /// round-trips via the structured AST fallback.
@@ -408,6 +439,8 @@ fn parse_filter(s: &str) -> Option<CharacterFilter> {
             consumed[i + 1] = true;
         }
     }
+
+    push_state_and_multiword_predicates(&lower_tokens, &mut consumed, &mut predicates);
 
     // Numeric thresholds: a stat keyword adjacent to an integer, optionally
     // followed by `or less` / `or more` (else exactly N), §7.1.
@@ -758,5 +791,26 @@ mod tests {
             parse_filter("chosen opposing character"),
             Some(CharacterFilter::any(TargetSide::Opposing))
         );
+    }
+
+    #[test]
+    fn parses_state_multiword_and_of_yours_without_bogus_classifications() {
+        // "damaged" / "exerted" -> boolean predicates, not classifications.
+        let damaged = format!("{:?}", parse_filter("your damaged characters").unwrap());
+        assert!(damaged.contains("Damaged(true)"), "{damaged}");
+        assert!(!damaged.contains("Classification"), "{damaged}");
+
+        // "of yours" -> side Yours with no leftover "of"/"yours" classifications.
+        let of_yours = format!("{:?}", parse_filter("chosen character of yours").unwrap());
+        assert!(of_yours.contains("Yours"), "{of_yours}");
+        assert!(!of_yours.contains("Classification"), "{of_yours}");
+
+        // "Seven Dwarfs" is one classification, not two bogus tokens.
+        let dwarfs = format!(
+            "{:?}",
+            parse_filter("your other Seven Dwarfs characters").unwrap()
+        );
+        assert!(dwarfs.contains("Seven Dwarfs"), "{dwarfs}");
+        assert!(!dwarfs.contains("\"Seven\""), "{dwarfs}");
     }
 }
