@@ -7,7 +7,53 @@ use lorcana_engine::{
     GameState, GameStatus, Input, PlayerScope, TriggerCondition, apply, load_toml, start,
 };
 
-const SET: &str = include_str!("../cards/set1_sample.toml");
+const SET: &str = r#"
+# A small sample of real Lorcana cards expressed in the engine's own TOML format.
+# Authored from public card facts (Lorcast used only as research); never loaded
+# from an external dataset. These exercise the effect DSL on real card text.
+
+[[card]]
+name = "Jasmine"
+type = "Character"
+cost = 3
+inkwell = true
+strength = 2
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Hero", "Princess"]
+# "Whenever this character quests, each opponent loses 1 lore."
+[[card.abilities]]
+on = "quest"
+do = { lose_lore = 1 }
+
+[[card]]
+name = "The White Rose"
+type = "Character"
+cost = 3
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Storyborn"]
+# "When you play this character, gain 1 lore."
+[[card.abilities]]
+on = "play"
+do = { gain_lore = 1 }
+
+[[card]]
+name = "Daisy Duck"
+type = "Character"
+cost = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Hero", "Musketeer"]
+# "Whenever this character quests, each opponent chooses and discards a card."
+[[card.abilities]]
+on = "quest"
+do = { discard = 1, who = "each opponent" }
+"#;
 
 #[test]
 fn the_real_card_sample_loads_and_maps_onto_the_ast() {

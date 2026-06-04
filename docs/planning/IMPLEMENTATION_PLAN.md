@@ -764,7 +764,7 @@ look-top/reveal 158, complex selectors 151).
   (`cards/*.toml`) → `CardDefinition`, validated on load (type/stats/keywords).
   Authored by us; external datasets (Lorcast) are research-only and never loaded.
   Covers printed characteristics + keywords (values inline); text-based abilities
-  via the effect DSL are a separate concern. `cards/examples.toml`,
+  via the effect DSL are a separate concern. authored inline in tests,
   `tests/card_loader.rs`.
 - [~] **Effect-DSL authoring (first cut)** — `[[card.abilities]]` author **triggered**
   abilities in TOML, mapped to the `Effect` AST. Hybrid surface: structured verb
@@ -773,19 +773,19 @@ look-top/reveal 158, complex selectors 151).
   opponent"`) *or* the structured AST form as a fallback. Verbs covered: draw,
   gain/lose lore, deal/remove damage, give-strength, banish/exert/ready/freeze,
   discard, grant-keyword. Added `Effect::All` (sequencing) to the engine.
-  `src/domain/cards/dsl.rs`, `cards/examples.toml`, `tests/card_loader.rs`. Played
+  `src/domain/cards/dsl.rs`, authored inline in tests, `tests/card_loader.rs`. Played
   end-to-end (TOML -> registry -> engine).
 - [~] **Effect-DSL: activated + static abilities** — `[[card.activated]]`
   (`cost = { exert, ink }` + `do`) -> `ActivatedAbility`; `[[card.statics]]`
   (`strength/willpower/lore = N`, `to = "your other Hero characters"`) ->
   `StaticAbility`. Beast's Mirror ({E},1 -> draw) and Hercules (+1 {S} to other
-  Heroes) in `cards/examples.toml`.
+  Heroes) in `tests/card_loader.rs`.
 - [~] **Effect-DSL: dynamic amounts + conditionals + static per/while** — amounts
   accept `"per <filter>"` (-> `PerMatchingCharacter`), `"cards in hand"`,
   `"damage on self"`, `"<stat> of self"`, or the structured form, anywhere an
   integer was allowed; `{ if_you_have = "<filter>", then = {..} }` -> `IfControl`;
   statics take `per = "<filter>"` and `while = "exerted"`. Maleficent (conditional
-  + for-each lore) and Cruella (static `per` + `while`) in `cards/examples.toml`.
+  + for-each lore) and Cruella (static `per` + `while`) in `tests/card_loader.rs`.
   **Next:** more triggers/verbs as cards force them; conformance suite.
 - A conformance test suite: encode the rules examples (§7–§10) and a library of
   hand-authored interaction scenarios as golden tests.

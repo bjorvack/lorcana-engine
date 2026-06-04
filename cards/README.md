@@ -1,36 +1,92 @@
 # Card Definitions
 
-Card definitions in the engine's **own TOML format** (`*.toml`). These are
-authored by us; external datasets (e.g. Lorcast) are only research aids and are
-never loaded directly.
+Cards in the engine's **own TOML format**, authored by us. External datasets
+(e.g. Lorcast) are only research aids — they are never loaded by the engine.
 
-## Format
+## Layout
 
-Each file is a list of `[[card]]` tables. Only the **printed characteristics +
-keywords** are defined here; a card's text-based triggered / activated / static
-abilities are authored via the effect DSL (a separate concern — see
-`docs/architecture/ARCHITECTURE.md`).
+- `sets/<code>.toml` — one file per set (`1`…`12`, `p1`/`p2`/`p3`, `c2`, `cp`,
+  `d23`, `dis`). Each holds every card in that set.
+- `scripts/from_lorcast.py` — regenerates the structured fields + a `# text:`
+  comment from a research dump. **It does not emit abilities** — re-running it
+  would overwrite hand-authored abilities, so don't.
+- `scripts/backfill_meta.py` — backfills `ink` / `image` / `max_copies` in place
+  (preserving abilities).
+
+## Card format
+
+Each file is a list of `[[card]]` tables:
 
 ```toml
 [[card]]
-name = "Genie"
-type = "Character"            # Character | Action | Song | Item | Location
+name = "Genie - The Ever Impressive"   # full name (Character - Version)
+type = "Character"                     # Character | Action | Song | Item | Location
 cost = 5
-inkwell = true
-strength = 4                 # characters
-willpower = 5                # characters / locations
-lore = 2                     # characters / locations
-move_cost = 1                # locations
+inkwell = true                         # has the inkwell symbol (default false)
+ink = ["Sapphire"]                     # 1 ink, or 2 for dual-ink: ["Ruby", "Sapphire"]
+strength = 4                           # characters
+willpower = 5                          # characters / locations
+lore = 2                               # characters / locations
+move_cost = 1                          # locations only
 classifications = ["Floodborn", "Ally"]
-keywords = ["Evasive", "Challenger 2"]   # value (if any) is inline
+keywords = ["Evasive", "Challenger 2"] # value (if any) is inline
+max_copies = 99                        # deck copy-limit override (omit for the default 4)
+image = "https://…"                    # display image URL
+# text:
+#   <printed rules text, kept as a comment to author abilities from>
 ```
 
 Keyword values are inline: `"Challenger 2"`, `"Resist 1"`, `"Shift 5"`,
 `"Singer 5"`, `"Sing Together 4"`, `"Boost 1"`; valueless keywords are just their
-name (`"Evasive"`, `"Bodyguard"`, `"Ward"`, …).
+name (`"Evasive"`, `"Bodyguard"`, `"Ward"`, `"Rush"`, `"Alert"`, `"Reckless"`,
+`"Vanish"`, `"Support"`).
+
+## Abilities (the effect DSL)
+
+A card's abilities are authored as sub-tables **below** its scalar fields. See
+`src/domain/cards/dsl.rs` for the authoritative grammar.
+
+```toml
+# Triggered ability: on = play | play_action/song/character/item/location |
+#   quest | challenge | challenged | banish | banished_in_challenge |
+#   banishes_in_challenge | start_of_turn | end_of_turn.
+# `do` is one effect, or an array (resolved in order). `may = true` for "you may".
+[[card.abilities]]
+on = "play"
+do = [{ draw = 1 }, { gain_lore = 1 }]
+
+# Activated ability: a cost + an effect.
+[[card.activated]]
+cost = { exert = true, ink = 1 }
+do = { draw = 1 }
+
+# Static stat modifier: one of strength/willpower/lore, on a selector,
+# optionally scaled (`per`) or gated (`while = "exerted"`).
+[[card.statics]]
+strength = 1
+to = "your other Hero characters"
+```
+
+**Effect verbs** (`do`): `draw`, `gain_lore`, `lose_lore`, `deal_damage`,
+`remove_damage`, `give_strength`, `banish`, `exert`, `ready`, `freeze`, `discard`,
+`return_to_hand`, `into_inkwell`, `grant_keyword` (`duration = "this_turn"`
+default | `"permanent"`), and `if_you_have` (`+ at_least = N`, `then = {…}`).
+
+**Amounts** (numbers, or a dynamic string): an integer, `"per <filter>"`,
+`"cards in hand"`, `"damage on self"`.
+
+**Selectors** (`target` / `to` / filters): `"self"`,
+`"chosen [opposing|your] [Classification] character"`, `"all/another … characters"`,
+`"chosen item/location"`, plus predicates `"named X"`, `"with cost N or less/more"`,
+`"with N {S}/{W}/{L} or more/less"`. A leaf may also be the full structured AST
+form (a TOML table) when the compact grammar can't express it.
+
+Actions/Songs: an `on = "play"` ability becomes the card's on-play action effect.
 
 ## Loading
 
 `lorcana_engine::load_toml(&str)` parses a document into `CardDefinition`s
-(validating types/stats/keywords), which insert directly into a `CardRegistry`.
-See `cards/examples.toml` and `tests/card_loader.rs`.
+(validating types/stats/keywords/abilities); `load_toml_from(&str, first_id)`
+assigns unique ids so multiple sets load into one registry. Both insert into a
+`CardRegistry`. See `tests/card_loader.rs`, `tests/all_sets_load.rs`, and the
+deck tooling in `decks/`.
