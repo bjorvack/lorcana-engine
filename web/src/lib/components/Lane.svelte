@@ -31,7 +31,7 @@
     {#each cards as card (card.instanceId)}
       <Card {card} {variant} />
     {:else}
-      <p class="empty">{empty}</p>
+      {#if empty}<p class="empty">{empty}</p>{/if}
     {/each}
   </div>
 </section>
@@ -44,24 +44,21 @@
     min-inline-size: 0;
   }
 
+  /* Quiet, muted section tag so the three play groups read as one mat. */
   header {
     display: flex;
     align-items: center;
-    gap: 0.4rem;
-    font-size: 0.6rem;
+    gap: 0.35rem;
+    font-size: 0.58rem;
     font-weight: 600;
-    color: color-mix(in srgb, var(--illuminary-gold) 80%, var(--parchment));
+    color: color-mix(in srgb, var(--muted) 80%, transparent);
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.09em;
     line-height: 1.1;
   }
 
   .count {
-    padding-inline: 0.4rem;
-    padding-block: 0.05rem;
-    border-radius: 1rem;
-    background: var(--pill);
-    color: var(--parchment);
+    color: color-mix(in srgb, var(--parchment) 70%, transparent);
     font-variant-numeric: tabular-nums;
   }
 
@@ -80,8 +77,12 @@
     scrollbar-width: thin;
   }
 
+  /* In a play region the lane fills the available height; the row grows to
+     centre its (square) cards vertically while never shrinking below one card. */
   .lane.art .row {
-    block-size: var(--card-w);
+    block-size: auto;
+    flex: 1;
+    min-block-size: var(--card-w);
   }
 
   /* Clipped lane (opponent hand): only the top of each card shows, clipped

@@ -55,9 +55,10 @@
   }
 
   .name {
-    font-size: 0.68rem;
+    font-size: 0.6rem;
+    font-weight: 600;
     color: var(--muted);
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.08em;
   }
 </style>

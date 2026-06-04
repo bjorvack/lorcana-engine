@@ -86,6 +86,8 @@
     background: var(--surface);
     overflow: hidden;
     flex: 0 0 auto;
+    /* Soft shadow gives cards depth so they read clearly without zone frames. */
+    box-shadow: 0 2px 5px rgb(0 0 0 / 38%);
     transition:
       transform 180ms ease,
       filter 180ms ease,

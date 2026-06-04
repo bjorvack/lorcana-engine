@@ -98,14 +98,14 @@
   <div class="left-zone">
     <div class="play-regions">
       <div class="play-region characters">
-        <Lane label="Characters" cards={characters} empty="No characters" variant="art" />
+        <Lane label="Characters" cards={characters} empty="" variant="art" />
       </div>
       <div class="play-bottom-row">
         <div class="play-region locations">
-          <Lane label="Locations" cards={locations} empty="No locations" variant="art" />
+          <Lane label="Locations" cards={locations} empty="" variant="art" />
         </div>
         <div class="play-region items">
-          <Lane label="Items" cards={items} empty="No items" variant="art" />
+          <Lane label="Items" cards={items} empty="" variant="art" />
         </div>
       </div>
     </div>
@@ -115,22 +115,24 @@
   <div class="right-zone">
     <div class="piles-vertical">
       <Pile label="Deck" count={player.deckCount} />
-      <div
+      <button
         class="discard-pile"
         onclick={() => (showDiscardModal = true)}
-        onkeydown={(e) => e.key === 'Enter' && (showDiscardModal = true)}
-        role="button"
-        tabindex="0"
-        title="Click to view discard pile"
+        type="button"
+        title="Click to view the discard pile"
       >
+        <span class="pile-visual">
+          {#if topDiscardCard}
+            <Card card={topDiscardCard} variant="art" />
+          {:else}
+            <span class="empty-discard">—</span>
+          {/if}
+          {#if player.discard.length > 0}
+            <span class="pile-badge">{player.discard.length}</span>
+          {/if}
+        </span>
         <span class="pile-label">Discard</span>
-        {#if topDiscardCard}
-          <Card card={topDiscardCard} variant="art" />
-        {:else}
-          <div class="empty-discard">Empty</div>
-        {/if}
-        <span class="pile-count">{player.discard.length}</span>
-      </div>
+      </button>
     </div>
   </div>
 
@@ -165,7 +167,7 @@
     <Lane
       label={revealHand ? 'Hand' : 'Hand (hidden)'}
       cards={hand}
-      empty="Empty hand"
+      empty=""
       clip={mirrored}
       bleed={!mirrored}
     />
@@ -250,14 +252,14 @@
     grid-column: 1;
     grid-row: 1;
     display: flex;
-    align-items: flex-end;
+    /* Stretch so the play mat fills its row; cards centre within it. */
+    align-items: stretch;
   }
 
   /* Mirrored: play sits in the bottom-right, nearest the centre line. */
   .side.mirrored .left-zone {
     grid-column: 2;
     grid-row: 3;
-    align-items: flex-start;
   }
 
   /* Mirrored: piles move to the opponent's left (our left), bottom row. */
@@ -310,17 +312,25 @@
     flex: 1;
     min-block-size: 0;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
   }
 
-  /* One purposeful divider separates the character row from items/locations. */
+  /* The lane fills the region; its label stays pinned at the top while the
+     cards centre in the leftover space (balanced on tall screens, never
+     clipping the label when space is tight). */
+  .play-region > :global(.lane) {
+    flex: 1;
+    min-block-size: 0;
+  }
+
+  /* No divider: characters + items + locations flow as one continuous mat. */
   .play-bottom-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: calc(var(--gap) * 2);
     flex: 1;
     min-block-size: 0;
-    padding-block-start: calc(var(--gap) * 0.75);
-    border-block-start: 1px solid var(--divider);
   }
 
   .play-region.characters {
@@ -431,9 +441,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.25rem;
+    gap: 0.2rem;
     cursor: pointer;
-    padding: 0.25rem;
+    padding: 0.2rem;
+    border: none;
+    background: none;
     border-radius: var(--radius);
     transition:
       background 0.2s,
@@ -450,19 +462,34 @@
     outline-offset: 2px;
   }
 
-  .pile-label {
-    font-size: 0.62rem;
-    font-weight: 600;
-    color: color-mix(in srgb, var(--illuminary-gold) 80%, var(--parchment));
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
+  /* A count badge sits on the pile corner — matches the deck's count style. */
+  .pile-visual {
+    position: relative;
+    display: block;
   }
 
-  .pile-count {
+  .pile-badge {
+    position: absolute;
+    inset-block-start: -0.35rem;
+    inset-inline-end: -0.35rem;
+    min-inline-size: 1.1rem;
+    padding-inline: 0.25rem;
+    border-radius: 1rem;
+    background: var(--surface-2);
+    color: var(--parchment);
     font-size: 0.7rem;
     font-weight: 700;
-    color: var(--parchment);
+    text-align: center;
     font-variant-numeric: tabular-nums;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .pile-label {
+    font-size: 0.6rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
   }
 
   .empty-discard {
@@ -472,7 +499,7 @@
     border-radius: 0.4rem;
     display: grid;
     place-items: center;
-    font-size: 0.6rem;
+    font-size: 0.9rem;
     color: var(--muted);
   }
 

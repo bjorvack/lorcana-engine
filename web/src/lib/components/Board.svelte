@@ -2,6 +2,9 @@
   import type { CardDef, GameView, PlayerView } from '../engine';
   import PlayerSide from './PlayerSide.svelte';
 
+  /** Lore needed to win a game of Lorcana. */
+  const WIN_LORE = 20;
+
   let {
     view,
     cards,
@@ -12,6 +15,18 @@
   const opponent = $derived(view.players.find((p) => p.id !== viewpoint) ?? view.players[1]);
 
   const loreFor = (p: PlayerView | undefined): number => p?.lore ?? 0;
+  const lorePct = (p: PlayerView | undefined): number =>
+    Math.min(100, (loreFor(p) / WIN_LORE) * 100);
+
+  const youActive = $derived(!!you && view.activePlayer === you.id);
+  const oppActive = $derived(!!opponent && view.activePlayer === opponent.id);
+
+  const finished = $derived(view.status === 'Finished');
+  const youWon = $derived(finished && !!you && view.winners.includes(you.id));
+  // Humanised phase label: avoid raw "P0's Main / Main" jargon.
+  const phaseLabel = $derived(
+    view.phase === view.step ? view.phase : `${view.phase} · ${view.step}`,
+  );
 </script>
 
 <div class="board">
@@ -26,19 +41,37 @@
   {/if}
 
   <div class="center" role="status">
-    <div class="score">
-      <span class="lore you">You · {loreFor(you)} lore</span>
-      <span class="vs">vs</span>
-      <span class="lore opp">Opponent · {loreFor(opponent)} lore</span>
-    </div>
-    <div class="phase">
-      <span class="turn">Turn {view.turnNumber}</span>
-      <span class="dot">•</span>
-      <span>P{view.activePlayer}'s {view.phase} / {view.step}</span>
-      {#if view.status !== 'Playing'}
-        <span class="dot">•</span>
-        <span class="status">{view.status}</span>
-      {/if}
+    <div class="hud">
+      <div class="seat" class:active={youActive}>
+        <span class="seat-name">You</span>
+        <span class="lore"
+          ><span class="lore-val">{loreFor(you)}</span><span class="lore-max">/{WIN_LORE}</span
+          ></span
+        >
+        <span class="lore-track"
+          ><span class="lore-fill" style="inline-size: {lorePct(you)}%"></span></span
+        >
+      </div>
+
+      <div class="match">
+        {#if finished}
+          <span class="result">{youWon ? 'You win' : 'Opponent wins'}</span>
+        {:else}
+          <span class="turn">Turn {view.turnNumber}</span>
+          <span class="phase">{phaseLabel}</span>
+        {/if}
+      </div>
+
+      <div class="seat opp" class:active={oppActive}>
+        <span class="seat-name">Opponent</span>
+        <span class="lore"
+          ><span class="lore-val">{loreFor(opponent)}</span><span class="lore-max">/{WIN_LORE}</span
+          ></span
+        >
+        <span class="lore-track"
+          ><span class="lore-fill" style="inline-size: {lorePct(opponent)}%"></span></span
+        >
+      </div>
     </div>
     {#if view.pending}
       <p class="pending" title={view.pending}>Awaiting: {view.pending}</p>
@@ -77,48 +110,118 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.1rem;
-    padding-block: 0.35rem;
+    gap: 0.25rem;
+    padding-block: 0.4rem;
     /* A single faint gold hairline marks the line between the two seats. */
     border-block: 1px solid transparent;
     border-image: linear-gradient(90deg, transparent, var(--divider), transparent) 1;
   }
 
-  .score {
-    display: flex;
+  /* Scoreboard: lore (the win condition) is the focal point; the active seat
+     is clearly emphasised. */
+  .hud {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    gap: 0.8rem;
-    font-weight: 700;
+    gap: clamp(1rem, 4vw, 3rem);
+    inline-size: min(100%, 640px);
   }
 
-  .lore.you {
+  .seat {
+    display: grid;
+    grid-template-columns: auto auto;
+    align-items: baseline;
+    gap: 0.2rem 0.5rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: var(--radius);
+    transition: background 0.2s;
+  }
+
+  .seat.opp {
+    justify-items: end;
+    text-align: end;
+  }
+
+  /* Active seat: a soft warm wash + brighter name — clearly whose turn it is. */
+  .seat.active {
+    background: color-mix(in srgb, var(--illuminary-gold) 12%, transparent);
+  }
+
+  .seat-name {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .seat.active .seat-name {
+    color: var(--accent);
+  }
+
+  .lore {
+    justify-self: end;
+    font-weight: 800;
+    line-height: 1;
     color: var(--lore);
   }
 
-  .lore.opp {
-    color: var(--accent);
+  .seat.opp .lore {
+    justify-self: start;
+    order: -1;
   }
 
-  .vs {
+  .lore-val {
+    font-size: 1.6rem;
+  }
+
+  .lore-max {
+    font-size: 0.85rem;
+    font-weight: 600;
     color: var(--muted);
-    font-weight: 400;
+  }
+
+  .lore-track {
+    grid-column: 1 / -1;
+    block-size: 3px;
+    border-radius: 2px;
+    background: color-mix(in srgb, var(--kelp) 55%, transparent);
+    overflow: hidden;
+  }
+
+  .lore-fill {
+    display: block;
+    block-size: 100%;
+    background: var(--lore);
+    transition: inline-size 0.3s ease;
+  }
+
+  .match {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.1rem;
+    white-space: nowrap;
+  }
+
+  .turn {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--text);
   }
 
   .phase {
-    display: flex;
-    gap: 0.4rem;
-    align-items: center;
-    font-size: 0.8rem;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
     color: var(--muted);
   }
 
-  .dot {
-    opacity: 0.5;
-  }
-
-  .status {
+  .result {
+    font-weight: 800;
     color: var(--accent);
-    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
   }
 
   .pending {
