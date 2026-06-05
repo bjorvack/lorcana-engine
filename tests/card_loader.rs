@@ -3,8 +3,8 @@
 
 use lorcana_engine::{
     AbilityCost, ActivatedAbility, Amount, CardDefId, CardKind, CharacterFilter, Classification,
-    Condition, Effect, Keyword, NumericFilter, PlayerScope, ShiftAbility, Stat, StaticAbility,
-    StaticTarget, Target, TargetSide, TriggerCondition, load_toml,
+    Condition, Effect, Keyword, NumericFilter, PlayerScope, ScopedEvent, ShiftAbility, Stat,
+    StaticAbility, StaticTarget, Target, TargetSide, TriggerCondition, load_toml,
 };
 
 /// The committed example deck, compiled in so the test needs no runtime files.
@@ -291,7 +291,7 @@ fn the_effect_dsl_maps_abilities_onto_the_ast() {
     // "Whenever this quests, chosen opposing character gets -2 {S} this turn."
     let ferdinand = by_name("Ferdinand");
     let quest = &ferdinand.abilities()[0];
-    assert_eq!(quest.condition, TriggerCondition::WhenThisQuests);
+    assert_eq!(quest.condition, TriggerCondition::when_this_quests());
     assert_eq!(
         quest.effect,
         Effect::GiveStrengthThisTurn {
@@ -1289,27 +1289,42 @@ fn damage_triggers_parse_correctly() {
     .expect("loads");
 
     // Check for dealt_damage trigger
-    let has_dealt_damage = defs[0]
-        .abilities()
-        .iter()
-        .any(|a| matches!(a.condition, TriggerCondition::WhenThisIsDealtDamage));
+    let has_dealt_damage = defs[0].abilities().iter().any(|a| {
+        matches!(
+            a.condition,
+            TriggerCondition::WhenCharacterEvent {
+                event: ScopedEvent::DealtDamage,
+                scope: CharacterFilter::IsSource
+            }
+        )
+    });
     assert!(has_dealt_damage, "should have dealt_damage trigger");
 
     // Check for opposing_dealt_damage trigger
-    let has_opposing_dealt_damage = defs[1]
-        .abilities()
-        .iter()
-        .any(|a| matches!(a.condition, TriggerCondition::WhenOpposingIsDealtDamage));
+    let has_opposing_dealt_damage = defs[1].abilities().iter().any(|a| {
+        matches!(
+            a.condition,
+            TriggerCondition::WhenCharacterEvent {
+                event: ScopedEvent::DealtDamage,
+                scope: CharacterFilter::Side(TargetSide::Opposing)
+            }
+        )
+    });
     assert!(
         has_opposing_dealt_damage,
         "should have opposing_dealt_damage trigger"
     );
 
     // Check for damage_removed trigger
-    let has_damage_removed = defs[2]
-        .abilities()
-        .iter()
-        .any(|a| matches!(a.condition, TriggerCondition::WhenDamageRemovedFromThis));
+    let has_damage_removed = defs[2].abilities().iter().any(|a| {
+        matches!(
+            a.condition,
+            TriggerCondition::WhenCharacterEvent {
+                event: ScopedEvent::DamageRemoved,
+                scope: CharacterFilter::IsSource
+            }
+        )
+    });
     assert!(has_damage_removed, "should have damage_removed trigger");
 }
 
@@ -1333,10 +1348,15 @@ fn ready_trigger_parses_correctly() {
     .expect("loads");
 
     // Check for readies trigger
-    let has_readies = defs[0]
-        .abilities()
-        .iter()
-        .any(|a| matches!(a.condition, TriggerCondition::WhenThisReadies));
+    let has_readies = defs[0].abilities().iter().any(|a| {
+        matches!(
+            a.condition,
+            TriggerCondition::WhenCharacterEvent {
+                event: ScopedEvent::Readies,
+                scope: CharacterFilter::IsSource
+            }
+        )
+    });
     assert!(has_readies, "should have readies trigger");
 }
 

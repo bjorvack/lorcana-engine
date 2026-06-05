@@ -205,34 +205,30 @@ no single "done" moment. Each addition follows the same recipe: add the variant
 | Damage / ready / leaves-play / draw (and any stragglers) | as needed, Slices 6–8 |
 | Full taxonomy + scope filters completeness | guaranteed by **Slice 9** (real card data + conformance) |
 
-Done since: self-scoped **sing-a-song** trigger (`WhenThisSings`, DSL `"sings"`) —
-fires for each singer in `apply_sing`, resolved from the bag after the song's
-effect. `tests/actions.rs::a_sing_a_song_trigger_fires_for_the_singer`. The
-yours-scope **`WhenYoursSings`** ("one of your characters sings a song", DSL
-`"yours_sings"`) is also done — fired per singer over the controller's watchers.
-`tests/actions.rs::a_yours_sings_trigger_fires_when_one_of_your_characters_sings`.
+**Scope rides the filter algebra (no per-scope variants).** Every per-character
+event — quest / sing / challenge / is-challenged / banishes-in-challenge / is
+banished (± in a challenge) / dealt-damage / damage-removed / readies — is a
+single `TriggerCondition::WhenCharacterEvent { event: ScopedEvent, scope:
+CharacterFilter }`. The scope expresses "this character" (`IsSource`), "one of
+your other characters" (`And([Side(Yours), Not(IsSource)])`), "an opposing
+character" (`Side(Opposing)`), etc., so no `WhenThis*` / `WhenYours*` /
+`WhenOpposing*` variants exist. `enqueue_character_event` fires them: it scans
+every in-play character (either player) plus the just-left-play actor, evaluates
+each watcher's scope filter (`matches_filter`) against the actor, honors
+`during_your_turn`, binds the trigger amount ("that much"), and includes granted
+triggers. DSL: `quest` / `yours_quests`, `sings` / `yours_sings`, `banished` /
+`yours_banished` / `banished_in_challenge` / `yours_banished_in_challenge`,
+`dealt_damage` / `opposing_dealt_damage`, `damage_removed`, `readies`,
+`challenge`, `challenged`, `banishes_in_challenge`. Tested across
+`tests/actions.rs`, `tests/conformance.rs` (`yours_quests_*`, `yours_banished_*`),
+`tests/challenge.rs`, `tests/card_loader.rs`.
 
-Also done: first **yours-scoped** trigger — `WhenYoursQuests` ("whenever one of
-your characters quests", DSL `"yours_quests"`). `apply_quest` scans the
-controller's in-play characters (including the quester) and routes each through
-`enqueue_triggers_for_def`, so `during_your_turn` gating + granted triggers are
-honored. `tests/conformance.rs::yours_quests_trigger_*` (fires for another
-character, fires for the quester itself, ignores the opponent's quest).
-
-Also done: `WhenYoursBanished` ("whenever one of your **other** characters is
-banished", DSL `"yours_banished"`). `enqueue_banish_triggers` scans the banished
-card's owner's remaining in-play characters (each is "other", since the banished
-card has left play). Works for both challenge and effect-driven banishment.
-`tests/conformance.rs::yours_banished_trigger_*` (fires for another character,
-ignores the opponent's banish). (The "in a challenge" / "during the opponent's
-turn" banish variants are follow-ups.)
-
-**Structural item (don't forget):** today only *self*-scoped triggers are detected
-at the action site (`enqueue_self_triggers`). Watching *other* cards' events
-(scope filters: one of your / a / an opposing character) requires a general
-**event → trigger matcher**. Build it when the first cross-scope card appears
-(Slice 5 or 6), not as per-card hacks; harden it in Slice 9. Each slice below
-back-links here.
+**Structural item (done):** the general **event → trigger matcher** now exists —
+`enqueue_character_event` watches *every* in-play character (and the just-left-play
+actor) and evaluates each watcher's `CharacterFilter` scope, so cross-scope cards
+("one of your other characters", "an opposing character") work without per-card
+hacks. Remaining cross-scope refinements (e.g. "during the opponent's turn"
+gating, classification-scoped events) extend the filter / a turn-side gate.
 
 ---
 

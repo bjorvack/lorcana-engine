@@ -134,7 +134,7 @@ fn an_effect_banishing_donald_resolves_the_opponents_pending_win() {
     reg.insert(
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 5, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenThisQuests,
+                TriggerCondition::when_this_quests(),
                 Effect::Banish(Target::ChosenCharacter {
                     filter: CharacterFilter::any(TargetSide::Yours)
                         .and(CharacterFilter::negate(CharacterFilter::IsSource)),

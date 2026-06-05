@@ -7,7 +7,7 @@ use crate::domain::cards::{
 };
 use crate::domain::effects::{
     Amount, CardCategory, CharacterFilter, CountCondition, DeckPosition, DelayedWhen, Destination,
-    DiscardAmount, DiscardBy, Effect, MoveSource, PlayerScope, Target, TargetSide,
+    DiscardAmount, DiscardBy, Effect, MoveSource, PlayerScope, ScopedEvent, Target, TargetSide,
     TriggerCondition,
 };
 use crate::domain::game::{
@@ -672,19 +672,11 @@ fn apply_sing(
             c.conditions_mut().ready = false;
         }
     }
-    // "Whenever this character sings a song" fires for each singer (§6.3.3); the
-    // triggers wait in the bag and resolve after the song's own effect.
+    // "Whenever a character sings a song" fires per singer (§6.3.3); the triggers
+    // wait in the bag and resolve after the song's own effect. Scoped, so "this
+    // character" and "one of your characters" both resolve.
     for &singer in singers {
-        enqueue_self_triggers(
-            state,
-            registry,
-            active,
-            singer,
-            &TriggerCondition::WhenThisSings,
-        );
-        // "Whenever one of your characters sings a song" — fires for the
-        // controller's watchers, once per singer (the singer included).
-        enqueue_yours_sings_triggers(state, registry, active);
+        enqueue_character_event(state, registry, Fired::Sings, singer, active);
     }
     Ok(resolve_action_play(
         state,
@@ -846,17 +838,9 @@ fn apply_quest(
     ];
     events.extend(game_state_check(state));
     if !state.is_finished() {
-        // "Whenever this character quests" triggers go to the bag (§4.3.5.9).
-        enqueue_self_triggers(
-            state,
-            registry,
-            active,
-            character,
-            &TriggerCondition::WhenThisQuests,
-        );
-        // "Whenever one of your characters quests" — fires for each of the
-        // controller's characters that watches for it (including the quester).
-        enqueue_yours_quests_triggers(state, registry, active);
+        // "Whenever a character quests" triggers go to the bag (§4.3.5.9) —
+        // scoped, so "this character" / "one of your characters" both resolve.
+        enqueue_character_event(state, registry, Fired::Quests, character, active);
         enqueue_support_trigger(state, registry, active, character);
         events.extend(resolve_bag(state, registry));
     }
@@ -980,62 +964,26 @@ fn apply_challenge(
     add_damage(state, target_owner, target, damage_to_target);
     add_damage(state, active, challenger, damage_to_challenger);
 
-    // Enqueue damage triggers
+    // Damage triggers — "whenever a character is dealt damage" (scoped: the
+    // damaged character itself via `IsSource`, or `Side(Opposing)`); the trigger
+    // amount carries how much (§4.3.6.16).
     if damage_to_target > 0 {
-        enqueue_self_triggers_with_context(
+        enqueue_character_event(
             state,
             registry,
-            target_owner,
+            Fired::DealtDamage(i32::try_from(damage_to_target).unwrap_or(i32::MAX)),
             target,
-            &TriggerCondition::WhenThisIsDealtDamage,
-            Some(i32::try_from(damage_to_target).unwrap_or(i32::MAX)),
+            target_owner,
         );
-        let opponent = active; // The challenger dealt damage to the target
-        let opp_cards: Vec<_> = state
-            .player(opponent)
-            .expect("opponent exists")
-            .play()
-            .iter()
-            .map(|c| (c.id(), c.definition()))
-            .collect();
-        for (card_id, def_id) in opp_cards {
-            enqueue_triggers_for_def(
-                state,
-                registry,
-                opponent,
-                card_id,
-                def_id,
-                &TriggerCondition::WhenOpposingIsDealtDamage,
-            );
-        }
     }
     if damage_to_challenger > 0 {
-        enqueue_self_triggers_with_context(
+        enqueue_character_event(
             state,
             registry,
-            active,
+            Fired::DealtDamage(i32::try_from(damage_to_challenger).unwrap_or(i32::MAX)),
             challenger,
-            &TriggerCondition::WhenThisIsDealtDamage,
-            Some(i32::try_from(damage_to_challenger).unwrap_or(i32::MAX)),
+            active,
         );
-        let opponent = target_owner; // The target dealt damage to the challenger
-        let opp_cards: Vec<_> = state
-            .player(opponent)
-            .expect("opponent exists")
-            .play()
-            .iter()
-            .map(|c| (c.id(), c.definition()))
-            .collect();
-        for (card_id, def_id) in opp_cards {
-            enqueue_triggers_for_def(
-                state,
-                registry,
-                opponent,
-                card_id,
-                def_id,
-                &TriggerCondition::WhenOpposingIsDealtDamage,
-            );
-        }
     }
 
     let mut events = vec![GameEvent::Challenged {
@@ -1046,54 +994,36 @@ fn apply_challenge(
     // "Whenever this character challenges / is challenged" triggers go to the bag
     // (§4.3.6); enqueued before the game-state check so a challenger/target that is
     // about to be banished still triggers (the bag captures the effect).
-    enqueue_self_triggers(
-        state,
-        registry,
-        active,
-        challenger,
-        &TriggerCondition::WhenThisChallenges,
-    );
-    enqueue_self_triggers(
-        state,
-        registry,
-        target_owner,
-        target,
-        &TriggerCondition::WhenChallenged,
-    );
+    enqueue_character_event(state, registry, Fired::Challenges, challenger, active);
+    enqueue_character_event(state, registry, Fired::Challenged, target, target_owner);
     let check_events = game_state_check(state);
     let banished_in_check = |id: CardId| {
         check_events
             .iter()
             .any(|e| matches!(e, GameEvent::Banished { card, .. } if *card == id))
     };
-    // "When this is banished" / "...in a challenge" for each card the challenge
-    // banished (the cards are now in the discard).
+    // "When this is banished" (any scope) for each card the challenge banished
+    // (the cards are now in the discard).
     enqueue_banish_triggers(state, registry, &check_events, true);
     // "Whenever this character banishes another in a challenge" for each side that
-    // banished the other (read from play or discard, since the banisher may itself
-    // have been banished simultaneously).
-    if banished_in_check(target)
-        && let Some(def) = def_in_play_or_discard(state, active, challenger)
-    {
-        enqueue_triggers_for_def(
+    // banished the other (the banisher may itself have been banished
+    // simultaneously, so `enqueue_character_event` reads it from play or discard).
+    if banished_in_check(target) {
+        enqueue_character_event(
             state,
             registry,
-            active,
+            Fired::BanishesInChallenge,
             challenger,
-            def,
-            &TriggerCondition::WhenBanishesInChallenge,
+            active,
         );
     }
-    if banished_in_check(challenger)
-        && let Some(def) = def_in_play_or_discard(state, target_owner, target)
-    {
-        enqueue_triggers_for_def(
+    if banished_in_check(challenger) {
+        enqueue_character_event(
             state,
             registry,
-            target_owner,
+            Fired::BanishesInChallenge,
             target,
-            def,
-            &TriggerCondition::WhenBanishesInChallenge,
+            target_owner,
         );
     }
     events.extend(check_events);
@@ -1101,22 +1031,6 @@ fn apply_challenge(
         events.extend(resolve_bag(state, registry));
     }
     Ok(events)
-}
-
-/// A card's definition id whether it is in play or in `owner`'s discard (e.g. a
-/// card that may have just been banished).
-fn def_in_play_or_discard(state: &GameState, owner: PlayerId, card: CardId) -> Option<CardDefId> {
-    state
-        .instance_in_play(card)
-        .map(CardInstance::definition)
-        .or_else(|| {
-            state
-                .player(owner)?
-                .discard()
-                .iter()
-                .find(|c| c.id() == card)
-                .map(CardInstance::definition)
-        })
 }
 
 /// Add damage counters to an in-play card (§4.3.6.16).
@@ -1938,24 +1852,13 @@ fn ready_all(state: &mut GameState, registry: &CardRegistry, player: PlayerId) {
             })
             .collect();
 
-        // Now enqueue triggers (outside the mutable borrow)
+        // Now enqueue "a character is readied" triggers (outside the mutable
+        // borrow). Inkwell cards aren't characters, so they fire nothing.
         for card_id in play_cards_to_ready {
-            enqueue_self_triggers(
-                state,
-                registry,
-                player,
-                card_id,
-                &TriggerCondition::WhenThisReadies,
-            );
+            enqueue_character_event(state, registry, Fired::Readies, card_id, player);
         }
         for card_id in inkwell_cards_to_ready {
-            enqueue_self_triggers(
-                state,
-                registry,
-                player,
-                card_id,
-                &TriggerCondition::WhenThisReadies,
-            );
+            enqueue_character_event(state, registry, Fired::Readies, card_id, player);
         }
     }
     // One-shot freezes (UntilStep { Ready, player }) are consumed now; continuous
@@ -1997,67 +1900,127 @@ fn seat(index: usize) -> PlayerId {
 // The bag: enqueueing and resolving triggered abilities (§8.7).
 // ---------------------------------------------------------------------------
 
-/// Enqueue "whenever one of your characters quests" triggers: for each of the
-/// controller's in-play characters that watches for it, enqueue its effect
-/// (reusing `enqueue_triggers_for_def`, so `during_your_turn` gating and granted
-/// triggers are honored). The quester is included — it is "one of your
-/// characters" (§4.3.5.9).
-fn enqueue_yours_quests_triggers(
-    state: &mut GameState,
-    registry: &CardRegistry,
-    controller: PlayerId,
-) {
-    let watchers: Vec<(CardId, CardDefId)> = state.player(controller).map_or_else(Vec::new, |p| {
-        p.play()
-            .iter()
-            .filter(|c| c.is_character())
-            .map(|c| (c.id(), c.definition()))
-            .collect()
-    });
-    for (id, def) in watchers {
-        enqueue_triggers_for_def(
-            state,
-            registry,
-            controller,
-            id,
-            def,
-            &TriggerCondition::WhenYoursQuests,
-        );
+/// What just happened to a character, used to fire [`TriggerCondition::WhenCharacterEvent`].
+#[derive(Clone, Copy)]
+enum Fired {
+    Quests,
+    Sings,
+    Challenges,
+    Challenged,
+    BanishesInChallenge,
+    Banished { in_challenge: bool },
+    DealtDamage(i32),
+    DamageRemoved,
+    Readies,
+}
+
+impl Fired {
+    /// Whether an authored [`ScopedEvent`] matches this occurrence (gating a
+    /// banish trigger on whether the banishment happened in a challenge).
+    const fn matches(self, event: ScopedEvent) -> bool {
+        match (event, self) {
+            (ScopedEvent::Quests, Self::Quests)
+            | (ScopedEvent::Sings, Self::Sings)
+            | (ScopedEvent::Challenges, Self::Challenges)
+            | (ScopedEvent::Challenged, Self::Challenged)
+            | (ScopedEvent::BanishesInChallenge, Self::BanishesInChallenge)
+            | (ScopedEvent::DealtDamage, Self::DealtDamage(_))
+            | (ScopedEvent::DamageRemoved, Self::DamageRemoved)
+            | (ScopedEvent::Readies, Self::Readies) => true,
+            (ScopedEvent::Banished { requires_challenge }, Self::Banished { in_challenge }) => {
+                !requires_challenge || in_challenge
+            }
+            _ => false,
+        }
+    }
+
+    /// The trigger amount this event carries ("that much"), if any.
+    const fn amount(self) -> Option<i32> {
+        if let Self::DealtDamage(n) = self {
+            Some(n)
+        } else {
+            None
+        }
     }
 }
 
-/// Enqueue "whenever one of your characters sings a song" triggers: for each of
-/// the controller's in-play characters watching for it, enqueue its effect (via
-/// `enqueue_triggers_for_def`). Called once per singer, so multiple singers (Sing
-/// Together) fire each watcher per participating singer (§6.3.3).
-fn enqueue_yours_sings_triggers(
+/// Fire [`TriggerCondition::WhenCharacterEvent`] triggers for `fired` happening to
+/// `actor` (owned by `actor_owner`). Scans every in-play character of either
+/// player — plus the actor itself when it has just left play (e.g. a banish) so
+/// its own `IsSource` trigger still fires — and any granted triggers, evaluating
+/// each watcher's scope filter against the actor (so "this" / "one of your other
+/// characters" / "an opposing character" all fall out of the algebra). Honors the
+/// `during_your_turn` gate and binds the trigger amount (e.g. damage dealt).
+fn enqueue_character_event(
     state: &mut GameState,
     registry: &CardRegistry,
-    controller: PlayerId,
+    fired: Fired,
+    actor: CardId,
+    actor_owner: PlayerId,
 ) {
-    let watchers: Vec<(CardId, CardDefId)> = state.player(controller).map_or_else(Vec::new, |p| {
-        p.play()
-            .iter()
-            .filter(|c| c.is_character())
-            .map(|c| (c.id(), c.definition()))
-            .collect()
-    });
-    for (id, def) in watchers {
-        enqueue_triggers_for_def(
-            state,
-            registry,
-            controller,
-            id,
-            def,
-            &TriggerCondition::WhenYoursSings,
-        );
+    let active = state.active_player();
+    let amount = fired.amount();
+    let mut to_enqueue: Vec<(PlayerId, CardId, bool, Effect)> = Vec::new();
+    {
+        // The actor's instance (in play, or in a discard if it just left play).
+        let Some(actor_inst) = state.instance_in_play(actor).or_else(|| {
+            state
+                .players()
+                .iter()
+                .find_map(|p| p.discard().iter().find(|c| c.id() == actor))
+        }) else {
+            return;
+        };
+        let actor_in_play = state.instance_in_play(actor).is_some();
+        // Watchers: in-play characters of both players, plus the actor itself when
+        // it has left play (so a self/`IsSource` trigger on a banished card fires).
+        let watchers = state.players().iter().flat_map(|p| {
+            let pid = p.id();
+            p.play()
+                .iter()
+                .filter(|c| c.is_character())
+                .map(move |c| (pid, c.id(), c.definition()))
+        });
+        let extra = (!actor_in_play).then_some((actor_owner, actor, actor_inst.definition()));
+        for (wc, wid, wdef) in watchers.chain(extra) {
+            let Some(def) = registry.get(wdef) else {
+                continue;
+            };
+            for ab in def.abilities() {
+                if let TriggerCondition::WhenCharacterEvent { event, scope } = &ab.condition
+                    && fired.matches(*event)
+                    && (!ab.during_your_turn || wc == active)
+                    && state.matches_filter(wc, wid, actor_owner, actor_inst, scope)
+                {
+                    to_enqueue.push((wc, wid, ab.optional, ab.effect.clone()));
+                }
+            }
+        }
+        // Granted scoped triggers ("gains 'Whenever …' this turn", §7.6).
+        for g in state.granted_triggers() {
+            if let TriggerCondition::WhenCharacterEvent { event, scope } = &g.condition
+                && fired.matches(*event)
+                && let Some(wc) = owner_holding(state, g.source)
+                && state.matches_filter(wc, g.source, actor_owner, actor_inst, scope)
+            {
+                to_enqueue.push((wc, g.source, g.optional, g.effect.clone()));
+            }
+        }
+    }
+    for (wc, wid, optional, effect) in to_enqueue {
+        let effect = match amount {
+            Some(n) => effect.with_trigger_amount(n),
+            None => effect,
+        };
+        let _ = state.enqueue_trigger(wc, wid, optional, effect);
     }
 }
 
-/// Enqueue the source card's own triggers whose condition matches (e.g. a
-/// character's "when you play this character" or "whenever this character
-/// quests"). Only self-scoped triggers are detected so far (see the
-/// `TriggerCondition` TODO for the broader scope/event space).
+/// Enqueue the source card's own non-scoped triggers whose condition exactly
+/// matches (play-this, card-put-under, turn boundaries, inkwell). Reads the
+/// source's definition plus any granted triggers on it. (Per-character *events* —
+/// quest / sing / challenge / banish / damage / ready — go through
+/// [`enqueue_character_event`] instead, which evaluates a scope filter.)
 fn enqueue_self_triggers(
     state: &mut GameState,
     registry: &CardRegistry,
@@ -2065,77 +2028,17 @@ fn enqueue_self_triggers(
     source: CardId,
     condition: &TriggerCondition,
 ) {
-    enqueue_self_triggers_with_context(state, registry, controller, source, condition, None);
-}
-
-/// Like [`enqueue_self_triggers`] but supplies the triggering event's amount
-/// ("that much") so effects referencing [`Amount::TriggerAmount`] resolve to it.
-fn enqueue_self_triggers_with_context(
-    state: &mut GameState,
-    registry: &CardRegistry,
-    controller: PlayerId,
-    source: CardId,
-    condition: &TriggerCondition,
-    context: Option<i32>,
-) {
     let Ok(instance) = find_in_play(state, controller, source) else {
         return;
     };
-    enqueue_triggers_for_def_with_context(
-        state,
-        registry,
-        controller,
-        source,
-        instance.definition(),
-        condition,
-        context,
-    );
-}
-
-/// Enqueue triggers matching `condition` from `source`'s definition. Works for a
-/// `source` that is no longer in play (e.g. a just-banished card now in the
-/// discard) since it reads abilities from the definition, not the instance.
-fn enqueue_triggers_for_def(
-    state: &mut GameState,
-    registry: &CardRegistry,
-    controller: PlayerId,
-    source: CardId,
-    definition_id: CardDefId,
-    condition: &TriggerCondition,
-) {
-    enqueue_triggers_for_def_with_context(
-        state,
-        registry,
-        controller,
-        source,
-        definition_id,
-        condition,
-        None,
-    );
-}
-
-/// Like [`enqueue_triggers_for_def`] but, when `context` is `Some(n)`, substitutes
-/// `n` for every [`Amount::TriggerAmount`] ("that much") in the enqueued effects.
-fn enqueue_triggers_for_def_with_context(
-    state: &mut GameState,
-    registry: &CardRegistry,
-    controller: PlayerId,
-    source: CardId,
-    definition_id: CardDefId,
-    condition: &TriggerCondition,
-    context: Option<i32>,
-) {
-    let Some(definition) = registry.get(definition_id) else {
+    let def_id = instance.definition();
+    let Some(definition) = registry.get(def_id) else {
         return;
     };
-    // "During your turn" triggers only fire while their controller is the active
-    // player (§4.1); skip them on any other player's turn.
-    let active = state.active_player();
     let mut matches: Vec<(bool, Effect)> = definition
         .abilities()
         .iter()
         .filter(|a| a.condition == *condition)
-        .filter(|a| !a.during_your_turn || controller == active)
         .map(|a| (a.optional, a.effect.clone()))
         .collect();
     // Also fire any triggered abilities granted to this card by an effect (§7.6).
@@ -2147,23 +2050,19 @@ fn enqueue_triggers_for_def_with_context(
             .map(|g| (g.optional, g.effect.clone())),
     );
     for (optional, effect) in matches {
-        // Bind "that much" / "that many" to the triggering event's amount.
-        let effect = match context {
-            Some(n) => effect.with_trigger_amount(n),
-            None => effect,
-        };
         let _ = state.enqueue_trigger(controller, source, optional, effect);
     }
 }
 
-/// Enqueue "when this is banished" / "...in a challenge" triggers for each card
-/// banished by the just-run game-state check (the `Banished` events). The card is
-/// already in the discard (dissolved), so its triggers are read from its def.
+/// Enqueue "a character is banished" triggers for each card banished by the
+/// just-run game-state check (the `Banished` events) via [`enqueue_character_event`]
+/// — so the banished card's own (`IsSource`) trigger and every "one of your other
+/// characters is banished" watcher both resolve, gated by `in_challenge` for
+/// "…in a challenge" variants.
 ///
 /// Effect-driven (non-challenge) banishment routes through
-/// `game_state_check_with_triggers`, which calls this with `in_challenge = false`,
-/// so `WhenBanished` is centralized (the move-zone effects — Marshmallow / Gramma
-/// Tala — also work now, Slice 8a-1/8b).
+/// `game_state_check_with_triggers`, which calls this with `in_challenge = false`
+/// (the move-zone effects — Marshmallow / Gramma Tala — also work, Slice 8a-1/8b).
 ///
 /// TODO(Slice 8+): §1.9.1.3 "banished by that character" attribution for
 /// who-banished-whom effects still needs effect context.
@@ -2181,62 +2080,12 @@ fn enqueue_banish_triggers(
         })
         .collect();
     for (owner, card) in banished {
-        let Some(def_id) = state
-            .player(owner)
-            .and_then(|p| p.discard().iter().find(|c| c.id() == card))
-            .map(CardInstance::definition)
-        else {
-            continue;
-        };
-        enqueue_triggers_for_def(
+        enqueue_character_event(
             state,
             registry,
-            owner,
+            Fired::Banished { in_challenge },
             card,
-            def_id,
-            &TriggerCondition::WhenBanished,
-        );
-        if in_challenge {
-            enqueue_triggers_for_def(
-                state,
-                registry,
-                owner,
-                card,
-                def_id,
-                &TriggerCondition::WhenBanishedInChallenge,
-            );
-        }
-        // "Whenever one of your other characters is banished" — fires for the
-        // owner's remaining in-play characters (the banished card has left play,
-        // so each is "other").
-        enqueue_yours_banished_triggers(state, registry, owner);
-    }
-}
-
-/// Enqueue "whenever one of your other characters is banished" triggers: for each
-/// of `owner`'s in-play characters watching for it, enqueue its effect (via
-/// `enqueue_triggers_for_def`, so gating + granted triggers are honored). The
-/// just-banished card has already left play, so every watcher is "other".
-fn enqueue_yours_banished_triggers(
-    state: &mut GameState,
-    registry: &CardRegistry,
-    owner: PlayerId,
-) {
-    let watchers: Vec<(CardId, CardDefId)> = state.player(owner).map_or_else(Vec::new, |p| {
-        p.play()
-            .iter()
-            .filter(|c| c.is_character())
-            .map(|c| (c.id(), c.definition()))
-            .collect()
-    });
-    for (id, def) in watchers {
-        enqueue_triggers_for_def(
-            state,
-            registry,
             owner,
-            id,
-            def,
-            &TriggerCondition::WhenYoursBanished,
         );
     }
 }
@@ -3732,14 +3581,8 @@ fn apply_amount_effect(
             {
                 let conditions = c.conditions_mut();
                 conditions.damage = conditions.damage.saturating_sub(remove);
-                // Enqueue "whenever you remove damage from this character" triggers
-                enqueue_self_triggers(
-                    state,
-                    registry,
-                    owner,
-                    target_card,
-                    &TriggerCondition::WhenDamageRemovedFromThis,
-                );
+                // "Whenever damage is removed from a character" triggers.
+                enqueue_character_event(state, registry, Fired::DamageRemoved, target_card, owner);
             }
         }
         _ => {}
@@ -4085,14 +3928,8 @@ fn apply_effect_to(
                 let was_not_ready = !c.conditions().ready;
                 c.conditions_mut().ready = ready;
                 if ready && was_not_ready {
-                    // Enqueue "whenever this character is readied" triggers
-                    enqueue_self_triggers(
-                        state,
-                        registry,
-                        owner,
-                        target_card,
-                        &TriggerCondition::WhenThisReadies,
-                    );
+                    // "Whenever a character is readied" triggers.
+                    enqueue_character_event(state, registry, Fired::Readies, target_card, owner);
                 }
             }
         }
@@ -4238,20 +4075,16 @@ fn banish_by_effect(
         player: owner,
         card,
     });
-    if let Some(def_id) = state
-        .player(owner)
-        .and_then(|p| p.discard().iter().find(|c| c.id() == card))
-        .map(CardInstance::definition)
-    {
-        enqueue_triggers_for_def(
-            state,
-            registry,
-            owner,
-            card,
-            def_id,
-            &TriggerCondition::WhenBanished,
-        );
-    }
+    // "A character is banished" triggers (not in a challenge — effect-driven).
+    enqueue_character_event(
+        state,
+        registry,
+        Fired::Banished {
+            in_challenge: false,
+        },
+        card,
+        owner,
+    );
 }
 
 /// The in-play characters matching a [`CharacterFilter`] from `controller`'s

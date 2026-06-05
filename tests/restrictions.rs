@@ -200,7 +200,7 @@ fn an_effect_can_grant_a_permission_to_a_chosen_character() {
     reg.insert(
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 5, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenThisQuests,
+                TriggerCondition::when_this_quests(),
                 Effect::GrantThisTurn {
                     target: Target::ChosenCharacter {
                         filter: CharacterFilter::any(TargetSide::Yours)

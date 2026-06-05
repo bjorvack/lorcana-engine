@@ -469,7 +469,7 @@ mod tests {
                     },
                 ),
                 TriggeredAbility::optional(
-                    TriggerCondition::WhenThisQuests,
+                    TriggerCondition::when_this_quests(),
                     Effect::Lore {
                         who: PlayerScope::EachOpponent,
                         amount: Amount::fixed(-1),

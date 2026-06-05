@@ -282,7 +282,7 @@ fn challenge_triggers_fire_for_challenger_and_target() {
     registry.insert(
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 3, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenThisChallenges,
+                TriggerCondition::when_this_challenges(),
                 Effect::Lore {
                     who: PlayerScope::You,
                     amount: Amount::fixed(1),
@@ -294,7 +294,7 @@ fn challenge_triggers_fire_for_challenger_and_target() {
     registry.insert(
         CardDefinition::character(CardDefId::from_raw(200), 1, true, 1, 9, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenChallenged,
+                TriggerCondition::when_challenged(),
                 Effect::Lore {
                     who: PlayerScope::You,
                     amount: Amount::fixed(2),
@@ -334,7 +334,7 @@ fn banish_triggers_fire_for_both_banisher_and_banished() {
     registry.insert(
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 5, 9, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenBanishesInChallenge,
+                TriggerCondition::when_banishes_in_challenge(),
                 Effect::Lore {
                     who: PlayerScope::You,
                     amount: Amount::fixed(1),
@@ -346,7 +346,7 @@ fn banish_triggers_fire_for_both_banisher_and_banished() {
     registry.insert(
         CardDefinition::character(CardDefId::from_raw(200), 1, true, 1, 2, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenBanishedInChallenge,
+                TriggerCondition::when_banished_in_challenge(),
                 Effect::Lore {
                     who: PlayerScope::You,
                     amount: Amount::fixed(2),
@@ -399,7 +399,7 @@ fn a_card_banished_in_a_challenge_can_return_itself_to_hand() {
     registry.insert(
         CardDefinition::character(CardDefId::from_raw(200), 1, true, 1, 2, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenBanishedInChallenge,
+                TriggerCondition::when_banished_in_challenge(),
                 Effect::Move {
                     what: lorcana_engine::MoveSource::Card(Target::SelfCard),
                     to: lorcana_engine::Destination::Hand,
@@ -449,7 +449,7 @@ fn a_banished_card_can_put_itself_into_the_inkwell() {
     registry.insert(
         CardDefinition::character(CardDefId::from_raw(200), 1, true, 1, 2, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenBanished,
+                TriggerCondition::when_banished(),
                 Effect::Move {
                     what: lorcana_engine::MoveSource::Card(Target::SelfCard),
                     to: lorcana_engine::Destination::Inkwell,

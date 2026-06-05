@@ -158,7 +158,7 @@ fn a_delayed_end_of_turn_trigger_fires_at_the_end_of_the_turn() {
     reg.insert(
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 1, 3, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenThisQuests,
+                TriggerCondition::when_this_quests(),
                 Effect::ScheduleDelayed {
                     when: DelayedWhen::EndOfTurn,
                     effect: Box::new(Effect::Lore {
@@ -227,7 +227,7 @@ fn freeze_keeps_a_character_exerted_through_its_next_ready_step_then_readies() {
     reg.insert(
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 1, 3, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenThisQuests,
+                TriggerCondition::when_this_quests(),
                 Effect::Freeze(Target::ChosenCharacter {
                     filter: CharacterFilter::any(TargetSide::Opposing),
                 }),

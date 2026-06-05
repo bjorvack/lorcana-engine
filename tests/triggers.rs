@@ -256,7 +256,7 @@ fn quest_trigger_fires() {
     registry.insert(
         CardDefinition::character(def, 1, true, 1, 1, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenThisQuests,
+                TriggerCondition::when_this_quests(),
                 Effect::Lore {
                     who: PlayerScope::You,
                     amount: Amount::fixed(2),

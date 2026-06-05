@@ -5,8 +5,8 @@
 use lorcana_engine::{
     Amount, CardCategory, CardDefId, CardDefinition, CardId, CardInstance, CardKind, CardRegistry,
     CharacterFilter, CharacterStats, Classification, Conditions, Decision, Effect, GameState,
-    GameStatus, Input, Keyword, PlayerId, PlayerScope, Target, TargetSide, TriggerCondition,
-    TriggeredAbility, apply, start,
+    GameStatus, Input, Keyword, PlayerId, PlayerScope, ScopedEvent, Target, TargetSide,
+    TriggerCondition, TriggeredAbility, apply, start,
 };
 
 fn action_card(id: u32, cost: u32, effects: Vec<Effect>) -> CardDefinition {
@@ -191,7 +191,7 @@ fn a_song_can_be_sung_by_exerting_an_eligible_character() {
 fn a_sing_a_song_trigger_fires_for_the_singer() {
     let singer_def = CardDefinition::character(CardDefId::from_raw(200), 4, true, 1, 1, 1)
         .with_abilities(vec![TriggeredAbility::new(
-            TriggerCondition::WhenThisSings,
+            TriggerCondition::when_this_sings(),
             Effect::Lore {
                 who: PlayerScope::You,
                 amount: Amount::fixed(1),
@@ -227,7 +227,10 @@ fn a_sing_a_song_trigger_fires_for_the_singer() {
 fn a_yours_sings_trigger_fires_when_one_of_your_characters_sings() {
     let watcher = CardDefinition::character(CardDefId::from_raw(201), 2, true, 1, 3, 1)
         .with_abilities(vec![TriggeredAbility::new(
-            TriggerCondition::WhenYoursSings,
+            TriggerCondition::character_event(
+                ScopedEvent::Sings,
+                CharacterFilter::Side(TargetSide::Yours),
+            ),
             Effect::Lore {
                 who: PlayerScope::You,
                 amount: Amount::fixed(1),

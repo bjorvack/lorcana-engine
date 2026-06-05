@@ -10,4 +10,4 @@ pub use effect::{
     Effect, MoveSource, PlayerScope,
 };
 pub use target::{CharacterFilter, Comparison, NumericFilter, Target, TargetSide};
-pub use trigger::{CardCategory, TriggerCondition};
+pub use trigger::{CardCategory, ScopedEvent, TriggerCondition};

@@ -16,8 +16,8 @@ pub use domain::cards::{
 pub use domain::deck::{Deck, DeckCard, DeckError};
 pub use domain::effects::{
     Amount, CardCategory, CharacterFilter, Comparison, CountCondition, DeckPosition, DelayedWhen,
-    Destination, DiscardAmount, DiscardBy, Effect, MoveSource, NumericFilter, PlayerScope, Target,
-    TargetSide, TriggerCondition,
+    Destination, DiscardAmount, DiscardBy, Effect, MoveSource, NumericFilter, PlayerScope,
+    ScopedEvent, Target, TargetSide, TriggerCondition,
 };
 pub use domain::engine::{Decision, Input, Rejected, apply, start};
 pub use domain::game::{

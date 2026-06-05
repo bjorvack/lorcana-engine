@@ -14,7 +14,7 @@ fn registry() -> CardRegistry {
     reg.insert(
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 1, 5, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenThisQuests,
+                TriggerCondition::when_this_quests(),
                 Effect::Discard {
                     who: PlayerScope::ChosenOpponent,
                     amount: DiscardAmount::Count(1),
@@ -175,7 +175,7 @@ fn mill_is_a_card_move_from_deck_to_discard() {
     reg.insert(
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 1, 5, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenThisQuests,
+                TriggerCondition::when_this_quests(),
                 Effect::Move {
                     what: lorcana_engine::MoveSource::DeckTop {
                         who: PlayerScope::You,
@@ -220,7 +220,7 @@ fn each_player_draws_applies_to_everyone() {
     reg.insert(
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 1, 5, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenThisQuests,
+                TriggerCondition::when_this_quests(),
                 Effect::Draw {
                     who: PlayerScope::EachPlayer,
                     amount: lorcana_engine::Amount::fixed(2),

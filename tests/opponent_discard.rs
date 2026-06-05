@@ -16,7 +16,7 @@ fn registry() -> CardRegistry {
     reg.insert(
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 1, 5, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenThisQuests,
+                TriggerCondition::when_this_quests(),
                 Effect::OpponentDiscardsChosen {
                     whose: PlayerScope::ChosenOpponent,
                     filter: CharacterFilter::Category(CardCategory::Action),
@@ -152,7 +152,7 @@ fn no_matching_card_means_no_discard() {
     reg.insert(
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 1, 5, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenThisQuests,
+                TriggerCondition::when_this_quests(),
                 Effect::OpponentDiscardsChosen {
                     whose: PlayerScope::ChosenOpponent,
                     filter: CharacterFilter::negate(CharacterFilter::Category(
@@ -204,7 +204,7 @@ fn no_matching_card_means_no_discard() {
 
 fn quester_with(effect: Effect) -> CardDefinition {
     CardDefinition::character(CardDefId::from_raw(100), 1, true, 1, 5, 1).with_abilities(vec![
-        TriggeredAbility::new(TriggerCondition::WhenThisQuests, effect),
+        TriggeredAbility::new(TriggerCondition::when_this_quests(), effect),
     ])
 }
 

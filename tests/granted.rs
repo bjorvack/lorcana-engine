@@ -59,13 +59,13 @@ fn granted_quest_trigger_fires_when_the_target_quests() {
     reg.insert(
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 1, 5, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenThisQuests,
+                TriggerCondition::when_this_quests(),
                 Effect::GrantAbilityThisTurn {
                     target: Target::ChosenCharacter {
                         filter: CharacterFilter::any(TargetSide::Yours)
                             .and(CharacterFilter::negate(CharacterFilter::IsSource)),
                     },
-                    condition: TriggerCondition::WhenThisQuests,
+                    condition: TriggerCondition::when_this_quests(),
                     effect: Box::new(Effect::Lore {
                         who: PlayerScope::You,
                         amount: Amount::fixed(2),
@@ -127,7 +127,7 @@ fn granted_activated_ability_can_be_used_this_turn() {
     reg.insert(
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 1, 5, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenThisQuests,
+                TriggerCondition::when_this_quests(),
                 Effect::GrantActivatedThisTurn {
                     target: Target::ChosenCharacter {
                         filter: CharacterFilter::any(TargetSide::Yours)
@@ -204,7 +204,7 @@ fn all_resolves_each_effect_in_order() {
     reg.insert(
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 1, 5, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenThisQuests,
+                TriggerCondition::when_this_quests(),
                 Effect::All(vec![
                     Effect::Draw {
                         who: PlayerScope::You,
@@ -253,7 +253,7 @@ fn a_sequence_resumes_after_a_mid_step_choice() {
     reg.insert(
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 1, 5, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenThisQuests,
+                TriggerCondition::when_this_quests(),
                 // First step needs a target choice; the second must still run after.
                 Effect::All(vec![
                     Effect::DealDamage {

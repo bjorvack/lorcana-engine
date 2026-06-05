@@ -79,7 +79,7 @@ fn place_quester(state: &mut GameState, owner: PlayerId, def: u32) -> CardId {
 
 fn look_quester(count: u32, category: Option<CardCategory>, rest: DeckPosition) -> CardDefinition {
     char_def(100).with_abilities(vec![TriggeredAbility::new(
-        TriggerCondition::WhenThisQuests,
+        TriggerCondition::when_this_quests(),
         Effect::LookAtTopAndTake {
             whose: lorcana_engine::PlayerScope::You,
             count,
@@ -212,7 +212,7 @@ fn look_at_a_chosen_players_deck_and_take_to_your_hand() {
     let reg = registry(vec![
         char_def(901),
         char_def(100).with_abilities(vec![TriggeredAbility::new(
-            TriggerCondition::WhenThisQuests,
+            TriggerCondition::when_this_quests(),
             Effect::LookAtTopAndTake {
                 whose: lorcana_engine::PlayerScope::ChosenPlayer,
                 count: 1,
@@ -266,7 +266,7 @@ fn lore(state: &GameState, player: PlayerId) -> u32 {
 
 fn name_reveal_quester() -> CardDefinition {
     char_def(100).with_abilities(vec![TriggeredAbility::new(
-        TriggerCondition::WhenThisQuests,
+        TriggerCondition::when_this_quests(),
         Effect::NameThenReveal {
             lore_on_match: lorcana_engine::Amount::fixed(3),
             match_to: lorcana_engine::Destination::Hand,
@@ -339,7 +339,7 @@ fn in_discard(state: &GameState, player: PlayerId, card: CardId) -> bool {
 
 fn blast_quester() -> CardDefinition {
     char_def(100).with_abilities(vec![TriggeredAbility::new(
-        TriggerCondition::WhenThisQuests,
+        TriggerCondition::when_this_quests(),
         Effect::NameThenRecur,
     )])
 }

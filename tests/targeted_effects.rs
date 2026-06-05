@@ -80,7 +80,7 @@ fn damage_on(state: &GameState, owner: PlayerId, card: CardId) -> Option<u32> {
 fn quester_dealing(def: u32, amount: i32) -> CardDefinition {
     CardDefinition::character(CardDefId::from_raw(def), 1, true, 2, 5, 1).with_abilities(vec![
         TriggeredAbility::new(
-            TriggerCondition::WhenThisQuests,
+            TriggerCondition::when_this_quests(),
             Effect::DealDamage {
                 target: Target::ChosenCharacter {
                     filter: CharacterFilter::any(TargetSide::Opposing),
@@ -132,7 +132,7 @@ fn lethal_effect_damage_banishes_and_fires_when_banished() {
     reg.insert(
         CardDefinition::character(CardDefId::from_raw(200), 1, true, 2, 2, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenBanished,
+                TriggerCondition::when_banished(),
                 Effect::Lore {
                     who: PlayerScope::You,
                     amount: Amount::fixed(4),
@@ -172,7 +172,7 @@ fn remove_damage_heals_a_chosen_character() {
     reg.insert(
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 5, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenThisQuests,
+                TriggerCondition::when_this_quests(),
                 Effect::RemoveDamage {
                     target: Target::ChosenCharacter {
                         filter: CharacterFilter::any(TargetSide::Yours)
@@ -218,7 +218,7 @@ fn a_trigger_banishes_a_chosen_character_and_fires_when_banished() {
     reg.insert(
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 5, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenThisQuests,
+                TriggerCondition::when_this_quests(),
                 Effect::Banish(Target::ChosenCharacter {
                     filter: CharacterFilter::any(TargetSide::Opposing),
                 }),
@@ -230,7 +230,7 @@ fn a_trigger_banishes_a_chosen_character_and_fires_when_banished() {
     reg.insert(
         CardDefinition::character(CardDefId::from_raw(200), 1, true, 2, 9, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenBanished,
+                TriggerCondition::when_banished(),
                 Effect::Lore {
                     who: PlayerScope::You,
                     amount: Amount::fixed(3),
@@ -275,7 +275,7 @@ fn a_cost_filter_restricts_the_choosable_targets() {
     reg.insert(
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 5, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenThisQuests,
+                TriggerCondition::when_this_quests(),
                 Effect::DealDamage {
                     target: Target::ChosenCharacter {
                         filter: CharacterFilter::any(TargetSide::Opposing)
@@ -341,7 +341,7 @@ fn an_item_can_be_chosen_and_banished() {
     reg.insert(
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 5, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenThisQuests,
+                TriggerCondition::when_this_quests(),
                 Effect::Banish(Target::ChosenPermanent {
                     filter: CharacterFilter::Category(CardCategory::Item),
                 }),
@@ -389,7 +389,7 @@ fn strength(state: &GameState, card: CardId) -> u32 {
 fn up_to_two_debuffer(def: u32) -> CardDefinition {
     CardDefinition::character(CardDefId::from_raw(def), 1, true, 2, 5, 1).with_abilities(vec![
         TriggeredAbility::new(
-            TriggerCondition::WhenThisQuests,
+            TriggerCondition::when_this_quests(),
             Effect::GiveStrengthThisTurn {
                 target: Target::UpToCharacters {
                     filter: CharacterFilter::any(TargetSide::Opposing),
@@ -483,7 +483,7 @@ fn a_name_filter_restricts_the_choosable_targets() {
     reg.insert(
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 5, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenThisQuests,
+                TriggerCondition::when_this_quests(),
                 Effect::DealDamage {
                     target: Target::ChosenCharacter {
                         filter: CharacterFilter::any(TargetSide::Opposing)
@@ -538,7 +538,7 @@ fn all_your_other_characters_excludes_the_source() {
     reg.insert(
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 5, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenThisQuests,
+                TriggerCondition::when_this_quests(),
                 Effect::GiveStrengthThisTurn {
                     target: Target::AllCharacters {
                         filter: CharacterFilter::any(TargetSide::Yours)
@@ -567,7 +567,7 @@ fn all_your_other_characters_excludes_the_source() {
 fn conditional_quester(def: u32) -> CardDefinition {
     CardDefinition::character(CardDefId::from_raw(def), 1, true, 2, 5, 1).with_abilities(vec![
         TriggeredAbility::new(
-            TriggerCondition::WhenThisQuests,
+            TriggerCondition::when_this_quests(),
             Effect::IfControl {
                 filter: CharacterFilter::any(TargetSide::Yours)
                     .and(CharacterFilter::Named("Elsa".to_string())),
@@ -639,7 +639,7 @@ fn exert_effect_exerts_a_chosen_character() {
     reg.insert(
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 5, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenThisQuests,
+                TriggerCondition::when_this_quests(),
                 Effect::Exert(Target::ChosenCharacter {
                     filter: CharacterFilter::any(TargetSide::Opposing),
                 }),
@@ -673,7 +673,7 @@ fn ready_effect_readies_the_source() {
     reg.insert(
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 5, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenThisQuests,
+                TriggerCondition::when_this_quests(),
                 Effect::Ready(Target::SelfCard),
             ),
         ]),
@@ -694,7 +694,7 @@ fn conditional_buffer(def: u32) -> CardDefinition {
     // "Chosen character gets +2 {S}; if a Villain is chosen, +3 instead."
     CardDefinition::character(CardDefId::from_raw(def), 1, true, 2, 5, 1).with_abilities(vec![
         TriggeredAbility::new(
-            TriggerCondition::WhenThisQuests,
+            TriggerCondition::when_this_quests(),
             Effect::IfTargetMatches {
                 target: Target::ChosenCharacter {
                     filter: CharacterFilter::any(TargetSide::Any)
@@ -788,7 +788,7 @@ fn return_to_deck_moves_the_target_out_of_play_into_the_deck() {
     reg.insert(
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 5, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenThisQuests,
+                TriggerCondition::when_this_quests(),
                 Effect::Move {
                     what: lorcana_engine::MoveSource::Card(Target::ChosenCharacter {
                         filter: CharacterFilter::any(TargetSide::Opposing),
@@ -848,7 +848,7 @@ fn choose_and_discard_n_removes_the_chosen_cards() {
     reg.insert(
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 5, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenThisQuests,
+                TriggerCondition::when_this_quests(),
                 Effect::Discard {
                     who: PlayerScope::You,
                     amount: DiscardAmount::Count(2),
@@ -885,7 +885,7 @@ fn discard_your_whole_hand_needs_no_choice() {
     reg.insert(
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 5, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenThisQuests,
+                TriggerCondition::when_this_quests(),
                 Effect::Discard {
                     who: PlayerScope::You,
                     amount: DiscardAmount::WholeHand,
@@ -925,7 +925,7 @@ fn registry_with_quester(ability: Effect) -> CardRegistry {
     }
     reg.insert(
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 5, 1).with_abilities(vec![
-            TriggeredAbility::new(TriggerCondition::WhenThisQuests, ability),
+            TriggeredAbility::new(TriggerCondition::when_this_quests(), ability),
         ]),
     );
     reg
@@ -1017,7 +1017,7 @@ fn deal_damage_equal_to_the_number_of_your_characters() {
     reg.insert(
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 5, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenThisQuests,
+                TriggerCondition::when_this_quests(),
                 Effect::DealDamage {
                     target: Target::ChosenCharacter {
                         filter: CharacterFilter::any(TargetSide::Opposing),
@@ -1074,7 +1074,7 @@ fn each_opponent_chooses_and_discards() {
     reg.insert(
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 5, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenThisQuests,
+                TriggerCondition::when_this_quests(),
                 Effect::Discard {
                     who: PlayerScope::EachOpponent,
                     amount: DiscardAmount::Count(1),
@@ -1115,7 +1115,7 @@ fn move_damage_from_chosen_onto_this_character() {
     reg.insert(
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 9, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenThisQuests,
+                TriggerCondition::when_this_quests(),
                 Effect::MoveDamage {
                     from: Target::ChosenCharacter {
                         filter: CharacterFilter::any(TargetSide::Any)
@@ -1175,7 +1175,7 @@ fn move_damage_between_two_chosen_characters() {
     reg.insert(
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 9, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenThisQuests,
+                TriggerCondition::when_this_quests(),
                 Effect::MoveDamage {
                     from: Target::ChosenCharacter {
                         filter: CharacterFilter::any(TargetSide::Yours)
@@ -1247,7 +1247,7 @@ fn move_damage_second_pick_excludes_the_first() {
     reg.insert(
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 9, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenThisQuests,
+                TriggerCondition::when_this_quests(),
                 Effect::MoveDamage {
                     from: Target::ChosenCharacter {
                         filter: CharacterFilter::any(TargetSide::Yours)
@@ -1320,7 +1320,7 @@ fn filter_algebra_or_composes() {
     reg.insert(
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 9, 1).with_abilities(vec![
             TriggeredAbility::new(
-                TriggerCondition::WhenThisQuests,
+                TriggerCondition::when_this_quests(),
                 Effect::DealDamage {
                     target: Target::ChosenCharacter {
                         filter: CharacterFilter::Or(vec![

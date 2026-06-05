@@ -620,7 +620,7 @@ fn effect_granted_challenger_adds_strength_in_a_challenge() {
     let mut registry = CardRegistry::new();
     // Quester grants "Challenger +3 this turn" to another chosen character of yours.
     registry.insert(char_def(101).with_abilities(vec![TriggeredAbility::new(
-            TriggerCondition::WhenThisQuests,
+            TriggerCondition::when_this_quests(),
             Effect::GrantThisTurn {
                 target: Target::ChosenCharacter {
                     filter: CharacterFilter::any(TargetSide::Yours)
@@ -666,7 +666,7 @@ fn ward_prevents_being_chosen_by_an_opponents_effect() {
     // Quester deals 1 damage to a chosen opposing character on quest.
     let mut registry = CardRegistry::new();
     registry.insert(char_def(100).with_abilities(vec![TriggeredAbility::new(
-        TriggerCondition::WhenThisQuests,
+        TriggerCondition::when_this_quests(),
         Effect::DealDamage {
             target: Target::ChosenCharacter {
                 filter: CharacterFilter::any(TargetSide::Opposing),
@@ -712,7 +712,7 @@ fn ward_does_not_protect_from_all_character_effects() {
     // Quester deals 1 damage to ALL opposing characters on quest (no choosing).
     let mut registry = CardRegistry::new();
     registry.insert(char_def(100).with_abilities(vec![TriggeredAbility::new(
-        TriggerCondition::WhenThisQuests,
+        TriggerCondition::when_this_quests(),
         Effect::DealDamage {
             target: Target::AllCharacters {
                 filter: CharacterFilter::any(TargetSide::Opposing),
@@ -745,7 +745,7 @@ fn your_own_warded_character_can_be_chosen_by_your_own_effect() {
     // Warded character ("deal damage to chosen character of yours", 75 cards).
     let mut registry = CardRegistry::new();
     registry.insert(char_def(100).with_abilities(vec![TriggeredAbility::new(
-            TriggerCondition::WhenThisQuests,
+            TriggerCondition::when_this_quests(),
             Effect::DealDamage {
                 target: Target::ChosenCharacter {
                     // exclude the quester, leaving only the Warded ally
@@ -780,7 +780,7 @@ fn up_to_targets_exclude_an_opponents_warded_character() {
     // "Up to 2 chosen opposing characters" must not offer a Warded one (§10.15).
     let mut registry = CardRegistry::new();
     registry.insert(char_def(100).with_abilities(vec![TriggeredAbility::new(
-        TriggerCondition::WhenThisQuests,
+        TriggerCondition::when_this_quests(),
         Effect::DealDamage {
             target: Target::UpToCharacters {
                 filter: CharacterFilter::any(TargetSide::Opposing),

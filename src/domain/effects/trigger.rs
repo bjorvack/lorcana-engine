@@ -1,7 +1,44 @@
 //! Trigger conditions for triggered abilities (§7.4).
 
+use super::target::{CharacterFilter, TargetSide};
 use crate::domain::types::card::Classification;
 use serde::{Deserialize, Serialize};
+
+/// A per-character game event that a trigger watches for (the "what happened").
+///
+/// Paired with a [`CharacterFilter`] scope in
+/// [`TriggerCondition::WhenCharacterEvent`] (the "to which character"). The scope
+/// expresses *self* (`IsSource` — "this character"), *relational* ("one of your
+/// other characters" = `And([Side(Yours), Not(IsSource)])`, "an opposing
+/// character" = `Side(Opposing)`), and anything else the filter algebra allows —
+/// so no event needs a per-scope trigger variant.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum ScopedEvent {
+    /// A character quests (§4.3.5).
+    Quests,
+    /// A character sings a song (§6.3.3).
+    Sings,
+    /// A character challenges another character (the actor is the challenger,
+    /// §4.3.6).
+    Challenges,
+    /// A character is challenged (the actor is the challenge target, §4.3.6).
+    Challenged,
+    /// A character banishes another character in a challenge (the actor is the
+    /// banisher, §4.3.6.16).
+    BanishesInChallenge,
+    /// A character is banished (§1.9.1.1); `requires_challenge` restricts it to
+    /// banishment that happened in a challenge ("…is banished in a challenge").
+    Banished {
+        /// Only fire when the banishment happened in a challenge.
+        requires_challenge: bool,
+    },
+    /// A character is dealt damage (the trigger amount carries how much, §4.3.6.16).
+    DealtDamage,
+    /// Damage is removed from a character (§9.4).
+    DamageRemoved,
+    /// A character is readied (at the start of turn, or via an effect).
+    Readies,
+}
 
 /// A category of card a "whenever you play a …" trigger watches for (§7.4).
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -60,36 +97,9 @@ pub enum TriggerCondition {
     /// "When you play this character/item/location via Shift" — fires only if
     /// the card was played using its Shift ability (~23 cards).
     WhenYouPlayThisWithShift,
-    /// "Whenever this character quests" (~200 cards).
-    WhenThisQuests,
-    /// "Whenever one of your characters quests" — a **yours-scoped** quest trigger:
-    /// fires for the watcher whenever any character its controller owns quests
-    /// (including the quester itself, since it is "one of your characters").
-    WhenYoursQuests,
     /// "Whenever you play a [category]" — fires on another card the controller
     /// plays that matches the category (~90 cards).
     WhenYouPlay(CardCategory),
-    /// "Whenever this character challenges another character" — fires for the
-    /// challenger when it is declared (§4.3.6).
-    WhenThisChallenges,
-    /// "Whenever this character is challenged" — fires for the challenged
-    /// character (§4.3.6).
-    WhenChallenged,
-    /// "Whenever this character banishes another character in a challenge"
-    /// (§4.3.6.16) — fires for the challenger when its challenge target is
-    /// banished.
-    WhenBanishesInChallenge,
-    /// "When this character/location is banished" — fires for a card as it leaves
-    /// play to the discard (§1.9.1.1, §9.4).
-    WhenBanished,
-    /// "When this character is banished **in a challenge**" — the banished-side
-    /// counterpart of `WhenBanishesInChallenge` (Marshmallow, `HeiHei`).
-    WhenBanishedInChallenge,
-    /// "Whenever one of your **other** characters is banished" — a yours-scoped
-    /// banish trigger that fires for the watcher when a *different* character its
-    /// controller owns is banished (the banished card has left play, so every
-    /// remaining in-play character is "other"). §1.9.1.1.
-    WhenYoursBanished,
     /// "Whenever a card is put under this character" — fires when a card is placed
     /// under this one (e.g. via Boost, §10.4).
     WhenCardPutUnder,
@@ -99,28 +109,97 @@ pub enum TriggerCondition {
     /// "At the end of your turn" — fires for the active player's cards and
     /// resolves in the End of Turn phase (§4.4.1).
     AtEndOfTurn,
-    /// "Whenever this character is dealt damage" — fires when damage is marked
-    /// on the character (~16 cards).
-    WhenThisIsDealtDamage,
-    /// "Whenever an opposing character is dealt damage" — fires when an opponent's
-    /// character takes damage.
-    WhenOpposingIsDealtDamage,
-    /// "Whenever you remove damage from this character" — fires when damage
-    /// counters are removed from the character.
-    WhenDamageRemovedFromThis,
-    /// "Whenever this character is readied" — fires when the character becomes
-    /// ready (at the start of turn, or via an effect).
-    WhenThisReadies,
-    /// "Whenever this character sings a song" — fires for each singing character
-    /// when a song is sung by exerting it (§6.3.3, §10.11).
-    WhenThisSings,
-    /// "Whenever one of your characters sings a song" — a yours-scoped sing
-    /// trigger: fires for the watcher once for each of its controller's
-    /// characters that sings (so once per singer; Sing Together fires it per
-    /// participating singer). The singer is included (it is "one of your
-    /// characters"). §6.3.3.
-    WhenYoursSings,
     /// "Whenever a card is put into your inkwell" — fires when a card is moved
     /// to the inkwell zone.
     WhenCardPutInInkwell,
+    /// A per-character event scoped by a [`CharacterFilter`]: fires for the watcher
+    /// when a character matching `scope` (relative to the watcher) performs
+    /// `event`. Covers self ("this character quests" — `IsSource`), relational
+    /// ("one of your other characters is banished" — `And([Side(Yours),
+    /// Not(IsSource)])`; "an opposing character is dealt damage" —
+    /// `Side(Opposing)`), and any other algebraic scope, so quest / sing /
+    /// challenge / banish / damage / ready triggers need no per-scope variants.
+    WhenCharacterEvent {
+        /// What happened.
+        event: ScopedEvent,
+        /// Which character it happened to, relative to the watcher.
+        scope: CharacterFilter,
+    },
+}
+
+impl TriggerCondition {
+    /// A scoped per-character event with the given scope filter.
+    #[must_use]
+    pub const fn character_event(event: ScopedEvent, scope: CharacterFilter) -> Self {
+        Self::WhenCharacterEvent { event, scope }
+    }
+
+    /// Self (`IsSource`) sugar for a scoped event — "this character …".
+    #[must_use]
+    const fn this(event: ScopedEvent) -> Self {
+        Self::character_event(event, CharacterFilter::IsSource)
+    }
+
+    /// "Whenever this character quests" (§4.3.5).
+    #[must_use]
+    pub const fn when_this_quests() -> Self {
+        Self::this(ScopedEvent::Quests)
+    }
+    /// "Whenever this character sings a song" (§6.3.3).
+    #[must_use]
+    pub const fn when_this_sings() -> Self {
+        Self::this(ScopedEvent::Sings)
+    }
+    /// "Whenever this character challenges another character" (§4.3.6).
+    #[must_use]
+    pub const fn when_this_challenges() -> Self {
+        Self::this(ScopedEvent::Challenges)
+    }
+    /// "Whenever this character is challenged" (§4.3.6).
+    #[must_use]
+    pub const fn when_challenged() -> Self {
+        Self::this(ScopedEvent::Challenged)
+    }
+    /// "Whenever this character banishes another character in a challenge" (§4.3.6.16).
+    #[must_use]
+    pub const fn when_banishes_in_challenge() -> Self {
+        Self::this(ScopedEvent::BanishesInChallenge)
+    }
+    /// "When this character is banished" (§1.9.1.1).
+    #[must_use]
+    pub const fn when_banished() -> Self {
+        Self::this(ScopedEvent::Banished {
+            requires_challenge: false,
+        })
+    }
+    /// "When this character is banished in a challenge".
+    #[must_use]
+    pub const fn when_banished_in_challenge() -> Self {
+        Self::this(ScopedEvent::Banished {
+            requires_challenge: true,
+        })
+    }
+    /// "Whenever this character is dealt damage" (§4.3.6.16).
+    #[must_use]
+    pub const fn when_this_dealt_damage() -> Self {
+        Self::this(ScopedEvent::DealtDamage)
+    }
+    /// "Whenever an opposing character is dealt damage".
+    #[must_use]
+    pub const fn when_opposing_dealt_damage() -> Self {
+        Self::character_event(
+            ScopedEvent::DealtDamage,
+            CharacterFilter::Side(TargetSide::Opposing),
+        )
+    }
+    /// "Whenever you remove damage from this character" (§9.4).
+    #[must_use]
+    pub const fn when_damage_removed_from_this() -> Self {
+        Self::this(ScopedEvent::DamageRemoved)
+    }
+    /// "Whenever this character is readied".
+    #[must_use]
+    pub const fn when_this_readies() -> Self {
+        Self::this(ScopedEvent::Readies)
+    }
 }

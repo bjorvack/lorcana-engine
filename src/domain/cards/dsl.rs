@@ -26,8 +26,8 @@ use super::loader::keyword_from;
 use super::{AbilityCost, ActivatedAbility, StaticAbility, StaticTarget, TriggeredAbility};
 use crate::domain::effects::{
     Amount, CardCategory, CharacterFilter, Comparison, CountCondition, DeckPosition, Destination,
-    DiscardAmount, DiscardBy, Effect, MoveSource, NumericFilter, PlayerScope, Target, TargetSide,
-    TriggerCondition,
+    DiscardAmount, DiscardBy, Effect, MoveSource, NumericFilter, PlayerScope, ScopedEvent, Target,
+    TargetSide, TriggerCondition,
 };
 use crate::domain::game::{Condition, Property, Restriction, Stat};
 use crate::domain::types::card::Classification;
@@ -94,6 +94,26 @@ impl TomlAbility {
 
 /// Map a trigger name to a [`TriggerCondition`].
 fn trigger_from(s: &str) -> Result<TriggerCondition, String> {
+    use ScopedEvent::{
+        Banished, BanishesInChallenge, Challenged, Challenges, DamageRemoved, DealtDamage, Quests,
+        Readies, Sings,
+    };
+    // Scope helpers (the CharacterFilter algebra): "this" = IsSource; "one of your
+    // characters" = Side(Yours); "one of your other characters" = Yours ∧ ¬IsSource;
+    // "an opposing character" = Side(Opposing).
+    let this = || CharacterFilter::IsSource;
+    let yours = || CharacterFilter::Side(TargetSide::Yours);
+    let yours_other = || {
+        CharacterFilter::And(vec![
+            CharacterFilter::Side(TargetSide::Yours),
+            CharacterFilter::Not(Box::new(CharacterFilter::IsSource)),
+        ])
+    };
+    let opposing = || CharacterFilter::Side(TargetSide::Opposing);
+    let ev = |event: ScopedEvent, scope: CharacterFilter| TriggerCondition::WhenCharacterEvent {
+        event,
+        scope,
+    };
     Ok(match s {
         "play" | "play_this" => TriggerCondition::WhenYouPlayThis,
         "play_with_shift" => TriggerCondition::WhenYouPlayThisWithShift,
@@ -102,22 +122,43 @@ fn trigger_from(s: &str) -> Result<TriggerCondition, String> {
         "play_character" => TriggerCondition::WhenYouPlay(CardCategory::Character(None)),
         "play_item" => TriggerCondition::WhenYouPlay(CardCategory::Item),
         "play_location" => TriggerCondition::WhenYouPlay(CardCategory::Location),
-        "quest" => TriggerCondition::WhenThisQuests,
-        "yours_quests" | "your_character_quests" => TriggerCondition::WhenYoursQuests,
-        "challenge" => TriggerCondition::WhenThisChallenges,
-        "challenged" => TriggerCondition::WhenChallenged,
-        "banish" | "banished" => TriggerCondition::WhenBanished,
-        "yours_banished" | "your_other_character_banished" => TriggerCondition::WhenYoursBanished,
-        "banished_in_challenge" => TriggerCondition::WhenBanishedInChallenge,
-        "banishes_in_challenge" => TriggerCondition::WhenBanishesInChallenge,
+        "quest" => ev(Quests, this()),
+        "yours_quests" | "your_character_quests" => ev(Quests, yours()),
+        "challenge" => ev(Challenges, this()),
+        "challenged" => ev(Challenged, this()),
+        "banish" | "banished" => ev(
+            Banished {
+                requires_challenge: false,
+            },
+            this(),
+        ),
+        "yours_banished" | "your_other_character_banished" => ev(
+            Banished {
+                requires_challenge: false,
+            },
+            yours_other(),
+        ),
+        "banished_in_challenge" => ev(
+            Banished {
+                requires_challenge: true,
+            },
+            this(),
+        ),
+        "yours_banished_in_challenge" => ev(
+            Banished {
+                requires_challenge: true,
+            },
+            yours_other(),
+        ),
+        "banishes_in_challenge" => ev(BanishesInChallenge, this()),
         "start_of_turn" => TriggerCondition::AtStartOfTurn,
         "end_of_turn" => TriggerCondition::AtEndOfTurn,
-        "dealt_damage" => TriggerCondition::WhenThisIsDealtDamage,
-        "opposing_dealt_damage" => TriggerCondition::WhenOpposingIsDealtDamage,
-        "damage_removed" => TriggerCondition::WhenDamageRemovedFromThis,
-        "readies" => TriggerCondition::WhenThisReadies,
-        "sings" | "sings_song" | "sing_song" => TriggerCondition::WhenThisSings,
-        "yours_sings" | "your_character_sings" => TriggerCondition::WhenYoursSings,
+        "dealt_damage" => ev(DealtDamage, this()),
+        "opposing_dealt_damage" => ev(DealtDamage, opposing()),
+        "damage_removed" => ev(DamageRemoved, this()),
+        "readies" => ev(Readies, this()),
+        "sings" | "sings_song" | "sing_song" => ev(Sings, this()),
+        "yours_sings" | "your_character_sings" => ev(Sings, yours()),
         "card_put_in_inkwell" => TriggerCondition::WhenCardPutInInkwell,
         other => return Err(format!("unknown trigger {other:?}")),
     })
