@@ -671,8 +671,12 @@ mechanics ranked by card count, with the remaining gaps to close in order:
       is composed via the new `Effect::May(Box<Effect>)` wrapper (one yes/no
       `MayResolveEffect`, reusable by any effect) rather than a per-effect flag.
       `tests/targeted_effects.rs`. DSL surface: `play_free = "<selector>"`
-      (`tests/card_loader.rs::the_dsl_exposes_play_free`). **Remaining:** play from
-      **discard**, cost-reduction (pay N less) alternate costs, free-played
+      (`tests/card_loader.rs::the_dsl_exposes_play_free`). **Cost reduction** ("you
+      pay N {I} less to play …"): a `CostModifier { owner, filter, amount, duration }`
+      layer; `effective_play_cost` subtracts every matching reduction (floored at 0)
+      at each play-cost site (character / item / location / action; Shift keeps its
+      own alternate cost). `tests/modifiers.rs::a_cost_reduction_lowers_the_ink_to_play`.
+      **Remaining:** authoring cost reductions on cards (DSL source), free-played
       Bodyguard enter-exerted.
 - [x] **Ward / can't be chosen** (§10.15) — modeled as `Restriction::CantBeChosen`
       (Ward keyword maps to it via `has_restriction`, so effect-granted Ward works

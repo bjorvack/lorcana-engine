@@ -21,8 +21,8 @@ pub use character_stats::{CharacterStats, LocationStats};
 pub use conditions::Conditions;
 pub use events::GameEvent;
 pub use modifier::{
-    Condition, GrantedActivated, GrantedTrigger, ModifierDuration, ModifierTarget, Permission,
-    Property, PropertyModifier, Restriction, RuleModifier, Stat, StatModifier,
+    Condition, CostModifier, GrantedActivated, GrantedTrigger, ModifierDuration, ModifierTarget,
+    Permission, Property, PropertyModifier, Restriction, RuleModifier, Stat, StatModifier,
 };
 pub use pending::{ChoiceRef, ChoiceThen, PendingDecision};
 pub use player_state::PlayerState;

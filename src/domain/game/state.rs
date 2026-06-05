@@ -1,10 +1,10 @@
 //! The authoritative game state.
 
 use super::{
-    BagEntry, CardInstance, CharacterStats, Condition, Conditions, DelayedTrigger, GameStatus,
-    GrantedActivated, GrantedTrigger, ModifierDuration, PendingDecision, Permission, PlayerState,
-    Property, PropertyModifier, Restriction, RuleModifier, SeededRng, Stat, StatModifier,
-    TriggerId, Zone,
+    BagEntry, CardInstance, CharacterStats, Condition, Conditions, CostModifier, DelayedTrigger,
+    GameStatus, GrantedActivated, GrantedTrigger, ModifierDuration, PendingDecision, Permission,
+    PlayerState, Property, PropertyModifier, Restriction, RuleModifier, SeededRng, Stat,
+    StatModifier, TriggerId, Zone,
 };
 use crate::domain::cards::Keyword;
 use crate::domain::effects::{
@@ -53,6 +53,8 @@ pub struct GameState {
     modifiers: Vec<StatModifier>,
     /// Active continuous property modifiers (granted keywords / restrictions).
     property_modifiers: Vec<PropertyModifier>,
+    /// Active continuous play-cost reductions ("you pay N less to play …").
+    cost_modifiers: Vec<CostModifier>,
     /// Scheduled one-shot delayed triggers (§7.4.7).
     delayed_triggers: Vec<DelayedTrigger>,
     /// Active game-rule modifiers (e.g. lore-to-win overrides, §1.2.1).
@@ -116,6 +118,7 @@ impl GameState {
             next_trigger_id: 0,
             modifiers: Vec::new(),
             property_modifiers: Vec::new(),
+            cost_modifiers: Vec::new(),
             delayed_triggers: Vec::new(),
             rule_modifiers: Vec::new(),
             granted_triggers: Vec::new(),
@@ -372,7 +375,22 @@ impl GameState {
     pub fn remove_modifiers_from_source(&mut self, source: CardId) {
         self.modifiers.retain(|m| m.source() != source);
         self.property_modifiers.retain(|m| m.source() != source);
+        self.cost_modifiers.retain(|m| m.source() != source);
         self.rule_modifiers.retain(|m| m.source() != source);
+    }
+
+    /// Add a continuous play-cost reduction ("you pay N less to play …").
+    pub fn add_cost_modifier(&mut self, modifier: CostModifier) {
+        self.cost_modifiers.push(modifier);
+    }
+
+    /// The cost reductions in force for `owner`'s plays right now (the gating
+    /// condition holds). The caller matches each modifier's `filter` against the
+    /// definition being played and sums the amounts.
+    pub fn active_cost_modifiers(&self, owner: PlayerId) -> impl Iterator<Item = &CostModifier> {
+        self.cost_modifiers
+            .iter()
+            .filter(move |m| m.owner() == owner && self.condition_holds(m.condition(), m.source()))
     }
 
     /// Add a continuous property modifier (granted keyword / restriction).

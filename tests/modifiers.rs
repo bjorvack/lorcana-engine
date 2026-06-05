@@ -3,10 +3,10 @@
 //! while retaining the true total (§7.8).
 
 use lorcana_engine::{
-    CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterStats, Classification,
-    Condition, Conditions, GameState, GameStatus, Input, ModifierDuration, ModifierTarget,
-    PlayerId, Property, Restriction, Stat, StatModifier, StaticAbility, StaticEffect, StaticTarget,
-    apply, start,
+    CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterFilter, CharacterStats,
+    Classification, Condition, Conditions, CostModifier, GameState, GameStatus, Input,
+    ModifierDuration, ModifierTarget, PlayerId, Property, Restriction, Stat, StatModifier,
+    StaticAbility, StaticEffect, StaticTarget, TargetSide, apply, start,
 };
 
 fn started_with(registry: &CardRegistry) -> GameState {
@@ -186,6 +186,57 @@ fn a_grant_static_applies_a_continuous_restriction() {
     assert!(
         state.has_restriction(hand[1], Restriction::CantBeChallenged),
         "the played character has the continuously-granted restriction"
+    );
+}
+
+/// A continuous cost reduction lowers the ink needed to play a matching card,
+/// floored at 0 ("you pay 1 {I} less to play your characters", §6).
+#[test]
+fn a_cost_reduction_lowers_the_ink_to_play() {
+    let registry: CardRegistry = (0..30)
+        .map(|n| CardDefinition::character(CardDefId::from_raw(n), 1, true, 2, 3, 1))
+        .collect();
+    let mut state = started_with(&registry);
+    let active = state.active_player();
+    let hand: Vec<CardId> = state
+        .player(active)
+        .unwrap()
+        .hand()
+        .iter()
+        .map(CardInstance::id)
+        .collect();
+
+    // With no ink yet (turn 1), a cost-1 character can't be played.
+    let rejected = apply(
+        &mut state,
+        &registry,
+        Input::PlayCard {
+            card: hand[0],
+            shift_onto: None,
+        },
+    );
+    assert!(rejected.is_err(), "cost 1 > 0 ready ink");
+
+    // "You pay 1 {I} less to play your characters" → effective cost 0.
+    state.add_cost_modifier(CostModifier::new(
+        CardId::from_raw(999),
+        active,
+        CharacterFilter::any(TargetSide::Yours),
+        1,
+        ModifierDuration::WhileSourceInPlay,
+    ));
+    let _ = apply(
+        &mut state,
+        &registry,
+        Input::PlayCard {
+            card: hand[0],
+            shift_onto: None,
+        },
+    )
+    .expect("reduced to 0, playable with no ink");
+    assert!(
+        state.player(active).unwrap().play().contains(hand[0]),
+        "the discounted character entered play"
     );
 }
 
@@ -405,13 +456,11 @@ fn lore_scales_with_each_other_villain_in_play() {
             ModifierDuration::WhileSourceInPlay,
         )
         .with_count(lorcana_engine::Amount::PerMatchingCharacter(
-            lorcana_engine::CharacterFilter::any(lorcana_engine::TargetSide::Yours)
-                .and(lorcana_engine::CharacterFilter::Classification(
-                    Classification::new("Villain"),
-                ))
-                .and(lorcana_engine::CharacterFilter::negate(
-                    lorcana_engine::CharacterFilter::IsSource,
-                )),
+            CharacterFilter::any(TargetSide::Yours)
+                .and(CharacterFilter::Classification(Classification::new(
+                    "Villain",
+                )))
+                .and(CharacterFilter::negate(CharacterFilter::IsSource)),
         )),
     );
 

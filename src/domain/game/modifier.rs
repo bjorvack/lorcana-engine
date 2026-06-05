@@ -8,7 +8,7 @@
 //! combining further modifiers (§7.8.1.2/§7.8.2/§7.8.3).
 
 use crate::domain::cards::Keyword;
-use crate::domain::effects::{Amount, Effect, TriggerCondition};
+use crate::domain::effects::{Amount, CharacterFilter, Effect, TriggerCondition};
 use crate::domain::types::card::Classification;
 use crate::domain::types::ids::{CardId, PlayerId};
 use crate::domain::types::turn::Step;
@@ -358,6 +358,86 @@ impl StatModifier {
     #[must_use]
     pub const fn delta(&self) -> i32 {
         self.delta
+    }
+
+    /// The duration.
+    #[must_use]
+    pub const fn duration(&self) -> ModifierDuration {
+        self.duration
+    }
+}
+
+/// A continuous reduction to the ink cost of playing matching cards.
+///
+/// Applies to cards matching `filter` (matched against the printed definition)
+/// for player `owner` — "you pay N {I} less to play [classification] characters"
+/// (§6, cost modification). Applied at the point of play; the effective cost
+/// floors at 0.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct CostModifier {
+    source: CardId,
+    owner: PlayerId,
+    filter: CharacterFilter,
+    amount: u32,
+    duration: ModifierDuration,
+    condition: Option<Condition>,
+}
+
+impl CostModifier {
+    /// Create a cost reduction of `amount` for `owner`'s plays matching `filter`.
+    #[must_use]
+    pub const fn new(
+        source: CardId,
+        owner: PlayerId,
+        filter: CharacterFilter,
+        amount: u32,
+        duration: ModifierDuration,
+    ) -> Self {
+        Self {
+            source,
+            owner,
+            filter,
+            amount,
+            duration,
+            condition: None,
+        }
+    }
+
+    /// Gate this modifier on a [`Condition`] (builder).
+    #[must_use]
+    pub const fn with_condition(mut self, condition: Condition) -> Self {
+        self.condition = Some(condition);
+        self
+    }
+
+    /// The card whose ability generates this modifier.
+    #[must_use]
+    pub const fn source(&self) -> CardId {
+        self.source
+    }
+
+    /// The player whose plays are discounted.
+    #[must_use]
+    pub const fn owner(&self) -> PlayerId {
+        self.owner
+    }
+
+    /// Which cards-to-play this reduction applies to (matched against the def).
+    #[must_use]
+    pub const fn filter(&self) -> &CharacterFilter {
+        &self.filter
+    }
+
+    /// The ink reduction.
+    #[must_use]
+    pub const fn amount(&self) -> u32 {
+        self.amount
+    }
+
+    /// The condition gating this modifier, if any.
+    #[must_use]
+    pub const fn condition(&self) -> Option<Condition> {
+        self.condition
     }
 
     /// The duration.

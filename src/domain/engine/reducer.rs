@@ -239,7 +239,7 @@ fn apply_play_card(
         if shift_onto.is_some() {
             return Err(Rejected::CannotShift(card)); // actions can't Shift
         }
-        let ink_cost = definition.cost();
+        let ink_cost = effective_play_cost(state, active, definition);
         let effects = definition.action_effects().to_vec();
         if state
             .player(active)
@@ -348,7 +348,12 @@ fn place_permanent(
     shift_onto: Option<CardId>,
     definition: &CardDefinition,
 ) -> Result<(), Rejected> {
-    let ink_cost = definition.cost();
+    // Cost reductions apply to a normal play (Shift is a separate alternate cost).
+    let ink_cost = if shift_onto.is_some() {
+        definition.cost()
+    } else {
+        effective_play_cost(state, active, definition)
+    };
     match definition.kind() {
         CardKind::Character {
             strength,
@@ -3817,6 +3822,18 @@ fn apply_amount_effect(
         }
         _ => {}
     }
+}
+
+/// The effective ink cost to play `def` for `controller`: the printed cost minus
+/// every active cost reduction whose filter matches the definition, floored at 0
+/// ("you pay N {I} less to play …", §6).
+fn effective_play_cost(state: &GameState, controller: PlayerId, def: &CardDefinition) -> u32 {
+    let reduction: u32 = state
+        .active_cost_modifiers(controller)
+        .filter(|m| def_matches_filter(controller, controller, def, m.filter()))
+        .map(crate::domain::game::CostModifier::amount)
+        .sum();
+    def.cost().saturating_sub(reduction)
 }
 
 /// Evaluate the [`CharacterFilter`] algebra against a card **definition** (a card
