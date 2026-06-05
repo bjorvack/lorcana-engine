@@ -66,6 +66,10 @@ pub struct TomlAbility {
     /// active player.
     #[serde(default)]
     pub during_your_turn: bool,
+    /// "During the opponent's turn, …" — the trigger only fires while its
+    /// controller is *not* the active player.
+    #[serde(default)]
+    pub during_opponents_turn: bool,
     /// The effect: a verb table `{ draw = 1 }`, or an array of them (a sequence).
     #[serde(rename = "do")]
     pub effect: Value,
@@ -84,8 +88,13 @@ impl TomlAbility {
         } else {
             TriggeredAbility::new(condition, effect)
         };
+        if self.during_your_turn && self.during_opponents_turn {
+            return Err("during_your_turn and during_opponents_turn are mutually exclusive".into());
+        }
         Ok(if self.during_your_turn {
             ability.during_your_turn()
+        } else if self.during_opponents_turn {
+            ability.during_opponents_turn()
         } else {
             ability
         })

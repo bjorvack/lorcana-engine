@@ -214,9 +214,10 @@ your other characters" (`And([Side(Yours), Not(IsSource)])`), "an opposing
 character" (`Side(Opposing)`), etc., so no `WhenThis*` / `WhenYours*` /
 `WhenOpposing*` variants exist. `enqueue_character_event` fires them: it scans
 every in-play character (either player) plus the just-left-play actor, evaluates
-each watcher's scope filter (`matches_filter`) against the actor, honors
-`during_your_turn`, binds the trigger amount ("that much"), and includes granted
-triggers. DSL: `quest` / `yours_quests`, `sings` / `yours_sings`, `banished` /
+each watcher's scope filter (`matches_filter`) against the actor, honors the
+`TurnGate` (any / your / opponent's turn — DSL `during_your_turn` /
+`during_opponents_turn`), binds the trigger amount ("that much"), and includes
+granted triggers. DSL: `quest` / `yours_quests`, `sings` / `yours_sings`, `banished` /
 `yours_banished` / `banished_in_challenge` / `yours_banished_in_challenge`,
 `dealt_damage` / `opposing_dealt_damage`, `damage_removed`, `readies`,
 `challenge`, `challenged`, `banishes_in_challenge`. Tested across

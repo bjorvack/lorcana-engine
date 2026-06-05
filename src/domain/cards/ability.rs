@@ -6,6 +6,32 @@ use crate::domain::game::{Condition, Stat};
 use crate::domain::types::card::Classification;
 use serde::{Deserialize, Serialize};
 
+/// When a triggered ability is allowed to fire relative to whose turn it is (§4.1).
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+pub enum TurnGate {
+    /// Fires on any player's turn (the default).
+    #[default]
+    AnyTurn,
+    /// "During your turn, …" — only while the controller is the active player.
+    YourTurn,
+    /// "During the opponent's turn, …" — only while the controller is *not* the
+    /// active player.
+    OpponentsTurn,
+}
+
+impl TurnGate {
+    /// Whether a trigger with this gate may fire for `controller` while `active`
+    /// is the active player.
+    #[must_use]
+    pub const fn allows(self, controller_is_active: bool) -> bool {
+        match self {
+            Self::AnyTurn => true,
+            Self::YourTurn => controller_is_active,
+            Self::OpponentsTurn => !controller_is_active,
+        }
+    }
+}
+
 /// A triggered ability (§7.4): when its `condition` is met its `effect` is added
 /// to the bag to resolve.
 ///
@@ -24,10 +50,9 @@ pub struct TriggeredAbility {
     pub condition: TriggerCondition,
     /// `true` if the effect is a "you may" (optional) effect.
     pub optional: bool,
-    /// `true` if the trigger is gated to the controller's own turn ("During your
-    /// turn, whenever …"): it only fires while its controller is the active
-    /// player (§4.1, ~110 cards). `false` means it fires on any player's turn.
-    pub during_your_turn: bool,
+    /// When the trigger may fire relative to whose turn it is ("During your turn,
+    /// …" / "During the opponent's turn, …"; §4.1). Defaults to any turn.
+    pub turn_gate: TurnGate,
     /// What the ability does when it resolves.
     pub effect: Effect,
 }
@@ -39,7 +64,7 @@ impl TriggeredAbility {
         Self {
             condition,
             optional: false,
-            during_your_turn: false,
+            turn_gate: TurnGate::AnyTurn,
             effect,
         }
     }
@@ -50,7 +75,7 @@ impl TriggeredAbility {
         Self {
             condition,
             optional: true,
-            during_your_turn: false,
+            turn_gate: TurnGate::AnyTurn,
             effect,
         }
     }
@@ -58,7 +83,14 @@ impl TriggeredAbility {
     /// Gate this trigger to the controller's own turn ("During your turn, …").
     #[must_use]
     pub const fn during_your_turn(mut self) -> Self {
-        self.during_your_turn = true;
+        self.turn_gate = TurnGate::YourTurn;
+        self
+    }
+
+    /// Gate this trigger to the opponent's turn ("During the opponent's turn, …").
+    #[must_use]
+    pub const fn during_opponents_turn(mut self) -> Self {
+        self.turn_gate = TurnGate::OpponentsTurn;
         self
     }
 }

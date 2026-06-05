@@ -11,6 +11,7 @@ pub mod registry;
 // Re-export for convenience
 pub use ability::{
     AbilityCost, ActivatedAbility, GameRuleStatic, StaticAbility, StaticTarget, TriggeredAbility,
+    TurnGate,
 };
 pub use card_kind::CardKind;
 pub use definition::CardDefinition;

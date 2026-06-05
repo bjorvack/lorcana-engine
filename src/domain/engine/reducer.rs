@@ -1950,7 +1950,7 @@ impl Fired {
 /// its own `IsSource` trigger still fires — and any granted triggers, evaluating
 /// each watcher's scope filter against the actor (so "this" / "one of your other
 /// characters" / "an opposing character" all fall out of the algebra). Honors the
-/// `during_your_turn` gate and binds the trigger amount (e.g. damage dealt).
+/// turn gate and binds the trigger amount (e.g. damage dealt).
 fn enqueue_character_event(
     state: &mut GameState,
     registry: &CardRegistry,
@@ -1989,7 +1989,7 @@ fn enqueue_character_event(
             for ab in def.abilities() {
                 if let TriggerCondition::WhenCharacterEvent { event, scope } = &ab.condition
                     && fired.matches(*event)
-                    && (!ab.during_your_turn || wc == active)
+                    && ab.turn_gate.allows(wc == active)
                     && state.matches_filter(wc, wid, actor_owner, actor_inst, scope)
                 {
                     to_enqueue.push((wc, wid, ab.optional, ab.effect.clone()));

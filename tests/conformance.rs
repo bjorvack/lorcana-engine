@@ -1901,3 +1901,77 @@ fn yours_banished_trigger_does_not_fire_on_opponents_banish() {
         "my yours-banished trigger ignores the opponent's character being banished"
     );
 }
+
+/// "During the opponent's turn" gate (set 6): a yours-scoped banish trigger gated
+/// to the opponent's turn fires when my character is banished on the OPPONENT's
+/// turn, but not on my own turn.
+#[test]
+fn during_opponents_turn_gate_fires_only_on_the_opponents_turn() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Watcher"
+        type = "Character"
+        cost = 2
+        ink = ["Amber"]
+        strength = 1
+        willpower = 5
+        lore = 1
+        [[card.abilities]]
+        on = "yours_banished"
+        during_opponents_turn = true
+        do = { gain_lore = 2 }
+        [[card]]
+        name = "Fragile"
+        type = "Character"
+        cost = 1
+        ink = ["Amber"]
+        strength = 1
+        willpower = 1
+        lore = 1
+        [[card]]
+        name = "Attacker"
+        type = "Character"
+        cost = 3
+        ink = ["Amber"]
+        strength = 5
+        willpower = 5
+        lore = 1
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let foe = opponent_of(&state, me);
+
+    let _watcher = place(&mut state, me, 100, 0, 1, 5, true);
+    let fragile = place(&mut state, me, 200, 1, 1, 1, false); // exerted, my character
+    let attacker = place(&mut state, foe, 300, 2, 5, 5, true);
+
+    // Hand the turn to the opponent; they challenge and banish my Fragile.
+    let _ = apply(&mut state, &reg, Input::EndTurn).expect("end turn");
+    assert_eq!(state.active_player(), foe, "opponent's turn");
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Challenge {
+            challenger: attacker,
+            target: fragile,
+        },
+    )
+    .expect("challenge");
+
+    assert!(
+        state
+            .player(me)
+            .unwrap()
+            .play()
+            .iter()
+            .all(|c| c.id() != fragile),
+        "my fragile character was banished on the opponent's turn"
+    );
+    assert_eq!(
+        lore(&state, me),
+        2,
+        "the during-opponents-turn watcher fired (gained 2 lore)"
+    );
+}
