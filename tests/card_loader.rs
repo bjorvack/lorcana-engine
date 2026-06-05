@@ -1450,3 +1450,32 @@ fn the_dsl_exposes_character_or_item_target() {
         "character-or-item => Or of category leaves"
     );
 }
+
+#[test]
+fn the_dsl_supports_static_per_cards_in_hand() {
+    use lorcana_engine::{Amount, Stat};
+    let defs = load_toml(
+        r#"
+        [[card]]
+        name = "Jafar"
+        type = "Character"
+        cost = 5
+        strength = 1
+        willpower = 5
+        lore = 2
+        [[card.statics]]
+        strength = 1
+        to = "self"
+        per = "cards in hand"
+        "#,
+    )
+    .expect("loads");
+    let stat = &defs[0].static_abilities()[0];
+    assert_eq!(stat.stat, Stat::Strength);
+    assert_eq!(stat.delta, 1);
+    assert_eq!(
+        stat.per,
+        Some(Amount::CardsInHand),
+        "+1 strength per card in hand"
+    );
+}

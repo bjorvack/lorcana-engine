@@ -1076,9 +1076,12 @@ impl TomlStatic {
             .per
             .as_deref()
             .map(|p| {
-                parse_filter(p)
-                    .map(Amount::PerMatchingCharacter)
-                    .ok_or_else(|| format!("unparseable `per` filter {p:?}"))
+                // The full Amount vocabulary ("cards in hand", "damage on self",
+                // "<stat> of self", "per <filter>"), falling back to a bare filter
+                // string ("another Villain") as for-each-character.
+                amount_from_str(p)
+                    .or_else(|| parse_filter(p).map(Amount::PerMatchingCharacter))
+                    .ok_or_else(|| format!("unparseable `per` amount {p:?}"))
             })
             .transpose()?;
         let condition = self

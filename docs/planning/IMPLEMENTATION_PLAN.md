@@ -741,10 +741,12 @@ mechanics ranked by card count, with the remaining gaps to close in order:
     item card from your discard to your hand"); DSL `return_from_discard = "<sel>"`.
     `tests/conformance.rs::return_a_character_from_discard_to_hand`.
     **Remaining:** other-player look-at-top (scoped `LookAtTopAndTake`).
-- [x] **dynamic continuous statics** — `StatModifier`/`StaticAbility` gain
-      `per: Count` (registry-free `ControlledCharacters`/`CardsInHand`/`DamageOnSelf`);
-      effective delta = `delta × count`, evaluated live in `stat_delta`. Hades /
-      Jafar / Minnie. `tests/modifiers.rs`.
+- [x] **dynamic continuous statics** — `StaticAbility.per: Option<Amount>` reuses
+      the effect `Amount` algebra (`PerMatchingCharacter` / `CardsInHand` /
+      `DamageOnSource` / `StatOf`); effective delta = `delta × count`, evaluated
+      live in `stat_delta`. DSL `per = "cards in hand"` / `"per <filter>"` /
+      `"damage on self"`. Hades / Jafar / Minnie.
+      `tests/card_loader.rs::the_dsl_supports_static_per_cards_in_hand`.
 - [x] **move damage** (113) — `Effect::MoveDamage { from, to, amount }`: up to N
       counters from one character to another (one side `SelfCard`, other chosen),
       capped by `from`'s damage; lethal banishes. `tests/targeted_effects.rs`.
