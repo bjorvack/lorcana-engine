@@ -220,6 +220,21 @@ fn effect_from_table(t: &toml::Table) -> Result<Effect, String> {
         }
     };
 
+    if let Some(steps) = t.get("then_to") {
+        // `{ apply_to = "<selector>", then_to = [<effect>, ...] }` — resolve the
+        // target once, then apply each sub-effect to it in order ([`Effect::OnTarget`]).
+        let target = t
+            .get("apply_to")
+            .map_or(Ok(Target::SelfCard), target_from_value)?;
+        let Value::Array(items) = steps else {
+            return Err("`then_to` must be an array of effects".to_string());
+        };
+        let effects = items
+            .iter()
+            .map(effect_from_value)
+            .collect::<Result<Vec<_>, _>>()?;
+        return Ok(Effect::OnTarget { target, effects });
+    }
     if t.contains_key("draw") {
         let who = t.get("who").and_then(Value::as_str);
         Ok(Effect::Draw {

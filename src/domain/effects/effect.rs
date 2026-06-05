@@ -413,6 +413,17 @@ pub enum Effect {
     /// "[A], then [B]", §7.1.2). A later effect resumes after an earlier one's
     /// choice is answered.
     All(Vec<Self>),
+    /// Resolve `target` **once**, then apply each of `effects` to the resolved
+    /// character in order ("Exert chosen character. They can't ready at the start
+    /// of their next turn." = exert then freeze on one chosen target). The
+    /// sub-effects act on the resolved target (their own inner target is ignored),
+    /// so the player picks a single character (§7.1).
+    OnTarget {
+        /// The single character the sequence acts on (e.g. a `ChosenCharacter`).
+        target: Target,
+        /// The effects applied to that character, in order.
+        effects: Vec<Self>,
+    },
     /// Optionally resolve `inner` ("you may …"): the controller is asked yes/no,
     /// and `inner` resolves only on yes (§7.1.3). Composes optionality onto any
     /// effect, so individual effects don't carry an `optional` flag.
@@ -518,6 +529,13 @@ impl Effect {
                     .map(|e| e.with_trigger_amount(value))
                     .collect(),
             ),
+            Self::OnTarget { target, effects } => Self::OnTarget {
+                target,
+                effects: effects
+                    .into_iter()
+                    .map(|e| e.with_trigger_amount(value))
+                    .collect(),
+            },
             Self::May(inner) => Self::May(recur(inner)),
             Self::ScheduleDelayed { when, effect } => Self::ScheduleDelayed {
                 when,

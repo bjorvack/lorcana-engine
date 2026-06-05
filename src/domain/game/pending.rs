@@ -26,6 +26,9 @@ pub enum ChoiceThen {
     /// Apply `effect` to each picked card, then resolve the rest ("chosen
     /// character … " / "up to N chosen characters …", §7.1 / §7.1.8).
     ApplyToEach(Box<Effect>),
+    /// Apply each of `effects` (in order) to each picked card, then resolve the
+    /// rest — "[A] then [B] to the same chosen character" ([`Effect::OnTarget`]).
+    ApplyAllTo(Vec<Effect>),
     /// Play each picked card for free (§6).
     PlayFree,
     /// Take the (up-to-one) picked card from `deck_owner`'s deck into hand; the

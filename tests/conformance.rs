@@ -2262,3 +2262,64 @@ fn leaves_play_trigger_fires_on_bounce() {
     // Quest lore (1) + leaves-play on the self-bounce (2) = 3.
     assert_eq!(lore(&state, me), 3, "leaves-play fired on the bounce");
 }
+
+/// "Exert chosen character. They can't ready at the start of their next turn." —
+/// `Effect::OnTarget` applies exert then freeze to a *single* chosen character
+/// (one pick, two effects), so a ready victim is exerted now and can't ready.
+#[test]
+fn exert_and_freeze_apply_to_one_chosen_target() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Frostbite"
+        type = "Character"
+        cost = 2
+        ink = ["Amethyst"]
+        strength = 1
+        willpower = 3
+        lore = 1
+        [[card.abilities]]
+        on = "quest"
+        do = { apply_to = "chosen opposing character", then_to = [ { exert = "self" }, { freeze = "self" } ] }
+        [[card]]
+        name = "Victim"
+        type = "Character"
+        cost = 2
+        ink = ["Amethyst"]
+        strength = 1
+        willpower = 3
+        lore = 1
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let foe = opponent_of(&state, me);
+    let froster = place(&mut state, me, 100, 0, 1, 3, true);
+    let victim = place(&mut state, foe, 200, 1, 1, 3, true); // READY
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: froster }).expect("quest");
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(lorcana_engine::Decision::ChooseTarget(victim)),
+    )
+    .expect("choose the one target for both effects");
+
+    let ready = state
+        .player(foe)
+        .unwrap()
+        .play()
+        .iter()
+        .find(|c| c.id() == victim)
+        .unwrap()
+        .conditions()
+        .ready;
+    assert!(
+        !ready,
+        "the single chosen target was exerted (the first step)"
+    );
+    assert!(
+        state.has_restriction(victim, lorcana_engine::Restriction::CantReady),
+        "...and frozen (the second step), from one pick"
+    );
+}

@@ -2783,6 +2783,11 @@ fn execute_effect(
                 state, registry, controller, source, from, to, amount, effect,
             );
         }
+        // Resolve a single target once, then apply each sub-effect to it in order
+        // ("exert chosen character; they can't ready" = OnTarget [Exert, Freeze]).
+        Effect::OnTarget { target, effects } => {
+            return resolve_on_target(state, registry, controller, source, target, effects, events);
+        }
         // Targeted effects: resolve the target now (self / all) or report that a
         // choice is needed (§7.1).
         Effect::Move {
@@ -2853,6 +2858,58 @@ fn resolve_targeted(
     }
 }
 
+/// Resolve an [`Effect::OnTarget`]: pick the single target once, then apply each
+/// sub-effect to the resolved character in order (the sub-effects act on that
+/// card, ignoring their own inner target). Returns the [`Choice`] when the target
+/// is chosen interactively (the pick then runs all the sub-effects).
+fn resolve_on_target(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    controller: PlayerId,
+    source: CardId,
+    target: &Target,
+    effects: &[Effect],
+    events: &mut Vec<GameEvent>,
+) -> Option<Choice> {
+    let apply_all = |state: &mut GameState, events: &mut Vec<GameEvent>, card: CardId| {
+        for effect in effects {
+            apply_effect_to(state, registry, controller, source, card, effect, events);
+        }
+    };
+    match target {
+        Target::SelfCard => {
+            apply_all(state, events, source);
+            None
+        }
+        Target::Card(card) => {
+            apply_all(state, events, *card);
+            None
+        }
+        Target::AllCharacters { filter } => {
+            for card in matching_characters(state, controller, source, filter) {
+                apply_all(state, events, card);
+            }
+            None
+        }
+        Target::ChosenCharacter { filter } | Target::ChosenPermanent { filter } => {
+            let options = if matches!(target, Target::ChosenPermanent { .. }) {
+                choosable_permanents(state, registry, controller, source, filter)
+            } else {
+                choosable_characters(state, registry, controller, source, filter)
+            };
+            (!options.is_empty()).then(|| Choice::Choose {
+                player: controller,
+                options: options.into_iter().map(ChoiceRef::Card).collect(),
+                min: 1,
+                max: 1,
+                then: ChoiceThen::ApplyAllTo(effects.to_vec()),
+            })
+        }
+        // "Up to" / nothing-to-choose endpoints aren't used by OnTarget cards.
+        Target::UpToCharacters { .. } => None,
+    }
+}
+
 /// The in-play **permanents** (characters / items / locations) `controller` may
 /// choose for a [`Target::ChosenPermanent`]: every in-play card matching the
 /// filter algebra, minus those an opponent can't choose (Ward, §10.15). Unlike
@@ -2897,6 +2954,8 @@ const fn destination_to_self(to: Destination) -> SelfDestination {
 /// Freeze `card`: it can't ready at its controller's next ready step. The
 /// `CantReady` modifier is sourced to the card itself (so it survives the freezer
 /// leaving play) and expires when that controller next readies (§"can't ready").
+/// "Exert chosen character. They can't ready…" composes `Exert` then `Freeze` on
+/// one chosen target via [`Effect::OnTarget`].
 fn freeze_card(state: &mut GameState, card: CardId) {
     if let Some(owner) = state.card_owner_in_play(card) {
         state.add_property_modifier(PropertyModifier::new(
@@ -4453,6 +4512,18 @@ fn apply_choose_decision(
             for pick in &picks {
                 if let ChoiceRef::Card(c) = pick {
                     apply_effect_to(state, registry, player, source, *c, effect, events);
+                }
+            }
+            resolve_effects(state, registry, player, source, rest, events);
+        }
+        // Apply each effect (in order) to each picked card — OnTarget's "do A then
+        // B to the same chosen character" — then the rest.
+        ChoiceThen::ApplyAllTo(effects) => {
+            for pick in &picks {
+                if let ChoiceRef::Card(c) = pick {
+                    for effect in effects {
+                        apply_effect_to(state, registry, player, source, *c, effect, events);
+                    }
                 }
             }
             resolve_effects(state, registry, player, source, rest, events);
