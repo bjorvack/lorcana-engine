@@ -50,6 +50,11 @@ ink = ["Amber"]
 image = "https://cards.lorcast.io/card/digital/large/crd_928bd23c4cdb4440898accbb73aba3bf.avif?1740589263"
 inkwell = true
 text = "HEALING AURA During your turn, whenever a card is put into your inkwell, you may remove up to 2 damage from chosen character."
+[[card.abilities]]
+on = "card_put_in_inkwell"
+during_your_turn = true
+may = true
+do = { remove_damage = 2, to = "chosen character" }
 
 [[card]]
 name = "Amethyst Coil"
@@ -58,6 +63,11 @@ cost = 3
 ink = ["Amethyst"]
 image = "https://cards.lorcast.io/card/digital/large/crd_e26f9abffd3943c096c50b0cef7425ff.avif?1740589431"
 text = "MAGICAL TOUCH During your turn, whenever a card is put into your inkwell, you may move 1 damage counter from chosen character to chosen opposing character."
+[[card.abilities]]
+on = "card_put_in_inkwell"
+during_your_turn = true
+may = true
+do = { move_damage = 1, from = "chosen character", to = "chosen opposing character" }
 
 [[card]]
 name = "Anastasia - Bossy Stepsister"
@@ -666,6 +676,10 @@ cost = 3
 ink = ["Emerald"]
 image = "https://cards.lorcast.io/card/digital/large/crd_6109e70026c649f2baca4f9656b66510.avif?1740589580"
 text = "SHIMMERING WINGS During your turn, whenever a card is put into your inkwell, chosen character gains Evasive until the start of your next turn. (Only characters with Evasive can challenge them.)"
+[[card.abilities]]
+on = "card_put_in_inkwell"
+during_your_turn = true
+do = { grant_keyword = "Evasive", to = "chosen character", duration = "next_turn" }
 
 [[card]]
 name = "Fa Zhou - War Hero"
@@ -1928,6 +1942,10 @@ willpower = 4
 lore = 2
 classifications = ["Storyborn", "Hero", "Princess"]
 text = "A GREATER PURPOSE During your turn, whenever a card is put into your inkwell, this character gains Resist +1 until the start of your next turn. (Damage dealt to them is reduced by 1.)"
+[[card.abilities]]
+on = "card_put_in_inkwell"
+during_your_turn = true
+do = { grant_keyword = "Resist 1", to = "this", duration = "next_turn" }
 
 [[card]]
 name = "Razoul - Menacing Guard"
@@ -2030,6 +2048,10 @@ ink = ["Ruby"]
 image = "https://cards.lorcast.io/card/digital/large/crd_9d23dd955ab74137bba7be82615b2178.avif?1740589697"
 inkwell = true
 text = "CRIMSON SPARK During your turn, whenever a card is put into your inkwell, chosen character gets +2 {S} this turn."
+[[card.abilities]]
+on = "card_put_in_inkwell"
+during_your_turn = true
+do = { give_strength = 2, to = "chosen character" }
 
 [[card]]
 name = "Sapphire Coil"
@@ -2039,6 +2061,11 @@ ink = ["Sapphire"]
 image = "https://cards.lorcast.io/card/digital/large/crd_3f99d55a6a434a00b6e547ec30e48a69.avif?1740589816"
 inkwell = true
 text = "BRILLIANT SHINE During your turn, whenever a card is put into your inkwell, you may give chosen character -2 {S} this turn."
+[[card.abilities]]
+on = "card_put_in_inkwell"
+during_your_turn = true
+may = true
+do = { give_strength = -2, to = "chosen character" }
 
 [[card]]
 name = "Scrooge Mcduck - Resourceful Miser"
@@ -2158,6 +2185,11 @@ cost = 2
 ink = ["Steel"]
 image = "https://cards.lorcast.io/card/digital/large/crd_9733c3ea959643178de845a528ff915c.avif?1740590278"
 text = "METALLIC FLOW During your turn, whenever a card is put into your inkwell, you may draw a card, then choose and discard a card."
+[[card.abilities]]
+on = "card_put_in_inkwell"
+during_your_turn = true
+may = true
+do = [{ draw = 1 }, { discard = 1 }]
 
 [[card]]
 name = "Suzy - Master Seamstress"

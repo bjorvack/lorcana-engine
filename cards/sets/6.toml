@@ -204,6 +204,10 @@ willpower = 3
 lore = 1
 classifications = ["Storyborn", "Villain"]
 text = "FEAR ALWAYS WORKS During your turn, whenever a card is put into your inkwell, chosen opposing character gains Reckless during their next turn. (They can't quest and must challenge if able.)"
+[[card.abilities]]
+on = "card_put_in_inkwell"
+during_your_turn = true
+do = { grant_keyword = "Reckless", to = "chosen opposing character", duration = "next_turn" }
 
 [[card]]
 name = "Bend to My Will"
@@ -932,6 +936,10 @@ willpower = 4
 lore = 1
 classifications = ["Dreamborn", "Villain", "Sorcerer"]
 text = "YOU WILL BE PAID WHEN THE TIME COMES During your turn, whenever a card is put into your inkwell, deal 1 damage to chosen character."
+[[card.abilities]]
+on = "card_put_in_inkwell"
+during_your_turn = true
+do = { deal_damage = 1, to = "chosen character" }
 
 [[card]]
 name = "Jasmine - Rebellious Princess"
@@ -1016,6 +1024,10 @@ willpower = 4
 lore = 1
 classifications = ["Storyborn", "Hero"]
 text = "COME HERE, COME HERE, COME HERE! During your turn, whenever a card is put into your inkwell, this character gets Challenger +2 this turn. (While challenging, this character gets +2 {S}.)"
+[[card.abilities]]
+on = "card_put_in_inkwell"
+during_your_turn = true
+do = { grant_keyword = "Challenger 2", to = "this", duration = "this_turn" }
 
 [[card]]
 name = "John Darling - Sophisticated Swordsman"
@@ -1770,6 +1782,10 @@ willpower = 3
 lore = 1
 classifications = ["Storyborn", "Hero"]
 text = "GOTCHA! During your turn, whenever a card is put into your inkwell, exert chosen opposing character."
+[[card.abilities]]
+on = "card_put_in_inkwell"
+during_your_turn = true
+do = { exert = "chosen opposing character" }
 
 [[card]]
 name = "Pixie Dust"
@@ -2531,3 +2547,7 @@ lore = 2
 classifications = ["Storyborn", "Ally"]
 keywords = ["Ward"]
 text = "Ward (Opponents can't choose this character except to challenge.)\nRUN INTERFERENCE During your turn, whenever a card is put into your inkwell, another chosen character gains Resist +1 until the start of your next turn. (Damage dealt to them is reduced by 1.)"
+[[card.abilities]]
+on = "card_put_in_inkwell"
+during_your_turn = true
+do = { grant_keyword = "Resist 1", to = "another chosen character", duration = "next_turn" }
