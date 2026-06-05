@@ -63,6 +63,14 @@ pub(crate) fn with_classifications<R>(classes: Vec<String>, f: impl FnOnce() -> 
 pub struct TomlAbility {
     /// The trigger ("play", "quest", "banish", …).
     pub on: String,
+    /// A classification that narrows the trigger's scope — "whenever you play a
+    /// **Floodborn** character" / "whenever one of your **Illusion** characters
+    /// quests". For `play_character` it threads into the watched
+    /// [`CardCategory::Character`]; for a scoped per-character event it is
+    /// AND-combined onto the [`CharacterFilter`] scope. Only valid on those
+    /// triggers.
+    #[serde(default)]
+    pub classification: Option<String>,
     /// "You may …" — optional ability.
     #[serde(default)]
     pub may: bool,
@@ -89,7 +97,10 @@ impl TomlAbility {
     /// # Errors
     /// Returns a human-readable detail string on any unmappable trigger/effect.
     pub fn to_ability(&self) -> Result<TriggeredAbility, String> {
-        let condition = trigger_from(&self.on)?;
+        let mut condition = trigger_from(&self.on)?;
+        if let Some(name) = &self.classification {
+            condition = narrow_by_classification(condition, Classification::new(name), &self.on)?;
+        }
         let effect = effect_from_value(&self.effect)?;
         let ability = if self.may {
             TriggeredAbility::optional(condition, effect)
@@ -186,6 +197,34 @@ fn trigger_from(s: &str) -> Result<TriggerCondition, String> {
         "draw" | "you_draw" => TriggerCondition::WhenYouDraw,
         other => return Err(format!("unknown trigger {other:?}")),
     })
+}
+
+/// Narrow a trigger's scope by a classification, composing with the existing
+/// algebra rather than adding a parallel trigger kind: a "whenever you play a
+/// character" trigger gains the watched [`CardCategory::Character`]
+/// classification ("a Floodborn character"), and a scoped per-character event
+/// AND-combines [`CharacterFilter::Classification`] onto its scope ("one of your
+/// Illusion characters quests"). Any other trigger has no classification slot, so
+/// it is an authoring error.
+fn narrow_by_classification(
+    condition: TriggerCondition,
+    class: Classification,
+    on: &str,
+) -> Result<TriggerCondition, String> {
+    match condition {
+        TriggerCondition::WhenYouPlay(CardCategory::Character(_)) => Ok(
+            TriggerCondition::WhenYouPlay(CardCategory::Character(Some(class))),
+        ),
+        TriggerCondition::WhenCharacterEvent { event, scope } => {
+            Ok(TriggerCondition::WhenCharacterEvent {
+                event,
+                scope: scope.and(CharacterFilter::Classification(class)),
+            })
+        }
+        _ => Err(format!(
+            "classification is not applicable to trigger {on:?}"
+        )),
+    }
 }
 
 /// Parse an effect: a sequence (`[..]` → [`Effect::All`]) or a verb table.

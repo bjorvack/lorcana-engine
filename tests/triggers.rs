@@ -5,7 +5,8 @@
 use lorcana_engine::{
     Amount, CardCategory, CardDefId, CardDefinition, CardId, CardInstance, CardRegistry,
     CharacterStats, Classification, Conditions, Decision, Effect, GameEvent, GameState, GameStatus,
-    Input, PendingDecision, PlayerScope, TriggerCondition, TriggeredAbility, apply, start,
+    Input, PendingDecision, PlayerScope, TriggerCondition, TriggeredAbility, apply, load_toml_from,
+    start,
 };
 
 fn two_decks(size: u32) -> Vec<Vec<CardDefId>> {
@@ -285,6 +286,150 @@ fn quest_trigger_fires() {
 
     // 1 lore from questing + 2 from the trigger.
     assert_eq!(state.player(active).unwrap().lore(), 3);
+}
+
+/// A DSL-authored watcher: "Whenever you play a Floodborn character, gain 1 lore."
+const PLAY_CLASS_WATCHER: &str = r#"
+[[card]]
+name = "Watcher"
+type = "Character"
+cost = 0
+inkwell = true
+strength = 1
+willpower = 1
+lore = 1
+[[card.abilities]]
+on = "play_character"
+classification = "Floodborn"
+do = { gain_lore = 1 }
+"#;
+
+/// A DSL-authored watcher: "Whenever one of your Illusion characters quests,
+/// gain 1 lore."
+const QUEST_CLASS_WATCHER: &str = r#"
+[[card]]
+name = "Watcher"
+type = "Character"
+cost = 0
+inkwell = true
+strength = 1
+willpower = 1
+lore = 1
+[[card.abilities]]
+on = "yours_quests"
+classification = "Illusion"
+do = { gain_lore = 1 }
+"#;
+
+/// Load the single watcher definition (def id 1000) from a DSL TOML document.
+fn watcher_def(toml: &str) -> CardDefinition {
+    load_toml_from(toml, 1000)
+        .expect("watcher loads")
+        .pop()
+        .expect("one watcher def")
+}
+
+/// Inject a ready, dry in-play character for `state`'s active player.
+fn inject_in_play(
+    state: &mut GameState,
+    card: CardId,
+    def: CardDefId,
+    classifications: Vec<Classification>,
+) {
+    let active = state.active_player();
+    let mut instance = CardInstance::new(
+        card,
+        def,
+        Conditions {
+            ready: true,
+            damage: 0,
+            drying: false,
+            facedown: false,
+        },
+    );
+    instance.set_stats(Some(CharacterStats::new(2, 3, 2)));
+    instance.set_classifications(classifications);
+    state.player_mut(active).unwrap().play_mut().push(instance);
+}
+
+/// Lore the active player ends with after a Floodborn watcher is in play and a
+/// character of `deck_class` is played from hand.
+fn lore_after_playing_character_of_class(deck_class: &str) -> u32 {
+    let mut registry: CardRegistry = (0..30)
+        .map(|n| {
+            CardDefinition::character(CardDefId::from_raw(n), 0, true, 2, 3, 1)
+                .with_classifications(vec![Classification::new(deck_class)])
+        })
+        .collect();
+    registry.insert(watcher_def(PLAY_CLASS_WATCHER));
+
+    let mut state = started(&registry);
+    let active = state.active_player();
+    inject_in_play(
+        &mut state,
+        CardId::from_raw(5000),
+        CardDefId::from_raw(1000),
+        vec![Classification::new("Floodborn")],
+    );
+
+    // Cost-0 characters need no ink: play the subject straight from hand.
+    let subject = active_hand_card(&state, 0);
+    let _ = apply(
+        &mut state,
+        &registry,
+        Input::PlayCard {
+            card: subject,
+            shift_onto: None,
+        },
+    )
+    .expect("play subject");
+
+    state.player(active).unwrap().lore()
+}
+
+#[test]
+fn dsl_play_character_classification_fires_only_for_matching_classification() {
+    // Playing a Floodborn character fires the DSL watcher (+1 lore); playing a
+    // non-Floodborn (Hero) character does not.
+    assert_eq!(lore_after_playing_character_of_class("Floodborn"), 1);
+    assert_eq!(lore_after_playing_character_of_class("Hero"), 0);
+}
+
+/// Lore the active player ends with after an Illusion-quest watcher is in play
+/// and one of their `quester_class` characters quests.
+fn lore_after_quester_of_class(quester_class: &str) -> u32 {
+    let mut registry: CardRegistry = (0..30)
+        .map(|n| CardDefinition::character(CardDefId::from_raw(n), 0, true, 2, 3, 2))
+        .collect();
+    registry.insert(watcher_def(QUEST_CLASS_WATCHER));
+
+    let mut state = started(&registry);
+    let active = state.active_player();
+    inject_in_play(
+        &mut state,
+        CardId::from_raw(5000),
+        CardDefId::from_raw(1000),
+        vec![Classification::new("Illusion")],
+    );
+    let quester = CardId::from_raw(6000);
+    inject_in_play(
+        &mut state,
+        quester,
+        CardDefId::from_raw(0),
+        vec![Classification::new(quester_class)],
+    );
+
+    let _ = apply(&mut state, &registry, Input::Quest { character: quester }).expect("quest");
+
+    state.player(active).unwrap().lore()
+}
+
+#[test]
+fn dsl_yours_quests_classification_fires_only_for_matching_classification() {
+    // Questing gives 2 lore; the Illusion-quest watcher adds 1 only when one of
+    // your Illusion characters quests, not a non-Illusion (Hero) one.
+    assert_eq!(lore_after_quester_of_class("Illusion"), 3);
+    assert_eq!(lore_after_quester_of_class("Hero"), 2);
 }
 
 #[test]

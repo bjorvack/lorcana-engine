@@ -2594,3 +2594,260 @@ fn reaching_twenty_lore_wins_the_game() {
         "20 lore ends the game with that player as the winner (§1.9.1.1)"
     );
 }
+
+/// §4.2.3.2 — Draw step: "First, the active player draws a card from their deck.
+/// If this turn is the first turn of the game, the active player skips this
+/// step." The starting player keeps their untouched 7-card opening hand, while
+/// the second player draws on turn 2 (their hand grows to 8) — proving only the
+/// very first turn of the game skips the draw.
+#[test]
+fn the_first_turn_of_the_game_skips_the_draw_step() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Vanilla"
+        type = "Character"
+        cost = 1
+        strength = 1
+        willpower = 1
+        lore = 1
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let foe = opponent_of(&state, me);
+
+    assert_eq!(
+        hand_len(&state, me),
+        7,
+        "the starting player kept their 7-card opening hand — turn 1 skips the draw (§4.2.3.2)"
+    );
+    let foe_hand_before = hand_len(&state, foe);
+
+    let _ = apply(&mut state, &reg, Input::EndTurn).expect("end turn");
+    assert_eq!(
+        state.active_player(),
+        foe,
+        "it is now the second player's turn"
+    );
+    assert_eq!(
+        hand_len(&state, foe),
+        foe_hand_before + 1,
+        "the second player draws on turn 2 — only the first turn of the game skips the draw step"
+    );
+}
+
+/// §4.3.3 — "Put a card into the inkwell" is a turn action limited to once per
+/// turn. The chosen inkable card is placed in the inkwell facedown and ready
+/// (§4.3.3.2); a second attempt the same turn is rejected (§4.3.3).
+#[test]
+fn putting_a_card_into_the_inkwell_is_limited_to_once_per_turn() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Inkable"
+        type = "Character"
+        cost = 1
+        inkwell = true
+        strength = 1
+        willpower = 1
+        lore = 1
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+
+    // Two inkable cards (def 0) in hand to put into the inkwell.
+    let first = CardId::from_raw(300);
+    let second = CardId::from_raw(301);
+    for id in [first, second] {
+        state
+            .player_mut(me)
+            .unwrap()
+            .hand_mut()
+            .push(CardInstance::new(
+                id,
+                CardDefId::from_raw(0),
+                Conditions::faceup_idle(),
+            ));
+    }
+
+    let _ = apply(&mut state, &reg, Input::PutCardInInkwell { card: first }).expect("ink one card");
+    assert!(
+        in_inkwell(&state, me, first),
+        "the chosen card is now in the inkwell"
+    );
+    let inked = state
+        .player(me)
+        .unwrap()
+        .inkwell()
+        .iter()
+        .find(|c| c.id() == first)
+        .unwrap();
+    assert!(
+        inked.conditions().facedown && inked.conditions().ready,
+        "the inked card is placed facedown and ready (§4.3.3.2)"
+    );
+
+    assert!(
+        apply(&mut state, &reg, Input::PutCardInInkwell { card: second }).is_err(),
+        "a second card can't be inked the same turn (§4.3.3 once-per-turn)"
+    );
+    assert_eq!(
+        state.player(me).unwrap().inkwell().len(),
+        1,
+        "the rejected second ink left the inkwell unchanged"
+    );
+}
+
+/// §4.3.6.7 — when declaring a challenge the player "chooses an exerted opposing
+/// character." A *ready* opposing character isn't a legal challenge target, so
+/// the challenge is rejected.
+#[test]
+fn only_an_exerted_character_can_be_challenged() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Attacker"
+        type = "Character"
+        cost = 1
+        strength = 3
+        willpower = 9
+        lore = 1
+        [[card]]
+        name = "Bystander"
+        type = "Character"
+        cost = 1
+        strength = 1
+        willpower = 9
+        lore = 1
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let foe = opponent_of(&state, me);
+    let attacker = place(&mut state, me, 100, 0, 3, 9, true);
+    let ready_target = place(&mut state, foe, 200, 1, 1, 9, true); // READY: not a legal target
+
+    assert!(
+        apply(
+            &mut state,
+            &reg,
+            Input::Challenge {
+                challenger: attacker,
+                target: ready_target,
+            },
+        )
+        .is_err(),
+        "a ready opposing character can't be chosen as a challenge target (§4.3.6.7)"
+    );
+}
+
+/// §4.3.6.9 — "the challenging player exerts the challenging character." A
+/// character that was ready when declared as the challenger is left exerted once
+/// the challenge has occurred.
+#[test]
+fn the_challenging_character_is_exerted_by_challenging() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Challenger"
+        type = "Character"
+        cost = 1
+        strength = 1
+        willpower = 9
+        lore = 1
+        [[card]]
+        name = "Target"
+        type = "Character"
+        cost = 1
+        strength = 1
+        willpower = 9
+        lore = 1
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let foe = opponent_of(&state, me);
+    let challenger = place(&mut state, me, 100, 0, 1, 9, true);
+    let target = place(&mut state, foe, 200, 1, 1, 9, false); // exerted: a legal target
+    assert!(
+        is_ready(&state, me, challenger),
+        "the challenger starts the turn ready"
+    );
+
+    let _ = apply(&mut state, &reg, Input::Challenge { challenger, target }).expect("challenge");
+
+    assert!(
+        !is_ready(&state, me, challenger),
+        "the challenging character is exerted by declaring the challenge (§4.3.6.9)"
+    );
+}
+
+/// §6.3.3 — Sing a song: instead of paying its ink cost, a song can be played for
+/// free by exerting a ready, dry character whose cost is at least the song's cost
+/// (§6.3.3.3). The singer is exerted, the song's effect resolves, and the song
+/// then goes to its owner's discard.
+#[test]
+fn a_song_is_sung_for_free_by_exerting_a_singer() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Part of Your World"
+        type = "Song"
+        classifications = ["Song"]
+        cost = 3
+        [[card.abilities]]
+        on = "play"
+        do = { gain_lore = 2 }
+        [[card]]
+        name = "Sebastian"
+        type = "Character"
+        cost = 3
+        strength = 1
+        willpower = 3
+        lore = 1
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    // The singer (def 1, cost 3) is ready and dry, so it can pay for the song.
+    let singer = place(&mut state, me, 100, 1, 1, 3, true);
+
+    // The song (def 0) is in hand.
+    let song = CardId::from_raw(300);
+    state
+        .player_mut(me)
+        .unwrap()
+        .hand_mut()
+        .push(CardInstance::new(
+            song,
+            CardDefId::from_raw(0),
+            Conditions::faceup_idle(),
+        ));
+    let lore_before = lore(&state, me);
+
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Sing {
+            song,
+            singers: vec![singer],
+        },
+    )
+    .expect("sing the song");
+
+    assert_eq!(
+        lore(&state, me),
+        lore_before + 2,
+        "the song's effect resolved (gain 2 lore)"
+    );
+    assert!(
+        !is_ready(&state, me, singer),
+        "the singer was exerted to pay for the song (§6.3.3.3)"
+    );
+    assert!(
+        state.player(me).unwrap().discard().contains(song),
+        "the sung song went to its owner's discard"
+    );
+}
