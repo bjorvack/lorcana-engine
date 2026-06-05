@@ -3227,3 +3227,62 @@ fn challenged_trigger_debuffs_the_challenging_character() {
         "the challenging character got -2 {{S}} (4 -> 2)"
     );
 }
+
+/// Modal "choose one" (§7.1.9) where the chosen option itself needs a target:
+/// picking "deal 2 damage to chosen character" suspends for the target, then
+/// resolves.
+#[test]
+fn modal_choose_one_option_can_require_a_target() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Decider"
+        type = "Character"
+        cost = 3
+        ink = ["Ruby"]
+        strength = 2
+        willpower = 4
+        lore = 1
+        [[card.abilities]]
+        on = "quest"
+        do = { choose_one = [
+            { deal_damage = 2, target = "chosen opposing character" },
+            { draw = 1 },
+        ] }
+        [[card]]
+        name = "Victim"
+        type = "Character"
+        cost = 2
+        ink = ["Ruby"]
+        strength = 2
+        willpower = 4
+        lore = 1
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let foe = opponent_of(&state, me);
+    let decider = place(&mut state, me, 100, 0, 2, 4, true);
+    let victim = place(&mut state, foe, 200, 1, 2, 4, true);
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: decider }).expect("quest");
+    // Pick option 0 (deal 2 damage), then choose the target.
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(lorcana_engine::Decision::ChooseOption(0)),
+    )
+    .expect("choose the damage option");
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(lorcana_engine::Decision::ChooseTarget(victim)),
+    )
+    .expect("choose the target");
+
+    assert_eq!(
+        damage(&state, foe, victim),
+        Some(2),
+        "the modal option resolved on its chosen target"
+    );
+}

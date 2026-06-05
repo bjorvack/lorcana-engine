@@ -829,8 +829,15 @@ blockers: look-at-top/reveal (~180), modal "choose one" (~80).
   next turn" timing, mirrors freeze).
 - [x] **look-at-top/reveal variants** — `LookAtTopAndTake` covers take >1,
   reorder, per-card split, and other-player scope (see the search/look-at-top
-  entry above). **Remaining:** **modal "choose one"** coverage passes; ongoing
-  authoring as each feature lands.
+  entry above).
+- [x] **modal "choose one" (§7.1.9)** — `Effect::ChooseOne { options, optional }`
+  presents 2–4 nested-effect options (`PendingDecision::ChooseOne` /
+  `Decision::ChooseOption`); the chosen option resolves through `resolve_effects`,
+  so an option that itself needs a target **suspends** for it and then resolves.
+  DSL `choose_one = [ … ]` / `may_choose_one`.
+  `tests/conformance.rs::modal_choose_one_option_can_require_a_target`,
+  `tests/card_loader.rs::{the_dsl_exposes_choose_one, anna_royal_resolution_choose_one}`.
+  Remaining work here is **authoring** more such cards (data), not engine.
 
 ## Slice 9 — Real card data & conformance suite
 
