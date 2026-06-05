@@ -249,6 +249,9 @@ lore = 2
 classifications = ["Dreamborn", "Hero", "Prince"]
 keywords = ["Rush"]
 text = "Rush (This character can challenge the turn they're played.)\nROAR When you play this character, exert all opposing damaged characters."
+[[card.abilities]]
+on = "play"
+do = { exert = "all opposing damaged characters" }
 
 [[card]]
 name = "Beast's Mirror"
@@ -484,6 +487,9 @@ ink = ["Sapphire"]
 image = "https://cards.lorcast.io/card/digital/large/crd_eb91a973f3ff4394a919aab77d9c71b9.avif?1709690747"
 inkwell = true
 text = "Look at the top 2 cards of your deck. Put one into your hand and the other on the bottom of the deck."
+[[card.abilities]]
+on = "play"
+do = { look_at_top = 2, take_count = 1, rest = "bottom" }
 
 [[card]]
 name = "Dinglehopper"
@@ -690,6 +696,9 @@ ink = ["Ruby"]
 image = "https://cards.lorcast.io/card/digital/large/crd_0df4378c1d3d40409014b2502a9926b1.avif?1709690747"
 inkwell = true
 text = "Ready chosen character. They can't quest for the rest of this turn."
+[[card.abilities]]
+on = "play"
+do = { apply_to = "chosen character", then_to = [{ ready = "self" }, { restrict = "cant_quest", duration = "this_turn" }] }
 
 [[card]]
 name = "Fire the Cannons!"
@@ -1088,6 +1097,9 @@ willpower = 4
 lore = 1
 classifications = ["Storyborn", "Ally"]
 text = "YOU GOT A PROBLEM? {E} — Chosen character gains Reckless during their next turn. (They can't quest and must challenge if able.)"
+[[card.activated]]
+cost = { exert = true }
+do = { grant_keyword = "Reckless", to = "chosen character", duration = "next_turn" }
 
 [[card]]
 name = "If it's Not Baroque"
@@ -1162,6 +1174,9 @@ willpower = 4
 lore = 1
 classifications = ["Storyborn", "Ally"]
 text = "PUPPYNAPPING Whenever this character quests, chosen opposing character can't quest during their next turn."
+[[card.abilities]]
+on = "quest"
+do = { restrict = "cant_quest", to = "chosen opposing character", duration = "next_turn" }
 
 [[card]]
 name = "Jetsam - Ursula's Spy"
@@ -1189,6 +1204,12 @@ willpower = 5
 lore = 2
 classifications = ["Storyborn", "Villain", "Alien", "Pirate", "Captain"]
 text = "PICK YOUR FIGHTS When you play this character and whenever he quests, chosen opposing character gains Reckless during their next turn. (They can't quest and must challenge if able.)"
+[[card.abilities]]
+on = "play"
+do = { grant_keyword = "Reckless", to = "chosen opposing character", duration = "next_turn" }
+[[card.abilities]]
+on = "quest"
+do = { grant_keyword = "Reckless", to = "chosen opposing character", duration = "next_turn" }
 
 [[card]]
 name = "Jumba Jookiba - Renegade Scientist"
@@ -2099,6 +2120,9 @@ ink = ["Ruby"]
 image = "https://cards.lorcast.io/card/digital/large/crd_81867e9c25c44f33aa150e70b57bb4dd.avif?1709690747"
 inkwell = true
 text = "FIREPROOF {E}, 3 {I} — Ready chosen character. They can't quest for the rest of this turn."
+[[card.activated]]
+cost = { exert = true, ink = 3 }
+do = { apply_to = "chosen character", then_to = [{ ready = "self" }, { restrict = "cant_quest", duration = "this_turn" }] }
 
 [[card]]
 name = "Simba - Future King"

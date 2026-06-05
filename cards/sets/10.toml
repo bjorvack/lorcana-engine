@@ -1264,6 +1264,9 @@ willpower = 6
 lore = 2
 classifications = ["Storyborn", "Ally"]
 text = "AMBUSH FROM THE DEEP When you play this character, deal 3 damage to chosen opposing damaged character."
+[[card.abilities]]
+on = "play"
+do = { deal_damage = 3, to = "chosen opposing damaged character" }
 
 [[card]]
 name = "Judy Hopps - Lead Detective"
@@ -2368,6 +2371,9 @@ lore = 1
 classifications = ["Floodborn", "Ally", "Fairy"]
 keywords = ["Shift 3"]
 text = "Shift 3 {I} (You may pay 3 {I} to play this on top of one of your characters named Tinker Bell.)\nHARMLESS DIVERSION When you play this character, exert chosen opposing character with 2 {S} or less."
+[[card.abilities]]
+on = "play"
+do = { exert = "chosen opposing character with 2 {S} or less" }
 
 [[card]]
 name = "Trust In Me"
