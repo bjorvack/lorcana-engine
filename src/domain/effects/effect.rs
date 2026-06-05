@@ -85,15 +85,27 @@ pub enum MoveSource {
         /// How many off the top.
         count: Amount,
     },
-    /// A single card chosen from `who`'s **discard** matching `filter` ("return a
-    /// character card from your discard to your hand", §8.x). Resolved to one pick
-    /// and moved to the [`Effect::Move`] destination.
-    ChosenFromDiscard {
-        /// Whose discard to choose from.
+    /// A single card chosen from `who`'s `zone` (discard / hand) matching `filter`
+    /// — "return a character card from your discard to your hand", "put a card
+    /// from your hand into your inkwell". Resolved to one pick and moved to the
+    /// [`Effect::Move`] destination.
+    ChosenFrom {
+        /// Which zone to choose from.
+        zone: SourceZone,
+        /// Whose `zone` to choose from.
         who: PlayerScope,
-        /// Which discarded cards qualify (by printed predicates / category).
+        /// Which cards qualify (by printed predicates / category).
         filter: CharacterFilter,
     },
+}
+
+/// A non-play zone a [`MoveSource::ChosenFrom`] picks a card out of.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum SourceZone {
+    /// The discard pile.
+    Discard,
+    /// The hand.
+    Hand,
 }
 
 /// Where a [`Effect::Move`] sends cards.

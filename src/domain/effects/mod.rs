@@ -7,7 +7,7 @@ pub mod trigger;
 // Re-export for convenience
 pub use effect::{
     Amount, CountCondition, DeckPosition, DelayedWhen, Destination, DiscardAmount, DiscardBy,
-    Effect, MoveSource, PlayerScope,
+    Effect, MoveSource, PlayerScope, SourceZone,
 };
 pub use target::{CharacterFilter, Comparison, NumericFilter, Target, TargetSide};
 pub use trigger::{CardCategory, ScopedEvent, TriggerCondition};

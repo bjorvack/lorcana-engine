@@ -26,8 +26,8 @@ use super::loader::keyword_from;
 use super::{AbilityCost, ActivatedAbility, StaticAbility, StaticTarget, TriggeredAbility};
 use crate::domain::effects::{
     Amount, CardCategory, CharacterFilter, Comparison, CountCondition, DeckPosition, Destination,
-    DiscardAmount, DiscardBy, Effect, MoveSource, NumericFilter, PlayerScope, ScopedEvent, Target,
-    TargetSide, TriggerCondition,
+    DiscardAmount, DiscardBy, Effect, MoveSource, NumericFilter, PlayerScope, ScopedEvent,
+    SourceZone, Target, TargetSide, TriggerCondition,
 };
 use crate::domain::game::{Condition, Property, Restriction, Stat};
 use crate::domain::types::card::Classification;
@@ -367,7 +367,8 @@ fn effect_from_table(t: &toml::Table) -> Result<Effect, String> {
         // defaults to You; the selector parses to a printed-predicate filter.
         let filter = parse_filter(sel).ok_or_else(|| format!("unparseable filter {sel:?}"))?;
         Ok(Effect::Move {
-            what: MoveSource::ChosenFromDiscard {
+            what: MoveSource::ChosenFrom {
+                zone: SourceZone::Discard,
                 who: scope(PlayerScope::You)?,
                 filter,
             },
@@ -376,6 +377,17 @@ fn effect_from_table(t: &toml::Table) -> Result<Effect, String> {
     } else if let Some(v) = t.get("into_inkwell") {
         Ok(Effect::Move {
             what: MoveSource::Card(target_from_value(v)?),
+            to: Destination::Inkwell,
+        })
+    } else if let Some(Value::String(sel)) = t.get("inkwell_from_hand") {
+        // "Put a <selector> card from your hand into your inkwell facedown & exerted."
+        let filter = parse_filter(sel).ok_or_else(|| format!("unparseable filter {sel:?}"))?;
+        Ok(Effect::Move {
+            what: MoveSource::ChosenFrom {
+                zone: SourceZone::Hand,
+                who: scope(PlayerScope::You)?,
+                filter,
+            },
             to: Destination::Inkwell,
         })
     } else if t.contains_key("discard") {

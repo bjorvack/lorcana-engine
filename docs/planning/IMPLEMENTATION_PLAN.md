@@ -742,10 +742,13 @@ mechanics ranked by card count, with the remaining gaps to close in order:
     (milling / digging). `Destination = Hand | Inkwell | Discard | Deck(pos)`.
     Mill = `Move { DeckTop, Discard }`, threads `PlayerScope` (so "top N of chosen
     player's deck into their discard" works in multiplayer). `tests/multiplayer.rs`.
-    `MoveSource::ChosenFromDiscard { who, filter }` returns a chosen discarded card
-    matching a printed-predicate filter to the destination ("return a character /
-    item card from your discard to your hand"); DSL `return_from_discard = "<sel>"`.
-    `tests/conformance.rs::return_a_character_from_discard_to_hand`.
+    `MoveSource::ChosenFrom { zone, who, filter }` picks one card from a non-play
+    zone (`SourceZone::Discard` / `Hand`) matching a printed-predicate filter and
+    moves it to the destination — "return a character / item card from your discard
+    to your hand" (`return_from_discard`), "put a card from your hand into your
+    inkwell" (`inkwell_from_hand`, facedown & exerted). `move_self_card` takes the
+    pick from whichever zone it is in. `tests/conformance.rs::return_a_character_from_discard_to_hand`,
+    `::put_a_hand_card_into_the_inkwell`.
     **Remaining:** other-player look-at-top (scoped `LookAtTopAndTake`).
 - [x] **dynamic continuous statics** — `StaticAbility.per: Option<Amount>` reuses
       the effect `Amount` algebra (`PerMatchingCharacter` / `CardsInHand` /

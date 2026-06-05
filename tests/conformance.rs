@@ -3046,3 +3046,76 @@ fn ward_protects_an_item_from_being_chosen() {
         "the Warded item was not banished"
     );
 }
+
+/// "Put a card from your hand into your inkwell facedown & exerted" — a chosen
+/// hand card moves to the inkwell (`MoveSource::ChosenFrom` with `Hand`).
+#[test]
+fn put_a_hand_card_into_the_inkwell() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Inker"
+        type = "Character"
+        cost = 2
+        ink = ["Sapphire"]
+        strength = 1
+        willpower = 3
+        lore = 1
+        [[card.abilities]]
+        on = "quest"
+        do = { inkwell_from_hand = "card" }
+        [[card]]
+        name = "Spare"
+        type = "Character"
+        cost = 1
+        ink = ["Sapphire"]
+        strength = 1
+        willpower = 1
+        lore = 1
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let inker = place(&mut state, me, 100, 0, 1, 3, true);
+
+    // A known card in my hand (def 1).
+    let spare = CardId::from_raw(200);
+    state
+        .player_mut(me)
+        .unwrap()
+        .hand_mut()
+        .push(CardInstance::new(
+            spare,
+            CardDefId::from_raw(1),
+            Conditions::faceup_idle(),
+        ));
+    let ink_before = state.player(me).unwrap().inkwell().len();
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: inker }).expect("quest");
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(lorcana_engine::Decision::ChooseTarget(spare)),
+    )
+    .expect("choose the hand card");
+
+    assert!(
+        state
+            .player(me)
+            .unwrap()
+            .inkwell()
+            .iter()
+            .any(|c| c.id() == spare),
+        "the chosen hand card went into the inkwell"
+    );
+    assert!(
+        !state
+            .player(me)
+            .unwrap()
+            .hand()
+            .iter()
+            .any(|c| c.id() == spare),
+        "...and left the hand"
+    );
+    assert_eq!(state.player(me).unwrap().inkwell().len(), ink_before + 1);
+}

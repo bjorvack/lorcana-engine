@@ -73,12 +73,13 @@ pub enum ChoiceThen {
         /// Whose deck the cards were taken from.
         deck_owner: PlayerId,
     },
-    /// Move the picked card(s) from `owner`'s discard to `to` ("return a card from
-    /// your discard to your hand", §8.x).
-    MoveFromDiscard {
-        /// Whose discard the cards came from.
+    /// Move the picked card(s) to `to` ("return a card from your discard to your
+    /// hand"; "put a card from your hand into your inkwell"). The card is taken
+    /// from wherever it is by `move_self_card`.
+    MoveChosenTo {
+        /// Whose card(s) (discard/hand) are moved.
         owner: PlayerId,
-        /// Where the picked cards go (usually the hand).
+        /// Where the picked cards go.
         to: Destination,
     },
 }

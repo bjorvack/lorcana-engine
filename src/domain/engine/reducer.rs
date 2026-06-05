@@ -7,8 +7,8 @@ use crate::domain::cards::{
 };
 use crate::domain::effects::{
     Amount, CardCategory, CharacterFilter, CountCondition, DeckPosition, DelayedWhen, Destination,
-    DiscardAmount, DiscardBy, Effect, MoveSource, PlayerScope, ScopedEvent, Target, TargetSide,
-    TriggerCondition,
+    DiscardAmount, DiscardBy, Effect, MoveSource, PlayerScope, ScopedEvent, SourceZone, Target,
+    TargetSide, TriggerCondition,
 };
 use crate::domain::game::{
     CardInstance, CharacterStats, ChoiceRef, ChoiceThen, Conditions, DelayedTrigger, GameEvent,
@@ -2650,12 +2650,16 @@ fn execute_effect(
                 state, registry, controller, source, *who, count, *to, effect,
             );
         }
-        // Return a chosen card from a player's discard to the destination (§8.x).
+        // Return / relocate a chosen card from a non-play zone (discard / hand) to
+        // the destination — "return a character from your discard to your hand",
+        // "put a card from your hand into your inkwell".
         Effect::Move {
-            what: MoveSource::ChosenFromDiscard { who, filter },
+            what: MoveSource::ChosenFrom { zone, who, filter },
             to,
         } => {
-            return resolve_discard_move(state, registry, controller, *who, filter, *to, effect);
+            return resolve_chosen_zone_move(
+                state, registry, controller, *who, *zone, filter, *to, effect,
+            );
         }
         // The controller plays an eligible card from hand for free (§6).
         Effect::PlayFreeFromHand { filter } => {
@@ -3453,13 +3457,16 @@ fn resolve_search_deck(
     }
 }
 
-/// Resolve a [`MoveSource::ChosenFromDiscard`] move: choose one card from `whose`
-/// discard matching `filter` (by printed predicates), then move it to `to` (§8.x).
-fn resolve_discard_move(
+/// Resolve a [`MoveSource::ChosenFrom`] move: choose one card from `whose` `zone`
+/// (discard / hand) matching `filter` (by printed predicates), then move it to
+/// `to` (§8.x). `move_self_card` takes the pick from whichever zone it is in.
+#[allow(clippy::too_many_arguments)]
+fn resolve_chosen_zone_move(
     state: &GameState,
     registry: &CardRegistry,
     controller: PlayerId,
     whose: PlayerScope,
+    zone: SourceZone,
     filter: &CharacterFilter,
     to: Destination,
     effect: &Effect,
@@ -3471,7 +3478,11 @@ fn resolve_discard_move(
     let options: Vec<CardId> = state
         .player(owner)
         .map(|p| {
-            p.discard()
+            let cards = match zone {
+                SourceZone::Discard => p.discard(),
+                SourceZone::Hand => p.hand(),
+            };
+            cards
                 .iter()
                 .filter(|c| {
                     registry
@@ -3487,7 +3498,7 @@ fn resolve_discard_move(
         options: options.into_iter().map(ChoiceRef::Card).collect(),
         min: 1,
         max: 1,
-        then: ChoiceThen::MoveFromDiscard { owner, to },
+        then: ChoiceThen::MoveChosenTo { owner, to },
     })
 }
 
@@ -3969,11 +3980,13 @@ fn move_self_card(
             return;
         };
         was_in_play = p.play().contains(card);
-        let taken = if was_in_play {
-            p.play_mut().take(card)
-        } else {
-            p.discard_mut().take(card)
-        };
+        // Take it from wherever it currently is: play (bounce / into-inkwell),
+        // discard (return-from-discard), or hand (put-a-hand-card-into-inkwell).
+        let taken = p
+            .play_mut()
+            .take(card)
+            .or_else(|| p.discard_mut().take(card))
+            .or_else(|| p.hand_mut().take(card));
         let Some(instance) = taken else {
             return;
         };
@@ -4687,7 +4700,7 @@ fn apply_choose_decision(
             resolve_effects(state, registry, player, source, rest, events);
         }
         // Move the picked card(s) from `owner`'s discard to `to` (return-from-discard).
-        ChoiceThen::MoveFromDiscard { owner, to } => {
+        ChoiceThen::MoveChosenTo { owner, to } => {
             let dest = destination_to_self(*to);
             for pick in &picks {
                 if let ChoiceRef::Card(c) = pick {
