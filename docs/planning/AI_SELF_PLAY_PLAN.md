@@ -806,6 +806,158 @@ the bridge — worth adding earlier than the full builder because it doubles as
 training pressure for the play model. The full deck-building AI is specced in
 **Appendix C**.
 
+## 16. Information needs, cross-spec optimizations & a more efficient path
+
+### 16.1 Information we still need (gather before committing compute)
+
+Most of the plan defers to "measure first" — so the **first deliverable is data, not
+model code**. Ordered by how much it changes decisions:
+
+- **Engine throughput numbers (blocking).** Games/sec (random + heuristic),
+  `GameState::clone()` cost, observation-encode cost, **branching-factor and
+  game-length distributions on real decks**, and the fraction of decision points
+  that are single-option. These size the MCTS budget, net size, parallelism, *and*
+  deck-eval cost — everything downstream. Make this the literal first task (it's
+  already implied by §7 / slice AI-0).
+- **Card-pool authoring coverage (repo-specific, blocking).** The AI can only train
+  on cards whose abilities the engine implements *correctly*. We need: what % of the
+  pool is fully authored vs stubbed, which effects/keywords are still
+  `Effect::Custom`/unimplemented, and a **"trainable card set"** filter so the deck
+  sampler (Appendix B) and constructor (Appendix C) only use fully-supported cards.
+  Training on an unimplemented card teaches wrong play. (The `card-dsl-draft` work is
+  directly relevant here.)
+- **Rules-correctness confidence.** A learning agent **amplifies engine bugs** — it
+  will find and exploit them. We need the conformance-test coverage picture and any
+  known-incorrect areas, so we can gate the trainable card set and treat
+  "degenerate" agent lines as bug reports (cf. Appendix C.6).
+- **Human / competitive corpus — confirmed *unavailable*.** No human game logs and no
+  curated competitive decklists are on hand. Consequences, all manageable: (1) the
+  **heuristic+search agent is the sole bootstrap teacher** (§16.3) — self-play needs
+  no human data (AlphaZero precedent), but the teacher's quality now gates how fast
+  ExIt converges, so it moves onto the critical path; (2) the missing **meta tier**
+  of the deck curriculum (§13) is replaced by structured-random + the 21 official
+  starters + a **synthetic metagame the PSRO/evolutionary deck AI generates itself**
+  (Appendix C) — arguably better, since it's not biased by a human meta; (3) the
+  **human-relative success bar** must come later from human testers (§16.1), with
+  internal Elo + exploitability (§14) as the interim proxy.
+- **Product/compute targets (need your input).** (a) **PvAI latency budget** —
+  how long may the AI think per move in a human game? sizes the distilled play net +
+  serve-time MCTS. (b) **Concrete compute** — wall-clock/GPU-hours available; can the
+  6800XT box run Linux+Vulkan for `burn`? (c) **Success bar** — what *operationally*
+  counts as "beats champions" (Elo vs a reference, win-rate vs strong testers)?
+
+### 16.2 Cross-spec optimizations (not yet captured)
+
+**Play AI:**
+- **Continual / incremental learning across set releases.** Lorcana ships new sets
+  regularly; **retraining tabula-rasa each set is wasteful**. Grow the `CardDefId`
+  embedding table, warm-start from the previous net, fine-tune on decks using new
+  cards. Plan for this from day one (embedding table + checkpoint format that admits
+  new rows).
+- **Precompute per-`CardDefId` static analysis once** (is-quester / removal / buff /
+  evasive, cost curve role) and cache — don't recompute per MCTS node.
+- **Share work across determinizations.** N determinizations from one info-set share
+  the public tree; batch their NN evals together and reuse subtrees — big win for
+  IS-MCTS specifically.
+- **Factorized policy head** (action-type × target) to cut candidate-scoring cost,
+  and **quantization-aware training** so the distilled play net is int8-ready.
+- **MuZero is *not* recommended here:** its value is a learned model when the
+  simulator is slow/unknown — but ours is **fast, exact, and the imperfect-info /
+  chance structure** is exactly where MuZero gets awkward. Use AlphaZero-with-real-sim.
+
+**Deck AI:**
+- **Surrogate win-rate predictor (highest-value).** Train a cheap model (reuse the
+  constructor's value head) that predicts a deck's win-rate-vs-field from deck
+  features; spend **real games only on the candidates it ranks highest** (Bayesian
+  optimization with the surrogate as the acquisition function). Can cut real-game
+  evaluations by an order of magnitude — directly attacks Appendix C's cost crux.
+- **Low-rank matchup-matrix completion.** Predict unobserved `M[i][j]` from a
+  low-rank model; only play real games where the prediction is *uncertain*. Avoids
+  the full O(n²) matrix.
+- **Card-level credit assignment** (inclusion/exclusion win-rate deltas, SHAP-like)
+  to guide mutation smarter than random swaps.
+- **Pre-filter the construction pool** to the trainable + non-strictly-dominated
+  cards (shrinks the constructor's action space and the evolutionary search space).
+- **Antithetic + common random numbers** beyond C.5 for further variance reduction.
+
+### 16.3 A more efficient training path (recommended change)
+
+**Do not pursue tabula-rasa AlphaZero.** It reached super-human play *with
+Google-scale compute*; on an M4 (+ optional 6800XT) it is the wrong path. For a
+compute-limited build, **front-load cheap strength and spend scarce RL compute only
+on the margin:**
+
+**Imitation-bootstrapped Expert Iteration (ExIt)** — *adapted for "no human data":*
+1. **Invest in the heuristic teacher first (now the critical path).** With no human
+   logs, the **heuristic + light-search agent is the only knowledge source**, and it
+   wears four hats: BC teacher, self-play opponent, eval gate, and the deck AI's
+   evaluator until the net surpasses it. So build a *real* search-augmented heuristic
+   (eval + a few plies / flat MCTS), not a trivial one — its strength directly sets
+   how fast everything downstream converges. Then **behaviour-clone it** into the
+   policy/value net so self-play starts from competence, not noise. (This promotes
+   slice AI-2 from "pipeline validation" to the backbone.)
+2. **Filtered / offline bootstrap.** Cheaply generate a large corpus with the
+   heuristic+light-search and learn from **winning trajectories** (filtered BC /
+   offline RL) before any expensive online self-play.
+3. **Gumbel-AlphaZero fine-tune** (§14) from that warm start — strong policy
+   improvement at **few sims per move**, the key efficiency lever on this hardware.
+4. **Curriculum on horizon.** Train on **endgames / shortened games first** (easy
+   credit assignment), then full games — faster value-signal convergence.
+5. **Embrace priors everywhere** (heuristic features, card text/DSL features, the
+   baked-in eval as a prior) rather than learning everything from scratch.
+
+**Reordering implication for the slices:** AI-2 (imitation) becomes the strength
+backbone, AI-3's self-play starts from the cloned net (not random), and Gumbel
+search + the §6.5 action reduction are *core*, not optional. This is plausibly the
+difference between a feasible and an infeasible project on the available compute.
+
+**Whole-project efficiency:** because the deck AI reuses a **frozen** play net,
+the cheapest global ordering is — get a *good-enough* play AI fast (heuristic +
+imitation + light search), freeze it for early deck work, and invest in
+champion-level play strength in parallel / later, refreshing the deck AI's evaluator
+as the play net improves (§15 cadence). Don't serialize "perfect play AI → then
+decks."
+
+### 16.4 Does a simpler AI help the target learn faster?
+
+**Yes — early on, and in three distinct roles.** This is *especially* true here,
+where the heuristic is our only non-self knowledge source (§16.1).
+
+1. **Bootstrap teacher.** Behaviour-cloning the simple agent gives the target a
+   competent starting policy, so self-play begins from strength instead of noise
+   (§16.3 step 1). This is the single biggest early speed-up.
+2. **Opponent curriculum (the "right-sized opponent" effect).** Against a much
+   *stronger* opponent a beginner loses ~every game → almost no learning signal
+   (sparse, undifferentiated reward). Against a *simpler* opponent it gets a healthy
+   mix of wins and losses → informative gradients. Starting on simpler opponents and
+   ramping difficulty speeds the early climb.
+3. **League diversity & eval anchor.** Keeping simple agents (random, heuristic) in
+   the opponent league (§14) stops the net from collapsing into a narrow self-play
+   equilibrium and forgetting how to punish "dumb but different" lines — and they
+   anchor the Elo ladder for measurement.
+
+**A near-free difficulty dial.** The heuristic's **search depth/budget** is a
+tunable strength knob (depth-0 = pure eval, depth-1, flat-MCTS-N, …), so we get a
+*graded* curriculum of teachers/opponents from one implementation — no extra agents
+to build. (Bonus: these double as the **easy/medium difficulty levels** for the
+shipped Player-vs-AI product.)
+
+**The crucial caveat — anneal it out.** A simpler AI can only teach up to *its own*
+level, and over-training against it makes the target **overfit to that agent's
+specific weaknesses** rather than get generally strong — capping strength at "beats
+the heuristic," not champion-level. So:
+- Use the simple AI to **bootstrap and as a curriculum floor**, then **decay its
+  weight** over training (like the deck curriculum, §13).
+- The target's real strength comes from **self-play against itself / stronger past
+  checkpoints** — which already provides an *automatic*, perfectly-sized curriculum
+  (the opponent is always exactly as good as you are). The simple AI mainly matters
+  for the **cold start** and for **league robustness**, not as the long-run opponent.
+- **Don't over-feed random/very-weak agents:** lines that only work versus weak play
+  are actively misleading; keep them a small slice, not the diet.
+
+Net: a simpler AI is a strong *accelerant and floor*, not the source of top-end
+strength — use it heavily at the start, taper it deliberately.
+
 ---
 
 ## Appendix A — Engine hot-path change specs (slice AI-0)
@@ -1072,3 +1224,145 @@ pub struct CoverageTracker { /* CardDefId -> play count */ }
   wired into a training `DeckSource`.
 - **Termination:** structured-random always returns within bounded retries (falls
   back to a template), never loops.
+
+---
+
+## Appendix C — Deck-building AI spec
+
+> **Scope.** This is the *second* AI (§1 non-goals): it constructs decks and hands
+> them to the engine for the play AI to pilot. It depends on a competent, **frozen**
+> play AI as its fitness function (§15), so it starts *after* the play model is
+> stable. It builds on Appendix B's `DeckSource` seam and coherence module.
+
+### C.1 What problem this actually is
+
+Deck-building is **black-box, expensive, stochastic, game-theoretic** optimization
+over a constrained combinatorial space:
+- **Search space:** choose 60 cards from the pool under §2.1.1 (≤2 ink colours, ≤4
+  per name / `max_deck_copies`). Astronomically large but heavily constrained.
+- **Objective:** a deck's value = its **win-rate when piloted by the play AI against
+  the field**. One evaluation = many full games × MCTS — *expensive and noisy*.
+- **Game-theoretic, not a point optimum.** Matchups are rock-paper-scissors; the
+  "best" deck depends on the field. The real target is a **robust portfolio / meta
+  equilibrium**, not a single deck that an opponent can hard-counter.
+
+These three facts drive every choice below: minimise evaluations, treat the
+objective as noisy, and optimise for robustness rather than a single peak.
+
+### C.2 Recommended architecture — PSRO outer loop + swappable best-response
+
+Use **PSRO (Policy-Space Response Oracles)** as the meta-framework, with the
+**best-response oracle** swappable from evolutionary (early) to learned (later):
+
+1. **Population & payoff matrix.** Keep a growing population of decks and the
+   empirical win-rate matrix `M[i][j]` = play-AI win-rate of deck *i* vs deck *j*
+   (both seat orders). Cache entries — reused across iterations.
+2. **Solve the meta-game.** Compute a **meta-Nash** mixture over the population (the
+   current "field" — a robust distribution of decks, not one deck).
+3. **Best response.** Find a new deck that maximally beats that field mixture (the
+   oracle, C.3/C.4). Add it to the population.
+4. **Repeat** until the best-response gain (exploitability of the meta-Nash) falls
+   below a threshold. Output the **meta-Nash portfolio** (and its best single deck).
+
+PSRO directly produces a **low-exploitability** result — the deck-side analogue of
+the play-AI's exploitability metric (§14), and the right answer to "beat champions"
+(who *will* try to counter a known deck).
+
+### C.3 Best-response oracle A — evolutionary (the §15 on-ramp)
+
+Stable, parallel, no second net; available as soon as the play AI is decent.
+
+```rust
+use lorcana_engine::{CardRegistry, Deck};
+
+/// Fitness = play-AI win-rate of `deck` vs a field, over `games` (both seats,
+/// varied seeds), piloted by a FROZEN play agent. Noisy → returns mean + n.
+pub trait DeckEvaluator {
+    fn evaluate(&self, deck: &Deck, field: &Field, games: u32, seed: u64) -> WinRate;
+}
+
+/// A field to beat: a (deck, weight) mixture — e.g. the PSRO meta-Nash.
+pub struct Field { pub entries: Vec<(Deck, f32)> }
+pub struct WinRate { pub mean: f32, pub games: u32 }
+
+pub struct Evolutionary {
+    pub pop: Vec<Deck>,
+    pub elitism: usize,
+    pub mutation_rate: f32,
+}
+// mutate(deck): swap/add/remove cards within ink + copy constraints (REUSES the
+//   Appendix B.3 coherence module — illegal moves never proposed).
+// crossover(a, b): merge two decks' card multisets, then repair to legality.
+// select: rank by evaluate(...) vs the field; keep elites; breed the rest.
+```
+
+### C.4 Best-response oracle B — learned constructor (the scalable endgame)
+
+Frame deck construction as a **single-agent MDP** and learn a policy/value net —
+the true "deck-building AI". Reuses the play net's **card embeddings** (transfer:
+the builder starts already "understanding" cards the play AI knows).
+
+```rust
+/// Construct a deck card-by-card. Deterministic transitions; reward only at the end.
+pub struct DeckConstructEnv {
+    partial: Vec<DeckCard>,   // multiset built so far
+    inks: InkSet,             // colours committed (≤2)
+    // ...
+}
+// State  : embedding of the partial deck (set encoder over CardDefId — shared with
+//          the play net) + slots-remaining + ink context + the field summary.
+// Actions: "add card X" over LEGAL additions only (masked by ink/copy/§2.1.1 via
+//          the B.3 constraint module), plus "stop" once ≥ 60.
+// Reward : DeckEvaluator::evaluate(finished_deck, field) — win-rate vs the field.
+// Net    : policy (distribution over addable cards) + value (predicted win-rate).
+// Train  : policy-gradient / value-based RL; optional AlphaZero-style construction
+//          search if branching is tamed by the prior + top-K (huge action set).
+```
+
+A trained constructor **is itself a `DeckSource`** (Appendix B) — closing the loop:
+its decks become adversarial training pressure for the next play-AI generation.
+
+### C.5 Making the expensive objective affordable (the crux)
+
+Evaluation cost dominates; spend it well:
+- **Frozen, fast play net** for fitness games (no training in the loop); **reduced
+  MCTS sims** (consistent, not peak strength).
+- **Racing / Successive-Halving (Hyperband):** give few games to many decks, more
+  games only to survivors — don't burn games proving a bad deck is bad.
+- **Common Random Numbers:** evaluate compared decks on the **same seeds/shuffles**.
+  The engine's seed-in-`GameState` makes this trivial and slashes win-rate variance
+  — a real, free advantage of this engine for deck comparison.
+- **Cache the payoff matrix** across PSRO iterations; only fill new row/column.
+- **Parallel evaluation** across cores/games (`rayon`); deterministic per (decks,seed).
+
+### C.6 Overfitting-to-the-bot risk (the big one)
+
+A deck can learn to beat *this* play AI's quirks rather than be genuinely good.
+Mitigations:
+- Evaluate against a **league of play-net snapshots**, not one (mirror §14).
+- **Refresh** the frozen evaluator periodically (the §15 co-evolution cadence).
+- **Validate** the top decks against the *strongest* available play AI and on
+  **held-out** opponents before trusting them.
+- Watch for degenerate decks that exploit engine/AI artefacts — a signal the play AI
+  (or a rule) needs hardening, not a real find.
+
+### C.7 Crate placement & invariants
+- Lives in `crates/lorcana-ai/src/deckbuild/`; reuses `decks` (Appendix B)
+  coherence + `DeckSource`, and the play `agent`/`net` as a frozen evaluator.
+- **Every emitted/mutated/constructed deck passes `Deck::validate`** (the B.3 module
+  guarantees this by construction; assert it anyway).
+- **Deterministic** given (inputs, seed) → reproducible PSRO runs and manifests.
+
+### C.8 Delivery slices (after the play AI is stable)
+- **DB-0 — `DeckEvaluator` + evolutionary oracle.** Frozen-play-net fitness with
+  CRN + racing; genetic search vs a fixed field (e.g. official decks). *Tests:*
+  legality of all decks; evaluator determinism; evolved deck beats the field
+  baseline at fixed compute.
+- **DB-1 — PSRO outer loop.** Population, cached payoff matrix, meta-Nash solve,
+  exploitability stop. *Tests:* exploitability decreases across iterations; portfolio
+  beats any single fixed deck on average.
+- **DB-2 — Learned constructor.** `DeckConstructEnv` + policy/value net (shared
+  embeddings), as a PSRO oracle and a `DeckSource`. *Tests:* matches/beats the
+  evolutionary oracle at lower evaluation budget; produced decks are legal + coherent.
+- **DB-3 — Co-evolution.** Wire the constructor back as adversarial `DeckSource`
+  training pressure for the play AI, with the §15 refresh cadence.
