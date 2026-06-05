@@ -262,6 +262,128 @@ fn random_discard_removes_a_card_without_a_choice() {
     assert_eq!(state.player(opp).unwrap().discard().iter().count(), 1);
 }
 
+fn started_n(reg: &CardRegistry, n: usize) -> GameState {
+    let decks: Vec<Vec<CardDefId>> = (0..n)
+        .map(|_| (0..30).map(CardDefId::from_raw).collect())
+        .collect();
+    let mut state = GameState::new(decks, 7);
+    let _ = start(&mut state).expect("start");
+    while let GameStatus::AwaitingMulligan(player) = *state.status() {
+        let _ = apply(
+            &mut state,
+            reg,
+            Input::Mulligan {
+                player,
+                put_back: Vec::new(),
+            },
+        )
+        .expect("mulligan");
+    }
+    state
+}
+
+#[test]
+fn each_opponent_chooses_and_discards_in_turn_order() {
+    // "Each opponent chooses and discards a card" (DiscardBy::Owner): the discard
+    // is driven down every opponent in turn, each picking their own card. With
+    // three players the controller's two opponents are each prompted in sequence
+    // via the multi-player discard continuation (§8.4).
+    use lorcana_engine::{DiscardAmount, DiscardBy};
+    let reg = reg_with(quester_with(Effect::Discard {
+        who: PlayerScope::EachOpponent,
+        amount: DiscardAmount::Count(1),
+        by: DiscardBy::Owner,
+    }));
+    let mut state = started_n(&reg, 3);
+    let me = state.active_player();
+    let opponents: Vec<PlayerId> = state
+        .players()
+        .iter()
+        .map(lorcana_engine::PlayerState::id)
+        .filter(|p| *p != me)
+        .collect();
+    assert_eq!(opponents.len(), 2, "three-player game has two opponents");
+
+    let quester = place_quester(&mut state, me);
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+
+    // Each opponent is asked, in turn, to choose one of their own cards. The
+    // controller is never asked to discard.
+    let mut discarded: Vec<(PlayerId, CardId)> = Vec::new();
+    while let Some(player) = state.pending().map(lorcana_engine::PendingDecision::player) {
+        assert!(
+            opponents.contains(&player),
+            "only opponents choose what to discard"
+        );
+        let card = state
+            .player(player)
+            .unwrap()
+            .hand()
+            .iter()
+            .next()
+            .unwrap()
+            .id();
+        discarded.push((player, card));
+        let _ = apply(
+            &mut state,
+            &reg,
+            Input::Decide(Decision::DiscardCards(vec![card])),
+        )
+        .expect("discard");
+    }
+
+    assert_eq!(
+        discarded.len(),
+        opponents.len(),
+        "every opponent discarded exactly once"
+    );
+    for (player, card) in discarded {
+        assert!(
+            in_discard(&state, player, card),
+            "the chosen card was discarded"
+        );
+        assert!(!in_hand(&state, player, card));
+        assert_eq!(
+            state.player(player).unwrap().discard().iter().count(),
+            1,
+            "each opponent discarded exactly one card"
+        );
+    }
+    assert_eq!(
+        state.player(me).unwrap().discard().iter().count(),
+        0,
+        "the controller never discards"
+    );
+}
+
+#[test]
+fn chosen_opponent_discards_multiple_at_random() {
+    // "Chosen opponent ... discards 2 at random": N random cards leave the hand
+    // with no decision, using the seeded RNG (§8.4).
+    use lorcana_engine::{DiscardAmount, DiscardBy};
+    let reg = reg_with(quester_with(Effect::Discard {
+        who: PlayerScope::ChosenOpponent,
+        amount: DiscardAmount::Count(2),
+        by: DiscardBy::Random,
+    }));
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let opp = opponent_of(&state, me);
+    let quester = place_quester(&mut state, me);
+    let before = state.player(opp).unwrap().hand().iter().count();
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+
+    assert!(state.pending().is_none(), "random discard needs no choice");
+    let after = state.player(opp).unwrap().hand().iter().count();
+    assert_eq!(
+        after,
+        before - 2,
+        "exactly two cards were discarded at random"
+    );
+    assert_eq!(state.player(opp).unwrap().discard().iter().count(), 2);
+}
+
 #[test]
 fn reveal_hand_emits_a_hand_revealed_event() {
     use lorcana_engine::GameEvent;
