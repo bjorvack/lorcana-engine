@@ -528,6 +528,11 @@ Challenge/banish triggers into the bag (see
     character named X", matched via the def's `has_name`) and `AllCharacters {
     filter, another }` so "your *other* characters" excludes the source. Tested in
     `tests/targeted_effects.rs`.
+  - [x] **8b-8b — OR-of-category selector:** `parse_filter` recognises " or "
+    joining ≥2 category words and emits `CharacterFilter::Or` of the category
+    leaves ("a character or item" → `Or([Category(Character), Category(Item)])`),
+    dropping the redundant per-token `Category` leaves. Single-category selectors
+    are unchanged. `tests/card_loader.rs::the_dsl_exposes_character_or_item_target`.
   - [x] **8b-9 — start/end-of-turn triggers + turn-progression-with-suspension**
     (clears the Slice 5h deferral): `TriggerCondition::AtStartOfTurn` resolves in
     the Set step (§4.2.2.3), `AtEndOfTurn` in the End phase (§4.4.1), both via
