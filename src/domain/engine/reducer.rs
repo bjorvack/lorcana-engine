@@ -2649,6 +2649,13 @@ fn execute_effect(
                 state, registry, controller, source, *who, count, *to, effect,
             );
         }
+        // Return a chosen card from a player's discard to the destination (§8.x).
+        Effect::Move {
+            what: MoveSource::ChosenFromDiscard { who, filter },
+            to,
+        } => {
+            return resolve_discard_move(state, registry, controller, *who, filter, *to, effect);
+        }
         // The controller plays an eligible card from hand for free (§6).
         Effect::PlayFreeFromHand { filter } => {
             let options = eligible_free_plays(state, registry, controller, filter);
@@ -3443,6 +3450,44 @@ fn resolve_search_deck(
             then: ChoiceThen::SearchDeckTake { deck_owner: owner },
         })
     }
+}
+
+/// Resolve a [`MoveSource::ChosenFromDiscard`] move: choose one card from `whose`
+/// discard matching `filter` (by printed predicates), then move it to `to` (§8.x).
+fn resolve_discard_move(
+    state: &GameState,
+    registry: &CardRegistry,
+    controller: PlayerId,
+    whose: PlayerScope,
+    filter: &CharacterFilter,
+    to: Destination,
+    effect: &Effect,
+) -> Option<Choice> {
+    let owner = match resolve_scope(state, controller, whose) {
+        ScopeOutcome::Players(players) => *players.first()?,
+        ScopeOutcome::Choose(options) => return Some(choose_player(controller, options, effect)),
+    };
+    let options: Vec<CardId> = state
+        .player(owner)
+        .map(|p| {
+            p.discard()
+                .iter()
+                .filter(|c| {
+                    registry
+                        .get(c.definition())
+                        .is_some_and(|def| def_matches_filter(controller, owner, def, filter))
+                })
+                .map(CardInstance::id)
+                .collect()
+        })
+        .unwrap_or_default();
+    (!options.is_empty()).then(|| Choice::Choose {
+        player: controller,
+        options: options.into_iter().map(ChoiceRef::Card).collect(),
+        min: 1,
+        max: 1,
+        then: ChoiceThen::MoveFromDiscard { owner, to },
+    })
 }
 
 /// Evaluate whether a count-based condition holds for the controller.
@@ -4638,6 +4683,16 @@ fn apply_choose_decision(
                 }
             }
             state.shuffle_deck(*deck_owner);
+            resolve_effects(state, registry, player, source, rest, events);
+        }
+        // Move the picked card(s) from `owner`'s discard to `to` (return-from-discard).
+        ChoiceThen::MoveFromDiscard { owner, to } => {
+            let dest = destination_to_self(*to);
+            for pick in &picks {
+                if let ChoiceRef::Card(c) = pick {
+                    move_self_card(state, registry, *owner, *c, dest);
+                }
+            }
             resolve_effects(state, registry, player, source, rest, events);
         }
         // Discard the picked cards, then continue down the remaining players; the

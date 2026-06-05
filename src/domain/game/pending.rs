@@ -73,6 +73,14 @@ pub enum ChoiceThen {
         /// Whose deck the cards were taken from.
         deck_owner: PlayerId,
     },
+    /// Move the picked card(s) from `owner`'s discard to `to` ("return a card from
+    /// your discard to your hand", §8.x).
+    MoveFromDiscard {
+        /// Whose discard the cards came from.
+        owner: PlayerId,
+        /// Where the picked cards go (usually the hand).
+        to: Destination,
+    },
 }
 
 /// A point in bag resolution that requires a player's input before the engine

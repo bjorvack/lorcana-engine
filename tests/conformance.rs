@@ -2851,3 +2851,82 @@ fn a_song_is_sung_for_free_by_exerting_a_singer() {
         "the sung song went to its owner's discard"
     );
 }
+
+/// "Return a character card from your discard to your hand" (§8.x): a quester with
+/// a return-from-discard ability lets the controller pick a matching discarded
+/// card, which moves to hand.
+#[test]
+fn return_a_character_from_discard_to_hand() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Necromancer"
+        type = "Character"
+        cost = 2
+        ink = ["Amethyst"]
+        strength = 1
+        willpower = 3
+        lore = 1
+        [[card.abilities]]
+        on = "quest"
+        do = { return_from_discard = "character card" }
+        [[card]]
+        name = "Fallen Hero"
+        type = "Character"
+        cost = 1
+        ink = ["Amethyst"]
+        strength = 1
+        willpower = 1
+        lore = 1
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let necromancer = place(&mut state, me, 100, 0, 1, 3, true);
+
+    // Seed a character card into my discard.
+    let fallen = CardId::from_raw(200);
+    let mut inst = CardInstance::new(
+        fallen,
+        CardDefId::from_raw(1),
+        Conditions {
+            ready: false,
+            damage: 0,
+            drying: false,
+            facedown: false,
+        },
+    );
+    inst.set_stats(Some(CharacterStats::new(1, 1, 1)));
+    state.player_mut(me).unwrap().discard_mut().push(inst);
+
+    let hand_before = hand_len(&state, me);
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Quest {
+            character: necromancer,
+        },
+    )
+    .expect("quest");
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(lorcana_engine::Decision::ChooseTarget(fallen)),
+    )
+    .expect("choose the discarded card");
+
+    assert!(
+        state
+            .player(me)
+            .unwrap()
+            .hand()
+            .iter()
+            .any(|c| c.id() == fallen),
+        "the discarded character returned to hand"
+    );
+    assert!(
+        !state.player(me).unwrap().discard().contains(fallen),
+        "and left the discard"
+    );
+    assert_eq!(hand_len(&state, me), hand_before + 1);
+}

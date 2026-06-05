@@ -85,6 +85,15 @@ pub enum MoveSource {
         /// How many off the top.
         count: Amount,
     },
+    /// A single card chosen from `who`'s **discard** matching `filter` ("return a
+    /// character card from your discard to your hand", §8.x). Resolved to one pick
+    /// and moved to the [`Effect::Move`] destination.
+    ChosenFromDiscard {
+        /// Whose discard to choose from.
+        who: PlayerScope,
+        /// Which discarded cards qualify (by printed predicates / category).
+        filter: CharacterFilter,
+    },
 }
 
 /// Where a [`Effect::Move`] sends cards.

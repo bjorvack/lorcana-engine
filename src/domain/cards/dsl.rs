@@ -349,6 +349,17 @@ fn effect_from_table(t: &toml::Table) -> Result<Effect, String> {
             what: MoveSource::Card(target_from_value(v)?),
             to: Destination::Hand,
         })
+    } else if let Some(Value::String(sel)) = t.get("return_from_discard") {
+        // "Return a <selector> card from your discard to your hand" — `who`
+        // defaults to You; the selector parses to a printed-predicate filter.
+        let filter = parse_filter(sel).ok_or_else(|| format!("unparseable filter {sel:?}"))?;
+        Ok(Effect::Move {
+            what: MoveSource::ChosenFromDiscard {
+                who: scope(PlayerScope::You)?,
+                filter,
+            },
+            to: Destination::Hand,
+        })
     } else if let Some(v) = t.get("into_inkwell") {
         Ok(Effect::Move {
             what: MoveSource::Card(target_from_value(v)?),

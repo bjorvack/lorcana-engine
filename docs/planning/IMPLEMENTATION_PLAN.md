@@ -734,6 +734,10 @@ mechanics ranked by card count, with the remaining gaps to close in order:
     (milling / digging). `Destination = Hand | Inkwell | Discard | Deck(pos)`.
     Mill = `Move { DeckTop, Discard }`, threads `PlayerScope` (so "top N of chosen
     player's deck into their discard" works in multiplayer). `tests/multiplayer.rs`.
+    `MoveSource::ChosenFromDiscard { who, filter }` returns a chosen discarded card
+    matching a printed-predicate filter to the destination ("return a character /
+    item card from your discard to your hand"); DSL `return_from_discard = "<sel>"`.
+    `tests/conformance.rs::return_a_character_from_discard_to_hand`.
     **Remaining:** other-player look-at-top (scoped `LookAtTopAndTake`).
 - [x] **dynamic continuous statics** — `StatModifier`/`StaticAbility` gain
       `per: Count` (registry-free `ControlledCharacters`/`CardsInHand`/`DamageOnSelf`);
