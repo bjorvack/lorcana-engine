@@ -4476,6 +4476,37 @@ fn banish_by_effect(
     enqueue_character_event(state, registry, Fired::LeavesPlay, card, owner);
 }
 
+/// §10.14 Vanish: when an opponent chooses this character as part of resolving an
+/// **action's** effect, banish it (after the effect resolves; if it has already
+/// left play it does nothing, §10.14.3). Called from the choice continuations, so
+/// it never fires for no-choice effects ("deal damage to all characters").
+fn vanish_after_action_choice(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    action_player: PlayerId,
+    source: CardId,
+    chosen: CardId,
+    events: &mut Vec<GameEvent>,
+) {
+    // Only actions trigger Vanish (§10.14.1). The played action sits in the
+    // chooser's discard while its effect resolves.
+    let is_action = state
+        .player(action_player)
+        .and_then(|p| p.discard().iter().find(|c| c.id() == source))
+        .and_then(|c| registry.get(c.definition()))
+        .is_some_and(|d| matches!(d.kind(), CardKind::Action));
+    if !is_action {
+        return;
+    }
+    // Must be an opponent's character still in play (else §10.14.3: no effect).
+    let Some(owner) = owner_holding(state, chosen) else {
+        return;
+    };
+    if owner != action_player && character_has_keyword(state, registry, chosen, &Keyword::Vanish) {
+        banish_by_effect(state, registry, chosen, events);
+    }
+}
+
 /// The in-play characters matching a [`CharacterFilter`] from `controller`'s
 /// perspective (the algebra is evaluated per card).
 fn matching_characters(
@@ -4800,6 +4831,7 @@ fn apply_choose_decision(
             for pick in &picks {
                 if let ChoiceRef::Card(c) = pick {
                     apply_effect_to(state, registry, player, source, *c, effect, events);
+                    vanish_after_action_choice(state, registry, player, source, *c, events);
                 }
             }
             resolve_effects(state, registry, player, source, rest, events);
@@ -4812,6 +4844,7 @@ fn apply_choose_decision(
                     for effect in effects {
                         apply_effect_to(state, registry, player, source, *c, effect, events);
                     }
+                    vanish_after_action_choice(state, registry, player, source, *c, events);
                 }
             }
             resolve_effects(state, registry, player, source, rest, events);

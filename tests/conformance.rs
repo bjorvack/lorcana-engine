@@ -3427,3 +3427,127 @@ fn damage_is_redirected_to_a_protector() {
         "the protector takes the counters"
     );
 }
+
+/// Vanish (§10.14): when an opponent chooses this character as part of resolving
+/// an action's effect, banish it (after the effect resolves). A non-removing
+/// action (−2 {S}) on a Vanish character still banishes it.
+#[test]
+fn vanish_banishes_a_character_chosen_by_an_opponents_action() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Poke"
+        type = "Action"
+        cost = 0
+        ink = ["Amber"]
+        [[card.abilities]]
+        on = "play"
+        do = { give_strength = -2, target = "chosen opposing character" }
+        [[card]]
+        name = "Ghost"
+        type = "Character"
+        cost = 2
+        ink = ["Amber"]
+        strength = 3
+        willpower = 5
+        lore = 1
+        keywords = ["Vanish"]
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let foe = opponent_of(&state, me);
+    let ghost = place(&mut state, foe, 200, 1, 3, 5, true);
+
+    // Play Poke (cost 0) and choose the opposing Vanish character.
+    let poke = CardId::from_raw(100);
+    state
+        .player_mut(me)
+        .unwrap()
+        .hand_mut()
+        .push(CardInstance::new(
+            poke,
+            CardDefId::from_raw(0),
+            Conditions::faceup_idle(),
+        ));
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::PlayCard {
+            card: poke,
+            shift_onto: None,
+        },
+    )
+    .expect("play poke");
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(lorcana_engine::Decision::ChooseTarget(ghost)),
+    )
+    .expect("choose ghost");
+
+    assert!(
+        !state.player(foe).unwrap().play().contains(ghost),
+        "Vanish banished the chosen character"
+    );
+    assert!(
+        state.player(foe).unwrap().discard().contains(ghost),
+        "...into its owner's discard"
+    );
+}
+
+/// Vanish only fires on an actual choice (§10.14.1 "chosen"): a no-choice
+/// "all opposing characters" action does not banish a Vanish character.
+#[test]
+fn vanish_does_not_fire_without_a_choice() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Sweep"
+        type = "Action"
+        cost = 0
+        ink = ["Amber"]
+        [[card.abilities]]
+        on = "play"
+        do = { give_strength = -1, target = "all opposing characters" }
+        [[card]]
+        name = "Ghost"
+        type = "Character"
+        cost = 2
+        ink = ["Amber"]
+        strength = 3
+        willpower = 5
+        lore = 1
+        keywords = ["Vanish"]
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let foe = opponent_of(&state, me);
+    let ghost = place(&mut state, foe, 200, 1, 3, 5, true);
+
+    let sweep = CardId::from_raw(100);
+    state
+        .player_mut(me)
+        .unwrap()
+        .hand_mut()
+        .push(CardInstance::new(
+            sweep,
+            CardDefId::from_raw(0),
+            Conditions::faceup_idle(),
+        ));
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::PlayCard {
+            card: sweep,
+            shift_onto: None,
+        },
+    )
+    .expect("play sweep");
+
+    assert!(
+        state.player(foe).unwrap().play().contains(ghost),
+        "no choice was made, so Vanish does not banish"
+    );
+}

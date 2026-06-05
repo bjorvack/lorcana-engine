@@ -390,12 +390,13 @@ see the TODO there). Split smallest-first like Slice 5.
   via `current_character_stats`, snapshot at quest time) to another chosen
   character as a flat `+N` `UntilEndOfTurn` modifier. Tested in `tests/support.rs`.
 - **Ward** (§10.15): done — `Restriction::CantBeChosen` (see the Ward entry in
-  Slice 8). **Vanish** (§10.14): parsed (`Keyword::Vanish`) but **no engine
-  behaviour yet** — it's a triggered ability ("when an opponent chooses this
-  character as part of resolving an *action's* effect, banish it, after the action
-  resolves"). Needs the *choosing* sites to be action-attributed (like Ward gates
-  *choosing*, not all-character effects) so the banish fires only on an opponent's
-  action-target choice. Focused follow-up.
+  Slice 8). **Vanish** (§10.14): done — `vanish_after_action_choice` runs in the
+  choice continuations (`ChoiceThen::ApplyToEach` / `ApplyAllTo`), so it fires only
+  on an actual *choice* made resolving an opponent's **action** (the action sits in
+  the chooser's discard); the chosen character is banished after the effect
+  resolves, and nothing happens if it already left play (§10.14.3) or if the effect
+  made no choice ("all characters"). `tests/conformance.rs::{vanish_banishes_a_character_chosen_by_an_opponents_action,
+  vanish_does_not_fire_without_a_choice}`.
 - **Singer / Sing Together** (§10.11–12): songs — **Slice 7**.
 
 Challenge/banish triggers into the bag (see
