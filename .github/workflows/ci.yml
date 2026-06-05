@@ -40,7 +40,9 @@ jobs:
         run: cargo clippy -p lorcana-wasm --target wasm32-unknown-unknown --all-features -- -D warnings
       - name: Unit tests (host)
         run: cargo test -p lorcana-wasm
-      - uses: jetli/wasm-pack-action@v0.4.0
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: wasm-pack
       - name: Build wasm package
         run: bash scripts/build-wasm.sh
 
@@ -53,7 +55,9 @@ jobs:
         with:
           targets: wasm32-unknown-unknown
       - uses: Swatinem/rust-cache@v2
-      - uses: jetli/wasm-pack-action@v0.4.0
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: wasm-pack
       - uses: actions/setup-node@v5
         with:
           node-version-file: web/.nvmrc
@@ -103,7 +107,7 @@ jobs:
           fail_ci_if_error: false
           token: ${{ secrets.CODECOV_TOKEN }}
       - name: Upload coverage report artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: lcov
           path: lcov.info
