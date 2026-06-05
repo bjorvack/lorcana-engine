@@ -1564,13 +1564,20 @@ fn apply_use_ability(
         .ok_or(Rejected::UnknownCard(card))?
         .activated_abilities()
         .iter()
-        .map(|a| (a.cost.ink, a.cost.exert_self, a.effect.clone()));
+        .map(|a| {
+            (
+                a.cost.ink,
+                a.cost.exert_self,
+                a.cost.banish_self,
+                a.effect.clone(),
+            )
+        });
     let granted = state
         .granted_activated()
         .iter()
         .filter(|g| g.source == card)
-        .map(|g| (g.ink, g.exert_self, g.effect.clone()));
-    let (ink, exert_self, effect) = printed
+        .map(|g| (g.ink, g.exert_self, false, g.effect.clone()));
+    let (ink, exert_self, banish_self, effect) = printed
         .chain(granted)
         .nth(ability_index)
         .ok_or(Rejected::NoSuchAbility(card))?;
@@ -1607,6 +1614,11 @@ fn apply_use_ability(
         player: active,
         card,
     }];
+    // "Banish this card" cost: banish the source before resolving (it fires the
+    // source's banish / leaves-play triggers, §7.5.3).
+    if banish_self {
+        banish_by_effect(state, registry, card, &mut events);
+    }
     resolve_effects(state, registry, active, card, vec![effect], &mut events);
     events.extend(game_state_check_with_triggers(state, registry));
     // Resolve any triggers the effect produced (e.g. a banished card's "when

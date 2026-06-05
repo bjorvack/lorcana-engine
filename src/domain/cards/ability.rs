@@ -108,11 +108,6 @@ impl TriggeredAbility {
 ///
 /// Models the dominant shapes from the card pool: `{E}` (exert the source) and
 /// `N {I}` (pay ink), alone or combined.
-///
-/// TODO(cost atoms — Slice 5a): add the remaining activation-cost atoms found in
-/// the survey — banish-this (items, ~34 abilities) and discard-a-card — as
-/// fields/variants when a card needs them. See `docs/planning/IMPLEMENTATION_PLAN.md`
-/// ("Slice 5a").
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub struct AbilityCost {
     /// Exert the source card (`{E}`). The source must be ready and not drying
@@ -120,19 +115,33 @@ pub struct AbilityCost {
     pub exert_self: bool,
     /// Ink to pay (`N {I}`), exerted from the inkwell like a card's cost.
     pub ink: u32,
+    /// Banish the source card as part of the cost ("Banish this item — …", ~34
+    /// item abilities). Paid before the effect resolves (§7.5.3).
+    pub banish_self: bool,
 }
 
 impl AbilityCost {
-    /// A cost of exerting the source and paying `ink`.
+    /// A cost of exerting the source and paying `ink` (no banish).
     #[must_use]
     pub const fn new(exert_self: bool, ink: u32) -> Self {
-        Self { exert_self, ink }
+        Self {
+            exert_self,
+            ink,
+            banish_self: false,
+        }
     }
 
     /// The `{E}` cost (exert the source only).
     #[must_use]
     pub const fn exert() -> Self {
         Self::new(true, 0)
+    }
+
+    /// Add a "banish this card" atom to the cost.
+    #[must_use]
+    pub const fn banishing_self(mut self) -> Self {
+        self.banish_self = true;
+        self
     }
 }
 

@@ -3119,3 +3119,59 @@ fn put_a_hand_card_into_the_inkwell() {
     );
     assert_eq!(state.player(me).unwrap().inkwell().len(), ink_before + 1);
 }
+
+/// "Banish this item — gain 2 lore" (§7.5.3): activating pays by banishing the
+/// source, then resolves the effect.
+#[test]
+fn banish_this_item_as_an_activation_cost() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Lucky Charm"
+        type = "Item"
+        cost = 1
+        ink = ["Amber"]
+        [[card.activated]]
+        cost = { banish = true }
+        do = { gain_lore = 2 }
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    // Place the item (def 0, no character stats).
+    let charm = CardId::from_raw(100);
+    state
+        .player_mut(me)
+        .unwrap()
+        .play_mut()
+        .push(CardInstance::new(
+            charm,
+            CardDefId::from_raw(0),
+            Conditions::faceup_idle(),
+        ));
+
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::UseAbility {
+            card: charm,
+            ability: 0,
+        },
+    )
+    .expect("activate");
+
+    assert_eq!(lore(&state, me), 2, "the ability's effect resolved");
+    assert!(
+        !state
+            .player(me)
+            .unwrap()
+            .play()
+            .iter()
+            .any(|c| c.id() == charm),
+        "the item was banished as the cost"
+    );
+    assert!(
+        state.player(me).unwrap().discard().contains(charm),
+        "...and is in the discard"
+    );
+}

@@ -1036,6 +1036,9 @@ pub struct TomlCost {
     /// Ink to pay.
     #[serde(default)]
     pub ink: u32,
+    /// Whether activating banishes the source ("Banish this item — …").
+    #[serde(default)]
+    pub banish: bool,
 }
 
 impl TomlActivated {
@@ -1044,8 +1047,12 @@ impl TomlActivated {
     /// # Errors
     /// Returns a detail string if the effect can't be parsed.
     pub fn to_ability(&self) -> Result<ActivatedAbility, String> {
+        let mut cost = AbilityCost::new(self.cost.exert, self.cost.ink);
+        if self.cost.banish {
+            cost = cost.banishing_self();
+        }
         Ok(ActivatedAbility::new(
-            AbilityCost::new(self.cost.exert, self.cost.ink),
+            cost,
             effect_from_value(&self.effect)?,
         ))
     }

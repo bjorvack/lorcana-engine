@@ -250,9 +250,11 @@ selectors over 42 classifications.
 
 ### Slice 5a — Activated abilities ✅
 - `ActivatedAbility { cost, effect }` on `CardDefinition`; `Input::UseAbility`.
-- Costs: exert-self + pay-ink now (the dominant `{E}` / `{E}+N{I}` shapes);
-  banish-self / discard deferred (TODO with back-link). Drying characters can't
-  pay an `{E}` cost (§4.2.2.1).
+- Costs: exert-self + pay-ink + **banish-self** (`AbilityCost.banish_self`, DSL
+  `cost = { banish = true }`; "Banish this item — …" pays by banishing the source,
+  firing its banish / leaves-play triggers before the effect resolves, §7.5.3).
+  Discard-a-card cost deferred. Drying characters can't pay an `{E}` cost (§4.2.2.1).
+  `tests/conformance.rs::banish_this_item_as_an_activation_cost`.
 - Resolve **immediately**, not via the bag (§7.5.3.3); reuse the minimal effects.
 - [x] Acceptance: an activated ability pays its cost and applies its effect;
       illegal if the cost is unpayable or the source is drying/exerted.
