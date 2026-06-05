@@ -4,7 +4,7 @@
 use lorcana_engine::{
     AbilityCost, ActivatedAbility, Amount, CardDefId, CardKind, CharacterFilter, Classification,
     Condition, Effect, Keyword, NumericFilter, PlayerScope, ScopedEvent, ShiftAbility, Stat,
-    StaticAbility, StaticTarget, Target, TargetSide, TriggerCondition, load_toml,
+    StaticAbility, StaticEffect, StaticTarget, Target, TargetSide, TriggerCondition, load_toml,
 };
 
 /// The committed example deck, compiled in so the test needs no runtime files.
@@ -325,10 +325,12 @@ fn the_effect_dsl_maps_abilities_onto_the_ast() {
                 classifications: vec![Classification::new("Hero")],
                 include_self: false,
             },
-            stat: Stat::Strength,
-            delta: 1,
+            effect: StaticEffect::Stat {
+                stat: Stat::Strength,
+                delta: 1,
+                per: None,
+            },
             condition: None,
-            per: None,
         }]
     );
 }
@@ -475,17 +477,21 @@ fn the_dsl_supports_dynamic_amounts_conditionals_and_static_per_while() {
         &[
             StaticAbility {
                 target: StaticTarget::SelfCard,
-                stat: Stat::Strength,
-                delta: 1,
+                effect: StaticEffect::Stat {
+                    stat: Stat::Strength,
+                    delta: 1,
+                    per: Some(Amount::PerMatchingCharacter(villains())),
+                },
                 condition: None,
-                per: Some(Amount::PerMatchingCharacter(villains())),
             },
             StaticAbility {
                 target: StaticTarget::SelfCard,
-                stat: Stat::Lore,
-                delta: 1,
+                effect: StaticEffect::Stat {
+                    stat: Stat::Lore,
+                    delta: 1,
+                    per: None,
+                },
                 condition: Some(Condition::SourceExerted),
-                per: None,
             },
         ]
     );
@@ -1471,11 +1477,38 @@ fn the_dsl_supports_static_per_cards_in_hand() {
     )
     .expect("loads");
     let stat = &defs[0].static_abilities()[0];
-    assert_eq!(stat.stat, Stat::Strength);
-    assert_eq!(stat.delta, 1);
     assert_eq!(
-        stat.per,
-        Some(Amount::CardsInHand),
+        stat.effect,
+        StaticEffect::Stat {
+            stat: Stat::Strength,
+            delta: 1,
+            per: Some(Amount::CardsInHand),
+        },
         "+1 strength per card in hand"
+    );
+}
+
+#[test]
+fn the_dsl_exposes_a_grant_static() {
+    use lorcana_engine::{Property, Restriction};
+    let defs = load_toml(
+        r#"
+        [[card]]
+        name = "Gantu"
+        type = "Character"
+        cost = 5
+        strength = 4
+        willpower = 5
+        lore = 2
+        [[card.statics]]
+        grant = "cant_be_challenged"
+        to = "your other characters"
+        "#,
+    )
+    .expect("loads");
+    assert_eq!(
+        defs[0].static_abilities()[0].effect,
+        StaticEffect::Grant(Property::Restriction(Restriction::CantBeChallenged)),
+        "grant static maps to a continuous restriction"
     );
 }

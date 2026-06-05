@@ -10,8 +10,8 @@ pub mod domain;
 pub use application::{Game, SetupError};
 pub use domain::cards::{
     AbilityCost, ActivatedAbility, CardDefinition, CardKind, CardRegistry, GameRuleStatic, Keyword,
-    LoadError, ShiftAbility, ShiftCost, ShiftKind, StaticAbility, StaticTarget, TomlCard,
-    TriggeredAbility, TurnGate, load_toml, load_toml_from,
+    LoadError, ShiftAbility, ShiftCost, ShiftKind, StaticAbility, StaticEffect, StaticTarget,
+    TomlCard, TriggeredAbility, TurnGate, load_toml, load_toml_from,
 };
 pub use domain::deck::{Deck, DeckCard, DeckError};
 pub use domain::effects::{

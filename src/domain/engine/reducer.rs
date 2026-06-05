@@ -3,7 +3,7 @@
 use super::input::{Decision, Input, Rejected};
 use crate::domain::cards::{
     CardDefinition, CardKind, CardRegistry, GameRuleStatic, Keyword, ShiftAbility, ShiftCost,
-    ShiftKind, StaticAbility, StaticTarget,
+    ShiftKind, StaticAbility, StaticEffect, StaticTarget,
 };
 use crate::domain::effects::{
     Amount, CardCategory, CharacterFilter, CountCondition, DeckPosition, DelayedWhen, Destination,
@@ -2277,20 +2277,38 @@ fn apply_enter_statics(
                 except: if *include_self { None } else { Some(card) },
             },
         };
-        let mut modifier = StatModifier::new(
-            card,
-            target,
-            ability.stat,
-            ability.delta,
-            ModifierDuration::WhileSourceInPlay,
-        );
-        if let Some(condition) = ability.condition {
-            modifier = modifier.with_condition(condition);
+        match &ability.effect {
+            StaticEffect::Stat { stat, delta, per } => {
+                let mut modifier = StatModifier::new(
+                    card,
+                    target,
+                    *stat,
+                    *delta,
+                    ModifierDuration::WhileSourceInPlay,
+                );
+                if let Some(condition) = ability.condition {
+                    modifier = modifier.with_condition(condition);
+                }
+                if let Some(per) = per {
+                    modifier = modifier.with_count(per.clone());
+                }
+                state.add_modifier(modifier);
+            }
+            StaticEffect::Grant(property) => {
+                // A continuous restriction / keyword grant ("your characters can't
+                // be challenged", "this character can't ready", §7.6).
+                let mut modifier = PropertyModifier::new(
+                    card,
+                    target,
+                    property.clone(),
+                    ModifierDuration::WhileSourceInPlay,
+                );
+                if let Some(condition) = ability.condition {
+                    modifier = modifier.with_condition(condition);
+                }
+                state.add_property_modifier(modifier);
+            }
         }
-        if let Some(per) = &ability.per {
-            modifier = modifier.with_count(per.clone());
-        }
-        state.add_modifier(modifier);
     }
 }
 

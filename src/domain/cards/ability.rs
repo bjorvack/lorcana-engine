@@ -2,7 +2,7 @@
 
 use crate::domain::effects::Amount;
 use crate::domain::effects::{Effect, TriggerCondition};
-use crate::domain::game::{Condition, Stat};
+use crate::domain::game::{Condition, Property, Stat};
 use crate::domain::types::card::Classification;
 use serde::{Deserialize, Serialize};
 
@@ -182,27 +182,35 @@ pub enum StaticTarget {
     },
 }
 
-/// A static ability that continuously modifies a characteristic while the card
-/// is in play (§7.6).
-///
-/// TODO(duration — Slice 5f): add timed statics ("until end of turn"); a resolved
-/// timed effect must snapshot its targets and not affect later-entering cards
-/// (§7.6.3), unlike the continuous statics here. See
-/// `docs/planning/IMPLEMENTATION_PLAN.md` ("Slice 5f").
+/// What a [`StaticAbility`] continuously does to its targets while in play (§7.6).
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub enum StaticEffect {
+    /// Modify a characteristic by `delta` (× `per` count if set) — "+2 {S}",
+    /// "+1 {L} for each other Villain you have in play".
+    Stat {
+        /// The characteristic modified.
+        stat: Stat,
+        /// The signed amount (e.g. `+2` or `-1`).
+        delta: i32,
+        /// If set, the effective delta is `delta × count` (a dynamic "for each …").
+        per: Option<Amount>,
+    },
+    /// Continuously grant a [`Property`] (restriction / keyword / permission) —
+    /// "your characters can't be challenged", "this character can't ready".
+    Grant(Property),
+}
+
+/// A static ability that continuously affects its targets while the card is in
+/// play (§7.6): a stat modifier or a granted property.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct StaticAbility {
-    /// Which cards the modifier applies to.
+    /// Which cards the ability applies to.
     pub target: StaticTarget,
-    /// The characteristic modified.
-    pub stat: Stat,
-    /// The signed amount (e.g. `+2` or `-1`).
-    pub delta: i32,
-    /// A condition gating the modifier ("while this character is exerted, …"); it
+    /// What it does to them.
+    pub effect: StaticEffect,
+    /// A condition gating the ability ("while this character is exerted, …"); it
     /// applies only while the condition holds. `None` means always.
     pub condition: Option<Condition>,
-    /// If set, the effective delta is `delta × count` — a dynamic "+N {stat} for
-    /// each …" static (e.g. "+1 {L} for each other Villain you have in play").
-    pub per: Option<Amount>,
 }
 
 /// A static ability that modifies a **game rule** while the card is in play (the
@@ -226,10 +234,12 @@ impl StaticAbility {
     pub const fn self_modifier(stat: Stat, delta: i32) -> Self {
         Self {
             target: StaticTarget::SelfCard,
-            stat,
-            delta,
+            effect: StaticEffect::Stat {
+                stat,
+                delta,
+                per: None,
+            },
             condition: None,
-            per: None,
         }
     }
 
@@ -246,10 +256,12 @@ impl StaticAbility {
                 classifications,
                 include_self,
             },
-            stat,
-            delta,
+            effect: StaticEffect::Stat {
+                stat,
+                delta,
+                per: None,
+            },
             condition: None,
-            per: None,
         }
     }
 
@@ -261,10 +273,12 @@ impl StaticAbility {
     }
 
     /// Make this static's delta scale by a live [`Amount`] (builder), for "+N
-    /// {stat} for each …".
+    /// {stat} for each …". No-op on a non-stat (grant) static.
     #[must_use]
     pub fn with_count(mut self, per: Amount) -> Self {
-        self.per = Some(per);
+        if let StaticEffect::Stat { per: slot, .. } = &mut self.effect {
+            *slot = Some(per);
+        }
         self
     }
 }

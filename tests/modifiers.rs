@@ -5,7 +5,8 @@
 use lorcana_engine::{
     CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterStats, Classification,
     Condition, Conditions, GameState, GameStatus, Input, ModifierDuration, ModifierTarget,
-    PlayerId, Stat, StatModifier, StaticAbility, apply, start,
+    PlayerId, Property, Restriction, Stat, StatModifier, StaticAbility, StaticEffect, StaticTarget,
+    apply, start,
 };
 
 fn started_with(registry: &CardRegistry) -> GameState {
@@ -138,6 +139,54 @@ fn self_static_modifier_applies_when_played() {
 
     // Base 2 + static 2 = current 4 the moment it enters play (§7.6.2).
     assert_eq!(state.current_character_stats(hand[1]).unwrap().strength, 4);
+}
+
+/// A `StaticEffect::Grant` static applies a continuous restriction to its targets
+/// while in play (§7.6) — here "this character can't be challenged".
+#[test]
+fn a_grant_static_applies_a_continuous_restriction() {
+    let registry: CardRegistry = (0..30)
+        .map(|n| {
+            CardDefinition::character(CardDefId::from_raw(n), 1, true, 2, 3, 1).with_static(vec![
+                StaticAbility {
+                    target: StaticTarget::SelfCard,
+                    effect: StaticEffect::Grant(Property::Restriction(
+                        Restriction::CantBeChallenged,
+                    )),
+                    condition: None,
+                },
+            ])
+        })
+        .collect();
+    let mut state = started_with(&registry);
+    let active = state.active_player();
+    let hand: Vec<CardId> = state
+        .player(active)
+        .unwrap()
+        .hand()
+        .iter()
+        .map(CardInstance::id)
+        .collect();
+    let _ = apply(
+        &mut state,
+        &registry,
+        Input::PutCardInInkwell { card: hand[0] },
+    )
+    .expect("ink");
+    let _ = apply(
+        &mut state,
+        &registry,
+        Input::PlayCard {
+            card: hand[1],
+            shift_onto: None,
+        },
+    )
+    .expect("play");
+
+    assert!(
+        state.has_restriction(hand[1], Restriction::CantBeChallenged),
+        "the played character has the continuously-granted restriction"
+    );
 }
 
 /// Place an in-play character with the given strength and classifications.

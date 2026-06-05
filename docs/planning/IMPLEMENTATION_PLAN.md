@@ -757,12 +757,18 @@ mechanics ranked by card count, with the remaining gaps to close in order:
     pick from whichever zone it is in. `tests/conformance.rs::return_a_character_from_discard_to_hand`,
     `::put_a_hand_card_into_the_inkwell`.
     **Remaining:** other-player look-at-top (scoped `LookAtTopAndTake`).
-- [x] **dynamic continuous statics** — `StaticAbility.per: Option<Amount>` reuses
-      the effect `Amount` algebra (`PerMatchingCharacter` / `CardsInHand` /
-      `DamageOnSource` / `StatOf`); effective delta = `delta × count`, evaluated
-      live in `stat_delta`. DSL `per = "cards in hand"` / `"per <filter>"` /
-      `"damage on self"`. Hades / Jafar / Minnie.
-      `tests/card_loader.rs::the_dsl_supports_static_per_cards_in_hand`.
+- [x] **dynamic continuous statics** — `StaticAbility { target, effect, condition }`
+      where `StaticEffect` is `Stat { stat, delta, per }` **or** `Grant(Property)`.
+      Stat statics reuse the effect `Amount` algebra for `per`
+      (`PerMatchingCharacter` / `CardsInHand` / `DamageOnSource` / `StatOf`),
+      effective delta = `delta × count` evaluated live in `stat_delta`; DSL
+      `per = "cards in hand"` / `"per <filter>"` / `"damage on self"` (Hades / Jafar /
+      Minnie). **Grant statics** register a continuous `PropertyModifier`
+      (`WhileSourceInPlay` + optional `while` condition), so "your other characters
+      can't be challenged" / "this character can't ready" work via DSL
+      `grant = "cant_be_challenged"` (Gantu / Mother Gothel).
+      `tests/card_loader.rs::the_dsl_supports_static_per_cards_in_hand`,
+      `::the_dsl_exposes_a_grant_static`, `tests/modifiers.rs::a_grant_static_applies_a_continuous_restriction`.
 - [x] **move damage** (113) — `Effect::MoveDamage { from, to, amount }`: up to N
       counters from one character to another (one side `SelfCard`, other chosen),
       capped by `from`'s damage; lethal banishes. `tests/targeted_effects.rs`.

@@ -23,7 +23,9 @@
 //! ```
 
 use super::loader::keyword_from;
-use super::{AbilityCost, ActivatedAbility, StaticAbility, StaticTarget, TriggeredAbility};
+use super::{
+    AbilityCost, ActivatedAbility, StaticAbility, StaticEffect, StaticTarget, TriggeredAbility,
+};
 use crate::domain::effects::{
     Amount, CardCategory, CharacterFilter, Comparison, CountCondition, DeckPosition, Destination,
     DiscardAmount, DiscardBy, Effect, MoveSource, NumericFilter, PlayerScope, ScopedEvent,
@@ -1063,15 +1065,19 @@ impl TomlActivated {
     }
 }
 
-/// One `[[card.statics]]` table: a continuous stat modifier on a selector.
+/// One `[[card.statics]]` table: a continuous stat modifier or granted property.
 #[derive(Debug, Clone, Deserialize)]
 pub struct TomlStatic {
-    /// `+N`/`-N` to `{S}` (set exactly one of strength/willpower/lore).
+    /// `+N`/`-N` to `{S}` (set exactly one of strength/willpower/lore, OR `grant`).
     pub strength: Option<i32>,
     /// `+N`/`-N` to `{W}`.
     pub willpower: Option<i32>,
     /// `+N`/`-N` to `{L}`.
     pub lore: Option<i32>,
+    /// Continuously grant a restriction instead of a stat delta — `cant_ready`,
+    /// `cant_be_challenged`, `cant_challenge`, … ("your characters can't be
+    /// challenged", §7.6).
+    pub grant: Option<String>,
     /// Who it applies to: "this" / "your characters" / "your other Villain characters".
     #[serde(rename = "to")]
     pub target: String,
@@ -1086,28 +1092,10 @@ impl TomlStatic {
     /// Build the [`StaticAbility`].
     ///
     /// # Errors
-    /// Returns a detail string if exactly-one-stat or the target can't be resolved.
+    /// Returns a detail string if exactly-one-effect or the target can't be resolved.
     pub fn to_static(&self) -> Result<StaticAbility, String> {
-        let (stat, delta) = match (self.strength, self.willpower, self.lore) {
-            (Some(d), None, None) => (Stat::Strength, d),
-            (None, Some(d), None) => (Stat::Willpower, d),
-            (None, None, Some(d)) => (Stat::Lore, d),
-            _ => return Err("a static must set exactly one of strength/willpower/lore".into()),
-        };
         let target = static_target_from_str(&self.target)
             .ok_or_else(|| format!("unparseable static target {:?}", self.target))?;
-        let per = self
-            .per
-            .as_deref()
-            .map(|p| {
-                // The full Amount vocabulary ("cards in hand", "damage on self",
-                // "<stat> of self", "per <filter>"), falling back to a bare filter
-                // string ("another Villain") as for-each-character.
-                amount_from_str(p)
-                    .or_else(|| parse_filter(p).map(Amount::PerMatchingCharacter))
-                    .ok_or_else(|| format!("unparseable `per` amount {p:?}"))
-            })
-            .transpose()?;
         let condition = self
             .while_
             .as_deref()
@@ -1116,12 +1104,38 @@ impl TomlStatic {
                 other => Err(format!("unknown condition {other:?}")),
             })
             .transpose()?;
+        let effect = if let Some(g) = &self.grant {
+            StaticEffect::Grant(Property::Restriction(restriction_from(g)?))
+        } else {
+            let (stat, delta) = match (self.strength, self.willpower, self.lore) {
+                (Some(d), None, None) => (Stat::Strength, d),
+                (None, Some(d), None) => (Stat::Willpower, d),
+                (None, None, Some(d)) => (Stat::Lore, d),
+                _ => {
+                    return Err(
+                        "a static must set exactly one of strength/willpower/lore or `grant`"
+                            .into(),
+                    );
+                }
+            };
+            let per = self
+                .per
+                .as_deref()
+                .map(|p| {
+                    // The full Amount vocabulary ("cards in hand", "damage on self",
+                    // "<stat> of self", "per <filter>"), falling back to a bare filter
+                    // string ("another Villain") as for-each-character.
+                    amount_from_str(p)
+                        .or_else(|| parse_filter(p).map(Amount::PerMatchingCharacter))
+                        .ok_or_else(|| format!("unparseable `per` amount {p:?}"))
+                })
+                .transpose()?;
+            StaticEffect::Stat { stat, delta, per }
+        };
         Ok(StaticAbility {
             target,
-            stat,
-            delta,
+            effect,
             condition,
-            per,
         })
     }
 }
