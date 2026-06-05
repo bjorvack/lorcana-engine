@@ -687,11 +687,14 @@ Challenge/banish triggers into the bag (see
 2,610-card corpus (Lorcast, sets 1–12 + promos; 2,314 with rules text). Effect
 mechanics ranked by card count, with the remaining gaps to close in order:
 
-- [~] **discard** (288) — `Effect::Discard(DiscardAmount::Count(n)/WholeHand)`:
-      the controller chooses N from hand (`PendingDecision::ChooseCardsToDiscard` /
-      `Decision::DiscardCards`) or discards the whole hand outright. Done for
-      **you**; `tests/targeted_effects.rs`. **Remaining:** "each opponent
-      chooses/discards N" (opponent is the chooser) and at-random.
+- [x] **discard** (288) — `Effect::Discard { who, amount, by }`: the controller
+      chooses N from hand (`PendingDecision::ChooseCardsToDiscard` /
+      `Decision::DiscardCards`) or discards the whole hand. `who` (`PlayerScope`)
+      and `by` cover "**each / chosen opponent** chooses and discards N" (the
+      opponent is the chooser, sequenced in turn order) and **at-random** (no
+      choice). `tests/targeted_effects.rs`, `tests/opponent_discard.rs`
+      (`each_opponent_chooses_and_discards_in_turn_order`,
+      `chosen_opponent_discards_multiple_at_random`, `random_discard_removes_a_card_without_a_choice`).
 - [~] **play a card from a zone** (147) — `Effect::PlayFreeFromHand { filter }`
       plays an eligible hand card for free (`PendingDecision::ChoosePlayFree`;
       characters/items/locations enter play, actions resolve + discard). Optionality
@@ -745,15 +748,15 @@ mechanics ranked by card count, with the remaining gaps to close in order:
       information event (Dolores / Copper / Nothing to Hide); reveal-and-pick emits
       it too. Reveal is **event-only** — the engine is full-information, so there's
       no persistent "revealed" state. `tests/opponent_discard.rs`.
-- [~] **freeze / "can't ready"** (38) — modeled uniformly as
+- [x] **freeze / "can't ready"** (38) — modeled uniformly as
       `Restriction::CantReady` (every card action goes through restrictions): the
       ready step skips cards that have it. `Effect::Freeze(Target)` adds it with a
-      new general duration `ModifierDuration::UntilStep { step, player }` (the
-      `NextStep(step, player)` idea) = consumed when that controller next readies;
-      survives end of turn. Continuous "can't ready" (Vincenzo) is the same
-      restriction with a `WhileSourceInPlay` modifier. `tests/turn_triggers.rs`.
-      **Remaining:** exert+freeze on the same chosen target (needs multi-effect-
-      per-target); continuous can't-ready statics; Anna-style is covered.
+      general duration `ModifierDuration::UntilStep { step, player }` = consumed
+      when that controller next readies; survives end of turn. **Exert + freeze on
+      one chosen target** is `Effect::OnTarget`; **continuous "can't ready"** is the
+      same restriction via a `StaticEffect::Grant` `WhileSourceInPlay` modifier
+      (Vincenzo / Gantu). `tests/turn_triggers.rs`,
+      `tests/modifiers.rs::a_grant_static_applies_a_continuous_restriction`.
 - [~] **dynamic amounts — "+N for each / equal to"** (94 + 40) — a uniform
       `Amount` enum (`Fixed` | `PerMatchingCharacter(filter)` | `StatOf { stat,
       target }`) now backs every numeric effect field (`DrawCards`, `GainLore`,
@@ -763,10 +766,11 @@ mechanics ranked by card count, with the remaining gaps to close in order:
       / their / another's stat" — and Support now uses `StatOf{Strength,SelfCard}`,
       so chained Support buffs add the **combined** value (§7.8). Tested:
       `tests/targeted_effects.rs` (damage = number of your characters),
-      `tests/support.rs` (chained Support). **Remaining (dynamic STATICs):**
-      continuous "+1 {L} for each Villain" (Hades) needs a count-based
-      `StatModifier` delta (today fixed); "for each card in zone" counts; cost
-      reductions.
+      `tests/support.rs` (chained Support). **Dynamic statics** also land: a static's
+      `per: Option<Amount>` scales the delta live ("+1 {L} for each Villain" — Hades,
+      "+1 {S} for each card in your hand" — Jafar via `CardsInHand`), and **cost
+      reductions** ride the same `Amount` (`CostModifier`). See the dynamic-statics
+      and cost-reduction entries below.
 - [~] **player-scoped effects** — `PlayerScope { You, EachOpponent, EachPlayer }`
       backs `Effect::Discard { who, amount }`: each player in scope discards,
       sequenced (each is its own `ChooseCardsToDiscard`, the *discarding* player
@@ -914,7 +918,9 @@ blockers: look-at-top/reveal (~180), modal "choose one" (~80).
   §7.4 "whenever you play a [category]", into-inkwell, and keywords
   §10.2/10.3/10.5/10.6/10.7/10.8/10.9/10.15. DSL trigger surface gained
   `play_action`/`play_song`/`play_character`/… (`WhenYouPlay`). Growing.
-- [ ] No remaining items in the `TriggerCondition` TODO.
+- [x] No remaining items in the `TriggerCondition` TODO — the taxonomy was unified
+  on `WhenCharacterEvent { event, scope }` over the `CharacterFilter` algebra (the
+  old per-variant TODO is gone from `src/domain/effects/trigger.rs`).
 
 ---
 
