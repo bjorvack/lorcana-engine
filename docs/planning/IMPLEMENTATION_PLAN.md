@@ -716,8 +716,12 @@ mechanics ranked by card count, with the remaining gaps to close in order:
       (`reduce` + `applies_to`), registered as a `WhileSourceInPlay` modifier on
       enter-play (Maurice / Lantern).
       `tests/modifiers.rs::a_cost_reduction_lowers_the_ink_to_play`,
-      `tests/card_loader.rs::the_dsl_exposes_a_cost_reduction`.
-      **Remaining:** free-played Bodyguard enter-exerted.
+      `tests/card_loader.rs::the_dsl_exposes_a_cost_reduction`. A **free-played
+      Bodyguard** still gets its enter-exerted choice: `play_card_free` returns the
+      Bodyguard so the `PlayFree` continuation stashes the remaining effects into
+      the `EnterPlayExerted` pending (which now carries `cont_source` + `rest`) and
+      resumes after the decision.
+      `tests/targeted_effects.rs::free_played_bodyguard_may_enter_exerted`.
 - [x] **Ward / can't be chosen** (§10.15) — modeled as `Restriction::CantBeChosen`
       (Ward keyword maps to it via `has_restriction`, so effect-granted Ward works
       too). Targeting splits into `matching_characters` (raw) and

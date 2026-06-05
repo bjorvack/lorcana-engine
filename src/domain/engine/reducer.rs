@@ -291,6 +291,8 @@ fn apply_play_card(
         state.set_pending(PendingDecision::EnterPlayExerted {
             player: active,
             card,
+            cont_source: card,
+            rest: Vec::new(),
         });
         return Ok(events);
     }
@@ -4085,32 +4087,28 @@ fn place_revealed_rest_per_card(
 }
 
 /// Play `card` from `player`'s hand **for free** (no ink, §6). Actions resolve
-/// their effect and go to the discard; permanents enter play (ready) with their
-/// statics and enters-play triggers. (A free-played Bodyguard enters ready — the
-/// optional enter-exerted prompt is skipped, which is a legal choice.)
+/// their effect and go to the discard; permanents enter play with their statics
+/// and enters-play triggers. Returns `Some(card)` if it's a Bodyguard whose
+/// enter-exerted prompt is pending (its enters-play triggers are deferred until
+/// the controller answers); the caller stashes any remaining effects.
 fn play_card_free(
     state: &mut GameState,
     registry: &CardRegistry,
     player: PlayerId,
     card: CardId,
     events: &mut Vec<GameEvent>,
-) {
-    let Some(def_id) = state
+) -> Option<CardId> {
+    let def_id = state
         .player(player)
         .and_then(|p| p.hand().iter().find(|c| c.id() == card))
-        .map(CardInstance::definition)
-    else {
-        return;
-    };
-    let Some(definition) = registry.get(def_id) else {
-        return;
-    };
+        .map(CardInstance::definition)?;
+    let definition = registry.get(def_id)?;
     if matches!(definition.kind(), CardKind::Action) {
         let effects = definition.action_effects().to_vec();
         events.extend(resolve_action_play(
             state, registry, player, card, def_id, effects,
         ));
-        return;
+        return None;
     }
     let statics = definition.static_abilities().to_vec();
     let rule_statics = definition.rule_statics().to_vec();
@@ -4122,7 +4120,13 @@ fn play_card_free(
     apply_enter_cost_reductions(state, player, card, &cost_reductions);
     apply_enter_replacements(state, player, card, &damage_replacements);
     events.push(GameEvent::CardPlayed { player, card });
+    // Bodyguard may enter play exerted (§10.3.2): defer its enters-play triggers
+    // until the controller answers the prompt (the caller stashes any `rest`).
+    if character_has_keyword(state, registry, card, &Keyword::Bodyguard) {
+        return Some(card);
+    }
     enqueue_enter_play_triggers(state, registry, player, card, def_id, false);
+    None
 }
 
 /// Put a permanent into play from `player`'s hand without paying its cost
@@ -4611,8 +4615,25 @@ fn apply_decision(
             let _ = state.take_pending();
             execute_trigger(state, registry, &mut events, trigger);
         }
-        (PendingDecision::EnterPlayExerted { player, card }, Decision::EnterExerted(exert)) => {
-            apply_enter_exerted_decision(state, registry, player, card, exert);
+        (
+            PendingDecision::EnterPlayExerted {
+                player,
+                card,
+                cont_source,
+                rest,
+            },
+            Decision::EnterExerted(exert),
+        ) => {
+            apply_enter_exerted_decision(
+                state,
+                registry,
+                player,
+                card,
+                exert,
+                cont_source,
+                rest,
+                &mut events,
+            );
         }
         // Effect-resolution choices (target / up-to-N / discard / play-free / may).
         (pending, decision) => {
@@ -4887,10 +4908,22 @@ fn apply_choose_decision(
         }
         // Play each picked card for free (a single pick), then the rest (§6).
         ChoiceThen::PlayFree => {
+            let mut bodyguard = None;
             for pick in &picks {
                 if let ChoiceRef::Card(c) = pick {
-                    play_card_free(state, registry, player, *c, events);
+                    bodyguard = play_card_free(state, registry, player, *c, events);
                 }
+            }
+            // A free-played Bodyguard suspends for its enter-exerted choice; stash
+            // the remaining effects to resume after the decision (§10.3.2).
+            if let Some(card) = bodyguard {
+                state.set_pending(PendingDecision::EnterPlayExerted {
+                    player,
+                    card,
+                    cont_source: source,
+                    rest,
+                });
+                return Ok(());
             }
             resolve_effects(state, registry, player, source, rest, events);
         }
@@ -5046,13 +5079,18 @@ fn apply_may_decision(
 }
 
 /// Answer a [`PendingDecision::EnterPlayExerted`] (Bodyguard, §10.3.2): optionally
-/// exert the entering character, then run its enters-play triggers.
+/// exert the entering character, run its enters-play triggers, then resume any
+/// effects stashed when it was played mid-effect (free-play continuation).
+#[allow(clippy::too_many_arguments)]
 fn apply_enter_exerted_decision(
     state: &mut GameState,
     registry: &CardRegistry,
     player: PlayerId,
     card: CardId,
     exert: bool,
+    cont_source: CardId,
+    rest: Vec<Effect>,
+    events: &mut Vec<GameEvent>,
 ) {
     let _ = state.take_pending();
     if exert
@@ -5063,5 +5101,8 @@ fn apply_enter_exerted_decision(
     }
     if let Some(definition_id) = state.instance_in_play(card).map(CardInstance::definition) {
         enqueue_enter_play_triggers(state, registry, player, card, definition_id, false);
+    }
+    if !rest.is_empty() {
+        resolve_effects(state, registry, player, cont_source, rest, events);
     }
 }

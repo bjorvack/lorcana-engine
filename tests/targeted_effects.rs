@@ -5,9 +5,9 @@
 use lorcana_engine::{
     Amount, CardCategory, CardDefId, CardDefinition, CardId, CardInstance, CardRegistry,
     CharacterFilter, CharacterStats, ChoiceRef, Classification, Conditions, Decision,
-    DiscardAmount, DiscardBy, Effect, GameState, GameStatus, Input, NumericFilter, PendingDecision,
-    PlayerId, PlayerScope, Stat, Target, TargetSide, TriggerCondition, TriggeredAbility, apply,
-    start,
+    DiscardAmount, DiscardBy, Effect, GameState, GameStatus, Input, Keyword, NumericFilter,
+    PendingDecision, PlayerId, PlayerScope, Stat, Target, TargetSide, TriggerCondition,
+    TriggeredAbility, apply, start,
 };
 
 fn started(reg: &CardRegistry) -> GameState {
@@ -1395,4 +1395,55 @@ fn set_named(state: &mut GameState, owner: PlayerId, card: CardId, name: &str) {
         .find(|c| c.id() == card)
         .unwrap()
         .set_names(vec![name.to_string()]);
+}
+
+/// A Bodyguard played **for free** still gets its enter-exerted choice (§10.3.2):
+/// the free-play suspends for the prompt, the controller chooses exerted.
+#[test]
+fn free_played_bodyguard_may_enter_exerted() {
+    // The deck/hand is all Bodyguard characters; the quester plays one for free.
+    let mut reg = CardRegistry::new();
+    for n in 0..30 {
+        reg.insert(
+            CardDefinition::character(CardDefId::from_raw(n), 2, true, 2, 3, 1)
+                .with_keywords(vec![Keyword::Bodyguard]),
+        );
+    }
+    reg.insert(
+        CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 5, 1).with_abilities(vec![
+            TriggeredAbility::new(
+                TriggerCondition::when_this_quests(),
+                Effect::PlayFreeFromHand {
+                    filter: CharacterFilter::Category(CardCategory::Character(None)),
+                },
+            ),
+        ]),
+    );
+    let mut state = started(&reg);
+    let active = state.active_player();
+    let quester = place(&mut state, active, 1000, 100, 5, 0);
+    let chosen = hand_ids(&state, active)[0];
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: quester }).expect("quest");
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(Decision::PlayFreeChoice(chosen)),
+    )
+    .expect("free play");
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(Decision::EnterExerted(true)),
+    )
+    .expect("enter exerted");
+
+    let exerted = state
+        .player(active)
+        .unwrap()
+        .play()
+        .iter()
+        .find(|c| c.id() == chosen)
+        .is_some_and(|c| !c.conditions().ready);
+    assert!(exerted, "the free-played Bodyguard entered exerted");
 }

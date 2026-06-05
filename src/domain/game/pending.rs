@@ -122,6 +122,11 @@ pub enum PendingDecision {
         player: PlayerId,
         /// The Bodyguard character that just entered play.
         card: CardId,
+        /// The source of the effect that played it (for resuming `rest`).
+        cont_source: CardId,
+        /// Remaining effects to resolve after the choice (non-empty only when a
+        /// Bodyguard is played mid-effect, e.g. "play a character for free, then …").
+        rest: Vec<Effect>,
     },
     /// A "name a card, then reveal the top of your deck" effect is resolving;
     /// `player` names a card and the revealed top is matched against it (§8.2).
