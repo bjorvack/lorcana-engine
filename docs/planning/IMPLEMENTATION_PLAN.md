@@ -207,8 +207,10 @@ no single "done" moment. Each addition follows the same recipe: add the variant
 
 Done since: self-scoped **sing-a-song** trigger (`WhenThisSings`, DSL `"sings"`) —
 fires for each singer in `apply_sing`, resolved from the bag after the song's
-effect. `tests/actions.rs::a_sing_a_song_trigger_fires_for_the_singer`. (The
-"one of *your* characters sings" yours-scope variant is a follow-up.)
+effect. `tests/actions.rs::a_sing_a_song_trigger_fires_for_the_singer`. The
+yours-scope **`WhenYoursSings`** ("one of your characters sings a song", DSL
+`"yours_sings"`) is also done — fired per singer over the controller's watchers.
+`tests/actions.rs::a_yours_sings_trigger_fires_when_one_of_your_characters_sings`.
 
 Also done: first **yours-scoped** trigger — `WhenYoursQuests` ("whenever one of
 your characters quests", DSL `"yours_quests"`). `apply_quest` scans the

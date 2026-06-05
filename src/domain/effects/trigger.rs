@@ -114,6 +114,12 @@ pub enum TriggerCondition {
     /// "Whenever this character sings a song" — fires for each singing character
     /// when a song is sung by exerting it (§6.3.3, §10.11).
     WhenThisSings,
+    /// "Whenever one of your characters sings a song" — a yours-scoped sing
+    /// trigger: fires for the watcher once for each of its controller's
+    /// characters that sings (so once per singer; Sing Together fires it per
+    /// participating singer). The singer is included (it is "one of your
+    /// characters"). §6.3.3.
+    WhenYoursSings,
     /// "Whenever a card is put into your inkwell" — fires when a card is moved
     /// to the inkwell zone.
     WhenCardPutInInkwell,

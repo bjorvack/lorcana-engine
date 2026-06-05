@@ -682,6 +682,9 @@ fn apply_sing(
             singer,
             &TriggerCondition::WhenThisSings,
         );
+        // "Whenever one of your characters sings a song" — fires for the
+        // controller's watchers, once per singer (the singer included).
+        enqueue_yours_sings_triggers(state, registry, active);
     }
     Ok(resolve_action_play(
         state,
@@ -2019,6 +2022,34 @@ fn enqueue_yours_quests_triggers(
             id,
             def,
             &TriggerCondition::WhenYoursQuests,
+        );
+    }
+}
+
+/// Enqueue "whenever one of your characters sings a song" triggers: for each of
+/// the controller's in-play characters watching for it, enqueue its effect (via
+/// `enqueue_triggers_for_def`). Called once per singer, so multiple singers (Sing
+/// Together) fire each watcher per participating singer (§6.3.3).
+fn enqueue_yours_sings_triggers(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    controller: PlayerId,
+) {
+    let watchers: Vec<(CardId, CardDefId)> = state.player(controller).map_or_else(Vec::new, |p| {
+        p.play()
+            .iter()
+            .filter(|c| c.is_character())
+            .map(|c| (c.id(), c.definition()))
+            .collect()
+    });
+    for (id, def) in watchers {
+        enqueue_triggers_for_def(
+            state,
+            registry,
+            controller,
+            id,
+            def,
+            &TriggerCondition::WhenYoursSings,
         );
     }
 }

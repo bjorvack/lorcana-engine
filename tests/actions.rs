@@ -220,6 +220,43 @@ fn a_sing_a_song_trigger_fires_for_the_singer() {
     );
 }
 
+/// §6.3.3 — yours-scoped "Whenever one of your characters sings a song" fires for a
+/// watcher when a *different* character of yours sings. Here the song gains 2 lore
+/// and the watcher's trigger gains 1: 2 + 1 = 3.
+#[test]
+fn a_yours_sings_trigger_fires_when_one_of_your_characters_sings() {
+    let watcher = CardDefinition::character(CardDefId::from_raw(201), 2, true, 1, 3, 1)
+        .with_abilities(vec![TriggeredAbility::new(
+            TriggerCondition::WhenYoursSings,
+            Effect::Lore {
+                who: PlayerScope::You,
+                amount: Amount::fixed(1),
+            },
+        )]);
+    let reg = song_reg(3, &[], vec![singer_char(200, 4, None), watcher]);
+    let mut state = started(&reg);
+    let active = state.active_player();
+    let _watcher = place_character(&mut state, active, 100, 201, true, false);
+    let singer = place_character(&mut state, active, 101, 200, true, false);
+    let song = hand_card(&state, 0);
+
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Sing {
+            song,
+            singers: vec![singer],
+        },
+    )
+    .expect("sing");
+
+    assert_eq!(
+        lore(&state, active),
+        3,
+        "song effect (2) + the watcher's yours-sings trigger (1)"
+    );
+}
+
 #[test]
 fn singing_rejects_a_character_whose_cost_is_too_low() {
     let reg = song_reg(3, &[], vec![singer_char(200, 2, None)]); // cost 2 < song 3
