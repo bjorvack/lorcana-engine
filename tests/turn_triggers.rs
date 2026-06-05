@@ -5,7 +5,8 @@
 use lorcana_engine::{
     Amount, CardDefId, CardDefinition, CardId, CardInstance, CardRegistry, CharacterFilter,
     CharacterStats, Conditions, Decision, DelayedWhen, Effect, GameState, GameStatus, Input, Phase,
-    PlayerId, PlayerScope, Target, TargetSide, TriggerCondition, TriggeredAbility, apply, start,
+    PlayerId, PlayerScope, ScopedEvent, Target, TargetSide, TriggerCondition, TriggeredAbility,
+    apply, start,
 };
 
 fn started(reg: &CardRegistry) -> GameState {
@@ -274,4 +275,93 @@ fn freeze_keeps_a_character_exerted_through_its_next_ready_step_then_readies() {
         ready(&state, b, victim),
         "freeze was consumed; victim readies"
     );
+}
+
+/// A "Once during your turn, whenever one of your characters quests" trigger
+/// (`once_per_turn`) fires only the *first* matching quest each turn; later
+/// quests that turn do nothing, and the limit resets next turn.
+#[test]
+fn a_once_per_turn_trigger_fires_only_on_the_first_matching_event() {
+    let mut reg = CardRegistry::new();
+    // The watcher: gains 2 lore the first time one of your characters quests
+    // each turn (once per turn).
+    reg.insert(
+        CardDefinition::character(CardDefId::from_raw(100), 1, true, 1, 3, 0).with_abilities(vec![
+            TriggeredAbility::new(
+                TriggerCondition::WhenCharacterEvent {
+                    event: ScopedEvent::Quests,
+                    scope: CharacterFilter::Side(TargetSide::Yours),
+                },
+                Effect::Lore {
+                    who: PlayerScope::You,
+                    amount: Amount::fixed(2),
+                },
+            )
+            .during_your_turn()
+            .once_per_turn(),
+        ]),
+    );
+    let mut state = started(&reg);
+    let a = state.active_player();
+    // The watcher plus two questers (each worth 1 lore on its own quest).
+    let _watcher = place(&mut state, a, 1000, 100);
+    let q1 = place(&mut state, a, 1001, 101);
+    let q2 = place(&mut state, a, 1002, 101);
+
+    // First quest: the quester's own 1 lore + the once-per-turn trigger's 2.
+    let _ = apply(&mut state, &reg, Input::Quest { character: q1 }).expect("quest q1");
+    assert_eq!(lore(&state, a), 3, "first quest: own lore + trigger");
+
+    // Second quest this turn: only the quester's own 1 lore — the trigger is spent.
+    let _ = apply(&mut state, &reg, Input::Quest { character: q2 }).expect("quest q2");
+    assert_eq!(
+        lore(&state, a),
+        4,
+        "second quest: trigger does not fire again"
+    );
+
+    // Pass to the opponent and back; the limit resets at the start of the turn.
+    end_turn(&mut state, &reg); // A -> B
+    end_turn(&mut state, &reg); // B -> A
+    assert_eq!(state.active_player(), a);
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: q1 }).expect("quest q1 again");
+    assert_eq!(
+        lore(&state, a),
+        7,
+        "next turn: own lore + trigger fires again"
+    );
+}
+
+/// Control: an otherwise identical trigger *without* `once_per_turn` fires on
+/// every matching quest in a turn — confirming the limiter is what makes the
+/// difference.
+#[test]
+fn a_trigger_without_once_per_turn_fires_every_time() {
+    let mut reg = CardRegistry::new();
+    reg.insert(
+        CardDefinition::character(CardDefId::from_raw(100), 1, true, 1, 3, 0).with_abilities(vec![
+            TriggeredAbility::new(
+                TriggerCondition::WhenCharacterEvent {
+                    event: ScopedEvent::Quests,
+                    scope: CharacterFilter::Side(TargetSide::Yours),
+                },
+                Effect::Lore {
+                    who: PlayerScope::You,
+                    amount: Amount::fixed(2),
+                },
+            )
+            .during_your_turn(),
+        ]),
+    );
+    let mut state = started(&reg);
+    let a = state.active_player();
+    let _watcher = place(&mut state, a, 1000, 100);
+    let q1 = place(&mut state, a, 1001, 101);
+    let q2 = place(&mut state, a, 1002, 101);
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: q1 }).expect("quest q1");
+    assert_eq!(lore(&state, a), 3, "first quest: own lore + trigger");
+    let _ = apply(&mut state, &reg, Input::Quest { character: q2 }).expect("quest q2");
+    assert_eq!(lore(&state, a), 6, "second quest: trigger fires again");
 }

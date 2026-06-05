@@ -51,6 +51,11 @@ pub struct TriggeredAbility {
     /// When the trigger may fire relative to whose turn it is ("During your turn,
     /// …" / "During the opponent's turn, …"; §4.1). Defaults to any turn.
     pub turn_gate: TurnGate,
+    /// "Once during your turn, whenever …": when `true`, the ability fires only
+    /// the *first* matching time each turn for its source; later matching events
+    /// that turn do nothing. The limit resets at the start of each turn. Defaults
+    /// to `false` (fires every time).
+    pub once_per_turn: bool,
     /// What the ability does when it resolves. Optionality ("you may …") is
     /// expressed by wrapping this in [`Effect::May`] — there is no separate
     /// `optional` flag (the algebra composes it onto any effect).
@@ -64,6 +69,7 @@ impl TriggeredAbility {
         Self {
             condition,
             turn_gate: TurnGate::AnyTurn,
+            once_per_turn: false,
             effect,
         }
     }
@@ -86,6 +92,14 @@ impl TriggeredAbility {
     #[must_use]
     pub const fn during_opponents_turn(mut self) -> Self {
         self.turn_gate = TurnGate::OpponentsTurn;
+        self
+    }
+
+    /// Limit this trigger to firing once per turn ("Once during your turn,
+    /// whenever …"): only the first matching event each turn fires it.
+    #[must_use]
+    pub const fn once_per_turn(mut self) -> Self {
+        self.once_per_turn = true;
         self
     }
 }
