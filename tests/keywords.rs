@@ -812,3 +812,109 @@ fn up_to_targets_exclude_an_opponents_warded_character() {
     assert!(cards.contains(&open), "the un-Warded target is offered");
     assert!(!cards.contains(&warded), "the Warded target is not offered");
 }
+
+#[test]
+fn evasive_imposes_no_restriction_on_what_it_challenges() {
+    // Evasive only restricts who may challenge *it* (§10.6.1); an Evasive
+    // character may freely challenge a plain (non-Evasive) target.
+    let mut registry = CardRegistry::new();
+    registry.insert(char_def(12).with_keywords(vec![Keyword::Evasive])); // evasive challenger
+    registry.insert(char_def(11)); // plain target
+    let mut state = started(&registry);
+    let active = state.active_player();
+    let foe = opponent_of(&state, active);
+
+    let evasive = place(&mut state, active, 100, 12, 3, 9, true, false);
+    let plain = place(&mut state, foe, 200, 11, 1, 9, false, false);
+
+    assert!(
+        apply(
+            &mut state,
+            &registry,
+            Input::Challenge {
+                challenger: evasive,
+                target: plain
+            }
+        )
+        .is_ok(),
+        "an Evasive character has no restriction on the targets it challenges (§10.6.1)"
+    );
+}
+
+#[test]
+fn resist_reduces_the_return_damage_when_challenging() {
+    // Resist reduces damage dealt *to this character* (§10.8.1), including the
+    // counter-damage a challenger takes from its exerted target.
+    let mut registry = CardRegistry::new();
+    registry.insert(char_def(22).with_keywords(vec![Keyword::Resist(2)])); // Resist challenger
+    registry.insert(char_def(23)); // target, strength 3
+    let mut state = started(&registry);
+    let active = state.active_player();
+    let foe = opponent_of(&state, active);
+
+    let challenger = place(&mut state, active, 100, 22, 1, 9, true, false);
+    let target = place(&mut state, foe, 200, 23, 3, 9, false, false);
+
+    let _ = apply(
+        &mut state,
+        &registry,
+        Input::Challenge { challenger, target },
+    )
+    .expect("challenge");
+    // Target deals 3, minus the challenger's Resist 2 = 1 damage to the challenger.
+    assert_eq!(damage(&state, active, challenger), Some(1));
+}
+
+#[test]
+fn resist_reduces_challenge_damage_to_zero() {
+    // §10.8.3: if damage is reduced to 0, no damage is dealt.
+    let mut registry = CardRegistry::new();
+    registry.insert(char_def(24)); // challenger, strength 3
+    registry.insert(char_def(25).with_keywords(vec![Keyword::Resist(3)])); // target Resist 3
+    let mut state = started(&registry);
+    let active = state.active_player();
+    let foe = opponent_of(&state, active);
+
+    let challenger = place(&mut state, active, 100, 24, 3, 9, true, false);
+    let target = place(&mut state, foe, 200, 25, 1, 9, false, false);
+
+    let _ = apply(
+        &mut state,
+        &registry,
+        Input::Challenge { challenger, target },
+    )
+    .expect("challenge");
+    // 3 strength minus Resist 3 = 0 damage.
+    assert_eq!(damage(&state, foe, target), Some(0));
+}
+
+#[test]
+fn challenger_does_not_add_strength_while_being_challenged() {
+    // §10.5.3: a character with Challenger doesn't gain +N {S} while it is the
+    // one *being* challenged — the bonus is offensive only.
+    let mut registry = CardRegistry::new();
+    registry.insert(char_def(26)); // plain challenger, strength 3
+    registry.insert(char_def(27).with_keywords(vec![Keyword::Challenger(2)])); // defender
+    let mut state = started(&registry);
+    let active = state.active_player();
+    let foe = opponent_of(&state, active);
+
+    let challenger = place(&mut state, active, 100, 26, 3, 9, true, false);
+    let defender = place(&mut state, foe, 200, 27, 2, 9, false, false);
+
+    let _ = apply(
+        &mut state,
+        &registry,
+        Input::Challenge {
+            challenger,
+            target: defender,
+        },
+    )
+    .expect("challenge");
+    // The defender deals only its base {S} 2 (no Challenger +2) back to the challenger.
+    assert_eq!(
+        damage(&state, active, challenger),
+        Some(2),
+        "Challenger +N must not apply while being challenged (§10.5.3)"
+    );
+}
