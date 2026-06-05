@@ -832,6 +832,26 @@ fn parse_filter(s: &str) -> Option<CharacterFilter> {
     } else {
         None // characters (the default) need no Category gate
     };
+    // "a character or item" / "an item or location" — an OR of category leaves
+    // (only when "or" actually joins ≥2 categories, so single-category selectors
+    // keep their existing single-`Category` shape). Includes the character category.
+    let category_or: Option<CharacterFilter> = lower
+        .contains(" or ")
+        .then(|| {
+            let mut cats = Vec::new();
+            if lower.contains("character") {
+                cats.push(CharacterFilter::Category(CardCategory::Character(None)));
+            }
+            if lower.contains("item") {
+                cats.push(CharacterFilter::Category(CardCategory::Item));
+            }
+            if lower.contains("location") {
+                cats.push(CharacterFilter::Category(CardCategory::Location));
+            }
+            cats
+        })
+        .filter(|cats| cats.len() >= 2)
+        .map(CharacterFilter::Or);
 
     // Tokenize once: original-case (for classification names) alongside a
     // lowercased view, with a `consumed` flag so phrases lifted out as predicates
@@ -897,7 +917,12 @@ fn parse_filter(s: &str) -> Option<CharacterFilter> {
     }
 
     let mut filter = CharacterFilter::any(side);
-    if let Some(cat) = category {
+    if let Some(or) = category_or {
+        // The OR of categories replaces single-category gating: drop the per-token
+        // `Category` leaves `push_card_type_predicates` added (they'd AND-narrow it).
+        predicates.retain(|p| !matches!(p, CharacterFilter::Category(_)));
+        filter = filter.and(or);
+    } else if let Some(cat) = category {
         filter = filter.and(CharacterFilter::Category(cat));
     }
     for predicate in predicates {

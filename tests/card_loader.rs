@@ -1419,3 +1419,34 @@ fn the_dsl_exposes_play_free() {
         "play_free maps to PlayFreeFromHand"
     );
 }
+
+#[test]
+fn the_dsl_exposes_character_or_item_target() {
+    use lorcana_engine::{CardCategory, CharacterFilter, Effect, Target, TargetSide};
+    let defs = load_toml(
+        r#"
+        [[card]]
+        name = "Befuddler"
+        type = "Character"
+        cost = 2
+        strength = 1
+        willpower = 3
+        lore = 1
+        [[card.abilities]]
+        on = "play"
+        do = { exert = "chosen character or item" }
+        "#,
+    )
+    .expect("loads");
+    let Effect::Exert(Target::ChosenPermanent { filter }) = &defs[0].abilities()[0].effect else {
+        panic!("expected Exert(ChosenPermanent)");
+    };
+    let expected = CharacterFilter::any(TargetSide::Any).and(CharacterFilter::Or(vec![
+        CharacterFilter::Category(CardCategory::Character(None)),
+        CharacterFilter::Category(CardCategory::Item),
+    ]));
+    assert_eq!(
+        *filter, expected,
+        "character-or-item => Or of category leaves"
+    );
+}
