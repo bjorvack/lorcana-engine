@@ -2976,3 +2976,73 @@ fn plus_lore_this_turn_boosts_questing() {
 
     assert_eq!(lore(&state, me), 1 + 3, "Anthem's 1 + Hero's boosted 3");
 }
+
+/// Ward (§10.15) protects items/locations too: a Warded opposing item can't be
+/// chosen, so "banish chosen opposing item" finds no target and does nothing.
+#[test]
+fn ward_protects_an_item_from_being_chosen() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Saboteur"
+        type = "Character"
+        cost = 2
+        ink = ["Steel"]
+        strength = 1
+        willpower = 3
+        lore = 1
+        [[card.abilities]]
+        on = "quest"
+        do = { banish = "chosen opposing item" }
+        [[card]]
+        name = "Warded Relic"
+        type = "Item"
+        cost = 2
+        ink = ["Steel"]
+        keywords = ["Ward"]
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let foe = opponent_of(&state, me);
+    let saboteur = place(&mut state, me, 100, 0, 1, 3, true);
+
+    // The opponent's only item has Ward (def 1) — pushed as an item (no stats).
+    let relic = CardId::from_raw(200);
+    state
+        .player_mut(foe)
+        .unwrap()
+        .play_mut()
+        .push(CardInstance::new(
+            relic,
+            CardDefId::from_raw(1),
+            Conditions {
+                ready: true,
+                damage: 0,
+                drying: false,
+                facedown: false,
+            },
+        ));
+
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Quest {
+            character: saboteur,
+        },
+    )
+    .expect("quest");
+    assert!(
+        !state.is_awaiting_decision(),
+        "no choosable item (the only one is Warded), so no target decision"
+    );
+    assert!(
+        state
+            .player(foe)
+            .unwrap()
+            .play()
+            .iter()
+            .any(|c| c.id() == relic),
+        "the Warded item was not banished"
+    );
+}

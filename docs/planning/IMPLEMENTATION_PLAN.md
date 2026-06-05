@@ -671,8 +671,9 @@ mechanics ranked by card count, with the remaining gaps to close in order:
       controller (§1.2.3). Challenges go through `can_challenge`, unaffected.
       Conformance: `tests/keywords.rs` (choose/all/own/up-to) + `tests/actions.rs`
       (§1.2.3 "deal damage to chosen char, draw" with a Warded target still draws).
-      (Ward on items/locations: minor follow-up — needs registry in
-      `chosen_permanent_options`.)
+      (Ward on items/locations also works: `choosable_permanents` applies the same
+      `CantBeChosen` filter and `character_has_keyword` reads def keywords for any
+      card type. `tests/conformance.rs::ward_protects_an_item_from_being_chosen`.)
 - [~] **search / look at top N** (59) — `Effect::LookAtTopAndTake { count, filter,
       rest }`: look at the top N, take **up to one** matching card to hand
       (`PendingDecision::ChooseFromRevealed` / `Decision::TakeRevealed`), the rest go
