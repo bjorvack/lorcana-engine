@@ -803,7 +803,8 @@ dependency and two failure modes if both learn from scratch simultaneously:
 
 So: **infrastructure now, learned builder later.** The evolutionary `DeckSource` is
 the bridge — worth adding earlier than the full builder because it doubles as
-training pressure for the play model.
+training pressure for the play model. The full deck-building AI is specced in
+**Appendix C**.
 
 ---
 
