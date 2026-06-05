@@ -1975,3 +1975,60 @@ fn during_opponents_turn_gate_fires_only_on_the_opponents_turn() {
         "the during-opponents-turn watcher fired (gained 2 lore)"
     );
 }
+
+/// Effect-driven damage (not just combat) fires "whenever a character is dealt
+/// damage" triggers: a quester deals 2 damage to a chosen opposing character that
+/// reacts to being damaged.
+#[test]
+fn effect_damage_fires_dealt_damage_triggers() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Pinger"
+        type = "Character"
+        cost = 1
+        ink = ["Ruby"]
+        strength = 1
+        willpower = 5
+        lore = 1
+        [[card.abilities]]
+        on = "quest"
+        do = { deal_damage = 2, to = "chosen opposing character" }
+        [[card]]
+        name = "Reactor"
+        type = "Character"
+        cost = 1
+        ink = ["Ruby"]
+        strength = 1
+        willpower = 5
+        lore = 1
+        [[card.abilities]]
+        on = "dealt_damage"
+        do = { gain_lore = 1 }
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let foe = opponent_of(&state, me);
+    let pinger = place(&mut state, me, 100, 0, 1, 5, true);
+    let reactor = place(&mut state, foe, 200, 1, 1, 5, false);
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: pinger }).expect("quest");
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(lorcana_engine::Decision::ChooseTarget(reactor)),
+    )
+    .expect("choose target");
+
+    assert_eq!(
+        damage(&state, foe, reactor),
+        Some(2),
+        "reactor took 2 damage"
+    );
+    assert_eq!(
+        lore(&state, foe),
+        1,
+        "reactor's dealt-damage trigger fired from effect damage"
+    );
+}

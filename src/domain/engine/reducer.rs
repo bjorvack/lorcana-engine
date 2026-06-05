@@ -3563,12 +3563,19 @@ fn apply_amount_effect(
         }
         Effect::DealDamage { .. } => {
             if let Some(owner) = owner_holding(state, target_card) {
-                add_damage(
-                    state,
-                    owner,
-                    target_card,
-                    u32::try_from(value.max(0)).unwrap_or(0),
-                );
+                let dealt = u32::try_from(value.max(0)).unwrap_or(0);
+                add_damage(state, owner, target_card, dealt);
+                // "Whenever a character is dealt damage" triggers (also fired by
+                // combat in `apply_challenge`); the amount carries how much.
+                if dealt > 0 {
+                    enqueue_character_event(
+                        state,
+                        registry,
+                        Fired::DealtDamage(i32::try_from(dealt).unwrap_or(i32::MAX)),
+                        target_card,
+                        owner,
+                    );
+                }
             }
         }
         Effect::RemoveDamage { .. } => {
