@@ -342,8 +342,13 @@ see the TODO there). Split smallest-first like Slice 5.
   (§10.5): +N `{S}` while challenging.
 - All wired into the Slice 3 challenge legality/damage seam (see the
   `apply_challenge` doc comment in `src/domain/engine/reducer.rs`).
-- [ ] Acceptance: each of the six alters challenge legality/damage per its §10
-      definition (`tests/keywords.rs`).
+- [x] Acceptance: each of the six alters challenge legality/damage per its §10
+      definition (`tests/keywords.rs`): Rush
+      (`rush_lets_a_drying_character_challenge`), Evasive + Alert
+      (`evasive_target_only_challengeable_by_evasive_or_alert`), Bodyguard
+      (`bodyguard_must_be_challenged_if_able`), Resist
+      (`resist_reduces_challenge_damage`), Challenger
+      (`challenger_adds_strength_while_challenging`).
 
 ### Slice 6b — shared challenge-legality authority + Reckless ✅
 - [x] Single legality authority `can_challenge` (with `target_legal_basic` and
@@ -413,7 +418,10 @@ Challenge/banish triggers into the bag (see
       (non-challenge) banishment.
 
 **Acceptance (whole slice)**
-- [ ] Each keyword has a passing scenario matching its §10 definition/example.
+- [x] Each keyword has a passing scenario matching its §10 definition/example:
+  Evasive/Alert/Bodyguard/Rush/Resist/Challenger/Reckless/Ward/Boost in
+  `tests/keywords.rs`; Support in `tests/support.rs`; Singer/Sing Together in
+  `tests/actions.rs`; Shift in `tests/shift.rs`; Vanish in `tests/conformance.rs`.
 - [x] Shift forms/moves stacks correctly; the stack moves with its top card on
   leave — `CardInstance.dissolve` unwinds the under-pile into the destination on
   every leave-play path (banish / `move_self_card` bounce-inkwell-deck /
