@@ -3580,3 +3580,72 @@ fn each_opponent_loses_lore_is_player_scoped() {
     let _ = apply(&mut state, &reg, Input::Quest { character: drain }).expect("quest");
     assert_eq!(lore(&state, foe), 1, "the opponent lost 2 lore (3 -> 1)");
 }
+
+/// §7.7 prevention replacement: "this character takes no damage" — a chosen
+/// damaging effect is replaced with nothing (no counters, no dealt-damage trigger).
+#[test]
+fn damage_is_prevented_by_a_replacement() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Warden"
+        type = "Character"
+        cost = 0
+        ink = ["Steel"]
+        strength = 2
+        willpower = 5
+        lore = 1
+        [[card.prevent_damage]]
+        to = "this"
+        [[card]]
+        name = "Zapper"
+        type = "Character"
+        cost = 2
+        ink = ["Steel"]
+        strength = 2
+        willpower = 5
+        lore = 1
+        [[card.abilities]]
+        on = "quest"
+        do = { deal_damage = 3, target = "chosen character" }
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+
+    // Play Warden (cost 0) so its prevention replacement registers on enter.
+    let warden = CardId::from_raw(100);
+    state
+        .player_mut(me)
+        .unwrap()
+        .hand_mut()
+        .push(CardInstance::new(
+            warden,
+            CardDefId::from_raw(0),
+            Conditions::faceup_idle(),
+        ));
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::PlayCard {
+            card: warden,
+            shift_onto: None,
+        },
+    )
+    .expect("play warden");
+
+    let zapper = place(&mut state, me, 102, 1, 2, 5, true);
+    let _ = apply(&mut state, &reg, Input::Quest { character: zapper }).expect("quest");
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(lorcana_engine::Decision::ChooseTarget(warden)),
+    )
+    .expect("target warden");
+
+    assert_eq!(
+        damage(&state, me, warden),
+        Some(0),
+        "the damage was prevented"
+    );
+}

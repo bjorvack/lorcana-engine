@@ -472,6 +472,12 @@ pub enum ReplacementKind {
         /// Which would-be-damaged characters this redirect applies to.
         filter: CharacterFilter,
     },
+    /// "If a character matching `filter` would be dealt damage, it takes no damage
+    /// instead" (prevention, §7.7).
+    PreventDamage {
+        /// Which would-be-damaged characters take no damage.
+        filter: CharacterFilter,
+    },
 }
 
 impl ReplacementEffect {

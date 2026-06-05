@@ -12,7 +12,8 @@ use super::ability::{
 };
 use super::card_kind::CardKind;
 use super::keyword::{Keyword, ShiftAbility};
-use crate::domain::effects::{CharacterFilter, Effect};
+use crate::domain::effects::Effect;
+use crate::domain::game::ReplacementKind;
 use crate::domain::types::card::{CardType, Classification, InkType};
 use crate::domain::types::ids::CardDefId;
 use serde::{Deserialize, Serialize};
@@ -41,10 +42,9 @@ pub struct CardDefinition {
     static_abilities: Vec<StaticAbility>,
     /// Continuous cost reductions granted while this card is in play (§6).
     cost_reductions: Vec<CostReduction>,
-    /// Continuous §7.7 damage-redirect replacements: each filter means "if a
-    /// character matching it would be dealt damage, put the counters on this card
-    /// instead" (Beast – Selfless Protector).
-    damage_redirects: Vec<CharacterFilter>,
+    /// Continuous §7.7 replacement effects granted while this card is in play
+    /// (damage redirect / prevention), e.g. Beast – Selfless Protector.
+    damage_replacements: Vec<ReplacementKind>,
     /// The card's game-rule static abilities (e.g. win-condition overrides).
     rule_statics: Vec<GameRuleStatic>,
     /// The card's keyword abilities (§10).
@@ -84,7 +84,7 @@ impl CardDefinition {
             classifications: Vec::new(),
             static_abilities: Vec::new(),
             cost_reductions: Vec::new(),
-            damage_redirects: Vec::new(),
+            damage_replacements: Vec::new(),
             rule_statics: Vec::new(),
             keywords: Vec::new(),
             names: Vec::new(),
@@ -153,10 +153,10 @@ impl CardDefinition {
         self
     }
 
-    /// Replace this definition's §7.7 damage-redirect replacements (builder style).
+    /// Replace this definition's §7.7 replacement effects (builder style).
     #[must_use]
-    pub fn with_damage_redirects(mut self, damage_redirects: Vec<CharacterFilter>) -> Self {
-        self.damage_redirects = damage_redirects;
+    pub fn with_damage_replacements(mut self, damage_replacements: Vec<ReplacementKind>) -> Self {
+        self.damage_replacements = damage_replacements;
         self
     }
 
@@ -326,10 +326,10 @@ impl CardDefinition {
         &self.cost_reductions
     }
 
-    /// This card's §7.7 damage-redirect replacements.
+    /// This card's §7.7 replacement effects.
     #[must_use]
-    pub fn damage_redirects(&self) -> &[CharacterFilter] {
-        &self.damage_redirects
+    pub fn damage_replacements(&self) -> &[ReplacementKind] {
+        &self.damage_replacements
     }
 
     /// This card's game-rule static abilities.

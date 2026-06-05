@@ -87,6 +87,9 @@ pub struct TomlCard {
     /// §7.7 damage-redirect replacements ("if … would be dealt damage, …instead").
     #[serde(default)]
     pub redirect_damage: Vec<super::dsl::TomlRedirect>,
+    /// §7.7 damage-prevention replacements ("… takes no damage instead").
+    #[serde(default)]
+    pub prevent_damage: Vec<super::dsl::TomlPrevent>,
 }
 
 /// Why a card couldn't be loaded.
@@ -189,10 +192,15 @@ impl TomlCard {
             .iter()
             .map(|c| c.to_cost_reduction().map_err(&bad))
             .collect::<Result<_, _>>()?;
-        let damage_redirects = self
+        let damage_replacements = self
             .redirect_damage
             .iter()
-            .map(|r| r.to_filter().map_err(&bad))
+            .map(|r| r.to_replacement().map_err(&bad))
+            .chain(
+                self.prevent_damage
+                    .iter()
+                    .map(|p| p.to_replacement().map_err(&bad)),
+            )
             .collect::<Result<_, _>>()?;
         let ink_types = self
             .ink
@@ -219,7 +227,7 @@ impl TomlCard {
             .with_activated(activated)
             .with_static(statics)
             .with_cost_reductions(cost_reductions)
-            .with_damage_redirects(damage_redirects)
+            .with_damage_replacements(damage_replacements)
             .with_action_effects(action_effects)
             .with_ink_types(ink_types)
             .with_max_deck_copies(self.max_copies)

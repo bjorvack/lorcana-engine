@@ -1572,7 +1572,7 @@ fn the_dsl_scopes_look_at_top_to_another_player() {
 
 #[test]
 fn the_dsl_exposes_a_damage_redirect() {
-    use lorcana_engine::{CharacterFilter, TargetSide};
+    use lorcana_engine::{CharacterFilter, ReplacementKind, TargetSide};
     let defs = load_toml(
         r#"
         [[card]]
@@ -1587,12 +1587,13 @@ fn the_dsl_exposes_a_damage_redirect() {
         "#,
     )
     .expect("loads");
-    let redirects = defs[0].damage_redirects();
-    assert_eq!(redirects.len(), 1);
+    let replacements = defs[0].damage_replacements();
+    assert_eq!(replacements.len(), 1);
     let expected = CharacterFilter::any(TargetSide::Yours)
         .and(CharacterFilter::negate(CharacterFilter::IsSource));
     assert_eq!(
-        redirects[0], expected,
+        replacements[0],
+        ReplacementKind::RedirectDamageToSource { filter: expected },
         "redirects damage from your other characters"
     );
 }

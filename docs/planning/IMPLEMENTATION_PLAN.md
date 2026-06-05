@@ -625,16 +625,20 @@ Challenge/banish triggers into the bag (see
 - [~] **Replacement effects (§7.7)** — a `ReplacementEffect { source, owner, kind,
   duration }` layer (state-held like the modifier layers, removed with the source).
   `deal_damage_to` consults it before applying damage and reapplies to the
-  modified event, each instance at most once (§7.7.7/§7.7.8). First kind:
+  modified event, each instance at most once (§7.7.7/§7.7.8). Kinds:
   `RedirectDamageToSource { filter }` — Beast – Selfless Protector's "if one of
   your other characters would be dealt damage, put that many counters on this
-  character instead"; the redirect places **counters** (not "dealt damage"), so no
-  dealt-damage trigger fires for either card (§7.7.5). Both combat and
-  `Effect::DealDamage` route through `deal_damage_to`; `MoveDamage` (counter moves)
-  does not. DSL `[[card.redirect_damage]]` (`from = "<selector>"`).
-  `tests/conformance.rs::damage_is_redirected_to_a_protector`,
+  character instead" (the redirect places **counters**, not "dealt damage", so no
+  dealt-damage trigger fires for either card, §7.7.5) — and `PreventDamage { filter }`
+  ("…takes no damage instead"). Both combat and `Effect::DealDamage` route through
+  `deal_damage_to`; `MoveDamage` (counter moves) does not. DSL
+  `[[card.redirect_damage]]` (`from`) / `[[card.prevent_damage]]` (`to`), registered
+  as `WhileSourceInPlay` replacements on enter-play.
+  `tests/conformance.rs::{damage_is_redirected_to_a_protector,damage_is_prevented_by_a_replacement}`,
   `tests/card_loader.rs::the_dsl_exposes_a_damage_redirect`.
-  **Remaining kinds:** prevention ("take no damage instead"), "skip", enters-exerted.
+  **Remaining kinds:** one-shot "the *next time* … would be dealt damage" (needs a
+  consume-once duration), "skip", enters-exerted; full §7.7.7 multi-replacement
+  ordering (self-replacement first).
 - Choice machinery completeness: "may" (§7.1.3), "up to N" (§7.1.8, no duplicates),
   ordering simultaneous discards/destinations, "that [game term]" resolution (§7.1.9).
 - Floating & delayed triggered abilities (§7.4.7).

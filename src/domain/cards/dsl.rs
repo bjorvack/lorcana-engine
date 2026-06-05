@@ -32,7 +32,7 @@ use crate::domain::effects::{
     DiscardAmount, DiscardBy, Effect, MoveSource, NumericFilter, PlayerScope, ScopedEvent,
     SourceZone, Target, TargetSide, TriggerCondition,
 };
-use crate::domain::game::{Condition, Property, Restriction, Stat};
+use crate::domain::game::{Condition, Property, ReplacementKind, Restriction, Stat};
 use crate::domain::types::card::Classification;
 use serde::Deserialize;
 use std::cell::RefCell;
@@ -1077,13 +1077,40 @@ pub struct TomlRedirect {
 }
 
 impl TomlRedirect {
-    /// Build the redirect's [`CharacterFilter`].
+    /// Build the redirect [`ReplacementKind`].
     ///
     /// # Errors
     /// Returns a detail string if the `from` selector can't be parsed.
-    pub fn to_filter(&self) -> Result<CharacterFilter, String> {
-        parse_filter(&self.from)
-            .ok_or_else(|| format!("unparseable redirect filter {:?}", self.from))
+    pub fn to_replacement(&self) -> Result<ReplacementKind, String> {
+        let filter = parse_filter(&self.from)
+            .ok_or_else(|| format!("unparseable redirect filter {:?}", self.from))?;
+        Ok(ReplacementKind::RedirectDamageToSource { filter })
+    }
+}
+
+/// One `[[card.prevent_damage]]` table: a §7.7 damage-prevention replacement.
+#[derive(Debug, Clone, Deserialize)]
+pub struct TomlPrevent {
+    /// Which would-be-damaged characters take no damage (a selector, e.g. "this",
+    /// "your characters").
+    pub to: String,
+}
+
+impl TomlPrevent {
+    /// Build the prevention [`ReplacementKind`].
+    ///
+    /// # Errors
+    /// Returns a detail string if the `to` selector can't be parsed.
+    pub fn to_replacement(&self) -> Result<ReplacementKind, String> {
+        // "this" / "this character" => the source itself (IsSource).
+        let lower = self.to.to_lowercase();
+        let filter = if lower == "this" || lower == "self" || lower == "this character" {
+            CharacterFilter::IsSource
+        } else {
+            parse_filter(&self.to)
+                .ok_or_else(|| format!("unparseable prevent filter {:?}", self.to))?
+        };
+        Ok(ReplacementKind::PreventDamage { filter })
     }
 }
 

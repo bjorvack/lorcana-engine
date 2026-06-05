@@ -266,7 +266,7 @@ fn apply_play_card(
     let statics = definition.static_abilities().to_vec();
     let rule_statics = definition.rule_statics().to_vec();
     let cost_reductions = definition.cost_reductions().to_vec();
-    let damage_redirects = definition.damage_redirects().to_vec();
+    let damage_replacements = definition.damage_replacements().to_vec();
 
     // --- pay the cost and place the card (a permanent: character or location) ---
     place_permanent(state, registry, active, card, shift_onto, definition)?;
@@ -274,7 +274,7 @@ fn apply_play_card(
     apply_enter_statics(state, active, card, &statics);
     apply_enter_rule_statics(state, active, card, &rule_statics);
     apply_enter_cost_reductions(state, active, card, &cost_reductions);
-    apply_enter_damage_redirects(state, active, card, &damage_redirects);
+    apply_enter_replacements(state, active, card, &damage_replacements);
 
     let mut events = vec![GameEvent::CardPlayed {
         player: active,
@@ -1113,11 +1113,26 @@ fn deal_damage_to(
     let mut used: Vec<CardId> = Vec::new();
     let mut replaced = false;
     loop {
+        // Prevention takes precedence: if any active PreventDamage matches the
+        // current target, the damage is replaced with nothing (§7.7).
+        let prevented = state.replacements().any(|r| {
+            matches!(r.kind(), ReplacementKind::PreventDamage { filter }
+            if owner_holding(state, target)
+                .zip(state.instance_in_play(target))
+                .is_some_and(|(holder, inst)| {
+                    state.matches_filter(r.owner(), r.source(), holder, inst, filter)
+                }))
+        });
+        if prevented {
+            return None;
+        }
         let redirect = state.replacements().find_map(|r| {
             if used.contains(&r.source()) {
                 return None;
             }
-            let ReplacementKind::RedirectDamageToSource { filter } = r.kind();
+            let ReplacementKind::RedirectDamageToSource { filter } = r.kind() else {
+                return None;
+            };
             let holder = owner_holding(state, target)?;
             let inst = state.instance_in_play(target)?;
             (state.matches_filter(r.owner(), r.source(), holder, inst, filter)
@@ -2417,22 +2432,20 @@ fn apply_enter_cost_reductions(
     }
 }
 
-/// Register a card's §7.7 damage-redirect replacements as it enters play: each
-/// becomes a `RedirectDamageToSource` replacement lasting while the source is in
-/// play (Beast – Selfless Protector).
-fn apply_enter_damage_redirects(
+/// Register a card's §7.7 replacement effects as it enters play: each becomes a
+/// `ReplacementEffect` lasting while the source is in play (damage redirect /
+/// prevention — Beast – Selfless Protector).
+fn apply_enter_replacements(
     state: &mut GameState,
     controller: PlayerId,
     card: CardId,
-    redirects: &[CharacterFilter],
+    kinds: &[ReplacementKind],
 ) {
-    for filter in redirects {
+    for kind in kinds {
         state.add_replacement(ReplacementEffect::new(
             card,
             controller,
-            ReplacementKind::RedirectDamageToSource {
-                filter: filter.clone(),
-            },
+            kind.clone(),
             ModifierDuration::WhileSourceInPlay,
         ));
     }
@@ -4094,12 +4107,12 @@ fn play_card_free(
     let statics = definition.static_abilities().to_vec();
     let rule_statics = definition.rule_statics().to_vec();
     let cost_reductions = definition.cost_reductions().to_vec();
-    let damage_redirects = definition.damage_redirects().to_vec();
+    let damage_replacements = definition.damage_replacements().to_vec();
     place_permanent_free(state, player, card, definition);
     apply_enter_statics(state, player, card, &statics);
     apply_enter_rule_statics(state, player, card, &rule_statics);
     apply_enter_cost_reductions(state, player, card, &cost_reductions);
-    apply_enter_damage_redirects(state, player, card, &damage_redirects);
+    apply_enter_replacements(state, player, card, &damage_replacements);
     events.push(GameEvent::CardPlayed { player, card });
     enqueue_enter_play_triggers(state, registry, player, card, def_id, false);
 }
