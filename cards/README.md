@@ -80,22 +80,15 @@ strength = 1
 to = "your other Hero characters"
 ```
 
-**Effect verbs** (`do`): `draw`, `gain_lore`, `lose_lore`, `deal_damage`,
-`remove_damage`, `give_strength`, `banish`, `exert`, `ready`, `freeze`, `discard`,
-`return_to_hand`, `into_inkwell`, `grant_keyword` (`duration = "this_turn"`
-default | `"permanent"`), `if_you_have` (`+ at_least = N`, `then = {…}`),
-`move_damage` (`= N, from = "…", to = "…"`), `look_at_top` (`= N, take = "<filter>", rest = "bottom"|"top"|"shuffle"`), and `restrict` (`= "cant_quest" |
-"cant_challenge" | "cant_be_challenged" | "cant_be_chosen" | "cant_ready" |
-"takes_no_challenge_damage"`, with the same `duration`).
-
-**Amounts** (numbers, or a dynamic string): an integer, `"per <filter>"`,
-`"cards in hand"`, `"damage on self"`.
-
-**Selectors** (`target` / `to` / filters): `"self"`,
-`"chosen [opposing|your] [Classification] character"`, `"all/another … characters"`,
-`"chosen item/location"`, plus predicates `"named X"`, `"with cost N or less/more"`,
-`"with N {S}/{W}/{L} or more/less"`. A leaf may also be the full structured AST
-form (a TOML table) when the compact grammar can't express it.
+**Full verb / selector / amount / scope / duration / restriction vocabulary** lives
+in **[`docs/dsl/EFFECT_DSL.md`](../docs/dsl/EFFECT_DSL.md)** — a generated reference
+that is kept in sync with the parser by `tests/dsl_reference.rs` (so it is correct
+at any time). Regenerate it with `cargo run --bin dsl_reference` after changing the
+DSL. A few highlights: effect verbs `draw` / `gain_lore` / `deal_damage` /
+`give_strength` / `grant_keyword` / `restrict` / `choose_one` / …; amounts can be a
+dynamic string (`"per <filter>"`, `"cards in hand"`); selectors like
+`"chosen opposing character"` / `"all your characters"`; a leaf may also be the
+structured AST form when the compact grammar can't express it.
 
 Actions/Songs: an `on = "play"` ability becomes the card's on-play action effect.
 

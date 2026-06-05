@@ -11,7 +11,7 @@ pub use application::{Game, SetupError};
 pub use domain::cards::{
     AbilityCost, ActivatedAbility, CardDefinition, CardKind, CardRegistry, GameRuleStatic, Keyword,
     LoadError, ShiftAbility, ShiftCost, ShiftKind, StaticAbility, StaticEffect, StaticTarget,
-    TomlCard, TriggeredAbility, TurnGate, load_toml, load_toml_from,
+    TomlCard, TriggeredAbility, TurnGate, dsl_reference, load_toml, load_toml_from,
 };
 pub use domain::deck::{Deck, DeckCard, DeckError};
 pub use domain::effects::{

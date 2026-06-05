@@ -4,6 +4,7 @@ pub mod ability;
 pub mod card_kind;
 pub mod definition;
 pub mod dsl;
+pub mod dsl_reference;
 pub mod keyword;
 pub mod loader;
 pub mod registry;
