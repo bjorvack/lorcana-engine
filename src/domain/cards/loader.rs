@@ -81,6 +81,9 @@ pub struct TomlCard {
     /// Continuous static stat modifiers.
     #[serde(default)]
     pub statics: Vec<super::dsl::TomlStatic>,
+    /// Continuous cost reductions ("you pay N less to play …").
+    #[serde(default)]
+    pub cost_reductions: Vec<super::dsl::TomlCostReduction>,
 }
 
 /// Why a card couldn't be loaded.
@@ -178,6 +181,11 @@ impl TomlCard {
             .iter()
             .map(|s| s.to_static().map_err(&bad))
             .collect::<Result<_, _>>()?;
+        let cost_reductions = self
+            .cost_reductions
+            .iter()
+            .map(|c| c.to_cost_reduction().map_err(&bad))
+            .collect::<Result<_, _>>()?;
         let ink_types = self
             .ink
             .iter()
@@ -202,6 +210,7 @@ impl TomlCard {
             .with_abilities(abilities)
             .with_activated(activated)
             .with_static(statics)
+            .with_cost_reductions(cost_reductions)
             .with_action_effects(action_effects)
             .with_ink_types(ink_types)
             .with_max_deck_copies(self.max_copies)

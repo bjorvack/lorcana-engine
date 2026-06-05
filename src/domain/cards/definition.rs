@@ -7,7 +7,9 @@
 //!
 //! [`CardInstance`]: crate::domain::game::CardInstance
 
-use super::ability::{ActivatedAbility, GameRuleStatic, StaticAbility, TriggeredAbility};
+use super::ability::{
+    ActivatedAbility, CostReduction, GameRuleStatic, StaticAbility, TriggeredAbility,
+};
 use super::card_kind::CardKind;
 use super::keyword::{Keyword, ShiftAbility};
 use crate::domain::effects::Effect;
@@ -37,6 +39,8 @@ pub struct CardDefinition {
     classifications: Vec<Classification>,
     /// The card's static abilities (§7.6).
     static_abilities: Vec<StaticAbility>,
+    /// Continuous cost reductions granted while this card is in play (§6).
+    cost_reductions: Vec<CostReduction>,
     /// The card's game-rule static abilities (e.g. win-condition overrides).
     rule_statics: Vec<GameRuleStatic>,
     /// The card's keyword abilities (§10).
@@ -75,6 +79,7 @@ impl CardDefinition {
             activated: Vec::new(),
             classifications: Vec::new(),
             static_abilities: Vec::new(),
+            cost_reductions: Vec::new(),
             rule_statics: Vec::new(),
             keywords: Vec::new(),
             names: Vec::new(),
@@ -133,6 +138,13 @@ impl CardDefinition {
     #[must_use]
     pub fn with_static(mut self, static_abilities: Vec<StaticAbility>) -> Self {
         self.static_abilities = static_abilities;
+        self
+    }
+
+    /// Replace this definition's continuous cost reductions (builder style).
+    #[must_use]
+    pub fn with_cost_reductions(mut self, cost_reductions: Vec<CostReduction>) -> Self {
+        self.cost_reductions = cost_reductions;
         self
     }
 
@@ -294,6 +306,12 @@ impl CardDefinition {
     #[must_use]
     pub fn static_abilities(&self) -> &[StaticAbility] {
         &self.static_abilities
+    }
+
+    /// This card's continuous cost reductions (§6).
+    #[must_use]
+    pub fn cost_reductions(&self) -> &[CostReduction] {
+        &self.cost_reductions
     }
 
     /// This card's game-rule static abilities.

@@ -1512,3 +1512,28 @@ fn the_dsl_exposes_a_grant_static() {
         "grant static maps to a continuous restriction"
     );
 }
+
+#[test]
+fn the_dsl_exposes_a_cost_reduction() {
+    use lorcana_engine::{CharacterFilter, TargetSide};
+    let defs = load_toml(
+        r#"
+        [[card]]
+        name = "Lantern"
+        type = "Item"
+        cost = 2
+        [[card.cost_reductions]]
+        reduce = 1
+        applies_to = "your characters"
+        "#,
+    )
+    .expect("loads");
+    let reductions = defs[0].cost_reductions();
+    assert_eq!(reductions.len(), 1);
+    assert_eq!(reductions[0].amount, 1);
+    assert_eq!(
+        reductions[0].applies_to,
+        CharacterFilter::any(TargetSide::Yours),
+        "applies to your characters"
+    );
+}

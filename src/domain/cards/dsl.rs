@@ -24,7 +24,8 @@
 
 use super::loader::keyword_from;
 use super::{
-    AbilityCost, ActivatedAbility, StaticAbility, StaticEffect, StaticTarget, TriggeredAbility,
+    AbilityCost, ActivatedAbility, CostReduction, StaticAbility, StaticEffect, StaticTarget,
+    TriggeredAbility,
 };
 use crate::domain::effects::{
     Amount, CardCategory, CharacterFilter, Comparison, CountCondition, DeckPosition, Destination,
@@ -1062,6 +1063,35 @@ impl TomlActivated {
             cost,
             effect_from_value(&self.effect)?,
         ))
+    }
+}
+
+/// One `[[card.cost_reductions]]` table: a continuous play-cost reduction.
+#[derive(Debug, Clone, Deserialize)]
+pub struct TomlCostReduction {
+    /// How much ink less to pay.
+    pub reduce: u32,
+    /// Which cards-to-play it applies to (a selector filter, e.g. "your Pirate
+    /// characters", "your characters"). Defaults to all your cards.
+    #[serde(default)]
+    pub applies_to: Option<String>,
+}
+
+impl TomlCostReduction {
+    /// Build the [`CostReduction`].
+    ///
+    /// # Errors
+    /// Returns a detail string if the `applies_to` selector can't be parsed.
+    pub fn to_cost_reduction(&self) -> Result<CostReduction, String> {
+        let applies_to = match &self.applies_to {
+            Some(sel) => parse_filter(sel)
+                .ok_or_else(|| format!("unparseable cost-reduction filter {sel:?}"))?,
+            None => CharacterFilter::any(TargetSide::Yours),
+        };
+        Ok(CostReduction {
+            applies_to,
+            amount: self.reduce,
+        })
     }
 }
 

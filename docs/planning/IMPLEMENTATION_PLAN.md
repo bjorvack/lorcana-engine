@@ -675,9 +675,12 @@ mechanics ranked by card count, with the remaining gaps to close in order:
       pay N {I} less to play …"): a `CostModifier { owner, filter, amount, duration }`
       layer; `effective_play_cost` subtracts every matching reduction (floored at 0)
       at each play-cost site (character / item / location / action; Shift keeps its
-      own alternate cost). `tests/modifiers.rs::a_cost_reduction_lowers_the_ink_to_play`.
-      **Remaining:** authoring cost reductions on cards (DSL source), free-played
-      Bodyguard enter-exerted.
+      own alternate cost). Authored via DSL `[[card.cost_reductions]]`
+      (`reduce` + `applies_to`), registered as a `WhileSourceInPlay` modifier on
+      enter-play (Maurice / Lantern).
+      `tests/modifiers.rs::a_cost_reduction_lowers_the_ink_to_play`,
+      `tests/card_loader.rs::the_dsl_exposes_a_cost_reduction`.
+      **Remaining:** free-played Bodyguard enter-exerted.
 - [x] **Ward / can't be chosen** (§10.15) — modeled as `Restriction::CantBeChosen`
       (Ward keyword maps to it via `has_restriction`, so effect-granted Ward works
       too). Targeting splits into `matching_characters` (raw) and

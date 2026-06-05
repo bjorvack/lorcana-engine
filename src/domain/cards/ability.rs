@@ -1,7 +1,7 @@
 //! Card abilities.
 
 use crate::domain::effects::Amount;
-use crate::domain::effects::{Effect, TriggerCondition};
+use crate::domain::effects::{CharacterFilter, Effect, TriggerCondition};
 use crate::domain::game::{Condition, Property, Stat};
 use crate::domain::types::card::Classification;
 use serde::{Deserialize, Serialize};
@@ -198,6 +198,16 @@ pub enum StaticEffect {
     /// Continuously grant a [`Property`] (restriction / keyword / permission) —
     /// "your characters can't be challenged", "this character can't ready".
     Grant(Property),
+}
+
+/// A continuous cost reduction granted while this card is in play — "you pay
+/// `amount` {I} less to play cards matching `applies_to`" (§6).
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct CostReduction {
+    /// Which cards-to-play the reduction applies to (matched against the def).
+    pub applies_to: CharacterFilter,
+    /// The ink reduction.
+    pub amount: u32,
 }
 
 /// A static ability that continuously affects its targets while the card is in

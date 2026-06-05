@@ -2,8 +2,8 @@
 
 use super::input::{Decision, Input, Rejected};
 use crate::domain::cards::{
-    CardDefinition, CardKind, CardRegistry, GameRuleStatic, Keyword, ShiftAbility, ShiftCost,
-    ShiftKind, StaticAbility, StaticEffect, StaticTarget,
+    CardDefinition, CardKind, CardRegistry, CostReduction, GameRuleStatic, Keyword, ShiftAbility,
+    ShiftCost, ShiftKind, StaticAbility, StaticEffect, StaticTarget,
 };
 use crate::domain::effects::{
     Amount, CardCategory, CharacterFilter, CountCondition, DeckPosition, DelayedWhen, Destination,
@@ -11,10 +11,10 @@ use crate::domain::effects::{
     TargetSide, TriggerCondition,
 };
 use crate::domain::game::{
-    CardInstance, CharacterStats, ChoiceRef, ChoiceThen, Conditions, DelayedTrigger, GameEvent,
-    GameState, GameStatus, GrantedActivated, GrantedTrigger, LocationStats, ModifierDuration,
-    ModifierTarget, PendingDecision, Permission, PlayerState, Property, PropertyModifier,
-    Restriction, RuleModifier, Stat, StatModifier, TriggerId,
+    CardInstance, CharacterStats, ChoiceRef, ChoiceThen, Conditions, CostModifier, DelayedTrigger,
+    GameEvent, GameState, GameStatus, GrantedActivated, GrantedTrigger, LocationStats,
+    ModifierDuration, ModifierTarget, PendingDecision, Permission, PlayerState, Property,
+    PropertyModifier, Restriction, RuleModifier, Stat, StatModifier, TriggerId,
 };
 use crate::domain::rules::game_state_check;
 use crate::domain::types::card::Classification;
@@ -264,12 +264,14 @@ fn apply_play_card(
     }
     let statics = definition.static_abilities().to_vec();
     let rule_statics = definition.rule_statics().to_vec();
+    let cost_reductions = definition.cost_reductions().to_vec();
 
     // --- pay the cost and place the card (a permanent: character or location) ---
     place_permanent(state, registry, active, card, shift_onto, definition)?;
     // Static abilities apply as the card enters play (§7.6.2).
     apply_enter_statics(state, active, card, &statics);
     apply_enter_rule_statics(state, active, card, &rule_statics);
+    apply_enter_cost_reductions(state, active, card, &cost_reductions);
 
     let mut events = vec![GameEvent::CardPlayed {
         player: active,
@@ -2317,6 +2319,25 @@ fn apply_enter_statics(
     }
 }
 
+/// Register a card's continuous cost reductions as it enters play: each becomes a
+/// [`CostModifier`] for the controller, lasting while the source is in play (§6).
+fn apply_enter_cost_reductions(
+    state: &mut GameState,
+    controller: PlayerId,
+    card: CardId,
+    reductions: &[CostReduction],
+) {
+    for reduction in reductions {
+        state.add_cost_modifier(CostModifier::new(
+            card,
+            controller,
+            reduction.applies_to.clone(),
+            reduction.amount,
+            ModifierDuration::WhileSourceInPlay,
+        ));
+    }
+}
+
 /// Apply a card's game-rule static abilities as it enters play (the win/loss
 /// modification layer, §1.2.1): each becomes a [`RuleModifier`] lasting while the
 /// source is in play, removed on leave.
@@ -3831,7 +3852,7 @@ fn effective_play_cost(state: &GameState, controller: PlayerId, def: &CardDefini
     let reduction: u32 = state
         .active_cost_modifiers(controller)
         .filter(|m| def_matches_filter(controller, controller, def, m.filter()))
-        .map(crate::domain::game::CostModifier::amount)
+        .map(CostModifier::amount)
         .sum();
     def.cost().saturating_sub(reduction)
 }
@@ -3970,9 +3991,11 @@ fn play_card_free(
     }
     let statics = definition.static_abilities().to_vec();
     let rule_statics = definition.rule_statics().to_vec();
+    let cost_reductions = definition.cost_reductions().to_vec();
     place_permanent_free(state, player, card, definition);
     apply_enter_statics(state, player, card, &statics);
     apply_enter_rule_statics(state, player, card, &rule_statics);
+    apply_enter_cost_reductions(state, player, card, &cost_reductions);
     events.push(GameEvent::CardPlayed { player, card });
     enqueue_enter_play_triggers(state, registry, player, card, def_id, false);
 }
