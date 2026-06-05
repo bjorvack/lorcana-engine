@@ -1,6 +1,7 @@
 <script lang="ts">
   import Board from './lib/components/Board.svelte';
   import { Engine, type GameView } from './lib/engine';
+  import { preloadImages } from './lib/preload';
   // Imported (not a `/brand/logo.png` string) so the URL is rewritten for the
   // GitHub Pages project subpath instead of 404-ing at the site root.
   import logo from './lib/assets/logo.png';
@@ -11,13 +12,21 @@
   let loading = $state(false);
   let seed = $state(1);
   let auto = $state(false);
+  // Progress of the card-art preload, or null when not preloading.
+  let preload = $state<{ done: number; total: number } | null>(null);
 
   async function newGame(): Promise<void> {
     loading = true;
     error = null;
     auto = false;
+    preload = null;
     try {
       const created = await Engine.create(BigInt(seed));
+      // Preload every deck card's art before revealing the board so nothing
+      // pops in blank as cards are drawn/played.
+      const urls = [...created.cards.values()].map((c) => c.image);
+      preload = { done: 0, total: new Set(urls.filter(Boolean)).size };
+      await preloadImages(urls, (done, total) => (preload = { done, total }));
       // Start at the opening: both players have drawn 7 and kept their hands
       // (mulligans auto-resolved), the fields are empty, and it's turn 1.
       // Use Step / Auto-play to drive the game from here.
@@ -27,6 +36,7 @@
       error = err instanceof Error ? err.message : String(err);
     } finally {
       loading = false;
+      preload = null;
     }
   }
 
@@ -73,7 +83,17 @@
   {#if error}
     <p class="error" role="alert">Failed to start: {error}</p>
   {:else if loading || !view}
-    <p class="loading">Loading engine…</p>
+    <div class="loading" role="status">
+      {#if preload && preload.total > 0}
+        <span>Loading card art… {preload.done}/{preload.total}</span>
+        <span class="progress">
+          <span class="progress-fill" style="inline-size: {(preload.done / preload.total) * 100}%"
+          ></span>
+        </span>
+      {:else}
+        <span>Loading engine…</span>
+      {/if}
+    </div>
   {:else if engine}
     <Board {view} cards={engine.cards} />
   {/if}
@@ -160,6 +180,27 @@
   }
 
   .loading {
+    margin-block: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
     color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  .progress {
+    inline-size: min(60vw, 18rem);
+    block-size: 4px;
+    border-radius: 2px;
+    background: color-mix(in srgb, var(--kelp) 55%, transparent);
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    display: block;
+    block-size: 100%;
+    background: var(--lore);
+    transition: inline-size 0.15s ease;
   }
 </style>
