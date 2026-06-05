@@ -328,9 +328,22 @@ fn effect_from_table(t: &toml::Table) -> Result<Effect, String> {
             amount: amt("remove_damage")?,
         })
     } else if t.contains_key("give_strength") {
-        Ok(Effect::GiveStrengthThisTurn {
+        Ok(Effect::GiveStatThisTurn {
             target: tgt()?,
+            stat: Stat::Strength,
             amount: amt("give_strength")?,
+        })
+    } else if t.contains_key("give_lore") {
+        Ok(Effect::GiveStatThisTurn {
+            target: tgt()?,
+            stat: Stat::Lore,
+            amount: amt("give_lore")?,
+        })
+    } else if t.contains_key("give_willpower") {
+        Ok(Effect::GiveStatThisTurn {
+            target: tgt()?,
+            stat: Stat::Willpower,
+            amount: amt("give_willpower")?,
         })
     } else if let Some(v) = t.get("banish") {
         Ok(Effect::Banish(target_from_value(v)?))

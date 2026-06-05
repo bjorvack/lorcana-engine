@@ -294,7 +294,8 @@ fn the_effect_dsl_maps_abilities_onto_the_ast() {
     assert_eq!(quest.condition, TriggerCondition::when_this_quests());
     assert_eq!(
         quest.effect,
-        Effect::GiveStrengthThisTurn {
+        Effect::GiveStatThisTurn {
+            stat: Stat::Strength,
             target: Target::ChosenCharacter {
                 filter: CharacterFilter::any(TargetSide::Opposing),
             },

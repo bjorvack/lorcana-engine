@@ -482,7 +482,7 @@ Challenge/banish triggers into the bag (see
     another }` + `AllCharacters`, a reusable `CharacterFilter { side,
     classifications }`, and `PendingDecision::ChooseTarget` (choose at resolution,
     via the bag). **Support** (§10.13) wired as an optional quest trigger carrying
-    `GiveStrengthThisTurn { ChosenCharacter, amount = source's current {S} }`
+    `GiveStatThisTurn { ChosenCharacter, Strength, amount = source's current {S} }`
     (so modifiers count). `Effect` is now non-`Copy` (filters hold classification
     strings). Tested in `tests/support.rs`. Target **filter dimensions** still to
     grow (cost/{S}/state, item/location/player, group-"other") — back-linked on
@@ -704,7 +704,7 @@ mechanics ranked by card count, with the remaining gaps to close in order:
 - [~] **dynamic amounts — "+N for each / equal to"** (94 + 40) — a uniform
       `Amount` enum (`Fixed` | `PerMatchingCharacter(filter)` | `StatOf { stat,
       target }`) now backs every numeric effect field (`DrawCards`, `GainLore`,
-      `EachOpponentLosesLore`, `GiveStrengthThisTurn`, `DealDamage`, `RemoveDamage`),
+      `EachOpponentLosesLore`, `GiveStatThisTurn`, `DealDamage`, `RemoveDamage`),
       evaluated at resolution via `eval_amount`. `StatOf` reads the source
       (`SelfCard`) or the resolved target's `{S}/{W}/{L}`, so it composes "your own
       / their / another's stat" — and Support now uses `StatOf{Strength,SelfCard}`,

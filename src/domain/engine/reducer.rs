@@ -868,11 +868,12 @@ fn enqueue_support_trigger(
         controller,
         character,
         // "you may" — optionality is expressed by wrapping in `Effect::May`.
-        Effect::May(Box::new(Effect::GiveStrengthThisTurn {
+        Effect::May(Box::new(Effect::GiveStatThisTurn {
             target: Target::ChosenCharacter {
                 filter: CharacterFilter::any(TargetSide::Any)
                     .and(CharacterFilter::negate(CharacterFilter::IsSource)),
             },
+            stat: Stat::Strength,
             amount: Amount::StatOf {
                 stat: Stat::Strength,
                 target: Target::SelfCard,
@@ -2820,7 +2821,7 @@ fn execute_effect(
             what: MoveSource::Card(target),
             ..
         }
-        | Effect::GiveStrengthThisTurn { target, .. }
+        | Effect::GiveStatThisTurn { target, .. }
         | Effect::DealDamage { target, .. }
         | Effect::RemoveDamage { target, .. }
         | Effect::Banish(target)
@@ -3697,11 +3698,11 @@ fn apply_amount_effect(
 ) {
     let value = state.eval_amount(controller, source, target_card, amount);
     match effect {
-        Effect::GiveStrengthThisTurn { .. } => {
+        Effect::GiveStatThisTurn { stat, .. } => {
             state.add_modifier(StatModifier::new(
                 source,
                 ModifierTarget::Card(target_card),
-                Stat::Strength,
+                *stat,
                 value,
                 ModifierDuration::UntilEndOfTurn,
             ));
@@ -4059,7 +4060,7 @@ fn apply_effect_to(
         Effect::MoveDamage {
             from, to, amount, ..
         } => apply_move_damage(state, controller, source, target_card, from, to, amount),
-        Effect::GiveStrengthThisTurn { amount, .. }
+        Effect::GiveStatThisTurn { amount, .. }
         | Effect::DealDamage { amount, .. }
         | Effect::RemoveDamage { amount, .. } => {
             apply_amount_effect(

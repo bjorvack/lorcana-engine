@@ -2930,3 +2930,49 @@ fn return_a_character_from_discard_to_hand() {
     );
     assert_eq!(hand_len(&state, me), hand_before + 1);
 }
+
+/// "Chosen character gets +2 {L} this turn" (§7.6.1): the buffed character then
+/// quests for its boosted lore.
+#[test]
+fn plus_lore_this_turn_boosts_questing() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Anthem"
+        type = "Character"
+        cost = 2
+        ink = ["Amber"]
+        strength = 1
+        willpower = 3
+        lore = 1
+        [[card.abilities]]
+        on = "quest"
+        do = { give_lore = 2, target = "another chosen character" }
+        [[card]]
+        name = "Hero"
+        type = "Character"
+        cost = 2
+        ink = ["Amber"]
+        strength = 1
+        willpower = 3
+        lore = 1
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let anthem = place(&mut state, me, 100, 0, 1, 3, true);
+    let hero = place(&mut state, me, 101, 1, 1, 3, true);
+
+    // Anthem quests (+1 lore) then buffs Hero's {L} by +2 this turn.
+    let _ = apply(&mut state, &reg, Input::Quest { character: anthem }).expect("anthem quest");
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(lorcana_engine::Decision::ChooseTarget(hero)),
+    )
+    .expect("choose hero");
+    // Hero now quests for 1 base + 2 = 3.
+    let _ = apply(&mut state, &reg, Input::Quest { character: hero }).expect("hero quest");
+
+    assert_eq!(lore(&state, me), 1 + 3, "Anthem's 1 + Hero's boosted 3");
+}

@@ -6,7 +6,8 @@ use lorcana_engine::{
     Amount, CardCategory, CardDefId, CardDefinition, CardId, CardInstance, CardRegistry,
     CharacterFilter, CharacterStats, ChoiceRef, Classification, Conditions, Decision,
     DiscardAmount, DiscardBy, Effect, GameState, GameStatus, Input, NumericFilter, PendingDecision,
-    PlayerId, PlayerScope, Target, TargetSide, TriggerCondition, TriggeredAbility, apply, start,
+    PlayerId, PlayerScope, Stat, Target, TargetSide, TriggerCondition, TriggeredAbility, apply,
+    start,
 };
 
 fn started(reg: &CardRegistry) -> GameState {
@@ -390,7 +391,8 @@ fn up_to_two_debuffer(def: u32) -> CardDefinition {
     CardDefinition::character(CardDefId::from_raw(def), 1, true, 2, 5, 1).with_abilities(vec![
         TriggeredAbility::new(
             TriggerCondition::when_this_quests(),
-            Effect::GiveStrengthThisTurn {
+            Effect::GiveStatThisTurn {
+                stat: Stat::Strength,
                 target: Target::UpToCharacters {
                     filter: CharacterFilter::any(TargetSide::Opposing),
                     max: 2,
@@ -539,7 +541,8 @@ fn all_your_other_characters_excludes_the_source() {
         CardDefinition::character(CardDefId::from_raw(100), 1, true, 2, 5, 1).with_abilities(vec![
             TriggeredAbility::new(
                 TriggerCondition::when_this_quests(),
-                Effect::GiveStrengthThisTurn {
+                Effect::GiveStatThisTurn {
+                    stat: Stat::Strength,
                     target: Target::AllCharacters {
                         filter: CharacterFilter::any(TargetSide::Yours)
                             .and(CharacterFilter::negate(CharacterFilter::IsSource)),
@@ -703,11 +706,13 @@ fn conditional_buffer(def: u32) -> CardDefinition {
                 filter: CharacterFilter::any(TargetSide::Any).and(CharacterFilter::Classification(
                     Classification::new("Villain"),
                 )),
-                then: Box::new(Effect::GiveStrengthThisTurn {
+                then: Box::new(Effect::GiveStatThisTurn {
+                    stat: Stat::Strength,
                     target: Target::SelfCard,
                     amount: Amount::fixed(3),
                 }),
-                otherwise: Box::new(Effect::GiveStrengthThisTurn {
+                otherwise: Box::new(Effect::GiveStatThisTurn {
+                    stat: Stat::Strength,
                     target: Target::SelfCard,
                     amount: Amount::fixed(2),
                 }),

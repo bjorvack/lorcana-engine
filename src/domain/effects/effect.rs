@@ -213,12 +213,15 @@ pub enum Effect {
         /// Where they go.
         to: Destination,
     },
-    /// Give the target character `amount` Strength `{S}` until end of turn (e.g.
-    /// Support adds the source's current `{S}`; "gets +N {S} this turn").
-    GiveStrengthThisTurn {
+    /// Give the target character `amount` of `stat` (`{S}`/`{W}`/`{L}`) until end
+    /// of turn ("gets +N {S}/{L} this turn"; Support adds the source's current
+    /// `{S}`). §7.6.1.
+    GiveStatThisTurn {
         /// Who is buffed/debuffed.
         target: Target,
-        /// The signed `{S}` change.
+        /// Which stat changes.
+        stat: Stat,
+        /// The signed change.
         amount: Amount,
     },
     /// Deal `amount` damage to the target character (§4.3.6.16, §9). Lethal damage
@@ -493,8 +496,13 @@ impl Effect {
                 who,
                 amount: amount.with_trigger_amount(value),
             },
-            Self::GiveStrengthThisTurn { target, amount } => Self::GiveStrengthThisTurn {
+            Self::GiveStatThisTurn {
                 target,
+                stat,
+                amount,
+            } => Self::GiveStatThisTurn {
+                target,
+                stat,
                 amount: amount.with_trigger_amount(value),
             },
             Self::DealDamage { target, amount } => Self::DealDamage {
