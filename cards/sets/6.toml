@@ -1065,6 +1065,9 @@ willpower = 3
 lore = 1
 classifications = ["Storyborn", "Villain", "Alien", "Pirate", "Captain"]
 text = "HUNK OF HARDWARE When you play this character, chosen character can't challenge during their next turn."
+[[card.abilities]]
+on = "play"
+do = { restrict = "cant_challenge", to = "chosen character", duration = "next_turn" }
 
 [[card]]
 name = "John Silver - Stern Captain"

@@ -39,6 +39,10 @@ pub struct GameState {
     /// Characters that have used Boost this turn (§10.4.1, once per turn). Reset
     /// at the start of each turn.
     boosted_this_turn: Vec<CardId>,
+    /// `once_per_turn` triggered abilities that have already fired this turn,
+    /// keyed by `(source card, ability index in its definition)`. Reset at the
+    /// start of each turn so the "Once during your turn, …" limit refreshes.
+    fired_once_per_turn: Vec<(CardId, usize)>,
     next_card_id: u32,
     /// Triggered abilities waiting to resolve (§8.7).
     bag: Vec<BagEntry>,
@@ -105,6 +109,7 @@ impl GameState {
             step: Step::Ready,
             inked_this_turn: false,
             boosted_this_turn: Vec::new(),
+            fired_once_per_turn: Vec::new(),
             next_card_id,
             bag: Vec::new(),
             pending: None,
@@ -250,6 +255,27 @@ impl GameState {
     /// Clear the per-turn Boost record (called at the start of each turn).
     pub fn clear_boosted_this_turn(&mut self) {
         self.boosted_this_turn.clear();
+    }
+
+    /// Whether the `once_per_turn` ability at `ability_index` on `source` has
+    /// already fired this turn (§"Once during your turn, …").
+    #[must_use]
+    pub fn has_fired_once_per_turn(&self, source: CardId, ability_index: usize) -> bool {
+        self.fired_once_per_turn.contains(&(source, ability_index))
+    }
+
+    /// Record that the `once_per_turn` ability at `ability_index` on `source` has
+    /// fired this turn.
+    pub fn mark_fired_once_per_turn(&mut self, source: CardId, ability_index: usize) {
+        if !self.has_fired_once_per_turn(source, ability_index) {
+            self.fired_once_per_turn.push((source, ability_index));
+        }
+    }
+
+    /// Clear the per-turn once-per-turn-trigger record (called at the start of
+    /// each turn).
+    pub fn clear_fired_once_per_turn(&mut self) {
+        self.fired_once_per_turn.clear();
     }
 
     /// Allocate a fresh, never-before-used [`CardId`] from the game's monotonic

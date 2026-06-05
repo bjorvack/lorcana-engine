@@ -55,6 +55,10 @@ pub(crate) fn with_classifications<R>(classes: Vec<String>, f: impl FnOnce() -> 
 }
 
 /// One `[[card.abilities]]` table.
+// A flat deserialization struct that mirrors the optional `[[card.abilities]]`
+// keys; each boolean maps to an independent ability modifier, so the count is
+// inherent rather than a state-machine smell.
+#[allow(clippy::struct_excessive_bools)]
 #[derive(Debug, Clone, Deserialize)]
 pub struct TomlAbility {
     /// The trigger ("play", "quest", "banish", …).
@@ -70,6 +74,10 @@ pub struct TomlAbility {
     /// controller is *not* the active player.
     #[serde(default)]
     pub during_opponents_turn: bool,
+    /// "Once during your turn, …" — the trigger fires only the first matching
+    /// time each turn; later matching events that turn do nothing.
+    #[serde(default)]
+    pub once_per_turn: bool,
     /// The effect: a verb table `{ draw = 1 }`, or an array of them (a sequence).
     #[serde(rename = "do")]
     pub effect: Value,
@@ -91,10 +99,15 @@ impl TomlAbility {
         if self.during_your_turn && self.during_opponents_turn {
             return Err("during_your_turn and during_opponents_turn are mutually exclusive".into());
         }
-        Ok(if self.during_your_turn {
+        let ability = if self.during_your_turn {
             ability.during_your_turn()
         } else if self.during_opponents_turn {
             ability.during_opponents_turn()
+        } else {
+            ability
+        };
+        Ok(if self.once_per_turn {
+            ability.once_per_turn()
         } else {
             ability
         })

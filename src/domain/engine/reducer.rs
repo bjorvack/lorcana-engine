@@ -1665,6 +1665,7 @@ fn begin_turn(state: &mut GameState, registry: &CardRegistry, first_turn: bool) 
     let active = state.active_player();
     state.set_inked_this_turn(false);
     state.clear_boosted_this_turn();
+    state.clear_fired_once_per_turn();
 
     let mut events = vec![GameEvent::TurnStarted {
         player: active,
@@ -1984,7 +1985,9 @@ fn enqueue_character_event(
 ) {
     let active = state.active_player();
     let amount = fired.amount();
-    let mut to_enqueue: Vec<(PlayerId, CardId, Effect)> = Vec::new();
+    // The fourth element is `Some(ability_index)` for a `once_per_turn` ability
+    // (so the firing site can mark it spent for the turn), else `None`.
+    let mut to_enqueue: Vec<(PlayerId, CardId, Effect, Option<usize>)> = Vec::new();
     {
         // The actor's instance, wherever it now is: a leave-play event fires
         // after the card has moved (to discard on a banish, but also to hand /
@@ -2016,13 +2019,18 @@ fn enqueue_character_event(
             let Some(def) = registry.get(wdef) else {
                 continue;
             };
-            for ab in def.abilities() {
+            for (idx, ab) in def.abilities().iter().enumerate() {
                 if let TriggerCondition::WhenCharacterEvent { event, scope } = &ab.condition
                     && fired.matches(*event)
                     && ab.turn_gate.allows(wc == active)
                     && state.matches_filter(wc, wid, actor_owner, actor_inst, scope)
                 {
-                    to_enqueue.push((wc, wid, ab.effect.clone()));
+                    // "Once during your turn, …": skip if it already fired this turn.
+                    if ab.once_per_turn && state.has_fired_once_per_turn(wid, idx) {
+                        continue;
+                    }
+                    let once = ab.once_per_turn.then_some(idx);
+                    to_enqueue.push((wc, wid, ab.effect.clone(), once));
                 }
             }
         }
@@ -2033,15 +2041,18 @@ fn enqueue_character_event(
                 && let Some(wc) = owner_holding(state, g.source)
                 && state.matches_filter(wc, g.source, actor_owner, actor_inst, scope)
             {
-                to_enqueue.push((wc, g.source, g.effect.clone()));
+                to_enqueue.push((wc, g.source, g.effect.clone(), None));
             }
         }
     }
-    for (wc, wid, effect) in to_enqueue {
+    for (wc, wid, effect, once) in to_enqueue {
         let effect = match amount {
             Some(n) => effect.with_trigger_amount(n),
             None => effect,
         };
+        if let Some(idx) = once {
+            state.mark_fired_once_per_turn(wid, idx);
+        }
         let _ = state.enqueue_trigger(wc, wid, effect);
     }
 }
@@ -2065,11 +2076,16 @@ fn enqueue_self_triggers(
     let Some(definition) = registry.get(def_id) else {
         return;
     };
-    let mut matches: Vec<Effect> = definition
+    // The second element is `Some(ability_index)` for a `once_per_turn` ability
+    // (so it can be marked spent once enqueued), else `None`.
+    let mut matches: Vec<(Effect, Option<usize>)> = definition
         .abilities()
         .iter()
-        .filter(|a| a.condition == *condition)
-        .map(|a| a.effect.clone())
+        .enumerate()
+        .filter(|(_, a)| a.condition == *condition)
+        // "Once during your turn, …": skip if it already fired this turn.
+        .filter(|(idx, a)| !(a.once_per_turn && state.has_fired_once_per_turn(source, *idx)))
+        .map(|(idx, a)| (a.effect.clone(), a.once_per_turn.then_some(idx)))
         .collect();
     // Also fire any triggered abilities granted to this card by an effect (§7.6).
     matches.extend(
@@ -2077,9 +2093,12 @@ fn enqueue_self_triggers(
             .granted_triggers()
             .iter()
             .filter(|g| g.source == source && g.condition == *condition)
-            .map(|g| g.effect.clone()),
+            .map(|g| (g.effect.clone(), None)),
     );
-    for effect in matches {
+    for (effect, once) in matches {
+        if let Some(idx) = once {
+            state.mark_fired_once_per_turn(source, idx);
+        }
         let _ = state.enqueue_trigger(controller, source, effect);
     }
 }

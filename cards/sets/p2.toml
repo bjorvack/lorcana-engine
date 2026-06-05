@@ -61,6 +61,9 @@ lore = 2
 classifications = ["Dreamborn", "Hero", "Queen", "Sorcerer"]
 keywords = ["Support"]
 text = "Support (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)\nWINTER AMBUSH When you play this character, chosen opposing character can't ready at the start of their next turn."
+[[card.abilities]]
+on = "play"
+do = { restrict = "cant_ready", to = "chosen opposing character", duration = "next_turn" }
 
 [[card]]
 name = "Chicha - Dedicated Mother"

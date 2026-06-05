@@ -1949,6 +1949,9 @@ willpower = 2
 lore = 2
 classifications = ["Dreamborn", "Villain", "Queen"]
 text = "ROYAL RAGE When you play this character, deal 1 damage to chosen damaged opposing character."
+[[card.abilities]]
+on = "play"
+do = { deal_damage = 1, to = "chosen damaged opposing character" }
 
 [[card]]
 name = "Queen of Hearts - Sensing Weakness"
