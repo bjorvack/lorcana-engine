@@ -1537,3 +1537,35 @@ fn the_dsl_exposes_a_cost_reduction() {
         "applies to your characters"
     );
 }
+
+#[test]
+fn the_dsl_scopes_look_at_top_to_another_player() {
+    use lorcana_engine::{Effect, PlayerScope};
+    let defs = load_toml(
+        r#"
+        [[card]]
+        name = "Spy"
+        type = "Character"
+        cost = 2
+        strength = 1
+        willpower = 3
+        lore = 1
+        [[card.abilities]]
+        on = "quest"
+        do = { look_at_top = 1, take = "a card", who = "chosen opponent" }
+        "#,
+    )
+    .expect("loads");
+    let Effect::LookAtTopAndTake {
+        whose, take_count, ..
+    } = &defs[0].abilities()[0].effect
+    else {
+        panic!("expected LookAtTopAndTake");
+    };
+    assert_eq!(
+        *whose,
+        PlayerScope::ChosenOpponent,
+        "looks at the opponent's deck"
+    );
+    assert_eq!(*take_count, 1);
+}

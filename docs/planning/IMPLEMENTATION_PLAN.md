@@ -693,12 +693,16 @@ mechanics ranked by card count, with the remaining gaps to close in order:
       (Ward on items/locations also works: `choosable_permanents` applies the same
       `CantBeChosen` filter and `character_has_keyword` reads def keywords for any
       card type. `tests/conformance.rs::ward_protects_an_item_from_being_chosen`.)
-- [~] **search / look at top N** (59) — `Effect::LookAtTopAndTake { count, filter,
-      rest }`: look at the top N, take **up to one** matching card to hand
-      (`PendingDecision::ChooseFromRevealed` / `Decision::TakeRevealed`), the rest go
-      to `rest` (top/bottom/shuffle). Covers Be Our Guest / Ariel / Develop Your
-      Brain. `tests/reveal.rs`. **Remaining:** take >1, reorder-in-any-order of the
-      rest, split top+bottom (Dr. Facilier), search the whole deck (tutor, 9).
+- [x] **search / look at top N** (59) — `Effect::LookAtTopAndTake { whose, count,
+      take_count, filter, rest, reorder, rest_per_card }`: look at the top N of
+      `whose` deck (scoped via `who`, so **other-player** look-at-top works), take
+      **up to `take_count`** matching cards to hand
+      (`PendingDecision::ChooseFromRevealed` / `Decision::TakeRevealed`), reorder the
+      rest, or split them per-card (Dr. Facilier top+bottom), the rest going to
+      `rest`. Tutoring the whole deck is `Effect::SearchDeckAndTake`. DSL `look_at_top`
+      / `take` / `take_count` / `reorder` / `rest` / `who`, and `search` / `take`.
+      `tests/reveal.rs`, `tests/card_loader.rs::{the_dsl_exposes_take_count_and_reorder,
+      the_dsl_exposes_search_deck, the_dsl_scopes_look_at_top_to_another_player}`.
 - [x] **reveal (opponent's hand) / discard from it** (Lenny, Timon, Goldie) —
       `Effect::OpponentDiscardsChosen { whose, filter }`: resolve the (chosen)
       opponent via `PlayerScope` (prompting in multiplayer), then the controller
@@ -763,7 +767,6 @@ mechanics ranked by card count, with the remaining gaps to close in order:
     inkwell" (`inkwell_from_hand`, facedown & exerted). `move_self_card` takes the
     pick from whichever zone it is in. `tests/conformance.rs::return_a_character_from_discard_to_hand`,
     `::put_a_hand_card_into_the_inkwell`.
-    **Remaining:** other-player look-at-top (scoped `LookAtTopAndTake`).
 - [x] **dynamic continuous statics** — `StaticAbility { target, effect, condition }`
       where `StaticEffect` is `Stat { stat, delta, per }` **or** `Grant(Property)`.
       Stat statics reuse the effect `Amount` algebra for `per`
@@ -824,9 +827,10 @@ blockers: look-at-top/reveal (~180), modal "choose one" (~80).
   `Property::Restriction`); and a proper `duration = "next_turn"`
   (`Effect::GrantNextTurn`, `UntilStep{Ready, owner}` — the "at the start of their
   next turn" timing, mirrors freeze).
-- [ ] **look-at-top/reveal variants** (expose/extend `LookAtTopAndTake` +
-  shuffle/reveal/search), **modal "choose one"**, trigger-context amounts; ongoing
-  authoring passes as each feature lands.
+- [x] **look-at-top/reveal variants** — `LookAtTopAndTake` covers take >1,
+  reorder, per-card split, and other-player scope (see the search/look-at-top
+  entry above). **Remaining:** **modal "choose one"** coverage passes; ongoing
+  authoring as each feature lands.
 
 ## Slice 9 — Real card data & conformance suite
 
