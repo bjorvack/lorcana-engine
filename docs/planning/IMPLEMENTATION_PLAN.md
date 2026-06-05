@@ -389,8 +389,13 @@ see the TODO there). Split smallest-first like Slice 5.
   optional quest trigger adds the source's **current** `{S}` (modifiers included,
   via `current_character_stats`, snapshot at quest time) to another chosen
   character as a flat `+N` `UntilEndOfTurn` modifier. Tested in `tests/support.rs`.
-- **Vanish** (§10.14) / **Ward** (§10.15): effect-targeting interactions (need
-  targeted effects / choices — overlaps Slice 8).
+- **Ward** (§10.15): done — `Restriction::CantBeChosen` (see the Ward entry in
+  Slice 8). **Vanish** (§10.14): parsed (`Keyword::Vanish`) but **no engine
+  behaviour yet** — it's a triggered ability ("when an opponent chooses this
+  character as part of resolving an *action's* effect, banish it, after the action
+  resolves"). Needs the *choosing* sites to be action-attributed (like Ward gates
+  *choosing*, not all-character effects) so the banish fires only on an opponent's
+  action-target choice. Focused follow-up.
 - **Singer / Sing Together** (§10.11–12): songs — **Slice 7**.
 
 Challenge/banish triggers into the bag (see
@@ -408,7 +413,10 @@ Challenge/banish triggers into the bag (see
 
 **Acceptance (whole slice)**
 - [ ] Each keyword has a passing scenario matching its §10 definition/example.
-- [ ] Shift forms/moves stacks correctly; the stack moves with its top card on leave.
+- [x] Shift forms/moves stacks correctly; the stack moves with its top card on
+  leave — `CardInstance.dissolve` unwinds the under-pile into the destination on
+  every leave-play path (banish / `move_self_card` bounce-inkwell-deck /
+  `banish_by_effect`). `tests/shift.rs::banishing_a_shifted_stack_dissolves_it_into_the_discard`.
 
 ---
 
