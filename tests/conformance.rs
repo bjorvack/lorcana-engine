@@ -3551,3 +3551,32 @@ fn vanish_does_not_fire_without_a_choice() {
         "no choice was made, so Vanish does not banish"
     );
 }
+
+/// Player-scoped lore: "each opponent loses 2 lore" reduces opponents' lore
+/// (clamped at 0), the affected player resolved via `PlayerScope`.
+#[test]
+fn each_opponent_loses_lore_is_player_scoped() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Drain"
+        type = "Character"
+        cost = 3
+        ink = ["Amethyst"]
+        strength = 2
+        willpower = 4
+        lore = 1
+        [[card.abilities]]
+        on = "quest"
+        do = { lose_lore = 2, who = "each opponent" }
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let foe = opponent_of(&state, me);
+    state.player_mut(foe).unwrap().add_lore(3);
+    let drain = place(&mut state, me, 100, 0, 2, 4, true);
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: drain }).expect("quest");
+    assert_eq!(lore(&state, foe), 1, "the opponent lost 2 lore (3 -> 1)");
+}

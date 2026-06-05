@@ -771,19 +771,20 @@ mechanics ranked by card count, with the remaining gaps to close in order:
       "+1 {S} for each card in your hand" — Jafar via `CardsInHand`), and **cost
       reductions** ride the same `Amount` (`CostModifier`). See the dynamic-statics
       and cost-reduction entries below.
-- [~] **player-scoped effects** — `PlayerScope { You, EachOpponent, EachPlayer }`
-      backs `Effect::Discard { who, amount }`: each player in scope discards,
-      sequenced (each is its own `ChooseCardsToDiscard`, the *discarding* player
-      chooses; whole-hand needs no choice). Closes the deferred "each opponent
-      chooses and discards" (35). `tests/targeted_effects.rs`.
-  - [x] **choose-a-player axis (multiplayer-ready)** — `PlayerScope` gains
-    `ChosenOpponent` / `ChosenPlayer` (+ resolved `Player(id)`). `resolve_scope`
+- [x] **player-scoped effects** — `PlayerScope { You, EachOpponent, EachPlayer,
+      ChosenOpponent, ChosenPlayer, Player(id) }` backs `Effect::Discard`, `Draw`,
+      and `Lore`: every player in scope is affected (discard sequenced, the
+      *discarding* player choosing). `tests/targeted_effects.rs`.
+  - [x] **choose-a-player axis (multiplayer-ready)** — `resolve_scope`
     auto-resolves a single candidate (2-player "chosen opponent") and otherwise
     emits a `PendingDecision::ChoosePlayer` (3–4 player games); `Decision::
-    ChoosePlayer` re-targets the effect onto the chosen player. Wired into
-    `Discard`. `tests/multiplayer.rs` (4-player prompts; 2-player auto-resolves).
-    **Remaining:** player-scoped **draw/lore** onto `PlayerScope` ("each/chosen
-    player draws", "chosen opponent loses lore").
+    ChoosePlayer` re-targets the effect onto the chosen player.
+    `tests/multiplayer.rs` (4-player prompts; 2-player auto-resolves).
+  - [x] **player-scoped draw/lore** — `Draw`/`Lore` carry `who` and route through
+    `resolve_player_draw_lore` ("each player draws", "chosen/each opponent loses
+    lore"); DSL `draw`/`gain_lore`/`lose_lore` take `who`.
+    `tests/multiplayer.rs::each_player_draws_applies_to_everyone`,
+    `tests/conformance.rs::each_opponent_loses_lore_is_player_scoped`.
   - [x] **unified zone move + mill** — `Effect::Move { what: MoveSource, to:
     Destination }` is the single card-move primitive: `MoveSource::Card(Target)`
     (bounce / into-inkwell / return-to-deck — replaces the old `ReturnToHand`,
