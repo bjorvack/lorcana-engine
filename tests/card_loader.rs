@@ -1569,3 +1569,30 @@ fn the_dsl_scopes_look_at_top_to_another_player() {
     );
     assert_eq!(*take_count, 1);
 }
+
+#[test]
+fn the_dsl_exposes_a_damage_redirect() {
+    use lorcana_engine::{CharacterFilter, TargetSide};
+    let defs = load_toml(
+        r#"
+        [[card]]
+        name = "Beast"
+        type = "Character"
+        cost = 4
+        strength = 2
+        willpower = 7
+        lore = 1
+        [[card.redirect_damage]]
+        from = "your other characters"
+        "#,
+    )
+    .expect("loads");
+    let redirects = defs[0].damage_redirects();
+    assert_eq!(redirects.len(), 1);
+    let expected = CharacterFilter::any(TargetSide::Yours)
+        .and(CharacterFilter::negate(CharacterFilter::IsSource));
+    assert_eq!(
+        redirects[0], expected,
+        "redirects damage from your other characters"
+    );
+}

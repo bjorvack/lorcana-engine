@@ -613,8 +613,19 @@ Challenge/banish triggers into the bag (see
     full replacement ordering, §1.9.1.3 attribution, and modifiable location stats.
 
 ### Slice 8b+ — harder resolution rules
-- Replacement effects (§7.7): "instead"/"skip"/"enter"; self-replacement applied
-  first; "same replacement can't apply twice"; replacement of steps/phases.
+- [~] **Replacement effects (§7.7)** — a `ReplacementEffect { source, owner, kind,
+  duration }` layer (state-held like the modifier layers, removed with the source).
+  `deal_damage_to` consults it before applying damage and reapplies to the
+  modified event, each instance at most once (§7.7.7/§7.7.8). First kind:
+  `RedirectDamageToSource { filter }` — Beast – Selfless Protector's "if one of
+  your other characters would be dealt damage, put that many counters on this
+  character instead"; the redirect places **counters** (not "dealt damage"), so no
+  dealt-damage trigger fires for either card (§7.7.5). Both combat and
+  `Effect::DealDamage` route through `deal_damage_to`; `MoveDamage` (counter moves)
+  does not. DSL `[[card.redirect_damage]]` (`from = "<selector>"`).
+  `tests/conformance.rs::damage_is_redirected_to_a_protector`,
+  `tests/card_loader.rs::the_dsl_exposes_a_damage_redirect`.
+  **Remaining kinds:** prevention ("take no damage instead"), "skip", enters-exerted.
 - Choice machinery completeness: "may" (§7.1.3), "up to N" (§7.1.8, no duplicates),
   ordering simultaneous discards/destinations, "that [game term]" resolution (§7.1.9).
 - Floating & delayed triggered abilities (§7.4.7).
@@ -646,7 +657,9 @@ Challenge/banish triggers into the bag (see
     But I'm Much Faster) → `character_has_keyword` must OR in granted keywords.
 
 **Acceptance**
-- [ ] A worked replacement example from §7.7 reproduces exactly (ordering included).
+- [~] A worked replacement example from §7.7 reproduces exactly — Beast's damage
+  redirect (Shield Another) does (`tests/conformance.rs::damage_is_redirected_to_a_protector`);
+  full multi-effect ordering (§7.7.7 self-replacement first) still to come.
 - [x] "Up to N" forbids duplicate picks and allows 0; "may" can decline cleanly
       (Slice 8b-7 `tests/targeted_effects.rs`; "may" via `MayResolve`).
 - [x] A delayed trigger ("at the end of your turn, …") fires at the right moment

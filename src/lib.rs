@@ -24,7 +24,8 @@ pub use domain::game::{
     BagEntry, CardInstance, CharacterStats, ChoiceRef, ChoiceThen, Condition, Conditions,
     CostModifier, GameEvent, GameState, GameStatus, LocationStats, ModifierDuration,
     ModifierTarget, PendingDecision, Permission, PlayerState, Property, PropertyModifier,
-    Restriction, RuleModifier, SeededRng, Stat, StatModifier, TriggerId, Zone, ZoneKind,
+    ReplacementEffect, ReplacementKind, Restriction, RuleModifier, SeededRng, Stat, StatModifier,
+    TriggerId, Zone, ZoneKind,
 };
 pub use domain::rules::{RequiredAction, check_win_loss, game_state_check, lore_to_win};
 pub use domain::types::{

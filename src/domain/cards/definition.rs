@@ -12,7 +12,7 @@ use super::ability::{
 };
 use super::card_kind::CardKind;
 use super::keyword::{Keyword, ShiftAbility};
-use crate::domain::effects::Effect;
+use crate::domain::effects::{CharacterFilter, Effect};
 use crate::domain::types::card::{CardType, Classification, InkType};
 use crate::domain::types::ids::CardDefId;
 use serde::{Deserialize, Serialize};
@@ -41,6 +41,10 @@ pub struct CardDefinition {
     static_abilities: Vec<StaticAbility>,
     /// Continuous cost reductions granted while this card is in play (§6).
     cost_reductions: Vec<CostReduction>,
+    /// Continuous §7.7 damage-redirect replacements: each filter means "if a
+    /// character matching it would be dealt damage, put the counters on this card
+    /// instead" (Beast – Selfless Protector).
+    damage_redirects: Vec<CharacterFilter>,
     /// The card's game-rule static abilities (e.g. win-condition overrides).
     rule_statics: Vec<GameRuleStatic>,
     /// The card's keyword abilities (§10).
@@ -80,6 +84,7 @@ impl CardDefinition {
             classifications: Vec::new(),
             static_abilities: Vec::new(),
             cost_reductions: Vec::new(),
+            damage_redirects: Vec::new(),
             rule_statics: Vec::new(),
             keywords: Vec::new(),
             names: Vec::new(),
@@ -145,6 +150,13 @@ impl CardDefinition {
     #[must_use]
     pub fn with_cost_reductions(mut self, cost_reductions: Vec<CostReduction>) -> Self {
         self.cost_reductions = cost_reductions;
+        self
+    }
+
+    /// Replace this definition's §7.7 damage-redirect replacements (builder style).
+    #[must_use]
+    pub fn with_damage_redirects(mut self, damage_redirects: Vec<CharacterFilter>) -> Self {
+        self.damage_redirects = damage_redirects;
         self
     }
 
@@ -312,6 +324,12 @@ impl CardDefinition {
     #[must_use]
     pub fn cost_reductions(&self) -> &[CostReduction] {
         &self.cost_reductions
+    }
+
+    /// This card's §7.7 damage-redirect replacements.
+    #[must_use]
+    pub fn damage_redirects(&self) -> &[CharacterFilter] {
+        &self.damage_redirects
     }
 
     /// This card's game-rule static abilities.

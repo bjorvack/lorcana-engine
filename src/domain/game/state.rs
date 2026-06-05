@@ -3,8 +3,8 @@
 use super::{
     BagEntry, CardInstance, CharacterStats, Condition, Conditions, CostModifier, DelayedTrigger,
     GameStatus, GrantedActivated, GrantedTrigger, ModifierDuration, PendingDecision, Permission,
-    PlayerState, Property, PropertyModifier, Restriction, RuleModifier, SeededRng, Stat,
-    StatModifier, TriggerId, Zone,
+    PlayerState, Property, PropertyModifier, ReplacementEffect, Restriction, RuleModifier,
+    SeededRng, Stat, StatModifier, TriggerId, Zone,
 };
 use crate::domain::cards::Keyword;
 use crate::domain::effects::{
@@ -55,6 +55,8 @@ pub struct GameState {
     property_modifiers: Vec<PropertyModifier>,
     /// Active continuous play-cost reductions ("you pay N less to play …").
     cost_modifiers: Vec<CostModifier>,
+    /// Active continuous replacement effects (§7.7).
+    replacements: Vec<ReplacementEffect>,
     /// Scheduled one-shot delayed triggers (§7.4.7).
     delayed_triggers: Vec<DelayedTrigger>,
     /// Active game-rule modifiers (e.g. lore-to-win overrides, §1.2.1).
@@ -119,6 +121,7 @@ impl GameState {
             modifiers: Vec::new(),
             property_modifiers: Vec::new(),
             cost_modifiers: Vec::new(),
+            replacements: Vec::new(),
             delayed_triggers: Vec::new(),
             rule_modifiers: Vec::new(),
             granted_triggers: Vec::new(),
@@ -376,7 +379,18 @@ impl GameState {
         self.modifiers.retain(|m| m.source() != source);
         self.property_modifiers.retain(|m| m.source() != source);
         self.cost_modifiers.retain(|m| m.source() != source);
+        self.replacements.retain(|m| m.source() != source);
         self.rule_modifiers.retain(|m| m.source() != source);
+    }
+
+    /// Add a continuous replacement effect (§7.7).
+    pub fn add_replacement(&mut self, replacement: ReplacementEffect) {
+        self.replacements.push(replacement);
+    }
+
+    /// The active replacement effects (the caller checks each against the event).
+    pub fn replacements(&self) -> impl Iterator<Item = &ReplacementEffect> {
+        self.replacements.iter()
     }
 
     /// Add a continuous play-cost reduction ("you pay N less to play …").

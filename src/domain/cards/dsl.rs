@@ -1068,6 +1068,25 @@ impl TomlActivated {
     }
 }
 
+/// One `[[card.redirect_damage]]` table: a §7.7 damage-redirect replacement.
+#[derive(Debug, Clone, Deserialize)]
+pub struct TomlRedirect {
+    /// Which would-be-damaged characters this redirect catches (a selector, e.g.
+    /// "your other characters"). The counters go onto this card instead.
+    pub from: String,
+}
+
+impl TomlRedirect {
+    /// Build the redirect's [`CharacterFilter`].
+    ///
+    /// # Errors
+    /// Returns a detail string if the `from` selector can't be parsed.
+    pub fn to_filter(&self) -> Result<CharacterFilter, String> {
+        parse_filter(&self.from)
+            .ok_or_else(|| format!("unparseable redirect filter {:?}", self.from))
+    }
+}
+
 /// One `[[card.cost_reductions]]` table: a continuous play-cost reduction.
 #[derive(Debug, Clone, Deserialize)]
 pub struct TomlCostReduction {

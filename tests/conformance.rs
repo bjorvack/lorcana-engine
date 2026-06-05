@@ -3340,3 +3340,90 @@ fn moving_to_a_location_fires_a_move_trigger() {
         "the move trigger granted 1 lore"
     );
 }
+
+/// §7.7 replacement effect (Beast – Selfless Protector, "Shield Another"): if one
+/// of your other characters would be dealt damage, put that many damage counters
+/// on this character instead. The original target takes none; the protector takes
+/// the counters (and, being counters, fires no dealt-damage trigger).
+#[test]
+fn damage_is_redirected_to_a_protector() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Beast"
+        type = "Character"
+        cost = 0
+        ink = ["Amber"]
+        strength = 2
+        willpower = 7
+        lore = 1
+        [[card.redirect_damage]]
+        from = "your other characters"
+        [[card]]
+        name = "Ally"
+        type = "Character"
+        cost = 2
+        ink = ["Amber"]
+        strength = 2
+        willpower = 5
+        lore = 1
+        [[card]]
+        name = "Zapper"
+        type = "Character"
+        cost = 2
+        ink = ["Amber"]
+        strength = 2
+        willpower = 5
+        lore = 1
+        [[card.abilities]]
+        on = "quest"
+        do = { deal_damage = 2, target = "chosen character" }
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+
+    // Play Beast (cost 0) so its §7.7 replacement registers as it enters play.
+    let beast = CardId::from_raw(100);
+    state
+        .player_mut(me)
+        .unwrap()
+        .hand_mut()
+        .push(CardInstance::new(
+            beast,
+            CardDefId::from_raw(0),
+            Conditions::faceup_idle(),
+        ));
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::PlayCard {
+            card: beast,
+            shift_onto: None,
+        },
+    )
+    .expect("play beast");
+
+    let ally = place(&mut state, me, 101, 1, 2, 5, true);
+    let zapper = place(&mut state, me, 102, 2, 2, 5, true);
+
+    // Zapper deals 2 to Ally — redirected onto Beast as counters.
+    let _ = apply(&mut state, &reg, Input::Quest { character: zapper }).expect("quest");
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(lorcana_engine::Decision::ChooseTarget(ally)),
+    )
+    .expect("target ally");
+
+    assert_eq!(
+        damage(&state, me, ally),
+        Some(0),
+        "the original target takes no damage"
+    );
+    assert_eq!(
+        damage(&state, me, beast),
+        Some(2),
+        "the protector takes the counters"
+    );
+}

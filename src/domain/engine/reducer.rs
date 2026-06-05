@@ -14,7 +14,8 @@ use crate::domain::game::{
     CardInstance, CharacterStats, ChoiceRef, ChoiceThen, Conditions, CostModifier, DelayedTrigger,
     GameEvent, GameState, GameStatus, GrantedActivated, GrantedTrigger, LocationStats,
     ModifierDuration, ModifierTarget, PendingDecision, Permission, PlayerState, Property,
-    PropertyModifier, Restriction, RuleModifier, Stat, StatModifier, TriggerId,
+    PropertyModifier, ReplacementEffect, ReplacementKind, Restriction, RuleModifier, Stat,
+    StatModifier, TriggerId,
 };
 use crate::domain::rules::game_state_check;
 use crate::domain::types::card::Classification;
@@ -265,6 +266,7 @@ fn apply_play_card(
     let statics = definition.static_abilities().to_vec();
     let rule_statics = definition.rule_statics().to_vec();
     let cost_reductions = definition.cost_reductions().to_vec();
+    let damage_redirects = definition.damage_redirects().to_vec();
 
     // --- pay the cost and place the card (a permanent: character or location) ---
     place_permanent(state, registry, active, card, shift_onto, definition)?;
@@ -272,6 +274,7 @@ fn apply_play_card(
     apply_enter_statics(state, active, card, &statics);
     apply_enter_rule_statics(state, active, card, &rule_statics);
     apply_enter_cost_reductions(state, active, card, &cost_reductions);
+    apply_enter_damage_redirects(state, active, card, &damage_redirects);
 
     let mut events = vec![GameEvent::CardPlayed {
         player: active,
@@ -982,28 +985,34 @@ fn apply_challenge(
     {
         c.conditions_mut().ready = false;
     }
-    add_damage(state, target_owner, target, damage_to_target);
-    add_damage(state, active, challenger, damage_to_challenger);
+    // §7.7 replacements may redirect combat damage (as counters); the dealt-damage
+    // trigger fires only for a card actually dealt damage.
+    let target_damaged = deal_damage_to(state, target_owner, target, damage_to_target);
+    let challenger_damaged = deal_damage_to(state, active, challenger, damage_to_challenger);
 
     // Damage triggers — "whenever a character is dealt damage" (scoped: the
     // damaged character itself via `IsSource`, or `Side(Opposing)`); the trigger
     // amount carries how much (§4.3.6.16).
-    if damage_to_target > 0 {
+    if let Some(damaged) = target_damaged
+        && damage_to_target > 0
+    {
         enqueue_character_event(
             state,
             registry,
             Fired::DealtDamage(i32::try_from(damage_to_target).unwrap_or(i32::MAX)),
-            target,
-            target_owner,
+            damaged,
+            owner_holding(state, damaged).unwrap_or(target_owner),
         );
     }
-    if damage_to_challenger > 0 {
+    if let Some(damaged) = challenger_damaged
+        && damage_to_challenger > 0
+    {
         enqueue_character_event(
             state,
             registry,
             Fired::DealtDamage(i32::try_from(damage_to_challenger).unwrap_or(i32::MAX)),
-            challenger,
-            active,
+            damaged,
+            owner_holding(state, damaged).unwrap_or(active),
         );
     }
 
@@ -1077,6 +1086,57 @@ fn add_damage(state: &mut GameState, owner: PlayerId, card: CardId, amount: u32)
     {
         c.conditions_mut().damage += amount;
     }
+}
+
+/// Deal `amount` damage to `card` (owned by `owner`), applying §7.7 damage
+/// **replacement** effects first — e.g. "if one of your other characters would be
+/// dealt damage, put that many counters on this character instead" (Beast). Use
+/// this for damage that is *dealt* (challenges, `Effect::DealDamage`); raw counter
+/// moves (`Effect::MoveDamage`) use `add_damage` directly. §7.7.7: replacements
+/// reapply to the modified event, each instance at most once (§7.7.8).
+///
+/// Returns the card that was actually **dealt damage** (so the caller fires its
+/// dealt-damage trigger), or `None` if a replacement applied — Beast's redirect
+/// *puts counters* rather than dealing damage, so neither the original nor the
+/// protector sees a dealt-damage event (§7.7.5).
+fn deal_damage_to(
+    state: &mut GameState,
+    owner: PlayerId,
+    card: CardId,
+    amount: u32,
+) -> Option<CardId> {
+    if amount == 0 {
+        return None;
+    }
+    let mut target = card;
+    let mut target_owner = owner;
+    let mut used: Vec<CardId> = Vec::new();
+    let mut replaced = false;
+    loop {
+        let redirect = state.replacements().find_map(|r| {
+            if used.contains(&r.source()) {
+                return None;
+            }
+            let ReplacementKind::RedirectDamageToSource { filter } = r.kind();
+            let holder = owner_holding(state, target)?;
+            let inst = state.instance_in_play(target)?;
+            (state.matches_filter(r.owner(), r.source(), holder, inst, filter)
+                && owner_holding(state, r.source()).is_some())
+            .then(|| (r.source(), r.owner()))
+        });
+        match redirect {
+            Some((next, next_owner)) => {
+                used.push(next);
+                target = next;
+                target_owner = next_owner;
+                replaced = true;
+            }
+            None => break,
+        }
+    }
+    add_damage(state, target_owner, target, amount);
+    // A redirect places counters (not "dealt damage"), so no dealt-damage trigger.
+    (!replaced).then_some(target)
 }
 
 /// Resolve one endpoint of a move-damage effect: `SelfCard` is the source, an
@@ -2352,6 +2412,27 @@ fn apply_enter_cost_reductions(
             controller,
             reduction.applies_to.clone(),
             reduction.amount,
+            ModifierDuration::WhileSourceInPlay,
+        ));
+    }
+}
+
+/// Register a card's §7.7 damage-redirect replacements as it enters play: each
+/// becomes a `RedirectDamageToSource` replacement lasting while the source is in
+/// play (Beast – Selfless Protector).
+fn apply_enter_damage_redirects(
+    state: &mut GameState,
+    controller: PlayerId,
+    card: CardId,
+    redirects: &[CharacterFilter],
+) {
+    for filter in redirects {
+        state.add_replacement(ReplacementEffect::new(
+            card,
+            controller,
+            ReplacementKind::RedirectDamageToSource {
+                filter: filter.clone(),
+            },
             ModifierDuration::WhileSourceInPlay,
         ));
     }
@@ -3832,16 +3913,18 @@ fn apply_amount_effect(
         Effect::DealDamage { .. } => {
             if let Some(owner) = owner_holding(state, target_card) {
                 let dealt = u32::try_from(value.max(0)).unwrap_or(0);
-                add_damage(state, owner, target_card, dealt);
-                // "Whenever a character is dealt damage" triggers (also fired by
-                // combat in `apply_challenge`); the amount carries how much.
-                if dealt > 0 {
+                // §7.7 replacements may redirect this to a protector (as counters);
+                // the dealt-damage trigger fires only for a card actually dealt damage.
+                let damaged = deal_damage_to(state, owner, target_card, dealt);
+                if let Some(damaged) = damaged
+                    && dealt > 0
+                {
                     enqueue_character_event(
                         state,
                         registry,
                         Fired::DealtDamage(i32::try_from(dealt).unwrap_or(i32::MAX)),
-                        target_card,
-                        owner,
+                        damaged,
+                        owner_holding(state, damaged).unwrap_or(owner),
                     );
                 }
             }
@@ -4011,10 +4094,12 @@ fn play_card_free(
     let statics = definition.static_abilities().to_vec();
     let rule_statics = definition.rule_statics().to_vec();
     let cost_reductions = definition.cost_reductions().to_vec();
+    let damage_redirects = definition.damage_redirects().to_vec();
     place_permanent_free(state, player, card, definition);
     apply_enter_statics(state, player, card, &statics);
     apply_enter_rule_statics(state, player, card, &rule_statics);
     apply_enter_cost_reductions(state, player, card, &cost_reductions);
+    apply_enter_damage_redirects(state, player, card, &damage_redirects);
     events.push(GameEvent::CardPlayed { player, card });
     enqueue_enter_play_triggers(state, registry, player, card, def_id, false);
 }

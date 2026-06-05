@@ -446,3 +446,72 @@ impl CostModifier {
         self.duration
     }
 }
+
+/// A continuous replacement effect (§7.7): it waits for a stated event and
+/// replaces it as it would occur.
+///
+/// Only damage redirection is modeled so far — "if a character matching `filter`
+/// would be dealt damage, put that many damage counters on the source instead"
+/// (Beast – Selfless Protector). The layer is designed to grow more
+/// [`ReplacementKind`] variants (prevention, skip, enters-exerted) as cards need
+/// them.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct ReplacementEffect {
+    source: CardId,
+    owner: PlayerId,
+    kind: ReplacementKind,
+    duration: ModifierDuration,
+}
+
+/// What a [`ReplacementEffect`] does.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub enum ReplacementKind {
+    /// "If a character matching `filter` would be dealt damage, put that many
+    /// damage counters on the source instead" (redirect to the source).
+    RedirectDamageToSource {
+        /// Which would-be-damaged characters this redirect applies to.
+        filter: CharacterFilter,
+    },
+}
+
+impl ReplacementEffect {
+    /// Create a replacement effect sourced from `source` (owned by `owner`).
+    #[must_use]
+    pub const fn new(
+        source: CardId,
+        owner: PlayerId,
+        kind: ReplacementKind,
+        duration: ModifierDuration,
+    ) -> Self {
+        Self {
+            source,
+            owner,
+            kind,
+            duration,
+        }
+    }
+
+    /// The card whose ability generates this replacement.
+    #[must_use]
+    pub const fn source(&self) -> CardId {
+        self.source
+    }
+
+    /// The player who controls the replacement's source.
+    #[must_use]
+    pub const fn owner(&self) -> PlayerId {
+        self.owner
+    }
+
+    /// What the replacement does.
+    #[must_use]
+    pub const fn kind(&self) -> &ReplacementKind {
+        &self.kind
+    }
+
+    /// The duration.
+    #[must_use]
+    pub const fn duration(&self) -> ModifierDuration {
+        self.duration
+    }
+}
