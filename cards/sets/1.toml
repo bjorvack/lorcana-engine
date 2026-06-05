@@ -154,6 +154,10 @@ willpower = 3
 lore = 1
 classifications = ["Storyborn", "Hero", "Princess"]
 text = "LOOK AT THIS STUFF Whenever you play an item, you may ready this character."
+[[card.abilities]]
+on = "play_item"
+may = true
+do = { ready = "self" }
 
 [[card]]
 name = "Aurora - Briar Rose"
@@ -439,6 +443,10 @@ ink = ["Sapphire"]
 image = "https://cards.lorcast.io/card/digital/large/crd_aa19240342864dd7a428b95c5b6a85b6.avif?1709690747"
 inkwell = true
 text = "CONSIDER THE COCONUT Whenever you play a character, you may remove up to 2 damage from chosen character."
+[[card.abilities]]
+on = "play_character"
+may = true
+do = { remove_damage = 2, to = "chosen character" }
 
 [[card]]
 name = "Control Your Temper!"
@@ -988,6 +996,9 @@ ink = ["Amber"]
 image = "https://cards.lorcast.io/card/digital/large/crd_2894c74113e7436abf095fe35dde6ea8.avif?1709690747"
 inkwell = true
 text = "(A character with cost 4 or more can {E} to sing this song for free.)\nRemove up to 3 damage from each of your characters."
+[[card.abilities]]
+on = "play"
+do = { remove_damage = 3, to = "all your characters" }
 
 [[card]]
 name = "Hans - Scheming Prince"
@@ -1161,6 +1172,14 @@ lore = 2
 classifications = ["Floodborn", "Hero", "Princess", "Queen"]
 keywords = ["Shift 3"]
 text = "Shift 3 (You may pay 3 {I} to play this on top of one of your characters named Jasmine.)\nCARETAKER When you play this character and whenever she quests, you may remove up to 2 damage from each of your characters."
+[[card.abilities]]
+on = "play"
+may = true
+do = { remove_damage = 2, to = "all your characters" }
+[[card.abilities]]
+on = "quest"
+may = true
+do = { remove_damage = 2, to = "all your characters" }
 
 [[card]]
 name = "Jasper - Common Crook"
@@ -1313,6 +1332,9 @@ willpower = 2
 lore = 1
 classifications = ["Dreamborn", "Ally"]
 text = "FAN THE FLAMES When you play this character, ready chosen character. They can't quest for the rest of this turn."
+[[card.abilities]]
+on = "play"
+do = { apply_to = "chosen character", then_to = [{ ready = "self" }, { restrict = "cant_quest", duration = "this_turn" }] }
 
 [[card]]
 name = "Let It Go"
@@ -1484,6 +1506,10 @@ willpower = 5
 lore = 1
 classifications = ["Storyborn", "Ally"]
 text = "DURABLE When this character is banished in a challenge, you may return this card to your hand."
+[[card.abilities]]
+on = "banished_in_challenge"
+may = true
+do = { return_to_hand = "self" }
 
 [[card]]
 name = "Maui - Demigod"
@@ -2181,6 +2207,10 @@ willpower = 5
 lore = 2
 classifications = ["Storyborn", "Hero", "Prince"]
 text = "I KNOW WHAT I HAVE TO DO During your turn, whenever this character banishes another character in a challenge, you gain 1 lore."
+[[card.abilities]]
+on = "banishes_in_challenge"
+during_your_turn = true
+do = { gain_lore = 1 }
 
 [[card]]
 name = "Smash"
@@ -2202,6 +2232,9 @@ cost = 1
 ink = ["Emerald"]
 image = "https://cards.lorcast.io/card/digital/large/crd_c2b11d41ddb1477a8f7293afb674c765.avif?1709690747"
 text = "Deal 2 damage to chosen damaged character."
+[[card.abilities]]
+on = "play"
+do = { deal_damage = 2, to = "chosen damaged character" }
 
 [[card]]
 name = "Starkey - Hook's Henchman"
@@ -2372,6 +2405,10 @@ willpower = 5
 lore = 2
 classifications = ["Dreamborn", "Villain", "Deity"]
 text = "SEEK THE HEART During your turn, whenever this character banishes another character in a challenge, you gain 2 lore."
+[[card.abilities]]
+on = "banishes_in_challenge"
+during_your_turn = true
+do = { gain_lore = 2 }
 
 [[card]]
 name = "Te Kā - The Burning One"
@@ -2394,6 +2431,9 @@ ink = ["Emerald"]
 image = "https://cards.lorcast.io/card/digital/large/crd_7c0b98be9394466198db3610a9b64953.avif?1709690747"
 inkwell = true
 text = "Chosen character gains Reckless during their next turn. (They can't quest and must challenge if able.)"
+[[card.abilities]]
+on = "play"
+do = { grant_keyword = "Reckless", duration = "next_turn", to = "chosen character" }
 
 [[card]]
 name = "The Queen - Wicked and Vain"
