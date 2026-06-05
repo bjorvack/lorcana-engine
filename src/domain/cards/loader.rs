@@ -24,7 +24,7 @@
 //! effect DSL (a separate concern).
 
 use super::{CardDefinition, CardKind, Keyword, ShiftAbility};
-use crate::domain::effects::{Effect, TriggerCondition};
+use crate::domain::effects::TriggerCondition;
 use crate::domain::types::card::{Classification, InkType};
 use crate::domain::types::ids::CardDefId;
 use serde::Deserialize;
@@ -160,11 +160,8 @@ impl TomlCard {
         if matches!(kind, CardKind::Action) {
             abilities.retain(|a| {
                 if a.condition == TriggerCondition::WhenYouPlayThis {
-                    action_effects.push(if a.optional {
-                        Effect::May(Box::new(a.effect.clone()))
-                    } else {
-                        a.effect.clone()
-                    });
+                    // `a.effect` already carries `Effect::May` if it was a "you may".
+                    action_effects.push(a.effect.clone());
                     false
                 } else {
                     true

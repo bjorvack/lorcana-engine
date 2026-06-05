@@ -482,7 +482,8 @@ mod tests {
             def.abilities()[0].condition,
             TriggerCondition::WhenYouPlayThis
         );
-        assert!(!def.abilities()[0].optional);
-        assert!(def.abilities()[1].optional);
+        // Optionality is expressed by wrapping the effect in `Effect::May` (no flag).
+        assert!(!matches!(def.abilities()[0].effect, Effect::May(_)));
+        assert!(matches!(def.abilities()[1].effect, Effect::May(_)));
     }
 }

@@ -2032,3 +2032,53 @@ fn effect_damage_fires_dealt_damage_triggers() {
         "reactor's dealt-damage trigger fired from effect damage"
     );
 }
+
+/// "You may" optionality is the `Effect::May` algebra (no flag): an optional quest
+/// trigger suspends on a may-decision and resolves only on yes.
+#[test]
+fn optional_quest_trigger_resolves_on_yes_only() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Bard"
+        type = "Character"
+        cost = 2
+        ink = ["Amber"]
+        strength = 1
+        willpower = 3
+        lore = 1
+        [[card.abilities]]
+        on = "quest"
+        may = true
+        do = { gain_lore = 2 }
+        "#,
+    );
+
+    // Yes branch: quest lore (1) + the optional +2 = 3.
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let bard = place(&mut state, me, 100, 0, 1, 3, true);
+    let _ = apply(&mut state, &reg, Input::Quest { character: bard }).expect("quest");
+    assert!(state.pending().is_some(), "awaiting the may-decision");
+    assert_eq!(lore(&state, me), 1, "only quest lore so far");
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(lorcana_engine::Decision::May(true)),
+    )
+    .expect("yes");
+    assert_eq!(lore(&state, me), 3, "resolved the optional +2 lore");
+
+    // No branch: just the quest lore (1).
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let bard = place(&mut state, me, 100, 0, 1, 3, true);
+    let _ = apply(&mut state, &reg, Input::Quest { character: bard }).expect("quest");
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(lorcana_engine::Decision::May(false)),
+    )
+    .expect("no");
+    assert_eq!(lore(&state, me), 1, "declined: no extra lore");
+}

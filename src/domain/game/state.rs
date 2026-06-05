@@ -295,13 +295,11 @@ impl GameState {
         &mut self,
         controller: PlayerId,
         source: CardId,
-        optional: bool,
         effect: Effect,
     ) -> TriggerId {
         let id = TriggerId::from_raw(self.next_trigger_id);
         self.next_trigger_id += 1;
-        self.bag
-            .push(BagEntry::new(id, controller, source, optional, effect));
+        self.bag.push(BagEntry::new(id, controller, source, effect));
         id
     }
 

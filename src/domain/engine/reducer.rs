@@ -867,8 +867,8 @@ fn enqueue_support_trigger(
     let _ = state.enqueue_trigger(
         controller,
         character,
-        true, // "you may"
-        Effect::GiveStrengthThisTurn {
+        // "you may" — optionality is expressed by wrapping in `Effect::May`.
+        Effect::May(Box::new(Effect::GiveStrengthThisTurn {
             target: Target::ChosenCharacter {
                 filter: CharacterFilter::any(TargetSide::Any)
                     .and(CharacterFilter::negate(CharacterFilter::IsSource)),
@@ -877,7 +877,7 @@ fn enqueue_support_trigger(
                 stat: Stat::Strength,
                 target: Target::SelfCard,
             },
-        },
+        })),
     );
 }
 
@@ -1646,12 +1646,7 @@ fn apply_end_turn(
     // at end of turn (§7.4.7) go to the bag and resolve; this may suspend.
     enqueue_turn_triggers(state, registry, active, &TriggerCondition::AtEndOfTurn);
     for delayed in state.take_delayed_due(DelayedWhen::EndOfTurn) {
-        let _ = state.enqueue_trigger(
-            delayed.controller(),
-            delayed.source(),
-            false,
-            delayed.effect(),
-        );
+        let _ = state.enqueue_trigger(delayed.controller(), delayed.source(), delayed.effect());
     }
     events.extend(resolve_bag(state, registry));
     // If an end-of-turn trigger is awaiting a decision, ending the turn and
@@ -1960,7 +1955,7 @@ fn enqueue_character_event(
 ) {
     let active = state.active_player();
     let amount = fired.amount();
-    let mut to_enqueue: Vec<(PlayerId, CardId, bool, Effect)> = Vec::new();
+    let mut to_enqueue: Vec<(PlayerId, CardId, Effect)> = Vec::new();
     {
         // The actor's instance (in play, or in a discard if it just left play).
         let Some(actor_inst) = state.instance_in_play(actor).or_else(|| {
@@ -1992,7 +1987,7 @@ fn enqueue_character_event(
                     && ab.turn_gate.allows(wc == active)
                     && state.matches_filter(wc, wid, actor_owner, actor_inst, scope)
                 {
-                    to_enqueue.push((wc, wid, ab.optional, ab.effect.clone()));
+                    to_enqueue.push((wc, wid, ab.effect.clone()));
                 }
             }
         }
@@ -2003,16 +1998,16 @@ fn enqueue_character_event(
                 && let Some(wc) = owner_holding(state, g.source)
                 && state.matches_filter(wc, g.source, actor_owner, actor_inst, scope)
             {
-                to_enqueue.push((wc, g.source, g.optional, g.effect.clone()));
+                to_enqueue.push((wc, g.source, g.effect.clone()));
             }
         }
     }
-    for (wc, wid, optional, effect) in to_enqueue {
+    for (wc, wid, effect) in to_enqueue {
         let effect = match amount {
             Some(n) => effect.with_trigger_amount(n),
             None => effect,
         };
-        let _ = state.enqueue_trigger(wc, wid, optional, effect);
+        let _ = state.enqueue_trigger(wc, wid, effect);
     }
 }
 
@@ -2035,11 +2030,11 @@ fn enqueue_self_triggers(
     let Some(definition) = registry.get(def_id) else {
         return;
     };
-    let mut matches: Vec<(bool, Effect)> = definition
+    let mut matches: Vec<Effect> = definition
         .abilities()
         .iter()
         .filter(|a| a.condition == *condition)
-        .map(|a| (a.optional, a.effect.clone()))
+        .map(|a| a.effect.clone())
         .collect();
     // Also fire any triggered abilities granted to this card by an effect (§7.6).
     matches.extend(
@@ -2047,10 +2042,10 @@ fn enqueue_self_triggers(
             .granted_triggers()
             .iter()
             .filter(|g| g.source == source && g.condition == *condition)
-            .map(|g| (g.optional, g.effect.clone())),
+            .map(|g| g.effect.clone()),
     );
-    for (optional, effect) in matches {
-        let _ = state.enqueue_trigger(controller, source, optional, effect);
+    for effect in matches {
+        let _ = state.enqueue_trigger(controller, source, effect);
     }
 }
 
@@ -2122,7 +2117,7 @@ fn enqueue_play_a_card_triggers(
     let Some(owner) = state.player(controller) else {
         return;
     };
-    let mut to_enqueue: Vec<(CardId, bool, Effect)> = Vec::new();
+    let mut to_enqueue: Vec<(CardId, Effect)> = Vec::new();
     for watcher in owner.play().iter() {
         if watcher.id() == played {
             continue; // a card's own play doesn't trigger its own "whenever you play"
@@ -2134,12 +2129,12 @@ fn enqueue_play_a_card_triggers(
             if let TriggerCondition::WhenYouPlay(category) = &ability.condition
                 && category_matches(category, played_definition)
             {
-                to_enqueue.push((watcher.id(), ability.optional, ability.effect.clone()));
+                to_enqueue.push((watcher.id(), ability.effect.clone()));
             }
         }
     }
-    for (source, optional, effect) in to_enqueue {
-        let _ = state.enqueue_trigger(controller, source, optional, effect);
+    for (source, effect) in to_enqueue {
+        let _ = state.enqueue_trigger(controller, source, effect);
     }
 }
 
@@ -2244,7 +2239,7 @@ fn resolve_bag(state: &mut GameState, registry: &CardRegistry) -> Vec<GameEvent>
             });
             break;
         }
-        resolve_or_ask(state, registry, &mut events, theirs[0]);
+        execute_trigger(state, registry, &mut events, theirs[0]);
     }
     events
 }
@@ -2257,24 +2252,6 @@ fn next_resolving_player(state: &GameState) -> Option<PlayerId> {
     (0..player_count)
         .map(|offset| seat((start + offset) % player_count))
         .find(|p| !state.triggers_for(*p).is_empty())
-}
-
-/// Resolve a single trigger, or suspend on a "may" decision if it is optional.
-fn resolve_or_ask(
-    state: &mut GameState,
-    registry: &CardRegistry,
-    events: &mut Vec<GameEvent>,
-    trigger: TriggerId,
-) {
-    let Some(entry) = state.bag().iter().find(|e| e.id() == trigger) else {
-        return;
-    };
-    if entry.optional() {
-        let player = entry.controller();
-        state.set_pending(PendingDecision::MayResolve { player, trigger });
-        return;
-    }
-    execute_trigger(state, registry, events, trigger);
 }
 
 /// Remove a trigger from the bag and apply its effect, then run a game-state
@@ -3974,11 +3951,17 @@ fn apply_effect_to_rest(
             optional,
             ..
         } => {
+            // "You may …" optionality is folded into the granted effect via
+            // `Effect::May` (the granted trigger carries no separate flag).
+            let granted_effect = if *optional {
+                Effect::May(Box::new((**granted).clone()))
+            } else {
+                (**granted).clone()
+            };
             state.add_granted_trigger(GrantedTrigger {
                 source: target_card,
                 condition: condition.clone(),
-                effect: (**granted).clone(),
-                optional: *optional,
+                effect: granted_effect,
                 duration: ModifierDuration::UntilEndOfTurn,
             });
         }
@@ -4160,15 +4143,7 @@ fn apply_decision(
                 return Err(Rejected::InvalidDecision);
             }
             let _ = state.take_pending();
-            resolve_or_ask(state, registry, &mut events, trigger);
-        }
-        (PendingDecision::MayResolve { trigger, .. }, Decision::May(apply_it)) => {
-            let _ = state.take_pending();
-            if apply_it {
-                execute_trigger(state, registry, &mut events, trigger);
-            } else {
-                let _ = state.remove_trigger(trigger);
-            }
+            execute_trigger(state, registry, &mut events, trigger);
         }
         (PendingDecision::EnterPlayExerted { player, card }, Decision::EnterExerted(exert)) => {
             apply_enter_exerted_decision(state, registry, player, card, exert);

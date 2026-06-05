@@ -103,14 +103,6 @@ pub enum PendingDecision {
         /// The candidate triggers (their own bag entries).
         options: Vec<TriggerId>,
     },
-    /// An optional ("you may") triggered ability is resolving; the player chooses
-    /// whether to apply it (§7.1.3).
-    MayResolve {
-        /// The player who must choose.
-        player: PlayerId,
-        /// The optional trigger awaiting a yes/no.
-        trigger: TriggerId,
-    },
     /// A Bodyguard character just entered play; its controller chooses whether it
     /// enters exerted instead of ready (§10.3.2).
     EnterPlayExerted {
@@ -178,7 +170,6 @@ impl PendingDecision {
     pub const fn player(&self) -> PlayerId {
         match self {
             Self::OrderTriggers { player, .. }
-            | Self::MayResolve { player, .. }
             | Self::EnterPlayExerted { player, .. }
             | Self::Choose { player, .. }
             | Self::NameCard { player, .. }

@@ -203,7 +203,7 @@ fn decision_actions(pending: &PendingDecision) -> Vec<Input> {
             .iter()
             .map(|t| decide(Decision::ResolveNext(*t)))
             .collect(),
-        PendingDecision::MayResolve { .. } | PendingDecision::MayResolveEffect { .. } => {
+        PendingDecision::MayResolveEffect { .. } => {
             vec![decide(Decision::May(true)), decide(Decision::May(false))]
         }
         PendingDecision::EnterPlayExerted { .. } => vec![

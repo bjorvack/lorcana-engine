@@ -44,10 +44,9 @@ pub struct GrantedTrigger {
     pub source: CardId,
     /// When it fires.
     pub condition: TriggerCondition,
-    /// What it does.
+    /// What it does. ("You may …" optionality is part of the effect via
+    /// [`Effect::May`].)
     pub effect: Effect,
-    /// Whether it's a "you may" (optional) trigger.
-    pub optional: bool,
     /// How long the grant lasts.
     pub duration: ModifierDuration,
 }

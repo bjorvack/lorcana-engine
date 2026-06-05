@@ -107,10 +107,10 @@ fn optional_trigger_waits_for_a_may_decision() {
     let active = state.active_player();
 
     let _ = ink_then_play(&mut state, &registry);
-    // Suspended on the "may" decision.
+    // Suspended on the "may" decision (optionality via Effect::May).
     assert!(matches!(
         state.pending(),
-        Some(PendingDecision::MayResolve { .. })
+        Some(PendingDecision::MayResolveEffect { .. })
     ));
     let hand_before = state.player(active).unwrap().hand().len();
 

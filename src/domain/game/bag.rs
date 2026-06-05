@@ -83,25 +83,17 @@ pub struct BagEntry {
     id: TriggerId,
     controller: PlayerId,
     source: CardId,
-    optional: bool,
     effect: Effect,
 }
 
 impl BagEntry {
     /// Create a bag entry.
     #[must_use]
-    pub const fn new(
-        id: TriggerId,
-        controller: PlayerId,
-        source: CardId,
-        optional: bool,
-        effect: Effect,
-    ) -> Self {
+    pub const fn new(id: TriggerId, controller: PlayerId, source: CardId, effect: Effect) -> Self {
         Self {
             id,
             controller,
             source,
-            optional,
             effect,
         }
     }
@@ -124,13 +116,8 @@ impl BagEntry {
         self.source
     }
 
-    /// Whether the ability is optional ("you may", §7.1.3).
-    #[must_use]
-    pub const fn optional(&self) -> bool {
-        self.optional
-    }
-
-    /// The effect to apply when this entry resolves.
+    /// The effect to apply when this entry resolves. ("You may …" optionality is
+    /// part of the effect itself via [`Effect::May`].)
     #[must_use]
     pub fn effect(&self) -> Effect {
         self.effect.clone()

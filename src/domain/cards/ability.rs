@@ -48,12 +48,12 @@ impl TurnGate {
 pub struct TriggeredAbility {
     /// What makes the ability fire.
     pub condition: TriggerCondition,
-    /// `true` if the effect is a "you may" (optional) effect.
-    pub optional: bool,
     /// When the trigger may fire relative to whose turn it is ("During your turn,
     /// …" / "During the opponent's turn, …"; §4.1). Defaults to any turn.
     pub turn_gate: TurnGate,
-    /// What the ability does when it resolves.
+    /// What the ability does when it resolves. Optionality ("you may …") is
+    /// expressed by wrapping this in [`Effect::May`] — there is no separate
+    /// `optional` flag (the algebra composes it onto any effect).
     pub effect: Effect,
 }
 
@@ -63,21 +63,16 @@ impl TriggeredAbility {
     pub const fn new(condition: TriggerCondition, effect: Effect) -> Self {
         Self {
             condition,
-            optional: false,
             turn_gate: TurnGate::AnyTurn,
             effect,
         }
     }
 
-    /// Create an optional ("you may") triggered ability.
+    /// Create an optional ("you may") triggered ability — sugar for wrapping the
+    /// effect in [`Effect::May`].
     #[must_use]
-    pub const fn optional(condition: TriggerCondition, effect: Effect) -> Self {
-        Self {
-            condition,
-            optional: true,
-            turn_gate: TurnGate::AnyTurn,
-            effect,
-        }
+    pub fn optional(condition: TriggerCondition, effect: Effect) -> Self {
+        Self::new(condition, Effect::May(Box::new(effect)))
     }
 
     /// Gate this trigger to the controller's own turn ("During your turn, …").

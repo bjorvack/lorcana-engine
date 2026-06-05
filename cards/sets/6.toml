@@ -1905,6 +1905,7 @@ text = "Shift 7 (You may pay 7 {I} to play this on top of one of your characters
 [[card.abilities]]
 on = "card_put_in_inkwell"
 during_your_turn = true
+may = true
 do = { draw = 1 }
 
 [[card]]
