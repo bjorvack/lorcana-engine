@@ -640,8 +640,14 @@ Challenge/banish triggers into the bag (see
   the *next* damage source goes through (DSL `prevent_next_damage`).
   `tests/conformance.rs::{damage_is_redirected_to_a_protector,damage_is_prevented_by_a_replacement,prevent_next_damage_stops_only_the_first_source}`,
   `tests/card_loader.rs::the_dsl_exposes_a_damage_redirect`.
-  **Remaining kinds:** "skip", enters-exerted; full §7.7.7 multi-replacement
-  ordering (self-replacement first).
+  **Remaining kinds:** "skip", enters-exerted. §7.7.8 ("the same replacement can't
+  apply twice") and **termination** are handled — `deal_damage_to` tracks a `used`
+  set and reapplies to the modified event (`tests/conformance.rs::chained_redirects_apply_once_and_terminate`).
+  **Scoped gap:** when *multiple different* replacements could apply to one event,
+  §7.7.7.2 has the affected player **choose** which; the engine currently applies a
+  deterministic order (making it interactive needs suspend-mid-damage, a large
+  change for a near-never board). Self-replacement effects (§7.7.7.1) don't exist
+  among the current damage kinds.
 - Choice machinery completeness: "may" (§7.1.3), "up to N" (§7.1.8, no duplicates),
   ordering simultaneous discards/destinations, "that [game term]" resolution (§7.1.9).
 - Floating & delayed triggered abilities (§7.4.7).

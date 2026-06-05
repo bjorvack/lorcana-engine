@@ -3739,3 +3739,92 @@ fn prevent_next_damage_stops_only_the_first_source() {
         "second damage goes through"
     );
 }
+
+/// §7.7.8 / termination: with two protectors that each redirect "your other
+/// characters'" damage to themselves, a single damage event is redirected through
+/// the chain, each redirect applying at most once (no infinite loop). The counters
+/// land on the last protector in the chain.
+#[test]
+fn chained_redirects_apply_once_and_terminate() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Beast"
+        type = "Character"
+        cost = 0
+        ink = ["Amber"]
+        strength = 1
+        willpower = 9
+        lore = 1
+        [[card.redirect_damage]]
+        from = "your other characters"
+        [[card]]
+        name = "Ally"
+        type = "Character"
+        cost = 2
+        ink = ["Amber"]
+        strength = 1
+        willpower = 5
+        lore = 1
+        [[card]]
+        name = "Zapper"
+        type = "Character"
+        cost = 2
+        ink = ["Amber"]
+        strength = 1
+        willpower = 5
+        lore = 1
+        [[card.abilities]]
+        on = "quest"
+        do = { deal_damage = 3, target = "chosen character" }
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+
+    // Two Beasts (cost 0), an Ally, a Zapper.
+    let play_beast = |state: &mut GameState, raw: u32| {
+        let id = CardId::from_raw(raw);
+        state
+            .player_mut(me)
+            .unwrap()
+            .hand_mut()
+            .push(CardInstance::new(
+                id,
+                CardDefId::from_raw(0),
+                Conditions::faceup_idle(),
+            ));
+        let _ = apply(
+            state,
+            &reg,
+            Input::PlayCard {
+                card: id,
+                shift_onto: None,
+            },
+        )
+        .expect("beast");
+        id
+    };
+    let b1 = play_beast(&mut state, 100);
+    let b2 = play_beast(&mut state, 101);
+    let ally = place(&mut state, me, 200, 1, 1, 5, true);
+    let zapper = place(&mut state, me, 201, 2, 1, 5, true);
+
+    // Deal 3 to Ally — redirected through both Beasts (each once), terminating.
+    let _ = apply(&mut state, &reg, Input::Quest { character: zapper }).expect("quest");
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(lorcana_engine::Decision::ChooseTarget(ally)),
+    )
+    .expect("target ally");
+
+    assert_eq!(
+        damage(&state, me, ally),
+        Some(0),
+        "original target unscathed"
+    );
+    // The chain redirects b1 -> b2; all 3 counters end on one protector, none lost.
+    let total = damage(&state, me, b1).unwrap() + damage(&state, me, b2).unwrap();
+    assert_eq!(total, 3, "the 3 damage landed once, no loop/duplication");
+}
