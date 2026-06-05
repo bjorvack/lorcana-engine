@@ -995,8 +995,20 @@ fn apply_challenge(
     // "Whenever this character challenges / is challenged" triggers go to the bag
     // (§4.3.6); enqueued before the game-state check so a challenger/target that is
     // about to be banished still triggers (the bag captures the effect).
-    enqueue_character_event(state, registry, Fired::Challenges, challenger, active);
-    enqueue_character_event(state, registry, Fired::Challenged, target, target_owner);
+    enqueue_character_event(
+        state,
+        registry,
+        Fired::Challenges { other: target },
+        challenger,
+        active,
+    );
+    enqueue_character_event(
+        state,
+        registry,
+        Fired::Challenged { other: challenger },
+        target,
+        target_owner,
+    );
     let check_events = game_state_check(state);
     let banished_in_check = |id: CardId| {
         check_events
@@ -1941,10 +1953,18 @@ fn seat(index: usize) -> PlayerId {
 enum Fired {
     Quests,
     Sings,
-    Challenges,
-    Challenged,
+    /// This character challenges `other` (the challenged character).
+    Challenges {
+        other: CardId,
+    },
+    /// This character is challenged by `other` (the challenging character).
+    Challenged {
+        other: CardId,
+    },
     BanishesInChallenge,
-    Banished { in_challenge: bool },
+    Banished {
+        in_challenge: bool,
+    },
     DealtDamage(i32),
     DamageRemoved,
     Readies,
@@ -1958,8 +1978,8 @@ impl Fired {
         match (event, self) {
             (ScopedEvent::Quests, Self::Quests)
             | (ScopedEvent::Sings, Self::Sings)
-            | (ScopedEvent::Challenges, Self::Challenges)
-            | (ScopedEvent::Challenged, Self::Challenged)
+            | (ScopedEvent::Challenges, Self::Challenges { .. })
+            | (ScopedEvent::Challenged, Self::Challenged { .. })
             | (ScopedEvent::BanishesInChallenge, Self::BanishesInChallenge)
             | (ScopedEvent::DealtDamage, Self::DealtDamage(_))
             | (ScopedEvent::DamageRemoved, Self::DamageRemoved)
@@ -1980,6 +2000,15 @@ impl Fired {
             None
         }
     }
+
+    /// The other card bound by the event — the challenging / challenged character
+    /// — for `Target::TriggerCard` substitution.
+    const fn trigger_card(self) -> Option<CardId> {
+        match self {
+            Self::Challenges { other } | Self::Challenged { other } => Some(other),
+            _ => None,
+        }
+    }
 }
 
 /// Fire [`TriggerCondition::WhenCharacterEvent`] triggers for `fired` happening to
@@ -1998,6 +2027,7 @@ fn enqueue_character_event(
 ) {
     let active = state.active_player();
     let amount = fired.amount();
+    let trigger_card = fired.trigger_card();
     // The fourth element is `Some(ability_index)` for a `once_per_turn` ability
     // (so the firing site can mark it spent for the turn), else `None`.
     let mut to_enqueue: Vec<(PlayerId, CardId, Effect, Option<usize>)> = Vec::new();
@@ -2061,6 +2091,10 @@ fn enqueue_character_event(
     for (wc, wid, effect, once) in to_enqueue {
         let effect = match amount {
             Some(n) => effect.with_trigger_amount(n),
+            None => effect,
+        };
+        let effect = match trigger_card {
+            Some(other) => effect.with_trigger_card(other),
             None => effect,
         };
         if let Some(idx) = once {
@@ -2877,6 +2911,8 @@ fn resolve_targeted(
             apply_effect_to(state, registry, controller, source, *card, effect, events);
             None
         }
+        // An unbound trigger card (not in a challenge context) fizzles.
+        Target::TriggerCard => None,
         Target::ChosenCharacter { filter } => {
             let options = choosable_characters(state, registry, controller, source, filter);
             (!options.is_empty()).then(|| choose_one(controller, options, effect))
@@ -2948,8 +2984,8 @@ fn resolve_on_target(
                 then: ChoiceThen::ApplyAllTo(effects.to_vec()),
             })
         }
-        // "Up to" / nothing-to-choose endpoints aren't used by OnTarget cards.
-        Target::UpToCharacters { .. } => None,
+        // "Up to" / an unbound trigger card aren't used by OnTarget cards — fizzle.
+        Target::UpToCharacters { .. } | Target::TriggerCard => None,
     }
 }
 

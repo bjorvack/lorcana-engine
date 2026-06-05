@@ -3175,3 +3175,55 @@ fn banish_this_item_as_an_activation_cost() {
         "...and is in the discard"
     );
 }
+
+/// "Whenever this character is challenged, the challenging character gets -2 {S}
+/// this turn" (§4.3.6): the trigger's effect targets the other combatant via
+/// `Target::TriggerCard`.
+#[test]
+fn challenged_trigger_debuffs_the_challenging_character() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Cheshire"
+        type = "Character"
+        cost = 3
+        ink = ["Amethyst"]
+        strength = 1
+        willpower = 6
+        lore = 1
+        [[card.abilities]]
+        on = "challenged"
+        do = { give_strength = -2, target = "the challenging character" }
+        [[card]]
+        name = "Attacker"
+        type = "Character"
+        cost = 3
+        ink = ["Amethyst"]
+        strength = 4
+        willpower = 6
+        lore = 1
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let foe = opponent_of(&state, me);
+    let attacker = place(&mut state, me, 100, 1, 4, 6, true);
+    let cheshire = place(&mut state, foe, 200, 0, 1, 6, false); // exerted → challengeable
+
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Challenge {
+            challenger: attacker,
+            target: cheshire,
+        },
+    )
+    .expect("challenge");
+
+    let str_now = state.current_character_stats(attacker).map(|s| s.strength);
+    assert_eq!(
+        str_now,
+        Some(2),
+        "the challenging character got -2 {{S}} (4 -> 2)"
+    );
+}

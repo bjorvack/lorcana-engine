@@ -3,7 +3,7 @@
 use super::target::{CharacterFilter, Target};
 use super::trigger::TriggerCondition;
 use crate::domain::game::{Property, Stat};
-use crate::domain::types::ids::PlayerId;
+use crate::domain::types::ids::{CardId, PlayerId};
 use serde::{Deserialize, Serialize};
 
 /// A numeric amount used by effects (damage, lore, draws, `{S}` change). Either a
@@ -490,6 +490,75 @@ pub enum Effect {
 }
 
 impl Effect {
+    /// Substitute the concrete `card` for every [`Target::TriggerCard`] ("the
+    /// challenging / challenged character") in this effect, recursing into nested
+    /// effects. Called when a challenge-trigger ability that references the other
+    /// combatant is enqueued.
+    #[must_use]
+    pub fn with_trigger_card(self, card: CardId) -> Self {
+        let bind = |t: Target| {
+            if matches!(t, Target::TriggerCard) {
+                Target::Card(card)
+            } else {
+                t
+            }
+        };
+        match self {
+            Self::GiveStatThisTurn {
+                target,
+                stat,
+                amount,
+            } => Self::GiveStatThisTurn {
+                target: bind(target),
+                stat,
+                amount,
+            },
+            Self::DealDamage { target, amount } => Self::DealDamage {
+                target: bind(target),
+                amount,
+            },
+            Self::RemoveDamage { target, amount } => Self::RemoveDamage {
+                target: bind(target),
+                amount,
+            },
+            Self::Banish(t) => Self::Banish(bind(t)),
+            Self::Exert(t) => Self::Exert(bind(t)),
+            Self::Ready(t) => Self::Ready(bind(t)),
+            Self::Freeze(t) => Self::Freeze(bind(t)),
+            Self::Move {
+                what: MoveSource::Card(t),
+                to,
+            } => Self::Move {
+                what: MoveSource::Card(bind(t)),
+                to,
+            },
+            Self::GrantThisTurn { target, property } => Self::GrantThisTurn {
+                target: bind(target),
+                property,
+            },
+            Self::Grant { target, property } => Self::Grant {
+                target: bind(target),
+                property,
+            },
+            Self::GrantNextTurn { target, property } => Self::GrantNextTurn {
+                target: bind(target),
+                property,
+            },
+            Self::OnTarget { target, effects } => Self::OnTarget {
+                target: bind(target),
+                effects: effects
+                    .into_iter()
+                    .map(|e| e.with_trigger_card(card))
+                    .collect(),
+            },
+            Self::All(seq) => {
+                Self::All(seq.into_iter().map(|e| e.with_trigger_card(card)).collect())
+            }
+            Self::May(inner) => Self::May(Box::new(inner.with_trigger_card(card))),
+            other => other,
+        }
+    }
+
     /// Substitute the triggering event's value for every [`Amount::TriggerAmount`]
     /// ("that much" / "that many") in this effect, recursing into nested effects.
     /// Called once when a triggered ability that references the trigger's amount is

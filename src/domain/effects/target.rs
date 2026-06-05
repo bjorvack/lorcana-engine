@@ -146,6 +146,12 @@ pub enum Target {
     /// target (e.g. the first pick of a two-target move-damage). Not authored on
     /// cards directly.
     Card(CardId),
+    /// The other card bound by the triggering event — "the challenging character"
+    /// (for a "when this is challenged" trigger) or "the challenged character"
+    /// (for a "when this challenges" trigger). The firing site substitutes the
+    /// concrete card (via `Effect::with_trigger_card`); evaluates to nothing if
+    /// unbound.
+    TriggerCard,
     /// A single character the controller chooses at resolution (§7.1). "Another
     /// chosen …" is expressed by the `filter` (`Not(IsSource)`).
     ChosenCharacter {

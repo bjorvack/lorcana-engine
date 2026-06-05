@@ -631,6 +631,11 @@ fn parse_selector(s: &str) -> Option<Target> {
     if lower == "self" || lower == "this" {
         return Some(Target::SelfCard);
     }
+    // "the challenging / challenged character" — the other combatant bound by a
+    // challenge trigger (substituted at the firing site).
+    if lower.contains("challenging character") || lower.contains("challenged character") {
+        return Some(Target::TriggerCard);
+    }
     let filter = parse_filter(s)?;
     let is_permanent = lower.contains("item") || lower.contains("location");
     Some(if is_permanent {

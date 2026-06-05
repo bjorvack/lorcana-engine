@@ -535,6 +535,11 @@ Challenge/banish triggers into the bag (see
     leaves ("a character or item" → `Or([Category(Character), Category(Item)])`),
     dropping the redundant per-token `Category` leaves. Single-category selectors
     are unchanged. `tests/card_loader.rs::the_dsl_exposes_character_or_item_target`.
+  - [x] **8b-8c — trigger-bound card target:** `Target::TriggerCard` ("the
+    challenging / challenged character") is substituted with the other combatant at
+    the challenge firing site via `Effect::with_trigger_card` (mirrors
+    `with_trigger_amount` for "that much"). DSL selector "the challenging/challenged
+    character". `tests/conformance.rs::challenged_trigger_debuffs_the_challenging_character`.
   - [x] **8b-9 — start/end-of-turn triggers + turn-progression-with-suspension**
     (clears the Slice 5h deferral): `TriggerCondition::AtStartOfTurn` resolves in
     the Set step (§4.2.2.3), `AtEndOfTurn` in the End phase (§4.4.1), both via
