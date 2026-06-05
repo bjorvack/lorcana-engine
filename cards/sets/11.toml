@@ -1957,6 +1957,10 @@ willpower = 2
 lore = 1
 classifications = ["Storyborn", "Villain"]
 text = "BAH, HUMBUG During your turn, whenever a card is put into your inkwell, chosen character gets -1 {S} this turn."
+[[card.abilities]]
+on = "card_put_in_inkwell"
+during_your_turn = true
+do = { give_strength = -1, to = "chosen character" }
 
 [[card]]
 name = "Scrooge McDuck - Reformed Ebenezer"

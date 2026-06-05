@@ -2323,3 +2323,274 @@ fn exert_and_freeze_apply_to_one_chosen_target() {
         "...and frozen (the second step), from one pick"
     );
 }
+
+/// Like [`place`] (always ready), but with an explicit `{L}` so quest-lore is
+/// observable (the `place` helper always fixes lore at 1).
+fn place_ready_with_lore(
+    state: &mut GameState,
+    owner: PlayerId,
+    raw: u32,
+    def: u32,
+    strength: u32,
+    willpower: u32,
+    lore: u32,
+) -> CardId {
+    let id = CardId::from_raw(raw);
+    let mut instance = CardInstance::new(id, CardDefId::from_raw(def), Conditions::faceup_idle());
+    instance.set_stats(Some(CharacterStats::new(strength, willpower, lore)));
+    state.player_mut(owner).unwrap().play_mut().push(instance);
+    id
+}
+
+fn is_ready(state: &GameState, owner: PlayerId, card: CardId) -> bool {
+    state
+        .player(owner)
+        .unwrap()
+        .play()
+        .iter()
+        .find(|c| c.id() == card)
+        .unwrap()
+        .conditions()
+        .ready
+}
+
+/// §4.3.5 — Quest: the active player exerts the questing character (§4.3.5.7) and
+/// gains lore equal to that character's {L} (§4.3.5.8). Here a {L} 2 character
+/// quests once, so its controller gains exactly 2 lore and the character is left
+/// exerted.
+#[test]
+fn questing_exerts_the_character_and_gains_its_lore() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Pathfinder"
+        type = "Character"
+        cost = 1
+        strength = 2
+        willpower = 3
+        lore = 2
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let hero = place_ready_with_lore(&mut state, me, 100, 0, 2, 3, 2);
+    assert_eq!(lore(&state, me), 0, "starts the turn at 0 lore");
+    assert!(is_ready(&state, me, hero), "the character starts ready");
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: hero }).expect("quest");
+
+    assert_eq!(
+        lore(&state, me),
+        2,
+        "gained lore equal to the questing character's {{L}} (§4.3.5.8)"
+    );
+    assert!(
+        !is_ready(&state, me, hero),
+        "the questing character is exerted (§4.3.5.7)"
+    );
+}
+
+/// §4.3.6 (worked Example A) — in a challenge, both the challenging character and
+/// the character being challenged deal damage equal to their Strength {S} to the
+/// other (§4.3.6.13). Here both have enough Willpower to survive, so each ends up
+/// with damage counters equal to the *other's* {S}.
+#[test]
+fn challenge_deals_damage_both_ways() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Stitch"
+        type = "Character"
+        cost = 1
+        strength = 2
+        willpower = 9
+        lore = 1
+        [[card]]
+        name = "Milo"
+        type = "Character"
+        cost = 1
+        strength = 3
+        willpower = 9
+        lore = 1
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let foe = opponent_of(&state, me);
+    let stitch = place(&mut state, me, 100, 0, 2, 9, true);
+    let milo = place(&mut state, foe, 200, 1, 3, 9, false); // exerted: a legal target
+
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Challenge {
+            challenger: stitch,
+            target: milo,
+        },
+    )
+    .expect("challenge");
+
+    assert_eq!(
+        damage(&state, foe, milo),
+        Some(2),
+        "the challenged character took the challenger's 2 {{S}}"
+    );
+    assert_eq!(
+        damage(&state, me, stitch),
+        Some(3),
+        "the challenging character took the defender's 3 {{S}}"
+    );
+}
+
+/// §8.7.4 — when a single event puts two of the active player's triggered
+/// abilities into the bag at once, that player chooses which to resolve next;
+/// both still fully resolve. Here one quest fires two `on = "quest"` abilities
+/// (gain 1 lore and draw 1), surfacing an `OrderTriggers` decision.
+#[test]
+fn the_active_player_orders_simultaneous_bag_triggers() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Twin Trigger"
+        type = "Character"
+        cost = 1
+        strength = 1
+        willpower = 5
+        lore = 1
+        [[card.abilities]]
+        on = "quest"
+        do = { gain_lore = 1 }
+        [[card.abilities]]
+        on = "quest"
+        do = { draw = 1 }
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let hero = place(&mut state, me, 100, 0, 1, 5, true);
+    let hand_before = hand_len(&state, me);
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: hero }).expect("quest");
+
+    // Two triggers from one quest → the controller chooses the resolution order.
+    let Some(lorcana_engine::PendingDecision::OrderTriggers { player, options }) = state.pending()
+    else {
+        panic!("expected an OrderTriggers decision (§8.7.4)");
+    };
+    assert_eq!(*player, me, "the active player chooses the order");
+    assert_eq!(
+        options.len(),
+        2,
+        "both quest triggers are waiting in the bag"
+    );
+    let first = options[0];
+
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Decide(lorcana_engine::Decision::ResolveNext(first)),
+    )
+    .expect("resolve next");
+
+    // Regardless of the chosen order both triggers resolve fully.
+    assert!(state.pending().is_none(), "the bag is empty afterwards");
+    assert_eq!(
+        lore(&state, me),
+        2,
+        "quest lore (1) + the gain-lore trigger (1)"
+    );
+    assert_eq!(
+        hand_len(&state, me),
+        hand_before + 1,
+        "the draw trigger also resolved"
+    );
+}
+
+/// §1.2.3 ("do as much as you can") — when a multi-part effect has a part that
+/// can't be performed, the player still does every other part. A quest ability
+/// reads "deal 2 damage to chosen opposing character, then draw a card"; the only
+/// opposing character has Ward (§10.15), so it can't be chosen (§1.2.4) and takes
+/// no damage — but the draw still happens.
+#[test]
+fn do_as_much_as_you_can_still_resolves_the_doable_part() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Storm Caller"
+        type = "Character"
+        cost = 1
+        strength = 1
+        willpower = 5
+        lore = 1
+        [[card.abilities]]
+        on = "quest"
+        do = [
+            { deal_damage = 2, to = "chosen opposing character" },
+            { draw = 1 },
+        ]
+        [[card]]
+        name = "Cogsworth"
+        type = "Character"
+        cost = 1
+        strength = 1
+        willpower = 5
+        lore = 1
+        keywords = ["Ward"]
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let foe = opponent_of(&state, me);
+    let caller = place(&mut state, me, 100, 0, 1, 5, true);
+    let warded = place(&mut state, foe, 200, 1, 1, 5, false); // Ward: not choosable
+    let hand_before = hand_len(&state, me);
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: caller }).expect("quest");
+
+    assert!(
+        state.pending().is_none(),
+        "no target to choose — Ward isn't choosable, so that part is skipped"
+    );
+    assert_eq!(
+        damage(&state, foe, warded),
+        Some(0),
+        "the Ward character took no damage (the un-doable part)"
+    );
+    assert_eq!(
+        hand_len(&state, me),
+        hand_before + 1,
+        "the draw still happened — do as much as you can (§1.2.3)"
+    );
+}
+
+/// §1.9.1.1 — the game-state check (§1.9.2) ends the game as soon as a player has
+/// 20 or more lore: that player wins. Here a {L} 2 character quests from 18 lore,
+/// reaching exactly 20 and finishing the game with its controller as the winner.
+#[test]
+fn reaching_twenty_lore_wins_the_game() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Closer"
+        type = "Character"
+        cost = 1
+        strength = 1
+        willpower = 5
+        lore = 2
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let closer = place_ready_with_lore(&mut state, me, 100, 0, 1, 5, 2);
+    state.player_mut(me).unwrap().add_lore(18);
+    assert_eq!(lore(&state, me), 18, "one quest short of winning");
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: closer }).expect("quest");
+
+    assert_eq!(lore(&state, me), 20, "reached 20 lore by questing");
+    assert_eq!(
+        *state.status(),
+        GameStatus::Finished { winners: vec![me] },
+        "20 lore ends the game with that player as the winner (§1.9.1.1)"
+    );
+}
