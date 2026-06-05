@@ -393,6 +393,13 @@ impl GameState {
         self.replacements.iter()
     }
 
+    /// Remove the replacement at `index` (a one-shot consumed when it applies).
+    pub fn remove_replacement_at(&mut self, index: usize) {
+        if index < self.replacements.len() {
+            drop(self.replacements.remove(index));
+        }
+    }
+
     /// Add a continuous play-cost reduction ("you pay N less to play …").
     pub fn add_cost_modifier(&mut self, modifier: CostModifier) {
         self.cost_modifiers.push(modifier);

@@ -461,6 +461,9 @@ pub struct ReplacementEffect {
     owner: PlayerId,
     kind: ReplacementKind,
     duration: ModifierDuration,
+    /// One-shot: removed the first time it applies ("the **next time** … would be
+    /// dealt damage"). Continuous replacements (Beast) leave this `false`.
+    consume_once: bool,
 }
 
 /// What a [`ReplacementEffect`] does.
@@ -494,7 +497,21 @@ impl ReplacementEffect {
             owner,
             kind,
             duration,
+            consume_once: false,
         }
+    }
+
+    /// Make this a one-shot replacement — removed the first time it applies.
+    #[must_use]
+    pub const fn consuming_once(mut self) -> Self {
+        self.consume_once = true;
+        self
+    }
+
+    /// Whether this replacement is removed the first time it applies.
+    #[must_use]
+    pub const fn consume_once(&self) -> bool {
+        self.consume_once
     }
 
     /// The card whose ability generates this replacement.

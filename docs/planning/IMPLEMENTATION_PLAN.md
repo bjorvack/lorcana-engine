@@ -633,11 +633,14 @@ Challenge/banish triggers into the bag (see
   ("…takes no damage instead"). Both combat and `Effect::DealDamage` route through
   `deal_damage_to`; `MoveDamage` (counter moves) does not. DSL
   `[[card.redirect_damage]]` (`from`) / `[[card.prevent_damage]]` (`to`), registered
-  as `WhileSourceInPlay` replacements on enter-play.
-  `tests/conformance.rs::{damage_is_redirected_to_a_protector,damage_is_prevented_by_a_replacement}`,
+  as `WhileSourceInPlay` replacements on enter-play. A **one-shot** prevention —
+  `Effect::PreventNextDamage(target)` ("the next time chosen character would be
+  dealt damage, they take no damage instead") — registers a `consume_once`
+  `PreventDamage { IsCard(target) }` that `deal_damage_to` removes when it fires, so
+  the *next* damage source goes through (DSL `prevent_next_damage`).
+  `tests/conformance.rs::{damage_is_redirected_to_a_protector,damage_is_prevented_by_a_replacement,prevent_next_damage_stops_only_the_first_source}`,
   `tests/card_loader.rs::the_dsl_exposes_a_damage_redirect`.
-  **Remaining kinds:** one-shot "the *next time* … would be dealt damage" (needs a
-  consume-once duration), "skip", enters-exerted; full §7.7.7 multi-replacement
+  **Remaining kinds:** "skip", enters-exerted; full §7.7.7 multi-replacement
   ordering (self-replacement first).
 - Choice machinery completeness: "may" (§7.1.3), "up to N" (§7.1.8, no duplicates),
   ordering simultaneous discards/destinations, "that [game term]" resolution (§7.1.9).

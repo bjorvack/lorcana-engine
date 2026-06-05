@@ -274,6 +274,10 @@ pub enum Effect {
     /// is consumed at that ready step). Does **not** exert — compose with
     /// [`Effect::Exert`] for "exert chosen character; it can't ready…".
     Freeze(Target),
+    /// "The next time the target would be dealt damage, it takes no damage
+    /// instead" — a one-shot §7.7 prevention bound to that character (consumed when
+    /// it fires).
+    PreventNextDamage(Target),
     /// Grant the target a **triggered ability** until end of turn ("gains
     /// 'Whenever this character challenges, …' this turn", §7.6). The granted
     /// ability fires from the target alongside its printed triggers.
@@ -525,6 +529,7 @@ impl Effect {
             Self::Exert(t) => Self::Exert(bind(t)),
             Self::Ready(t) => Self::Ready(bind(t)),
             Self::Freeze(t) => Self::Freeze(bind(t)),
+            Self::PreventNextDamage(t) => Self::PreventNextDamage(bind(t)),
             Self::Move {
                 what: MoveSource::Card(t),
                 to,

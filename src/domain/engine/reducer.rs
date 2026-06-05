@@ -1114,16 +1114,23 @@ fn deal_damage_to(
     let mut replaced = false;
     loop {
         // Prevention takes precedence: if any active PreventDamage matches the
-        // current target, the damage is replaced with nothing (§7.7).
-        let prevented = state.replacements().any(|r| {
-            matches!(r.kind(), ReplacementKind::PreventDamage { filter }
-            if owner_holding(state, target)
-                .zip(state.instance_in_play(target))
-                .is_some_and(|(holder, inst)| {
-                    state.matches_filter(r.owner(), r.source(), holder, inst, filter)
-                }))
+        // current target, the damage is replaced with nothing (§7.7). A one-shot
+        // prevention ("the next time …") is consumed, so a later damage event
+        // goes through.
+        let prevent = state.replacements().enumerate().find_map(|(i, r)| {
+            let ReplacementKind::PreventDamage { filter } = r.kind() else {
+                return None;
+            };
+            let holder = owner_holding(state, target)?;
+            let inst = state.instance_in_play(target)?;
+            state
+                .matches_filter(r.owner(), r.source(), holder, inst, filter)
+                .then_some((i, r.consume_once()))
         });
-        if prevented {
+        if let Some((index, consume)) = prevent {
+            if consume {
+                state.remove_replacement_at(index);
+            }
             return None;
         }
         let redirect = state.replacements().find_map(|r| {
@@ -3035,6 +3042,7 @@ fn execute_effect(
         | Effect::Exert(target)
         | Effect::Ready(target)
         | Effect::Freeze(target)
+        | Effect::PreventNextDamage(target)
         | Effect::GrantAbilityThisTurn { target, .. }
         | Effect::GrantActivatedThisTurn { target, .. }
         | Effect::GrantThisTurn { target, .. }
@@ -4328,6 +4336,21 @@ fn apply_effect_to(
             }
         }
         Effect::Freeze(_) => freeze_card(state, target_card),
+        // "The next time this character would be dealt damage, it takes no damage
+        // instead" — a one-shot §7.7 prevention bound to this card.
+        Effect::PreventNextDamage(_) => {
+            state.add_replacement(
+                ReplacementEffect::new(
+                    source,
+                    controller,
+                    ReplacementKind::PreventDamage {
+                        filter: CharacterFilter::IsCard(target_card),
+                    },
+                    ModifierDuration::WhileSourceInPlay,
+                )
+                .consuming_once(),
+            );
+        }
         // Grant / restrict / conditional / never-reached effects.
         _ => apply_effect_to_rest(
             state,

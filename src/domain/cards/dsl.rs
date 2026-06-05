@@ -362,6 +362,9 @@ fn effect_from_table(t: &toml::Table) -> Result<Effect, String> {
         Ok(Effect::Ready(target_from_value(v)?))
     } else if let Some(v) = t.get("freeze") {
         Ok(Effect::Freeze(target_from_value(v)?))
+    } else if let Some(v) = t.get("prevent_next_damage") {
+        // "The next time <target> would be dealt damage, it takes no damage."
+        Ok(Effect::PreventNextDamage(target_from_value(v)?))
     } else if let Some(v) = t.get("return_to_hand") {
         Ok(Effect::Move {
             what: MoveSource::Card(target_from_value(v)?),

@@ -3649,3 +3649,93 @@ fn damage_is_prevented_by_a_replacement() {
         "the damage was prevented"
     );
 }
+
+/// One-shot §7.7 prevention ("the next time chosen character would be dealt
+/// damage, they take no damage instead"): the FIRST damage is prevented and the
+/// effect consumed, so the SECOND damage source goes through.
+#[test]
+fn prevent_next_damage_stops_only_the_first_source() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Shield"
+        type = "Action"
+        cost = 0
+        ink = ["Steel"]
+        [[card.abilities]]
+        on = "play"
+        do = { prevent_next_damage = "chosen character" }
+        [[card]]
+        name = "Warden"
+        type = "Character"
+        cost = 2
+        ink = ["Steel"]
+        strength = 1
+        willpower = 6
+        lore = 1
+        [[card]]
+        name = "Zapper"
+        type = "Character"
+        cost = 2
+        ink = ["Steel"]
+        strength = 1
+        willpower = 6
+        lore = 1
+        [[card.abilities]]
+        on = "quest"
+        do = { deal_damage = 2, target = "chosen character" }
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let warden = place(&mut state, me, 200, 1, 1, 6, true);
+    let zap1 = place(&mut state, me, 201, 2, 1, 6, true);
+    let zap2 = place(&mut state, me, 202, 2, 1, 6, true);
+
+    // Shield: "the next time chosen character would be dealt damage, prevent it."
+    let shield = CardId::from_raw(100);
+    state
+        .player_mut(me)
+        .unwrap()
+        .hand_mut()
+        .push(CardInstance::new(
+            shield,
+            CardDefId::from_raw(0),
+            Conditions::faceup_idle(),
+        ));
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::PlayCard {
+            card: shield,
+            shift_onto: None,
+        },
+    )
+    .expect("shield");
+    let choose = |s: &mut _, c| {
+        apply(
+            s,
+            &reg,
+            Input::Decide(lorcana_engine::Decision::ChooseTarget(c)),
+        )
+    };
+    let _ = choose(&mut state, warden).expect("shield target");
+
+    // First source: prevented (0 damage), consuming the one-shot.
+    let _ = apply(&mut state, &reg, Input::Quest { character: zap1 }).expect("zap1");
+    let _ = choose(&mut state, warden).expect("zap1 target");
+    assert_eq!(
+        damage(&state, me, warden),
+        Some(0),
+        "first damage prevented"
+    );
+
+    // Second source: the prevention is spent, so it goes through.
+    let _ = apply(&mut state, &reg, Input::Quest { character: zap2 }).expect("zap2");
+    let _ = choose(&mut state, warden).expect("zap2 target");
+    assert_eq!(
+        damage(&state, me, warden),
+        Some(2),
+        "second damage goes through"
+    );
+}
