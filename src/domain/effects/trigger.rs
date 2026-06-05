@@ -41,6 +41,9 @@ pub enum ScopedEvent {
     /// A character leaves play — by any departure (banished, returned to hand,
     /// put into the inkwell or deck). §1.9.
     LeavesPlay,
+    /// A character moves to a location (§4.3.7); the destination location is
+    /// carried as the trigger card ("the location it moved to").
+    MovesToLocation,
 }
 
 /// A category of card a "whenever you play a …" trigger watches for (§7.4).

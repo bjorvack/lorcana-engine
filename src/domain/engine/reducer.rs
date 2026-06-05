@@ -88,7 +88,7 @@ pub fn apply(
         Input::MoveCharacter {
             character,
             location,
-        } => apply_move(state, character, location),
+        } => apply_move(state, registry, character, location),
         Input::Sing { song, singers } => apply_sing(state, registry, song, &singers),
         Input::Challenge { challenger, target } => {
             apply_challenge(state, registry, challenger, target)
@@ -572,6 +572,7 @@ fn place_via_shift(
 /// then record the character as being there.
 fn apply_move(
     state: &mut GameState,
+    registry: &CardRegistry,
     character: CardId,
     location: CardId,
 ) -> Result<Vec<GameEvent>, Rejected> {
@@ -606,13 +607,25 @@ fn apply_move(
     if let Some(c) = p.play_mut().iter_mut().find(|c| c.id() == character) {
         c.set_at_location(Some(location));
     }
-    // TODO(move triggers — Slice 8 / trigger taxonomy): effects that happen "as a
-    // result of moving" (and "while here") go to the bag here (§4.3.7.5).
-    Ok(vec![GameEvent::Moved {
+    let mut events = vec![GameEvent::Moved {
         player: active,
         character,
         location,
-    }])
+    }];
+    events.extend(game_state_check(state));
+    if !state.is_finished() {
+        // "Whenever this/a character moves to a location" triggers go to the bag
+        // (§4.3.7.5); the destination is the trigger card ("the location").
+        enqueue_character_event(
+            state,
+            registry,
+            Fired::MovesToLocation { location },
+            character,
+            active,
+        );
+        events.extend(resolve_bag(state, registry));
+    }
+    Ok(events)
 }
 
 /// Sing a song (§6.3.3): pay the alternate cost by exerting eligible singers, then
@@ -1976,6 +1989,10 @@ enum Fired {
     DamageRemoved,
     Readies,
     LeavesPlay,
+    /// This character moves to `location`.
+    MovesToLocation {
+        location: CardId,
+    },
 }
 
 impl Fired {
@@ -1991,7 +2008,8 @@ impl Fired {
             | (ScopedEvent::DealtDamage, Self::DealtDamage(_))
             | (ScopedEvent::DamageRemoved, Self::DamageRemoved)
             | (ScopedEvent::Readies, Self::Readies)
-            | (ScopedEvent::LeavesPlay, Self::LeavesPlay) => true,
+            | (ScopedEvent::LeavesPlay, Self::LeavesPlay)
+            | (ScopedEvent::MovesToLocation, Self::MovesToLocation { .. }) => true,
             (ScopedEvent::Banished { requires_challenge }, Self::Banished { in_challenge }) => {
                 !requires_challenge || in_challenge
             }
@@ -2013,6 +2031,7 @@ impl Fired {
     const fn trigger_card(self) -> Option<CardId> {
         match self {
             Self::Challenges { other } | Self::Challenged { other } => Some(other),
+            Self::MovesToLocation { location } => Some(location),
             _ => None,
         }
     }

@@ -3286,3 +3286,57 @@ fn modal_choose_one_option_can_require_a_target() {
         "the modal option resolved on its chosen target"
     );
 }
+
+/// "Whenever this character moves to a location, gain 1 lore" (§4.3.7.5): moving
+/// fires the character's move trigger.
+#[test]
+fn moving_to_a_location_fires_a_move_trigger() {
+    use lorcana_engine::LocationStats;
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Sleepy Hollow"
+        type = "Location"
+        cost = 2
+        inkwell = true
+        move_cost = 0
+        willpower = 5
+        lore = 1
+        [[card]]
+        name = "Explorer"
+        type = "Character"
+        cost = 1
+        ink = ["Emerald"]
+        strength = 1
+        willpower = 5
+        lore = 1
+        [[card.abilities]]
+        on = "moves"
+        do = { gain_lore = 1 }
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let explorer = place(&mut state, me, 100, 1, 1, 5, true);
+
+    let loc = CardId::from_raw(300);
+    let mut inst = CardInstance::new(loc, CardDefId::from_raw(0), Conditions::faceup_idle());
+    inst.set_location_stats(Some(LocationStats::new(5, 1, 0)));
+    state.player_mut(me).unwrap().play_mut().push(inst);
+
+    let before = lore(&state, me);
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::MoveCharacter {
+            character: explorer,
+            location: loc,
+        },
+    )
+    .expect("move");
+    assert_eq!(
+        lore(&state, me),
+        before + 1,
+        "the move trigger granted 1 lore"
+    );
+}

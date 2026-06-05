@@ -444,9 +444,14 @@ Challenge/banish triggers into the bag (see
       already gives 0-back for non-characters. Tested in `tests/locations.rs`.
   Reckless's "must challenge … or location" now works too, since
   `can_legally_challenge_anything` scans all opposing in-play cards.
+- [x] **Move triggers** (§4.3.7.5): `apply_move` fires
+      `ScopedEvent::MovesToLocation` through `enqueue_character_event`, with the
+      destination as the `Target::TriggerCard` ("the location it moved to"); DSL
+      triggers `moves` / `moves_to_location` (this) and `yours_moves` (your
+      characters). `tests/conformance.rs::moving_to_a_location_fires_a_move_trigger`.
 - Deferred (back-linked): **modifiable** location stats (the `Stat` TODO in
-  `src/domain/game/modifier.rs`); location **abilities** and move / "while here"
-  **triggers** (the `apply_move` TODO + trigger rollout).
+  `src/domain/game/modifier.rs`); "while at a location" statics (a
+  `Condition::AtLocation` gate).
 
 ### Slice 7c — Items ✅
 - [x] **Items** (§6.4): `CardKind::Item` is playable — enters play faceup/in play
