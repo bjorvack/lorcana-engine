@@ -384,6 +384,10 @@ fn effect_from_table(t: &toml::Table) -> Result<Effect, String> {
             amount: DiscardAmount::Count(u32::try_from(int("discard")?).unwrap_or(0)),
             by: DiscardBy::Owner,
         })
+    } else if let Some(Value::String(sel)) = t.get("play_free") {
+        // "(You may) play a <selector> card from your hand for free" (§6).
+        let filter = parse_filter(sel).ok_or_else(|| format!("unparseable filter {sel:?}"))?;
+        Ok(Effect::PlayFreeFromHand { filter })
     } else if let Some(Value::String(cond)) = t.get("if_you_have") {
         let filter = parse_filter(cond).ok_or_else(|| format!("unparseable filter {cond:?}"))?;
         let then = t

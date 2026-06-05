@@ -658,8 +658,10 @@ mechanics ranked by card count, with the remaining gaps to close in order:
       characters/items/locations enter play, actions resolve + discard). Optionality
       is composed via the new `Effect::May(Box<Effect>)` wrapper (one yes/no
       `MayResolveEffect`, reusable by any effect) rather than a per-effect flag.
-      `tests/targeted_effects.rs`. **Remaining:** play from **discard**,
-      cost-reduction (pay N less) alternate costs, free-played Bodyguard enter-exerted.
+      `tests/targeted_effects.rs`. DSL surface: `play_free = "<selector>"`
+      (`tests/card_loader.rs::the_dsl_exposes_play_free`). **Remaining:** play from
+      **discard**, cost-reduction (pay N less) alternate costs, free-played
+      Bodyguard enter-exerted.
 - [x] **Ward / can't be chosen** (§10.15) — modeled as `Restriction::CantBeChosen`
       (Ward keyword maps to it via `has_restriction`, so effect-granted Ward works
       too). Targeting splits into `matching_characters` (raw) and

@@ -1390,3 +1390,32 @@ fn inkwell_trigger_parses_correctly() {
         "should have card_put_in_inkwell trigger"
     );
 }
+
+#[test]
+fn the_dsl_exposes_play_free() {
+    use lorcana_engine::Effect;
+    let defs = load_toml(
+        r#"
+        [[card]]
+        name = "Genie"
+        type = "Character"
+        cost = 5
+        strength = 3
+        willpower = 3
+        lore = 2
+        [[card.abilities]]
+        on = "play"
+        may = true
+        do = { play_free = "a character card with cost 4 or less" }
+        "#,
+    )
+    .expect("loads");
+    // "may" wraps the effect in Effect::May; the inner effect is PlayFreeFromHand.
+    let Effect::May(inner) = &defs[0].abilities()[0].effect else {
+        panic!("expected Effect::May");
+    };
+    assert!(
+        matches!(**inner, Effect::PlayFreeFromHand { .. }),
+        "play_free maps to PlayFreeFromHand"
+    );
+}
