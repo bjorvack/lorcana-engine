@@ -1712,29 +1712,53 @@ fn begin_turn(state: &mut GameState, registry: &CardRegistry, first_turn: bool) 
     if state.is_awaiting_decision() || state.is_finished() {
         return events;
     }
-    events.extend(finish_beginning_phase(state, first_turn));
+    events.extend(finish_beginning_phase(state, registry, first_turn));
     events
 }
 
 /// The Draw step (§4.2.3) and the move into the Main phase (§4.3). Split out so it
 /// can run inline in `begin_turn` or resume after a start-of-turn trigger suspends.
-fn finish_beginning_phase(state: &mut GameState, first_turn: bool) -> Vec<GameEvent> {
+fn finish_beginning_phase(
+    state: &mut GameState,
+    registry: &CardRegistry,
+    first_turn: bool,
+) -> Vec<GameEvent> {
     let active = state.active_player();
     let mut events = Vec::new();
 
     state.set_step(Step::Draw);
     events.push(GameEvent::StepEntered { step: Step::Draw });
     if !first_turn {
-        events.push(draw(state, active));
-    }
-    events.extend(game_state_check(state));
-    if state.is_finished() {
-        return events;
+        let event = draw(state, active);
+        let drew = matches!(event, GameEvent::CardDrawn { .. });
+        events.push(event);
+        events.extend(game_state_check(state));
+        if state.is_finished() {
+            return events;
+        }
+        if drew {
+            // "Whenever you draw a card" (§7.4): fires on the draw-step draw and
+            // resolves before the Main phase. If it suspends on a decision, the
+            // turn resumes into Main via `resume_turn_progression` (the Draw
+            // having already happened — no double-draw).
+            enqueue_turn_triggers(state, registry, active, &TriggerCondition::WhenYouDraw);
+            events.extend(resolve_bag(state, registry));
+            if state.is_awaiting_decision() || state.is_finished() {
+                return events;
+            }
+        }
     }
 
+    events.extend(enter_main_phase(state));
+    events
+}
+
+/// Enter the Main phase (§4.3). Split from `finish_beginning_phase` so resuming
+/// after a draw-step trigger doesn't re-run the draw.
+fn enter_main_phase(state: &mut GameState) -> Vec<GameEvent> {
     state.set_phase(Phase::Main);
     state.set_step(Step::Main);
-    events.push(GameEvent::StepEntered { step: Step::Main });
+    let mut events = vec![GameEvent::StepEntered { step: Step::Main }];
     events.extend(game_state_check(state));
     events
 }
@@ -1782,7 +1806,10 @@ fn resume_turn_progression(state: &mut GameState, registry: &CardRegistry) -> Ve
     }
     match (state.phase(), state.step()) {
         (Phase::End, _) => continue_after_end_phase(state, registry),
-        (Phase::Beginning, Step::Set) => finish_beginning_phase(state, false),
+        (Phase::Beginning, Step::Set) => finish_beginning_phase(state, registry, false),
+        // A draw-step "whenever you draw" trigger suspended; the draw already
+        // happened, so just enter the Main phase (no re-draw).
+        (Phase::Beginning, Step::Draw) => enter_main_phase(state),
         _ => Vec::new(),
     }
 }
@@ -2552,7 +2579,7 @@ fn execute_effect(
         // Each player in `who` draws / changes lore (may prompt a player choice).
         Effect::Draw { who, amount } | Effect::Lore { who, amount } => {
             return resolve_player_draw_lore(
-                state, controller, source, *who, amount, effect, events,
+                state, registry, controller, source, *who, amount, effect, events,
             );
         }
         // Players in `who` discard; each chooses their own cards unless the whole
@@ -2890,6 +2917,7 @@ fn grant_property(state: &mut GameState, source: CardId, target: CardId, propert
 #[allow(clippy::too_many_arguments)]
 fn resolve_player_draw_lore(
     state: &mut GameState,
+    registry: &CardRegistry,
     controller: PlayerId,
     source: CardId,
     who: PlayerScope,
@@ -2901,7 +2929,7 @@ fn resolve_player_draw_lore(
     match resolve_scope(state, controller, who) {
         ScopeOutcome::Players(players) => {
             for p in players {
-                apply_player_amount(state, p, effect, n, events);
+                apply_player_amount(state, registry, p, effect, n, events);
             }
             None
         }
@@ -2913,6 +2941,7 @@ fn resolve_player_draw_lore(
 /// count (clamped ≥0); `Lore` adds when positive, loses when negative.
 fn apply_player_amount(
     state: &mut GameState,
+    registry: &CardRegistry,
     player: PlayerId,
     effect: &Effect,
     amount: i32,
@@ -2921,7 +2950,13 @@ fn apply_player_amount(
     match effect {
         Effect::Draw { .. } => {
             for _ in 0..amount.max(0) {
-                events.push(draw(state, player));
+                let event = draw(state, player);
+                let drew = matches!(event, GameEvent::CardDrawn { .. });
+                events.push(event);
+                // "Whenever you draw a card" fires per card drawn (§7.4).
+                if drew {
+                    enqueue_turn_triggers(state, registry, player, &TriggerCondition::WhenYouDraw);
+                }
             }
         }
         Effect::Lore { .. } if amount >= 0 => {

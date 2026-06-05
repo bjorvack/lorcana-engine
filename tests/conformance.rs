@@ -2082,3 +2082,83 @@ fn optional_quest_trigger_resolves_on_yes_only() {
     .expect("no");
     assert_eq!(lore(&state, me), 1, "declined: no extra lore");
 }
+
+/// "Whenever you draw a card" fires for the drawing player's in-play cards on an
+/// effect-driven draw (here a quester that draws), once per card drawn.
+#[test]
+fn effect_draw_fires_when_you_draw_trigger() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Sage"
+        type = "Character"
+        cost = 2
+        ink = ["Amber"]
+        strength = 1
+        willpower = 3
+        lore = 1
+        [[card.abilities]]
+        on = "draw"
+        do = { gain_lore = 1 }
+        [[card]]
+        name = "Drawer"
+        type = "Character"
+        cost = 2
+        ink = ["Amber"]
+        strength = 1
+        willpower = 3
+        lore = 1
+        [[card.abilities]]
+        on = "quest"
+        do = { draw = 1 }
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let _sage = place(&mut state, me, 100, 0, 1, 3, true);
+    let drawer = place(&mut state, me, 101, 1, 1, 3, true);
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: drawer }).expect("quest");
+    // Quest lore (1) + the draw trigger from drawing 1 card (1) = 2.
+    assert_eq!(
+        lore(&state, me),
+        2,
+        "the draw trigger fired on the effect draw"
+    );
+}
+
+/// "Whenever you draw a card" also fires on the natural draw step at the start of
+/// the player's turn — without double-drawing.
+#[test]
+fn draw_step_fires_when_you_draw_trigger() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Sage"
+        type = "Character"
+        cost = 2
+        ink = ["Amber"]
+        strength = 1
+        willpower = 3
+        lore = 1
+        [[card.abilities]]
+        on = "draw"
+        do = { gain_lore = 1 }
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let foe = opponent_of(&state, me);
+    let _sage = place(&mut state, foe, 100, 0, 1, 3, true);
+    let foe_hand_before = hand_len(&state, foe);
+
+    // End my turn; the opponent's turn begins with a draw step.
+    let _ = apply(&mut state, &reg, Input::EndTurn).expect("end turn");
+    assert_eq!(state.active_player(), foe);
+    assert_eq!(
+        hand_len(&state, foe),
+        foe_hand_before + 1,
+        "drew exactly one card at the draw step (no double-draw)"
+    );
+    assert_eq!(lore(&state, foe), 1, "the draw-step draw fired the trigger");
+}

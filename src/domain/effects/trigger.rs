@@ -97,6 +97,10 @@ pub enum TriggerCondition {
     /// "Whenever a card is put into your inkwell" — fires when a card is moved
     /// to the inkwell zone.
     WhenCardPutInInkwell,
+    /// "Whenever you draw a card" — fires for the drawing player's in-play cards,
+    /// once per card drawn (natural draw step and effect-driven draws; not the
+    /// opening hand).
+    WhenYouDraw,
     /// A per-character event scoped by a [`CharacterFilter`]: fires for the watcher
     /// when a character matching `scope` (relative to the watcher) performs
     /// `event`. Covers self ("this character quests" — `IsSource`), relational

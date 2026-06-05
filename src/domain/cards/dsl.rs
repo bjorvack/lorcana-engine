@@ -169,6 +169,7 @@ fn trigger_from(s: &str) -> Result<TriggerCondition, String> {
         "sings" | "sings_song" | "sing_song" => ev(Sings, this()),
         "yours_sings" | "your_character_sings" => ev(Sings, yours()),
         "card_put_in_inkwell" => TriggerCondition::WhenCardPutInInkwell,
+        "draw" | "you_draw" => TriggerCondition::WhenYouDraw,
         other => return Err(format!("unknown trigger {other:?}")),
     })
 }
