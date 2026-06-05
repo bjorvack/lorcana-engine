@@ -10,3 +10,6 @@ lore = 2
 classifications = ["Storyborn", "Ally"]
 keywords = ["Evasive"]
 text = "Evasive (Only characters with Evasive can challenge this character.)\nWHAT HAPPENS NOW? When you play this character, draw a card."
+[[abilities]]
+on = "play"
+do = { draw = 1 }
