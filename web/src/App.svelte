@@ -1,6 +1,9 @@
 <script lang="ts">
   import Board from './lib/components/Board.svelte';
   import { Engine, type GameView } from './lib/engine';
+  // Imported (not a `/brand/logo.png` string) so the URL is rewritten for the
+  // GitHub Pages project subpath instead of 404-ing at the site root.
+  import logo from './lib/assets/logo.png';
 
   let engine = $state<Engine | null>(null);
   let view = $state<GameView | null>(null);
@@ -50,7 +53,7 @@
 
 <header class="topbar">
   <div class="brand">
-    <img class="logo" src="/brand/logo.png" alt="Disney Lorcana" />
+    <img class="logo" src={logo} alt="Disney Lorcana" />
     <span class="subtitle">Board Viewer</span>
   </div>
   <div class="controls">

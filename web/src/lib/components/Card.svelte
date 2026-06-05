@@ -1,5 +1,8 @@
 <script lang="ts">
   import type { DisplayCard } from '../cardModel';
+  // Imported so Vite fingerprints it and rewrites the URL for the deploy base
+  // (a string `src="/back.webp"` would 404 on the project Pages subpath).
+  import cardBack from '../assets/back.webp';
 
   // `art` shows only the square art crop (top of the card); rotating it 90°
   // keeps the exact same footprint. `full` shows the whole 5/7 card.
@@ -28,7 +31,7 @@
   onmousemove={handleMouseMove}
 >
   {#if card.facedown}
-    <img class="back" src="/back.webp" alt="Card back" loading="lazy" decoding="async" />
+    <img class="back" src={cardBack} alt="Card back" loading="lazy" decoding="async" />
   {:else}
     {#if card.image}
       <img class="art" src={card.image} alt={card.name} loading="lazy" decoding="async" />
