@@ -1934,6 +1934,7 @@ enum Fired {
     DealtDamage(i32),
     DamageRemoved,
     Readies,
+    LeavesPlay,
 }
 
 impl Fired {
@@ -1948,7 +1949,8 @@ impl Fired {
             | (ScopedEvent::BanishesInChallenge, Self::BanishesInChallenge)
             | (ScopedEvent::DealtDamage, Self::DealtDamage(_))
             | (ScopedEvent::DamageRemoved, Self::DamageRemoved)
-            | (ScopedEvent::Readies, Self::Readies) => true,
+            | (ScopedEvent::Readies, Self::Readies)
+            | (ScopedEvent::LeavesPlay, Self::LeavesPlay) => true,
             (ScopedEvent::Banished { requires_challenge }, Self::Banished { in_challenge }) => {
                 !requires_challenge || in_challenge
             }
@@ -1984,12 +1986,18 @@ fn enqueue_character_event(
     let amount = fired.amount();
     let mut to_enqueue: Vec<(PlayerId, CardId, Effect)> = Vec::new();
     {
-        // The actor's instance (in play, or in a discard if it just left play).
-        let Some(actor_inst) = state.instance_in_play(actor).or_else(|| {
-            state
-                .players()
+        // The actor's instance, wherever it now is: a leave-play event fires
+        // after the card has moved (to discard on a banish, but also to hand /
+        // inkwell / deck on a bounce), so search every zone for its `IsSource`
+        // (self) match.
+        let Some(actor_inst) = state.players().iter().find_map(|p| {
+            p.play()
                 .iter()
-                .find_map(|p| p.discard().iter().find(|c| c.id() == actor))
+                .chain(p.discard().iter())
+                .chain(p.hand().iter())
+                .chain(p.inkwell().iter())
+                .chain(p.deck().iter())
+                .find(|c| c.id() == actor)
         }) else {
             return;
         };
@@ -2109,6 +2117,8 @@ fn enqueue_banish_triggers(
             card,
             owner,
         );
+        // A banish is also a departure from play (§1.9).
+        enqueue_character_event(state, registry, Fired::LeavesPlay, card, owner);
     }
 }
 
@@ -3886,6 +3896,11 @@ fn move_self_card(
     if matches!(dest, SelfDestination::ShuffleIntoDeck) {
         state.shuffle_deck(owner);
     }
+    // "When this character leaves play" (§1.9) — a self-move out of play (to
+    // hand / inkwell / deck / discard) is a departure, like a banish.
+    if was_in_play {
+        enqueue_character_event(state, registry, Fired::LeavesPlay, card, owner);
+    }
 }
 
 /// Apply a targeted effect to an already-resolved `target_card` (after a
@@ -4110,6 +4125,8 @@ fn banish_by_effect(
         card,
         owner,
     );
+    // A banish is also a departure from play (§1.9).
+    enqueue_character_event(state, registry, Fired::LeavesPlay, card, owner);
 }
 
 /// The in-play characters matching a [`CharacterFilter`] from `controller`'s

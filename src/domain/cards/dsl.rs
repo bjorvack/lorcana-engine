@@ -104,8 +104,8 @@ impl TomlAbility {
 /// Map a trigger name to a [`TriggerCondition`].
 fn trigger_from(s: &str) -> Result<TriggerCondition, String> {
     use ScopedEvent::{
-        Banished, BanishesInChallenge, Challenged, Challenges, DamageRemoved, DealtDamage, Quests,
-        Readies, Sings,
+        Banished, BanishesInChallenge, Challenged, Challenges, DamageRemoved, DealtDamage,
+        LeavesPlay, Quests, Readies, Sings,
     };
     // Scope helpers (the CharacterFilter algebra): "this" = IsSource; "one of your
     // characters" = Side(Yours); "one of your other characters" = Yours ∧ ¬IsSource;
@@ -166,6 +166,7 @@ fn trigger_from(s: &str) -> Result<TriggerCondition, String> {
         "opposing_dealt_damage" => ev(DealtDamage, opposing()),
         "damage_removed" => ev(DamageRemoved, this()),
         "readies" => ev(Readies, this()),
+        "leaves_play" | "leave_play" => ev(LeavesPlay, this()),
         "sings" | "sings_song" | "sing_song" => ev(Sings, this()),
         "yours_sings" | "your_character_sings" => ev(Sings, yours()),
         "card_put_in_inkwell" => TriggerCondition::WhenCardPutInInkwell,

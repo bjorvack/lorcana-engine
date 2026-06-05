@@ -2162,3 +2162,103 @@ fn draw_step_fires_when_you_draw_trigger() {
     );
     assert_eq!(lore(&state, foe), 1, "the draw-step draw fired the trigger");
 }
+
+/// "When this character leaves play" fires on a banish departure (here the
+/// opponent banishes my character in a challenge); the owner gains the lore.
+#[test]
+fn leaves_play_trigger_fires_on_banish() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Martyr"
+        type = "Character"
+        cost = 1
+        ink = ["Amber"]
+        strength = 1
+        willpower = 1
+        lore = 1
+        [[card.abilities]]
+        on = "leaves_play"
+        do = { gain_lore = 1 }
+        [[card]]
+        name = "Attacker"
+        type = "Character"
+        cost = 3
+        ink = ["Amber"]
+        strength = 3
+        willpower = 3
+        lore = 1
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let foe = opponent_of(&state, me);
+    let martyr = place(&mut state, me, 100, 0, 1, 1, false); // my exerted character
+    let attacker = place(&mut state, foe, 200, 1, 3, 3, true);
+
+    let _ = apply(&mut state, &reg, Input::EndTurn).expect("end turn");
+    let _ = apply(
+        &mut state,
+        &reg,
+        Input::Challenge {
+            challenger: attacker,
+            target: martyr,
+        },
+    )
+    .expect("challenge");
+
+    assert!(
+        state
+            .player(me)
+            .unwrap()
+            .play()
+            .iter()
+            .all(|c| c.id() != martyr),
+        "martyr was banished"
+    );
+    assert_eq!(
+        lore(&state, me),
+        1,
+        "the leaves-play trigger fired for the banished character's owner"
+    );
+}
+
+/// "When this character leaves play" also fires on a non-banish departure — here
+/// the character returns itself to hand (a self-move out of play).
+#[test]
+fn leaves_play_trigger_fires_on_bounce() {
+    let reg = registry_from(
+        r#"
+        [[card]]
+        name = "Houdini"
+        type = "Character"
+        cost = 2
+        ink = ["Amber"]
+        strength = 1
+        willpower = 3
+        lore = 1
+        [[card.abilities]]
+        on = "quest"
+        do = { return_to_hand = "self" }
+        [[card.abilities]]
+        on = "leaves_play"
+        do = { gain_lore = 2 }
+        "#,
+    );
+    let mut state = started(&reg);
+    let me = state.active_player();
+    let houdini = place(&mut state, me, 100, 0, 1, 3, true);
+
+    let _ = apply(&mut state, &reg, Input::Quest { character: houdini }).expect("quest");
+    assert!(
+        state
+            .player(me)
+            .unwrap()
+            .play()
+            .iter()
+            .all(|c| c.id() != houdini),
+        "houdini returned to hand"
+    );
+    // Quest lore (1) + leaves-play on the self-bounce (2) = 3.
+    assert_eq!(lore(&state, me), 3, "leaves-play fired on the bounce");
+}

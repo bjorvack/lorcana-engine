@@ -38,6 +38,9 @@ pub enum ScopedEvent {
     DamageRemoved,
     /// A character is readied (at the start of turn, or via an effect).
     Readies,
+    /// A character leaves play — by any departure (banished, returned to hand,
+    /// put into the inkwell or deck). §1.9.
+    LeavesPlay,
 }
 
 /// A category of card a "whenever you play a …" trigger watches for (§7.4).
