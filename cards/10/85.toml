@@ -1,0 +1,13 @@
+name = "Baloo - Carefree Bear"
+type = "Character"
+cost = 5
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7858350d79594f45aa4a11625f300b31.avif?1761752347"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 5
+lore = 2
+classifications = ["Floodborn", "Ally"]
+keywords = ["Shift 3"]
+text = "Shift 3 {I} (You may pay 3 {I} to play this on top of one of your characters named Baloo.)\nROLL WITH IT When you play this character, choose one:\n- Each player draws a card.\n- Each player chooses and discards a card."

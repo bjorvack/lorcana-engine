@@ -1,0 +1,7 @@
+name = "Jumbo Pop"
+type = "Item"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f19a04399d3d44a9b9e346a4ee4741a4.avif?1730901319"
+max_copies = 4
+text = "HERE YOU GO Banish this item – Remove up to 2 damage from each of your characters. Draw a card."

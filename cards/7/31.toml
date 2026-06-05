@@ -1,0 +1,11 @@
+name = "Minnie Mouse - Storyteller"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9e82c244c06f495eb4de6ae7915cd575.avif?1740589222"
+max_copies = 4
+strength = 1
+willpower = 2
+lore = 0
+classifications = ["Storyborn", "Hero"]
+text = "GATHER AROUND Whenever you play a character, this character gets +1 {L} this turn.\nJUST ONE MORE Whenever this character quests, chosen opposing character loses {S} equal to this character's {L} until the start of your next turn."

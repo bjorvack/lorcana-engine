@@ -1,0 +1,12 @@
+name = "Vanellope von Schweetz - Random Roster Racer"
+type = "Character"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a24dcdebfc7246d4be1faad573e0a23e.avif?1723917209"
+max_copies = 4
+strength = 3
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Hero", "Princess", "Racer"]
+keywords = ["Rush"]
+text = "Rush (This character can challenge the turn they're played.)\nPIXLEXIA When you play this character, she gains Evasive until the start of your next turn. (Only characters with Evasive can challenge them.)"

@@ -1,0 +1,12 @@
+name = "Goofy - Groundbreaking Chef"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5271034abc194947b4c2b0e9c66b7f78.avif?1747703531"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Hero"]
+text = "PLENTY TO GO AROUND At the end of your turn, you may remove up to 1 damage from each of your other characters. Ready each character you removed damage from this way."

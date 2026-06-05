@@ -1,0 +1,13 @@
+name = "Stitch - Rock Star"
+type = "Character"
+cost = 6
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1135ff76d7504441942b3f9e9edae58d.avif?1755540091"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 5
+lore = 3
+classifications = ["Floodborn", "Hero", "Alien"]
+keywords = ["Shift 4"]
+text = "Shift 4 {I} (You may pay 4 {I} to play this on top of one of your characters named Stitch.)\nADORING FANS Whenever you play a character with cost 2 or less, you may exert them to draw a card."

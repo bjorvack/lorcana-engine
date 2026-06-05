@@ -1,0 +1,12 @@
+name = "Beagle Boys - Small-Time Crooks"
+type = "Character"
+cost = 4
+ink = ["Ruby", "Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0d3c06bef62348d7b6dcb0fe03afa6d0.avif?1740589629"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Villain"]
+text = "HURRY IT UP! Whenever this character quests, chosen character of yours gains Rush and Resist +1 this turn. (They can challenge the turn they're played. Damage dealt to them is reduced by 1.)"

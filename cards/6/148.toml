@@ -1,0 +1,12 @@
+name = "Nick Wilde - Soggy Fox"
+type = "Character"
+cost = 1
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_cbd38ca5b3b04da382b8aa2b3da66adb.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "NICE TO HAVE A PARTNER While you have another character with Support in play, this character gets +2 {S}."

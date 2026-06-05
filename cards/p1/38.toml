@@ -1,0 +1,13 @@
+name = "Ursula - Sea Witch Queen"
+type = "Character"
+cost = 7
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5b8b1ca3bad5482e8fc1592899c58cbf.avif?1728609660"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 7
+lore = 3
+classifications = ["Floodborn", "Villain", "Queen", "Sorcerer"]
+keywords = ["Shift 5"]
+text = "Shift 5 (You may pay 5 {I} to play this on top of one of your characters named Ursula.)\nNOW I AM THE RULER! Whenever this character quests, exert chosen character.\nYOU'LL LISTEN TO ME! Other characters can't exert to sing songs."

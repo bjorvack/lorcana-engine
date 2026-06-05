@@ -1,0 +1,11 @@
+name = "Lucky - The 15th Puppy"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_885f1f8ac17a447fa3c9f7b668fa8663.avif?1709690747"
+max_copies = 4
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Puppy"]
+text = "GOOD AS NEW {E} — Reveal the top 3 cards of your deck. You may put each character card with cost 2 or less into your hand. Put the rest on the bottom of your deck in any order.\nPUPPY LOVE Whenever this character quests, if you have 4 or more other characters in play, your other characters get +1 {L} this turn."

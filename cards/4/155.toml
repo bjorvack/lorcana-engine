@@ -1,0 +1,11 @@
+name = "Sisu - Wise Friend"
+type = "Character"
+cost = 6
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_bcef0c1c280242a8878b505860c6d89b.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 6
+lore = 2
+classifications = ["Storyborn", "Hero", "Deity", "Dragon"]

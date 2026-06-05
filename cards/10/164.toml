@@ -1,0 +1,8 @@
+name = "Sudden Scare"
+type = "Action"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0df623db97dc4fb8be3a67db8c593564.avif?1761764585"
+max_copies = 4
+inkwell = true
+text = "Put chosen opposing character into their player's inkwell facedown. That player puts the top card of their deck into their inkwell facedown."

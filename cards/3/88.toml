@@ -1,0 +1,11 @@
+name = "Starkey - Devious Pirate"
+type = "Character"
+cost = 7
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_92c7a997ed6f441a807e91c8bd5aa470.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 6
+lore = 3
+classifications = ["Storyborn", "Ally", "Pirate"]

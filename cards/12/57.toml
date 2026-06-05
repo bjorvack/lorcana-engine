@@ -1,0 +1,12 @@
+name = "Mor'du - Savage Cursed Prince"
+type = "Character"
+cost = 5
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_05dcb2ebcf1340c4a16fab77145a1fec.avif?1777687384"
+max_copies = 4
+inkwell = true
+strength = 8
+willpower = 8
+lore = 3
+classifications = ["Storyborn", "Villain", "Prince"]
+text = "FEROCIOUS ROAR When you play this character, exert all your characters not named Mor'du.\nROOTED BY FEAR Your characters not named Mor'du can't ready at the start of your turn."

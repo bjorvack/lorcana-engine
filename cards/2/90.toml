@@ -1,0 +1,11 @@
+name = "Queen of Hearts - Quick-Tempered"
+type = "Character"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2f01947ccb4d4bae8b2cda6308a77323.avif?1709690747"
+max_copies = 4
+strength = 1
+willpower = 2
+lore = 2
+classifications = ["Dreamborn", "Villain", "Queen"]
+text = "ROYAL RAGE When you play this character, deal 1 damage to chosen damaged opposing character."

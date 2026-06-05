@@ -1,0 +1,12 @@
+name = "Gustav the Giant - Terror of the Kingdom"
+type = "Character"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2977bf4ea525446f9f26eb7c272ed37b.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 6
+lore = 1
+classifications = ["Dreamborn", "Villain"]
+text = "ALL TIED UP This character enters play exerted and can't ready at the start of your turn.\nBREAK FREE During your turn, whenever one of your other characters banishes another character in a challenge, you may ready this character."

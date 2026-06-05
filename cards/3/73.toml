@@ -1,0 +1,12 @@
+name = "Friar Tuck - Priest of Nottingham"
+type = "Character"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f6b07239b4384329b151160a80691d1b.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "YOU THIEVING SCOUNDREL When you play this character, the player or players with the most cards in their hand chooses and discards a card."

@@ -1,0 +1,11 @@
+name = "Mickey Mouse - Experienced Traveler"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8bcdf654443a405caac520c31100c7da.avif?1777687359"
+max_copies = 4
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Hero", "Sorcerer"]
+text = "LIGHTING THE WAY Whenever this character quests, if you played another character this turn, you may draw a card."

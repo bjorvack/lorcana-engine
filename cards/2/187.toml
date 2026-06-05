@@ -1,0 +1,12 @@
+name = "Li Shang - Archery Instructor"
+type = "Character"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_71250fc9f98742369de2116914b4109f.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 6
+lore = 2
+classifications = ["Storyborn", "Hero"]
+text = "ARCHERY LESSON Whenever this character quests, your characters gain Evasive this turn. (They can challenge characters with Evasive.)"

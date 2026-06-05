@@ -1,0 +1,11 @@
+name = "Poe De Spell - Magica's Brother"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_75c10c12f3394d92a6e2d4806474dd62.avif?1747508541"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally", "Sorcerer"]

@@ -1,0 +1,13 @@
+name = "Rex - Protective Dinosaur"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_39de8b639e424da9b739e523f4a661d2.avif?1777687149"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Ally", "Dinosaur", "Toy"]
+keywords = ["Bodyguard"]
+text = "Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)\nRUN AWAY! During an opponent's turn, when this character is banished, gain 1 lore."

@@ -1,0 +1,11 @@
+name = "Gramma Tala - Connected to Nature"
+type = "Character"
+cost = 12
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_600ad28b57694ad2b078261118277ad2.avif?1770259867"
+max_copies = 4
+strength = 6
+willpower = 6
+lore = 2
+classifications = ["Storyborn", "Mentor"]
+text = "ANCESTORS' GIFT For each card in your inkwell, you pay 1 {I} less to play this character."

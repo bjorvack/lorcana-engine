@@ -1,0 +1,12 @@
+name = "Bruno Madrigal - Seeing the Future"
+type = "Character"
+cost = 6
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8a69b362d8e44f9abee64c1d4800420f.avif?1777687769"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 6
+lore = 2
+classifications = ["Storyborn", "Ally", "Madrigal"]
+text = "CHANGE THE OUTCOME When you play this character, you may look at the top card of chosen player's deck. Put it on either the top or the bottom of their deck."

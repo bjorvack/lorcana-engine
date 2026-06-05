@@ -1,0 +1,13 @@
+name = "Mrs. Beakley - Former S.H.U.S.H. Agent"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a935c6ef1e2c459e8f5ae49d95c044b2.avif?1761751975"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 6
+lore = 1
+classifications = ["Storyborn", "Ally"]
+keywords = ["Bodyguard"]
+text = "Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)"

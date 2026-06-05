@@ -1,0 +1,13 @@
+name = "Violet Sabrewing - Senior Junior Woodchuck"
+type = "Character"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6e4756264eee4c9a8e6043984cba2c1d.avif?1761752135"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Ally"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)"

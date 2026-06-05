@@ -1,0 +1,12 @@
+name = "Belle - Snowfield Strategist"
+type = "Character"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c38c857e2cbd433699e354e085a4625c.avif?1770259913"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Hero", "Princess"]
+text = "WINTER STOCKPILE Whenever one of your characters is banished, you may put that card from your discard into your inkwell facedown and exerted."

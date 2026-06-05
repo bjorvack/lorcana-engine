@@ -1,0 +1,12 @@
+name = "Kuzco - Temperamental Emperor"
+type = "Character"
+cost = 5
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_758f6165053247138a43133356718b77.avif?1755540544"
+max_copies = 4
+strength = 2
+willpower = 4
+lore = 3
+classifications = ["Storyborn", "King"]
+keywords = ["Ward"]
+text = "Ward (Opponents can't choose this character except to challenge.)\nNO TOUCHY! When this character is challenged and banished, you may banish the challenging character."

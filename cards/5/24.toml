@@ -1,0 +1,12 @@
+name = "Minnie Mouse - Compassionate Friend"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_edb33beb5360472080df4b6d2a6878a2.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Hero"]
+text = "PATCH THEM UP Whenever this character quests, you may remove up to 2 damage from chosen character."

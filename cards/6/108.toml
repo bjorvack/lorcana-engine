@@ -1,0 +1,12 @@
+name = "Wendy Darling - Courageous Captain"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f0088a27ad794105a7a6858c5f32e3a8.avif?1730901319"
+max_copies = 4
+strength = 1
+willpower = 2
+lore = 1
+classifications = ["Dreamborn", "Hero", "Pirate", "Captain"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)\nLOOK LIVELY, CREW! While you have another Pirate character in play, this character gets +1 {S} and +1 {L}."

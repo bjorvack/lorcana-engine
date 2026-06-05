@@ -1,0 +1,13 @@
+name = "Te Kā - Lava Monster"
+type = "Character"
+cost = 6
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ef4c7e8b987648b1ad759f754aaafc9e.avif?1740589330"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 6
+lore = 2
+classifications = ["Storyborn", "Villain", "Deity"]
+keywords = ["Challenger 2"]
+text = "Challenger +2 (While challenging, this character gets +2 {S}.)"

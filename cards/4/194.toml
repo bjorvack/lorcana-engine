@@ -1,0 +1,13 @@
+name = "Yao - Imperial Soldier"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_80c0754783744500af77590d9234826c.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Ally"]
+keywords = ["Challenger 2"]
+text = "Challenger +2 (While challenging, this character gets +2 {S}.)"

@@ -1,0 +1,13 @@
+name = "Clawhauser - Front Desk Officer"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1727b81007044782bc9c1df26820e7e1.avif?1747507340"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Ally", "Detective"]
+keywords = ["Bodyguard", "Singer 4"]
+text = "Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)\nSinger 4 (This character counts as cost 4 to sing songs.)"

@@ -1,0 +1,12 @@
+name = "The Matchmaker - Unforgiving Expert"
+type = "Character"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9b84afa5574c49e4a0270195f6ced69b.avif?1740589594"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 3
+lore = 1
+classifications = ["Storyborn"]
+text = "YOU ARE A DISGRACE! Whenever this character challenges another character, each opponent loses 1 lore."

@@ -1,0 +1,12 @@
+name = "Moana - Self-Taught Sailor"
+type = "Character"
+cost = 1
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_772912bd2bb0469890adfcc1b3eedd61.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 2
+lore = 1
+classifications = ["Dreamborn", "Hero", "Princess", "Pirate"]
+text = "LEARNING THE ROPES This character can't challenge unless you have a Captain character in play."

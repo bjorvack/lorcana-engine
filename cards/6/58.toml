@@ -1,0 +1,11 @@
+name = "Peter Pan - Shadow Catcher"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_421a2dfb847b406fb91556a8ee090423.avif?1730901319"
+max_copies = 4
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero"]
+text = "GOTCHA! During your turn, whenever a card is put into your inkwell, exert chosen opposing character."

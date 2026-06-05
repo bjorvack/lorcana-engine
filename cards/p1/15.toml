@@ -1,0 +1,12 @@
+name = "Bucky - Squirrel Squeak Tutor"
+type = "Character"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c0112540b6764a02a42944c0434d87ae.avif?1728609660"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "SQUEAK Whenever you play a Floodborn character, if you used Shift to play them, each opponent chooses and discards a card."

@@ -1,0 +1,8 @@
+name = "World's Greatest Criminal Mind"
+type = "Song"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_772b7e1de7024e47bdbe47e672f35d2f.avif?1755540271"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 3 or more can {E} to sing this song for free.)\nBanish chosen character with 5 {S} or more."

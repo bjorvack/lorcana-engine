@@ -1,0 +1,8 @@
+name = "The Game's Afoot!"
+type = "Action"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_dcc0cd9b218f4392bcf503bf27701202.avif?1761765016"
+max_copies = 4
+inkwell = true
+text = "Move up to 2 of your characters to the same location for free. That location gains Resist +2 until the start of your next turn. (Damage dealt to it is reduced by 2.)"

@@ -1,0 +1,12 @@
+name = "Raya - Fierce Protector"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e79d0ba09f4342b5a7a3ffe96ebef508.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero", "Princess"]
+text = "DON'T CROSS ME Whenever this character challenges another character, gain 1 lore for each other damaged character you have in play."

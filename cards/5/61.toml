@@ -1,0 +1,8 @@
+name = "We Know the Way"
+type = "Song"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_74fab45eaa32470b9ca3c830ab920f93.avif?1723917209"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 3 or more can {E} to sing this song for free.)\nShuffle chosen card from your discard into your deck. Reveal the top card of your deck. If it has the same name as the chosen card, you may play the revealed card for free. Otherwise, put it into your hand."

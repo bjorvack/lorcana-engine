@@ -1,0 +1,11 @@
+name = "Chaca - Impressive Daughter"
+type = "Character"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ee79f31b26a94960a66ea9e5defa5a0c.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Ally"]

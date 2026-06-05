@@ -1,0 +1,7 @@
+name = "Ratigan's Marvelous Trap"
+type = "Item"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_99154bf3bafd47f6ae3736da4cd5424f.avif?1709690747"
+max_copies = 4
+text = "SNAP! BOOM! TWANG! Banish this item — Each opponent loses 2 lore."

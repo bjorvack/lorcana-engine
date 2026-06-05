@@ -1,0 +1,10 @@
+name = "Treasure Mountain - Azurite Sea Island"
+type = "Location"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_dc9cd90360a14c2488e647a1934a17bb.avif?1730901319"
+max_copies = 4
+move_cost = 2
+willpower = 9
+lore = 2
+text = "SECRET WEAPON At the start of your turn, deal damage to chosen character or location equal to the number of characters here."

@@ -1,0 +1,12 @@
+name = "Tiana - Natural Talent"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e1412fbad88c459a989f3738fb678789.avif?1747506692"
+max_copies = 4
+strength = 2
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Hero", "Princess"]
+keywords = ["Singer 6"]
+text = "Singer 6 (This character counts as cost 6 to sing songs.)\nCAPTIVATING MELODY Whenever you play a song, each opposing character gets -1 {S} until the start of your next turn."

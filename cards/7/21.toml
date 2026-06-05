@@ -1,0 +1,12 @@
+name = "Penny - Bolt's Person"
+type = "Character"
+cost = 2
+ink = ["Amber", "Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_32c3d2920fe747bbb4ee7e95f78523d8.avif?1740589181"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 2
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "ENDURING LOYALTY When you play this character, you may remove up to 2 damage from chosen character and they gain Resist +1 until the start of your next turn. (Damage dealt to them is reduced by 1.)"

@@ -1,0 +1,12 @@
+name = "Camilo Madrigal - Prankster"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b07f766507574745ae00ade904bd2558.avif?1755540425"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Ally", "Madrigal"]
+text = "MANY FORMS At the start of your turn, you may choose one:\n- This character gets +1 {L} this turn.\n- This character gains Challenger +2 this turn.\n(While challenging, this character gets +2 {S}.)"

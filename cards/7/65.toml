@@ -1,0 +1,13 @@
+name = "Sven - Keen-Eyed Reindeer"
+type = "Character"
+cost = 5
+ink = ["Amethyst", "Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7b2b13682a1c4b4198f7c27df73abc46.avif?1740589356"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 6
+lore = 1
+classifications = ["Storyborn", "Ally"]
+keywords = ["Rush"]
+text = "Rush (This character can challenge the turn they're played.)\nFORMIDABLE GLARE When you play this character, chosen character gets -3 {S} this turn."

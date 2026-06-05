@@ -1,0 +1,12 @@
+name = "Chief - Seasoned Tracker"
+type = "Character"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a26bf7d81173483589a2df5446ab1ec0.avif?1770260005"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "GOOD RIDDANCE {E} — If an opposing character was banished in a challenge this turn, draw a card."

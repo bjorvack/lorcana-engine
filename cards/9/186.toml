@@ -1,0 +1,13 @@
+name = "Hercules - Beloved Hero"
+type = "Character"
+cost = 6
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_37be647e4dfe481996bdf2bad1909176.avif?1755541325"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Hero", "Prince"]
+keywords = ["Bodyguard", "Resist 1"]
+text = "Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)\nResist +1 (Damage dealt to this character is reduced by 1.)"

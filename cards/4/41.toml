@@ -1,0 +1,12 @@
+name = "Dolores Madrigal - Easy Listener"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d469872faa0b4f0fb50d4a0dbc521211.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Ally", "Madrigal"]
+text = "MAGICAL INFORMANT When you play this character, if an opponent has an exerted character in play, you may draw a card."

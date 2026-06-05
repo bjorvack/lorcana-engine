@@ -1,0 +1,12 @@
+name = "Emily Quackfaster - Level-Headed Librarian"
+type = "Character"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9309b1cf13e545c2a5ef5292f2ffae01.avif?1761752327"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "RECOMMENDED READING When you play this character, you may put the top card of your deck facedown under one of your characters or locations with Boost."

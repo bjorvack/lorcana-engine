@@ -1,0 +1,12 @@
+name = "Madam Mim - Cheating Spellcaster"
+type = "Character"
+cost = 6
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e1f18adb01e14dbd97be31ad052d642d.avif?1740589322"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Villain", "Sorcerer"]
+text = "PLAY ROUGH Whenever this character quests, exert chosen opposing character."

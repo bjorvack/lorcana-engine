@@ -1,0 +1,11 @@
+name = "Basil - Perceptive Investigator"
+type = "Character"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c26b377f986245bd8f63360bcf26d5be.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Hero", "Detective"]

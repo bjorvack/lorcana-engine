@@ -1,0 +1,13 @@
+name = "Eilonwy - Princess of Llyr"
+type = "Character"
+cost = 1
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_495426e5c16b4039977439b3c7a9b9e2.avif?1761751958"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Ally", "Princess"]
+keywords = ["Support"]
+text = "Support (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)"

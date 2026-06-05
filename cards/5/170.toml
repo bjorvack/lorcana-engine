@@ -1,0 +1,11 @@
+name = "Merlin's Cottage - The Wizard's Home"
+type = "Location"
+cost = 1
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_cc13be0e046742f4ae3e0aaffb5d3f9e.avif?1723917209"
+max_copies = 4
+inkwell = true
+move_cost = 1
+willpower = 7
+lore = 0
+text = "KNOWLEDGE IS POWER Each player plays with the top card of their deck face up."

@@ -1,0 +1,13 @@
+name = "Shere Khan - Fierce and Furious"
+type = "Character"
+cost = 8
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_024a30a70f624c58bc3219532ffdd37c.avif?1761763763"
+max_copies = 4
+inkwell = true
+strength = 8
+willpower = 8
+lore = 2
+classifications = ["Floodborn", "Villain"]
+keywords = ["Shift 5"]
+text = "Shift 5 {I} (You may pay 5 {I} to play this on top of one of your characters named Shere Khan.)\nWILD RAGE 1 {I}, Deal 1 damage to this character — Ready this character. He can't quest for the rest of this turn."

@@ -1,0 +1,11 @@
+name = "The Horned King - Heartless Devil"
+type = "Character"
+cost = 1
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f2535ab8555e4cc3bcd5cf3f5ff022e1.avif?1761752107"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Villain", "King", "Sorcerer"]

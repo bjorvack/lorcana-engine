@@ -1,0 +1,8 @@
+name = "Stand Out"
+type = "Song"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d0049d68c901455c94c76afdd99a2745.avif?1776533289"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 3 or more can {E} to sing this song for free.)\nChosen character gets +3 {S} and gains Evasive until the start of your next turn. (Only characters with Evasive can challenge them.)"

@@ -1,0 +1,11 @@
+name = "Lumiere - Hotheaded Candelabra"
+type = "Character"
+cost = 7
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_78adb82131a54205b5ba3cef451bee00.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 7
+willpower = 7
+lore = 2
+classifications = ["Dreamborn", "Ally"]

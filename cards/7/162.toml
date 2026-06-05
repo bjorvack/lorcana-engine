@@ -1,0 +1,12 @@
+name = "Tamatoa - Happy as a Clam"
+type = "Character"
+cost = 6
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_06dfa21b660f45cabf624bb321400368.avif?1740589748"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Villain"]
+text = "COOLEST COLLECTION When you play this character, return up to 2 item cards from your discard to your hand.\nI'M BEAUTIFUL, BABY! Whenever this character quests, you may play an item for free."

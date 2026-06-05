@@ -1,0 +1,8 @@
+name = "Duck for Cover!"
+type = "Action"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2eae8238f1d54959a3bc9f1e875c1efe.avif?1723917209"
+max_copies = 4
+inkwell = true
+text = "Chosen character gains Resist +1 and Evasive this turn. (Damage dealt to them is reduced by 1. They can challenge characters with Evasive.)"

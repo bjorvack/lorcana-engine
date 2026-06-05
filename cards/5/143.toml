@@ -1,0 +1,12 @@
+name = "Pacha - Emperor's Guide"
+type = "Character"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_761315af205f480fae3ecf8c5018db46.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 0
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Hero"]
+text = "HELPFUL SUPPLIES At the start of your turn, if you have an item in play, gain 1 lore.\nPERFECT DIRECTIONS At the start of your turn, if you have a location in play, gain 1 lore."

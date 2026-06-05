@@ -1,0 +1,7 @@
+name = "Snow Fort"
+type = "Item"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_626e78520f89461d8982834bdc9ac172.avif?1770259640"
+max_copies = 4
+text = "THE HIGH GROUND Your characters get +1 {S}.\nBARRICADE During opponents' turns, your characters gain Resist +1. (Damage dealt to them is reduced by 1.)"

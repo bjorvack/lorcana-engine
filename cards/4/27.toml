@@ -1,0 +1,8 @@
+name = "First Aid"
+type = "Action"
+cost = 1
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_258d12e6617d4e648d73be028f191b40.avif?1716052430"
+max_copies = 4
+inkwell = true
+text = "Remove up to 1 damage from each of your characters."

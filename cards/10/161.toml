@@ -1,0 +1,8 @@
+name = "Hen Wen's Visions"
+type = "Action"
+cost = 1
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e118a4c9805c426687bc202180e54e46.avif?1761764573"
+max_copies = 4
+inkwell = true
+text = "Look at the top 4 cards of your deck. Put 1 on the top of your deck and the rest on the bottom in any order."

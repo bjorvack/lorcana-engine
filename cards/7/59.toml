@@ -1,0 +1,12 @@
+name = "Yzma - Transformed Kitten"
+type = "Character"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5a028a55c4554cfd94686805d26929b1.avif?1740589334"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Villain", "Sorcerer"]
+text = "I WIN When this character is banished, if you have more cards in your hand than each opponent, you may return this card to your hand."

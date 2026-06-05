@@ -1,0 +1,7 @@
+name = "Sword of Truth"
+type = "Item"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_19c135ff62f2427d93b3131114b4c10b.avif?1709690747"
+max_copies = 4
+text = "FINAL ENCHANTMENT Banish this item — Banish chosen Villain character."

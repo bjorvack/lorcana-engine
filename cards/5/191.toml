@@ -1,0 +1,12 @@
+name = "Happy - Lively Knight"
+type = "Character"
+cost = 1
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_fa38166d51fb479a962761c3c17a670d.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 1
+lore = 1
+classifications = ["Dreamborn", "Ally", "Knight", "Seven Dwarfs"]
+text = "BURST OF SPEED During your turn, this character gains Evasive. (They can challenge characters with Evasive.)"

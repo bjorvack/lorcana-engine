@@ -1,0 +1,13 @@
+name = "Kit Cloudkicker - Navigator"
+type = "Character"
+cost = 6
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d77c74eca9ae4b56b85f6c1feac4c1c5.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 5
+lore = 3
+classifications = ["Floodborn", "Ally"]
+keywords = ["Shift 3", "Ward"]
+text = "Shift 3 (You may pay 3 {I} to play this on top of one of your characters named Kit Cloudkicker.)\nWard (Opponents can't choose this character except to challenge.)"

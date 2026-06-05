@@ -1,0 +1,8 @@
+name = "The Sorcerer's Hat"
+type = "Item"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4ae1ca3505fc492eb6e4310ae36f3ba3.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "INCREDIBLE ENERGY {E}, 1 {I} — Name a card, then reveal the top card of your deck. If it's the named card, put that card into your hand. Otherwise, put it on the top of your deck."

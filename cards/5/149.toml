@@ -1,0 +1,12 @@
+name = "Kuzco - Selfish Emperor"
+type = "Character"
+cost = 6
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b66ac79061b848eba1c927989cc2fd37.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "King"]
+text = "OUTPLACEMENT When you play this character, you may put chosen item or location into its player's inkwell facedown and exerted.\nBY INVITE ONLY 4 {I} — Your other characters gain Resist +1 until the start of your next turn. (Damage dealt to them is reduced by 1.)"

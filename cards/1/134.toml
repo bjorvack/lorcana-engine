@@ -1,0 +1,7 @@
+name = "Poisoned Apple"
+type = "Item"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3c0355d3cc2d409e9b10876744aa534a.avif?1709690747"
+max_copies = 4
+text = "TAKE A BITE... 1 {I}, Banish this item — Exert chosen character. If a Princess character is chosen, banish her instead."

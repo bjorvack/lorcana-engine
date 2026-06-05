@@ -1,0 +1,12 @@
+name = "Chernabog's Followers - Creatures of Evil"
+type = "Character"
+cost = 1
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_bda38dbbd3974a5bb53bc91853faa172.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "RESTLESS SOULS Whenever this character quests, you may banish them to draw a card."

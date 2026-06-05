@@ -1,0 +1,8 @@
+name = "Undermine"
+type = "Action"
+cost = 2
+ink = ["Emerald", "Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_056bd71d4a064d9a890c5558a88de654.avif?1747509122"
+max_copies = 4
+inkwell = true
+text = "Chosen opponent chooses and discards a card. Chosen character gets +2 {S} this turn."

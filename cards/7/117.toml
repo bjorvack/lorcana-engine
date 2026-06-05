@@ -1,0 +1,8 @@
+name = "He's A Tramp"
+type = "Song"
+cost = 1
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_81b8d1f9be6542e0902b77e4ab51fae0.avif?1740589569"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 1 or more can {E} to sing this song for free.)\nChosen character gets +1 {S} this turn for each character you have in play."

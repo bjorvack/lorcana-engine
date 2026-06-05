@@ -1,0 +1,7 @@
+name = "The Family Scattered"
+type = "Action"
+cost = 8
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_dfd21b18ff8e4b118d94ee09db759671.avif?1777687541"
+max_copies = 4
+text = "Chosen opponent chooses 3 of their characters and returns one of those cards to their hand, puts one on the bottom of their deck, and puts one on the top of their deck."

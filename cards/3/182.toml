@@ -1,0 +1,11 @@
+name = "Mickey Mouse - Trumpeter"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f607033b63f544219ebcff94bd3c6e81.avif?1709690747"
+max_copies = 4
+strength = 0
+willpower = 1
+lore = 1
+classifications = ["Dreamborn", "Hero"]
+text = "SOUND THE CALL {E}, 2 {I} — Play a character for free."

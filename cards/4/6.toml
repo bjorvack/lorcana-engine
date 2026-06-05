@@ -1,0 +1,11 @@
+name = "Daisy Duck - Lovely Lady"
+type = "Character"
+cost = 1
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2ea290775cb046cebfd884af9fd14fb6.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Ally"]

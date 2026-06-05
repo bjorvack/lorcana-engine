@@ -1,0 +1,12 @@
+name = "Namaari - Resolute Daughter"
+type = "Character"
+cost = 9
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7bc86960d8004c408340e121f634035b.avif?1723917209"
+max_copies = 4
+strength = 5
+willpower = 5
+lore = 3
+classifications = ["Storyborn", "Villain", "Princess"]
+keywords = ["Resist 3"]
+text = "I DON'T HAVE ANY OTHER CHOICE For each opposing character banished in a challenge this turn, you pay 2 {I} less to play this character.\nResist +3 (Damage dealt to this character is reduced by 3.)"

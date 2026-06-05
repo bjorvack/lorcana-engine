@@ -1,0 +1,13 @@
+name = "Magic Carpet - Flying Rug"
+type = "Character"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_308bd5ecd73f4d26af79fb786fab2eea.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Ally"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)\nFIND THE WAY {E} — Move a character of yours to a location for free."

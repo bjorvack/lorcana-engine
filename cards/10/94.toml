@@ -1,0 +1,8 @@
+name = "So Be It!"
+type = "Action"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_758f17fbfa45410ab196cc29a03a4c45.avif?1761752385"
+max_copies = 4
+inkwell = true
+text = "Each of your characters gets +1 {S} this turn. You may banish chosen item."

@@ -1,0 +1,12 @@
+name = "Chip - Ranger Leader"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_68660de4a81d4426acdb185e3ff4813a.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Hero"]
+text = "THE VALUE OF FRIENDSHIP While you have a character named Dale in play, this character gains Support. (Whenever they quest, you may add their {S} to another chosen character's {S} this turn.)"

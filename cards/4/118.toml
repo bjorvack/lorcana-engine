@@ -1,0 +1,11 @@
+name = "Nessus - River Guardian"
+type = "Character"
+cost = 6
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8ae1e6ad39e04645b85489774efd1418.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 7
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Villain"]

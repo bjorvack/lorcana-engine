@@ -1,0 +1,13 @@
+name = "Gadget Hackwrench - Brilliant Bosun"
+type = "Character"
+cost = 6
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7394b4b887f3447dae760121d9ddef7b.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 6
+lore = 3
+classifications = ["Floodborn", "Ally", "Inventor"]
+keywords = ["Shift 4"]
+text = "Shift 4 (You may pay 4 {I} to play this on top of one of your characters named Gadget Hackwrench.)\nMECHANICALLY SAVVY While you have 3 or more items in play, you pay 1 {I} less to play Inventor characters."

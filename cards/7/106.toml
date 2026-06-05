@@ -1,0 +1,12 @@
+name = "Fidget - Sneaky Bat"
+type = "Character"
+cost = 4
+ink = ["Emerald", "Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0306993b7adb4a52afb9ff31aea3a9b1.avif?1740589524"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "Evasive (Only characters with Evasive can challenge this character.)\nI TOOK CARE OF EVERYTHING Whenever this character quests, another chosen character of yours gains Evasive until the start of your next turn."

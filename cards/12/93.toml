@@ -1,0 +1,12 @@
+name = "Helga Sinclair - Prepared for Anything"
+type = "Character"
+cost = 6
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ad9b6e3372a140178662bc5ffd0db287.avif?1777687526"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 5
+lore = 2
+classifications = ["Dreamborn", "Villain"]
+text = "COMBAT TRAINING Whenever this character quests, deal 1 damage to chosen opposing character. If 2 or more cards were put into your discard this turn, deal 2 damage instead."

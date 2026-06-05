@@ -1,0 +1,11 @@
+name = "Dewey - Lovable Showoff"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e4383a9f6b7d4f3291c7935a76610f44.avif?1747703523"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally"]

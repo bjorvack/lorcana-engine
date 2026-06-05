@@ -1,0 +1,12 @@
+name = "Perdita - Playful Mother"
+type = "Character"
+cost = 4
+ink = ["Amber", "Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9290224bc0aa4571a72a8cca9b3dc655.avif?1740589105"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Hero"]
+text = "WHO'S NEXT? Whenever this character quests, you pay 2 {I} less for the next Puppy character you play this turn.\nDON'T BE AFRAID Your Puppy characters gain Ward. (Opponents can't choose them except to challenge.)"

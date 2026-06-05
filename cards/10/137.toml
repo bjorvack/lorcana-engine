@@ -1,0 +1,12 @@
+name = "Judy Hopps - On the Case"
+type = "Character"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_23a4b454b25c4c2f98c8e42664bc2394.avif?1761764351"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero", "Detective"]
+text = "HIDDEN CLUES When you play this character, if you have another Detective character in play, you may put chosen item into its player's inkwell facedown and exerted."

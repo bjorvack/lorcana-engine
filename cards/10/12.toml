@@ -1,0 +1,11 @@
+name = "Bagheera - Cautious Explorer"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_bd27b70ddc3540489c47c824128ec53f.avif?1761751980"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally"]

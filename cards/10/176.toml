@@ -1,0 +1,13 @@
+name = "Francine - Eyeing the Evidence"
+type = "Character"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3a814a78339d4df290966005abc1a5e4.avif?1761764756"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally", "Detective"]
+keywords = ["Resist 1"]
+text = "Resist +1 (Damage dealt to this character is reduced by 1.)"

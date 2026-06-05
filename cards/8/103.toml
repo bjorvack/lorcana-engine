@@ -1,0 +1,12 @@
+name = "Dormouse - Easily Agitated"
+type = "Character"
+cost = 2
+ink = ["Emerald", "Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ff4402de300941a0a708629ab5f59aae.avif?1747509038"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 2
+lore = 1
+classifications = ["Storyborn"]
+text = "VERY RUDE INDEED When you play this character, you may put 1 damage counter on chosen character."

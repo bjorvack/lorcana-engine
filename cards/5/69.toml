@@ -1,0 +1,12 @@
+name = "Robin Hood - Timely Contestant"
+type = "Character"
+cost = 9
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e563c6bf2df446f5b77fbf41d3d3b30a.avif?1723917209"
+max_copies = 4
+strength = 6
+willpower = 6
+lore = 4
+classifications = ["Storyborn", "Hero"]
+keywords = ["Ward"]
+text = "TAG ME IN! For each 1 damage on opposing characters, you pay 1 {I} less to play this character.\nWard (Opponents can't choose this character except to challenge.)"

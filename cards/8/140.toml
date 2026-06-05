@@ -1,0 +1,13 @@
+name = "The Coachman - Greedy Deceiver"
+type = "Character"
+cost = 2
+ink = ["Ruby", "Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_be9dcbe9a9fa41a1986ff7c26818f092.avif?1747509240"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Villain"]
+keywords = ["Reckless"]
+text = "WILD RIDE While 2 or more characters of yours are exerted, this character gets +2 {S} and gains Evasive. (Only characters with Evasive can challenge them.)"

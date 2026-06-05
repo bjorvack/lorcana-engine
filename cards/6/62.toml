@@ -1,0 +1,8 @@
+name = "Making Magic"
+type = "Action"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9bc0e3add087485a927ee66c7414802d.avif?1730901319"
+max_copies = 4
+inkwell = true
+text = "Move 1 damage counter from chosen character to chosen opposing character. Draw a card."

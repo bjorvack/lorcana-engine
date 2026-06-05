@@ -1,0 +1,8 @@
+name = "She's Your Person"
+type = "Action"
+cost = 1
+ink = ["Amber", "Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_45f97fb5ff014a158519e81b63e644c5.avif?1747507360"
+max_copies = 4
+inkwell = true
+text = "Choose one:\n- Remove up to 3 damage from chosen character.\n- Remove up to 3 damage from each of your characters with Bodyguard."

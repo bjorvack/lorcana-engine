@@ -1,0 +1,7 @@
+name = "Binding Contract"
+type = "Item"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_baa89f6923b94ff6a59e1957814a2645.avif?1709690747"
+max_copies = 4
+text = "FOR ALL ETERNITY {E}, {E} one of your characters — Exert chosen character."

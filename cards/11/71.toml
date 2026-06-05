@@ -1,0 +1,13 @@
+name = "Big Mama - Clever and Calming"
+type = "Character"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_692e18212e974f8e808f8a8dc45169a8.avif?1770259519"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Ally"]
+keywords = ["Ward"]
+text = "Ward (Opponents can't choose this character except to challenge.)"

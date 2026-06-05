@@ -1,0 +1,8 @@
+name = "Hot Potato"
+type = "Action"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ab3a202cb90a43beac5943ac4baad67a.avif?1730901319"
+max_copies = 4
+inkwell = true
+text = "Choose one:\n- Deal 2 damage to chosen character.\n- Banish chosen item."

@@ -1,0 +1,13 @@
+name = "The Huntsman - On the Queen's Orders"
+type = "Character"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b3558cc6e55c47c6823f2324e28b0397.avif?1777687530"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally"]
+keywords = ["Ward"]
+text = "Ward (Opponents can't choose this character except to challenge.)"

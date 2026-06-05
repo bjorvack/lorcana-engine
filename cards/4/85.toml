@@ -1,0 +1,11 @@
+name = "Pete - Born to Cheat"
+type = "Character"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_07556ab263e64b3e816e9b094893b497.avif?1716052430"
+max_copies = 4
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Villain", "Musketeer"]
+text = "I CLOBBER YOU! Whenever this character quests while he has 5 {S} or more, return chosen character with 2 {S} or less to their player's hand."

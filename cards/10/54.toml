@@ -1,0 +1,12 @@
+name = "Magica De Spell - Conniving Sorceress"
+type = "Character"
+cost = 7
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c8b3b3f1c90f441ca2eab63ef98d79cf.avif?1761752180"
+max_copies = 4
+strength = 7
+willpower = 7
+lore = 1
+classifications = ["Floodborn", "Villain", "Sorcerer"]
+keywords = ["Shift 7"]
+text = "Shift 7 {I} (You may pay 7 {I} to play this on top of one of your characters named Magica De Spell.)\nSHADOW'S GRASP When you play this character, if you used Shift to play her, you may draw 4 cards."

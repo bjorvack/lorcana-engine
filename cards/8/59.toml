@@ -1,0 +1,11 @@
+name = "Madam Mim - Up to No Good"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_246606d417374c8fa6ba822d85eb9e62.avif?1747508544"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Villain", "Sorcerer"]

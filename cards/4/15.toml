@@ -1,0 +1,13 @@
+name = "Mickey Mouse - Leader of the Band"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_74dbff9983194285973b48e74a2c3f90.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Hero"]
+keywords = ["Support"]
+text = "Support (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)\nSTRIKE UP THE MUSIC When you play this character, chosen character gains Support this turn."

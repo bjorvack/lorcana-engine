@@ -1,0 +1,11 @@
+name = "Ed - Hysterical Partygoer"
+type = "Character"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f291329542f04339988b4051333a446e.avif?1723917209"
+max_copies = 4
+strength = 2
+willpower = 4
+lore = 3
+classifications = ["Storyborn", "Ally", "Hyena"]
+text = "ROWDY GUEST Damaged characters can't challenge this character."

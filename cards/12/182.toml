@@ -1,0 +1,13 @@
+name = "Fat Cat - Felonious Feline"
+type = "Character"
+cost = 6
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9ce6a1417e4049989dae66845d3aeb70.avif?1777687868"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 6
+lore = 2
+classifications = ["Storyborn", "Villain"]
+keywords = ["Resist 1"]
+text = "Resist +1 (Damage dealt to this character is reduced by 1.)"

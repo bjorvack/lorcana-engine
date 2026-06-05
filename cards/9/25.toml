@@ -1,0 +1,9 @@
+name = "Look at This Family"
+type = "Song"
+cost = 7
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c8a627814d404f46ad87c09ece866017.avif?1755651362"
+max_copies = 4
+inkwell = true
+keywords = ["Sing Together 7"]
+text = "Sing Together 7 (Any number of your or your teammates' characters with total cost 7 or more may {E} to sing this song for free.)\nLook at the top 5 cards of your deck. You may reveal up to 2 character cards and put them into your hand. Put the rest on the bottom of your deck in any order."

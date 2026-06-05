@@ -1,0 +1,11 @@
+name = "Tuk Tuk - Curious Partner"
+type = "Character"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_835ae01a69684fe7af625817ecb51341.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally"]

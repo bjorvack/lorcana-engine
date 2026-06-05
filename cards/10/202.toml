@@ -1,0 +1,11 @@
+name = "Illuminary Tunnels - Linked Caverns"
+type = "Location"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f0d2c7f7fb9243bdb38b6c1e5eb522cd.avif?1761765029"
+max_copies = 4
+inkwell = true
+move_cost = 1
+willpower = 6
+lore = 1
+text = "SUBTERRANEAN NETWORK While you have a character here, this location gets +1 {L} for each other location you have in play.\nLOCUS While you have a character here, you pay 1 {I} less to play locations."

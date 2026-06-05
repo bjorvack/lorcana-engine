@@ -1,0 +1,12 @@
+name = "Ling - Imperial Soldier"
+type = "Character"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b99de29dfb744a0184319f957208d126.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "FULL OF SPIRIT Your Hero characters get +1 {S}."

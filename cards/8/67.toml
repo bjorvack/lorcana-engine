@@ -1,0 +1,13 @@
+name = "Kuzco - Impulsive Llama"
+type = "Character"
+cost = 7
+ink = ["Amethyst", "Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4bac50502815415f85c40e884fe5db24.avif?1747508780"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 5
+lore = 2
+classifications = ["Floodborn", "King"]
+keywords = ["Shift 4"]
+text = "Shift 4 (You may pay 4 {I} to play this on top of one of your characters named Kuzco.)\nWHAT DOES THIS DO? When you play this character, each opponent chooses one of their characters and puts that card on the bottom of their deck. Then, each opponent may draw a card."

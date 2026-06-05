@@ -1,0 +1,13 @@
+name = "Moana - Kakamora Leader"
+type = "Character"
+cost = 7
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ea56665b30604ff0977e95ad7442f5f5.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 5
+lore = 1
+classifications = ["Floodborn", "Hero", "Princess", "Pirate", "Captain"]
+keywords = ["Shift 5"]
+text = "Shift 5 (You may pay 5 {I} to play this on top of one of your characters named Moana.)\nGATHERING FORCES When you play this character, you may move any number of your characters to the same location for free. Gain 1 lore for each character you moved."

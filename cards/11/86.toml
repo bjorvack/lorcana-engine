@@ -1,0 +1,13 @@
+name = "Vixey - Forest Friend"
+type = "Character"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6edf9f351f6d4d8ea588fbbdbf8ed253.avif?1770259586"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Ally"]
+keywords = ["Evasive"]
+text = "SHOWIN' UP If you have a character named Tod in play, you pay 1 {I} less to play this character.\nEvasive (Only characters with Evasive can challenge this character.)"

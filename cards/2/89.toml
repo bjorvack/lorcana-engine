@@ -1,0 +1,12 @@
+name = "Prince John - Greediest of All"
+type = "Character"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f5e766865cfb44288cd71675cda91f7f.avif?1709690747"
+max_copies = 4
+strength = 1
+willpower = 2
+lore = 2
+classifications = ["Dreamborn", "Villain", "Prince"]
+keywords = ["Ward"]
+text = "Ward (Opponents can't choose this character except to challenge.)\nI SENTENCE YOU Whenever your opponent discards 1 or more cards, you may draw a card for each card discarded."

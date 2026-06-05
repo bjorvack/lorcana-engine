@@ -1,0 +1,13 @@
+name = "Maui - Half-Shark"
+type = "Character"
+cost = 6
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5123478aad6349f1a3f4500b31bc7d5e.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 7
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Hero", "Deity"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)\nCHEEEEOHOOOO! Whenever this character challenges another character, you may return an action card from your discard to your hand.\nWAYFINDING Whenever you play an action, gain 1 lore."

@@ -1,0 +1,12 @@
+name = "Jack-Jack Parr - Incredible Potential"
+type = "Character"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7f47cc5a26eb4220a9622e8ee83c528d.avif?1777687633"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Super", "Hero"]
+text = "WEIRD THINGS ARE HAPPENING At the start of your turn, you may put the top card of your deck into your discard. If its card type is:\n• character, this character gets +2 {S} this turn.\n• action or item, this character gets +2 {L} this turn.\n• location, banish chosen character."

@@ -1,0 +1,12 @@
+name = "Tuk Tuk - Wrecking Ball"
+type = "Character"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_afce8f318b6d4d68a9ff9ccb5a616655.avif?1709690747"
+max_copies = 4
+strength = 4
+willpower = 5
+lore = 0
+classifications = ["Storyborn", "Ally"]
+keywords = ["Reckless"]
+text = "Reckless (This character can't quest and must challenge each turn if able.)"

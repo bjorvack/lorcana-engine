@@ -1,0 +1,12 @@
+name = "Scroop - Backstabber"
+type = "Character"
+cost = 5
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d785c3ffe80440a5a9ef39641add4d23.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Villain", "Alien", "Pirate"]
+text = "BRUTE While this character has damage, he gets +3 {S}."

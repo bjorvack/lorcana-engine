@@ -1,0 +1,12 @@
+name = "Aurora - Briar Rose"
+type = "Character"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ce469941c08b425484af9a8c69eb8ce1.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Hero", "Princess"]
+text = "DISARMING BEAUTY When you play this character, chosen character gets -2 {S} this turn."

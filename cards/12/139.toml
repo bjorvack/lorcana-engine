@@ -1,0 +1,13 @@
+name = "Merryweather - Feisty Fairy"
+type = "Character"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_31821d032ad0412f9bcc5868d002aa2a.avif?1777687702"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Ally", "Fairy"]
+keywords = ["Ward"]
+text = "Ward (Opponents can't choose this character except to challenge.)"

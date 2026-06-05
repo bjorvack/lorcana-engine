@@ -1,0 +1,11 @@
+name = "Suzy - Master Seamstress"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_06b99488cc904626be99d5646a5f4c91.avif?1740589129"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Ally"]

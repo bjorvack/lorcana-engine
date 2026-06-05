@@ -1,0 +1,13 @@
+name = "Cinderella - Stouthearted"
+type = "Character"
+cost = 7
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5526a660684f4be1a1abdbd210e754b2.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 5
+lore = 3
+classifications = ["Floodborn", "Hero", "Princess", "Knight"]
+keywords = ["Resist 2", "Shift 5"]
+text = "Shift 5 (You may pay 5 {I} to play this on top of one of your characters named Cinderella.)\nResist +2 (Damage dealt to this character is reduced by 2.)\nTHE SINGING SWORD Whenever you play a song, this character may challenge ready characters this turn."

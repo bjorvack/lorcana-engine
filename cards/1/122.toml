@@ -1,0 +1,11 @@
+name = "Scar - Fiery Usurper"
+type = "Character"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_59bf4857765e425bb663ea128e53ee0b.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Villain"]

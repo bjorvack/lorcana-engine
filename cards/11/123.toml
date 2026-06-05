@@ -1,0 +1,13 @@
+name = "Elsa - Ice Artisan"
+type = "Character"
+cost = 6
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e9a1997821d647d5b13378a801921bf6.avif?1770259752"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 5
+lore = 1
+classifications = ["Floodborn", "Hero", "Queen", "Sorcerer"]
+keywords = ["Shift 4"]
+text = "Shift 4 {I} (You may pay 4 {I} to play this on top of one of your characters named Elsa.)\nENDLESS WINTER When you play this character and whenever you play a location, you may exert chosen character with 3 {S} or less.\nDISTANT CALL While this character is at a location, she gets +3 {L}."

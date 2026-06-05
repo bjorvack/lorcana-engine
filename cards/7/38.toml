@@ -1,0 +1,8 @@
+name = "So Much to Give"
+type = "Song"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1420be51e8504e689e1166dfb5bd2790.avif?1740589251"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 2 or more can {E} to sing this song for free.)\nDraw a card. Chosen character gains Bodyguard until the start of your next turn. (An opposing character who challenges one of your characters must choose one with Bodyguard if able.)"

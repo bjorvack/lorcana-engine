@@ -1,0 +1,12 @@
+name = "Gantu - Galactic Federation Captain"
+type = "Character"
+cost = 8
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c165a1025f82402fa3834ed4c9da14ba.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 6
+lore = 2
+classifications = ["Storyborn", "Alien", "Captain"]
+text = "UNDER ARREST Characters with cost 2 or less can't challenge your characters."

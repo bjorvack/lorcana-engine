@@ -1,0 +1,13 @@
+name = "Genie - Magical Researcher"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0f1e171e26c9423aa264732a2e38dd7f.avif?1770259420"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally", "Whisper"]
+keywords = ["Boost 1"]
+text = "Boost 1 {I} (Once during your turn, you may pay 1 {I} to put the top card of your deck facedown under this character.) INCREASING WISDOM This character gets +1 {L} for each card under him."

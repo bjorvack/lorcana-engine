@@ -1,0 +1,7 @@
+name = "Be King Undisputed"
+type = "Song"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e20ac0daac8445eb8c7d2a8a27f06745.avif?1755540982"
+max_copies = 4
+text = "(A character with cost 4 or more can {E} to sing this song for free.)\nEach opponent chooses and banishes one of their characters."

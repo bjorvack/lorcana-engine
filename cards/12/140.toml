@@ -1,0 +1,13 @@
+name = "Fauna - Good-Natured Fairy"
+type = "Character"
+cost = 1
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1b2280c5875e45cbb27ced6f0116c762.avif?1777687706"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Ally", "Fairy"]
+keywords = ["Support"]
+text = "Support (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)"

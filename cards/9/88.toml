@@ -1,0 +1,13 @@
+name = "Tinker Bell - Most Helpful"
+type = "Character"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2cb6f3824afc43249a7d4dfcdcacbd53.avif?1755823418"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Ally", "Fairy"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)\nPIXIE DUST When you play this character, chosen character gains Evasive this turn."

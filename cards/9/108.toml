@@ -1,0 +1,12 @@
+name = "Maleficent - Monstrous Dragon"
+type = "Character"
+cost = 9
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_331c3ce2f2a74490acc4b2bec16a0ad9.avif?1755540812"
+max_copies = 4
+inkwell = true
+strength = 7
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Villain", "Dragon"]
+text = "DRAGON FIRE When you play this character, you may banish chosen character."

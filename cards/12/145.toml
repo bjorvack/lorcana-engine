@@ -1,0 +1,11 @@
+name = "Gadget Hackwrench - Resourceful Mechanic"
+type = "Character"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ddc2c44f61984a82b0020763c4e4a5e8.avif?1777687726"
+max_copies = 4
+strength = 1
+willpower = 5
+lore = 1
+classifications = ["Dreamborn", "Ally", "Inventor"]
+text = "TIME TO TINKER When you play this character, you may play an item with cost 3 or less for free.\nWELL SUPPLIED Your characters with Support get +1 {L}."

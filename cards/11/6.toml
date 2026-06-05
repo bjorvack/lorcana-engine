@@ -1,0 +1,11 @@
+name = "Nakoma - Waiting Out the Storm"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1bd5bf1817684e57a918f2fdc04b4e3a.avif?1770259224"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 6
+lore = 1
+classifications = ["Storyborn", "Ally"]

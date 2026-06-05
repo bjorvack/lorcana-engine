@@ -1,0 +1,12 @@
+name = "Grand Councilwoman - Federation Leader"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_07af0c79c9fe46728b147454f273deac.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Alien"]
+text = "FIND IT! Whenever this character quests, your other Alien characters get +1 {L} this turn."

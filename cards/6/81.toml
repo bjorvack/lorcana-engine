@@ -1,0 +1,12 @@
+name = "Daisy Duck - Pirate Captain"
+type = "Character"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9aa8f725b1184ad1ab93f2c138625077.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 2
+classifications = ["Dreamborn", "Hero", "Pirate", "Captain"]
+text = "DISTANT SHORES Whenever one of your Pirate characters quests while at a location, draw a card."

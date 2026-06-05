@@ -1,0 +1,11 @@
+name = "Scar - Eerily Prepared"
+type = "Character"
+cost = 5
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f2674e110de64c81ae9b07068364c22d.avif?1761764538"
+max_copies = 4
+strength = 6
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Villain", "Whisper"]
+text = "Boost 2 {I} (Once during your turn, you may pay 2 {I} to put the top card of your deck facedown under this character.)\nSURVIVAL OF THE FITTEST Whenever you put a card under this character, chosen opposing character gets -5 {S} this turn."

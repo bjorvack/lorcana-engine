@@ -1,0 +1,8 @@
+name = "Mother Will Protect You"
+type = "Song"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_026951e834c74886a9c05341b713b3fa.avif?1770259334"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 2 or more can {E} to sing this song for free.)\nChosen character can't be challenged until the start of your next turn."

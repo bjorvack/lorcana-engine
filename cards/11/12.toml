@@ -1,0 +1,12 @@
+name = "Sarabi - Protecting the Pride"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7820a5ea1cc44b97b4b5aeb89fc1882a.avif?1770259252"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Mentor", "Queen"]
+text = "FEARSOME SNARL {E} — Chosen opposing character gets -4 {S} until the start of your next turn."

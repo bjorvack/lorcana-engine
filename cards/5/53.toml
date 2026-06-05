@@ -1,0 +1,12 @@
+name = "Magica De Spell - Cruel Sorceress"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5a958c7371a3467fbb486adb3bd370ce.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Villain", "Sorcerer"]
+text = "PLAYING WITH POWER During opponents' turns, if an effect would cause you to discard one or more cards from your hand, you don't discard."

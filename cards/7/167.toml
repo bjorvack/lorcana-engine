@@ -1,0 +1,12 @@
+name = "Pepper - Quick-Thinking Puppy"
+type = "Character"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_eddf6a4eb7af4098997b5e91e4a763e7.avif?1740589768"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Puppy"]
+text = "IN THE NICK OF TIME Whenever one of your Puppy characters is banished, you may put that card into your inkwell facedown and exerted."

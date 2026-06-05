@@ -1,0 +1,12 @@
+name = "Zazu - Steward of the Pride Lands"
+type = "Character"
+cost = 1
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ad676278d4e74481af58729c5c986b7b.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "IT'S TIME TO GO! While this character is at a location, he gets +1 {L}."

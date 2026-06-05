@@ -1,0 +1,12 @@
+name = "Mulan - Considerate Diplomat"
+type = "Character"
+cost = 5
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1a90e72da27d4638ad9aed26776feee5.avif?1755541040"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Hero", "Princess"]
+text = "IMPERIAL INVITATION Whenever this character quests, look at the top 4 cards of your deck. You may reveal a Princess character card and put it into your hand. Put the rest on the bottom of your deck in any order."

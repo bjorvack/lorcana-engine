@@ -1,0 +1,11 @@
+name = "Duckburg - Funso's Funzone"
+type = "Location"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_516d19ec66bf46689607d453ce6f267d.avif?1761752088"
+max_copies = 4
+inkwell = true
+move_cost = 2
+willpower = 6
+lore = 0
+text = "WHERE FUN IS IN THE ZONE Whenever a character quests while here, you pay 2 less for the next character you play this turn."

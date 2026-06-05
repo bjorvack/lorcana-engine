@@ -1,0 +1,12 @@
+name = "Lumiere - Nimble Candelabra"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a5ab1a4a40304395b5363fff5858b9a8.avif?1747509170"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 1
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "QUICK-STEP While you have an item card in your discard, this character gains Evasive. (Only characters with Evasive can challenge them.)"

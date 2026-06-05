@@ -1,0 +1,13 @@
+name = "Darkwing Duck - Darkwolf Dog"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_72e6b0eee1f1425ea52d9be4a2984843.avif?1770259394"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Super", "Hero", "Detective"]
+keywords = ["Rush"]
+text = "Rush (This character can challenge the turn they're played.)"

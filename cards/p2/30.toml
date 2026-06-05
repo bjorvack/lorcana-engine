@@ -1,0 +1,12 @@
+name = "Patch - Playful Pup"
+type = "Character"
+cost = 1
+ink = ["Amber", "Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_fc53d343b14c4bb08188fee46360d232.avif?1755564054"
+max_copies = 4
+strength = 0
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Puppy"]
+keywords = ["Ward"]
+text = "Ward (Opponents can't choose this character except to challenge.)\nPUPPY BARKING While you have another Puppy character in play, this character gets +1 {L}."

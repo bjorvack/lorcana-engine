@@ -1,0 +1,12 @@
+name = "Mulan - Imperial Soldier"
+type = "Character"
+cost = 5
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_45037644be034dad9ec46ffdabcde550.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Hero", "Princess"]
+text = "LEAD BY EXAMPLE During your turn, whenever this character banishes another character in a challenge, your other characters get +1 {L} this turn."

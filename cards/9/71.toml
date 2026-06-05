@@ -1,0 +1,11 @@
+name = "Cursed Merfolk - Ursula's Handiwork"
+type = "Character"
+cost = 1
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c571350ccb314e4aac4f3e79d9a29c87.avif?1755540560"
+max_copies = 4
+strength = 0
+willpower = 1
+lore = 2
+classifications = ["Storyborn"]
+text = "POOR SOULS Whenever this character is challenged, each opponent chooses and discards a card."

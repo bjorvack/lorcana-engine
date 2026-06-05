@@ -1,0 +1,11 @@
+name = "Ludwig Von Drake - All-Around Expert"
+type = "Character"
+cost = 2
+ink = ["Amber", "Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a22eb000866a46439fd736cd7a8ec535.avif?1747506682"
+max_copies = 4
+strength = 1
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "SUPERIOR MIND When you play this character, chosen opponent reveals their hand and discards a non-character card of your choice.\nLASTING LEGACY When this character is banished, you may put this card into your inkwell facedown and exerted."

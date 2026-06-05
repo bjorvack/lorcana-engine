@@ -1,0 +1,8 @@
+name = "Time to Go!"
+type = "Action"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a34fbc1360b340faa269ab2347af7ee1.avif?1761763846"
+max_copies = 4
+inkwell = true
+text = "Banish chosen character of yours to draw 2 cards. If that character had a card under them, draw 3 cards instead."

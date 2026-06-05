@@ -1,0 +1,12 @@
+name = "RC - Remote-Controlled Car"
+type = "Character"
+cost = 1
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_82226e6a95b54a879f3428c272b34108.avif?1777687461"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 2
+lore = 2
+classifications = ["Storyborn", "Ally", "Toy", "Racer"]
+text = "LOW BATTERIES This character can't quest or challenge unless you pay 1 {I}. (You pay this cost each time.)"

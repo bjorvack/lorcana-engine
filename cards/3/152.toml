@@ -1,0 +1,11 @@
+name = "Pluto - Mickey's Clever Friend"
+type = "Character"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_936d98ea79ba4a54bd3ef0a166ce6875.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Dreamborn", "Ally"]

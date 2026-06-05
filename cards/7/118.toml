@@ -1,0 +1,8 @@
+name = "The Return of Hercules"
+type = "Action"
+cost = 5
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f6df91ec4b8144ec99568e5979a90225.avif?1740589573"
+max_copies = 4
+inkwell = true
+text = "Each player may reveal a character card from their hand and play it for free."

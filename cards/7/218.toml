@@ -1,0 +1,8 @@
+name = "Devil's Eye Diamond"
+type = "Item"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6a4c5fe1b3b74110acd16d725f8cc3f6.avif?1740590348"
+max_copies = 4
+inkwell = true
+text = "THE PRICE OF POWER {E} — If one of your characters was damaged this turn, gain 1 lore."

@@ -1,0 +1,13 @@
+name = "Rajah - Devoted Protector"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_aa590039809f41f6b67c833b1fba999c.avif?1761751952"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally"]
+keywords = ["Bodyguard"]
+text = "Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)"

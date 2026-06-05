@@ -1,0 +1,11 @@
+name = "Toulouse - Artistic Kitten"
+type = "Character"
+cost = 1
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a46f9d543f42488aa953e79ab9993010.avif?1740589761"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally"]

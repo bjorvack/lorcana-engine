@@ -1,0 +1,11 @@
+name = "Tiana - Diligent Waitress"
+type = "Character"
+cost = 1
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1843141c81254b5bb5dd3dfc7cc624dc.avif?1755541294"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero", "Princess"]

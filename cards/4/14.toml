@@ -1,0 +1,12 @@
+name = "Max - Loyal Sheepdog"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9002164290424cb1911b9817cf1abf95.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "HERE BOY If you have a character named Prince Eric in play, you pay 1 {I} less to play this character."

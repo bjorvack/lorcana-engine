@@ -1,0 +1,11 @@
+name = "Aurora - Regal Princess"
+type = "Character"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f6c70da42b524965bcd4f7d6d86e8437.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 2
+classifications = ["Storyborn", "Hero", "Princess"]

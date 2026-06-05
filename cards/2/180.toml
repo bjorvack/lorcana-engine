@@ -1,0 +1,11 @@
+name = "Goofy - Knight for a Day"
+type = "Character"
+cost = 9
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3efeba396af644afb4fbef6c35b58521.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 10
+willpower = 10
+lore = 4
+classifications = ["Dreamborn", "Hero", "Knight"]

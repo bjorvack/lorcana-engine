@@ -1,0 +1,13 @@
+name = "Maui - Hero to All"
+type = "Character"
+cost = 5
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_407bb2a4ff5c4d46b0e4e76cbc2be949.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 5
+lore = 0
+classifications = ["Storyborn", "Hero", "Deity"]
+keywords = ["Reckless", "Rush"]
+text = "Rush (This character can challenge the turn they're played.)\nReckless (This character can't quest and must challenge each turn if able.)"

@@ -1,0 +1,13 @@
+name = "Goofy - Galumphing Gumshoe"
+type = "Character"
+cost = 8
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_70871546bb2548d094e4cd171efb603f.avif?1761752039"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 7
+lore = 3
+classifications = ["Floodborn", "Hero", "Detective"]
+keywords = ["Shift 5"]
+text = "Shift 5 {I} (You may pay 5 {I} to play this on top of one of your characters named Goofy.)\nHOT PURSUIT When you play this character and whenever he quests, each opposing character gets -1 {S} until the start of your next turn."

@@ -1,0 +1,12 @@
+name = "Iago - Out of Reach"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_14cf336ace334aa4bb012d3a932242bf.avif?1747509505"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "SELF-PRESERVATION While you have another exerted character in play, this character can't be challenged."

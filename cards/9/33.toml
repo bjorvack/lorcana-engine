@@ -1,0 +1,7 @@
+name = "Ursula's Shell Necklace"
+type = "Item"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_cfa8f36f7729492fa74fa256816c7f55.avif?1755540290"
+max_copies = 4
+text = "NOW, SING! Whenever you play a song, you may pay 1 {I} to draw a card."

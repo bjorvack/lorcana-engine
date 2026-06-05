@@ -1,0 +1,12 @@
+name = "Nathaniel Flint - Notorious Pirate"
+type = "Character"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_06dcb232c2b84e47923c74acc1f755aa.avif?1747509509"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Villain", "Alien", "Pirate", "Captain"]
+text = "PREDATORY INSTINCT You can't play this character unless an opposing character was damaged this turn."

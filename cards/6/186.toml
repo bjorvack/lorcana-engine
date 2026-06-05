@@ -1,0 +1,13 @@
+name = "Pluto - Guard Dog"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0b42ad3a223046c0a3807f04c58a552e.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Ally"]
+keywords = ["Bodyguard"]
+text = "Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)\nBRAVO While this character has no damage, he gets +4 {S}."

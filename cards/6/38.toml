@@ -1,0 +1,11 @@
+name = "Genie - Excited Shipbuilder"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8a0ce27bd434498ba454be0571e58c5b.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally"]

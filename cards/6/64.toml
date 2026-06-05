@@ -1,0 +1,7 @@
+name = "Seeking the Half Crown"
+type = "Action"
+cost = 5
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_bb8cbf92bd50483b979bd9ad606987ae.avif?1730901319"
+max_copies = 4
+text = "For each Sorcerer character you have in play, you pay 1 {I} less to play this action.\nDraw 2 cards."

@@ -1,0 +1,12 @@
+name = "Miss Bianca - Unwavering Agent"
+type = "Character"
+cost = 6
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_977124ea617d440a9224e0eb1619ded6.avif?1740590248"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 5
+lore = 1
+classifications = ["Dreamborn", "Hero"]
+text = "HAVE A LITTLE FAITH If you have an Ally character in play, you pay 2 {I} less to play this character."

@@ -1,0 +1,8 @@
+name = "Retrosphere"
+type = "Item"
+cost = 1
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0aa70773df3a4f87ab5b96825787497d.avif?1723917209"
+max_copies = 4
+inkwell = true
+text = "EXTRACT OF AMETHYST 2 {I}, Banish this item — Return chosen character, item, or location with cost 3 or less to their player's hand."

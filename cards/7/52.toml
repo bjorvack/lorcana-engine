@@ -1,0 +1,11 @@
+name = "Hades - Fast Talker"
+type = "Character"
+cost = 6
+ink = ["Amethyst", "Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5dd4b7c75d134e76998535e1f8ec6b6c.avif?1740589306"
+max_copies = 4
+strength = 4
+willpower = 6
+lore = 2
+classifications = ["Storyborn", "Villain", "Deity"]
+text = "FOR JUST A LITTLE PAIN When you play this character, you may deal 2 damage to another chosen character of yours to banish chosen character with cost 3 or less."

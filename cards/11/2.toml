@@ -1,0 +1,12 @@
+name = "Lilo - Snow Artist"
+type = "Character"
+cost = 1
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_df49511658c9468b9a5353f1561cc9cc.avif?1770259206"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Hero"]
+text = "CREATIVE INSPIRATION While you have a character named Stitch in play, this character gets +1 {L}."

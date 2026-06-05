@@ -1,0 +1,12 @@
+name = "LeFou - Cake Thief"
+type = "Character"
+cost = 2
+ink = ["Ruby", "Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b89e331f531c40c7a269911b0ca4a92b.avif?1747509226"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "ALL FOR ME {E}, Banish one of your items — Chosen opponent loses 1 lore and you gain 1 lore."

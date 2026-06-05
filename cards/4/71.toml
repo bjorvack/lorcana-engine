@@ -1,0 +1,12 @@
+name = "Diablo - Maleficent's Spy"
+type = "Character"
+cost = 1
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_abd789362dc8479c8dc89e89859b6a6a.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "SCOUT AHEAD When you play this character, you may look at each opponent's hand."

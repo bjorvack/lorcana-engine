@@ -1,0 +1,12 @@
+name = "Raya - Infiltration Expert"
+type = "Character"
+cost = 6
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0a97dde4f01045ccb29a9f61ac3c36d8.avif?1747509024"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Hero", "Princess"]
+text = "UNCONVENTIONAL TACTICS Whenever this character quests, you may pay 2 {I} to ready another chosen character."

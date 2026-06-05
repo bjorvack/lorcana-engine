@@ -1,0 +1,11 @@
+name = "Prince Naveen - Bundled Up"
+type = "Character"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6c7e5e05d9ad44ceb4f84c5a82ee8c6b.avif?1770259978"
+max_copies = 4
+inkwell = true
+strength = 7
+willpower = 6
+lore = 1
+classifications = ["Dreamborn", "Hero", "Prince"]

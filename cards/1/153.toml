@@ -1,0 +1,13 @@
+name = "Merlin - Self-Appointed Mentor"
+type = "Character"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_47e91685dd1f4021908561ca134dfe94.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Dreamborn", "Mentor", "Sorcerer"]
+keywords = ["Support"]
+text = "Support (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)"

@@ -1,0 +1,11 @@
+name = "Alma Madrigal - Family Matriarch"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a853bb92fbe7486ea510a97f6a8494e2.avif?1716052430"
+max_copies = 4
+strength = 1
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Mentor", "Madrigal"]
+text = "TO THE TABLE When you play this character, you may search your deck for a Madrigal character card and reveal that card to all players. Shuffle your deck and put that card on top of it."

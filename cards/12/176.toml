@@ -1,0 +1,13 @@
+name = "Wee Dingwall - Scrappy Lad"
+type = "Character"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1fe95db14cce4c10b58cd4293dce1bb9.avif?1777687847"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally"]
+keywords = ["Challenger 2"]
+text = "Challenger +2 (While challenging, this character gets +2 {S}.)"

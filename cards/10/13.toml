@@ -1,0 +1,13 @@
+name = "Shanti - Village Girl"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_656fee63050e47b8aa6d9c9a732ca5a6.avif?1761751985"
+max_copies = 4
+inkwell = true
+strength = 0
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Ally"]
+keywords = ["Singer 5"]
+text = "Singer 5 (This character counts as cost 5 to sing songs.)"

@@ -1,0 +1,8 @@
+name = "Magical Maneuvers"
+type = "Action"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a03dfd74bc3343a883df4bb71b193f0c.avif?1740589415"
+max_copies = 4
+inkwell = true
+text = "Return chosen character of yours to your hand. Exert chosen character."

@@ -1,0 +1,12 @@
+name = "Scroop - Odious Mutineer"
+type = "Character"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6ecf18a6435e46238220c23606eb7768.avif?1723917209"
+max_copies = 4
+strength = 2
+willpower = 1
+lore = 2
+classifications = ["Storyborn", "Villain", "Alien", "Pirate"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)\nDO SAY HELLO TO MR. ARROW When you play this character, you may pay 3 {I} to banish chosen damaged character."

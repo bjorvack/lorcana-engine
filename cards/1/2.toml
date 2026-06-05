@@ -1,0 +1,13 @@
+name = "Ariel - Spectacular Singer"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_be92bba983424f2f9546f237e65ce357.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero", "Princess"]
+keywords = ["Singer 5"]
+text = "Singer 5 (This character counts as cost 5 to sing songs.)\nMUSICAL DEBUT When you play this character, look at the top 4 cards of your deck. You may reveal a song card and put it into your hand. Put the rest on the bottom of your deck in any order."

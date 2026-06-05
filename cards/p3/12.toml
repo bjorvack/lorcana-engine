@@ -1,0 +1,12 @@
+name = "The Queen - Mirror Seeker"
+type = "Character"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5f8477e82274478083db60897d3516f5.avif?1773508755"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Villain", "Queen", "Sorcerer"]
+text = "CALCULATING AND VAIN Whenever this character quests, you may look at the top 3 cards of your deck and put them back in any order."

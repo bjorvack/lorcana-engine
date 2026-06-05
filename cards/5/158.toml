@@ -1,0 +1,12 @@
+name = "Belle - Of the Ball"
+type = "Character"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d5087e3422e74e3585a2a323b4a06ee7.avif?1723917209"
+max_copies = 4
+strength = 2
+willpower = 3
+lore = 2
+classifications = ["Dreamborn", "Hero", "Princess"]
+keywords = ["Ward"]
+text = "Ward (Opponents can't choose this character except to challenge.)\nUSHERED INTO THE PARTY When you play this character, your other characters gain Ward until the start of your next turn."

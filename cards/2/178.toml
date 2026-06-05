@@ -1,0 +1,11 @@
+name = "Donald Duck - Deep-Sea Diver"
+type = "Character"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0e5d59110fee4c7e922e2ec67f5fe1a6.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 5
+lore = 1
+classifications = ["Dreamborn", "Hero"]

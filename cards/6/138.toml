@@ -1,0 +1,12 @@
+name = "Aunt Cass - Biggest Fan"
+type = "Character"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a881e85e281f4e3abe2fbf0437a5c159.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Mentor"]
+text = "HAPPY TO HELP Whenever this character quests, chosen Inventor character gets +1 {L} this turn."

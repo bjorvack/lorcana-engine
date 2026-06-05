@@ -1,0 +1,13 @@
+name = "Chief Powhatan - Protective Leader"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4b12af84da2444928667b6d356a70766.avif?1770259248"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Mentor", "King"]
+keywords = ["Bodyguard"]
+text = "Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)\nSTANDS HIS GROUND This character can't challenge."

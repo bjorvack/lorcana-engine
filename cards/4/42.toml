@@ -1,0 +1,11 @@
+name = "Elsa - Storm Chaser"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_178373b0fe2f483b90202bfeb6014e0a.avif?1716052430"
+max_copies = 4
+strength = 1
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Hero", "Queen", "Sorcerer"]
+text = "TEMPEST {E} — Chosen character gains Challenger +2 and Rush this turn. (They get +2 {S} while challenging. They can challenge the turn they're played.)"

@@ -1,0 +1,12 @@
+name = "Diablo - Obedient Raven"
+type = "Character"
+cost = 1
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1419caf47da54560bbafd279ca6cfc4b.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 0
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "FLY, MY PET! When this character is banished, you may draw a card."

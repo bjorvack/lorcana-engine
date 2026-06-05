@@ -1,0 +1,13 @@
+name = "Yzma - Above It All"
+type = "Character"
+cost = 7
+ink = ["Amethyst", "Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_181371118d864cd08cfc849f7b795a5d.avif?1740589368"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 8
+lore = 2
+classifications = ["Floodborn", "Villain", "Queen"]
+keywords = ["Shift 5"]
+text = "Shift 5 (You may pay 5 {I} to play this on top of one of your characters named Yzma.)\nEvasive (Only characters with Evasive can challenge this character.)\nBACK TO WORK Whenever another character is banished in a challenge, return that card to its player's hand, then that player discards a card at random."

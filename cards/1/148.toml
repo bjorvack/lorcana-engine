@@ -1,0 +1,11 @@
+name = "Jasmine - Disguised"
+type = "Character"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c401f199cd7046b4838589db368f2391.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Princess"]

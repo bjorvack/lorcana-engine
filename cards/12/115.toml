@@ -1,0 +1,12 @@
+name = "Daisy Duck - Trendy Traveler"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9bfc8968eb2b449182568b2336c6aa01.avif?1777687611"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Ally"]
+text = "BREAK IS OVER Whenever this character quests, if you played a character this turn, you may ready another chosen character. If you do, they can't quest for the rest of this turn."

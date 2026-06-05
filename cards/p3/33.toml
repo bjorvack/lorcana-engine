@@ -1,0 +1,12 @@
+name = "Tinker Bell - Snowflake Collector"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e0ff247b374b43c68d645477a6d0177a.avif?1773508882"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Ally", "Fairy"]
+text = "FLURRY OF DELIGHT While you have 4 or more cards in your hand, this character gains Evasive. (Only characters with Evasive can challenge them.)\nSPECTACULAR FIND While you have 7 or more cards in your hand, this character gets +3 {L}."

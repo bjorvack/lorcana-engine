@@ -1,0 +1,11 @@
+name = "Winter Camp - Medical Tent"
+type = "Location"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0d7681a6ac944b5aa5606946cff8ebd5.avif?1716052430"
+max_copies = 4
+inkwell = true
+move_cost = 1
+willpower = 8
+lore = 1
+text = "HELP THE WOUNDED Whenever a character quests while here, remove up to 2 damage from them. If they're a Hero character, remove up to 4 damage instead."

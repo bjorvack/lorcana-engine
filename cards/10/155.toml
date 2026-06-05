@@ -1,0 +1,11 @@
+name = "Cinderella - Dream Come True"
+type = "Character"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_31e94039c2494d31b8966443911b0fb2.avif?1761764547"
+max_copies = 4
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero", "Princess"]
+text = "WHATEVER YOU WISH FOR At the end of your turn, if you played a Princess character this turn, you may put a card from your hand into your inkwell facedown to draw a card."

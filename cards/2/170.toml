@@ -1,0 +1,8 @@
+name = "Sardine Can"
+type = "Item"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ac6b41f1d4314cd48a6c0e40b01203fd.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "FLIGHT CABIN Your exerted characters gain Ward. (Opponents can't choose them except to challenge.)"

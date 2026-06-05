@@ -1,0 +1,12 @@
+name = "Figaro - Tuxedo Cat"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9da6ba4d41244f61b558bc6a63a93ec3.avif?1747509193"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "PLAYFULNESS Opposing items enter play exerted."

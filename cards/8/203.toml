@@ -1,0 +1,7 @@
+name = "Quick Shot"
+type = "Action"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_312b989c72124b8ba3e6722d4ffa16b6.avif?1747509536"
+max_copies = 4
+text = "Deal 1 damage to chosen character. Draw a card."

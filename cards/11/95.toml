@@ -1,0 +1,8 @@
+name = "Snowball Fight"
+type = "Action"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8bd23953f8744c588a3f122476f67c3c.avif?1770259626"
+max_copies = 4
+inkwell = true
+text = "Each opponent chooses and discards a card. If you have a character with Evasive in play, gain 1 lore."

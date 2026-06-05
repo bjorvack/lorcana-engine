@@ -1,0 +1,8 @@
+name = "Coconut Basket"
+type = "Item"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_aa19240342864dd7a428b95c5b6a85b6.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "CONSIDER THE COCONUT Whenever you play a character, you may remove up to 2 damage from chosen character."

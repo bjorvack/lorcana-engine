@@ -1,0 +1,11 @@
+name = "Fang - River City"
+type = "Location"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6438731e38f642b38a24a0b566078fa3.avif?1709690747"
+max_copies = 4
+inkwell = true
+move_cost = 2
+willpower = 6
+lore = 2
+text = "SURROUNDED BY WATER Characters gain Ward and Evasive while here. (Opponents can't choose them except to challenge. Only characters with Evasive can challenge them.)"

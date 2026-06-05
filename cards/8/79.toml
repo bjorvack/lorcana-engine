@@ -1,0 +1,8 @@
+name = "Fantastical and Magical"
+type = "Song"
+cost = 9
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9dfb87c4e43b49619e138291a5c9dbea.avif?1747508868"
+max_copies = 4
+keywords = ["Sing Together 9"]
+text = "Sing Together 9 (Any number of your or your teammates' characters with total cost 9 or more may {E} to sing this song for free.)\nFor each character that sang this song, draw a card and gain 1 lore."

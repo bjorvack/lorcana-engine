@@ -1,0 +1,7 @@
+name = "Half Hexwell Crown"
+type = "Item"
+cost = 6
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_721b1a5a766441a382bd8975b7b7a7ea.avif?1723917209"
+max_copies = 4
+text = "AN UNEXPECTED FIND {E}, 2 {I} — Draw a card.\nA PERILOUS POWER {E}, 2 {I}, Discard a card — Exert chosen character."

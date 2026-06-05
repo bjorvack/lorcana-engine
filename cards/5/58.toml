@@ -1,0 +1,12 @@
+name = "Camilo Madrigal - Family Copycat"
+type = "Character"
+cost = 6
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7fd5d0e0a462464dbc04f11a37718f4a.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 7
+lore = 1
+classifications = ["Storyborn", "Ally", "Madrigal"]
+text = "IMITATE Whenever this character quests, you may gain lore equal to the {L} of chosen other character of yours. Return that character to your hand."

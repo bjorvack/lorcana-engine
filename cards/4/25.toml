@@ -1,0 +1,13 @@
+name = "Ursula - Vanessa"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a7946badda8f45c59504dc3df868ac26.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Villain", "Sorcerer"]
+keywords = ["Singer 4"]
+text = "Singer 4 (This character counts as cost 4 to sing songs.)"

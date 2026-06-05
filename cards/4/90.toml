@@ -1,0 +1,13 @@
+name = "The Muses - Proclaimers of Heroes"
+type = "Character"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_12e044565cad4dea9a798105ec0df2f2.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally"]
+keywords = ["Ward"]
+text = "Ward (Opponents can't choose this character except to challenge.)\nTHE GOSPEL TRUTH Whenever you play a song, you may return chosen character with 2 {S} or less to their player's hand."

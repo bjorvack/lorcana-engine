@@ -1,0 +1,13 @@
+name = "Rapunzel - Ready for Adventure"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_70ae5f21fa1347b49ee910683e34d90e.avif?1761751909"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 2
+lore = 1
+classifications = ["Dreamborn", "Hero", "Princess"]
+keywords = ["Support"]
+text = "Support (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)\nACT OF KINDNESS Whenever one of your characters is chosen for Support, until the start of your next turn, the next time they would be dealt damage they take no damage instead."

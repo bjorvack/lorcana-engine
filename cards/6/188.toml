@@ -1,0 +1,13 @@
+name = "Cobra Bubbles - Former CIA"
+type = "Character"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0e199ab83f22428784550f317e16fefd.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 2
+classifications = ["Dreamborn", "Ally"]
+keywords = ["Bodyguard"]
+text = "Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)\nTHINK ABOUT WHAT'S BEST 2 {I} – Draw a card, then choose and discard a card."

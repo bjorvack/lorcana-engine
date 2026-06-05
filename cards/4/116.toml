@@ -1,0 +1,12 @@
+name = "Mulan - Injured Soldier"
+type = "Character"
+cost = 1
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3ef4ed482d774066a82884d9424efe5c.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero", "Princess"]
+text = "BATTLE WOUND This character enters play with 2 damage."

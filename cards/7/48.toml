@@ -1,0 +1,12 @@
+name = "Honeymaren - Northuldra Guide"
+type = "Character"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_db6704b5f5e54a799f35d46afeca395d.avif?1740589290"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "TALE OF THE FIFTH SPIRIT When you play this character, if an opponent has an exerted character in play, gain 1 lore."

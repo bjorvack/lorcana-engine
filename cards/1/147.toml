@@ -1,0 +1,11 @@
+name = "Hades - Infernal Schemer"
+type = "Character"
+cost = 7
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e372495979314c78b3613e2b19c30366.avif?1709690747"
+max_copies = 4
+strength = 3
+willpower = 6
+lore = 2
+classifications = ["Dreamborn", "Villain", "Deity"]
+text = "IS THERE A DOWNSIDE TO THIS? When you play this character, you may put chosen opposing character into their player's inkwell facedown."

@@ -1,0 +1,12 @@
+name = "Pudge - Controls the Weather"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a862524392a1444389f95109d49ddd31.avif?1770259210"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Deity"]
+text = "GOOD FRIEND If you have a character named Lilo in play, you can play this character for free."

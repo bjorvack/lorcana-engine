@@ -1,0 +1,8 @@
+name = "Begone!"
+type = "Action"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_34f44dc8dcef41ba9b4c4f23f9720ff6.avif?1761752214"
+max_copies = 4
+inkwell = true
+text = "Return chosen character, item, or location with cost 3 or less to their player's hand."

@@ -1,0 +1,13 @@
+name = "Te Kā - Elemental Terror"
+type = "Character"
+cost = 10
+ink = ["Amethyst", "Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_97ba744205d341099f6b8a54f12eee71.avif?1740589313"
+max_copies = 4
+inkwell = true
+strength = 12
+willpower = 12
+lore = 3
+classifications = ["Floodborn", "Villain", "Deity"]
+keywords = ["Shift 7"]
+text = "Shift 7 (You may pay 7 {I} to play this on top of one of your characters named Te Kā.)\nANCIENT RAGE During your turn, whenever an opposing character is exerted, banish them."

@@ -1,0 +1,12 @@
+name = "Dale - Mischievous Ranger"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a0d0572121974dd1afc318bb0fd0907e.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Hero"]
+text = "NUTS ABOUT PRANKS When you play this character, you may put the top 3 cards of your deck into your discard to give chosen character -3 {S} until the start of your next turn."

@@ -1,0 +1,12 @@
+name = "Olaf - Recapping the Story"
+type = "Character"
+cost = 1
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_af73ab0ecfb241e08c2ab10bc74ea708.avif?1747509347"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "ENDLESS TALE When you play this character, chosen opposing character gets -1 {S} this turn."

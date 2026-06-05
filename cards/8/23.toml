@@ -1,0 +1,12 @@
+name = "King Candy - Sugar Rush Nightmare"
+type = "Character"
+cost = 3
+ink = ["Amber", "Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c7f64e55e7234c46bc9ed7d742e22265.avif?1747506748"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Villain", "King", "Racer"]
+text = "A NEW ROSTER When this character is banished, you may return another Racer character card from your discard to your hand."

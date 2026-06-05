@@ -1,0 +1,12 @@
+name = "Treasure Guardian - Foreboding Sentry"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_dde4814ef611454ca907668ed03b2027.avif?1740589286"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 2
+classifications = ["Storyborn"]
+text = "UNTOLD TREASURE When you play this character, if you have an Illusion character in play, you may draw a card."

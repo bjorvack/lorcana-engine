@@ -1,0 +1,11 @@
+name = "Minnie Mouse - Pirate Lookout"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_bbd9d2a6b1194759b18eb6e58a3c3d3e.avif?1773508786"
+max_copies = 4
+strength = 3
+willpower = 2
+lore = 1
+classifications = ["Dreamborn", "Hero", "Pirate"]
+text = "LAND, HO! Once during your turn, whenever a card is put into your inkwell, you may return a location card from your discard to your hand."

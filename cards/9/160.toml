@@ -1,0 +1,12 @@
+name = "Alice - Growing Girl"
+type = "Character"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8619541a52554ab3b8a32dcaf795748e.avif?1755541169"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 4
+lore = 1
+classifications = ["Dreamborn", "Hero"]
+text = "GOOD ADVICE Your other characters gain Support. (Whenever they quest, you may add their {S} to another chosen character's {S} this turn.)\nWHAT DID I DO? While this character has 10 {S} or more, she gets +4 {L}."

@@ -1,0 +1,12 @@
+name = "Gunther - Interior Designer"
+type = "Character"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_96a14bbf788e4a138b05f46f08c0fa47.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 2
+classifications = ["Dreamborn", "Ally"]
+text = "SAD-EYED PUPPY When this character is challenged and banished, each opponent chooses one of their characters and returns that card to their hand."

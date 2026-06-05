@@ -1,0 +1,13 @@
+name = "Alan-a-Dale - Loyal Bard"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9b3e23958e8c439db9998f14adeba943.avif?1777687135"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally"]
+keywords = ["Singer 4"]
+text = "Singer 4 (This character counts as cost 4 to sing songs.)"

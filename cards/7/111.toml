@@ -1,0 +1,11 @@
+name = "King of Hearts - Picky Ruler"
+type = "Character"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f20054bb326b460c8ac1dc08f2723ce3.avif?1740589545"
+max_copies = 4
+strength = 3
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Ally", "King"]
+text = "OBJECTIONABLE STATE Damaged characters can't challenge your characters."

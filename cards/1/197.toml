@@ -1,0 +1,7 @@
+name = "Fire the Cannons!"
+type = "Action"
+cost = 1
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_eb6216aa3f6b4cccaf6216809f915658.avif?1709690747"
+max_copies = 4
+text = "Deal 2 damage to chosen character."

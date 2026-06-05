@@ -1,0 +1,12 @@
+name = "Bo Peep - Caring Shepherd"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e63fe9e08c924f4b973fa0f6d4f9a00b.avif?1777687161"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Ally", "Toy"]
+text = "SOMEBODY DO SOMETHING! Your characters named Woody gain Bodyguard. (An opposing character who challenges one of your characters must choose one with Bodyguard if able.)"

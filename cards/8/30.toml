@@ -1,0 +1,13 @@
+name = "Rhino - Power Hamster"
+type = "Character"
+cost = 4
+ink = ["Amber", "Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b7d241314eca4aa2b268c00cd4dde064.avif?1747507318"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 3
+lore = 2
+classifications = ["Floodborn", "Ally"]
+keywords = ["Shift 2"]
+text = "Shift 2 (You may pay 2 {I} to play this on top of one of your characters named Rhino.)\nEPIC BALL OF AWESOME While this character has no damage, he gains Resist +2. (Damage dealt to them is reduced by 2.)"

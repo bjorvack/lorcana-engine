@@ -1,0 +1,8 @@
+name = "Heffalumps and Woozles"
+type = "Song"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b87dd2f01e364f679975158dd2637a6d.avif?1730901319"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 2 or more can {E} to sing this song for free.)\nChosen opposing character can't quest during their next turn. Draw a card."

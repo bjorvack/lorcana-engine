@@ -1,0 +1,13 @@
+name = "Monterey Jack - Defiant Protector"
+type = "Character"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c36fb1d14427405e9855584cc3303929.avif?1747509479"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Ally"]
+keywords = ["Bodyguard"]
+text = "Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)"

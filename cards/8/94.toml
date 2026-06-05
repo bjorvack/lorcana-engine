@@ -1,0 +1,11 @@
+name = "Dale - Bumbler"
+type = "Character"
+cost = 1
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_bfb723663a9d477c92b6b0322d7a578d.avif?1747508973"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero"]

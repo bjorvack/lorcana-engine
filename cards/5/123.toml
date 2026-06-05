@@ -1,0 +1,12 @@
+name = "Ratigan - Party Crasher"
+type = "Character"
+cost = 7
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e49684f046464f2fac248bd11ba54f5d.avif?1723917209"
+max_copies = 4
+strength = 5
+willpower = 5
+lore = 3
+classifications = ["Floodborn", "Villain"]
+keywords = ["Evasive", "Shift 4"]
+text = "Shift 4 (You may pay 4 {I} to play this on top of one of your characters named Ratigan.)\nEvasive (Only characters with Evasive can challenge this character.)\nDELIGHTFULLY WICKED Your damaged characters get +2 {S}."

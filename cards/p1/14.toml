@@ -1,0 +1,12 @@
+name = "Cinderella - Knight in Training"
+type = "Character"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4ca99dff350049e6a2a72a72b595d33f.avif?1728609660"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Dreamborn", "Hero", "Princess", "Knight"]
+text = "HAVE COURAGE When you play this character, you may draw a card, then choose and discard a card."

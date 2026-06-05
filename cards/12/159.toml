@@ -1,0 +1,12 @@
+name = "Minnie Mouse - Practical Traveler"
+type = "Character"
+cost = 1
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b760305650e54e7b84dcbeb7c014b0f5.avif?1777687781"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 1
+lore = 1
+classifications = ["Dreamborn", "Hero"]
+text = "DISCERNING EYE Whenever this character quests, if you played another character this turn, gain 1 lore."

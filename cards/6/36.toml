@@ -1,0 +1,11 @@
+name = "Hades - Lord of the Dead"
+type = "Character"
+cost = 6
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_856fe3c718b544ba808b79a6811bca02.avif?1730901319"
+max_copies = 4
+strength = 3
+willpower = 4
+lore = 3
+classifications = ["Storyborn", "Villain", "Deity"]
+text = "SOUL COLLECTOR Whenever one of your other characters is banished during the opponent's turn, gain 2 lore."

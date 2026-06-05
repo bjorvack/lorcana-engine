@@ -1,0 +1,11 @@
+name = "Vinnie - Green Pigeon"
+type = "Character"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_81959a7827c2427d9ec829539d2a7418.avif?1747509501"
+max_copies = 4
+strength = 1
+willpower = 4
+lore = 1
+classifications = ["Storyborn"]
+text = "LEARNING EXPERIENCE During an opponent's turn, whenever one of your other characters is banished, gain 1 lore."

@@ -1,0 +1,13 @@
+name = "Rapunzel - Gifted Artist"
+type = "Character"
+cost = 5
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a324c0fddfab4d7681efcf47adae3c6d.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 0
+willpower = 6
+lore = 2
+classifications = ["Floodborn", "Hero", "Princess"]
+keywords = ["Shift 3"]
+text = "Shift 3 (You may pay 3 {I} to play this on top of one of your characters named Rapunzel.)\nLET YOUR POWER SHINE Whenever you remove 1 or more damage from one of your characters, you may draw a card."

@@ -1,0 +1,11 @@
+name = "Scrooge McDuck - S.H.U.S.H. Agent"
+type = "Character"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_73f5d43fcb894f40b2d40ef10c2f0014.avif?1773508899"
+max_copies = 4
+strength = 0
+willpower = 2
+lore = 2
+classifications = ["Storyborn", "Hero"]
+text = "BACKUP PLAN When you play this character, draw a card, then choose and discard a card.\nON THE MOVE When this character is challenged, return this card to your hand. (No damage is dealt in that challenge.)"

@@ -1,0 +1,12 @@
+name = "Maurice - World-Famous Inventor"
+type = "Character"
+cost = 6
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_de24a04b1d83417594730a5036cfc2a4.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 7
+lore = 2
+classifications = ["Dreamborn", "Mentor", "Inventor"]
+text = "GIVE IT A TRY Whenever this character quests, you pay 2 {I} less for the next item you play this turn.\nIT WORKS! Whenever you play an item, you may draw a card."

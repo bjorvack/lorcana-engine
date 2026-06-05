@@ -1,0 +1,12 @@
+name = "Christopher Robin - Joining the Fun"
+type = "Character"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6ef0db16a9b944d29c9a18fb37a8916d.avif?1770259447"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Hero"]
+text = "UNDERDOG If this is your first turn and you're not the first player, you pay 1 {I} less to play this character."

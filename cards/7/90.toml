@@ -1,0 +1,12 @@
+name = "Hiro Hamada - Future Champion"
+type = "Character"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_82584b5e3b2e4d319077b9c8021cb066.avif?1740589455"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero", "Inventor"]
+text = "ORIGIN STORY When you play a Floodborn character on this card, draw a card."

@@ -1,0 +1,12 @@
+name = "Snow White - Well Wisher"
+type = "Character"
+cost = 6
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d93d338ebe6c4e2dbbfb72a3059dcbc3.avif?1709690747"
+max_copies = 4
+strength = 3
+willpower = 5
+lore = 2
+classifications = ["Floodborn", "Hero", "Princess"]
+keywords = ["Shift 4"]
+text = "Shift 4 (You may pay 4 {I} to play this on top of one of your characters named Snow White.)\nWISHES COME TRUE Whenever this character quests, you may return a character card from your discard to your hand."

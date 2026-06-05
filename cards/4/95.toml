@@ -1,0 +1,8 @@
+name = "Under the Sea"
+type = "Song"
+cost = 8
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_dbd4475720c8479481050b2ba6ef3c5a.avif?1716052430"
+max_copies = 4
+keywords = ["Sing Together 8"]
+text = "Sing Together 8 (Any number of your or your teammates' characters with total cost 8 or more may {E} to sing this song for free.)\nPut all opposing characters with 2 {S} or less on the bottom of their players' decks in any order."

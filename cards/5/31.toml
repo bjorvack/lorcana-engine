@@ -1,0 +1,8 @@
+name = "Queen's Sensor Core"
+type = "Item"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a3736e115d014a5e85d5913b9d100f9e.avif?1723917209"
+max_copies = 4
+inkwell = true
+text = "SYMBOL OF NOBILITY At the start of your turn, if you have a Princess or Queen character in play, gain 1 lore.\nROYAL SEARCH {E}, 2 {I} — Reveal the top card of your deck. If it's a Princess or Queen character card, you may put it into your hand. Otherwise, put it on the top of your deck."

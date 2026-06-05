@@ -1,0 +1,13 @@
+name = "Lilo - Rock Star"
+type = "Character"
+cost = 6
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_85108b76785246e98f3f0b462684ff0b.avif?1770259274"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 5
+lore = 2
+classifications = ["Floodborn", "Hero"]
+keywords = ["Shift 4"]
+text = "Shift 4 {I} (You may pay 4 {I} to play this on top of one of your characters named Lilo.)\nI'LL COUNT YOU IN Whenever this character quests, you may play a character with cost 2 or less from your discard for free."

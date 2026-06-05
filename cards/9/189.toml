@@ -1,0 +1,12 @@
+name = "Tinker Bell - Tiny Tactician"
+type = "Character"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_24d837a8adab46e8ac2ffa7859489926.avif?1755541338"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 4
+lore = 1
+classifications = ["Dreamborn", "Ally", "Fairy"]
+text = "BATTLE PLANS {E} — Draw a card, then choose and discard a card."

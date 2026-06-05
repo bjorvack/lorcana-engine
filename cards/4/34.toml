@@ -1,0 +1,11 @@
+name = "The Underworld - River Styx"
+type = "Location"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0c75f068ac98487f9544d1bce3858b39.avif?1716052430"
+max_copies = 4
+inkwell = true
+move_cost = 2
+willpower = 6
+lore = 1
+text = "SAVE A SOUL Whenever a character quests while here, you may pay 3 {I} to return a character card from your discard to your hand."

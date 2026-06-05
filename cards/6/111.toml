@@ -1,0 +1,11 @@
+name = "Michael Darling - Playful Swordsman"
+type = "Character"
+cost = 1
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2f6b3b92c227489ab785e1d828ea5f44.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally", "Pirate"]

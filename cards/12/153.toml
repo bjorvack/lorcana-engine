@@ -1,0 +1,12 @@
+name = "Isabela Madrigal - Perfectly in Control"
+type = "Character"
+cost = 6
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_fc677f7c6b3b4781b5772602b566a1df.avif?1777687757"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 6
+lore = 3
+classifications = ["Dreamborn", "Ally", "Madrigal"]
+text = "FEEL BETTER When you play this character and whenever she quests, you may move all damage from chosen character of yours to this character.\nSELF-CARE At the end of your turn, you may remove all damage from this character."

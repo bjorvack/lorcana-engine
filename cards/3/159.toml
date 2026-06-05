@@ -1,0 +1,8 @@
+name = "Distract"
+type = "Action"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_462476bc47ff4cd7bf84c2bb4cd8f169.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "Chosen character gets -2 {S} this turn. Draw a card."

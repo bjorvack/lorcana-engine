@@ -1,0 +1,13 @@
+name = "Sebastian - Court Composer"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_acaae5dbf3c341b8ad35851ac755cfd6.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally"]
+keywords = ["Singer 4"]
+text = "Singer 4 (This character counts as cost 4 to sing songs.)"

@@ -1,0 +1,13 @@
+name = "Negaduck - Public Enemy Number One"
+type = "Character"
+cost = 5
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6f9057fdce974222a39f3a84c51114ec.avif?1770259721"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 5
+lore = 1
+classifications = ["Floodborn", "Super", "Villain"]
+keywords = ["Shift 3"]
+text = "Shift 3 {I} (You may pay 3 {I} to play this on top of one of your characters named Negaduck.)\nSTICKY FINGERS Whenever this character challenges another character, each opponent loses 1 lore and you gain 1 lore."

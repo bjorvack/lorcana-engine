@@ -1,0 +1,13 @@
+name = "Scar - Vengeful Lion"
+type = "Character"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a6340b8d58a14de28c95f912df744b3e.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Villain"]
+keywords = ["Ward"]
+text = "Ward (Opponents can't choose this character except to challenge.)\nLIFE'S NOT FAIR, IS IT? Whenever one of your characters challenges a damaged character, you may draw a card."

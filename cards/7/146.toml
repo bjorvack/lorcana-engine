@@ -1,0 +1,11 @@
+name = "Edgar Balthazar - Ambitious Butler"
+type = "Character"
+cost = 5
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4496d449edb34ea2b6994004e5d30c84.avif?1740589685"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Villain"]

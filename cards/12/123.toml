@@ -1,0 +1,11 @@
+name = "Hercules - Young Rescuer"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f3c83bbcb8b9497d84c5a04aa767c0fb.avif?1777687641"
+max_copies = 4
+strength = 2
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Hero", "Prince"]
+text = "HEROIC SACRIFICE When you play this character, you may discard your hand. If you do, return a card from your discard to your hand."

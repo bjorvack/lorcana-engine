@@ -1,0 +1,7 @@
+name = "Can't Hold It Back Anymore"
+type = "Song"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_217ec805ad494104bcdd188e2a38dbb3.avif?1761752218"
+max_copies = 4
+text = "(A character with cost 4 or more can {E} to sing this song for free.)\nExert chosen opposing character. Move all damage counters from all other characters to that character."

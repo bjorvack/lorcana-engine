@@ -1,0 +1,12 @@
+name = "Dr. Hamsterviel - Infamous Scientist"
+type = "Character"
+cost = 8
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_fa25fc0098884a649dc40a9e0551cff2.avif?1770260033"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Villain", "Alien", "Inventor"]
+text = "CONTROLLED VARIABLES For each Alien character card in your discard, you pay 1 {I} less to play this character.\nAWESTRUCK When you play this character, chosen opposing character can't challenge during their next turn."

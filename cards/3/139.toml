@@ -1,0 +1,13 @@
+name = "Dewey - Showy Nephew"
+type = "Character"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ada8dfe4da974553886bcf9387198373.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 2
+classifications = ["Dreamborn", "Ally"]
+keywords = ["Support"]
+text = "Support (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)"

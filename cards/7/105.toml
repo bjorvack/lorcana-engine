@@ -1,0 +1,13 @@
+name = "Gizmoduck - Suited Up"
+type = "Character"
+cost = 4
+ink = ["Emerald", "Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_bca7b817c7d54046bdf02f573d14d87a.avif?1740589520"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Inventor"]
+keywords = ["Resist 1"]
+text = "Resist +1 (Damage dealt to this character is reduced by 1.)\nBLATHERING BLATHERSKITE This character can challenge ready damaged characters."

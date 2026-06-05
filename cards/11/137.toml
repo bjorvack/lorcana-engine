@@ -1,0 +1,12 @@
+name = "Roo - Little Helper"
+type = "Character"
+cost = 1
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e2a1ea3f5b0d48db8e7197056581c11d.avif?1770259817"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Ally", "Whisper"]
+text = "HOPPING IN {E} — Put this character facedown under one of your characters or locations with Boost."

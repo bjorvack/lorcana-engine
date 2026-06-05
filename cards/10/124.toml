@@ -1,0 +1,11 @@
+name = "Lady Tremaine - Sinister Socialite"
+type = "Character"
+cost = 5
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5e356ee21c484c87bcd2f4197dc637ac.avif?1761763668"
+max_copies = 4
+strength = 5
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Villain", "Whisper"]
+text = "Boost 2 {I} (Once during your turn, you may pay 2 {I} to put the top card of your deck facedown under this character.)\nEXPEDIENT SCHEMES Whenever this character quests, if you've put a card under her this turn, you may play an action with cost 5 or less from your discard for free, then put that action card on the bottom of your deck instead of into your discard."

@@ -1,0 +1,10 @@
+name = "Sir Ector - Castle Lord"
+type = "Character"
+cost = 7
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ede0bedf6d774a6db32444997ed3dccf.avif?1723917209"
+max_copies = 4
+strength = 7
+willpower = 10
+lore = 3
+classifications = ["Storyborn", "Knight"]

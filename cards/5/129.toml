@@ -1,0 +1,8 @@
+name = "Don't Let the Frostbite Bite"
+type = "Song"
+cost = 7
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0f1a48118a4d4952864c66eec69808cf.avif?1723917209"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 7 or more can {E} to sing this song for free.)\nReady all your characters. They can't quest for the rest of this turn."

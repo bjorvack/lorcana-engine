@@ -1,0 +1,8 @@
+name = "Detective's Badge"
+type = "Item"
+cost = 1
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_423d5717f2d347448441e9da6d022847.avif?1761764679"
+max_copies = 4
+inkwell = true
+text = "PROTECT AND SERVE {E}, 1 {I} — Chosen character gains Resist +1 and the Detective classification until the start of your next turn. (Damage dealt to them is reduced by 1.)"

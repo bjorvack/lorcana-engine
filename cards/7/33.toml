@@ -1,0 +1,12 @@
+name = "Snow White - Fairest in the Land"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2f6b2d82972a4c47aca9ebf61a664045.avif?1740589230"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 2
+classifications = ["Storyborn", "Hero", "Princess"]
+text = "HIDDEN AWAY This character can't be challenged."

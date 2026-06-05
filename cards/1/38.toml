@@ -1,0 +1,13 @@
+name = "Dr. Facilier - Charlatan"
+type = "Character"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_17c7228380dd4d8e8b5e2cce3058d9d3.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 0
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Villain", "Sorcerer"]
+keywords = ["Challenger 2"]
+text = "Challenger +2 (While challenging, this character gets +2 {S}.)"

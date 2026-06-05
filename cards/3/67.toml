@@ -1,0 +1,11 @@
+name = "The Queen's Castle - Mirror Chamber"
+type = "Location"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a4f0a9a928674b2a93d17f7c81eb09d7.avif?1709690747"
+max_copies = 4
+inkwell = true
+move_cost = 1
+willpower = 7
+lore = 2
+text = "USING THE MIRROR At the start of your turn, for each character you have here, you may draw a card."

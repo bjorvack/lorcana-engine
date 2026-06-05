@@ -1,0 +1,12 @@
+name = "Mickey Mouse - Courageous Sailor"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_01d728f9a98643378187ab0151a89b06.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 4
+lore = 1
+classifications = ["Dreamborn", "Hero"]
+text = "SOLID GROUND While this character is at a location, he gets +2 {S}."

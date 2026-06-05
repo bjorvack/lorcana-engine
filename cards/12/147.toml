@@ -1,0 +1,12 @@
+name = "Gadget Hackwrench - Finder of Lost Parts"
+type = "Character"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_bf923e0701574d3b954ea18e6ea2baf5.avif?1777687733"
+max_copies = 4
+inkwell = true
+strength = 0
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally", "Inventor"]
+text = "USEFUL BITS When this character leaves play, you may return an item card from your discard to your hand."

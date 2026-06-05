@@ -1,0 +1,7 @@
+name = "Restoring the Crown"
+type = "Action"
+cost = 6
+ink = ["Amethyst", "Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_73e72e4fa154400f892e295a0eaffb40.avif?1740589427"
+max_copies = 4
+text = "Exert all opposing characters. Whenever one of your characters banishes another character in a challenge this turn, gain 2 lore."

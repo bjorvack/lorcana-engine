@@ -1,0 +1,8 @@
+name = "Family Fishing Pole"
+type = "Item"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b081887da7a445c0b0a5a1404d9102b0.avif?1755540755"
+max_copies = 4
+inkwell = true
+text = "WATCH CLOSELY This item enters play exerted.\nTHE PERFECT CAST {E}, 1 {I}, Banish this item – Return chosen exerted character of yours to your hand to gain 2 lore."

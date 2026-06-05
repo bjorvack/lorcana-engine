@@ -1,0 +1,11 @@
+name = "Hamish, Hubert & Harris - Making Mischief"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f97b251adbeb4697b06c2cdaa80bc6e5.avif?1777687351"
+max_copies = 4
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally", "Prince"]
+text = "STAY QUIET This character may enter play exerted.\nCLEVER TRAP At the end of your turn, if this character is exerted, chosen opposing character can't ready at the start of their next turn."

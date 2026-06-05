@@ -1,0 +1,12 @@
+name = "Luisa Madrigal - Magically Strong One"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4ce57ce9f6484fd386b2add4847b5dc8.avif?1755540474"
+max_copies = 4
+strength = 4
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally", "Madrigal"]
+keywords = ["Rush"]
+text = "Rush (This character can challenge the turn they're played.)"

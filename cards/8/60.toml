@@ -1,0 +1,12 @@
+name = "Elsa - Fierce Protector"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a6a007b0f7ae4fa19480721bacd2b0b6.avif?1747508548"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Hero", "Queen", "Sorcerer"]
+text = "ICE OVER 1 {I} , Choose and discard a card — Exert chosen opposing character."

@@ -1,0 +1,11 @@
+name = "Genie - The Ever Impressive"
+type = "Character"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_64d94b7ad8e84bac909438767e1e63af.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Ally"]

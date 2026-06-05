@@ -1,0 +1,11 @@
+name = "Flotsam - Ursula's \"Baby\""
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5fb77165fcbc43e99fc15c3d64426b65.avif?1716052430"
+max_copies = 4
+strength = 4
+willpower = 2
+lore = 1
+classifications = ["Dreamborn", "Ally"]
+text = "QUICK ESCAPE When this character is banished in a challenge, return this card to your hand.\nOMINOUS PAIR Your characters named Jetsam gain “When this character is banished in a challenge, return this card to your hand.”"

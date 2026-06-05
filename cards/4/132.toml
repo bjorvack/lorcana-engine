@@ -1,0 +1,8 @@
+name = "Medallion Weights"
+type = "Item"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_26599f04c2b242a194da9d9207b944b4.avif?1716052430"
+max_copies = 4
+inkwell = true
+text = "DISCIPLINE AND STRENGTH {E}, 2 {I} — Chosen character gets +2 {S} this turn. Whenever they challenge another character this turn, you may draw a card."

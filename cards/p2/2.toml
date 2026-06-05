@@ -1,0 +1,12 @@
+name = "Kristoff - Reindeer Keeper"
+type = "Character"
+cost = 9
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6cba76453f834205a7edf1e8222907c7.avif?1745500329"
+max_copies = 4
+strength = 3
+willpower = 7
+lore = 3
+classifications = ["Dreamborn", "Ally"]
+keywords = ["Bodyguard"]
+text = "SONG OF THE HERD For each song card in your discard, you pay 1 {I} less to play this character.\nBodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)"

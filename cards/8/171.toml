@@ -1,0 +1,13 @@
+name = "Jasmine - Steady Strategist"
+type = "Character"
+cost = 4
+ink = ["Sapphire", "Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e7e7a32216674ff5b5928592a8236ffd.avif?1747509408"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 5
+lore = 1
+classifications = ["Floodborn", "Hero", "Princess"]
+keywords = ["Shift 2"]
+text = "Shift 2 (You may pay 2 {I} to play this on top of one of your characters named Jasmine.)\nALWAYS PLANNING Whenever this character quests, look at the top 3 cards of your deck. You may reveal an Ally character card and put it into your hand. Put the rest on the bottom of your deck in any order."

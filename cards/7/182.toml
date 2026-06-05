@@ -1,0 +1,11 @@
+name = "Akela - Wolf Pack Elder"
+type = "Character"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b8f203cb54ee40baae13e58050d0c843.avif?1740589828"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally"]

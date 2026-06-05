@@ -1,0 +1,12 @@
+name = "Peg - Natural Performer"
+type = "Character"
+cost = 3
+ink = ["Amber", "Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7085d6eb08764015945d684bc74bceb5.avif?1740589125"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "CAPTIVE AUDIENCE {E} — If you have 3 or more other characters in play, draw a card."

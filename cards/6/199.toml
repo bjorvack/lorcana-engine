@@ -1,0 +1,8 @@
+name = "Unfortunate Situation"
+type = "Action"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_178a79a0d95a433d9a6add9dccca0730.avif?1730901319"
+max_copies = 4
+inkwell = true
+text = "Each opponent chooses one of their characters and deals 4 damage to them."

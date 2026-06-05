@@ -1,0 +1,12 @@
+name = "Grand Duke - Advisor to the King"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0b2c5d800fc14fdfacf098d74ec7ab74.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "YES, YOUR MAJESTY Your Prince, Princess, King, and Queen characters get +1 {S}."

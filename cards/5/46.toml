@@ -1,0 +1,12 @@
+name = "Anna - Mystical Majesty"
+type = "Character"
+cost = 7
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2254457f8600435abc8520521283f8ff.avif?1723917209"
+max_copies = 4
+strength = 4
+willpower = 5
+lore = 2
+classifications = ["Floodborn", "Hero", "Queen", "Sorcerer"]
+keywords = ["Shift 4"]
+text = "Shift 4 (You may pay 4 {I} to play this on top of one of your characters named Anna.)\nEXCEPTIONAL POWER When you play this character, exert all opposing characters."

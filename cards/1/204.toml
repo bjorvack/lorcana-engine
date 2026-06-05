@@ -1,0 +1,7 @@
+name = "Plasma Blaster"
+type = "Item"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_22373df684c0420ea90d2f8508ac096c.avif?1709690747"
+max_copies = 4
+text = "QUICK SHOT {E}, 2 {I} — Deal 1 damage to chosen character."

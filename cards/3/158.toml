@@ -1,0 +1,13 @@
+name = "Wendy Darling - Authority on Peter Pan"
+type = "Character"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_43915110e8b94147baf492d89356e0ca.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 1
+lore = 2
+classifications = ["Storyborn", "Hero"]
+keywords = ["Support", "Ward"]
+text = "Ward (Opponents can't choose this character except to challenge.)\nSupport (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)"

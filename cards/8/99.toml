@@ -1,0 +1,12 @@
+name = "Gadget Hackwrench - Quirky Scientist"
+type = "Character"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d09689076d3344cd9a6fb53f2790c103.avif?1747509014"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 2
+lore = 2
+classifications = ["Storyborn", "Ally", "Inventor"]
+text = "GOLLY! When you play this character, if an opponent has more cards in their hand than you, you may draw a card."

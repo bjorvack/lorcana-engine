@@ -1,0 +1,7 @@
+name = "Merlin's Carpetbag"
+type = "Item"
+cost = 5
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b17b7e285ce043a2bc97e5953a39c574.avif?1723917209"
+max_copies = 4
+text = "HOCKETY POCKETY {E}, 1 {I} — Return an item card from your discard to your hand."

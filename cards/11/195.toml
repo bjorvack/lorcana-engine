@@ -1,0 +1,11 @@
+name = "Lilo - Bundled Up"
+type = "Character"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f86297c4c6f940cc8135cd806d96105a.avif?1770260073"
+max_copies = 4
+strength = 1
+willpower = 2
+lore = 2
+classifications = ["Dreamborn", "Hero"]
+text = "EXTRA LAYERS During each opponent's turn, the first time this character would take damage, she takes no damage instead."

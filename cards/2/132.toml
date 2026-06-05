@@ -1,0 +1,8 @@
+name = "What Did You Call Me?"
+type = "Action"
+cost = 1
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b62b44f1e2144c1e9ebec3da471579c3.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "Chosen damaged character gets +3 {S} this turn."

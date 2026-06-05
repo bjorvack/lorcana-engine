@@ -1,0 +1,12 @@
+name = "Sleepy - Deep Sleeper"
+type = "Character"
+cost = 1
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_74d958eba8d84933bb8d416153a757d0.avif?1777687320"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally", "Seven Dwarfs"]
+text = "PLEASANT DREAMS When this character is banished, if you have a Seven Dwarfs or Princess character in play, you may draw a card."

@@ -1,0 +1,8 @@
+name = "Get to Safety!"
+type = "Action"
+cost = 1
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_898936239d774f7199fa2911d1528878.avif?1761763808"
+max_copies = 4
+inkwell = true
+text = "Play a location with cost 3 or less from your discard for free. Then, if you have a location named Sleepy Hollow in play, draw a card."

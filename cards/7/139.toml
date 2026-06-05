@@ -1,0 +1,13 @@
+name = "Goofy - Extreme Athlete"
+type = "Character"
+cost = 7
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f51072d030ba4e7b892f9ae48175f4cb.avif?1740589657"
+max_copies = 4
+inkwell = true
+strength = 7
+willpower = 6
+lore = 1
+classifications = ["Storyborn", "Ally"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)\nSTAR POWER Whenever this character challenges another character, your other characters get +1 {L} this turn."

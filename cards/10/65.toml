@@ -1,0 +1,8 @@
+name = "Fragile as a Flower"
+type = "Song"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_84584c67578c4843a7aa845642566259.avif?1761752266"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 3 or more can {E} to sing this song for free.)\nDraw a card. Exert chosen character with cost 2 or less. They can't ready at the start of their next turn."

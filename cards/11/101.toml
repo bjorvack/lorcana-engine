@@ -1,0 +1,8 @@
+name = "Battering Ram"
+type = "Item"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c49a2f008f0048d4951384b30880eba6.avif?1770259654"
+max_copies = 4
+inkwell = true
+text = "FULL FORCE {E} — Deal 1 damage to chosen damaged character.\nBREAK THROUGH {E}, Banish this item — Banish chosen location."

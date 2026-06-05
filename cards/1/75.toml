@@ -1,0 +1,12 @@
+name = "Genie - On the Job"
+type = "Character"
+cost = 6
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e910a64a2c12444e9eb34bab151b0428.avif?1709690747"
+max_copies = 4
+strength = 3
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Ally"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)\nDISAPPEAR When you play this character, you may return chosen character to their player's hand."

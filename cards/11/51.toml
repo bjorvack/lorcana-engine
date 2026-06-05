@@ -1,0 +1,11 @@
+name = "Kristoff - Icy Explorer"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_094f62fcb6094af1922921881eddf3f6.avif?1770259429"
+max_copies = 4
+strength = 4
+willpower = 4
+lore = 1
+classifications = ["Dreamborn", "Ally"]
+text = "HIDDEN DEPTHS When you play this character, if you have a character named Anna in play, you may put a card from chosen player's discard on the bottom of their deck.\nSTROKE OF LUCK Once during your turn, whenever a card leaves your discard, draw a card."

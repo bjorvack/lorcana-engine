@@ -1,0 +1,8 @@
+name = "Recovered Page"
+type = "Item"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f682ac8152d24a3192669d92bb1f22d0.avif?1761752067"
+max_copies = 4
+inkwell = true
+text = "WHAT IS TO COME When you play this item, look at the top 4 cards of your deck. You may reveal a character card and put it into your hand. Put the rest on the bottom of your deck in any order.\nWHISPERED POWER 1 {I}, Banish this item — Put the top card of your deck facedown under one of your characters or locations with Boost."

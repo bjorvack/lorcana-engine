@@ -1,0 +1,13 @@
+name = "Hercules - Unwavering Demigod"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1c5e7d4a006c4736baf5e602734fec5b.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 4
+lore = 2
+classifications = ["Dreamborn", "Hero", "Prince"]
+keywords = ["Challenger 2"]
+text = "Challenger +2 (While challenging, this character gets +2 {S})."

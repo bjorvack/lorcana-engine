@@ -1,0 +1,11 @@
+name = "Hades - Strong Arm"
+type = "Character"
+cost = 5
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_aace3808bd9f445195dceec7b4fe87e9.avif?1730901319"
+max_copies = 4
+strength = 4
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Villain", "Deity"]
+text = "WHAT ARE YOU GONNA DO? {E}, 3 {I}, Banish one of your characters – Banish chosen character."

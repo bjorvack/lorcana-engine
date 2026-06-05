@@ -1,0 +1,12 @@
+name = "Scrooge McDuck - On the Right Track"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c44b5e749e584c13a821007c6dce1cec.avif?1761751962"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero"]
+text = "FABULOUS WEALTH When you play this character, chosen character with a card under them gets +1 {L} this turn."

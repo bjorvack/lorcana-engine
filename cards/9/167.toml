@@ -1,0 +1,8 @@
+name = "Aurelian Gyrosensor"
+type = "Item"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6e6d5ca027b34def81032f79864dc6c6.avif?1755541227"
+max_copies = 4
+inkwell = true
+text = "SEEKING KNOWLEDGE Whenever one of your characters quests, you may look at the top card of your deck. Put it on either the top or the bottom of your deck."

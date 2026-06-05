@@ -1,0 +1,8 @@
+name = "I Won't Give In"
+type = "Song"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_128b29d2aef043efb62b2fb63189c4ca.avif?1730901319"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 2 or more can {E} to sing this song for free.)\nReturn a character card with cost 2 or less from your discard to your hand."

@@ -1,0 +1,12 @@
+name = "Rat Capone - Rodent Gangster"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_dc7439b895b342b99a0c373767318f64.avif?1777687872"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Villain"]
+text = "SHADAAP! While this character has no damage, he gets +3 {S}."

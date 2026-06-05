@@ -1,0 +1,12 @@
+name = "Panic - Immortal Sidekick"
+type = "Character"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3b8a6e3644374d98828747b29622e053.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "REPORTING FOR DUTY While this character is exerted, if you have a character named Pain in play, your Villain characters can't be challenged."

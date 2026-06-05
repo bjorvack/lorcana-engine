@@ -1,0 +1,7 @@
+name = "Light the Fuse"
+type = "Action"
+cost = 1
+ink = ["Ruby", "Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e416c26c509b4f3eb41a49cf0d478734.avif?1747509307"
+max_copies = 4
+text = "Deal 1 damage to chosen character for each exerted character you have in play."

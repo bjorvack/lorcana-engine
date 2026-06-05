@@ -1,0 +1,8 @@
+name = "Finders Keepers"
+type = "Action"
+cost = 5
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c2ea432892434d9c9814d4bf6c3791a5.avif?1745500336"
+max_copies = 4
+inkwell = true
+text = "Draw 3 cards."

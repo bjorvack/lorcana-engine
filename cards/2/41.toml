@@ -1,0 +1,13 @@
+name = "Fairy Godmother - Mystic Armorer"
+type = "Character"
+cost = 5
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ea4fdeec62324b1eac04465ca25a1fbc.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 2
+classifications = ["Floodborn", "Mentor", "Fairy"]
+keywords = ["Shift 2"]
+text = "Shift 2 (You may pay 2 {I} to play this on top of one of your characters named Fairy Godmother.)\nFORGET THE COACH, HERE'S A SWORD Whenever this character quests, your characters gain Challenger +3 and “When this character is banished in a challenge, return this card to your hand” this turn. (They get +3 {S} while challenging.)"

@@ -1,0 +1,12 @@
+name = "The Horned King - Triumphant Ghoul"
+type = "Character"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_133b244940a04f5cb851d8f179fcd91a.avif?1761752158"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Villain", "King", "Sorcerer"]
+text = "GRAND MACHINATIONS During your turn, if 1 or more cards have left a player's discard this turn, this character gets +2 {L}."

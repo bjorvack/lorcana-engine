@@ -1,0 +1,11 @@
+name = "Hans - Scheming Prince"
+type = "Character"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c0ca53eaf2d849e7b533d0628ea7585c.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 3
+classifications = ["Storyborn", "Villain", "Prince"]

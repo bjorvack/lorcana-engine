@@ -1,0 +1,13 @@
+name = "Mickey Mouse - Playful Sorcerer"
+type = "Character"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7295a54624614f55a8d469d9d6b2e502.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 2
+classifications = ["Floodborn", "Hero", "Sorcerer"]
+keywords = ["Resist 1", "Shift 3"]
+text = "Shift 3 (You may pay 3 {I} to play this on top of one of your characters named Mickey Mouse.)\nResist +1 (Damage dealt to this character is reduced by 1.)\nSWEEP AWAY When you play this character, deal damage to chosen character equal to the number of Broom characters you have in play."

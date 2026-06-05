@@ -1,0 +1,12 @@
+name = "Mr. Smee - Steadfast Mate"
+type = "Character"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7ee0b368f69e45f7832d164a926951ff.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally", "Pirate"]
+text = "GOOD CATCH During your turn, this character gains Evasive. (They can challenge characters with Evasive.)"

@@ -1,0 +1,12 @@
+name = "Pluto - Clever Cluefinder"
+type = "Character"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_bfdd0f1b2c564334afb8ee438ebd677e.avif?1761764556"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Dreamborn", "Ally"]
+text = "ON THE TRAIL {E} — If you have a Detective character in play, return an item card from your discard to your hand. Otherwise, put it on the top of your deck."

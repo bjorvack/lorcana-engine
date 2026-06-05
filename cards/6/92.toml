@@ -1,0 +1,10 @@
+name = "Olivia Flaversham - The Toymaker's Daughter"
+type = "Character"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_479312aef4f4411f8bd173c113ab31f4.avif?1730901319"
+max_copies = 4
+strength = 1
+willpower = 1
+lore = 3
+classifications = ["Storyborn"]

@@ -1,0 +1,12 @@
+name = "Mor'du - Wicked with Pride"
+type = "Character"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6ed671e897624e01b14ca2e5db565d06.avif?1777687278"
+max_copies = 4
+strength = 3
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Villain", "Prince"]
+keywords = ["Rush"]
+text = "Rush (This character can challenge the turn they're played.)"

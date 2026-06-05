@@ -1,0 +1,12 @@
+name = "Mickey Mouse - Bob Cratchit"
+type = "Character"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_df33ab22a6b1429781e4be47ec28e350.avif?1770259917"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Hero"]
+text = "HARD WORK Whenever this character quests, put the top card of your deck facedown under him.\nA GIVING HEART When this character is banished in a challenge, you may put all cards that were under him under another chosen character or location of yours."

@@ -1,0 +1,7 @@
+name = "Pixie Dust"
+type = "Item"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_030f9799a2ef4cc0afedc46a03650e70.avif?1730901319"
+max_copies = 4
+text = "FAITH AND TRUST {E}, {2} {I} - Chosen character gains Challenger +2 and Evasive until the start of your next turn. (While challenging, they get +2 {1}. Only characters with Evasive can challenge them.)"

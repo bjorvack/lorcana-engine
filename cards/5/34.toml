@@ -1,0 +1,11 @@
+name = "Pride Lands - Jungle Oasis"
+type = "Location"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_210e4fd42fff4273b7ed916683431def.avif?1723917209"
+max_copies = 4
+inkwell = true
+move_cost = 2
+willpower = 8
+lore = 1
+text = "OUR HUMBLE HOME While you have 3 or more characters here, you may banish this location to play a character from your discard for free."

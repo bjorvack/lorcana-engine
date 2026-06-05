@@ -1,0 +1,12 @@
+name = "Edna Mode - Super Suit Designer"
+type = "Character"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_911059054d6c417eac48594ab4b94e7c.avif?1777687741"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Dreamborn", "Ally", "Inventor"]
+text = "KEY ACCESSORY {E} — Ready chosen item.\nALL THE BASICS While you have an item named Super Suit in play, this character gains Ward. (Opponents can't choose them except to challenge.)"

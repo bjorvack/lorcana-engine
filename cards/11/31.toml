@@ -1,0 +1,7 @@
+name = "Wisdom of the Willow"
+type = "Action"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9efb436da763484ba54c2b75e1e0fcd9.avif?1770259339"
+max_copies = 4
+text = "For the rest of this turn, whenever one of your characters quests, you may draw a card."

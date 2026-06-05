@@ -1,0 +1,8 @@
+name = "Promising Lead"
+type = "Action"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7e8b9ff676484f2bb8a16dde98de13a7.avif?1761764577"
+max_copies = 4
+inkwell = true
+text = "Chosen character gets +1 {L} and gains Support this turn. (Whenever they quest, you may add their {S} to another chosen character's {S} this turn.)"

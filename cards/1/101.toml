@@ -1,0 +1,7 @@
+name = "Dr. Facilier's Cards"
+type = "Item"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b30843c0d5e845ee88fc040b5c5e727b.avif?1709690747"
+max_copies = 4
+text = "THE CARDS WILL TELL {E} — You pay 1 {I} less for the next action you play this turn."

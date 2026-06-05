@@ -1,0 +1,12 @@
+name = "Belle - Inventive Engineer"
+type = "Character"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b77ec6c391cd4ccaa1b1e01ca897502d.avif?1755541140"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 2
+classifications = ["Dreamborn", "Hero", "Princess", "Inventor"]
+text = "TINKER Whenever this character quests, you pay 1 {I} less for the next item you play this turn."

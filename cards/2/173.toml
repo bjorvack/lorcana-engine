@@ -1,0 +1,13 @@
+name = "Beast - Tragic Hero"
+type = "Character"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7ffeed1a4c364378ab7814dda3b99b73.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 5
+lore = 2
+classifications = ["Floodborn", "Hero", "Prince"]
+keywords = ["Shift 3"]
+text = "Shift 3 (You may pay 3 {I} to play this on top of one of your characters named Beast.)\nIT'S BETTER THIS WAY At the start of your turn, if this character has no damage, draw a card. Otherwise, he gets +4 {S} this turn."

@@ -1,0 +1,11 @@
+name = "Minnie Mouse - Spinning Skater"
+type = "Character"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8db0f3b74ec145c39cb0ec2413c48c75.avif?1770259523"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero"]

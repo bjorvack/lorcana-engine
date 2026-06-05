@@ -1,0 +1,12 @@
+name = "Madame Medusa - Deceiving Partner"
+type = "Character"
+cost = 3
+ink = ["Amethyst", "Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c25b03f0800041229325ec211c5e132c.avif?1747507389"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Villain"]
+text = "DOUBLE-CROSS When you play this character, you may deal 2 damage to another chosen character of yours to return chosen character with cost 2 or less to their player's hand."

@@ -1,0 +1,11 @@
+name = "Higgins - Undercover Officer"
+type = "Character"
+cost = 1
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0511a324cc744453bb56c0d34d8f8d2a.avif?1761751951"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Dreamborn", "Ally", "Detective"]

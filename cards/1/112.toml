@@ -1,0 +1,12 @@
+name = "LeFou - Instigator"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_350f66335966462b90a118ec2d81578f.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Dreamborn", "Ally"]
+text = "FAN THE FLAMES When you play this character, ready chosen character. They can't quest for the rest of this turn."

@@ -1,0 +1,12 @@
+name = "Copper - Hound Pup"
+type = "Character"
+cost = 1
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_47915154ee494451b714c3ec1084331a.avif?1770259582"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Hero", "Puppy"]
+text = "FOUND YA When you play this character, chosen player reveals their hand."

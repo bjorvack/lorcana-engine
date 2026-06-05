@@ -1,0 +1,11 @@
+name = "Doc - Bold Knight"
+type = "Character"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_663b3bcaa1df4b48ad139248ef5a5208.avif?1723917209"
+max_copies = 4
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Ally", "Knight", "Seven Dwarfs"]
+text = "DRASTIC MEASURES When you play this character, you may discard your hand to draw 2 cards."

@@ -1,0 +1,8 @@
+name = "When Will My Life Begin?"
+type = "Song"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f4219fc0ab3a47ed9fc0b3f5f705f597.avif?1723917209"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 3 or more can {E} to sing this song for free.)\nChosen character can't challenge during their next turn. Draw a card."

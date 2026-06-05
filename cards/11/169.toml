@@ -1,0 +1,8 @@
+name = "Darkwing's Gas Device"
+type = "Item"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_51455b45e452420caabc777bd7bd1ee5.avif?1770259961"
+max_copies = 4
+inkwell = true
+text = "BLINDING CLOUD {E}, 1 {I} — Chosen character gets -1 {S} this turn. If you have a character named Darkwing Duck in play, chosen character gets -2 {S} this turn instead."

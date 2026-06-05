@@ -1,0 +1,12 @@
+name = "Baymax - Armored Companion"
+type = "Character"
+cost = 5
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_982364cf0c5f42ee9ba82a335bf674b5.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 6
+lore = 2
+classifications = ["Storyborn", "Hero", "Robot"]
+text = "THE TREATMENT IS WORKING When you play this character and whenever he quests, you may remove up to 2 damage from another chosen character of yours. Gain 1 lore for each 1 damage removed this way."

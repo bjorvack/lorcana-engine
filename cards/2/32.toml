@@ -1,0 +1,7 @@
+name = "Zero to Hero"
+type = "Song"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_03538324959a406cb3ac98684214d437.avif?1709690747"
+max_copies = 4
+text = "(A character with cost 2 or more can {E} to sing this song for free.)\nCount the number of characters you have in play. You pay that amount of {I} less for the next character you play this turn."

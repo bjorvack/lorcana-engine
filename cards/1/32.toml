@@ -1,0 +1,8 @@
+name = "Dinglehopper"
+type = "Item"
+cost = 1
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4ab0c55e07324d30903f51b7bbd41c8d.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "STRAIGHTEN HAIR {E} — Remove up to 1 damage from chosen character."

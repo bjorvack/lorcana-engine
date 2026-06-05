@@ -1,0 +1,12 @@
+name = "Pluto - Steel Champion"
+type = "Character"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_bd58d594eb5940b98b648d9eeffe6272.avif?1761764881"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 5
+lore = 2
+classifications = ["Dreamborn", "Ally"]
+text = "WINNER TAKE ALL During your turn, whenever one of your other Steel characters banishes another character in a challenge, gain 2 lore.\nMAKE ROOM Whenever you play another Steel character, you may banish chosen item."

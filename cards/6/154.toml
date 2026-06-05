@@ -1,0 +1,12 @@
+name = "Hiro Hamada - Team Leader"
+type = "Character"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7115d5f5c2604ff08596a89ef6574d19.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Hero", "Inventor"]
+text = "I NEED TO UPGRADE ALL OF YOU Your other Inventor characters gain Resist +1. (Damage dealt to them is reduced by 1.)\n\nSHAPE THE FUTURE 2 {I} - Look at the top card of your deck. Put it on either the top or the bottom of your deck."

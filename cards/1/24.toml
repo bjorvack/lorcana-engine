@@ -1,0 +1,12 @@
+name = "Timon - Grub Rustler"
+type = "Character"
+cost = 1
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a7a780b01376481388b871a1b533de08.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "TASTES LIKE CHICKEN When you play this character, you may remove up to 1 damage from chosen character."

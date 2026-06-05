@@ -1,0 +1,10 @@
+name = "Grand Councilwoman - Galactic Authority"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a0d09a062bc54cceb56ecef2636860c3.avif?1770260051"
+max_copies = 4
+strength = 3
+willpower = 5
+lore = 3
+classifications = ["Dreamborn", "Alien"]

@@ -1,0 +1,11 @@
+name = "Li Shang - Newly Promoted"
+type = "Character"
+cost = 3
+ink = ["Ruby", "Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0ee5f4ec8dfa4e3fbf3fd802f6166047.avif?1745500450"
+max_copies = 4
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero", "Captain"]
+text = "I WON'T LET YOU DOWN This character can challenge ready characters.\nENORMOUS RESPONSIBILITY While this character has damage, he gets +2 {S}."

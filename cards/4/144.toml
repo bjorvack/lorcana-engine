@@ -1,0 +1,13 @@
+name = "Flounder - Collector's Companion"
+type = "Character"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e5268062a91d46d1b89bd272a3f8c043.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 2
+classifications = ["Storyborn", "Ally"]
+keywords = ["Support"]
+text = "Support (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)\nI'M NOT A GUPPY If you have a character named Ariel in play, you pay 1 {I} less to play this character."

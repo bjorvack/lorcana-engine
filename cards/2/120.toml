@@ -1,0 +1,13 @@
+name = "Queen of Hearts - Sensing Weakness"
+type = "Character"
+cost = 5
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_137c6f751cfa4c56a1fb8443e611b0f4.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 3
+lore = 1
+classifications = ["Floodborn", "Villain", "Queen"]
+keywords = ["Shift 2"]
+text = "Shift 2 (You may pay 2 {I} to play this on top of one of your characters named Queen of Hearts.)\nLET THE GAME BEGIN Whenever one of your characters challenges another character, you may draw a card."

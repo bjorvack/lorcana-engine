@@ -1,0 +1,11 @@
+name = "Elsa - Queen Regent"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_643a385f109c4e50a6462b86c64b98b2.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Hero", "Queen", "Sorcerer"]

@@ -1,0 +1,12 @@
+name = "Ariel - Treasure Collector"
+type = "Character"
+cost = 6
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_268651d4999a481faa22b6598a4dea0c.avif?1716052430"
+max_copies = 4
+strength = 3
+willpower = 4
+lore = 3
+classifications = ["Storyborn", "Hero", "Princess"]
+keywords = ["Ward"]
+text = "Ward (Opponents can't choose this character except to challenge.)\nTHE GIRL WHO HAS EVERYTHING While you have more items in play than each opponent, this character gets +2 {L}."

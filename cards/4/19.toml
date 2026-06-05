@@ -1,0 +1,13 @@
+name = "Mirabel Madrigal - Prophecy Finder"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_42b2c061d90345869820c14b4bad81ee.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Hero", "Madrigal"]
+keywords = ["Support"]
+text = "Support (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)"

@@ -1,0 +1,13 @@
+name = "Robin Hood - Champion of Sherwood"
+type = "Character"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_fc5e485b906a4e97b420d9ea122b4414.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 6
+lore = 2
+classifications = ["Floodborn", "Hero"]
+keywords = ["Shift 3"]
+text = "Shift 3 (You may pay 3 {I} to play this on top of one of your characters named Robin Hood.)\nSKILLED COMBATANT During your turn, whenever this character banishes another character in a challenge, gain 2 lore.\nTHE GOOD OF OTHERS When this character is banished in a challenge, you may draw a card."

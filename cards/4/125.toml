@@ -1,0 +1,12 @@
+name = "Sisu - Empowered Sibling"
+type = "Character"
+cost = 8
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1f7b39db813d495ea2aebf5c8e7ddcbe.avif?1716052430"
+max_copies = 4
+strength = 5
+willpower = 4
+lore = 3
+classifications = ["Floodborn", "Hero", "Deity", "Dragon"]
+keywords = ["Shift 6"]
+text = "Shift 6 (You may pay 6 {I} to play this on top of one of your characters named Sisu.)\nI GOT THIS! When you play this character, banish all opposing characters with 2 {S} or less."

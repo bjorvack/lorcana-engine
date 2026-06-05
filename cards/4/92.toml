@@ -1,0 +1,12 @@
+name = "Zeus - Mr. Lightning Bolts"
+type = "Character"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6c8b36633fae4e9c9106e63af43934eb.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 0
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "King", "Deity"]
+text = "TARGET PRACTICE Whenever this character challenges another character, he gets +{S} equal to the {S} of chosen character this turn."

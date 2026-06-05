@@ -1,0 +1,11 @@
+name = "Atlantica - Concert Hall"
+type = "Location"
+cost = 1
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_74c2fa84872c4c68ac1eb0e2a7a8affc.avif?1755540294"
+max_copies = 4
+inkwell = true
+move_cost = 2
+willpower = 6
+lore = 0
+text = "UNDERWATER ACOUSTICS Characters count as having +2 cost to sing songs while here."

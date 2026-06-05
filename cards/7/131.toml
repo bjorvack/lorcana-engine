@@ -1,0 +1,10 @@
+name = "Toby - Dogged Companion"
+type = "Character"
+cost = 1
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1cc513a07b96473ebf95f9369c01c25d.avif?1740589625"
+max_copies = 4
+strength = 3
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Ally"]

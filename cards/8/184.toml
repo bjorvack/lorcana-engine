@@ -1,0 +1,12 @@
+name = "Prince Achmed - Rival Suitor"
+type = "Character"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7330464a904f4bc48287806c802ca7f1.avif?1747509463"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Prince"]
+text = "UNWELCOME PROPOSAL When you play this character, you may exert chosen Princess character."

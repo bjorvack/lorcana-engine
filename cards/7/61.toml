@@ -1,0 +1,11 @@
+name = "Pain - Impudent Imp"
+type = "Character"
+cost = 1
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_28105ce920e943dbb885b3a831689c38.avif?1740589341"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally"]

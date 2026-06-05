@@ -1,0 +1,13 @@
+name = "Max Goof - Rockin' Teen"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_bb2ace4414ab49e5a25181049e58c660.avif?1755540831"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero"]
+keywords = ["Singer 5"]
+text = "Singer 5 (This character counts as cost 5 to sing songs.)\nI JUST WANNA STAY HOME This character can't move to locations."

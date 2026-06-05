@@ -1,0 +1,8 @@
+name = "Right Behind You"
+type = "Action"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ff9b8c01070340d5ba17656c5ef0c2bf.avif?1777687410"
+max_copies = 4
+inkwell = true
+text = "Draw a card. If you have a Seven Dwarfs character and a Princess character in play, you may play a Seven Dwarfs character for free."

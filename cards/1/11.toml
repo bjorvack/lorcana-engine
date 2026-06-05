@@ -1,0 +1,12 @@
+name = "Maximus - Relentless Pursuer"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_dbc44ab9437a44568efdf23b37f3f278.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Ally"]
+text = "HORSE KICK When you play this character, chosen character gets -2 {S} this turn."

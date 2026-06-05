@@ -1,0 +1,11 @@
+name = "Tinker Bell - Generous Fairy"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_136ffadfd42e4f968a125c32a8d18591.avif?1709690747"
+max_copies = 4
+strength = 1
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally", "Fairy"]
+text = "MAKE A NEW FRIEND When you play this character, look at the top 4 cards of your deck. You may reveal a character card and put it into your hand. Put the rest on the bottom of your deck in any order."

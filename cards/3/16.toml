@@ -1,0 +1,12 @@
+name = "Piglet - Pooh Pirate Captain"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f478c96f7b1b45b790d74395480da563.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Dreamborn", "Hero", "Pirate", "Captain"]
+text = "AND I'M THE CAPTAIN! While you have 2 or more other characters in play, this character gets +2 {L}."

@@ -1,0 +1,12 @@
+name = "Adorabeezle Winterpop - Ice Rocket Racer"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7873f8596eef4066bc23325ceeedcfd8.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Hero", "Racer"]
+text = "KEEP DRIVING While this character has damage, she gets +1 {L}."

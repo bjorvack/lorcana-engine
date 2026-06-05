@@ -1,0 +1,11 @@
+name = "Li Shang - Imperial Captain"
+type = "Character"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3a743f412ff34cd38bd9896f146950f4.avif?1755541367"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 5
+lore = 2
+classifications = ["Dreamborn", "Hero", "Captain"]

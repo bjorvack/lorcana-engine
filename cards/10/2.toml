@@ -1,0 +1,11 @@
+name = "Gaston - Frightful Bully"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_429e35bda1a141a9870b8943f8847109.avif?1761751904"
+max_copies = 4
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Villain", "Whisper"]
+text = "Boost 2 {I} (Once during your turn, you may pay 2 {I} to put the top card of your deck facedown under this character.)\nTOP THAT! Whenever this character quests, if there's a card under him, chosen opposing character can't challenge and must quest if able during their next turn."

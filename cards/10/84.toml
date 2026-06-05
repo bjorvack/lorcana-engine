@@ -1,0 +1,10 @@
+name = "Penumbra - Moon Alien"
+type = "Character"
+cost = 5
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b3484a7d91f949b485eb269bcb2d9975.avif?1761752343"
+max_copies = 4
+strength = 7
+willpower = 6
+lore = 2
+classifications = ["Storyborn", "Alien"]

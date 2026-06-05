@@ -1,0 +1,12 @@
+name = "Cruella De Vil - Miserable as Usual"
+type = "Character"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a3a886b05f4149c695ffbd5e5b9a049f.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Villain"]
+text = "YOU'LL BE SORRY! When this character is challenged and banished, you may return chosen character to their player's hand."

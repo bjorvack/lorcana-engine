@@ -1,0 +1,12 @@
+name = "Elsa - Concerned Sister"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a6f3c215973844fc8ae5cbc2a4ea388f.avif?1770259762"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 2
+classifications = ["Storyborn", "Hero", "Queen", "Sorcerer"]
+text = "CLEAR THE WAY When you play this character, you pay 2 {I} less for the next location you play this turn."

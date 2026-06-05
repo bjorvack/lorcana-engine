@@ -1,0 +1,13 @@
+name = "Perdita - Determined Mother"
+type = "Character"
+cost = 6
+ink = ["Amber", "Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6367664eb4c34561a0051df14b2683e5.avif?1747506765"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 6
+lore = 2
+classifications = ["Floodborn", "Hero"]
+keywords = ["Shift 4"]
+text = "Shift 4 (You may pay 4 {I} to play this on top of one of your characters named Perdita.)\nQUICK, EVERYONE HIDE When you play this character, you may put all Puppy character cards from your discard into your inkwell facedown and exerted."

@@ -1,0 +1,11 @@
+name = "Lilo - Galactic Hero"
+type = "Character"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6a986375d35444ad9660332cda624a14.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 2
+lore = 2
+classifications = ["Dreamborn", "Hero"]

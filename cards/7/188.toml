@@ -1,0 +1,12 @@
+name = "Fa Zhou - War Hero"
+type = "Character"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c7f70b64da8740e0a6cc47d0862b88e3.avif?1740589850"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero"]
+text = "TRAINING EXERCISES Whenever one of your characters challenges another character, if it's the second challenge this turn, gain 3 lore."

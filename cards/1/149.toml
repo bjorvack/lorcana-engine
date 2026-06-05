@@ -1,0 +1,13 @@
+name = "Jasmine - Queen of Agrabah"
+type = "Character"
+cost = 5
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6b26bc2dda6e49bba695529a039dcaee.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 5
+lore = 2
+classifications = ["Floodborn", "Hero", "Princess", "Queen"]
+keywords = ["Shift 3"]
+text = "Shift 3 (You may pay 3 {I} to play this on top of one of your characters named Jasmine.)\nCARETAKER When you play this character and whenever she quests, you may remove up to 2 damage from each of your characters."

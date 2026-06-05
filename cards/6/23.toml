@@ -1,0 +1,12 @@
+name = "Roo - Littlest Pirate"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8497d60197bd451c91b4c2468f85b156.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 2
+lore = 1
+classifications = ["Dreamborn", "Ally", "Pirate"]
+text = "I'M A PIRATE TOO! When you play this character, you may give chosen character -2 {S} until the start of your next turn."

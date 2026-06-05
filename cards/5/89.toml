@@ -1,0 +1,12 @@
+name = "Mother Gothel - Conceited Manipulator"
+type = "Character"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_209d406df9574154ad94b0b7c78d635f.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Villain"]
+text = "MOTHER KNOWS BEST When you play this character, you may pay 3 {I} to return chosen character to their player's hand."

@@ -1,0 +1,11 @@
+name = "Mr. Snoops - Inept Businessman"
+type = "Character"
+cost = 6
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_748599af9c8e4272b5f2926597a405ba.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 8
+lore = 2
+classifications = ["Dreamborn", "Ally"]

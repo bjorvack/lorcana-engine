@@ -1,0 +1,12 @@
+name = "Mickey Mouse - Expedition Leader"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c1295a70475b44d392fa06adbbc74b6b.avif?1777687234"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 2
+classifications = ["Dreamborn", "Hero"]
+text = "LONG JOURNEY This character may enter play exerted.\nSECRET PATH While this character is exerted, whenever one of your other characters quests, chosen opposing character gets -2 {S} until the start of your next turn."

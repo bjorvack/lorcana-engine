@@ -1,0 +1,13 @@
+name = "Aurora - Dreaming Guardian"
+type = "Character"
+cost = 5
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1a45dd7bd500476991afd5bb75f173b2.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 5
+lore = 2
+classifications = ["Floodborn", "Hero", "Princess"]
+keywords = ["Shift 3"]
+text = "Shift 3 (You may pay 3 {I} to play this on top of one of your characters named Aurora.)\nPROTECTIVE EMBRACE Your other characters gain Ward. (Opponents can't choose them except to challenge.)"

@@ -1,0 +1,12 @@
+name = "The Queen - Devious Disguise"
+type = "Character"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_676cc0d5efcc4e34ae01d912295510eb.avif?1777687512"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Villain", "Queen", "Sorcerer"]
+text = "EVIL SCHEME When you play this character, you may draw a card. If you do, each opponent gains 2 lore.\nJEALOUS HEART While an opponent has more lore than you, this character gets +2 {L}."

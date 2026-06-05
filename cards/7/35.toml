@@ -1,0 +1,13 @@
+name = "Mirabel Madrigal - Musically Talented"
+type = "Character"
+cost = 6
+ink = ["Amber", "Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_54b4ddf71822489da9c826190fd490c1.avif?1740589238"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 6
+lore = 2
+classifications = ["Floodborn", "Hero", "Madrigal"]
+keywords = ["Shift 4"]
+text = "Shift 4 (You may pay 4 {I} to play this on top of one of your characters named Mirabel Madrigal.)\nHER OWN SPECIAL GIFT Whenever this character quests, you may return a song card with cost 3 or less from your discard to your hand."

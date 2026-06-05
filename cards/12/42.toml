@@ -1,0 +1,12 @@
+name = "Sneezy - Startlingly Loud"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_157e8d9b9f8745f2addc02e485dd2050.avif?1777687309"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally", "Seven Dwarfs"]
+text = "GESUNDHEIT When you play this character, chosen character gets +1 {L} this turn."

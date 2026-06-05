@@ -1,0 +1,13 @@
+name = "Cinderella - Melody Weaver"
+type = "Character"
+cost = 5
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4dcd2225913d4c7b8ff2527a2b1b3fb7.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 5
+lore = 2
+classifications = ["Dreamborn", "Hero", "Princess"]
+keywords = ["Singer 9"]
+text = "Singer 9 (This character counts as cost 9 to sing songs.)\nBEAUTIFUL VOICE Whenever this character sings a song, your other Princess characters get +1 {L} this turn."

@@ -1,0 +1,13 @@
+name = "Prince Phillip - Gallant Defender"
+type = "Character"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_02bb98b56ae0427abdd944699f1bda1c.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Hero", "Prince"]
+keywords = ["Support"]
+text = "Support (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)\nBEST DEFENSE Whenever one of your characters is chosen for Support, they gain Resist +1 this turn. (Damage dealt to them is reduced by 1.)"

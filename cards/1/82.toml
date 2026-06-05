@@ -1,0 +1,12 @@
+name = "John Silver - Alien Pirate"
+type = "Character"
+cost = 6
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ab006041fefc4aba8f3142821fded198.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Villain", "Alien", "Pirate", "Captain"]
+text = "PICK YOUR FIGHTS When you play this character and whenever he quests, chosen opposing character gains Reckless during their next turn. (They can't quest and must challenge if able.)"

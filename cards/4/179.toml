@@ -1,0 +1,12 @@
+name = "Donald Duck - Buccaneer"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_da097130ff544f99b4ff980b404c053e.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Dreamborn", "Hero", "Pirate", "Captain"]
+text = "BOARDING PARTY During your turn, whenever this character banishes a character in a challenge, your other characters get +1 {L} this turn."

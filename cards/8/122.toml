@@ -1,0 +1,11 @@
+name = "Honest John - Shameless Schemer"
+type = "Character"
+cost = 6
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2c1c280cbd8d446eb1520ac32e816f66.avif?1747509144"
+max_copies = 4
+inkwell = true
+strength = 7
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Villain"]

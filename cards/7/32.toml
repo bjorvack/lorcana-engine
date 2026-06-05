@@ -1,0 +1,13 @@
+name = "Perla - Nimble Seamstress"
+type = "Character"
+cost = 3
+ink = ["Amber", "Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_fd0e022a8b8c4171a610ffe0a440d8be.avif?1740589226"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)\nSupport (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)"

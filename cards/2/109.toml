@@ -1,0 +1,11 @@
+name = "Honest John - Not That Honest"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_834655aa7bc54dd0b1bdf69ce343359d.avif?1709690747"
+max_copies = 4
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Villain"]
+text = "EASY STREET Whenever you play a Floodborn character, each opponent loses 1 lore."

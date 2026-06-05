@@ -1,0 +1,12 @@
+name = "Gazelle - Angel with Horns"
+type = "Character"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c53a704a909445f5b2837b51f29faa47.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 2
+lore = 1
+classifications = ["Dreamborn", "Ally"]
+text = "YOU ARE A REALLY HOT DANCER When you play this character, chosen character gains Evasive until the start of your next turn. (Only characters with Evasive can challenge them.)"

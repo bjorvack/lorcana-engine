@@ -1,0 +1,11 @@
+name = "Owl - Logical Lecturer"
+type = "Character"
+cost = 1
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c60b5558ee6c404f8cdf7955d1087b10.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally"]

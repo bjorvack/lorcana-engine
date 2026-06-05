@@ -1,0 +1,7 @@
+name = "Akood et Emuti"
+type = "Song"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ff15d454e2f84f89a64bf17216e0b5f4.avif?1770259330"
+max_copies = 4
+text = "(A character with cost 3 or more can {E} to sing this song for free.)\nYou pay 2 {I} less for the next character you play this turn. Draw a card."

@@ -1,0 +1,12 @@
+name = "Genie - Wish Fulfilled"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9a41d700cf2749da8eed29420df7467c.avif?1730901319"
+max_copies = 4
+strength = 2
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Ally"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)\nWHAT HAPPENS NOW? When you play this character, draw a card."

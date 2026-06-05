@@ -1,0 +1,12 @@
+name = "Winnie the Pooh - Hungry Bear"
+type = "Character"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_bdaa50ed73874775b00eead51a5c83de.avif?1770259881"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Hero"]
+text = "LOOKING FOR A MORSEL When you play this character, you may return an item card from your discard to your hand."

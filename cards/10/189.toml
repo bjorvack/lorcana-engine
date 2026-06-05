@@ -1,0 +1,13 @@
+name = "Prince Charming - Protector of the Realm"
+type = "Character"
+cost = 7
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_fafe3c3da4484cf6b0485a5f5a1c557a.avif?1761764872"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 10
+lore = 2
+classifications = ["Dreamborn", "Hero", "Prince"]
+keywords = ["Bodyguard"]
+text = "Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)\nPROTECTIVE PRESENCE Each turn, only one character can challenge."

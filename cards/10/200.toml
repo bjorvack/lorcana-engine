@@ -1,0 +1,8 @@
+name = "The Sword of Hercules"
+type = "Item"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ba8f9757d4864c8fbc0de96be4579ef3.avif?1761765021"
+max_copies = 4
+inkwell = true
+text = "MIGHTY HIT When you play this item, banish chosen opposing Deity character.\nHAND-TO-HAND During your turn, whenever one of your characters banishes another character in a challenge, gain 1 lore."

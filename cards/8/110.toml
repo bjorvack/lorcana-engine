@@ -1,0 +1,12 @@
+name = "Maui - Stubborn Trickster"
+type = "Character"
+cost = 6
+ink = ["Emerald", "Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e58f4c06ff8049e791b111019217c486.avif?1747509079"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 3
+classifications = ["Storyborn", "Hero", "Deity"]
+text = "I'M NOT FINISHED YET When this character is banished, choose one:\n- Put 2 damage counters on all opposing characters.\n- Banish all opposing items.\n- Banish all opposing locations."

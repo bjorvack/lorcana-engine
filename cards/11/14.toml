@@ -1,0 +1,11 @@
+name = "Cobra Bubbles - Dedicated Official"
+type = "Character"
+cost = 5
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f3b02d0a1478421da5b8ad2dac40d1b0.avif?1770259261"
+max_copies = 4
+strength = 3
+willpower = 6
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "AURA OF AUTHORITY Whenever this character quests, chosen opposing character can't challenge and must quest during their next turn if able."

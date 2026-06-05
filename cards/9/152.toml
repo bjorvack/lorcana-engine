@@ -1,0 +1,11 @@
+name = "Mama Odie - Mystical Maven"
+type = "Character"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_901fa7746b2745bc84aa4c7c6fddbbc7.avif?1755541099"
+max_copies = 4
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Mentor"]
+text = "THIS GOING TO BE GOOD Whenever you play a song, you may put the top card of your deck into your inkwell facedown and exerted."

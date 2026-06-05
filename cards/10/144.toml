@@ -1,0 +1,12 @@
+name = "Fergus McDuck - Scrooge's Father"
+type = "Character"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a6ad0755a1114acca877267acb719f59.avif?1761764381"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 2
+lore = 2
+classifications = ["Storyborn", "Mentor"]
+text = "TOUGHEN UP When you play this character, chosen character of yours gains Ward until the start of your next turn. (Opponents can't choose them except to challenge.)"

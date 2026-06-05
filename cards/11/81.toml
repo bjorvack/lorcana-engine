@@ -1,0 +1,12 @@
+name = "Aladdin - On the Edge of Adventure"
+type = "Character"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1088d26ccab942568c740c3ebaccb2c7.avif?1770259563"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Hero"]
+text = "QUICK ON HIS FEET Whenever you play an action, this character gains Evasive until the start of your next turn. (Only characters with Evasive can challenge them.)"

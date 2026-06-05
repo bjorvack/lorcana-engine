@@ -1,0 +1,13 @@
+name = "Judy Hopps - Snowball Patrol"
+type = "Character"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_bc75672185f940fc88f84192ceff4973.avif?1770260069"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Dreamborn", "Hero", "Detective"]
+keywords = ["Resist 1"]
+text = "UNDERDOG If this is your first turn and you're not the first player, you pay 1 {I} less to play this character.\nResist +1 (Damage dealt to this character is reduced by 1.)"

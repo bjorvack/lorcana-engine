@@ -1,0 +1,12 @@
+name = "Sisu - Daring Visitor"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a83a5da99ba24518860ad7da3dbe1d02.avif?1773508738"
+max_copies = 4
+strength = 1
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Hero", "Deity", "Dragon"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)\nBRING ON THE HEAT! When you play this character, banish chosen opposing character with 1 {S} or less."

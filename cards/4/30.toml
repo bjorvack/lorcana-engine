@@ -1,0 +1,7 @@
+name = "Sign the Scroll"
+type = "Action"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9f0c12874b204c0f99d48aa7ddb68c51.avif?1716052430"
+max_copies = 4
+text = "Each opponent may choose and discard a card. For each opponent who doesn't, you gain 2 lore."

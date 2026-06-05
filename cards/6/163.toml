@@ -1,0 +1,8 @@
+name = "Sail the Azurite Sea"
+type = "Action"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_049739e69c034e898c3c48abd37544cc.avif?1730901319"
+max_copies = 4
+inkwell = true
+text = "This turn, you may put an additional card from your hand into your inkwell facedown. Draw a card."

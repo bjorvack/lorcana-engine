@@ -1,0 +1,11 @@
+name = "Bambi - Prince of the Forest"
+type = "Character"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_83fb168f74ce49fa9c92000143bf3402.avif?1747508537"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Hero", "Prince"]

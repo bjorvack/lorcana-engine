@@ -1,0 +1,8 @@
+name = "Beast's Mirror"
+type = "Item"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d23121463b6b482ab4af10faa55ba4ba.avif?1755541443"
+max_copies = 4
+inkwell = true
+text = "SHOW ME {E}, 3 {I} — If you have no cards in your hand, draw a card."

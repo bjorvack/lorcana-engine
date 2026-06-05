@@ -1,0 +1,12 @@
+name = "Kuzco - Panicked Llama"
+type = "Character"
+cost = 4
+ink = ["Amethyst", "Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4b09d3e4c16c4e0d8b579d090a021dd5.avif?1740589380"
+max_copies = 4
+strength = 2
+willpower = 2
+lore = 2
+classifications = ["Storyborn", "King"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)\nWE CAN FIGURE THIS OUT At the start of your turn, choose one: \n• Each player draws a card. \n• Each player chooses and discards a card."

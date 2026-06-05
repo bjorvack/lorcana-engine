@@ -1,0 +1,13 @@
+name = "Jafar - Dreadnought"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_89090f037609469eaa214e72bc12d218.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Floodborn", "Villain", "Sorcerer"]
+keywords = ["Shift 2"]
+text = "Shift 2 (You may pay 2 {I} to play this on top of one of your characters named Jafar.)\nNOW WHERE WERE WE? During your turn, whenever this character banishes another character in a challenge, you may draw a card."

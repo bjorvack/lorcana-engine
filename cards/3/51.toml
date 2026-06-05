@@ -1,0 +1,12 @@
+name = "Maleficent - Mistress of All Evil"
+type = "Character"
+cost = 5
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ffec4fba40d948dc8cd4f54b5f9897a9.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Villain", "Sorcerer"]
+text = "DARK KNOWLEDGE Whenever this character quests, you may draw a card.\nDIVINATION During your turn, whenever you draw a card, you may move 1 damage counter from chosen character to chosen opposing character."

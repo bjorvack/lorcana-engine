@@ -1,0 +1,12 @@
+name = "Sven - Leaping Reindeer"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ad33da4d6a2e44569e0bb8f16810ba1a.avif?1770259469"
+max_copies = 4
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Ally"]
+keywords = ["Challenger 3", "Evasive", "Rush"]
+text = "Rush (This character can challenge the turn they're played.)\nChallenger +3 (While challenging, this character gets +3 {S}.)\nEvasive (Only characters with Evasive can challenge this character.)"

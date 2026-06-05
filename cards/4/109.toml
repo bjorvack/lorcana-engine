@@ -1,0 +1,12 @@
+name = "Hercules - Daring Demigod"
+type = "Character"
+cost = 5
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_90c1d84c1ab7490897021c0eb19f781c.avif?1716052430"
+max_copies = 4
+strength = 7
+willpower = 3
+lore = 0
+classifications = ["Dreamborn", "Hero", "Prince"]
+keywords = ["Reckless", "Rush"]
+text = "Rush (This character can challenge the turn they're played.)\nReckless (This character can't quest and must challenge each turn if able.)"

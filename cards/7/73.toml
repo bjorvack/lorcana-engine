@@ -1,0 +1,11 @@
+name = "Donald Duck - Flustered Sorcerer"
+type = "Character"
+cost = 7
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a776c58f579148a7b4e6944fb3d9f12e.avif?1740589388"
+max_copies = 4
+strength = 5
+willpower = 6
+lore = 3
+classifications = ["Dreamborn", "Ally", "Sorcerer"]
+text = "OBFUSCATE! Opponents need 25 lore to win the game."

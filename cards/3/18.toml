@@ -1,0 +1,11 @@
+name = "Pluto - Friendly Pooch"
+type = "Character"
+cost = 1
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f405327bb31a4ca0880e91e09bf5893a.avif?1709690747"
+max_copies = 4
+strength = 0
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "GOOD DOG {E} — You pay 1 {I} less for the next character you play this turn."

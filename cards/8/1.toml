@@ -1,0 +1,12 @@
+name = "Louie - One Cool Duck"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9977cd39e1244f29a352a5ef0564d3cb.avif?1747703518"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "SPRING THE TRAP While this character is being challenged, the challenging character gets -1 {S}."

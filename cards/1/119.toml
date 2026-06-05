@@ -1,0 +1,12 @@
+name = "Peter Pan - Fearless Fighter"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7f4cc9a32a834ebabaeaea3407d06dbc.avif?1709690747"
+max_copies = 4
+strength = 3
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Hero"]
+keywords = ["Rush"]
+text = "Rush (This character can challenge the turn they're played.)"

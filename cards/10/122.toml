@@ -1,0 +1,11 @@
+name = "Elisa Maza - Intrepid Investigator"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_78d6ec7c65b746efaec6c74337bdb84d.avif?1761763660"
+max_copies = 4
+strength = 4
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero", "Detective"]
+text = "SPECIAL DETAIL While you have 2 or more other characters in play with 5 {S} or more, this character gets +2 {L}."

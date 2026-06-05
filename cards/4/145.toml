@@ -1,0 +1,11 @@
+name = "Hades - Meticulous Plotter"
+type = "Character"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d555fad606ee4b13b0493364de8c4cda.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 6
+lore = 1
+classifications = ["Storyborn", "Villain", "Deity"]

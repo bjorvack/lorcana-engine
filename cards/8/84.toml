@@ -1,0 +1,8 @@
+name = "Ice Spikes"
+type = "Item"
+cost = 2
+ink = ["Amethyst", "Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f045d7f21ccd4cbe8ffb41e436759221.avif?1747508912"
+max_copies = 4
+inkwell = true
+text = "HOLD STILL When you play this item, exert chosen opposing character.\nIT'S STUCK {E}, 1 {I} – Exert chosen opposing item. It can't ready at the start of its next turn."

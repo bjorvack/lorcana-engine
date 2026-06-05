@@ -1,0 +1,13 @@
+name = "Peter Pan - Never Land Hero"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ffccea571e7e4efb9b5258ecc03e847b.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Hero"]
+keywords = ["Rush"]
+text = "Rush (This character can challenge the turn they're played.)\nOVER HERE, TINK While you have a character named Tinker Bell in play, this character gets +2 {S}."

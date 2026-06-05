@@ -1,0 +1,11 @@
+name = "Raksha - Fearless Mother"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2e40c49df1cd47a8ace3dfcb6bec1741.avif?1761763597"
+max_copies = 4
+strength = 5
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "ON PATROL Once during your turn, you may pay 1 {I} less to move this character to a location."

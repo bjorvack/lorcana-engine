@@ -1,0 +1,13 @@
+name = "Audrey Ramirez - The Engineer"
+type = "Character"
+cost = 5
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ac107df1d3864416ac579de7b826d297.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Ally"]
+keywords = ["Ward"]
+text = "Ward (Opponents can't choose this character except to challenge.)\nSPARE PARTS Whenever this character quests, ready one of your items."

@@ -1,0 +1,12 @@
+name = "Dopey - Drawn to Music"
+type = "Character"
+cost = 6
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a0369f5ac4404d72aeebd384f99c92fe.avif?1777687289"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 8
+lore = 2
+classifications = ["Storyborn", "Ally", "Seven Dwarfs"]
+text = "TONGUE-TIED This character can't {E} to sing songs.\nDISTANT MELODY Once during your turn, whenever you play a song, this character gets +1 {L} this turn."

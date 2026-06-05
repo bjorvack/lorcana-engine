@@ -1,0 +1,12 @@
+name = "Minnie Mouse - Sweetheart Princess"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2a28cdd2430b478ba3251c5478a09d02.avif?1755540101"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 4
+lore = 2
+classifications = ["Dreamborn", "Hero", "Princess"]
+text = "ROYAL FAVOR Your characters named Mickey Mouse gain Support. (Whenever they quest, you may add their {S} to another chosen character's {S} this turn.)\nBYE BYE, NOW Whenever this character quests, you may banish chosen exerted character with 5 {S} or more."

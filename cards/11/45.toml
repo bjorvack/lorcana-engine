@@ -1,0 +1,12 @@
+name = "Eeyore - In the Way"
+type = "Character"
+cost = 9
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2dd93d7bd66a4ce78cba02bbfdbcafef.avif?1770259403"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "THANKS FOR NOTICIN' ME For each exerted character in play, you pay 1 {I} less to play this character.\nSORRY ABOUT THAT When you play this character, for each opposing player, you may choose a character of theirs. They can't ready at the start of their next turn."

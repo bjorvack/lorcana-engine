@@ -1,0 +1,12 @@
+name = "Julieta Madrigal - Caring Baker"
+type = "Character"
+cost = 1
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0dffc260d1554199bc1b2ccf50fc1831.avif?1777687226"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 2
+lore = 1
+classifications = ["Dreamborn", "Mentor", "Madrigal"]
+text = "RESTORING RECIPE When you play this character and whenever she quests, you may remove up to 1 damage from chosen character or location."

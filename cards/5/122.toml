@@ -1,0 +1,12 @@
+name = "Donald Duck - Daisy's Date"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_79bc467a7ad540e4b2012a26e7a247df.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "PLUCKY PLAY Whenever this character challenges another character, each opponent loses 1 lore."

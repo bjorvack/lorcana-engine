@@ -1,0 +1,13 @@
+name = "Mushu - Your Worst Nightmare"
+type = "Character"
+cost = 6
+ink = ["Ruby", "Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_72aee0ede57046b1ad53a67b8f39d6f0.avif?1747509250"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 6
+lore = 2
+classifications = ["Floodborn", "Ally", "Dragon"]
+keywords = ["Shift 4"]
+text = "Shift 4 (You may pay 4 {I} to play this on top of one of your characters named Mushu.)\nALL FIRED UP Whenever you play another character, they gain Rush, Reckless, and Evasive this turn. (They can challenge the turn they're played. They can't quest and must challenge if able. They can challenge characters with Evasive.)"

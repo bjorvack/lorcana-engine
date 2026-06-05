@@ -1,0 +1,12 @@
+name = "Belle - Strange but Special"
+type = "Character"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_63c2ca66eeea417b9079d833e0fd88d4.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Hero", "Princess"]
+text = "READ A BOOK During your turn, you may put an additional card from your hand into your inkwell facedown.\nMY FAVORITE PART! While you have 10 or more cards in your inkwell, this character gets +4 {L}."

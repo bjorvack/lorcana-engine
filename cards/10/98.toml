@@ -1,0 +1,7 @@
+name = "Potion of Malice"
+type = "Item"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9df06512bc4c4b928c62b8d263e2bf51.avif?1761752401"
+max_copies = 4
+text = "SUPPRESSED ANGER {E}, 1 {I} — Put 1 damage counter on chosen character.\nMINDLESS RAGE {E}, Banish this item – Each opposing damaged character gains Reckless until the start of your next turn. (They can't quest and must challenge if able.)"

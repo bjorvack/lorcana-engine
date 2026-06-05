@@ -1,0 +1,11 @@
+name = "Prince Charming - Heir to the Throne"
+type = "Character"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_06f238177bee499eab1cf34e60e55725.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 3
+classifications = ["Dreamborn", "Hero", "Prince"]

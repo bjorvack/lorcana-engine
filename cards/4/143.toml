@@ -1,0 +1,11 @@
+name = "Fa Li - Mulan's Mother"
+type = "Character"
+cost = 1
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b792d79485f44ddd8d1fb20b25cb19a3.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Mentor"]

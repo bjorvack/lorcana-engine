@@ -1,0 +1,13 @@
+name = "Darkwing Duck - Cool Under Pressure"
+type = "Character"
+cost = 7
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5215a54a63fe44f38f2e56f30d6847e6.avif?1770260059"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 8
+lore = 2
+classifications = ["Storyborn", "Super", "Hero", "Detective"]
+keywords = ["Shift 5"]
+text = "Shift 5 {I} (You may pay 5 {I} to play this on top of one of your characters named Darkwing Duck.)\nTAKE THAT! During your turn, whenever an item is banished, you may pay 1 {I} to deal 2 damage to chosen character.\nEVILDOERS BEWARE! This character can challenge ready Villain characters."

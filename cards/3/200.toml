@@ -1,0 +1,8 @@
+name = "Gizmosuit"
+type = "Item"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4ffb52f1841e434f9263e1b8973f46a6.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "CYBERNETIC ARMOR Banish this item — Chosen character gains Resist +2 until the start of your next turn. (Damage dealt to them is reduced by 2.)"

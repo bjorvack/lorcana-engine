@@ -1,0 +1,12 @@
+name = "Pete - Pirate Scoundrel"
+type = "Character"
+cost = 1
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6ff1b412a0b3492ea86308a9f41842b8.avif?1740589451"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Villain", "Pirate"]
+text = "PILFER AND PLUNDER Whenever you play an action that isn't a song, you may banish chosen item."

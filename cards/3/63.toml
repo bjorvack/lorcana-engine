@@ -1,0 +1,8 @@
+name = "The Boss is on a Roll"
+type = "Song"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_716a89f3b6cf4f57b66888fd4166d1df.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 3 or more can {E} to sing this song for free.)\nLook at the top 5 cards of your deck. Put any number of them on the top or the bottom of your deck in any order. Gain 1 lore."

@@ -1,0 +1,12 @@
+name = "Mirabel Madrigal - Curious Child"
+type = "Character"
+cost = 1
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c58b2d33655f4541baec11fcf639b1c5.avif?1747506696"
+max_copies = 4
+inkwell = true
+strength = 0
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Hero", "Madrigal"]
+text = "YOU ARE A WONDER When you play this character, you may reveal a song card in your hand to gain 1 lore."

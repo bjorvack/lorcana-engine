@@ -1,0 +1,13 @@
+name = "Iago - Stompin' Mad"
+type = "Character"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_93fe86cf6bea47328896bd5ff2560694.avif?1761752131"
+max_copies = 4
+inkwell = true
+strength = 0
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally"]
+keywords = ["Challenger 5"]
+text = "Challenger +5 (While challenging, this character gets +5 {S}.)"

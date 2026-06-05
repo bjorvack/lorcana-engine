@@ -1,0 +1,11 @@
+name = "Sherwood Forest - Outlaw Hideaway"
+type = "Location"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_846446f8cb0941d293de679be94fac73.avif?1723917209"
+max_copies = 4
+inkwell = true
+move_cost = 2
+willpower = 7
+lore = 0
+text = "FOREST HOME Your characters named Robin Hood may move here for free.\nFAMILIAR TERRAIN Characters gain Ward and “{E}, 1 {I} — Deal 2 damage to chosen damaged character” while here. (Opponents can't choose them except to challenge.)"

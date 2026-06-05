@@ -1,0 +1,11 @@
+name = "Agustin Madrigal - Clumsy Dad"
+type = "Character"
+cost = 1
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_80c9df6d04f94ccab3df1e24619e21a3.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Mentor", "Madrigal"]

@@ -1,0 +1,12 @@
+name = "Donald Duck - First Mate"
+type = "Character"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_466a67ed11c64db5962523365e633f0d.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Hero", "Pirate"]
+text = "CAPTAIN ON DECK While you have a Captain character in play, this character gets +2 {L}."

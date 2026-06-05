@@ -1,0 +1,12 @@
+name = "Kakamora - Pirate Pitcher"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_46799cbfa9fd48629572bf3851c598af.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Pirate"]
+text = "DIZZYING SPEED When you play this character, chosen Pirate character gains Evasive until the start of your next turn. (Only characters with Evasive can challenge them.)"

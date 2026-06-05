@@ -1,0 +1,13 @@
+name = "Hera - Queen of the Gods"
+type = "Character"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0ac3ee4c2bb043a280fa2e4f7f6505e7.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Queen", "Deity"]
+keywords = ["Ward"]
+text = "Ward (Opponents can't choose this character except to challenge.)\nPROTECTIVE GODDESS Your characters named Zeus gain Ward.\nYOU'RE A TRUE HERO Your characters named Hercules gain Evasive. (Only characters with Evasive can challenge them.)"

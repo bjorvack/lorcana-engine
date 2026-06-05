@@ -1,0 +1,12 @@
+name = "Iago - Reappearing Parrot"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_92d831ee2e5b430a9bbbcf7d684bbd57.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 2
+lore = 1
+classifications = ["Dreamborn", "Ally"]
+text = "GUESS WHO When this character is banished in a challenge, return this card to your hand."

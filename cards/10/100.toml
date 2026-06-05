@@ -1,0 +1,7 @@
+name = "Enigmatic Inkcaster"
+type = "Item"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d774288aca6149239c554da4daab38b4.avif?1761752410"
+max_copies = 4
+text = "ITS OWN REWARD {E} — If you've played 2 or more cards this turn, gain 1 lore."

@@ -1,0 +1,12 @@
+name = "Magica De Spell - Shadow Form"
+type = "Character"
+cost = 5
+ink = ["Amethyst", "Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_67e61d2f97084cb69e58b70c2a5d90d4.avif?1747508722"
+max_copies = 4
+strength = 3
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Villain", "Sorcerer"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)\nDANCE OF DARKNESS When you play this character, you may return one of your other characters to your hand to draw a card."

@@ -1,0 +1,10 @@
+name = "Sugar Rush Speedway - Starting Line"
+type = "Location"
+cost = 1
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_38b31e4f9b2043259a5d8909cb58b8d3.avif?1723917209"
+max_copies = 4
+move_cost = 0
+willpower = 5
+lore = 0
+text = "ON YOUR MARKS! Once per turn, you may {E} chosen character here and deal them 1 damage to move them to another location for free."

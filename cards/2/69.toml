@@ -1,0 +1,11 @@
+name = "Arthur - Trained Swordsman"
+type = "Character"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_fd6fc618265f462787b1a9bc6c988b54.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 3
+lore = 2
+classifications = ["Dreamborn", "Hero"]

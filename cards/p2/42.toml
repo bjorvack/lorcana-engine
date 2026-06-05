@@ -1,0 +1,11 @@
+name = "Snow White - Unexpected Houseguest"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_332e095b11d44545865d7878ea27b58d.avif?1774403052"
+max_copies = 4
+strength = 1
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Hero", "Princess"]
+text = "HOW DO YOU DO? You pay 1 {I} less to play Seven Dwarfs characters."

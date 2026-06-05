@@ -1,0 +1,11 @@
+name = "Jumba Jookiba - Critical Scientist"
+type = "Character"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_303840f357ac4b089d20984dee17a8fa.avif?1747509416"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 6
+lore = 2
+classifications = ["Storyborn", "Alien", "Inventor"]

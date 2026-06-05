@@ -1,0 +1,12 @@
+name = "Prince John - Gold Lover"
+type = "Character"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b6134218a3104ed7b31df482ccb0b0a9.avif?1745500324"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Villain", "Prince"]
+text = "BEAUTIFUL, LOVELY TAXES {E} – Play an item from your hand or discard with cost 5 or less for free, exerted."

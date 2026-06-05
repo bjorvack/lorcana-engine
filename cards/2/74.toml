@@ -1,0 +1,11 @@
+name = "Cheshire Cat - Always Grinning"
+type = "Character"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6ba7d8ee8a894df9a67bc08fa0ad9b35.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 2
+lore = 1
+classifications = ["Storyborn"]

@@ -1,0 +1,8 @@
+name = "Swing into Action"
+type = "Action"
+cost = 1
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_388773c70283456b87414157b1eebd98.avif?1716052430"
+max_copies = 4
+inkwell = true
+text = "Chosen character gains Rush this turn. (They can challenge the turn they're played.)"

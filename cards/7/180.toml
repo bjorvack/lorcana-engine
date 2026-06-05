@@ -1,0 +1,8 @@
+name = "Baymax's Charging Station"
+type = "Item"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c2a15901752f4d5289f1296558834989.avif?1740589820"
+max_copies = 4
+inkwell = true
+text = "ENERGY CONVERTER Whenever you play a Floodborn character, if you used Shift to play them, you may draw a card."

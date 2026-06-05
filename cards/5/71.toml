@@ -1,0 +1,11 @@
+name = "Little John - Camp Cook"
+type = "Character"
+cost = 1
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_715fd7db81234ccc970f710f0c4d469e.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 0
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally"]

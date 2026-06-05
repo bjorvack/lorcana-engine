@@ -1,0 +1,11 @@
+name = "Rhino - Motivational Speaker"
+type = "Character"
+cost = 6
+ink = ["Amber", "Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b817b45c424b49b98e7978f1dcf3d7db.avif?1740589101"
+max_copies = 4
+strength = 4
+willpower = 7
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "DESTINY CALLING Your other characters get +2 {W}."

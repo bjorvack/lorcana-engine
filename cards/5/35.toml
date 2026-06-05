@@ -1,0 +1,12 @@
+name = "Maleficent - Formidable Queen"
+type = "Character"
+cost = 8
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d3bfcff390e54c9bbd1027b57320d621.avif?1723917209"
+max_copies = 4
+strength = 7
+willpower = 7
+lore = 2
+classifications = ["Floodborn", "Villain", "Queen", "Sorcerer"]
+keywords = ["Shift 6"]
+text = "Shift 6 (You may pay 6 {I} to play this on top of one of your characters named Maleficent.)\nLISTEN WELL, ALL OF YOU When you play this character, for each of your characters named Maleficent in play, return a chosen opposing character, item, or location with cost 3 or less to their player's hand."

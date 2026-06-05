@@ -1,0 +1,8 @@
+name = "Voyage"
+type = "Action"
+cost = 1
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_cc0c5bf9ccbf4884926461d06eed76b0.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "Move up to 2 characters of yours to the same location for free."

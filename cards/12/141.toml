@@ -1,0 +1,12 @@
+name = "Flora - Strong-Willed Fairy"
+type = "Character"
+cost = 5
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_aaea685bf107411087af5025359f986f.avif?1777687710"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Ally", "Fairy"]
+text = "LUMINOUS SHELTER When you play this character, your other characters gain Resist +1 until the start of your next turn. (Damage dealt to them is reduced by 1.)"

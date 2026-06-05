@@ -1,0 +1,12 @@
+name = "Jetsam - Opportunistic Eel"
+type = "Character"
+cost = 7
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9228d591151a4ba0a1e577d19d9e38f9.avif?1761752315"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 6
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "AMBUSH FROM THE DEEP When you play this character, deal 3 damage to chosen opposing damaged character."

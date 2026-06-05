@@ -1,0 +1,12 @@
+name = "Judy Hopps - Optimistic Officer"
+type = "Character"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9408beff78404a25a70496ffe22a7bf4.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Hero"]
+text = "DON'T CALL ME CUTE When you play this character, you may banish chosen item. Its player draws a card."

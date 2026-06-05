@@ -1,0 +1,7 @@
+name = "Plate Armor"
+type = "Item"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_170330e953034b0b84419cfff824f737.avif?1723917209"
+max_copies = 4
+text = "WELL CRAFTED {E} — Chosen character gains Resist +2 until the start of your next turn. (Damage dealt to them is reduced by 2.)"

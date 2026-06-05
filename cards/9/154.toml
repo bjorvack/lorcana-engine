@@ -1,0 +1,13 @@
+name = "Aurora - Tranquil Princess"
+type = "Character"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_84ca414b157a462fa322e66c8fe9cebc.avif?1755541120"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Hero", "Princess"]
+keywords = ["Ward"]
+text = "Ward (Opponents can't choose this character except to challenge.)"

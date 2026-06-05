@@ -1,0 +1,12 @@
+name = "Mulan - Soldier in Training"
+type = "Character"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ddd89c441cdd4795907313f38e85c1e7.avif?1709690747"
+max_copies = 4
+strength = 4
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero", "Princess"]
+keywords = ["Rush"]
+text = "Rush (This character can challenge the turn they're played.)"

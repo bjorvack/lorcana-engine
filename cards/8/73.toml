@@ -1,0 +1,12 @@
+name = "The Sultan - Royal Apparition"
+type = "Character"
+cost = 5
+ink = ["Amethyst", "Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_34f916796e6844d081bdebaa3f7df182.avif?1747508832"
+max_copies = 4
+strength = 5
+willpower = 5
+lore = 2
+classifications = ["Dreamborn", "Ally", "King", "Illusion"]
+keywords = ["Vanish"]
+text = "Vanish (When an opponent chooses this character for an action, banish them.)\nCOMMANDING PRESENCE Whenever one of your Illusion characters quests, exert chosen opposing character."

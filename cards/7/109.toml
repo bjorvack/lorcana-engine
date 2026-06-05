@@ -1,0 +1,13 @@
+name = "John Silver - Vengeful Pirate"
+type = "Character"
+cost = 8
+ink = ["Emerald", "Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b6a644c09d674fe6ace0502427a05c6e.avif?1740589537"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Villain", "Alien", "Pirate", "Captain"]
+keywords = ["Resist 1"]
+text = "DRAWN TO A FIGHT If an opposing character was damaged this turn, you pay 2 {I} less to play this character.\nResist +1 (Damage dealt to this character is reduced by 1.)\nI AIN'T GONE SOFT! Whenever you play an action that isn't a song, you may deal 1 damage to chosen character."

@@ -1,0 +1,12 @@
+name = "Hans - Thirteenth in Line"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4fa7d5ae1044415e8ad8c609a527498c.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Villain", "Prince"]
+text = "STAGE A LITTLE ACCIDENT Whenever this character quests, you may deal 1 damage to chosen character."

@@ -1,0 +1,11 @@
+name = "Arianna - Queen of Corona"
+type = "Character"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1168e8040a86449695383ef10c9daa2e.avif?1747509490"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Queen"]

@@ -1,0 +1,12 @@
+name = "Anastasia - Bossy Stepsister"
+type = "Character"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_17faea698cdc496d81f840310128074b.avif?1740589553"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 1
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "OH, I HATE THIS! Whenever this character is challenged, the challenging player chooses and discards a card."

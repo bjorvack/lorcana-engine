@@ -1,0 +1,12 @@
+name = "Bellwether - Master Manipulator"
+type = "Character"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5c98a0c3b0924e90bb20d53354594c02.avif?1761752336"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Villain"]
+text = "VENDETTA When this character is challenged and banished, put 1 damage counter on each opposing character."

@@ -1,0 +1,7 @@
+name = "Blast from Your Past"
+type = "Song"
+cost = 6
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1fafea8238334475ae8ed9ece3728309.avif?1723917209"
+max_copies = 4
+text = "(A character with cost 6 or more can {E} to sing this song for free.)\nName a card. Return all character cards with that name from your discard to your hand."

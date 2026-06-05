@@ -1,0 +1,13 @@
+name = "Eeyore - Overstuffed Donkey"
+type = "Character"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3c62b89fbbdc4162b250ee5525e10135.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Ally"]
+keywords = ["Resist 1"]
+text = "Resist +1 (Damage dealt to this character is reduced by 1.)"

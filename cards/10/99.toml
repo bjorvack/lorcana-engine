@@ -1,0 +1,8 @@
+name = "Inscrutable Map"
+type = "Item"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9c1be117f6004fffaa9455c468395bf7.avif?1761752405"
+max_copies = 4
+inkwell = true
+text = "BACKTRACK {E}, 1 {I} — Chosen opposing character gets -1 {L} until the start of your next turn."

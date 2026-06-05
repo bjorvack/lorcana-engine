@@ -1,0 +1,11 @@
+name = "John Silver - Ferocious Friend"
+type = "Character"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6c12ae52fc6c4244b1f638ff2102bf59.avif?1730901319"
+max_copies = 4
+strength = 2
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Villain", "Alien", "Pirate", "Captain"]
+text = "YOU HAVE TO CHART YOUR OWN COURSE Whenever this character quests, you may deal 1 damage to one of your other characters. If you do, ready that character. They cannot quest this turn."

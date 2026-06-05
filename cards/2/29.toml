@@ -1,0 +1,7 @@
+name = "Last Stand"
+type = "Action"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a7f5bdc867ac4e5da287d746420e7448.avif?1709690747"
+max_copies = 4
+text = "Banish chosen character who was challenged this turn."

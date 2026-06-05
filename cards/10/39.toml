@@ -1,0 +1,11 @@
+name = "Cauldron Born - Mindless Horde"
+type = "Character"
+cost = 5
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3675f8f0ce8e461e8bd1e3f89a63d590.avif?1761752112"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 7
+lore = 1
+classifications = ["Storyborn"]

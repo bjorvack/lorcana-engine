@@ -1,0 +1,11 @@
+name = "Casa Madrigal - Casita"
+type = "Location"
+cost = 1
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3badd6eb64ca49b18e7ee2cefea06b46.avif?1755540536"
+max_copies = 4
+inkwell = true
+move_cost = 1
+willpower = 6
+lore = 0
+text = "OUR HOME At the start of your turn, if you have a character here, gain 1 lore."

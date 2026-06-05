@@ -1,0 +1,12 @@
+name = "Belle - Untrained Mystic"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_53d3d0830c344ef08b076c3aada0afa6.avif?1755540333"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Hero", "Princess"]
+text = "HERE NOW, DON'T DO THAT When you play this character, move up to 1 damage counter from chosen character to chosen opposing character."

@@ -1,0 +1,11 @@
+name = "Moana - Adventurer of Land and Sea"
+type = "Character"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2e61b6cfa0da4f32a21cc3375e0855b1.avif?1740589725"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 6
+lore = 1
+classifications = ["Storyborn", "Hero", "Princess"]

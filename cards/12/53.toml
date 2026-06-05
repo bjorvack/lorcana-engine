@@ -1,0 +1,12 @@
+name = "Mirage - Super Recruiter"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_fd90534b079e4fec8d12822fedc90c9a.avif?1777687365"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "BUSINESS ARRANGEMENT When you play this character, if you have a Super or Hero character in play, you may draw a card."

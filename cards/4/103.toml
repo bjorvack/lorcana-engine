@@ -1,0 +1,12 @@
+name = "Beast - Wounded"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c3acd1c879e645779501109c65580c93.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 6
+lore = 2
+classifications = ["Storyborn", "Hero", "Prince"]
+text = "THAT HURTS! This character enters play with 4 damage."

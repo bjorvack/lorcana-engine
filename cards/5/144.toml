@@ -1,0 +1,13 @@
+name = "The Queen - Fairest of All"
+type = "Character"
+cost = 5
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_cf5e4f99f9c44d91b44ba607d640173b.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 6
+lore = 1
+classifications = ["Floodborn", "Villain", "Queen", "Sorcerer"]
+keywords = ["Shift 3", "Ward"]
+text = "Shift 3 (You may pay 3 {I} to play this on top of one of your characters named The Queen.)\nWard (Opponents can't choose this character except to challenge.)\nREFLECTIONS OF VANITY For each other character named The Queen you have in play, this character gets +1 {L}."

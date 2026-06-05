@@ -1,0 +1,11 @@
+name = "Little John - Sir Reginald"
+type = "Character"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4d7bf56fb70e41289a010677c1ebea27.avif?1755822831"
+max_copies = 4
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "WHAT A BEAUTIFUL BRAWL! When you play this character, choose one:\n- Chosen Hero character gains Resist +2 this turn. (Damage dealt to them is reduced by 2.)\n- Deal 2 damage to chosen Villain character."

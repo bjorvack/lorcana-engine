@@ -1,0 +1,8 @@
+name = "The Mob Song"
+type = "Song"
+cost = 10
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_bf617c80f0c9417a8434ffa4428e7911.avif?1716052430"
+max_copies = 4
+keywords = ["Sing Together 10"]
+text = "Sing Together 10 (Any number of your or your teammates' characters with total cost 10 or more may {E} to sing this song for free.)\nDeal 3 damage to up to 3 chosen characters and/or locations."

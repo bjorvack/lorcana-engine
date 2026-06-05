@@ -1,0 +1,11 @@
+name = "Pete - Rotten Guy"
+type = "Character"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e99a28536b8c4a7e98db8ee70e564fba.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Villain", "Musketeer"]

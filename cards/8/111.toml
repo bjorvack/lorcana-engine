@@ -1,0 +1,12 @@
+name = "Honey Lemon - Costumed Catalyst"
+type = "Character"
+cost = 4
+ink = ["Emerald", "Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_68a30037a4074eed8e5d0924b542cec9.avif?1747509088"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Hero", "Inventor"]
+text = "LET'S DO THIS! Whenever you play a Floodborn character, if you used Shift to play them, you may return chosen character to their player's hand."

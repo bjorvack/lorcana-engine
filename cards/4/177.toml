@@ -1,0 +1,12 @@
+name = "Chi-Fu - Imperial Advisor"
+type = "Character"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6d38ee3cce1e48ae9a8e945734ab950f.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 0
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "OVERLY CAUTIOUS While this character has no damage, he gets +2 {L}."

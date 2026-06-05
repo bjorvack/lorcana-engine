@@ -1,0 +1,11 @@
+name = "Bad-Anon - Villain Support Center"
+type = "Location"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e66afeb046bd444e87889ec1866cc643.avif?1723917209"
+max_copies = 4
+inkwell = true
+move_cost = 2
+willpower = 7
+lore = 1
+text = "THERE'S NO ONE I'D RATHER BE THAN ME Villain characters gain “{E}, 3 {I} — Play a character with the same name as this character for free” while here."

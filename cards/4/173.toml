@@ -1,0 +1,11 @@
+name = "Arges - The Cyclops"
+type = "Character"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8b213fe23fec4f629b8368b197d7d7c8.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Titan"]

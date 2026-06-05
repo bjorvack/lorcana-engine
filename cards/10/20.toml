@@ -1,0 +1,12 @@
+name = "Simba - King in the Making"
+type = "Character"
+cost = 7
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_01ba964bb84745b09a29da266cddccfd.avif?1761752019"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 5
+lore = 3
+classifications = ["Storyborn", "Hero", "Prince", "Whisper"]
+text = "Boost 3 {I} (Once during your turn, you may pay 3 {I} to put the top card of your deck facedown under this character.)\nTIMELY ALLIANCE Whenever you put a card under this character, you may reveal the top card of your deck. If it's a character card, you may play that character for free and they enter play exerted. Otherwise, put it on the bottom of your deck."

@@ -1,0 +1,11 @@
+name = "Robin Hood - Capable Fighter"
+type = "Character"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e772b66217694798b4a09dda0949184d.avif?1755541314"
+max_copies = 4
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Hero"]
+text = "SKIRMISH {E} — Deal 1 damage to chosen character."

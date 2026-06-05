@@ -1,0 +1,10 @@
+name = "Maleficent - Biding Her Time"
+type = "Character"
+cost = 1
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ed5b22e519844e948a57784cdc4d5a48.avif?1709690747"
+max_copies = 4
+strength = 1
+willpower = 1
+lore = 2
+classifications = ["Dreamborn", "Villain", "Sorcerer"]

@@ -1,0 +1,11 @@
+name = "Yokai - Professor Callaghan"
+type = "Character"
+cost = 1
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_fbf237baa9744eb19ca3d4e6c280d587.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Villain", "Inventor"]

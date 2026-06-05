@@ -1,0 +1,8 @@
+name = "Lonely Grave"
+type = "Item"
+cost = 1
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0fb558452ff949e1ad997108b6f0ad06.avif?1770259794"
+max_copies = 4
+inkwell = true
+text = "HAUNTING PRESENCE {E}, Banish chosen character of yours — Put the top card of your deck facedown under one of your characters or locations with Boost."

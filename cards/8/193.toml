@@ -1,0 +1,11 @@
+name = "Khan - War Horse"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3ae06939a98a4e41a6c37b577aedd462.avif?1747509498"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 7
+lore = 1
+classifications = ["Storyborn", "Ally"]

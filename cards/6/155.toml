@@ -1,0 +1,11 @@
+name = "Tadashi Hamada - Gifted Roboticist"
+type = "Character"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d27f3196f81b4b17a0134b39608aefe7.avif?1730901319"
+max_copies = 4
+strength = 2
+willpower = 2
+lore = 2
+classifications = ["Storyborn", "Mentor", "Inventor"]
+text = "SOMEONE HAS TO HELP During an opponent's turn, when this character is banished, you may put the top card of your deck into your inkwell facedown. Then, put this card into your inkwell facedown."

@@ -1,0 +1,12 @@
+name = "Captain Hook - Ruthless Pirate"
+type = "Character"
+cost = 7
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6b3ab2c893c34e5989908e451259e1b1.avif?1709690747"
+max_copies = 4
+strength = 5
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Villain", "Pirate", "Captain"]
+keywords = ["Rush"]
+text = "Rush (This character can challenge the turn they're played.)\nYOU COWARD! While this character is exerted, opposing characters with Evasive gain Reckless. (They can't quest and must challenge if able.)"

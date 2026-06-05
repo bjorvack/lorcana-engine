@@ -1,0 +1,11 @@
+name = "Copper - Big Dog"
+type = "Character"
+cost = 6
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8cf7165e05a24faea856e32135166b05.avif?1777687614"
+max_copies = 4
+inkwell = true
+strength = 7
+willpower = 6
+lore = 2
+classifications = ["Storyborn", "Hero"]

@@ -1,0 +1,12 @@
+name = "Donald Duck - Sleepwalker"
+type = "Character"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7388269750db42eebdd7fbe6cbcfe30b.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 0
+willpower = 5
+lore = 1
+classifications = ["Storyborn"]
+text = "STARTLED AWAKE Whenever you play an action, this character gets +2 {S} this turn."

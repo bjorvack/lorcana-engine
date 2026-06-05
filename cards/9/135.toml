@@ -1,0 +1,7 @@
+name = "Dinner Bell"
+type = "Item"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_205f1fdf160e42a4837e5d9ca8759f45.avif?1755540997"
+max_copies = 4
+text = "YOU KNOW WHAT HAPPENS {E}, 2 {I} — Draw cards equal to the damage on chosen character of yours, then banish them."

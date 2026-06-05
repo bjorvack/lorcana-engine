@@ -1,0 +1,12 @@
+name = "Rapunzel - Sunshine"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_003d1c2326544b7493e1641770d22b0a.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 4
+lore = 1
+classifications = ["Dreamborn", "Hero", "Princess"]
+text = "MAGIC HAIR {E} — Remove up to 2 damage from chosen character."

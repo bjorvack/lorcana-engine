@@ -1,0 +1,12 @@
+name = "Snow White - Lost in the Forest"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_abb29b66e814454ab886f18985102a9d.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero", "Princess"]
+text = "I WON'T HURT YOU When you play this character, you may remove up to 2 damage from chosen character."

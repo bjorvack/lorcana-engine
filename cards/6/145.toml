@@ -1,0 +1,12 @@
+name = "Hiro Hamada - Robotics Prodigy"
+type = "Character"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4aa4ce170d6840e393a1ffd6c44d96ee.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 0
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero", "Inventor"]
+text = "SWEET TECH {2} {E} - Search your deck for an item card or a Robot character card and reveal it to all players. Shuffle your deck and put that card on top of it."

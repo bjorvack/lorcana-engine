@@ -1,0 +1,11 @@
+name = "White Agony Plains - Golden Lagoon"
+type = "Location"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4296f5bd9774451e920827cc374b8981.avif?1761773797"
+max_copies = 4
+inkwell = true
+move_cost = 1
+willpower = 7
+lore = 0
+text = "PURE LIQUID GOLD This location gets +1 {L} for each character here."

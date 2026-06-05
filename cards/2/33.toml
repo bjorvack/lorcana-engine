@@ -1,0 +1,7 @@
+name = "Dragon Gem"
+type = "Item"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9d869b2d59da48ad81923dc474ab2bfc.avif?1709690747"
+max_copies = 4
+text = "BRING BACK TO LIFE {E}, 3 {I} — Return a character card with Support from your discard to your hand."

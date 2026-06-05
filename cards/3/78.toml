@@ -1,0 +1,11 @@
+name = "Lyle Tiberius Rourke - Cunning Mercenary"
+type = "Character"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_04851c839e844359bfe6a0fa70158d38.avif?1709690747"
+max_copies = 4
+strength = 2
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Villain"]
+text = "WELL, NOW YOU KNOW When you play this character, chosen opposing character gains Reckless during their next turn. (They can't quest and must challenge if able.)\nTHANKS FOR VOLUNTEERING Whenever one of your other characters is banished, each opponent loses 1 lore."

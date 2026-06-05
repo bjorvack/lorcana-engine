@@ -1,0 +1,12 @@
+name = "Toby Turtle - Wary Friend"
+type = "Character"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0de5fd56ffa5426c854d2123b28a61c1.avif?1747509486"
+max_copies = 4
+inkwell = true
+strength = 0
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "HARD SHELL While this character is exerted, he gains Resist +1. (Damage dealt to them is reduced by 1.)"

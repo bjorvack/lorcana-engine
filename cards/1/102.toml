@@ -1,0 +1,8 @@
+name = "Stolen Scimitar"
+type = "Item"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a86ebded73ba41e2ab58fcebfd30eeb0.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "SLASH {E} — Chosen character gets +1 {S} this turn. If a character named Aladdin is chosen, he gets +2 {S} instead."

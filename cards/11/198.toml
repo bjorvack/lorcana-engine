@@ -1,0 +1,8 @@
+name = "Let's Get Dangerous"
+type = "Song"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_bdf35f1859df44e19594261c5bcede11.avif?1770260086"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 4 or more can {E} to sing this song for free.)\nEach player shuffles their deck and then reveals the top card. Each player who reveals a character card may play that character for free. Otherwise, put the revealed cards on the bottom of their player's deck."

@@ -1,0 +1,12 @@
+name = "Tuk Tuk - Disarmingly Cute"
+type = "Character"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_fd63d8b5d43d49ae9441e6839bfdec37.avif?1740589846"
+max_copies = 4
+strength = 0
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Ally"]
+keywords = ["Bodyguard"]
+text = "Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)\nResist +2 (Damage dealt to this character is reduced by 2.)"

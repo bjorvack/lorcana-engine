@@ -1,0 +1,8 @@
+name = "Double Trouble"
+type = "Action"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b03fcfe1974a4516a5b260cd9cd838b2.avif?1740590275"
+max_copies = 4
+inkwell = true
+text = "Deal 1 damage each to up to 2 chosen characters."

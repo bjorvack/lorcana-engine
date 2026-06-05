@@ -1,0 +1,12 @@
+name = "Shenzi - Hyena Pack Leader"
+type = "Character"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_45b441afc5ff420f85eb9732b8b8e0c4.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 0
+willpower = 6
+lore = 1
+classifications = ["Storyborn", "Ally", "Hyena"]
+text = "I'LL HANDLE THIS While this character is at a location, she gets +3 {S}.\nWHAT'S THE HURRY? While this character is at a location, whenever she challenges another character, you may draw a card."

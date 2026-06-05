@@ -1,0 +1,13 @@
+name = "Raya - Unstoppable Force"
+type = "Character"
+cost = 7
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_498044d6e5da4eb3868df6a6d0c058d4.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 6
+lore = 2
+classifications = ["Dreamborn", "Hero", "Princess"]
+keywords = ["Challenger 2", "Resist 2"]
+text = "Challenger +2 (While challenging, this character gets +2 {S}.)\nResist +2 (Damage dealt to this character is reduced by 2.)\nYOU GAVE IT YOUR BEST During your turn, whenever this character banishes another character in a challenge, you may draw a card."

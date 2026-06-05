@@ -1,0 +1,11 @@
+name = "Panic - Underworld Imp"
+type = "Character"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_995ce4bea35048d3b53f224ba4fc7664.avif?1709690747"
+max_copies = 4
+strength = 2
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "I CAN HANDLE IT When you play this character, chosen character gets +2 {S} this turn. If the chosen character is named Pain, he gets +4 {S} instead."

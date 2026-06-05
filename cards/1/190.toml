@@ -1,0 +1,11 @@
+name = "Simba - Rightful Heir"
+type = "Character"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b2976a87410e4dd5a753e7f871c2b6fc.avif?1709690747"
+max_copies = 4
+strength = 3
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Hero", "Prince"]
+text = "I KNOW WHAT I HAVE TO DO During your turn, whenever this character banishes another character in a challenge, you gain 1 lore."

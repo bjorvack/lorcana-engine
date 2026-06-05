@@ -1,0 +1,11 @@
+name = "Mama Odie - Voice of Wisdom"
+type = "Character"
+cost = 6
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7c8f8f0af4fb4d6087a414c04c0fca4c.avif?1709690747"
+max_copies = 4
+strength = 3
+willpower = 6
+lore = 2
+classifications = ["Dreamborn", "Ally", "Sorcerer"]
+text = "LISTEN TO YOUR MAMA NOW Whenever this character quests, you may move up to 2 damage counters from chosen character to chosen opposing character."

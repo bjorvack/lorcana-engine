@@ -1,0 +1,8 @@
+name = "Break Free"
+type = "Action"
+cost = 1
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8f78f01a16b947d8808ca0d350cb5c31.avif?1723917209"
+max_copies = 4
+inkwell = true
+text = "Deal 1 damage to chosen character of yours. They gain Rush and get +1 {S} this turn. (They can challenge the turn they're played.)"

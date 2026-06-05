@@ -1,0 +1,12 @@
+name = "The Witch - Wily Woodcarver"
+type = "Character"
+cost = 5
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_897e8937b42e46a5b0a3710a1d7617d5.avif?1777687449"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 6
+lore = 2
+classifications = ["Storyborn", "Sorcerer"]
+text = "UNSATISFIED CUSTOMERS Whenever this character is challenged, each opponent loses 1 lore."

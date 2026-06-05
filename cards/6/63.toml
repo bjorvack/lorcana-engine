@@ -1,0 +1,8 @@
+name = "Lose the Way"
+type = "Action"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d7336a7cef10416793a025c24ffc28a0.avif?1730901319"
+max_copies = 4
+inkwell = true
+text = "Exert chosen character. Then, you may choose and discard a card. If you do, the exerted character can't ready at the start of their next turn."

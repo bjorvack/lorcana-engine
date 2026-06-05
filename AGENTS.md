@@ -28,7 +28,17 @@ See `docs/development/CONTRIBUTING.md` → "Test-driven development" for detail.
 
 ## Before every commit
 
-All three must pass (CI enforces them — `.github/workflows/ci.yml`):
+Card data lives as **per-card files** `cards/<set>/<collector>.toml` (the source of
+truth). The combined `cards/sets/*.toml` that the engine loads (and the wasm crate
+embeds) are **generated and git-ignored** — regenerate them first, or `clippy`/tests
+won't compile/find card data:
+
+```bash
+python3 cards/scripts/combine_sets.py
+```
+
+All three must pass (CI enforces them — `.github/workflows/ci.yml`, which runs the
+generate step in every job):
 
 ```bash
 cargo fmt --all --check

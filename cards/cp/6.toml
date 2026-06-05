@@ -1,0 +1,7 @@
+name = "Invited to the Ball"
+type = "Action"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_50f9f3e358124c8bbe7714840adb4a45.avif?1755565874"
+max_copies = 4
+text = "Reveal the top 2 cards of your deck. Put revealed character cards into your hand. Put the rest on the bottom of your deck in any order."

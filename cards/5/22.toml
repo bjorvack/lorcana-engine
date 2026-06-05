@@ -1,0 +1,12 @@
+name = "Maid Marian - Lady of the Lists"
+type = "Character"
+cost = 6
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0140dc8d8b8444878839e0c94f358497.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 5
+lore = 2
+classifications = ["Dreamborn", "Princess"]
+text = "IF IT PLEASES THE LADY When you play this character, chosen opposing character gets -5 {S} until the start of your next turn."

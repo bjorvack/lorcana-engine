@@ -1,0 +1,13 @@
+name = "Dr. Facilier - Fortune Teller"
+type = "Character"
+cost = 7
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d544feae1c8b4accae8e8f3d185380c4.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 3
+classifications = ["Storyborn", "Villain", "Sorcerer"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)\nYOU'RE IN MY WORLD Whenever this character quests, chosen opposing character can't quest during their next turn."

@@ -1,0 +1,11 @@
+name = "Captain Hook - Captain of the Jolly Roger"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ec7df19190b24fe1a70ac895f40b5853.avif?1709690747"
+max_copies = 4
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Villain", "Pirate", "Captain"]
+text = "DOUBLE THE POWDER! When you play this character, you may return an action card named Fire the Cannons! from your discard to your hand."

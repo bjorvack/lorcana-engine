@@ -1,0 +1,13 @@
+name = "March Hare - Absurd Host"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_dc31d36d626f403b871338da45d0a685.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 2
+classifications = ["Storyborn"]
+keywords = ["Rush"]
+text = "Rush (This character can challenge the turn they're played.)"

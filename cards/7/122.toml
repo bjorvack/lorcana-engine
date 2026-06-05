@@ -1,0 +1,12 @@
+name = "Queen of Hearts - Losing Her Temper"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8e76340248ad450587db93be8aeeb437.avif?1740589590"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Villain", "Queen"]
+text = "ROYAL PAIN While this character has damage, she gets +3 {S}."

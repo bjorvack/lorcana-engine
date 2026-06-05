@@ -1,0 +1,12 @@
+name = "Trigger - Not-So-Sharp Shooter"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_89a33b4b36de4c2a97042cd58ca0e6e5.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "OLD BETSY Your characters named Nutsy get +1 {L}."

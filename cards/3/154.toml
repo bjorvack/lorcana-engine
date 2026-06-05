@@ -1,0 +1,11 @@
+name = "Scrooge McDuck - Richest Duck in the World"
+type = "Character"
+cost = 5
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_396903bc291c456ab3a3ebbdea9b1952.avif?1709690747"
+max_copies = 4
+strength = 3
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Hero"]
+text = "I'M GOING HOME! During your turn, this character gains Evasive. (They can challenge characters with Evasive.)\nI DIDN'T GET RICH BY BEING STUPID During your turn, whenever this character banishes another character in a challenge, you may play an item for free."

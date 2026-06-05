@@ -1,0 +1,12 @@
+name = "Brom Bones - Burly Bully"
+type = "Character"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8f73a6eed2b94aae85021a25eaa083fc.avif?1761763763"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 4
+lore = 1
+classifications = ["Storyborn"]
+text = "ROUGH AND TUMBLE Whenever this character challenges a character with 2 {S} or less, each opponent loses 1 lore."

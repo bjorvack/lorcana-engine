@@ -1,0 +1,12 @@
+name = "Stitch - High Badness Level"
+type = "Character"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7e2cac54dd5d4e0ea2db87cf752df00a.avif?1770260029"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Hero", "Alien"]
+text = "AMPED UP While you have a character named Lilo in play, this character gains Challenger +3. (They get +3 {S} while challenging.)"

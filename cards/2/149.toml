@@ -1,0 +1,12 @@
+name = "Hiram Flaversham - Toymaker"
+type = "Character"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e0ddeb51820a4e46840686240e076a57.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 6
+lore = 1
+classifications = ["Storyborn", "Inventor"]
+text = "ARTIFICER When you play this character and whenever he quests, you may banish one of your items to draw 2 cards."

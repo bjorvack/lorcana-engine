@@ -1,0 +1,7 @@
+name = "Julieta's Arepas"
+type = "Item"
+cost = 1
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_800457a096c74a15b1ac1d9aece16efb.avif?1777687809"
+max_copies = 4
+text = "FLAVORFUL CURE At the start of your turn, if you have a Madrigal character in play, remove up to 2 damage from chosen character.\nTHAT DID THE TRICK {E} — If you removed damage from a character this turn, gain 1 lore."

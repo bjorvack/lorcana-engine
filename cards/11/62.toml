@@ -1,0 +1,8 @@
+name = "Come Out and Fight!"
+type = "Action"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9d9eb44aa6324c2ebce958cbf92a2d31.avif?1770259478"
+max_copies = 4
+inkwell = true
+text = "Put all cards from under chosen character, item, or location on the bottom of their player's deck in a random order. Draw a card."

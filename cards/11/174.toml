@@ -1,0 +1,11 @@
+name = "Darkwing Duck - Crime Fighter"
+type = "Character"
+cost = 1
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b776bea5bc784d669be7db1efd244ef3.avif?1770259982"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Super", "Hero", "Detective"]

@@ -1,0 +1,8 @@
+name = "Transport Pod"
+type = "Item"
+cost = 1
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9d508f285a934e1fbdd5182fc46734b9.avif?1730901319"
+max_copies = 4
+inkwell = true
+text = "GIVE 'EM A SHOW At the start of your turn, you may move a character of yours to a location for free."

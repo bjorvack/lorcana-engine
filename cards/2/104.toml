@@ -1,0 +1,11 @@
+name = "Boun - Precocious Entrepreneur"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5531bbdbce6c4d0b86a40ea6fecac853.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally"]

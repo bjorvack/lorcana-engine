@@ -1,0 +1,11 @@
+name = "Stitch - Abomination"
+type = "Character"
+cost = 6
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7ed94ab06dc44f91895dd7b9bf648b97.avif?1728609660"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 6
+lore = 3
+classifications = ["Storyborn", "Hero", "Alien"]

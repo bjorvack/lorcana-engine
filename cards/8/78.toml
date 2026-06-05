@@ -1,0 +1,8 @@
+name = "They Never Come Back"
+type = "Action"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2c56f14b54074c8890e8c66d93e1d1f3.avif?1747508862"
+max_copies = 4
+inkwell = true
+text = "Up to 2 chosen characters can't ready at the start of their next turn. Draw a card."

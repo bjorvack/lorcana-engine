@@ -1,0 +1,13 @@
+name = "Yzma - Scary Beyond All Reason"
+type = "Character"
+cost = 6
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b687a800e99b4465a744086c0eb9c93f.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 2
+classifications = ["Floodborn", "Villain", "Sorcerer"]
+keywords = ["Shift 4"]
+text = "Shift 4 (You may pay 4 {I} to play this on top of one of your characters named Yzma.)\nCRUEL IRONY When you play this character, shuffle another chosen character card into their player's deck. That player draws 2 cards."

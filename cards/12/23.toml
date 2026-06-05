@@ -1,0 +1,10 @@
+name = "The Prince - Searching for His Love"
+type = "Character"
+cost = 1
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_25eee8741de44224946fe827a0debb09.avif?1777687222"
+max_copies = 4
+strength = 0
+willpower = 2
+lore = 2
+classifications = ["Storyborn", "Hero", "Prince"]

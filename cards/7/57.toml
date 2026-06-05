@@ -1,0 +1,12 @@
+name = "Giant Cobra - Ghostly Serpent"
+type = "Character"
+cost = 3
+ink = ["Amethyst", "Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e83395def01e4f76b670fd014c79d440.avif?1740589325"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 1
+classifications = ["Dreamborn", "Ally", "Illusion"]
+text = "Vanish (When an opponent chooses this character for an action, banish them.)\nMYSTERIOUS ADVANTAGE When you play this character, you may choose and discard a card to gain 2 lore."

@@ -1,0 +1,12 @@
+name = "Beast - Hardheaded"
+type = "Character"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9600ba030e244c31becf34a3bf0822af.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Hero", "Prince"]
+text = "BREAK When you play this character, you may banish chosen item."

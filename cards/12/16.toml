@@ -1,0 +1,13 @@
+name = "Isabela Madrigal - Such a Lovely Voice"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_80d82e7c2bda4d8da137d7a85a19d78f.avif?1777687173"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally", "Madrigal"]
+keywords = ["Singer 5"]
+text = "Singer 5 (This character counts as cost 5 to sing songs.)\nNEW MOTIF When you play this character, if you removed 1 or more damage from one of your characters this turn, gain 1 lore."

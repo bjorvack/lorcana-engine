@@ -1,0 +1,8 @@
+name = "Blessed Bagpipes"
+type = "Item"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e3db74a687664c44971134d8a326fa68.avif?1761752414"
+max_copies = 4
+inkwell = true
+text = "MCDUCK HEIRLOOM When you play this item, you may put the top card of your deck facedown under one of your characters or locations with Boost.\nBATTLE ANTHEM Whenever one of your characters or locations with a card under them is challenged, gain 1 lore."

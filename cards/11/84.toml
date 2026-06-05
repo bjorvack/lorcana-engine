@@ -1,0 +1,13 @@
+name = "Copper - Champion of the Forest"
+type = "Character"
+cost = 5
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1828e2a9c3c547abbcd95f8c4fdc211f.avif?1770259577"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 5
+lore = 2
+classifications = ["Floodborn", "Hero"]
+keywords = ["Shift 3"]
+text = "Shift 3 {I} (You may pay 3 {I} to play this on top of one of your characters named Copper.)\nMORE TO EXPLORE Whenever this character quests, your characters with Evasive get +1 {L} this turn."

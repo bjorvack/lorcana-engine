@@ -1,0 +1,7 @@
+name = "Steel Chromicon"
+type = "Item"
+cost = 6
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6cda288d106d4d46837a3c11690dce63.avif?1723917209"
+max_copies = 4
+text = "STEEL LIGHT {E} — Deal 1 damage to chosen character."

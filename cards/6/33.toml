@@ -1,0 +1,8 @@
+name = "Scrump"
+type = "Item"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a631b5ead5b34dd4b89ae313a3dcbd1d.avif?1730901319"
+max_copies = 4
+inkwell = true
+text = "I MADE HER {E} one of your characters - Chosen character gets -2 {S} until the start of your next turn."

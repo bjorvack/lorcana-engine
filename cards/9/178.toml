@@ -1,0 +1,12 @@
+name = "Jasmine - Fearless Princess"
+type = "Character"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_70f818f3196e4178a8bd5735332d8f06.avif?1755541284"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 7
+lore = 2
+classifications = ["Storyborn", "Hero", "Princess"]
+text = "TAKE THE LEAP During your turn, this character gains Evasive. (They can challenge characters with Evasive.)\nNOW'S MY CHANCE Choose and discard a card — This character gains Challenger +3 this turn. (They get +3 {S} while challenging.)"

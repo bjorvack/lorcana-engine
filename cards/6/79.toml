@@ -1,0 +1,13 @@
+name = "Basil - Hypnotized Mouse"
+type = "Character"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e2546a2e03c8442aba30fd09105e54db.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 2
+lore = 1
+classifications = ["Dreamborn", "Hero", "Detective"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)"

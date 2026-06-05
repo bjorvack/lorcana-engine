@@ -1,0 +1,12 @@
+name = "Penny the Orphan - Clever Child"
+type = "Character"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ca23777aebb648ae879ec623bc4f760d.avif?1740589783"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 1
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "OUR BOTTLE WORKED! While you have a Hero character in play, this character gains Ward. (Opponents can't choose them except to challenge.)"

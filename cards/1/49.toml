@@ -1,0 +1,12 @@
+name = "Maleficent - Sorceress"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ff8bf99d2bd84183bcc4b5d7a18360f0.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Villain", "Sorcerer"]
+text = "CAST MY SPELL! When you play this character, you may draw a card."

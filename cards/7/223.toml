@@ -1,0 +1,13 @@
+name = "Bolt - Superdog"
+type = "Character"
+cost = 5
+ink = ["Amber", "Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1c25fe2340004c5b9c9166ec33e1779f.avif?1778766130"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 5
+lore = 2
+classifications = ["Floodborn", "Hero"]
+keywords = ["Shift 3"]
+text = "Shift 3 (You may pay 3 {I} to play this on top of one of your characters named Bolt.)\nMARK OF POWER Whenever you ready this character, gain 1 lore for each other undamaged character you have in play.\nBOLT STARE {E} — Banish chosen Illusion character."

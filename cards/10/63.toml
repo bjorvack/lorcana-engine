@@ -1,0 +1,8 @@
+name = "Swooping Strike"
+type = "Action"
+cost = 1
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c285a7ee2f8644b3a286c71d28dabaa6.avif?1761752223"
+max_copies = 4
+inkwell = true
+text = "Each opponent chooses and exerts one of their ready characters."

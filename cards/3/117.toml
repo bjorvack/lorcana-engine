@@ -1,0 +1,13 @@
+name = "Moana - Undeterred Voyager"
+type = "Character"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c4bb70c1ad214e2093ce724398d59e4b.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Hero", "Princess"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)"

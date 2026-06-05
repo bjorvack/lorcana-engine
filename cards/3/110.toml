@@ -1,0 +1,11 @@
+name = "Jim Hawkins - Thrill Seeker"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_bdeabb102e8a43af9b4e1699df256503.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 2
+lore = 1
+classifications = ["Dreamborn", "Hero"]

@@ -1,0 +1,11 @@
+name = "Graveyard of Christmas Future - Lonely Resting Place"
+type = "Location"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_648f06059c3b4f8680bc932c085d6182.avif?1770259807"
+max_copies = 4
+inkwell = true
+move_cost = 1
+willpower = 8
+lore = 1
+text = "NEW ARRIVAL Whenever you move a character here, put the top card of your deck under this location facedown.\nANOTHER CHANCE At the start of your turn, you may put all cards from under this location into your hand. If you do, banish this location."

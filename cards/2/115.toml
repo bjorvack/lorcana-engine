@@ -1,0 +1,11 @@
+name = "Minnie Mouse - Zipping Around"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_08ee7216354243869129fd8d6491168e.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Hero"]

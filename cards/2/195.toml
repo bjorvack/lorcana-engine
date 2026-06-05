@@ -1,0 +1,13 @@
+name = "The Prince - Never Gives Up"
+type = "Character"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9cc22e72ff234c27acb37f7d0e1f4441.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 2
+classifications = ["Dreamborn", "Hero", "Prince"]
+keywords = ["Bodyguard", "Resist 1"]
+text = "Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)\nResist +1 (Damage dealt to this character is reduced by 1.)"

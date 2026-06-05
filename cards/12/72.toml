@@ -1,0 +1,13 @@
+name = "Tod - Nimble Fox"
+type = "Character"
+cost = 5
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b328d3d5de43456ba31bd637c44a24a8.avif?1777687442"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Hero"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)"

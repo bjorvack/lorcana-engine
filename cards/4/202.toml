@@ -1,0 +1,7 @@
+name = "RLS Legacy's Cannon"
+type = "Item"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d12740d7854a4ff69d2921c943454bc8.avif?1716052430"
+max_copies = 4
+text = "BA-BOOM! {E}, 2 {I}, Discard a card — Deal 2 damage to chosen character or location."

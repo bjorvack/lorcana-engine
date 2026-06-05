@@ -1,0 +1,12 @@
+name = "Ursula - Deceiver of All"
+type = "Character"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_00dafa7609fb42d2a1a8e4e81e79474a.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Villain", "Sorcerer"]
+text = "WHAT A DEAL Whenever this character sings a song, you may play that song again from your discard for free, then put it on the bottom of your deck."

@@ -1,0 +1,11 @@
+name = "Kristoff - Official Ice Master"
+type = "Character"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_097bd499debd459f9ce55afa7bc72d66.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Ally"]

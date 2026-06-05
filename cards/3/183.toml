@@ -1,0 +1,12 @@
+name = "Minnie Mouse - Funky Spelunker"
+type = "Character"
+cost = 1
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e5e54863fdb8474db4d0515a2a562ced.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 0
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Hero"]
+text = "JOURNEY While this character is at a location, she gets +2 {S}."

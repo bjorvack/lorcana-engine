@@ -1,0 +1,13 @@
+name = "Pegasus - Gift for Hercules"
+type = "Character"
+cost = 1
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e7fa7e2b66a6410b9baafd7d7e46f119.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Ally"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)"

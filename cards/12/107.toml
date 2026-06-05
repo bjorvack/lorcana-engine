@@ -1,0 +1,12 @@
+name = "Audrey Ramirez - Gutsy Mechanic"
+type = "Character"
+cost = 1
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b2d382e40e5642e0bd54eb50f0b0dc5c.avif?1777687580"
+max_copies = 4
+strength = 2
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Ally"]
+keywords = ["Rush"]
+text = "Rush (This character can challenge the turn they're played.)"

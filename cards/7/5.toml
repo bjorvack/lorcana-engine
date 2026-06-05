@@ -1,0 +1,12 @@
+name = "Roger Radcliffe - Dog Lover"
+type = "Character"
+cost = 1
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_fb3fdf1042f04416b070bdd8566a53e6.avif?1740589117"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "THERE YOU GO Whenever this character quests, you may remove up to 1 damage from each of your Puppy characters."

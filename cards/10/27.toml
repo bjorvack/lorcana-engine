@@ -1,0 +1,8 @@
+name = "Or Rewrite History!"
+type = "Song"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a6fe0f1466334c1abc4a7cda49a6db08.avif?1761752053"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 3 or more can {E} to sing this song for free.)\nReturn a character card from your discard to your hand."

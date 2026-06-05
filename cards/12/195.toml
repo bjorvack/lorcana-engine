@@ -1,0 +1,13 @@
+name = "Mrs. Incredible - Determined Rescuer"
+type = "Character"
+cost = 7
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b50f7fa4b213465981b1b4cd05d54ee2.avif?1777687915"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 4
+lore = 3
+classifications = ["Storyborn", "Super", "Hero"]
+keywords = ["Shift 5"]
+text = "Shift 5 {I}\nPULL BACK Your characters gain Resist +1. \nREGROUP During your turn, whenever another character is banished in a challenge, you may ready chosen Super character. If you do, they can't quest for the rest of this turn."

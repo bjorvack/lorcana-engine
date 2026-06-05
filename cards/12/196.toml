@@ -1,0 +1,12 @@
+name = "Diablo - Stone Servant"
+type = "Character"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3b6a0713a14849bd9a660f147308111d.avif?1777687918"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Ally"]
+text = "CRUEL INTENT While you have a Villain character in play, this character gets +2 {S} and +1 {L}.\nVILLAINOUS BOND While this character is exerted, your Villain characters can't be challenged."

@@ -1,0 +1,12 @@
+name = "Cri-Kee - Lucky Cricket"
+type = "Character"
+cost = 5
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_38b8a802fe784ee286fd81ddc09ea7ec.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 3
+classifications = ["Storyborn", "Ally"]
+text = "SPREADING GOOD FORTUNE When you play this character, your other characters get +3 {S} this turn."

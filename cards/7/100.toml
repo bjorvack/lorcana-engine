@@ -1,0 +1,11 @@
+name = "Lady - Elegant Spaniel"
+type = "Character"
+cost = 1
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_923b464195ae4552b00f557378bc77a3.avif?1740589500"
+max_copies = 4
+strength = 1
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Hero"]
+text = "A DOG'S LIFE While you have a character named Tramp in play, this character gets +1 {L}."

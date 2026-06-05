@@ -1,0 +1,12 @@
+name = "Kuzco - Wanted Llama"
+type = "Character"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0da7128b38524119b441c3df9091184d.avif?1755540397"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "King"]
+text = "OK, WHERE AM I? When this character is banished, you may draw a card."

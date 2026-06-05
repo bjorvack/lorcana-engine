@@ -1,0 +1,8 @@
+name = "Magic Golden Flower"
+type = "Item"
+cost = 1
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_33a1cfa2557e48ba8b7aac42a10592f6.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "HEALING POLLEN Banish this item — Remove up to 3 damage from chosen character."

@@ -1,0 +1,8 @@
+name = "Strike a Good Match"
+type = "Song"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_cc8e7afe0f344c32b64446caf7b31456.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 2 or more can {E} to sing this song for free.)\nDraw 2 cards, then choose and discard a card."

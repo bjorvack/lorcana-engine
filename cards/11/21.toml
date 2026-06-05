@@ -1,0 +1,12 @@
+name = "Reuben - Sandwich Expert"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_47d6da02d19a4b82a6d7aaf593ca151e.avif?1770259292"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally", "Alien"]
+text = "LUNCH SPECIAL {E} — Remove up to 2 damage from chosen character of yours. For each 1 damage removed this way, you pay 1 {I} less for the next character you play this turn."

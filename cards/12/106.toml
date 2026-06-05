@@ -1,0 +1,13 @@
+name = "Pegasus - Searching High and Low"
+type = "Character"
+cost = 6
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0a746213099d4c5eaf9ea5bf5926a411.avif?1777687576"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 7
+lore = 1
+classifications = ["Dreamborn", "Ally"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)"

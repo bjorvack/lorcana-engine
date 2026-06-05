@@ -1,0 +1,12 @@
+name = "Morph - Space Goo"
+type = "Character"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_be70d689335140bdadcde5f5356e169d.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Ally", "Alien"]
+text = "MIMICRY You may play any character with Shift on this character as if this character had any name."

@@ -1,0 +1,13 @@
+name = "Bambi - Ethereal Fawn"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_33a165a8153e4ba587d52961bca86f79.avif?1770259306"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Hero", "Prince", "Whisper"]
+keywords = ["Boost 2"]
+text = "Boost 2 {I} (Once during your turn, you may pay 2 {I} to put the top card of your deck facedown under this character.)\nCOME SEE! During your turn, whenever this character exerts, reveal a number of cards from the top of your deck equal to the number of cards under him. Put all revealed character cards into your hand. Put the rest on the bottom of your deck in any order."

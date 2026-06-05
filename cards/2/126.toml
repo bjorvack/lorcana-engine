@@ -1,0 +1,12 @@
+name = "Shere Khan - Menacing Predator"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d61c5630a6b649589ac1fd4a8bcb1014.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Villain"]
+text = "DON'T INSULT MY INTELLIGENCE Whenever one of your characters challenges another character, gain 1 lore."

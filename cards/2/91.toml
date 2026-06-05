@@ -1,0 +1,13 @@
+name = "Ratigan - Criminal Mastermind"
+type = "Character"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9dcde646049c4c889034da24e175f7f8.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 1
+lore = 2
+classifications = ["Dreamborn", "Villain"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)"

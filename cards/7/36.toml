@@ -1,0 +1,12 @@
+name = "Calhoun - Battle-Tested"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_64a76c911cf94a1c88039f36efdec741.avif?1740589243"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 4
+lore = 1
+classifications = ["Dreamborn", "Hero", "Racer"]
+text = "TACTICAL ADVANTAGE When you play this character, you may choose and discard a card to give chosen opposing character -3 {S} until the start of your next turn."

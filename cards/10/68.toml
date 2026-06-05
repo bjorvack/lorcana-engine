@@ -1,0 +1,11 @@
+name = "The Great Illuminary - Abandoned Laboratory"
+type = "Location"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f0a21489090449a4af62aa6f09ad9552.avif?1761752279"
+max_copies = 4
+inkwell = true
+move_cost = 1
+willpower = 3
+lore = 1
+text = "STARTLING DISCOVERY Characters gain \" {E} — Draw a card\" while here."

@@ -1,0 +1,12 @@
+name = "Jasmine - Soothing Princess"
+type = "Character"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_19f087c81e534ceda53b510446d75965.avif?1761764480"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Hero", "Princess", "Whisper"]
+text = "Boost 2 {I} (Once during your turn, you may pay 2 {I} to put the top card of your deck facedown under this character.)\nUPLIFTING AURA Whenever this character quests, if there's a card under her, remove up to 3 damage from each of your characters."

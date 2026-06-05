@@ -1,0 +1,8 @@
+name = "Nani's Payback"
+type = "Action"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ade83b5dd75144a4b901097e22b7b8b1.avif?1770259771"
+max_copies = 4
+inkwell = true
+text = "Each opponent loses lore equal to the damage on chosen character of yours, to a maximum of 4 lore each. Draw a card."

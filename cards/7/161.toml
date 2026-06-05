@@ -1,0 +1,11 @@
+name = "Dawson - Puzzling Sleuth"
+type = "Character"
+cost = 1
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9fcd1bf3255d48ecb5f16b78512c01bb.avif?1740589744"
+max_copies = 4
+strength = 1
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally", "Detective"]
+text = "BE SENSIBLE Once during your turn, whenever a card is put into your inkwell, look at the top card of your deck. You may put it on either the top or the bottom of your deck."

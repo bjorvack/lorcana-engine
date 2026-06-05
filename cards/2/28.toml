@@ -1,0 +1,8 @@
+name = "Hold Still"
+type = "Action"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7672e43ea7ac4d9a8a51e463a77b6358.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "Remove up to 4 damage from chosen character."

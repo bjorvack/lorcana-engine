@@ -1,0 +1,13 @@
+name = "Abu - Illusory Pachyderm"
+type = "Character"
+cost = 6
+ink = ["Amethyst", "Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_befc74dca10e458ba4a71a1f4ac05e7e.avif?1747507401"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 7
+lore = 1
+classifications = ["Dreamborn", "Ally", "Illusion"]
+keywords = ["Vanish"]
+text = "Vanish (When an opponent chooses this character for an action, banish them.)\nGRASPING TRUNK Whenever this character quests, gain lore equal to the {L} of chosen opposing character."

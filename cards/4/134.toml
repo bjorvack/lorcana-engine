@@ -1,0 +1,8 @@
+name = "Vitalisphere"
+type = "Item"
+cost = 1
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0377cc62eb6044bc808843bbcd39eb48.avif?1716052430"
+max_copies = 4
+inkwell = true
+text = "EXTRACT OF RUBY 1 {I}, Banish this item — Chosen character gains Rush and gets +2 {S} this turn. (They can challenge the turn they're played.)"

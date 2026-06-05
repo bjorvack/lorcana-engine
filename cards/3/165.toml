@@ -1,0 +1,7 @@
+name = "Lucky Dime"
+type = "Item"
+cost = 7
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b4342b1e77754c4caec6596f27f963b2.avif?1709690747"
+max_copies = 4
+text = "NUMBER ONE {E}, 2 {I} — Choose a character of yours and gain lore equal to their {L}."

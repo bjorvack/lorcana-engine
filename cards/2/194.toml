@@ -1,0 +1,12 @@
+name = "The Huntsman - Reluctant Enforcer"
+type = "Character"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_98f78d167b2e41d58e796d0124e5f9bf.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 1
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "CHANGE OF HEART Whenever this character quests, you may draw a card, then choose and discard a card."

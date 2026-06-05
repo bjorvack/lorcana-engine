@@ -1,0 +1,12 @@
+name = "Pocahontas - Steadfast Traveler"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_65471535e336408d9a1f465798307df2.avif?1777687829"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 5
+lore = 1
+classifications = ["Dreamborn", "Hero", "Princess"]
+text = "WANDERING SPIRIT Whenever this character quests, if you played another character this turn, return a location card from your discard to your hand."

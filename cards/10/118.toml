@@ -1,0 +1,11 @@
+name = "Hercules - Mighty Leader"
+type = "Character"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ee4bc5f80eb74a19b749e0b31be7d920.avif?1761763643"
+max_copies = 4
+strength = 5
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Hero", "Prince", "Deity"]
+text = "EVER VIGILANT This character can't be dealt damage unless he's being challenged.\nEVER VALIANT While this character is exerted, your other Hero characters can't be dealt damage unless they're being challenged."

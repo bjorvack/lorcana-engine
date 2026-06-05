@@ -1,0 +1,12 @@
+name = "Magic Broom - The Big Sweeper"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5bb1d62852d74227a37ae937c075eef0.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 5
+lore = 1
+classifications = ["Dreamborn", "Broom"]
+text = "CLEAN SWEEP While this character is at a location, it gets +2 {S}."

@@ -1,0 +1,12 @@
+name = "Omnidroid - V.9"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d7153226a02845a4a71dbc705def5172.avif?1777687875"
+max_copies = 4
+strength = 4
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Robot"]
+keywords = ["Shift 2"]
+text = "Shift 2 {I} (You may pay 2 {I} to play this on top of one of your characters named Omnidroid.)\nENEMY DETECTED When you play this character, if you used Shift to play it, you may deal 2 damage to chosen character."

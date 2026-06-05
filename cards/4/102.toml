@@ -1,0 +1,11 @@
+name = "Ursula's Garden - Full of the Unfortunate"
+type = "Location"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5b7970f5f54d4311882227c856ac28ac.avif?1716052430"
+max_copies = 4
+inkwell = true
+move_cost = 2
+willpower = 7
+lore = 1
+text = "ABANDON HOPE While you have an exerted character here, opposing characters get -1 {L}."

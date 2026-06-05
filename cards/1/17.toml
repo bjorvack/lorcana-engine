@@ -1,0 +1,11 @@
+name = "Pumbaa - Friendly Warthog"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_389a5296a2114c10a16be57f0677429f.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Ally"]

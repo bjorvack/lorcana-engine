@@ -1,0 +1,11 @@
+name = "Baloo - Laid-Back Bear"
+type = "Character"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d7134801fdd04fb6bf20166667a14f20.avif?1761752282"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally"]

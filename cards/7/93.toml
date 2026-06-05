@@ -1,0 +1,12 @@
+name = "Basil - Secret Informer"
+type = "Character"
+cost = 6
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_06d0c264e2e34e248fcce5ce2e0d3efe.avif?1740589468"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 6
+lore = 3
+classifications = ["Dreamborn", "Hero", "Detective"]
+text = "DRAW THEM OUT Whenever this character quests, opposing damaged characters gain Reckless during their next turn. (They can't quest and must challenge if able.)"

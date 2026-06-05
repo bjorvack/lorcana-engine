@@ -1,0 +1,11 @@
+name = "The Sorcerer's Tower - Wondrous Workspace"
+type = "Location"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d9a1c24b8bf4469f8535e75c38cf61f7.avif?1709690747"
+max_copies = 4
+inkwell = true
+move_cost = 2
+willpower = 7
+lore = 0
+text = "BROOM CLOSET Your characters named Magic Broom may move here for free.\nMAGICAL POWER Characters get +1 {L} while here."

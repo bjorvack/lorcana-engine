@@ -1,0 +1,8 @@
+name = "Friends on the Other Side"
+type = "Song"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f9097c53f99d488aa8685b73ea5a9373.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 3 or more can {E} to sing this song for free.)\nDraw 2 cards."

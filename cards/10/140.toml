@@ -1,0 +1,11 @@
+name = "Chef Louis - In Over His Head"
+type = "Character"
+cost = 7
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9e590e6d47e9422fa521110e41e48cd1.avif?1761764363"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 8
+lore = 3
+classifications = ["Storyborn"]

@@ -1,0 +1,11 @@
+name = "Donald Duck - Boisterous Fowl"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9db4390c3200400db02bf38305508d38.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Storyborn"]

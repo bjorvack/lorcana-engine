@@ -1,0 +1,8 @@
+name = "Tug-of-War"
+type = "Action"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3a34c665afa94105b0b19383925dd830.avif?1723917209"
+max_copies = 4
+inkwell = true
+text = "Choose one:\n• Deal 1 damage to each opposing character without Evasive.\n• Deal 3 damage to each opposing character with Evasive."

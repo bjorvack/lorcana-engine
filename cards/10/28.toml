@@ -1,0 +1,8 @@
+name = "Della's Moon Lullaby"
+type = "Song"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ebc01607e02e4421b658f6fbe90a97ca.avif?1761752058"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 2 or more can {E} to sing this song for free.)\nChosen opposing character gets -2 {S} until the start of your next turn. Draw a card."

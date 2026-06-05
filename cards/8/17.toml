@@ -1,0 +1,12 @@
+name = "The Colonel - Old Sheepdog"
+type = "Character"
+cost = 5
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_cddc453bf8734d989b68193f212de440.avif?1747506725"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 6
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "WE'VE GOT 'EM OUTNUMBERED While you have 3 or more Puppy characters in play, this character gets +2 {S} and +2 {L}."

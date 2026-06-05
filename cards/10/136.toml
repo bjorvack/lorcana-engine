@@ -1,0 +1,11 @@
+name = "Sleepy Hollow - The Bridge"
+type = "Location"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_98339be4f48249779fb2ae2de3e9b757.avif?1761773967"
+max_copies = 4
+inkwell = true
+move_cost = 1
+willpower = 6
+lore = 0
+text = "HEAD FOR THE BRIDGE! Whenever a character quests while here, you may banish this location to gain 2 lore and give them Evasive until the start of your next turn. (Only characters with Evasive can challenge them.)"

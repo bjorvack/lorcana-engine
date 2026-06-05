@@ -1,0 +1,12 @@
+name = "Stitch - Alien Buccaneer"
+type = "Character"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_efcb250575354ffd8cdce9e8c45d52bf.avif?1730901319"
+max_copies = 4
+strength = 3
+willpower = 4
+lore = 2
+classifications = ["Floodborn", "Hero", "Alien", "Pirate"]
+keywords = ["Shift 3"]
+text = "Shift 3 (You may pay 3 {I} to play this on top of one of your characters named Stitch.)\nREADY FOR ACTION When you play this character, if you used Shift to play him, you may put an action card from your discard on the top of your deck."

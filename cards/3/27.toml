@@ -1,0 +1,8 @@
+name = "Quick Patch"
+type = "Action"
+cost = 1
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5364fdf0cf144ac38d2d7c824f8cc72f.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "Remove up to 3 damage from chosen location."

@@ -1,0 +1,8 @@
+name = "Try Everything"
+type = "Song"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_43b3128f2b504d7b9364db3803511c13.avif?1723917209"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 4 or more can {E} to sing this song for free.)\nRemove up to 3 damage from chosen character and ready them. They can't quest or challenge for the rest of this turn."

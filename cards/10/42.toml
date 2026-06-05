@@ -1,0 +1,12 @@
+name = "Lena Sabrewing - Mysterious Duck"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_041e41c6ea3349e6a3734dd749f9543e.avif?1761752127"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Ally", "Sorcerer"]
+text = "ARCANE CONNECTION When you play this character, if you have a character or location in play with a card under them, gain 1 lore."

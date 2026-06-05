@@ -1,0 +1,11 @@
+name = "Snow White - Fair-Hearted"
+type = "Character"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8d0e59a2afe64a538efd96c2270336ca.avif?1723917209"
+max_copies = 4
+strength = 3
+willpower = 5
+lore = 3
+classifications = ["Dreamborn", "Hero", "Princess", "Knight"]
+text = "NATURAL LEADER This character gains Resist +1 for each other Knight character you have in play. (Damage dealt to this character is reduced by 1 for each other Knight.)"

@@ -1,0 +1,12 @@
+name = "Benja - Guardian of the Dragon Gem"
+type = "Character"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_66a2a59da61b4b54a92f25b54c375d93.avif?1755541295"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Mentor", "King"]
+text = "WE HAVE A CHOICE When you play this character, you may banish chosen item."

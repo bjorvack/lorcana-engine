@@ -1,0 +1,11 @@
+name = "Prince Naveen - Penniless Royal"
+type = "Character"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6bfaedf8350c4f27ad9c60c2ecb2c942.avif?1755541309"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Prince"]

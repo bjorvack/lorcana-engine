@@ -1,0 +1,12 @@
+name = "Honker Muddlefoot - Timid Genius"
+type = "Character"
+cost = 1
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_864fbdcc6f91431db5a365dd2aa4dba1.avif?1770259844"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally", "Inventor"]
+text = "BE CAREFUL! Your characters named Darkwing Duck gain Resist +1. (Damage dealt to them is reduced by 1.)"

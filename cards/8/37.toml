@@ -1,0 +1,12 @@
+name = "Donald Duck - Coin Collector"
+type = "Character"
+cost = 8
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_fef2291c6e394415a529772dcda9e9b0.avif?1747507348"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 8
+lore = 2
+classifications = ["Storyborn", "Hero"]
+text = "HERE, PIGGY, PIGGY For each item named The Nephews' Piggy Bank you have in play, you pay 2 {I} less to play this character.\nMONEY EVERYWHERE When you play this character, your other characters gain \"{E} – Draw a card\" this turn."

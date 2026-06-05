@@ -1,0 +1,9 @@
+name = "Stopped Chaos in Its Tracks"
+type = "Song"
+cost = 8
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_655c8f27d9fa48ce9e7ff33c0bf4f6c8.avif?1747509109"
+max_copies = 4
+inkwell = true
+keywords = ["Sing Together 8"]
+text = "Sing Together 8 (Any number of your or your teammates' characters with total cost 8 or more may {E} to sing this song for free.)\nReturn up to 2 chosen characters with 3 {S} or less each to their player's hand."

@@ -1,0 +1,7 @@
+name = "Mother's Necklace"
+type = "Item"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f91b39cb2d4a47f984e9e5114216e75b.avif?1770259491"
+max_copies = 4
+text = "PRECIOUS GIFT At the end of your turn, if none of your characters challenged this turn, chosen character of yours gains Evasive until the start of your next turn. (Only characters with Evasive can challenge them.)"

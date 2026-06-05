@@ -1,0 +1,12 @@
+name = "Sina - Vigilant Parent"
+type = "Character"
+cost = 1
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6f3a637fc61e4ad084fc878c55ff543c.avif?1770259839"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "Alert (This character can challenge as if they had Evasive.)"

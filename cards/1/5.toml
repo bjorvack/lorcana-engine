@@ -1,0 +1,12 @@
+name = "Hades - King of Olympus"
+type = "Character"
+cost = 8
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ab901cb3afed4b95b0bbca4350b0d4d7.avif?1709690747"
+max_copies = 4
+strength = 6
+willpower = 7
+lore = 1
+classifications = ["Floodborn", "Villain", "King", "Deity"]
+keywords = ["Shift 6"]
+text = "Shift 6 (You may pay 6 {I} to play this on top of one of your characters named Hades.)\nSINISTER PLOT This character gets +1 {L} for each other Villain character you have in play."

@@ -1,0 +1,12 @@
+name = "Merlin - Shapeshifter"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_05560bab5aba45cd8cd838e0d3597cce.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Mentor", "Sorcerer"]
+text = "BATTLE OF WITS Whenever one of your other characters is returned to your hand from play, this character gets +1 {L} this turn."

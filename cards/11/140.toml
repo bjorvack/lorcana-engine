@@ -1,0 +1,11 @@
+name = "Mickey Mouse - Tiny Tim's Father"
+type = "Character"
+cost = 6
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9280b9713ade4c7fb2fb651ff5a2e815.avif?1770259831"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 7
+lore = 2
+classifications = ["Storyborn", "Hero"]

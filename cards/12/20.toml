@@ -1,0 +1,12 @@
+name = "Jessie - Lively Cowgirl"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c7f3b3cbe19c44f7943c510392ea88db.avif?1777687200"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero", "Toy"]
+text = "PART OF A FAMILY Whenever this character quests, if you have 2 or more other Toy characters in play, you may draw a card.\nYODEL-AY-HEE-HOO! Whenever you pay 2 {I} or less to play a card, chosen opposing character gets -1 {S} until the start of your next turn."

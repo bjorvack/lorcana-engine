@@ -1,0 +1,13 @@
+name = "Webby Vanderquack - Junior Prospector"
+type = "Character"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_58ae0148760646e99f9394011ca1cbb9.avif?1761752381"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 4
+lore = 2
+classifications = ["Floodborn", "Ally"]
+keywords = ["Shift 2"]
+text = "Shift 2 {I} (You may pay 2 {I} to play this on top of one of your characters named Webby Vanderquack.)\nWard\nWORK SMARTER Whenever this character quests, if an opponent has more cards in their inkwell than you, you may put the top card of your deck into your inkwell facedown and exerted."

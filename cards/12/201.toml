@@ -1,0 +1,7 @@
+name = "Syndrome's Remote"
+type = "Item"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_735ae286d20644cdb01c377869987e29.avif?1777687937"
+max_copies = 4
+text = "ZERO-POINT ENERGY {E}, 2 {I} — Chosen character can't challenge during their next turn.\nLEARN FROM THEIR LOSSES Whenever a Robot character is banished, you may banish this item to discard your hand and draw 2 cards."

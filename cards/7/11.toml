@@ -1,0 +1,13 @@
+name = "The Troubadour - Musical Narrator"
+type = "Character"
+cost = 2
+ink = ["Amber", "Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7f80a94bb56149dea86cbcf92b7eff6f.avif?1740589141"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally"]
+keywords = ["Resist 1"]
+text = "Resist +1 (Damage dealt to this character is reduced by 1.)\nSinger 4 (This character counts as cost 4 to sing songs.)"

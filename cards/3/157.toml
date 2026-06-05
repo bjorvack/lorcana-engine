@@ -1,0 +1,12 @@
+name = "Tinker Bell - Very Clever Fairy"
+type = "Character"
+cost = 5
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_62d821004e3d483a8d3d91a220cada53.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 2
+classifications = ["Dreamborn", "Ally", "Fairy"]
+text = "I CAN USE THAT Whenever one of your items is banished, you may put that card into your inkwell facedown and exerted."

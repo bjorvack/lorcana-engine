@@ -1,0 +1,11 @@
+name = "Chief Tui - Proud of Motunui"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5646a42f0a98475ba7c07e55f7cb47df.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Mentor", "King"]

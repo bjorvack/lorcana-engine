@@ -1,0 +1,12 @@
+name = "Lady - Family Dog"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5cad0c55b4644a3ea12fff8717e5fe83.avif?1747506701"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 2
+classifications = ["Storyborn", "Hero"]
+text = "SOMEONE TO CARE FOR When you play this character, you may play a character with cost 2 or less for free."

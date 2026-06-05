@@ -1,0 +1,8 @@
+name = "Next Stop, Olympus"
+type = "Action"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9072eca9a2d74193b9beb9527d6fec2d.avif?1761763767"
+max_copies = 4
+inkwell = true
+text = "ACTION If you have a character with 5 {S} or more in play, you pay 2 {I} less to play this action.\nReady chosen character. They can't quest for the rest of this turn. The next time they challenge another character this turn, gain 1 lore."

@@ -1,0 +1,11 @@
+name = "Chernabog - Creature of the Night"
+type = "Character"
+cost = 5
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_557e4cc6a67e4683ab3a48a35fcf6372.avif?1740589298"
+max_copies = 4
+strength = 2
+willpower = 6
+lore = 1
+classifications = ["Storyborn", "Villain"]
+text = "MIDNIGHT REVEL When you play this character, each opponent chooses and exerts one of their ready characters. They can't ready at the start of their next turn."

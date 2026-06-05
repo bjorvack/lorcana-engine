@@ -1,0 +1,12 @@
+name = "Jafar - Newly Crowned"
+type = "Character"
+cost = 4
+ink = ["Amethyst", "Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4beba63e13ea4be58f3b775bccc5d7d3.avif?1740589302"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 4
+lore = 2
+classifications = ["Dreamborn", "Villain", "Sorcerer"]
+text = "THIS IS NOT DONE YET During an opponent's turn, whenever one of your Illusion characters is banished, you may return that card to your hand."

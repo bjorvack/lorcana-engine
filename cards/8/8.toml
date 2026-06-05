@@ -1,0 +1,11 @@
+name = "Charlotte La Bouff - Mardi Gras Princess"
+type = "Character"
+cost = 1
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6183fa48800b4b52b6a5e81f473dee3b.avif?1747506687"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally", "Princess"]

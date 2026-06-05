@@ -1,0 +1,12 @@
+name = "Donald Duck - Fred Honeywell"
+type = "Character"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0ad5cc52cd5f49bb9594afa82796f42e.avif?1770259617"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "SPIRIT OF GIVING Whenever you use the Boost ability of a character, you may put the top card of your deck under them facedown.\nWELL WISHES During opponents' turns, whenever one of your other characters is banished, you may draw a card for each card that was under them."

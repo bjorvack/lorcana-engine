@@ -1,0 +1,13 @@
+name = "Powerline - Taking the Stage"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7d7835f351084d94aa5f108f373a1de2.avif?1755540817"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 2
+lore = 1
+classifications = ["Storyborn"]
+keywords = ["Singer 4"]
+text = "Singer 4 (This character counts as cost 4 to sing songs.)"

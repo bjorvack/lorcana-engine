@@ -1,0 +1,13 @@
+name = "Chief Tui - Respected Leader"
+type = "Character"
+cost = 7
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2bd7564121d5445ab350345c91a45ef4.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 6
+lore = 3
+classifications = ["Storyborn", "Mentor", "King"]
+keywords = ["Support"]
+text = "Support (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)"

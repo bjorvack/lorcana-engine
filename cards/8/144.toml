@@ -1,0 +1,11 @@
+name = "Friend Owl - Cantankerous Neighbor"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_fee05898e5484f948ef002681b38ec43.avif?1747509266"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 2
+classifications = ["Storyborn", "Ally"]

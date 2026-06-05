@@ -1,0 +1,10 @@
+name = "Lilo - Making a Wish"
+type = "Character"
+cost = 1
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0ccbea0b8fd54779939f56e1fcc3769a.avif?1709690747"
+max_copies = 4
+strength = 1
+willpower = 1
+lore = 2
+classifications = ["Storyborn", "Hero"]

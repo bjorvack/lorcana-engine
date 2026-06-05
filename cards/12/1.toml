@@ -1,0 +1,11 @@
+name = "Gosalyn Mallard - The Quiverwing Quack"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1755646d14394fc69c64fcae17bf5f44.avif?1777687107"
+max_copies = 4
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Super", "Hero"]
+text = "HEROIC INTERVENTION When you play this character, you may ready chosen character with cost 2 or less. If you do, they can't quest or challenge for the rest of this turn."

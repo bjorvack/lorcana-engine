@@ -1,0 +1,13 @@
+name = "Minnie Mouse - Stylish Surfer"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_bce37cc08d944fb99b90fa9f6fcda16d.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 2
+classifications = ["Dreamborn", "Hero"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)"

@@ -1,0 +1,12 @@
+name = "Dale - Friend in Need"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_166f05d54db54c06813b6dbb7693255d.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Hero"]
+text = "CHIP'S PARTNER This character enters play exerted unless you have a character named Chip in play."

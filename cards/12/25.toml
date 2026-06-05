@@ -1,0 +1,12 @@
+name = "Pluto - Vigilant Traveler"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_49511c0b9e594c4ca7a0e38fa31ede19.avif?1777687230"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 4
+lore = 1
+classifications = ["Dreamborn", "Ally"]
+text = "BEWARE OF DOG Whenever this character quests, if you played another character this turn, chosen opposing character gets -1 {S} until the start of your next turn."

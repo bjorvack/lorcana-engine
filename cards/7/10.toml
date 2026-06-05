@@ -1,0 +1,12 @@
+name = "Tramp - Street-Smart Dog"
+type = "Character"
+cost = 7
+ink = ["Amber", "Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8d473335c16245e684e466b7a745ec89.avif?1740589137"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 6
+lore = 2
+classifications = ["Storyborn", "Hero"]
+text = "NOW IT'S A PARTY For each character you have in play, you pay 1 {I} less to play this character.\nHOW'S PICKINGS? When you play this character, you may draw a card for each other character you have in play, then choose and discard that many cards."

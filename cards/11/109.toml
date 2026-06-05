@@ -1,0 +1,12 @@
+name = "Maui - Snow Slider"
+type = "Character"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d6b606b2691f493bb74f2faf13339c28.avif?1770259689"
+max_copies = 4
+strength = 4
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Hero", "Deity"]
+keywords = ["Rush"]
+text = "Rush (This character can challenge the turn they're played.)"

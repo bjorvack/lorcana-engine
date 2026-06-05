@@ -1,0 +1,11 @@
+name = "Antonio Madrigal - Animal Expert"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_bf3808fbbb364067a497257398cf353d.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally", "Madrigal"]

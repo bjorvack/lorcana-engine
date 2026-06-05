@@ -1,0 +1,13 @@
+name = "Rabbit - Fed Up"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_260df0802696480898a5d7f6634c5a43.avif?1770259384"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Ally"]
+keywords = ["Challenger 3"]
+text = "Challenger +3 (While challenging, this character gets +3 {S}.)"

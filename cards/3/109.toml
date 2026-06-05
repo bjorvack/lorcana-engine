@@ -1,0 +1,12 @@
+name = "Jim Hawkins - Space Traveler"
+type = "Character"
+cost = 5
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_163516a9fa684676b2bed66aa7a64a35.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Hero"]
+text = "THIS IS IT! When you play this character, you may play a location with cost 4 or less for free.\nTAKE THE HELM Whenever you play a location, this character may move there for free."

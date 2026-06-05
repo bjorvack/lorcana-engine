@@ -1,0 +1,10 @@
+name = "Fat Cat's Club - Seedy Headquarters"
+type = "Location"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f395ea0a746947c69e82b851035edec7.avif?1777687944"
+max_copies = 4
+inkwell = true
+move_cost = 1
+willpower = 6
+lore = 2

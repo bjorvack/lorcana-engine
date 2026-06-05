@@ -1,0 +1,12 @@
+name = "Robin Hood - Unrivaled Archer"
+type = "Character"
+cost = 6
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4a9c161784fa428f843e9b76858abf96.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Hero"]
+text = "FEED THE POOR When you play this character, if an opponent has more cards in their hand than you, draw a card.\nGOOD SHOT During your turn, this character gains Evasive. (They can challenge characters with Evasive.)"

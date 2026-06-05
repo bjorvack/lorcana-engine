@@ -1,0 +1,13 @@
+name = "Megara - Liberated One"
+type = "Character"
+cost = 5
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6cb1a1b4a1e447b19a2a22c63e15dec9.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Ally"]
+keywords = ["Ward"]
+text = "Ward (Opponents can't choose this character except to challenge.)\nPEOPLE ALWAYS DO CRAZY THINGS Whenever you play a character named Hercules, you may ready this character."

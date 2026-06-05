@@ -1,0 +1,12 @@
+name = "Cheshire Cat - Perplexing Feline"
+type = "Character"
+cost = 5
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6bbaa412cc0d43d8a2c2913ccbf13c3c.avif?1740589460"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 3
+lore = 2
+classifications = ["Storyborn"]
+text = "MAD GRIN When you play this character, you may deal 2 damage to chosen damaged character."

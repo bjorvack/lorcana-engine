@@ -1,0 +1,12 @@
+name = "The Fates - Only One Eye"
+type = "Character"
+cost = 1
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_cd05e8e7bb5c434cba3487e6f2aaf7ed.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "ALL WILL BE SEEN When you play this character, look at the top card of each opponent's deck."

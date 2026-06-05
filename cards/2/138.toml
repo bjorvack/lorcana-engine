@@ -1,0 +1,13 @@
+name = "Basil - Great Mouse Detective"
+type = "Character"
+cost = 6
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ebdef6b29bb74afaa3e5efea83fe89c7.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 3
+classifications = ["Floodborn", "Hero", "Detective"]
+keywords = ["Shift 5"]
+text = "Shift 5 (You may pay 5 {I} to play this on top of one of your characters named Basil.)\nTHERE'S ALWAYS A CHANCE If you used Shift to play this character, you may draw 2 cards when he enters play."

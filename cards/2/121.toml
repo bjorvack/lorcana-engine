@@ -1,0 +1,11 @@
+name = "Ratigan - Very Large Mouse"
+type = "Character"
+cost = 5
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_35af0ddde9834b5e8b37b9ba98126c71.avif?1709690747"
+max_copies = 4
+strength = 3
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Villain"]
+text = "THIS IS MY KINGDOM When you play this character, exert chosen opposing character with 3 {S} or less. Choose one of your characters and ready them. They can't quest for the rest of this turn."

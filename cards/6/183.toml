@@ -1,0 +1,12 @@
+name = "Jim Hawkins - Rigging Specialist"
+type = "Character"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_88c973fe2a114a198654133896a022b7.avif?1730901319"
+max_copies = 4
+strength = 5
+willpower = 5
+lore = 2
+classifications = ["Floodborn", "Hero"]
+keywords = ["Shift 3"]
+text = "Shift 3 (You may pay 3 {I} to play this on top of one of your characters named Jim Hawkins.)\nBATTLE STATION When you play this character, you may deal 1 damage to chosen character or location."

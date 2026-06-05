@@ -1,0 +1,7 @@
+name = "Down in New Orleans"
+type = "Song"
+cost = 6
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_eaa05e5b86e743a08331ddbbc5f19f4b.avif?1747509433"
+max_copies = 4
+text = "(A character with cost 6 or more can {E} to sing this song for free.)\nLook at the top 3 cards of your deck. You may reveal a character, item, or location card with cost 6 or less and play it for free. Put the rest on the bottom of your deck in any order."

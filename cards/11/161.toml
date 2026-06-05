@@ -1,0 +1,12 @@
+name = "Chief Tui - Weaving a Tale"
+type = "Character"
+cost = 5
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1bd99dad44d341dda6d1f73ffb2bc529.avif?1770259927"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Mentor", "King"]
+text = "AND THEN... Once during your turn, whenever a card is put into your inkwell, look at the top card of your deck. You may put it on either the top or the bottom of your deck."

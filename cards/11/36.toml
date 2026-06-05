@@ -1,0 +1,13 @@
+name = "Alice - Well-Read Whisper"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4328715a70224a1fae6ee75034f305fa.avif?1770259362"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Hero", "Whisper"]
+keywords = ["Boost 2"]
+text = "Boost 2 {I} (Once during your turn, you may pay 2 {I} to put the top card of your deck facedown under this character.)\nMYSTICAL INSIGHT Whenever this character quests, put all cards from under her into your hand."

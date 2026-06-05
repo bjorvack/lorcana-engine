@@ -1,0 +1,12 @@
+name = "Flash - Records Specialist"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_08f33a2464654944a7424e6b5971033c.avif?1761751990"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 2
+classifications = ["Dreamborn", "Ally"]
+text = "HOLD... YOUR HORSES This character enters play exerted.\nDEEP RESEARCH Whenever this character quests, you may give chosen Detective character +2 {S} this turn."

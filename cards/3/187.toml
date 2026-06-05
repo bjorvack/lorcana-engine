@@ -1,0 +1,12 @@
+name = "Pyros - Lava Titan"
+type = "Character"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f68e5422b47243a1b385c562531498f4.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Titan"]
+text = "ERUPTION During your turn, whenever this character banishes another character in a challenge, you may ready chosen character."

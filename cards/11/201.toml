@@ -1,0 +1,8 @@
+name = "Infra-Pink Ultra Scan Specs"
+type = "Item"
+cost = 1
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_472838feca334c31913db3f2fc0b39db.avif?1770260099"
+max_copies = 4
+inkwell = true
+text = "DETECTING EVIDENCE When you play this item, draw a card, then choose and discard a card.\nFOLLOW THE CLUES Banish this item – Chosen character gains Alert this turn. (They can challenge as if they had Evasive.)"

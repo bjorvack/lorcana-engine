@@ -1,0 +1,8 @@
+name = "Vicious Betrayal"
+type = "Action"
+cost = 1
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_85e0edbb8cbd458fa3957029a8bb5697.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "Chosen character gets +2 {S} this turn. If a Villain character is chosen, they get +3 {S} instead."

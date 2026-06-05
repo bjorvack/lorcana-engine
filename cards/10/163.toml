@@ -1,0 +1,8 @@
+name = "Might Solve a Mystery"
+type = "Song"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3f49acb68d7d44f4a8f98b555b7e47dd.avif?1761764581"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 4 or more can {E} to sing this song for free.)\nLook at the top 4 cards of your deck. You may reveal up to 1 character card and up to 1 item card and put them into your hand. Put the rest on the bottom of your deck in any order."

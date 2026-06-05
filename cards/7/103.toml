@@ -1,0 +1,12 @@
+name = "Tweedledee & Tweedledum - Strange Storytellers"
+type = "Character"
+cost = 5
+ink = ["Emerald", "Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f412907cdf7346cf8bbc1d02fab3d1d6.avif?1740589512"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 2
+classifications = ["Storyborn"]
+text = "ANOTHER RECITATION Whenever this character quests, you may return chosen damaged character to their player's hand."

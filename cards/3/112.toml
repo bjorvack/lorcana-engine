@@ -1,0 +1,11 @@
+name = "Madame Medusa - The Boss"
+type = "Character"
+cost = 6
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_62c656f20cba4c43a1ed1f7ebc2ca720.avif?1709690747"
+max_copies = 4
+strength = 4
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Villain"]
+text = "THAT TERRIBLE WOMAN When you play this character, banish chosen opposing character with 3 {S} or less."

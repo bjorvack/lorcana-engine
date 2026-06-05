@@ -1,0 +1,12 @@
+name = "Nala - Romping in the Snow"
+type = "Character"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c86496abfa1c4cc9a138143a845e15ce.avif?1770259357"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "PLAYFUL SLIDE When you play this character, chosen character of yours gains Evasive until the start of your next turn. (Only characters with Evasive can challenge them.)"

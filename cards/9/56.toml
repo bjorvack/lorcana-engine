@@ -1,0 +1,11 @@
+name = "Sven - Official Ice Deliverer"
+type = "Character"
+cost = 6
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7b8e4758284944abbee5ba2f79d2b353.avif?1755540464"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 7
+lore = 1
+classifications = ["Storyborn", "Ally"]

@@ -1,0 +1,11 @@
+name = "King Stefan - New Father"
+type = "Character"
+cost = 5
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_45494b13fa0d45a8befe78f80312b7d9.avif?1740589109"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 7
+lore = 1
+classifications = ["Storyborn", "Mentor", "King"]

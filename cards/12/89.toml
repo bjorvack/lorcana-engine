@@ -1,0 +1,13 @@
+name = "Merida - Gifted Archer"
+type = "Character"
+cost = 5
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2ba24a02308b4a9196bbe2cef9546e6b.avif?1777687508"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 6
+lore = 2
+classifications = ["Floodborn", "Hero", "Princess"]
+keywords = ["Shift 3"]
+text = "Shift 3 {I} (You may pay 3 {I} to play this on top of one of your characters named Merida.)\nFIERCE PROTECTION While this character is exerted, whenever an opposing character challenges, you may deal 1 damage to the challenging character."

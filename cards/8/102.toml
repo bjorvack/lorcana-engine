@@ -1,0 +1,11 @@
+name = "Flynn Rider - Breaking and Entering"
+type = "Character"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b41f273d5c6b4abe99a596fd14435de1.avif?1747509033"
+max_copies = 4
+strength = 1
+willpower = 4
+lore = 3
+classifications = ["Storyborn", "Hero", "Prince"]
+text = "THIS IS A VERY BIG DAY Whenever this character is challenged, the challenging player may choose and discard a card. If they don't, you gain 2 lore."

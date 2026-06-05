@@ -1,0 +1,13 @@
+name = "Pete - Ghost of Christmas Future"
+type = "Character"
+cost = 5
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_cc4685ee359648a9b100d7a20c00ee5f.avif?1770259895"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Ally", "Ghost"]
+keywords = ["Boost 1"]
+text = "Boost 1 {I} (Once during your turn, you may pay 1 {I} to put the top card of your deck facedown under this character.)\nFOREBODING GLANCE Whenever this character quests, look at a number of cards from the top of your deck equal to the number of cards under him. Put one into your hand and put the rest on the bottom of your deck in any order."

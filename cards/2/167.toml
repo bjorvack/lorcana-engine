@@ -1,0 +1,8 @@
+name = "Gumbo Pot"
+type = "Item"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_45bfb8a9f002440191e7bfd8b993fd22.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "THE BEST I'VE EVER TASTED {E} — Remove 1 damage each from up to 2 chosen characters."

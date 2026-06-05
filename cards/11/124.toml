@@ -1,0 +1,11 @@
+name = "Scrooge McDuck - Ebenezer Scrooge"
+type = "Character"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a06d887649d146a89f4c56939b02ad13.avif?1770259757"
+max_copies = 4
+strength = 4
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Villain"]
+text = "PAYMENT DUE Whenever this character quests, each opponent loses 1 lore. Draw a card for each 1 lore lost this way.\nFORECLOSURE At the end of your turn, if an opponent has 0 lore, you gain 1 lore."

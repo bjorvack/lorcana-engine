@@ -1,0 +1,12 @@
+name = "Wreck-It Ralph - Hero's Duty"
+type = "Character"
+cost = 6
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_98cc1ff61f704e70a88362de3d5d29a7.avif?1740589207"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 8
+lore = 1
+classifications = ["Storyborn", "Hero"]
+text = "OUTFLANK During your turn, whenever one of your other characters is banished, this character gets +1 {L} this turn."

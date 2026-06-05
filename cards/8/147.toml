@@ -1,0 +1,9 @@
+name = "Nothing We Won't Do"
+type = "Song"
+cost = 8
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d3991d318fce49248c57af5fea2ee5a7.avif?1747509296"
+max_copies = 4
+inkwell = true
+keywords = ["Sing Together 8"]
+text = "Sing Together 8 (Any number of your or your teammates' characters with total cost 8 or more may {E} to sing this song for free.)\nReady all your characters. For the rest of this turn, they take no damage from challenges and can't quest."

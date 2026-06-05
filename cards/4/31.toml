@@ -1,0 +1,8 @@
+name = "Miracle Candle"
+type = "Item"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f192e99706074455884cf28efb9ee03a.avif?1716052430"
+max_copies = 4
+inkwell = true
+text = "ABUELA'S GIFT Banish this item — If you have 3 or more characters in play, gain 2 lore and remove up to 2 damage from chosen location."

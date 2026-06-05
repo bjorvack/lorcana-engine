@@ -1,0 +1,10 @@
+name = "Luisa Madrigal - Entertaining Muscle"
+type = "Character"
+cost = 6
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5c628b6eefe64685a02ea0bd3bef7a44.avif?1723917209"
+max_copies = 4
+strength = 4
+willpower = 8
+lore = 3
+classifications = ["Storyborn", "Ally", "Madrigal"]

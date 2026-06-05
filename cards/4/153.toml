@@ -1,0 +1,12 @@
+name = "Rapunzel - Appreciative Artist"
+type = "Character"
+cost = 5
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7cfbdaa5c45f4ee9a73d3359c2f206c7.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 5
+lore = 3
+classifications = ["Dreamborn", "Hero", "Princess"]
+text = "PERCEPTIVE PARTNER While you have a character named Pascal in play, this character gains Ward. (Opponents can't choose them except to challenge.)"

@@ -1,0 +1,11 @@
+name = "Winnie the Pooh - Hunny Wizard"
+type = "Character"
+cost = 5
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6754fb447a2d4bbf901387509a864a10.avif?1755540344"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 5
+lore = 2
+classifications = ["Dreamborn", "Hero", "Sorcerer", "Hunny"]

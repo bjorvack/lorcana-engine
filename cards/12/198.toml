@@ -1,0 +1,8 @@
+name = "Card Advantage"
+type = "Action"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5a10ae29a3de4850af0cc678162ed6d7.avif?1777687926"
+max_copies = 4
+inkwell = true
+text = "If an opposing character was banished in a challenge this turn, draw 2 cards."

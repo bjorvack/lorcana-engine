@@ -1,0 +1,8 @@
+name = "Restoring the Heart"
+type = "Action"
+cost = 1
+ink = ["Amber", "Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a9d9c4039f5445c582413664824aad1d.avif?1740589255"
+max_copies = 4
+inkwell = true
+text = "Remove up to 3 damage from chosen character or location. Draw a card."

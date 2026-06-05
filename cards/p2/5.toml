@@ -1,0 +1,12 @@
+name = "Chicha - Dedicated Mother"
+type = "Character"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_775c901d8b4d4fd3884750a11cb7b1be.avif?1745500339"
+max_copies = 4
+strength = 2
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Ally"]
+keywords = ["Support"]
+text = "Support (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)\nONE ON THE WAY During your turn, when you put a card into your inkwell, if it's the second card you've put into your inkwell this turn, you may draw a card."

@@ -1,0 +1,13 @@
+name = "Pua - Protective Pig"
+type = "Character"
+cost = 3
+ink = ["Amber", "Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_dec273aa1bbc492dafa914363265979c.avif?1747506733"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally"]
+keywords = ["Bodyguard"]
+text = "Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)\nFREE FRUIT When this character is banished, you may draw a card."

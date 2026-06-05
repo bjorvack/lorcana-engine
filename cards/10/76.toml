@@ -1,0 +1,12 @@
+name = "Flintheart Glomgold - Scheming Billionaire"
+type = "Character"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6337614f5664420999e442e0bfa1dd31.avif?1761752311"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 4
+lore = 3
+classifications = ["Storyborn", "Villain"]
+text = "TRY ME While you have a character or location in play with a card under them, this character gains Ward. (Opponents can't choose them except to challenge.)"

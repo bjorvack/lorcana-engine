@@ -1,0 +1,11 @@
+name = "Orville - Ace Pilot"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_07dfc12012794405ad72a71f1a738c5d.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally"]

@@ -1,0 +1,12 @@
+name = "Simba - Playful Pouncer"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9a221a16584b472c8bdec14c1b4ae5b8.avif?1770259302"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Hero", "Prince"]
+text = "YOU DON'T STAND A CHANCE When you play this character, chosen opposing character gets -2 {S} until the start of your next turn."

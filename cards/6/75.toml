@@ -1,0 +1,12 @@
+name = "Fred - Mascot by Day"
+type = "Character"
+cost = 1
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9cbf437511cf41c7b61f04f01a22c39e.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Hero"]
+text = "HOW COOL IS THAT Whenever this character is challenged, gain 2 lore."

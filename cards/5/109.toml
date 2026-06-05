@@ -1,0 +1,12 @@
+name = "Scar - Betrayer"
+type = "Character"
+cost = 5
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0e2b19d48e8447f19582feef97a52725.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Villain"]
+text = "LONG LIVE THE KING When you play this character, you may banish chosen character named Mufasa."

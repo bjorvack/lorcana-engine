@@ -1,0 +1,13 @@
+name = "Philoctetes - Trainer of Heroes"
+type = "Character"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3d8ce215614244a483a06d6ecf99c2e2.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Mentor"]
+keywords = ["Support"]
+text = "Support (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)"

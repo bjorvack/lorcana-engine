@@ -1,0 +1,11 @@
+name = "Ariel - Whoseit Collector"
+type = "Character"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a23c99ed9f3243969466fb000bd139dc.avif?1709690747"
+max_copies = 4
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero", "Princess"]
+text = "LOOK AT THIS STUFF Whenever you play an item, you may ready this character."

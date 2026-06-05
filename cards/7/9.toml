@@ -1,0 +1,12 @@
+name = "Mittens - Sassy Street Cat"
+type = "Character"
+cost = 5
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9b5d0e7c5c15447d9f17ea4419b07e3f.avif?1740589133"
+max_copies = 4
+strength = 4
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Ally"]
+keywords = ["Bodyguard"]
+text = "Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)\nNO THANKS NECESSARY Once during your turn, whenever a card is put into your inkwell, your other characters with Bodyguard get +1 {L} this turn."

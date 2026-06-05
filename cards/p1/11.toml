@@ -1,0 +1,13 @@
+name = "Mickey Mouse - Musketeer"
+type = "Character"
+cost = 6
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e81b8a65eb1f4006a70ca1cc89adc3b2.avif?1728609660"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 7
+lore = 2
+classifications = ["Dreamborn", "Hero", "Musketeer"]
+keywords = ["Bodyguard"]
+text = "Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)\nALL FOR ONE Your other Musketeer characters get +1 {S}."

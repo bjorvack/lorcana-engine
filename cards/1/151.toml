@@ -1,0 +1,11 @@
+name = "Maleficent - Uninvited"
+type = "Character"
+cost = 5
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7d72a31f03964ae2b79110b788039b73.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 6
+lore = 3
+classifications = ["Dreamborn", "Villain", "Sorcerer"]

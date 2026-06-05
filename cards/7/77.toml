@@ -1,0 +1,11 @@
+name = "Kashekim - Ancient Ruler"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0c0360dcefeb4a60bec287543d586f28.avif?1740589403"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "King"]

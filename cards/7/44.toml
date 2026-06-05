@@ -1,0 +1,7 @@
+name = "The Glass Slipper"
+type = "Item"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_68e6c910a8e74691b4a10dd1d5560643.avif?1740589274"
+max_copies = 2
+text = "PERFECT PAIR You may only have 2 copies of The Glass Slipper in your deck.\nSEARCH THE KINGDOM Banish this item, {E} one of your Prince characters – Search your deck for a Princess character card and reveal it to all players. Put that card into your hand and shuffle your deck."

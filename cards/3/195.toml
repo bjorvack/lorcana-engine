@@ -1,0 +1,7 @@
+name = "And Then Along Came Zeus"
+type = "Song"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_420df750d99c4942abedc0cde1307a3a.avif?1709690747"
+max_copies = 4
+text = "(A character with cost 4 or more can {E} to sing this song for free.)\nDeal 5 damage to chosen character or location."

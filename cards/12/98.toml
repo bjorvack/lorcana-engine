@@ -1,0 +1,8 @@
+name = "Buzz's Arm"
+type = "Item"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_eb78022ded274a99bea1f50570755b37.avif?1777687546"
+max_copies = 4
+inkwell = true
+text = "MISSING PIECE If a character named Buzz Lightyear was banished this turn, you may play this item for free.\nSOME ASSEMBLY REQUIRED {E} — You pay 1 {I} less for the next action or item you play this turn."

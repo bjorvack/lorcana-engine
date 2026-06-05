@@ -1,0 +1,12 @@
+name = "Helga Sinclair - Tough as Nails"
+type = "Character"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ba65ec4007544e7ba265690e8e823312.avif?1740589831"
+max_copies = 4
+strength = 0
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Villain"]
+keywords = ["Challenger 3"]
+text = "Challenger +3 (While challenging, this character gets +3 {S}).\nQUICK REFLEXES During your turn, this character gains Evasive. (They can challenge characters with Evasive.)"

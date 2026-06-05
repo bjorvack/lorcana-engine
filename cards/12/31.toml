@@ -1,0 +1,7 @@
+name = "Metamorphosis"
+type = "Action"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_bd6859c3955c47818b6c6df4df09bc69.avif?1777687259"
+max_copies = 4
+text = "Shift a character from your discard for free."

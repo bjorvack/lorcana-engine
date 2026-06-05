@@ -1,0 +1,10 @@
+name = "Leviathan's Lair - Dangerous Ground"
+type = "Location"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6390182da0394996b7ea68dee5b0de54.avif?1777687691"
+max_copies = 4
+move_cost = 1
+willpower = 4
+lore = 2
+text = "LOST TO THE DUNES When this location is banished, each opponent chooses and banishes one of their characters."

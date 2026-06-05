@@ -1,0 +1,7 @@
+name = "Firefly Swarm"
+type = "Action"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_cf31223643444ceab69c0a9fddd46f22.avif?1777687668"
+max_copies = 4
+text = "Choose one:\n• Banish chosen character with 2 {S} or less.\n• If 2 or more other cards were put into your discard this turn, banish chosen character."

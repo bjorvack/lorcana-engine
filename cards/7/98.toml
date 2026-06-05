@@ -1,0 +1,11 @@
+name = "Donald Duck - Lively Pirate"
+type = "Character"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3c1ded27230c410bb3f454c406bab158.avif?1740589492"
+max_copies = 4
+strength = 1
+willpower = 1
+lore = 2
+classifications = ["Dreamborn", "Hero", "Pirate"]
+text = "DUCK OF ACTION Whenever this character is challenged, you may return an action card that isn't a song card from your discard to your hand."

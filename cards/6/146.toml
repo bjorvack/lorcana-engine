@@ -1,0 +1,11 @@
+name = "HeiHei - Not-So-Tricky Chicken"
+type = "Character"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e4908765126742488bab30dd0beb2c12.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally"]

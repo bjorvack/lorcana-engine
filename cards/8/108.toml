@@ -1,0 +1,12 @@
+name = "Don Karnage - Air Pirate Leader"
+type = "Character"
+cost = 3
+ink = ["Emerald", "Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_618a43c6b78446dbb31c8637116fafb7.avif?1747509071"
+max_copies = 4
+strength = 3
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Villain", "Prince", "Pirate"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)\nSCORNFUL TAUNT Whenever you play an action that isn't a song, chosen opposing character gains Reckless during their next turn. (They can't quest and must challenge if able.)"

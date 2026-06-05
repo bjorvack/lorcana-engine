@@ -1,0 +1,7 @@
+name = "Avalanche"
+type = "Action"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9bf4859e7a784073aa4b4de08c5211f0.avif?1716052430"
+max_copies = 4
+text = "Deal 1 damage to each opposing character. You may banish chosen location."

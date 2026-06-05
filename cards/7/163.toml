@@ -1,0 +1,12 @@
+name = "HeiHei - Expanded Consciousness"
+type = "Character"
+cost = 5
+ink = ["Sapphire", "Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f424db642c4340f7a412e29c1bcde568.avif?1740589752"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 5
+lore = 2
+classifications = ["Floodborn", "Ally"]
+keywords = ["Shift 3"]

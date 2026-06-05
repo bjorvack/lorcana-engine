@@ -1,0 +1,11 @@
+name = "Young Macintosh - Proud Son"
+type = "Character"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_35c7f5fe2959472a8f4abc38de41a8af.avif?1777687861"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 2
+lore = 2
+classifications = ["Storyborn", "Ally"]

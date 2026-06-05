@@ -1,0 +1,8 @@
+name = "Force of a Great Typhoon"
+type = "Song"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_dbff3559ccd647889b1fb934994a2d02.avif?1770259776"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 2 or more can {E} to sing this song for free.)\nChosen character gets +5 {S} this turn."

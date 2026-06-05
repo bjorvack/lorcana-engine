@@ -1,0 +1,13 @@
+name = "Judy Hopps - Resourceful Rabbit"
+type = "Character"
+cost = 6
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_17a352bad7df43d2bfd36a9c2c475c6c.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 6
+lore = 2
+classifications = ["Storyborn", "Hero"]
+keywords = ["Support"]
+text = "Support (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)\n\nNEED SOME HELP? At the end of your turn, you may ready another chosen character of yours."

@@ -1,0 +1,12 @@
+name = "Magica De Spell - Shadowy and Sinister"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6f5c4ee5c5ee4479be8ad253eb275033.avif?1761752122"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Villain", "Sorcerer"]
+text = "DARK INCANTATION When you play this character, you may shuffle a card from chosen player's discard into their deck."

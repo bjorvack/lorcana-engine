@@ -1,0 +1,7 @@
+name = "Pooh Pirate Ship"
+type = "Item"
+cost = 1
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4251575ec547497da73676a6a09c8872.avif?1730901319"
+max_copies = 4
+text = "MAKE A RESCUE {E}, 3 {I} – Return a Pirate character card from your discard to your hand."

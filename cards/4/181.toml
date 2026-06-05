@@ -1,0 +1,12 @@
+name = "LeFou - Opportunistic Flunky"
+type = "Character"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_91f835d4527741b8b1190e6695d55698.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Ally"]
+text = "I LEARNED FROM THE BEST During your turn, you may play this character for free if an opposing character was banished in a challenge this turn."

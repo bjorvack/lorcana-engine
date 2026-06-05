@@ -1,0 +1,12 @@
+name = "Robin Hood - Archery Contestant"
+type = "Character"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5d3eec99c8a746a5b8b774fb50cc5180.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Hero"]
+text = "TRICK SHOT When you play this character, if an opponent has a damaged character in play, gain 1 lore."

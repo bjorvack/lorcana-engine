@@ -1,0 +1,11 @@
+name = "Duke of Weselton - Opportunistic Official"
+type = "Character"
+cost = 1
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_fb2dc6f12f584032a54f9925f060e059.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Villain"]

@@ -1,0 +1,12 @@
+name = "Arthur - Determined Squire"
+type = "Character"
+cost = 4
+ink = ["Sapphire", "Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c79a6e612467451ca809ce7ed1a9889f.avif?1747509397"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 6
+lore = 3
+classifications = ["Storyborn", "Hero"]
+text = "NO MORE BOOKS Skip your turn's Draw step."

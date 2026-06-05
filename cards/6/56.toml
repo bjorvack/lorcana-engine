@@ -1,0 +1,12 @@
+name = "Yzma - Conniving Chemist"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_02c20f35d83f4d6094a4427dae0c821f.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Villain", "Sorcerer"]
+text = "FEEL THE POWER {E} - If you have fewer than 3 cards in your hand, draw until you have 3 cards in your hand."

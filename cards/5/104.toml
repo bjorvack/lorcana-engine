@@ -1,0 +1,12 @@
+name = "Wreck-It Ralph - Demolition Dude"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f41934191f364d68bc66e64860cc0c92.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Hero"]
+text = "REFRESHING BREAK Whenever you ready this character, gain 1 lore for each 1 damage on him."

@@ -1,0 +1,8 @@
+name = "Ohana Means Family"
+type = "Action"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b1aa36e48c8e4041b07e30efb7837fa3.avif?1770259344"
+max_copies = 4
+inkwell = true
+text = "Remove all damage from chosen character of yours. Draw a card for each 1 damage removed this way."

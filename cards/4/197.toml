@@ -1,0 +1,7 @@
+name = "One Last Hope"
+type = "Song"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8d3ed88361eb4e9e8af1cc1658ec69b1.avif?1716052430"
+max_copies = 4
+text = "(A character with cost 3 or more can {E} to sing this song for free.)\nChosen character gains Resist +2 until the start of your next turn. If a Hero character is chosen, they may also challenge ready characters this turn. (Damage dealt to them is reduced by 2.)"

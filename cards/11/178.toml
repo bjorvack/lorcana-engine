@@ -1,0 +1,12 @@
+name = "Donald Duck - Along for the Ride"
+type = "Character"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d7b4bc07ebf4418eab82165a82343d18.avif?1770260000"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 6
+lore = 2
+classifications = ["Storyborn", "Hero"]
+text = "COMIN' THROUGH! When you play this character, you may banish chosen item."

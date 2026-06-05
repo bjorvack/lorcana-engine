@@ -1,0 +1,11 @@
+name = "Triton - The Sea King"
+type = "Character"
+cost = 7
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_76258afdc2084ca2b2657664bbca3efa.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 9
+lore = 2
+classifications = ["Storyborn", "King"]

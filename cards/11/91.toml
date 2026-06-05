@@ -1,0 +1,11 @@
+name = "Mickey Mouse - Snowboard Ace"
+type = "Character"
+cost = 6
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_23f005944c784e158b9709de1c587d1e.avif?1770259608"
+max_copies = 4
+strength = 4
+willpower = 6
+lore = 2
+classifications = ["Dreamborn", "Hero"]
+text = "SLIPPERY SLOPE When you play this character and when he leaves play, each opponent chooses and discards a card."

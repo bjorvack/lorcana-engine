@@ -1,0 +1,11 @@
+name = "Mickey Mouse - Inspirational Warrior"
+type = "Character"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7b39bf9a14c84b239c83583925fbfeff.avif?1740590267"
+max_copies = 4
+strength = 1
+willpower = 1
+lore = 1
+classifications = ["Dreamborn", "Hero"]
+text = "STIRRING SPIRIT During your turn, whenever this character banishes another character in a challenge, you may play a character for free."

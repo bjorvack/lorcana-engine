@@ -1,0 +1,7 @@
+name = "Helping Hand"
+type = "Action"
+cost = 1
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_82a7bdb095d2477bbad45e524ad4a7dd.avif?1730901319"
+max_copies = 4
+text = "Chosen character gains Support this turn. Draw a card. (Whenever they quest, you may add their {S} to another chosen character's {S} this turn.)"

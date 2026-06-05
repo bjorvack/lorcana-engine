@@ -1,0 +1,12 @@
+name = "Mickey Mouse - Standard Bearer"
+type = "Character"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1d3be42741804a65bec6c1e4c5cdabd3.avif?1755541324"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero"]
+text = "STAND STRONG When you play this character, chosen character gains Challenger +2 this turn. (They get +2 {S} while challenging.)"

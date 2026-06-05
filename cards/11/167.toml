@@ -1,0 +1,8 @@
+name = "Tiny Tim's Crutch"
+type = "Item"
+cost = 1
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f87c783d2fe2456687533d4b5f641131.avif?1770259952"
+max_copies = 4
+inkwell = true
+text = "AT YOUR SIDE {E} — Chosen character gains Support this turn. (Whenever they quest, you may add their {S} to another chosen character's {S} this turn.)"

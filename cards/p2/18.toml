@@ -1,0 +1,13 @@
+name = "Mickey Mouse - Pirate Captain"
+type = "Character"
+cost = 5
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5ede6a78d97e4352bdeef2039b18806d.avif?1745500416"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 2
+classifications = ["Floodborn", "Hero", "Pirate", "Captain"]
+keywords = ["Shift 3"]
+text = "Shift 3 (You may pay 3 {I} to play this on top of one of your characters named Mickey Mouse.)\nMARINER'S MIGHT Whenever this character quests, chosen Pirate character gets +2 {S} and gains “This character takes no damage from challenges” this turn."

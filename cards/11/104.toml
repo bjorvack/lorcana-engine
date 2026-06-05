@@ -1,0 +1,12 @@
+name = "Scrooge McDuck - Ghostly Ebenezer"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4209198480ed495d9d5ed7608ece035f.avif?1770259667"
+max_copies = 4
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Villain", "Ghost"]
+keywords = ["Boost 1"]
+text = "Boost 1 {I} (Once during your turn, you may pay 1 {I} to put the top card of your deck facedown under this character.)\nCOUNTING COINS This character gets +1 {S} and +1 {W} for each card under him."

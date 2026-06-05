@@ -1,0 +1,12 @@
+name = "Flotsam & Jetsam - Entangling Eels"
+type = "Character"
+cost = 6
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2eb85540f12446e38d0eef16937315eb.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 5
+lore = 2
+classifications = ["Floodborn", "Ally"]
+text = "Shift: Discard 2 cards (You may discard 2 cards to play this on top of one of your characters named Flotsam or Jetsam.)\n(This character counts as being named both Flotsam and Jetsam.)"

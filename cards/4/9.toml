@@ -1,0 +1,11 @@
+name = "Félix Madrigal - Fun-Loving Family Man"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_294d9cff39f64e0394a0af134957afc3.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Ally", "Madrigal"]

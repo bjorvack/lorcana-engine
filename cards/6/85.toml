@@ -1,0 +1,12 @@
+name = "Peter Pan - Never Land Prankster"
+type = "Character"
+cost = 7
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_582e975ec5b64cb7be3e406585a05a6d.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 6
+lore = 1
+classifications = ["Storyborn", "Hero"]
+text = "LOOK INNOCENT This character enters play exerted.\nCAN'T TAKE A JOKE? While this character is exerted, each opposing player can't gain lore unless one of their characters has challenged this turn."

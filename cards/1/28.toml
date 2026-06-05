@@ -1,0 +1,8 @@
+name = "Healing Glow"
+type = "Action"
+cost = 1
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ce4f357a6aa24302ba5553eefea4930a.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "Remove up to 2 damage from chosen character."

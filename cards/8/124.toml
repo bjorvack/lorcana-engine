@@ -1,0 +1,13 @@
+name = "Vanellope Von Schweetz - Spunky Speedster"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3b52c05d999944679005cd5fe94c2adb.avif?1747509152"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Hero", "Princess", "Racer"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)"

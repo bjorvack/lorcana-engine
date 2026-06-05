@@ -1,0 +1,13 @@
+name = "Willie the Giant - Ghost of Christmas Present"
+type = "Character"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f472ec7c6a294a6498f3788b189472c4.avif?1770259766"
+max_copies = 4
+inkwell = true
+strength = 7
+willpower = 7
+lore = 2
+classifications = ["Storyborn", "Ally", "Ghost", "Giant"]
+keywords = ["Boost 3"]
+text = "Boost 3 {I} (Once during your turn, you may pay 3 {I} to put the top card of your deck facedown under this character.)\nTHE FOOD OF GENEROSITY This character can't quest or challenge unless you put a card under him this turn."

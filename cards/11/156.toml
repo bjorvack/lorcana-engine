@@ -1,0 +1,13 @@
+name = "Tamatoa - Seeker of Shine"
+type = "Character"
+cost = 7
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1ec6bad52ccc4a4facc7bbe7e7aa6c53.avif?1770259904"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 6
+lore = 1
+classifications = ["Storyborn", "Villain", "Whisper"]
+keywords = ["Boost 2", "Ward"]
+text = "Boost 2 {I} (Once during your turn, you may pay 2 {I} to put the top card of your deck facedown under this character.)\nWard (Opponents can't choose this character except to challenge.)\nANYTHING THAT GLITTERS Whenever you put a card under one of your characters or locations, this character gets +1 {L} this turn."

@@ -1,0 +1,11 @@
+name = "Widow Tweed - Kindly Soul"
+type = "Character"
+cost = 6
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5d8b927e8f92419c93dd42424d44f562.avif?1770259316"
+max_copies = 4
+strength = 2
+willpower = 8
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "I'VE GOT YOU When you play this character, return a character card from your discard to your hand. If that character is named Tod, you may play him for free."

@@ -1,0 +1,11 @@
+name = "Negaduck - Evil Doppelganger"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c7e5c7bde26548919587cb50662ebef3.avif?1770259716"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Super", "Villain"]

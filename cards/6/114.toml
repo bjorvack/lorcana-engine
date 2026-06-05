@@ -1,0 +1,12 @@
+name = "Abu - Bold Helmsman"
+type = "Character"
+cost = 5
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4b053bdcc56546798dfd962d892a3630.avif?1730901319"
+max_copies = 4
+strength = 4
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Ally"]
+keywords = ["Rush"]
+text = "Rush (This character can challenge the turn they're played.)"

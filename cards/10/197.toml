@@ -1,0 +1,7 @@
+name = "He Hurled His Thunderbolt"
+type = "Song"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d1d7087095df46dbaeafac4d6512d2ae.avif?1761764970"
+max_copies = 4
+text = "(A character with cost 4 or more can {E} to sing this song for free.)\nDeal 4 damage to chosen character. Your Deity characters gain Challenger +2 this turn. (They get +2 {S} while challenging.)"

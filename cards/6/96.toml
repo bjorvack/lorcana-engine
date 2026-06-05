@@ -1,0 +1,8 @@
+name = "Mosquito Bite"
+type = "Action"
+cost = 1
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b2f167a1614348f194ac43b390bd7fe1.avif?1730901319"
+max_copies = 4
+inkwell = true
+text = "Put 1 damage counter on chosen character."

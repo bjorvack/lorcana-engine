@@ -1,0 +1,12 @@
+name = "Joshua Sweet - Field Surgeon"
+type = "Character"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_fd42305369ea44619d7dc7af6eb418a9.avif?1777687504"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 1
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "NO PATIENCE Whenever this character is challenged, chosen opponent chooses and discards a card."

@@ -1,0 +1,13 @@
+name = "Gaston - Baritone Bully"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_88ec6886b1a0481c9ab402049d1649e8.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Villain"]
+keywords = ["Singer 5"]
+text = "Singer 5 (This character counts as cost 5 to sing songs.)"

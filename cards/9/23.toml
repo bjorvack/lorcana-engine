@@ -1,0 +1,12 @@
+name = "Queen of Hearts - Wonderland Empress"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8da184a94db34eee8c9b4cc378a58d11.avif?1755540229"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Villain", "Queen"]
+text = "ALL WAYS HERE ARE MY WAYS Whenever this character quests, your other Villain characters get +1 {L} this turn."

@@ -1,0 +1,8 @@
+name = "Candy Drift"
+type = "Action"
+cost = 2
+ink = ["Amber", "Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_25e476ae1e6545bc87787d0705f87364.avif?1747507356"
+max_copies = 4
+inkwell = true
+text = "Draw a card. Chosen character of yours gets +5 {S} this turn. At the end of your turn, banish them."

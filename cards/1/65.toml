@@ -1,0 +1,8 @@
+name = "Reflection"
+type = "Song"
+cost = 1
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2edd696f67314cde96ae6ff8f6661033.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 1 or more can {E} to sing this song for free.)\nLook at the top 3 cards of your deck. Put them back on the top of your deck in any order."

@@ -1,0 +1,11 @@
+name = "Flynn Rider - Confident Vagabond"
+type = "Character"
+cost = 1
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e6055fbcee8a4a03a980c5e2e3a2cff9.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero", "Prince"]

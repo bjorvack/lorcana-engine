@@ -1,0 +1,11 @@
+name = "Merlin - Rabbit"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6ebf8ca0c6b848e992e9927bf0d93d2b.avif?1709690747"
+max_copies = 4
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Mentor", "Sorcerer"]
+text = "HOPPITY HIP! When you play this character and when he leaves play, you may draw a card."

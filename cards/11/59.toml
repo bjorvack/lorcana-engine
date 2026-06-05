@@ -1,0 +1,11 @@
+name = "Pua - Disgruntled Pig"
+type = "Character"
+cost = 1
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e7d84a4948de49e49e717671d44fbb4c.avif?1770259465"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally"]

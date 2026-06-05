@@ -1,0 +1,8 @@
+name = "The Magic Feather"
+type = "Item"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_34d603519eae499991189bf1efc0207c.avif?1755540513"
+max_copies = 4
+inkwell = true
+text = "NOW YOU CAN FLY! When you play this item, choose a character of yours. While this item is in play, that character gains Evasive. (Only characters with Evasive can challenge them.)\nGROUNDED 3 {I} — Return this item to your hand."

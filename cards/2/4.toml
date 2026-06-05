@@ -1,0 +1,11 @@
+name = "Cobra Bubbles - Just a Social Worker"
+type = "Character"
+cost = 7
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ab2c56210cf647609962b1be64726001.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 9
+lore = 2
+classifications = ["Storyborn", "Ally"]

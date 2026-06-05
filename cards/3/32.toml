@@ -1,0 +1,10 @@
+name = "Never Land - Mermaid Lagoon"
+type = "Location"
+cost = 1
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b9ecaeeeee5a467ea41b58edda3b8f13.avif?1709690747"
+max_copies = 4
+inkwell = true
+move_cost = 1
+willpower = 4
+lore = 1

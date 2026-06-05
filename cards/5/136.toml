@@ -1,0 +1,11 @@
+name = "Ratigan's Party - Seedy Back Room"
+type = "Location"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2c1dd652a2ff4655a1e26419afe50b4e.avif?1723917209"
+max_copies = 4
+inkwell = true
+move_cost = 1
+willpower = 7
+lore = 0
+text = "MISFITS' REVELRY While you have a damaged character here, this location gets +2 {L}."

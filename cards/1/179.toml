@@ -1,0 +1,11 @@
+name = "Goons - Maleficent's Underlings"
+type = "Character"
+cost = 1
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_665baed36bfe4c0194ea9e3b22b19ac2.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally"]

@@ -1,0 +1,12 @@
+name = "Flynn Rider - Frenemy"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7cdbe543d7e447a6a84144d85870b3b9.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Hero", "Prince"]
+text = "NARROW ADVANTAGE At the start of your turn, if you have a character in play with more {S} than each opposing character, gain 3 lore."

@@ -1,0 +1,12 @@
+name = "Grumpy - Bad-Tempered"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9d62c487faa543c78f964ac8ff1a73f6.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally", "Seven Dwarfs"]
+text = "THERE'S TROUBLE A-BREWIN' Your other Seven Dwarfs characters get +1 {S}."

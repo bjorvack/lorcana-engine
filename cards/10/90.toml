@@ -1,0 +1,12 @@
+name = "Akela - Forest Runner"
+type = "Character"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_37c56a7dac1a492499e021595eda74a7.avif?1761752368"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "AHEAD OF THE PACK 1 {I} — This character gets +1 {S} this turn."

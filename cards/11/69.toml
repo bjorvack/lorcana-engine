@@ -1,0 +1,12 @@
+name = "Mulan - Resourceful Recruit"
+type = "Character"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3825929341ca42099c98d099ed40d2ac.avif?1770259509"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 4
+lore = 0
+classifications = ["Storyborn", "Hero", "Princess"]
+text = "RIGOROUS TRAINING Whenever this character quests, gain lore equal to her {S}, to a maximum of 6 lore."

@@ -1,0 +1,13 @@
+name = "Bobby - Purple Pigeon"
+type = "Character"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_88d71cff12ab4e23940f32ab8c568af4.avif?1747509454"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 2
+lore = 1
+classifications = ["Storyborn"]
+keywords = ["Bodyguard"]
+text = "Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)"

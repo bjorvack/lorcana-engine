@@ -1,0 +1,11 @@
+name = "Minnie Mouse - Quick-Thinking Inventor"
+type = "Character"
+cost = 1
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a5dbf42b10974a1d96749b32de706c58.avif?1723917209"
+max_copies = 4
+strength = 1
+willpower = 2
+lore = 1
+classifications = ["Dreamborn", "Hero", "Inventor"]
+text = "CAKE CATAPULT When you play this character, chosen character gets -2 {S} this turn."

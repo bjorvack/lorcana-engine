@@ -1,0 +1,12 @@
+name = "Faline - Playful Fawn"
+type = "Character"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_586a47f740a3450b930cd1cbc7f3e640.avif?1747509276"
+max_copies = 4
+strength = 2
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)\nPRECOCIOUS FRIEND While you have a character in play with more {S} than each opposing character, this character gets +2 {L}."

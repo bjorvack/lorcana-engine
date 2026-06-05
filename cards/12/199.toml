@@ -1,0 +1,8 @@
+name = "Touch the Sky"
+type = "Song"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0b20b27507194e779b1e9d043d19e5de.avif?1777687930"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 2 or more can {E} to sing this song for free.)\nMove a character of yours to a location for free. Then, draw cards equal to that location's {L}."

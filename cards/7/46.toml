@@ -1,0 +1,11 @@
+name = "Tanana - Tribal Elder"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_fc616b53f3414fafa9aa52283d03fa3e.avif?1740589282"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally"]

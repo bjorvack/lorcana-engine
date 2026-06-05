@@ -1,0 +1,8 @@
+name = "Last Cannon"
+type = "Item"
+cost = 1
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a776fb952998401394dcee6936d85b56.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "ARM YOURSELF 1 {I}, Banish this item — Chosen character gains Challenger +3 this turn. (They get +3 {S} while challenging.)"

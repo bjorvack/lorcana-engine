@@ -1,0 +1,12 @@
+name = "Raya - Guidance Seeker"
+type = "Character"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0ab7da34efae4501b26ae156eb69755c.avif?1740589842"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Hero", "Princess"]
+text = "A GREATER PURPOSE During your turn, whenever a card is put into your inkwell, this character gains Resist +1 until the start of your next turn. (Damage dealt to them is reduced by 1.)"

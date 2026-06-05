@@ -1,0 +1,11 @@
+name = "Magic Broom - Lively Sweeper"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_bdc1291ed02b4526802da87554f615fd.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 4
+lore = 1
+classifications = ["Dreamborn", "Broom"]

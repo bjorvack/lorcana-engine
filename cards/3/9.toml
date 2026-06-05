@@ -1,0 +1,13 @@
+name = "Minnie Mouse - Musical Artist"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a6d0aaef05744b279192132d481af4be.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Hero"]
+keywords = ["Singer 3"]
+text = "Singer 3 (This character counts as cost 3 to sing songs.)\nENTOURAGE Whenever you play a character with Bodyguard, you may remove up to 2 damage from chosen character."

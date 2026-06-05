@@ -1,0 +1,12 @@
+name = "Merlin - Clever Clairvoyant"
+type = "Character"
+cost = 1
+ink = ["Amethyst", "Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1acf47f176fd481791f5e79e900fefe6.avif?1740589364"
+max_copies = 4
+inkwell = true
+strength = 0
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Mentor", "Sorcerer"]
+text = "PRESTIDIGITONIUM Whenever this character quests, name a card, then reveal the top card of your deck. If it's the named card, put it into your inkwell facedown and exerted. Otherwise, put it on the top of your deck."

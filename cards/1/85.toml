@@ -1,0 +1,11 @@
+name = "Lady Tremaine - Wicked Stepmother"
+type = "Character"
+cost = 6
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1acda7d08eb443e9bd36798a1fd7741a.avif?1709690747"
+max_copies = 4
+strength = 1
+willpower = 5
+lore = 1
+classifications = ["Dreamborn", "Villain"]
+text = "DO IT AGAIN! When you play this character, you may return an action card from your discard to your hand."

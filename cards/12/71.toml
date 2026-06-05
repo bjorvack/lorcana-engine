@@ -1,0 +1,11 @@
+name = "Young MacGuffin - Soft-Spoken Son"
+type = "Character"
+cost = 1
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0e3b42aaf42e4bc9bdc7b2814a825893.avif?1777687437"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally"]

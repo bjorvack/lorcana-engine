@@ -1,0 +1,11 @@
+name = "Lucifer - Cunning Cat"
+type = "Character"
+cost = 5
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_436427be3a944c3983c61f6038ef6ea6.avif?1709690747"
+max_copies = 4
+strength = 2
+willpower = 2
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "MOUSE CATCHER When you play this character, each opponent chooses and discards either 2 cards or 1 action card."

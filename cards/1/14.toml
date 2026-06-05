@@ -1,0 +1,12 @@
+name = "Moana - Of Motunui"
+type = "Character"
+cost = 5
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6c18714222c749b8b16800630a5d26cf.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 6
+lore = 3
+classifications = ["Storyborn", "Hero", "Princess"]
+text = "WE CAN FIX IT Whenever this character quests, you may ready your other Princess characters. They can't quest for the rest of this turn."

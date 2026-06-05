@@ -1,0 +1,13 @@
+name = "Luisa Madrigal - Confident Climber"
+type = "Character"
+cost = 5
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_46ca002a8945440398b20c8e4ad6b6eb.avif?1777687396"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 4
+lore = 1
+classifications = ["Floodborn", "Ally", "Madrigal"]
+keywords = ["Shift 3"]
+text = "Shift 3 {I} (You may pay 3 {I} to play this on top of one of your characters named Luisa Madrigal.)\nI CAN TAKE IT 1 {I} — Move up to 1 damage from chosen character of yours to this character. Then, if this character has 3 or more damage, move all damage from this character to chosen opposing character."

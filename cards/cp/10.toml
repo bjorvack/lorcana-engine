@@ -1,0 +1,7 @@
+name = "A Whole New World"
+type = "Song"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_94aea01bdb0a49a4aff52b8802388bb1.avif?1755566321"
+max_copies = 4
+text = "(A character with cost 5 or more can {E} to sing this song for free.)\nEach player discards their hand and draws 7 cards."

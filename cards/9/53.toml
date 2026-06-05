@@ -1,0 +1,12 @@
+name = "Elsa - Snow Queen"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_285e5cadf23a4b2b836effe0550a237a.avif?1755540438"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Hero", "Queen", "Sorcerer"]
+text = "FREEZE {E} — Exert chosen opposing character."

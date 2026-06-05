@@ -1,0 +1,12 @@
+name = "Lumiere - Fiery Friend"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_724fef83bb594bbf883b6fc1bcc6d4e2.avif?1755540891"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Dreamborn", "Ally"]
+text = "FERVENT ADDRESS Your other characters get +1 {S}."

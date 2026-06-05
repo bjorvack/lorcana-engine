@@ -1,0 +1,10 @@
+name = "Forbidden Mountain - Maleficent's Castle"
+type = "Location"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5ac4816ce7b240db942b5963a8db9909.avif?1709690747"
+max_copies = 4
+inkwell = true
+move_cost = 1
+willpower = 6
+lore = 1

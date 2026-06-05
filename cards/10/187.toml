@@ -1,0 +1,12 @@
+name = "Nick Wilde - Persistent Investigator"
+type = "Character"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5f0c0fa9eb5d4394bac82782bef7aaef.avif?1761764864"
+max_copies = 4
+strength = 5
+willpower = 4
+lore = 2
+classifications = ["Floodborn", "Ally", "Detective"]
+keywords = ["Shift 3"]
+text = "Shift 3 {I} (You may pay 3 {I} to play this on top of one of your characters named Nick Wilde.)\nCASE CLOSED During your turn, whenever one of your Detective characters banishes another character in a challenge, draw a card."

@@ -1,0 +1,8 @@
+name = "Control Your Temper!"
+type = "Action"
+cost = 1
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3a593c8dd2fe4552a4874f7346527387.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "Chosen character gets -2 {S} this turn."

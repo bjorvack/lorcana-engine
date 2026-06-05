@@ -1,0 +1,12 @@
+name = "Anita Radcliffe - Dog Lover"
+type = "Character"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3e1fbfdb7f9c42119cd02bba07f694e7.avif?1747509343"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "I'LL TAKE CARE OF YOU When you play this character, you may give chosen Puppy character Resist +1 until the start of your next turn. (Damage dealt to them is reduced by 1.)"

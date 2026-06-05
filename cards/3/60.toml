@@ -1,0 +1,8 @@
+name = "Bestow a Gift"
+type = "Action"
+cost = 1
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f3f30e7e137c4336a2551abfa4b4eeaf.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "Move 1 damage counter from chosen character to chosen opposing character."

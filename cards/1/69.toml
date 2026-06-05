@@ -1,0 +1,13 @@
+name = "Aladdin - Prince Ali"
+type = "Character"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_cae2a3157f7a42d782a2c3cefae01615.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Hero", "Prince"]
+keywords = ["Ward"]
+text = "Ward (Opponents can't choose this character except to challenge.)"

@@ -1,0 +1,12 @@
+name = "The Dodo - Outlandish Storyteller"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_98f834b45bba4455b572aa08bcfe8715.avif?1747509162"
+max_copies = 4
+inkwell = true
+strength = 0
+willpower = 6
+lore = 1
+classifications = ["Storyborn"]
+text = "EXTRAORDINARY SITUATION This character gets +1 {S} for each 1 damage on him."

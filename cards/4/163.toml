@@ -1,0 +1,8 @@
+name = "Glean"
+type = "Action"
+cost = 1
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3185489386dc4b9a833fec1e0668d65f.avif?1716052430"
+max_copies = 4
+inkwell = true
+text = "Banish chosen item. Its player gains 2 lore."

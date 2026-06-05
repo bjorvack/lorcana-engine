@@ -1,0 +1,8 @@
+name = "Work Together"
+type = "Action"
+cost = 1
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8f64870b7d4f490ea13c8da48ebe514b.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "Chosen character gains Support this turn. (Whenever they quest, you may add their {S} to another chosen character's {S} this turn.)"

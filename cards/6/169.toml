@@ -1,0 +1,11 @@
+name = "Rescue Rangers Submarine - Mobile Headquarters"
+type = "Location"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d6deefa8519c46a39b105b62d7b857f4.avif?1730901319"
+max_copies = 4
+inkwell = true
+move_cost = 1
+willpower = 8
+lore = 0
+text = "PLANNING SESSION At the start of your turn, if you have a character here, you may put the top card of your deck into your inkwell facedown and exerted."

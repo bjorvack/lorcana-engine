@@ -1,0 +1,11 @@
+name = "Monterey Jack - Hypnotized by Cheese"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_490b647e01e44f77b1413fa6fc30b023.avif?1777687157"
+max_copies = 4
+strength = 0
+willpower = 3
+lore = 3
+classifications = ["Storyborn", "Ally"]
+text = "BREAK THE TRANCE This character can't quest unless you have a character with 4 {W} or more in play."

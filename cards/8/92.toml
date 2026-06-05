@@ -1,0 +1,12 @@
+name = "Fred - Major Science Enthusiast"
+type = "Character"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_cce48aee1b594c6db6fbc7f6bc3eada7.avif?1747508962"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Hero"]
+text = "SPITTING FIRE! When you play this character, you may banish chosen item."

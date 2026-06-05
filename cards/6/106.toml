@@ -1,0 +1,12 @@
+name = "Jasmine - Rebellious Princess"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e093d909d79f4dd5baaccae93139c95b.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Hero", "Princess"]
+text = "YOU'LL NEVER MISS IT Whenever this character quests, each opponent loses 1 lore."

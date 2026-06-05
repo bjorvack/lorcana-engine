@@ -1,0 +1,12 @@
+name = "Mickey Mouse - Friendly Face"
+type = "Character"
+cost = 6
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e32380ac2e3f4e69b385cad4b3c3df11.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 6
+lore = 3
+classifications = ["Storyborn", "Hero"]
+text = "GLAD YOU'RE HERE! Whenever this character quests, you pay 3 {I} less for the next character you play this turn."

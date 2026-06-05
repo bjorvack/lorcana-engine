@@ -1,0 +1,12 @@
+name = "Bolt - Headstrong Dog"
+type = "Character"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b6cecef16e364dc6bbc9b538aaa52226.avif?1740589835"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero"]
+text = "THERE'S NO TURNING BACK Whenever this character quests, if he has no damage, you may draw a card, then choose and discard a card."

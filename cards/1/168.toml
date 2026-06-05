@@ -1,0 +1,8 @@
+name = "Fishbone Quill"
+type = "Item"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_33db0577186a4483aa85190fd0496d90.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "GO AHEAD AND SIGN {E} — Put any card from your hand into your inkwell facedown."

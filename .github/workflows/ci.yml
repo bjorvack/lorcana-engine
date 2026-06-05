@@ -19,6 +19,8 @@ jobs:
         with:
           components: rustfmt, clippy
       - uses: Swatinem/rust-cache@v2
+      - name: Generate card set files
+        run: python3 cards/scripts/combine_sets.py
       - name: Format
         run: cargo fmt --all --check
       - name: Clippy
@@ -36,6 +38,8 @@ jobs:
           targets: wasm32-unknown-unknown
           components: clippy
       - uses: Swatinem/rust-cache@v2
+      - name: Generate card set files
+        run: python3 cards/scripts/combine_sets.py
       - name: Clippy (wasm target)
         run: cargo clippy -p lorcana-wasm --target wasm32-unknown-unknown --all-features -- -D warnings
       - name: Unit tests (host)
@@ -63,6 +67,8 @@ jobs:
           node-version-file: web/.nvmrc
           cache: npm
           cache-dependency-path: web/package-lock.json
+      - name: Generate card set files
+        run: python3 cards/scripts/combine_sets.py
       - name: Build wasm package
         run: bash scripts/build-wasm.sh
       - name: Install web deps
@@ -91,6 +97,8 @@ jobs:
           components: llvm-tools-preview
       - uses: Swatinem/rust-cache@v2
       - uses: taiki-e/install-action@cargo-llvm-cov
+      - name: Generate card set files
+        run: python3 cards/scripts/combine_sets.py
       - name: Generate coverage (lcov + summary)
         run: |
           cargo llvm-cov --all-features --workspace --lcov --output-path lcov.info

@@ -1,0 +1,11 @@
+name = "King Hubert - Phillip's Father"
+type = "Character"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d9abb9a8a381433486a5da9e3173de4b.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Mentor", "King"]

@@ -1,0 +1,12 @@
+name = "Rapunzel - Creative Captor"
+type = "Character"
+cost = 5
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_000a947aaa794fb098baed9d88b6fab1.avif?1761764377"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 6
+lore = 2
+classifications = ["Storyborn", "Hero", "Princess"]
+text = "ENSNARL When you play this character, chosen opposing character gets -3 {S} this turn."

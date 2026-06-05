@@ -1,0 +1,7 @@
+name = "Kristoff's Lute"
+type = "Item"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ec94f5c4a31b40c99f5b421ac7dd3acf.avif?1770259798"
+max_copies = 4
+text = "MOMENT OF INSPIRATION {E}, 2 {I} — Reveal the top card of your deck. You may play it as if it were in your hand. Otherwise, put it in your discard."

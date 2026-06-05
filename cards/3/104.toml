@@ -1,0 +1,11 @@
+name = "Billy Bones - Keeper of the Map"
+type = "Character"
+cost = 5
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_962d3a1f68d842a2818db2f230723b87.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Alien", "Pirate"]

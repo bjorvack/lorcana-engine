@@ -1,0 +1,8 @@
+name = "Gold Coin"
+type = "Item"
+cost = 1
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2543ac0748a945e3a4a68ef2f90e2feb.avif?1730901319"
+max_copies = 4
+inkwell = true
+text = "GLITTERING ACCESS {E}, 1 {I}, Banish this item – Ready chosen character of yours. They can't quest for the rest of this turn."

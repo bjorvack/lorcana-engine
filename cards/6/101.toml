@@ -1,0 +1,11 @@
+name = "Perilous Maze - Watery Labyrinth"
+type = "Location"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_766de0c1ae8b4e5da1ecd7740eb5feb8.avif?1730901319"
+max_copies = 4
+inkwell = true
+move_cost = 1
+willpower = 8
+lore = 1
+text = "LOST IN THE WAVES Whenever a character is challenged while here, each opponent chooses and discards a card."

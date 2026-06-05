@@ -1,0 +1,13 @@
+name = "Morgana Macawber - Reformed Spellcaster"
+type = "Character"
+cost = 6
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1d1f7c6cafbd497292467de4c883cf0c.avif?1770259412"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 6
+lore = 1
+classifications = ["Floodborn", "Super", "Hero", "Sorcerer"]
+keywords = ["Shift 4"]
+text = "Shift 4 {I} (You may pay 4 {I} to play this on top of one of your characters named Morgana Macawber.)\nJUST FOR YOU When you play this character, you may choose an opposing character and move 1 damage from each other character to them."

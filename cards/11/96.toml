@@ -1,0 +1,8 @@
+name = "Freeze the Vine"
+type = "Action"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d8867ccffeba46a5b16ab0f876653f4b.avif?1770259631"
+max_copies = 4
+inkwell = true
+text = "Banish all locations. Draw 2 cards, then choose and discard a card."

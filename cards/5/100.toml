@@ -1,0 +1,7 @@
+name = "Emerald Chromicon"
+type = "Item"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_693273eeac4846a39a3539fc6ded617d.avif?1723917209"
+max_copies = 4
+text = "EMERALD LIGHT During opponents' turns, whenever one of your characters is banished, you may return chosen character to their player's hand."

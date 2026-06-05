@@ -1,0 +1,8 @@
+name = "Eye of the Fates"
+type = "Item"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2c6eae027003403c832a8463afbb6ec0.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "SEE THE FUTURE {E} — Chosen character gets +1 {L} this turn."

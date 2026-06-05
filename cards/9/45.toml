@@ -1,0 +1,13 @@
+name = "Dumbo - Ninth Wonder of the Universe"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_535bf9178837443f894f45d8c71045a0.avif?1755540368"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)\nBREAKING RECORDS {E}, 1 {I} – Draw a card and gain 1 lore.\nMAKING HISTORY Your other characters with Evasive gain \"{E}, 1 {I} – Draw a card and gain 1 lore.\""

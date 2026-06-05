@@ -1,0 +1,12 @@
+name = "Archimedes - Exceptional Owl"
+type = "Character"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_35cac934c7154962803cd87c1d34e32a.avif?1740589400"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "MORE TO LEARN Whenever an opponent chooses this character for an action or ability, you may draw a card."

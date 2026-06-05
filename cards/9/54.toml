@@ -1,0 +1,11 @@
+name = "Genie - Supportive Friend"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_777ef1df73214a63a89bce29396afefa.avif?1755540446"
+max_copies = 4
+strength = 3
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "THREE WISHES Whenever this character quests, you may shuffle this card into your deck to draw 3 cards."

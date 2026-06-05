@@ -1,0 +1,12 @@
+name = "Stitch - Little Trickster"
+type = "Character"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_91292f4ca0684baf9ed9715bf7caa07a.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero", "Alien"]
+text = "NEED A HAND? 1 {I} - This character gets +1 {S} this turn."

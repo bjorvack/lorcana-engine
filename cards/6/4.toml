@@ -1,0 +1,11 @@
+name = "Gopher - Ship's Carpenter"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_582917ea24ef4aa4a6921fcbe55d0100.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 6
+lore = 2
+classifications = ["Storyborn", "Ally", "Pirate"]

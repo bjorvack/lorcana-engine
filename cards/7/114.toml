@@ -1,0 +1,13 @@
+name = "Pete - Space Pirate"
+type = "Character"
+cost = 6
+ink = ["Emerald", "Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_874601077b644699b9e61662ec1c68a8.avif?1740589557"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 5
+lore = 2
+classifications = ["Floodborn", "Villain", "Pirate"]
+keywords = ["Shift 4"]
+text = "Shift 4 (You may pay 4 {I} to play this on top of one of your characters named Pete.)\nFRIGHTFUL SCHEME While this character is exerted, opposing characters can't exert to sing songs and your Pirate characters gain Resist +1. (Damage dealt to them is reduced by 1.)"

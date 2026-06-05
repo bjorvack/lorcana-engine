@@ -1,0 +1,11 @@
+name = "Marshmallow - Terrifying Snowman"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4539b94483584e5591a52ff5f95348ae.avif?1716052430"
+max_copies = 4
+strength = 0
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "BEHEMOTH This character gets +1 {S} for each card in your hand."

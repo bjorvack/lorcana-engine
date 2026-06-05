@@ -1,0 +1,11 @@
+name = "Fairy Godmother - Here to Help"
+type = "Character"
+cost = 5
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_28f00cdb65fe48deb2f97ff979670b4b.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 7
+lore = 2
+classifications = ["Storyborn", "Ally", "Fairy"]

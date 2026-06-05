@@ -1,0 +1,11 @@
+name = "The Great Illuminary - Radiant Ballroom"
+type = "Location"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5b27a13096a24ba4af338df7a19a358f.avif?1723917209"
+max_copies = 4
+inkwell = true
+move_cost = 2
+willpower = 9
+lore = 0
+text = "WARM WELCOME Characters with Support get +1 {L} and +2 {W} while here."

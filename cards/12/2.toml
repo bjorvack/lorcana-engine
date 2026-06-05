@@ -1,0 +1,11 @@
+name = "Monterey Jack - Watchful Ranger"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a277ec572a7c4e2b8a351bfd233c139c.avif?1777687111"
+max_copies = 4
+strength = 1
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "BIRD'S-EYE VIEW When you play this character, you may reveal the top card of your deck. If it's a character card, you may put it into your hand. Otherwise, put it on the bottom of your deck."

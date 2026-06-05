@@ -1,0 +1,7 @@
+name = "Sword in the Stone"
+type = "Item"
+cost = 1
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_24945449688b42f699bff7a47b3f282b.avif?1709690747"
+max_copies = 4
+text = "{E}, 2 {I} — Chosen character gets +1 {S} this turn for each 1 damage on them."

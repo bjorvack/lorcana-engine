@@ -1,0 +1,12 @@
+name = "Enchantress - Unexpected Judge"
+type = "Character"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3b397fb706a24feab4001ec2becf901a.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 1
+lore = 2
+classifications = ["Dreamborn", "Sorcerer"]
+text = "TRUE FORM While being challenged, this character gets +2 {S}."

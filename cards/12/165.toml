@@ -1,0 +1,8 @@
+name = "Salvage Operation"
+type = "Action"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_63707e5a57c94a458792bd9ae218a839.avif?1777687805"
+max_copies = 4
+inkwell = true
+text = "Return an item card from your discard to your hand. If you have a character with 4 {W} or more in play, gain 1 lore."

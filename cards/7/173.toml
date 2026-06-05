@@ -1,0 +1,11 @@
+name = "Jasmine - Inspired Researcher"
+type = "Character"
+cost = 5
+ink = ["Sapphire", "Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_62c3a4d3b2234f26b7d63be72faf93a4.avif?1740589791"
+max_copies = 4
+strength = 3
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Hero", "Princess"]
+text = "EXTRA ASSISTANCE Whenever this character quests, if you have no cards in your hand, draw a card for each Ally character you have in play."

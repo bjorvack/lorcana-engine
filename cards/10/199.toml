@@ -1,0 +1,8 @@
+name = "The Robot Queen"
+type = "Item"
+cost = 1
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_66f7d006b33147e3b08181ee9299e5d1.avif?1761765017"
+max_copies = 4
+inkwell = true
+text = "MAJOR MALFUNCTION Whenever you play a character, you may pay 1 {I} and banish this item to deal 2 damage to chosen character."

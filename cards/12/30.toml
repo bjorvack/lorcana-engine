@@ -1,0 +1,8 @@
+name = "You've Got a Friend in Me"
+type = "Song"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_27629d2527714727a23db4e81da1a520.avif?1777687254"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 3 or more can {E} to sing this song for free.) \nLook at the top 4 cards of your deck. You may reveal up to 2 Toy character cards and put them into your hand. Put the rest on the bottom of your deck in any order."

@@ -1,0 +1,12 @@
+name = "Pluto - Rescue Dog"
+type = "Character"
+cost = 5
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e16de0af3ca24eaa9e6570598920d9e8.avif?1755540173"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "TO THE RESCUE When you play this character, you may remove up to 3 damage from chosen character of yours."

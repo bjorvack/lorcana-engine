@@ -1,0 +1,11 @@
+name = "Goofy - Emerald Champion"
+type = "Character"
+cost = 5
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_feda80eba5264f44b483cb6b52fafb47.avif?1773508831"
+max_copies = 4
+strength = 3
+willpower = 5
+lore = 2
+classifications = ["Dreamborn", "Hero"]
+text = "EVEN THE SCORE Whenever one of your other Emerald characters is challenged and banished, banish the challenging character.\nPROVIDE COVER Your other Emerald characters gain Ward. (Opponents can't choose them except to challenge.)"

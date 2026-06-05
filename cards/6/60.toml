@@ -1,0 +1,8 @@
+name = "A Very Merry Unbirthday"
+type = "Song"
+cost = 1
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6b0de2d0a5b84b5f852ba2a8eccd1a17.avif?1730901319"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 1 or more can {E} to sing this song for free.)\nEach opponent puts the top 2 cards of their deck into their discard."

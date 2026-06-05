@@ -1,0 +1,12 @@
+name = "Pepa Madrigal - Sensitive Sister"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_dc149fc0470a4fc2a5cde6ba7dffbdd7.avif?1740589247"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally", "Madrigal"]
+text = "CLEAR SKIES, CLEAR SKIES Whenever one or more of your characters sings a song, gain 1 lore."

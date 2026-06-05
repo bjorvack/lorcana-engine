@@ -1,0 +1,8 @@
+name = "Ring the Bell"
+type = "Action"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_50bb3e4e83fa4e7d9e603a15bc296c3e.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "Banish chosen damaged character."

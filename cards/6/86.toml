@@ -1,0 +1,12 @@
+name = "Hercules - Baby Demigod"
+type = "Character"
+cost = 6
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3463916fe4e54939a91ee57a62d50ba2.avif?1730901319"
+max_copies = 4
+strength = 6
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Hero", "Prince"]
+keywords = ["Ward"]
+text = "Ward (Opponents can't choose this character except to challenge.)\nSTRONG LIKE HIS DAD 3 {I} - Deal 1 damage to chosen damaged character."

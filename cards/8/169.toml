@@ -1,0 +1,11 @@
+name = "Bernard - Over-Prepared"
+type = "Character"
+cost = 2
+ink = ["Sapphire", "Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_66c4a3962c704f18ac6b7131fa2662f1.avif?1747509400"
+max_copies = 4
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Hero"]
+text = "GO DOWN THERE AND INVESTIGATE When you play this character, if you have an Ally character in play, you may draw a card."

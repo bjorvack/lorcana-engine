@@ -1,0 +1,13 @@
+name = "Tiana - Warm and Happy"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0c1fa4bfab94474da9e4a8396bbed19f.avif?1770259220"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 2
+classifications = ["Dreamborn", "Hero", "Princess"]
+keywords = ["Support"]
+text = "Support (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)"

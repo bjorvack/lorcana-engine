@@ -1,0 +1,8 @@
+name = "Lead the Way"
+type = "Action"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_025d33fc4b0c45caabfa10a108e46acd.avif?1730901319"
+max_copies = 4
+inkwell = true
+text = "Your characters get +2 {S} this turn."

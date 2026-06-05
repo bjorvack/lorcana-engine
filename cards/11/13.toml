@@ -1,0 +1,11 @@
+name = "Grandmother Willow - Ancient Advisor"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a3822d68287f451baa20438d5a31e307.avif?1770259256"
+max_copies = 4
+strength = 1
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Mentor"]
+text = "SMOOTH THE WAY Once during your turn, you pay 1 {I} less for the next character you play this turn."

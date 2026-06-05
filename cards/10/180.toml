@@ -1,0 +1,12 @@
+name = "Hudson - Determined Reader"
+type = "Character"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_02e6e99d68464f9894c940f686132741.avif?1761764812"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Mentor", "Gargoyle"]
+text = "FINDING ANSWERS When you play this character, you may draw a card, then choose and discard a card.\nSTONE BY DAY If you have 3 or more cards in your hand, this character can't ready."

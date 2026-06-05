@@ -1,0 +1,12 @@
+name = "Chief Bogo - Commanding Officer"
+type = "Character"
+cost = 6
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_cafa13413b754a96b2ac5df738bd0b89.avif?1747506729"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 5
+lore = 1
+classifications = ["Storyborn"]
+text = "SENDING BACKUP During an opponent's turn, whenever one of your characters with Bodyguard is banished, you may reveal the top card of your deck. If it's a character card with cost 5 or less, you may play that character for free. Otherwise, put it on the top of your deck."

@@ -1,0 +1,12 @@
+name = "Mirabel Madrigal - Family Gatherer"
+type = "Character"
+cost = 5
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_79ca7c747dcb4e7189ed8bc3a6b14f8b.avif?1745500346"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 5
+lore = 5
+classifications = ["Storyborn", "Hero", "Madrigal"]
+text = "NOT WITHOUT MY FAMILY You can't play this character unless you have 5 or more characters in play."

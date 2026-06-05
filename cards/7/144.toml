@@ -1,0 +1,11 @@
+name = "Sir Kay - Unruly Knight"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ff5d1835b81b400cac7373fb6310ca6a.avif?1740589677"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 2
+classifications = ["Storyborn", "Knight"]

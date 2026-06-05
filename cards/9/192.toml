@@ -1,0 +1,12 @@
+name = "John Silver - Greedy Treasure Seeker"
+type = "Character"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8db5f81d06034612b857a11fc606c5d2.avif?1755541360"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Villain", "Alien", "Pirate", "Captain"]
+text = "CHART YOUR OWN COURSE For each location you have in play, this character gains Resist +1 and gets +1 {L}. (Damage dealt to them is reduced by 1.)"

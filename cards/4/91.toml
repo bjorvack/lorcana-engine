@@ -1,0 +1,11 @@
+name = "Tor - Florist"
+type = "Character"
+cost = 5
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_da27f6ea33754e3990af2592197c8c35.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 7
+lore = 1
+classifications = ["Dreamborn", "Ally"]

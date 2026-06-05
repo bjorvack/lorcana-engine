@@ -1,0 +1,12 @@
+name = "Queen of Hearts - Impatient Traveler"
+type = "Character"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b2eea1c89b5d48689e3fe6209acaae46.avif?1773508992"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 2
+lore = 2
+classifications = ["Dreamborn", "Villain", "Queen"]
+text = "ROYAL COMMAND Whenever this character quests, if you played another character this turn, chosen character gains Rush this turn. (They can challenge the turn they're played.)"

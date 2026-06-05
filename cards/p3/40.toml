@@ -1,0 +1,12 @@
+name = "Beast - Gracious Prince"
+type = "Character"
+cost = 5
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_559d04fd26174de38e6c40504c2f0b43.avif?1773508925"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Hero", "Prince"]
+text = "FULL DANCE CARD Your Princess characters get +1 {S} and +1 {W}."

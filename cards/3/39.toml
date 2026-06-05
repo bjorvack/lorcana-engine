@@ -1,0 +1,12 @@
+name = "Hydros - Ice Titan"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_fabf6b8091ab49a1b2dccff0b1bb66ab.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 2
+classifications = ["Storyborn", "Titan"]
+text = "BLIZZARD {E} — Exert chosen character."

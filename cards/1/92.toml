@@ -1,0 +1,11 @@
+name = "Tamatoa - Drab Little Crab"
+type = "Character"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ce61d71725be41b7a5a766b690f56a1b.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 4
+lore = 1
+classifications = ["Dreamborn"]

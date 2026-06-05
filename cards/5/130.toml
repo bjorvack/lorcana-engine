@@ -1,0 +1,7 @@
+name = "Glimmer vs Glimmer"
+type = "Action"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_00e4569178e847649514f979474839fe.avif?1723917209"
+max_copies = 4
+text = "Banish chosen character of yours to banish chosen character."

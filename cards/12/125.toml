@@ -1,0 +1,11 @@
+name = "The Leviathan - Guardian of Atlantis"
+type = "Character"
+cost = 10
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0a72279b05f0453399584e40b7caaa1d.avif?1777687648"
+max_copies = 4
+strength = 10
+willpower = 10
+lore = 3
+classifications = ["Dreamborn", "Monster", "Robot"]
+text = "IT'S A MACHINE! When you play this character, if 2 or more cards were put into your discard this turn, you may banish any number of chosen opposing characters with total {S} 10 or less."

@@ -1,0 +1,12 @@
+name = "Bashful - Hopeless Romantic"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ac175f73ee3c4cce86c8ffe6d32db73a.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 5
+lore = 3
+classifications = ["Storyborn", "Ally", "Seven Dwarfs"]
+text = "OH, GOSH! This character can't quest unless you have another Seven Dwarfs character in play."

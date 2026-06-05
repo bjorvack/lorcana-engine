@@ -1,0 +1,13 @@
+name = "The Queen - Cruelest of All"
+type = "Character"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_bc6df0ab3743447f9498d36c8f51fe73.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 0
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Villain", "Queen", "Sorcerer"]
+keywords = ["Ward"]
+text = "Ward (Opponents can't choose this character except to challenge.)"

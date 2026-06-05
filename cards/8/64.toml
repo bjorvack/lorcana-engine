@@ -1,0 +1,13 @@
+name = "Monstro - Infamous Whale"
+type = "Character"
+cost = 8
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_bb513d50f4fb44aab988cf4dca6c9fe5.avif?1747508711"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 8
+lore = 2
+classifications = ["Storyborn"]
+keywords = ["Rush"]
+text = "Rush (This character can challenge the turn they're played.)\nFULL BREACH Choose and discard a card – Ready this character. He can't quest for the rest of this turn."

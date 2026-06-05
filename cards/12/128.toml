@@ -1,0 +1,12 @@
+name = "Pterodactyl Janie Doll - Sid's Toy"
+type = "Character"
+cost = 1
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_97451c08fce84aa7a3685f87f9b40438.avif?1777687660"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Ally", "Toy"]
+text = "DOUBLE TRANSPLANT During your turn, when this character is banished, each opponent loses 1 lore and you gain 1 lore."

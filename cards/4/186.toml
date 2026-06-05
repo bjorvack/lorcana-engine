@@ -1,0 +1,13 @@
+name = "Magic Broom - Brigade Commander"
+type = "Character"
+cost = 6
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_989cc7ce93b04fae9388328e9f46d840.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 6
+lore = 2
+classifications = ["Dreamborn", "Broom"]
+keywords = ["Resist 1"]
+text = "Resist +1 (Damage dealt to this character is reduced by 1.)\nARMY OF BROOMS This character gets +2 {S} for each other character named Magic Broom you have in play."

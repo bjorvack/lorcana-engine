@@ -1,0 +1,12 @@
+name = "Maui - Soaring Demigod"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1b985f3a7a854505902294c666c69c34.avif?1709690747"
+max_copies = 4
+strength = 5
+willpower = 2
+lore = 0
+classifications = ["Storyborn", "Hero", "Deity"]
+keywords = ["Reckless"]
+text = "Reckless (This character can't quest and must challenge each turn if able.)\nIN MA BELLY Whenever a character of yours named HeiHei quests, this character gets +1 {L} and loses Reckless this turn."

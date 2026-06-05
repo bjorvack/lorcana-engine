@@ -1,0 +1,12 @@
+name = "Jingle Joe - Sid's Toy"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b55a67a84a954c57933ff1d7218f1093.avif?1777687595"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally", "Toy"]
+text = "TURN OUT THE LIGHT During your turn, whenever one of your other Toy characters is banished, chosen character of yours gains Evasive until the start of your next turn. (Only characters with Evasive can challenge them.)"

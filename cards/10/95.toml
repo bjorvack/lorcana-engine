@@ -1,0 +1,7 @@
+name = "Trust In Me"
+type = "Song"
+cost = 6
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a8554e2076074a8599f09e171436ac14.avif?1761752389"
+max_copies = 4
+text = "(A character with cost 6 or more can {E} to sing this song for free.)\nChoose one:\n- Each opposing character gets -1 until the start of your next turn.\n- Each opponent chooses and discards 2 cards."

@@ -1,0 +1,11 @@
+name = "Anna - Diplomatic Queen"
+type = "Character"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e572046b12da49769e2e492828d61636.avif?1723917209"
+max_copies = 4
+strength = 2
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Hero", "Queen"]
+text = "ROYAL RESOLUTION When you play this character, you may pay 2 {I} to choose one: \n• Each opponent chooses and discards a card. \n• Chosen character gets +2 {S} this turn. \n• Banish chosen damaged character."

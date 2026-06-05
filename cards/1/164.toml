@@ -1,0 +1,7 @@
+name = "One Jump Ahead"
+type = "Song"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0de7275633824d0f8b48461aa047a472.avif?1709690747"
+max_copies = 4
+text = "(A character with cost 2 or more can {E} to sing this song for free.)\nPut the top card of your deck into your inkwell facedown and exerted."

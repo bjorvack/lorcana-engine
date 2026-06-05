@@ -1,0 +1,8 @@
+name = "Pack Tactics"
+type = "Action"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3255845b67e447e9821ea5cee4848f57.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "Gain 1 lore for each damaged character opponents have in play."

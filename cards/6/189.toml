@@ -1,0 +1,11 @@
+name = "Gantu - Captain Crankyhead"
+type = "Character"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4ab60bc408c44708b7f820348cad85c5.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 3
+lore = 4
+classifications = ["Dreamborn", "Alien", "Captain"]

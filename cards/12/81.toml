@@ -1,0 +1,11 @@
+name = "Peter Pan - Searching Far and Wide"
+type = "Character"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d6cd900ff0684586bbcb200553e6cd9a.avif?1777687477"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 2
+classifications = ["Dreamborn", "Hero"]

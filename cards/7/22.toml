@@ -1,0 +1,12 @@
+name = "Fix-It Felix, Jr. - Pint-Sized Hero"
+type = "Character"
+cost = 5
+ink = ["Amber", "Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8e4e89a1b49c4ea5936be4e14cfadb46.avif?1740589186"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Hero", "Racer"]
+text = "LET'S GET TO WORK Whenever you return a Racer character card from your discard to your hand, you may ready chosen Racer character. They can't quest for the rest of this turn."

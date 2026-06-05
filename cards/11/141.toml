@@ -1,0 +1,12 @@
+name = "Minnie Mouse - Tiny Tim's Mother"
+type = "Character"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_33f12c74df68498cb444d6a493be67ef.avif?1770259835"
+max_copies = 4
+strength = 2
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Ally"]
+keywords = ["Support"]
+text = "Support (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)"

@@ -1,0 +1,13 @@
+name = "Lumiere - Fired Up"
+type = "Character"
+cost = 5
+ink = ["Ruby", "Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_29af9e5b5190472eaa2fb7e637fa3050.avif?1747509235"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 3
+lore = 2
+classifications = ["Floodborn", "Ally"]
+keywords = ["Evasive", "Shift 3"]
+text = "Shift 3 (You may pay 3 {I} to play this on top of one of your characters named Lumiere.)\nEvasive, Ward\nSACREBLEU!: Whenever one of your items is banished, this character gets +1 {L} this turn."

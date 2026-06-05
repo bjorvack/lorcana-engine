@@ -1,0 +1,12 @@
+name = "Gaston - Arrogant Showoff"
+type = "Character"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0e17eaad60a343068204ccdf776daa36.avif?1747509174"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Villain"]
+text = "BREAK APART When you play this character, you may banish one of your items to give chosen character +2 {S} this turn."

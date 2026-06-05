@@ -1,0 +1,13 @@
+name = "Mulan - Imperial General"
+type = "Character"
+cost = 7
+ink = ["Ruby", "Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5d754111355845818b81e2a9a506bab4.avif?1740589665"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 6
+lore = 2
+classifications = ["Floodborn", "Hero", "Princess"]
+keywords = ["Shift 5"]
+text = "Shift 5 (You may pay 5 {I} to play this on top of one of your characters named Mulan.)\nEvasive (Only characters with Evasive can challenge this character.)\nEXCEPTIONAL LEADER Whenever this character challenges another character, your other characters gain “This character can challenge ready characters” this turn."

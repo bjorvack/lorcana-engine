@@ -1,0 +1,12 @@
+name = "Milo Thatch - Spirited Scholar"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c219f80dc2d34bea9b7a9bfdb4e04528.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Hero"]
+text = "I'M YOUR MAN! While this character is at a location, he gets +2 {S}."

@@ -1,0 +1,12 @@
+name = "Hans - Brazen Manipulator"
+type = "Character"
+cost = 6
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c8a9d4fc3bd241468dc26f8415bea95a.avif?1761763640"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Villain", "Prince"]
+text = "JOSTLING FOR POWER King and Queen characters can't quest.\nGROWING INFLUENCE At the start of your turn, if an opponent has 2 or more ready characters in play, gain 2 lore."

@@ -1,0 +1,12 @@
+name = "Ratigan - Raging Rat"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_833361002e2a4571b9d12ba392560b16.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 5
+lore = 1
+classifications = ["Dreamborn", "Villain"]
+text = "NOTHING CAN STAND IN MY WAY While this character has damage, he gets +2 {S}."

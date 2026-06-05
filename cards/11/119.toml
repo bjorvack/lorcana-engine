@@ -1,0 +1,12 @@
+name = "Slushy - Glacial Guster"
+type = "Character"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_bf26fddf7a2741a48dbe56961de6a5cb.avif?1770259735"
+max_copies = 4
+strength = 5
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Alien"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)"

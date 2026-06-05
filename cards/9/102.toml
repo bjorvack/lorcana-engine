@@ -1,0 +1,11 @@
+name = "Hidden Cove - Tranquil Haven"
+type = "Location"
+cost = 1
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a7b30a7923bd4b3596c48ede7e6b438e.avif?1755540768"
+max_copies = 4
+inkwell = true
+move_cost = 1
+willpower = 6
+lore = 0
+text = "REVITALIZING WATERS Characters get +1 {S} and +1 {W} while here."

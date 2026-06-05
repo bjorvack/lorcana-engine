@@ -1,0 +1,8 @@
+name = "Develop Your Brain"
+type = "Action"
+cost = 1
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_441f1bb9f8c2478d84c13e70dd62755c.avif?1755541192"
+max_copies = 4
+inkwell = true
+text = "Look at the top 2 cards of your deck. Put one into your hand and the other on the bottom of your deck."

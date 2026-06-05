@@ -1,0 +1,13 @@
+name = "Jafar - Tyrannical Hypnotist"
+type = "Character"
+cost = 6
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1ba7f7638b4a47d29957c8eef13099b8.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 0
+willpower = 7
+lore = 2
+classifications = ["Dreamborn", "Villain", "Sorcerer"]
+keywords = ["Challenger 7"]
+text = "Challenger +7 (While challenging, this character gets +7 {S}.)\nINTIMIDATING GAZE Opposing characters with cost 4 or less can't challenge."

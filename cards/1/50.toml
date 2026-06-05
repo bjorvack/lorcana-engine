@@ -1,0 +1,11 @@
+name = "Marshmallow - Persistent Guardian"
+type = "Character"
+cost = 6
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_de3c296136f24c1a8bada1580861504c.avif?1709690747"
+max_copies = 4
+strength = 5
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "DURABLE When this character is banished in a challenge, you may return this card to your hand."

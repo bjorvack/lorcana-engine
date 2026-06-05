@@ -1,0 +1,12 @@
+name = "Earth Giant - Living Mountain"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_314343a109e74d31bb84143aeb72d25f.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "UNEARTHED When you play this character, each opponent draws a card."

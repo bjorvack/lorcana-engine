@@ -1,0 +1,11 @@
+name = "Arthur - Wart"
+type = "Character"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_93993a91205c4c6bb310fd17b0417b7f.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 2
+classifications = ["Storyborn", "Hero"]

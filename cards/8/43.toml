@@ -1,0 +1,8 @@
+name = "Trials and Tribulations"
+type = "Song"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0194ae6591894265a420ae3e50f6a355.avif?1747507373"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 2 or more can {E} to sing this song for free.)\nChosen character gets -4 {S} until the start of your next turn."

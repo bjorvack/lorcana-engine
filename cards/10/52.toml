@@ -1,0 +1,12 @@
+name = "Magica De Spell - Spiteful Sorceress"
+type = "Character"
+cost = 5
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e209409eb89242b58b08601654b417dc.avif?1761752171"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 6
+lore = 2
+classifications = ["Storyborn", "Villain", "Sorcerer"]
+text = "MYSTICAL MANIPULATION Whenever you put a card under one of your characters or locations, you may move 1 damage counter from chosen character to chosen opposing character."

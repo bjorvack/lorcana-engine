@@ -1,0 +1,12 @@
+name = "Rafiki - Mysterious Sage"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3939d10a183b4eb48b843a68c74ed87b.avif?1709690747"
+max_copies = 4
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Mentor", "Sorcerer"]
+keywords = ["Rush"]
+text = "Rush (This character can challenge the turn they're played.)"

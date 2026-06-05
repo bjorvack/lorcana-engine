@@ -1,0 +1,12 @@
+name = "Anna - Little Sister"
+type = "Character"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1ea627edc2aa4a099e53afb91a2bdbf1.avif?1770259434"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero", "Queen"]
+text = "UNEXPECTED DISCOVERY When you play this character, you may put a card from chosen player's discard on the bottom of their deck."

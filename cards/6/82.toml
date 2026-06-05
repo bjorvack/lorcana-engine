@@ -1,0 +1,11 @@
+name = "Mertle Edmonds - Lilo's Rival"
+type = "Character"
+cost = 1
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_23e456f99c354c9892c90d72d6992bcb.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Storyborn"]

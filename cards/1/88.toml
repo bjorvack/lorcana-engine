@@ -1,0 +1,12 @@
+name = "Mickey Mouse - Artful Rogue"
+type = "Character"
+cost = 7
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1fc96a36c5a94f05a295d7d565ece2b8.avif?1709690747"
+max_copies = 4
+strength = 6
+willpower = 5
+lore = 2
+classifications = ["Floodborn", "Hero"]
+keywords = ["Shift 5"]
+text = "Shift 5 (You may pay 5 {I} to play this on top of one of your characters named Mickey Mouse.)\nMISDIRECTION Whenever you play an action, chosen opposing character can't quest during their next turn."

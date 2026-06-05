@@ -1,0 +1,13 @@
+name = "Baymax - Upgraded Robot"
+type = "Character"
+cost = 5
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4b7cdb55b647410f85f60e74a4a4b619.avif?1740589799"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Hero", "Robot"]
+keywords = ["Support"]
+text = "Support (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)\nADVANCED SCANNER When you play this character, look at the top 4 cards of your deck. You may reveal a Floodborn character card and put it into your hand. Put the rest on the bottom of your deck in any order."

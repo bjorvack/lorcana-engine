@@ -1,0 +1,11 @@
+name = "Motunui - Island Paradise"
+type = "Location"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_fc47f435832f4356ab419cf268febdb2.avif?1755541242"
+max_copies = 4
+inkwell = true
+move_cost = 1
+willpower = 5
+lore = 1
+text = "REINCARNATION Whenever a character is banished while here, you may put that card into your inkwell facedown and exerted."

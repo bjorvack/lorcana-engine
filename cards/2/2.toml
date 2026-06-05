@@ -1,0 +1,12 @@
+name = "Christopher Robin - Adventurer"
+type = "Character"
+cost = 6
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4730c91483f24305b42abe86b2bb34ee.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 6
+lore = 2
+classifications = ["Dreamborn", "Hero"]
+text = "WE'LL ALWAYS BE TOGETHER Whenever you ready this character, if you have 2 or more other characters in play, gain 2 lore."

@@ -1,0 +1,13 @@
+name = "Mickey Mouse - Night Watch"
+type = "Character"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_59714153da7e4a6884f25a5c5edad2c1.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Hero"]
+keywords = ["Support"]
+text = "SUPPORT Your Pluto characters get Resist +1. (Damage dealt to them is reduced by 1.)"

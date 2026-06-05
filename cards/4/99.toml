@@ -1,0 +1,8 @@
+name = "Signed Contract"
+type = "Item"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_03e583258e944837bd3b9f4772c45f8c.avif?1716052430"
+max_copies = 4
+inkwell = true
+text = "FINE PRINT Whenever an opponent plays a song, you may draw a card."

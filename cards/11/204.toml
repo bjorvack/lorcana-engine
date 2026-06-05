@@ -1,0 +1,11 @@
+name = "Darkwing Tower - Icy Headquarters"
+type = "Location"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_22e1f1dc8f434e0a87d5335d7a6b2984.avif?1770260113"
+max_copies = 4
+inkwell = true
+move_cost = 1
+willpower = 8
+lore = 1
+text = "EVIL VANQUISHED During your turn, whenever an opposing Villain character is banished, you may ready a character here. If you do, they can't quest for the rest of this turn."

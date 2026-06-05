@@ -1,0 +1,13 @@
+name = "Clarabelle - Light on Her Hooves"
+type = "Character"
+cost = 7
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7e4aa6ffcba9401b916220a6f79c355c.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 6
+lore = 2
+classifications = ["Floodborn", "Ally"]
+keywords = ["Shift 5"]
+text = "Shift 5 (You may pay 5 {I} to play this on top of one of your characters named Clarabelle.)\nKEEP IN STEP At the end of your turn, if chosen opponent has more cards in their hand than you, you may draw cards until you have the same number."

@@ -1,0 +1,7 @@
+name = "You Came Back"
+type = "Action"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7b4400dc0c6b407083fd848dd281e6d8.avif?1730901319"
+max_copies = 4
+text = "Ready chosen character."

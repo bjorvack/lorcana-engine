@@ -1,0 +1,8 @@
+name = "Shield of Virtue"
+type = "Item"
+cost = 1
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_81867e9c25c44f33aa150e70b57bb4dd.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "FIREPROOF {E}, 3 {I} — Ready chosen character. They can't quest for the rest of this turn."

@@ -1,0 +1,12 @@
+name = "Aladdin - Street Rat"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a2d28e5e695747fb95ebe50f891eb0b4.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Hero"]
+text = "IMPROVISE When you play this character, each opponent loses 1 lore."

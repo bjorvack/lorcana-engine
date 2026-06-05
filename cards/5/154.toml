@@ -1,0 +1,12 @@
+name = "King Candy - Sweet Abomination"
+type = "Character"
+cost = 5
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7217d3c0bad44bd3b8f186720cfb4838.avif?1723917209"
+max_copies = 4
+strength = 3
+willpower = 3
+lore = 2
+classifications = ["Floodborn", "Villain", "King", "Racer"]
+keywords = ["Shift 3"]
+text = "Shift 3 (You may pay 3 {I} to play this on top of one of your characters named King Candy.)\nCHANGING THE CODE When you play this character, you may draw 2 cards, then put a card from your hand on the bottom of your deck."

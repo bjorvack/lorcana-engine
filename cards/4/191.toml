@@ -1,0 +1,12 @@
+name = "Piglet - Sturdy Swordsman"
+type = "Character"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e66f39ac0f6a44b0bd2f7ffbd633cf9b.avif?1716052430"
+max_copies = 4
+strength = 3
+willpower = 5
+lore = 3
+classifications = ["Dreamborn", "Hero"]
+keywords = ["Resist 1"]
+text = "Resist +1 (Damage dealt to this character is reduced by 1.)\nNOT SO SMALL ANYMORE While you have no cards in your hand, this character can challenge ready characters."

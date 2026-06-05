@@ -1,0 +1,11 @@
+name = "Pepa Madrigal - Weather Maker"
+type = "Character"
+cost = 5
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8f5bdfa86b31418bb75a251ce2ebd313.avif?1716052430"
+max_copies = 4
+strength = 1
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Ally", "Madrigal"]
+text = "IT LOOKS LIKE RAIN When you play this character, you may exert chosen opposing character. That character can't ready at the start of their next turn unless they're at a location."

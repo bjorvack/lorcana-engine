@@ -1,0 +1,12 @@
+name = "Pascal - Inquisitive Pet"
+type = "Character"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_551090cbc3134b44b9736a0fd5320b3a.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "COLORFUL TACTICS When you play this character, look at the top 3 cards of your deck and put them back in any order."

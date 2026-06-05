@@ -1,0 +1,12 @@
+name = "Thumper - Young Bunny"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_def9163ddaf740d6820cbc2df3fddbf3.avif?1747509203"
+max_copies = 4
+inkwell = true
+strength = 0
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "YOU CAN DO IT! {E} — Chosen character gets +3 this turn."

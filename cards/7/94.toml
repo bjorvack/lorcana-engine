@@ -1,0 +1,12 @@
+name = "Mad Hatter - Unruly Eccentric"
+type = "Character"
+cost = 6
+ink = ["Emerald", "Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1d6a93033e0b4304b27bfcfc052aa129.avif?1740589473"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 5
+lore = 2
+classifications = ["Storyborn"]
+text = "UNBIRTHDAY PRESENT Whenever a damaged character challenges another character, you may draw a card."

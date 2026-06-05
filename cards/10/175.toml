@@ -1,0 +1,12 @@
+name = "Clawhauser - Donut Detective"
+type = "Character"
+cost = 6
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d9964e71c9c442d48702f92af971833f.avif?1761764751"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 6
+lore = 2
+classifications = ["Dreamborn", "Ally", "Detective"]
+text = "Challenger +2 (While challenging, this character gets +2 {S}.)"

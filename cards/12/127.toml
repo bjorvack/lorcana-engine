@@ -1,0 +1,13 @@
+name = "Mr. Incredible - Super Strong"
+type = "Character"
+cost = 5
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_22adb1813838413ab42f071c073d4a04.avif?1777687656"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Super", "Hero"]
+keywords = ["Shift 3"]
+text = "Shift 3 {I} (You may pay 3 {I} to play this on top of one of your characters named Mr. Incredible.)\nALWAYS UNITED This character gets +2 {S} for each other character you have in play.\nLET'S DO THIS! Whenever one of your Super characters challenges another character, draw a card."

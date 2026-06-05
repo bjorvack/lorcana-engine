@@ -1,0 +1,7 @@
+name = "Royal Tantrum"
+type = "Action"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_87ecd33b2aa441168c1ff68b4e5e8700.avif?1723917209"
+max_copies = 4
+text = "Banish any number of your items, then draw a card for each item banished this way."

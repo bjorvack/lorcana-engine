@@ -1,0 +1,12 @@
+name = "Scar - Mastermind"
+type = "Character"
+cost = 6
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_39139dbf0feb48b1924d20cc03c58d47.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Villain"]
+text = "INSIDIOUS PLOT When you play this character, chosen opposing character gets -5 {S} this turn."

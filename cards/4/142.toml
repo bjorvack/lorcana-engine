@@ -1,0 +1,12 @@
+name = "Dang Hu - Talon Chief"
+type = "Character"
+cost = 5
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0e74340fa12045cb9bdb4824d72f2ad3.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Villain"]
+text = "YOU BETTER TALK FAST Your other Villain characters gain Support. (Whenever they quest, you may add their {S} to another chosen character's {S} this turn.)"

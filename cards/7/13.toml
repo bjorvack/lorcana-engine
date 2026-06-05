@@ -1,0 +1,13 @@
+name = "Mirabel Madrigal - Hopeful Dreamer"
+type = "Character"
+cost = 3
+ink = ["Amber", "Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_039fcd98eaf7444ea45cea5da181f1c8.avif?1740589149"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero", "Madrigal"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.) Singer 5 (This character counts as cost 5 to sing songs.)"

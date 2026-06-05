@@ -1,0 +1,13 @@
+name = "Jim Hawkins - Honorable Pirate"
+type = "Character"
+cost = 7
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5de4864e187a4039b3e47b6ada93b801.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 7
+lore = 2
+classifications = ["Dreamborn", "Hero", "Pirate", "Captain"]
+keywords = ["Bodyguard"]
+text = "Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)\nHIRE A CREW When you play this character, look at the top 4 cards of your deck. You may reveal any number of Pirate character cards and put them into your hand. Put the rest on the bottom of your deck in any order."

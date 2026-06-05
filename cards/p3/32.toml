@@ -1,0 +1,11 @@
+name = "Timon - Snowball Swiper"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c47dcf86ffa542dda6f30a0cda47c1b4.avif?1773508875"
+max_copies = 4
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "GET RID OF THAT When you play this character, chosen opponent reveals their hand and discards a non-character card of your choice."

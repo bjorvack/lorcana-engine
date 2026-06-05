@@ -1,0 +1,12 @@
+name = "Bouncing Ducky - Sid's Toy"
+type = "Character"
+cost = 6
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_53304492277b499dbe09d52c0708c9ea.avif?1777687629"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Ally", "Toy"]
+text = "REJECTED TOYS For each Toy character card in your discard, you pay 1 {I} less to play this character.\nREPURPOSED When you play this character, put all Toy character cards from your discard on the bottom of your deck in any order."

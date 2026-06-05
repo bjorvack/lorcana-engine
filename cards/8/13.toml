@@ -1,0 +1,12 @@
+name = "Gene - Niceland Resident"
+type = "Character"
+cost = 1
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c4cc9368ba4d4f488b35ac8f8b0b07a1.avif?1747506709"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 2
+lore = 1
+classifications = ["Storyborn"]
+text = "I GUESS YOU EARNED THIS Whenever this character quests, you may remove up to 2 damage from chosen character."

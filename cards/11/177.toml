@@ -1,0 +1,11 @@
+name = "Launchpad - Trusty Sidekick"
+type = "Character"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5dd9c7a6d0ca4d4e9b0891adf35e1a99.avif?1770259996"
+max_copies = 4
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "WHAT DID YOU NEED? {E} — Draw a card. Then, choose and discard a card unless you have a character named Darkwing Duck in play."

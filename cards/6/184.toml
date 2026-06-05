@@ -1,0 +1,11 @@
+name = "Tuk Tuk - Big Buddy"
+type = "Character"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ccc37a7514f24045ad1e2c6cff286e6f.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Ally"]

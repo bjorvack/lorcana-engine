@@ -1,0 +1,10 @@
+name = "Pinocchio - Star Attraction"
+type = "Character"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a32fde4ae1e84354ae7f20d6953d08f0.avif?1709690747"
+max_copies = 4
+strength = 1
+willpower = 1
+lore = 3
+classifications = ["Storyborn", "Hero"]

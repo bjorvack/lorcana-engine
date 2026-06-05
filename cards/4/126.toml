@@ -1,0 +1,12 @@
+name = "Tong - Survivor"
+type = "Character"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_bf643690c507479592f493f27a9dfeb2.avif?1716052430"
+max_copies = 4
+strength = 3
+willpower = 6
+lore = 0
+classifications = ["Storyborn", "Ally"]
+keywords = ["Reckless"]
+text = "Reckless (This character can't quest and must challenge each turn if able.)"

@@ -1,0 +1,12 @@
+name = "Sheriff of Nottingham - Bushel Britches"
+type = "Character"
+cost = 9
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f13c7ff8caa0471c9cea95ac9d2177c2.avif?1723917209"
+max_copies = 4
+strength = 5
+willpower = 9
+lore = 4
+classifications = ["Storyborn", "Villain"]
+keywords = ["Support"]
+text = "EVERY LITTLE BIT HELPS For each item you have in play, you pay 1 {I} less to play this character.\nSupport (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)"

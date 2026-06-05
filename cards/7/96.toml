@@ -1,0 +1,13 @@
+name = "Hiro Hamada - Armor Designer"
+type = "Character"
+cost = 7
+ink = ["Emerald", "Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d81e14dbf9434f8dbf44f03a0a759fe9.avif?1740589483"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 6
+lore = 3
+classifications = ["Floodborn", "Hero", "Inventor"]
+keywords = ["Shift 5"]
+text = "Shift 5 (You may pay 5 {I} to play this on top of one of your characters named Hiro Hamada.)\nYOU CAN BE WAY MORE Your Floodborn characters that have a card under them gain Evasive and Ward. (Only characters with Evasive can challenge them. Opponents can't choose them except to challenge.)"

@@ -1,0 +1,12 @@
+name = "Ariel - On Human Legs"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d9f3b86af85f48579ed9d0d7ce0de129.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Hero", "Princess"]
+text = "VOICELESS This character can't {E} to sing songs."

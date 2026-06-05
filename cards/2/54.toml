@@ -1,0 +1,12 @@
+name = "Merlin - Squirrel"
+type = "Character"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_68c2d4e87fa84e0bb650d5e2b9c0737b.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Mentor", "Sorcerer"]
+text = "LOOK BEFORE YOU LEAP When you play this character and when he leaves play, look at the top card of your deck. Put it on either the top or the bottom of your deck."

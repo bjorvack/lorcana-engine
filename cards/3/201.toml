@@ -1,0 +1,8 @@
+name = "Map of Treasure Planet"
+type = "Item"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_07d0c6cc94bc4eee9c5f12d78bc8a84c.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "KEY TO THE PORTAL {E} — You pay 1 {I} less for the next location you play this turn.\nSHOW THE WAY You pay 1 {I} less to move your characters to a location."

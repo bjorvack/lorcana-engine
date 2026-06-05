@@ -1,0 +1,12 @@
+name = "Gaston - Scheming Suitor"
+type = "Character"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4cb55532004549e59945436fd57a62b7.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Villain"]
+text = "YES, I'M INTIMIDATING While one or more opponents have no cards in their hands, this character gets +3 {S}."

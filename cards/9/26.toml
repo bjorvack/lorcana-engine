@@ -1,0 +1,9 @@
+name = "Circle of Life"
+type = "Song"
+cost = 8
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e573fd1307ec42b6b2dbd9ebb94504f0.avif?1755651363"
+max_copies = 4
+inkwell = true
+keywords = ["Sing Together 8"]
+text = "Sing Together 8 (Any number of your or your teammates' characters with total cost 8 or more may {E} to sing this song for free.) Play a character from your discard for free."

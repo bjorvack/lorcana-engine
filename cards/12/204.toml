@@ -1,0 +1,11 @@
+name = "The Island of Nomanisan - Syndrome's Headquarters"
+type = "Location"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0970bfa5f6e24f108baff292de83fcb5.avif?1777687948"
+max_copies = 4
+inkwell = true
+move_cost = 1
+willpower = 6
+lore = 1
+text = "RESEARCH & DEVELOPMENT Robot characters get +1 {S} and +1 {W} while here.\nCHEAP SHOT Once during your turn, whenever a character banishes another character in a challenge while here, you may deal 2 damage to chosen character."

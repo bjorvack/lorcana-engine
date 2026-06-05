@@ -1,0 +1,12 @@
+name = "Pacha - Trekmate"
+type = "Character"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b2930c4282b145fe8eabadae2c6567f9.avif?1740589508"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Hero"]
+text = "FULL PACK While you have more cards in your hand than each opponent, this character gets +2 {L}."

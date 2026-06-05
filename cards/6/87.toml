@@ -1,0 +1,12 @@
+name = "Alistair Krei - Ambitious Entrepreneur"
+type = "Character"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c089296aad2d4e4c86c0225be686795b.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Inventor"]
+text = "AN EYE FOR TECH When you play this character, if an opponent has an item in play, gain 1 lore."

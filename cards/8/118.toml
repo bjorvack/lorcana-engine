@@ -1,0 +1,7 @@
+name = "Walk the Plank!"
+type = "Action"
+cost = 3
+ink = ["Emerald", "Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d5390ce678f1438eb716de9952cfd9d2.avif?1747509126"
+max_copies = 4
+text = "Your Pirate characters gain \"{E} — Banish chosen damaged character\" this turn."

@@ -1,0 +1,12 @@
+name = "Iago - Loud-Mouthed Parrot"
+type = "Character"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_fb67b53a2df44bff96ca7fff2d607437.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "YOU GOT A PROBLEM? {E} — Chosen character gains Reckless during their next turn. (They can't quest and must challenge if able.)"

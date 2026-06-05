@@ -1,0 +1,7 @@
+name = "The Black Cauldron"
+type = "Item"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_02bc7b97b6044592b68b86b9afadd113.avif?1761752078"
+max_copies = 4
+text = "THE CAULDRON CALLS {E}, 1 {I} — Put a character card from your discard under this item faceup.\nRISE AND JOIN ME! {E}, 1 {I} – This turn, you may play characters from under this item."

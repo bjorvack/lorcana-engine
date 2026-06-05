@@ -1,0 +1,13 @@
+name = "Kida - Crystal Scion"
+type = "Character"
+cost = 8
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9e3dda7a33de4861a5f81b5bea034db3.avif?1777687785"
+max_copies = 4
+inkwell = true
+strength = 7
+willpower = 7
+lore = 2
+classifications = ["Floodborn", "Hero", "Princess"]
+keywords = ["Shift 6"]
+text = "Shift 6 {I}\nFLOOD OF POWER When you play this character, each player may put up to 5 cards from their discard into their inkwell facedown and exerted.\nTHE PATH REVEALED 7 {I} — Look at the top 2 cards of your deck. Put one into your hand and the other on the bottom of your deck."

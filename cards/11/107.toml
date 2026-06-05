@@ -1,0 +1,13 @@
+name = "Copper - On the Scent"
+type = "Character"
+cost = 6
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f5ec9aa34cb2438fb19806535e9ffcc5.avif?1770259680"
+max_copies = 4
+inkwell = true
+strength = 8
+willpower = 5
+lore = 0
+classifications = ["Storyborn", "Hero"]
+keywords = ["Reckless", "Rush"]
+text = "Rush (This character can challenge the turn they're played.)\nReckless (This character can't quest and must challenge each turn if able.)"

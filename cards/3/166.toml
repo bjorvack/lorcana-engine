@@ -1,0 +1,7 @@
+name = "Scrooge's Top Hat"
+type = "Item"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9897b7dc2c8142b5b2afc74e87fa14ae.avif?1709690747"
+max_copies = 4
+text = "BUSINESS EXPERTISE {E} — You pay 1 {I} less for the next item you play this turn."

@@ -1,0 +1,8 @@
+name = "Olympus Would Be That Way"
+type = "Action"
+cost = 1
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_68b76d76c7b1460cbae204778e1da3f2.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "Your characters get +3 {S} while challenging a location this turn."

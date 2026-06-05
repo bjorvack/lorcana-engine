@@ -1,0 +1,11 @@
+name = "Game Preserve - Protected Land"
+type = "Location"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f25d2634d58b4a00ab2ac2f2753b8116.avif?1770259658"
+max_copies = 4
+inkwell = true
+move_cost = 1
+willpower = 4
+lore = 2
+text = "EASY TO MISS While there's a character with Evasive here, this location gains Evasive. (Only characters with Evasive can challenge it.)"

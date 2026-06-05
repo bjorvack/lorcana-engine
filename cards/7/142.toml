@@ -1,0 +1,11 @@
+name = "Baloo - Ol' Iron Paws"
+type = "Character"
+cost = 6
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_aded94a6d9d84b958d8e1b56f83af565.avif?1740589669"
+max_copies = 4
+strength = 5
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "FIGHT LIKE A BEAR Your characters with 7 {S} or more can't be dealt damage."

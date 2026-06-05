@@ -1,0 +1,8 @@
+name = "Ranger Plane"
+type = "Item"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f9616f640bae49f5811aa5ecff83d6a8.avif?1777687813"
+max_copies = 4
+inkwell = true
+text = "AIR SUPPORT Your characters gain Support. (Whenever they quest, you may add their {S} to another chosen character's {S} this turn.)\nBIG LIFT {E} — Chosen character with 10 {S} or more gets +3 {L} this turn."

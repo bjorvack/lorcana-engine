@@ -1,0 +1,11 @@
+name = "Woody - Waiting for a Friend"
+type = "Character"
+cost = 1
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ff8566269f8e44b2ae13abb3a79a27dd.avif?1777687116"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Hero", "Toy"]

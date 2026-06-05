@@ -1,0 +1,11 @@
+name = "Card Soldiers - Full Deck"
+type = "Character"
+cost = 5
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1d57accf2ede4947b8cfd1a71c7b85c6.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Ally"]

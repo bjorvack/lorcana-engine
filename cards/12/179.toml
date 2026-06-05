@@ -1,0 +1,12 @@
+name = "Mrs. Incredible - Helen Parr"
+type = "Character"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0aa8e64527f24ea78b59afcd62f71a4b.avif?1777687858"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 1
+lore = 2
+classifications = ["Storyborn", "Super", "Hero"]
+text = "PEP TALK When you play this character, chosen character gains Challenger +2 this turn. (They get +2 {S} while challenging.)"

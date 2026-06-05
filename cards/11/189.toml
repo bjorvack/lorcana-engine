@@ -1,0 +1,12 @@
+name = "Gigi - Best in Snow"
+type = "Character"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a1e3f0b6249140fcbab13e33ef76fba8.avif?1770260046"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Alien"]
+text = "Alert (This character can challenge as if they had Evasive.)\nSO PRETTY While this character has no damage, she gets +2 {S}."

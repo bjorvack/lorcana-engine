@@ -1,0 +1,8 @@
+name = "Munchings and Crunchings"
+type = "Item"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ef6c610fc243499c894239a4f0d50c00.avif?1761752083"
+max_copies = 4
+inkwell = true
+text = "WHAT A JUICY APPLE {E} — Remove up to 2 damage from chosen character.\nCOME ON OUT You pay 1 {I} less to play characters named Gurgi."

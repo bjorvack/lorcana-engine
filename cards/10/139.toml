@@ -1,0 +1,13 @@
+name = "Anna - Making Snow Plans"
+type = "Character"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_13a02a2c79fa4493bc8a593d5fb1bd98.avif?1761764360"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Hero", "Queen"]
+keywords = ["Support"]
+text = "Support (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)"

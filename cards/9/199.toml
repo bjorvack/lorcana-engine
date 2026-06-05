@@ -1,0 +1,8 @@
+name = "I Find 'Em, I Flatten 'Em"
+type = "Song"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_47f56a5b08b04ccda46e94744710ad9c.avif?1755541420"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 4 or more can {E} to sing this song for free.)\nBanish all items."

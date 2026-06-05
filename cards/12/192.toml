@@ -1,0 +1,10 @@
+name = "John Smith - Skillful Explorer"
+type = "Character"
+cost = 1
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_78ac2c6c97844444a40bdfebc124745c.avif?1777687904"
+max_copies = 4
+strength = 1
+willpower = 1
+lore = 2
+classifications = ["Storyborn", "Hero"]

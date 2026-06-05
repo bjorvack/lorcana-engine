@@ -1,0 +1,11 @@
+name = "Perdita - Devoted Mother"
+type = "Character"
+cost = 6
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a1c95bf6c8744ccaa5ff363453aa8716.avif?1709690747"
+max_copies = 4
+strength = 1
+willpower = 6
+lore = 2
+classifications = ["Storyborn", "Hero"]
+text = "COME ALONG, CHILDREN When you play this character and whenever she quests, you may play a character with cost 2 or less from your discard for free."

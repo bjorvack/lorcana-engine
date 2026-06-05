@@ -1,0 +1,12 @@
+name = "The Wardrobe - Perceptive Friend"
+type = "Character"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_00a8d41f53554e5b9151021f4bd59f41.avif?1747509365"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "I HAVE JUST THE THING! {E}, Choose and discard an item card — Draw 2 cards."

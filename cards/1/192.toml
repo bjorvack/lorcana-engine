@@ -1,0 +1,12 @@
+name = "Te Kā - Heartless"
+type = "Character"
+cost = 6
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5fa3eadb1c984d63b845035c1e227af9.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 5
+lore = 2
+classifications = ["Dreamborn", "Villain", "Deity"]
+text = "SEEK THE HEART During your turn, whenever this character banishes another character in a challenge, you gain 2 lore."

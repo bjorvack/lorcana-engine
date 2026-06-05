@@ -1,0 +1,12 @@
+name = "Magic Broom - Aerial Cleaner"
+type = "Character"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_df2a4ae009034326bac684df1aac9287.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Broom"]
+text = "WINGED FOR A DAY During your turn, this character gains Evasive. (They can challenge characters with Evasive.)"

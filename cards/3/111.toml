@@ -1,0 +1,11 @@
+name = "Kakamora - Menacing Sailor"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d119988be09743af8639f30e658caa8c.avif?1709690747"
+max_copies = 4
+strength = 3
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Pirate"]
+text = "PLUNDER When you play this character, each opponent loses 1 lore."

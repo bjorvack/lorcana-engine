@@ -1,0 +1,12 @@
+name = "Pedro Madrigal - Family Patriarch"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_91ca0b124f3a401faaf0926a24588af5.avif?1777687125"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally", "Madrigal"]
+text = "DIFFICULT JOURNEY This character enters play with 1 damage.\nDEVOTED FAMILY When you play this character, if you have another Madrigal character in play, you may remove up to 1 damage from him."

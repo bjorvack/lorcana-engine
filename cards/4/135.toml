@@ -1,0 +1,11 @@
+name = "Snuggly Duckling - Disreputable Pub"
+type = "Location"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_af45f5f03d0944e79c47f0375cc9597a.avif?1716052430"
+max_copies = 4
+inkwell = true
+move_cost = 2
+willpower = 9
+lore = 0
+text = "ROUTINE RUCKUS Whenever a character with 3 {S} or more challenges another character while here, gain 1 lore. If the challenging character has 6 {S} or more, gain 3 lore instead."

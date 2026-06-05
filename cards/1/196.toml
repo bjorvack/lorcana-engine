@@ -1,0 +1,8 @@
+name = "Break"
+type = "Action"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_327f997026094ec49f0dc7d77e4628f5.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "Banish chosen item."

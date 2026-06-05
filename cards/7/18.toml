@@ -1,0 +1,13 @@
+name = "Bolt - Dependable Friend"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9b70e9c76a6643c69167b3f081530ae9.avif?1740589170"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Hero"]
+keywords = ["Support"]
+text = "Support (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)"

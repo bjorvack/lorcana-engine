@@ -1,0 +1,13 @@
+name = "Lena Sabrewing - Pure Energy"
+type = "Character"
+cost = 3
+ink = ["Amethyst", "Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5d5fd6b02f3646c9ae4661c9a36177c6.avif?1747507397"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Hero", "Sorcerer"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)\nSUPERNATURAL VENGEANCE {E} – Deal 1 damage to chosen character."

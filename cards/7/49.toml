@@ -1,0 +1,13 @@
+name = "Iago - Giant Spectral Parrot"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9510a7439adc4dc5b1f444e37334a32e.avif?1740589294"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 6
+lore = 1
+classifications = ["Dreamborn", "Ally", "Illusion"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)\nVanish (When an opponent chooses this character for an action, banish them.)"

@@ -1,0 +1,13 @@
+name = "The Headless Horseman - Cursed Rider"
+type = "Character"
+cost = 8
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1e28088d9c49441390e874b91d6352d0.avif?1761764751"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 7
+lore = 2
+classifications = ["Floodborn", "Villain"]
+keywords = ["Shift 5"]
+text = "Shift 5 {I} (You may pay 5 {I} to play this on top of one of your characters named The Headless Horseman.)\nWITCHING HOUR When you play this character, each player draws 3 cards, then discards 3 cards at random. Choose an opposing character and deal 2 damage to them for each action card discarded this way."

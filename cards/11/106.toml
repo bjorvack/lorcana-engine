@@ -1,0 +1,11 @@
+name = "Taurus Bulba - Steerminator"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_85d6bd70dfe74990af90d215e5010a8d.avif?1770259676"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Super", "Villain"]

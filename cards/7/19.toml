@@ -1,0 +1,12 @@
+name = "Pascal - Garden Chameleon"
+type = "Character"
+cost = 4
+ink = ["Amber", "Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b2dd259955af479c8816391e13d4e16d.avif?1740589173"
+max_copies = 4
+strength = 3
+willpower = 3
+lore = 3
+classifications = ["Storyborn", "Ally"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)"

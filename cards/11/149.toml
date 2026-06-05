@@ -1,0 +1,12 @@
+name = "Gosalyn Mallard - Curious Child"
+type = "Character"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_dc802d9673ac4bd3ae7f6976a4faae09.avif?1770259871"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "KEEN GEAR When you play this character, look at the top 4 cards of your deck. You may reveal an item card and put it into your hand. Put the rest on the bottom of your deck in any order."

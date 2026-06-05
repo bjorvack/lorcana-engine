@@ -1,0 +1,11 @@
+name = "Treasure Guardian - Protector of the Cave"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8b9133c809b04113a3b464d0f1c2ca82.avif?1709690747"
+max_copies = 4
+strength = 6
+willpower = 6
+lore = 2
+classifications = ["Storyborn"]
+text = "WHO DISTURBS MY SLUMBER? This character can't challenge or quest unless it is at a location."

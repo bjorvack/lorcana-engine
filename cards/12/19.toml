@@ -1,0 +1,13 @@
+name = "Isabela Madrigal - Caring Cultivator"
+type = "Character"
+cost = 6
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_36cd916ef6924852970d3b63c2666f74.avif?1777687193"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 5
+lore = 2
+classifications = ["Floodborn", "Ally", "Madrigal"]
+keywords = ["Shift 4"]
+text = "Shift 4 {I} (You may pay 4 {I} to play this on top of one of your characters named Isabela Madrigal.)\nDO NO WRONG Whenever you remove damage from one of your characters, gain 1 lore for each 1 damage removed."

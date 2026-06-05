@@ -1,0 +1,12 @@
+name = "Raya - Guardian of the Dragon Gem"
+type = "Character"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_37a7ae2b078b415aab3dff267ca8c86d.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Hero", "Princess"]
+text = "WE HAVE TO COME TOGETHER When you play this character, ready chosen character of yours at a location. They can't quest for the rest of this turn."

@@ -1,0 +1,11 @@
+name = "Robin Hood - Daydreamer"
+type = "Character"
+cost = 6
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_93d3181a0964484f8c491f7b96dd7d02.avif?1755540546"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 5
+lore = 4
+classifications = ["Dreamborn", "Hero"]

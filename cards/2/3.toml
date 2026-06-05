@@ -1,0 +1,13 @@
+name = "Cinderella - Ballroom Sensation"
+type = "Character"
+cost = 1
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_853c5c99d28f4304ba79004c91379057.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Hero", "Princess"]
+keywords = ["Singer 3"]
+text = "Singer 3 (This character counts as cost 3 to sing songs.)"

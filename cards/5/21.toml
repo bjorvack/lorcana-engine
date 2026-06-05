@@ -1,0 +1,11 @@
+name = "Wreck-It Ralph - Admiral Underpants"
+type = "Character"
+cost = 7
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4bb6eeb124574cc6ac3695e255598cfb.avif?1723917209"
+max_copies = 4
+strength = 6
+willpower = 7
+lore = 2
+classifications = ["Storyborn", "Hero"]
+text = "I'VE GOT THE COOLEST FRIEND When you play this character, return a character card from your discard to your hand. If that card is a Princess character card, gain 2 lore."

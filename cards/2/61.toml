@@ -1,0 +1,11 @@
+name = "Yzma - Without Beauty Sleep"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_73984c4885124477b3a6a48fbe5cb2ac.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Villain", "Sorcerer"]

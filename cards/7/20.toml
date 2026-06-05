@@ -1,0 +1,11 @@
+name = "King Candy - Royal Racer"
+type = "Character"
+cost = 4
+ink = ["Amber", "Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_68c5e563c4774f3f94a16eed86475c95.avif?1740589177"
+max_copies = 4
+strength = 2
+willpower = 2
+lore = 2
+classifications = ["Storyborn", "Villain", "King", "Racer"]
+text = "SWEET REVENGE Whenever one of your other Racer characters is banished, each opponent chooses and banishes one of their characters."

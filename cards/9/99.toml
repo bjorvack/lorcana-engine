@@ -1,0 +1,7 @@
+name = "Mother Knows Best"
+type = "Song"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_39a0e5d019794fcd9a96be1309addb7c.avif?1755540753"
+max_copies = 4
+text = "(A character with cost 3 or more can {E} to sing this song for free.)\nReturn chosen character to their player's hand."

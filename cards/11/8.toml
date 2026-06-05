@@ -1,0 +1,12 @@
+name = "Pocahontas - Finding the Way"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_aa9b3ea05aa64ee9aa09783eb6ca425c.avif?1770259233"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Hero", "Princess"]
+text = "DISCOVERY AWAITS When you play this character, chosen character gets +1 {L} this turn."

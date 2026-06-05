@@ -1,0 +1,11 @@
+name = "Mufasa - Champion of the Pride Lands"
+type = "Character"
+cost = 7
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_40537dcea12e45f1b057ab68b337632c.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 10
+lore = 3
+classifications = ["Storyborn", "Mentor", "King"]

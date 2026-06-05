@@ -1,0 +1,13 @@
+name = "Li Shang - Solemn Son"
+type = "Character"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b63df19a6a2e47edb0325ce080a7ac04.avif?1770259987"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Hero", "Captain"]
+keywords = ["Challenger 2"]
+text = "Challenger +2 (While challenging, this character gets +2 {S}.)"

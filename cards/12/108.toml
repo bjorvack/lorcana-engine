@@ -1,0 +1,12 @@
+name = "Milo Thatch - Courageous Explorer"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_81621f1cf94c4b109b89dfdba4289025.avif?1777687584"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Hero"]
+text = "FASCINATING DISCOVERY During your turn, if 2 or more cards were put into your discard this turn, this character gets +1 {L}."

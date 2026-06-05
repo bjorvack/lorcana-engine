@@ -1,0 +1,11 @@
+name = "Namaari - Nemesis"
+type = "Character"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6b414f08443c4f009d32f627f1d46256.avif?1709690747"
+max_copies = 4
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Villain", "Princess"]
+text = "THIS SHOULDN'T TAKE LONG {E}, Banish this character — Banish chosen character."

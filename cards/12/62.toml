@@ -1,0 +1,13 @@
+name = "Luisa Madrigal - Pushing Through"
+type = "Character"
+cost = 1
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e3a969791b0146e9af4d258746a3289f.avif?1777687403"
+max_copies = 4
+inkwell = true
+strength = 0
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally", "Madrigal"]
+keywords = ["Challenger 2"]
+text = "Challenger +2 (While challenging, this character gets +2 {S}.)"

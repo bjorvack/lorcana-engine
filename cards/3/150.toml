@@ -1,0 +1,12 @@
+name = "Maid Marian - Delightful Dreamer"
+type = "Character"
+cost = 5
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b893e4f0b17c41338fe0396ba1dcc8b3.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Princess"]
+text = "HIGHBORN LADY When you play this character, chosen character gets -2 {S} this turn."

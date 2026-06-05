@@ -1,0 +1,13 @@
+name = "Omnidroid - V.10"
+type = "Character"
+cost = 6
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c894240fefa847e6aec7d10546131a7a.avif?1777687896"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 6
+lore = 2
+classifications = ["Storyborn", "Robot"]
+keywords = ["Shift 4"]
+text = "Shift 4 {I} (You may pay 4 {I} to play this on top of one of your characters named Omnidroid.)\nELECTRO-ARMOR While there's a card under this character, it gains Resist +2. (Damage dealt to them is reduced by 2.)"

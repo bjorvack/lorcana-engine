@@ -1,0 +1,7 @@
+name = "Dragon Fire"
+type = "Action"
+cost = 5
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f54b0e3b38d340ffa793953c49e6cb56.avif?1776533276"
+max_copies = 4
+text = "Banish chosen character."

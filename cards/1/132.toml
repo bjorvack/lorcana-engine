@@ -1,0 +1,8 @@
+name = "He's Got a Sword!"
+type = "Action"
+cost = 1
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3f328e2a6ea741bcb31348ee2954b3e8.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "Chosen character gets +2 {S} this turn."

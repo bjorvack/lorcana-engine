@@ -1,0 +1,7 @@
+name = "Spaghetti Dinner"
+type = "Item"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_568855977d47447e9b2977c859dc31c7.avif?1740589267"
+max_copies = 4
+text = "FINE DINING {E}, 1 {I} — If you have 2 or more characters in play, gain 1 lore."

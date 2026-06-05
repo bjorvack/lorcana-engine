@@ -1,0 +1,11 @@
+name = "Mickey Mouse - Steamboat Pilot"
+type = "Character"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_03cc8c548715482fb5d2d3d894767dbd.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Hero", "Captain"]

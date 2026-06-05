@@ -1,0 +1,8 @@
+name = "Hero Work"
+type = "Action"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0e38efe0ee78447b8966de3f57656c86.avif?1777687675"
+max_copies = 4
+inkwell = true
+text = "Your characters get +1 {S} this turn. Your Hero characters gain \"Whenever this character challenges another character, each opponent loses 1 lore and you gain 1 lore\" this turn."

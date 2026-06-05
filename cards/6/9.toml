@@ -1,0 +1,13 @@
+name = "Prince Naveen - Vigilant First Mate"
+type = "Character"
+cost = 5
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_39972f3e75a3417488662b70443b3164.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 6
+lore = 2
+classifications = ["Floodborn", "Hero", "Prince"]
+keywords = ["Bodyguard", "Shift 3"]
+text = "Shift 3 (You may pay 3 {I} to play this on top of one of your characters named Prince Naveen.)\nBodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)"

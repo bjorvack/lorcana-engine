@@ -1,0 +1,8 @@
+name = "Amber Chromicon"
+type = "Item"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a849716500754889824d4a9aeb2c6b84.avif?1723917209"
+max_copies = 4
+inkwell = true
+text = "AMBER LIGHT {E} — Remove up to 1 damage from each of your characters."

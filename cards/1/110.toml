@@ -1,0 +1,13 @@
+name = "Gaston - Arrogant Hunter"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_559add80c2b44fb0bc383708f59d11c5.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 2
+lore = 0
+classifications = ["Storyborn", "Villain"]
+keywords = ["Reckless"]
+text = "Reckless (This character can't quest and must challenge each turn if able.)"

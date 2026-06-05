@@ -1,0 +1,8 @@
+name = "Like A Bird In the Sky"
+type = "Song"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2a4015409c2d48788a2885b200a080e4.avif?1777687672"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 2 or more can {E} to sing this song for free.) \nChosen character gets +1 {L} and gains Evasive until the start of your next turn. (Only characters with Evasive can challenge them.)"

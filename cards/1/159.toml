@@ -1,0 +1,12 @@
+name = "Tamatoa - So Shiny!"
+type = "Character"
+cost = 8
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_43467fa51d7b4bcc9ebe110d9fe9e3b9.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 8
+lore = 1
+classifications = ["Storyborn", "Villain"]
+text = "WHAT HAVE WE HERE? When you play this character and whenever he quests, you may return an item card from your discard to your hand.\nGLAM This character gets +1 {L} for each item you have in play."

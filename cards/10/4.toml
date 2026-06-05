@@ -1,0 +1,11 @@
+name = "Headless Manhorse - Manny"
+type = "Character"
+cost = 6
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b29df88a89414f9cb5ad2f74b7fd428c.avif?1761751914"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 10
+lore = 1
+classifications = ["Storyborn", "Ally"]

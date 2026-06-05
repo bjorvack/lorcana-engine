@@ -1,0 +1,13 @@
+name = "Jafar - Striking Illusionist"
+type = "Character"
+cost = 7
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_021972513f684c6185280e93fa2f41ef.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 5
+lore = 1
+classifications = ["Floodborn", "Villain", "Sorcerer"]
+keywords = ["Evasive", "Shift 5"]
+text = "Shift 5 (You may pay 5 {I} to play this on top of one of your characters named Jafar.)\nEvasive (Only characters with Evasive can challenge this character.)\nPOWER BEYOND MEASURE During your turn, while this character is exerted, whenever you draw a card, gain 1 lore."

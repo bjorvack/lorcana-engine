@@ -1,0 +1,11 @@
+name = "Seven Dwarfs' Mine - Secure Fortress"
+type = "Location"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_30df26498319433588a4ee13b1397ea1.avif?1723917209"
+max_copies = 4
+inkwell = true
+move_cost = 2
+willpower = 6
+lore = 1
+text = "MOUNTAIN DEFENSE During your turn, the first time you move a character here, you may deal 1 damage to chosen character. If the moved character is a Knight, deal 2 damage instead."

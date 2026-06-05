@@ -1,0 +1,8 @@
+name = "Someone Will Lose His Head"
+type = "Song"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b6e75e30d325452bba95859c5d667442.avif?1777687793"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 3 or more can {E} to sing this song for free.) \nEach opposing character gets -2 {S} this turn."

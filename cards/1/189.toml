@@ -1,0 +1,13 @@
+name = "Simba - Returned King"
+type = "Character"
+cost = 7
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3325b070fe8b4709b756066f49ba3b3c.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 6
+lore = 2
+classifications = ["Storyborn", "Hero", "King"]
+keywords = ["Challenger 4"]
+text = "Challenger +4 (While challenging, this character gets +4 {S}.)\nPOUNCE During your turn, this character gains Evasive. (They can challenge characters with Evasive.)"

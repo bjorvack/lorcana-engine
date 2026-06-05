@@ -1,0 +1,12 @@
+name = "Snow White - Merry as the Morning"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6253282cb5e14ec384482907b1b1aaa3.avif?1777687285"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Hero", "Princess"]
+text = "CLARION CALL Whenever this character quests, you may return chosen Seven Dwarfs character of yours to your hand to draw a card.\nNEVER FORGOTTEN During an opponent's turn, when this character is banished in a challenge, return this card to your hand."

@@ -1,0 +1,11 @@
+name = "Magical Maid - Feather Duster"
+type = "Character"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_217effcb1f034d1ca6e36929cce6f11d.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 2
+classifications = ["Storyborn", "Ally"]

@@ -1,0 +1,8 @@
+name = "Wildcat's Wrench"
+type = "Item"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e46266028977431da15b820d9f665664.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "REBUILD {E} — Remove up to 2 damage from chosen location."

@@ -1,0 +1,12 @@
+name = "Flynn Rider - His Own Biggest Fan"
+type = "Character"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ce8e3338542f433193eaf3a3737ba1c4.avif?1709690747"
+max_copies = 4
+strength = 2
+willpower = 3
+lore = 4
+classifications = ["Floodborn", "Hero", "Prince"]
+keywords = ["Evasive", "Shift 2"]
+text = "Shift 2 (You may pay 2 {I} to play this on top of one of your characters named Flynn Rider.)\nEvasive (Only characters with Evasive can challenge this character.)\nONE LAST, BIG SCORE This character gets -1 {L} for each card in your opponents' hands."

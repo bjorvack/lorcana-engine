@@ -1,0 +1,11 @@
+name = "Kronk - Right-Hand Man"
+type = "Character"
+cost = 6
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4dff2ba7b2d744a1a6c33741e2c1fcf6.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 6
+lore = 2
+classifications = ["Storyborn", "Ally"]

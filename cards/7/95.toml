@@ -1,0 +1,12 @@
+name = "Queen of Hearts - Unpredictable Bully"
+type = "Character"
+cost = 5
+ink = ["Emerald", "Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1a8a91c84777485892034cbc17d8359d.avif?1740589478"
+max_copies = 4
+strength = 2
+willpower = 6
+lore = 2
+classifications = ["Floodborn", "Villain", "Queen"]
+keywords = ["Shift 3"]
+text = "Shift 3 (You may pay 3 {I} to play this on top of one of your characters named Queen of Hearts.)\nIF I LOSE MY TEMPER... Whenever another character is played, put a damage counter on them."

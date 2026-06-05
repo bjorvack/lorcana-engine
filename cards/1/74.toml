@@ -1,0 +1,12 @@
+name = "Flynn Rider - Charming Rogue"
+type = "Character"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c0742f7731e04b749870bceb5c6b133b.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 2
+lore = 2
+classifications = ["Storyborn", "Hero", "Prince"]
+text = "HERE COMES THE SMOLDER Whenever this character is challenged, the challenging player chooses and discards a card."

@@ -1,0 +1,8 @@
+name = "Rescue Rangers Away!"
+type = "Action"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_be7a93b4b99b4a8b9da63fd956fa3c86.avif?1730901319"
+max_copies = 4
+inkwell = true
+text = "Count the number of characters you have in play. Chosen character loses {S} equal to that number until the start of your next turn."

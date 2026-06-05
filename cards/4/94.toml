@@ -1,0 +1,7 @@
+name = "Make the Potion"
+type = "Action"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_afc3862d2be34a6893a1d99cef9c90e6.avif?1716052430"
+max_copies = 4
+text = "Choose one:\n• Banish chosen item.\n• Deal 2 damage to chosen damaged character."

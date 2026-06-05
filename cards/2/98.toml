@@ -1,0 +1,8 @@
+name = "Hypnotize"
+type = "Action"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1391eb60b4054ac9a02e6b1f0e150c0f.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "Each opponent chooses and discards a card. Draw a card."

@@ -1,0 +1,7 @@
+name = "If it's Not Baroque"
+type = "Action"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_fcfc387c36dc450c93bb85840e3b6957.avif?1709690747"
+max_copies = 4
+text = "Return an item card from your discard to your hand."

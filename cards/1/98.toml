@@ -1,0 +1,8 @@
+name = "Sudden Chill"
+type = "Song"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_cf7aaffeb44d43fdb372b21fec59ff3b.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 2 or more can {E} to sing this song for free.)\nEach opponent chooses and discards a card."

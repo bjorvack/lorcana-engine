@@ -1,0 +1,12 @@
+name = "Moana - Curious Explorer"
+type = "Character"
+cost = 5
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d598d22b1dbf4566bede003c3af9e0a8.avif?1770259899"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Hero", "Princess"]
+text = "ANCESTRAL LEGACY You can ink cards from your discard."

@@ -1,0 +1,12 @@
+name = "Stitch - Little Rocket"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_cc036edd4af94499aec28c45e5a3b2a5.avif?1774403107"
+max_copies = 4
+strength = 3
+willpower = 1
+lore = 1
+classifications = ["Dreamborn", "Hero", "Alien"]
+keywords = ["Rush"]
+text = "Rush (This character can challenge the turn they're played.)"

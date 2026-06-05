@@ -1,0 +1,8 @@
+name = "Swordplay"
+type = "Action"
+cost = 1
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_79bedff3158647f791e28faa270773b5.avif?1770259482"
+max_copies = 4
+inkwell = true
+text = "Chosen character gains Challenger +3 this turn. (They get +3 {S} while challenging.)"

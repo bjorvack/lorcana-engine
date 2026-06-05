@@ -1,0 +1,8 @@
+name = "Heart of Te Fiti"
+type = "Item"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_81cea9b9222c496a8de13d5eb3215ab2.avif?1755541235"
+max_copies = 4
+inkwell = true
+text = "CREATE LIFE {E}, 2 {I} — Put the top card of your deck into your inkwell facedown and exerted."

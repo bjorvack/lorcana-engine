@@ -1,0 +1,12 @@
+name = "Elsa - Exploring the Unknown"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_309a0e71b66c4ba492590374f92d9598.avif?1773508813"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Hero", "Queen", "Sorcerer"]
+text = "CLOSER LOOK When you play this character, you may draw a card."

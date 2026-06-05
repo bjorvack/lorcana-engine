@@ -1,0 +1,12 @@
+name = "Yokai - Intellectual Schemer"
+type = "Character"
+cost = 2
+ink = ["Emerald", "Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f9a3516262004948b7bd488cc55af5b9.avif?1740589487"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Villain", "Inventor"]
+text = "INNOVATE You pay 1 {I} less to play characters using their Shift ability."

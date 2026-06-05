@@ -1,0 +1,12 @@
+name = "Cruella De Vil - Fashionable Cruiser"
+type = "Character"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f3478602630b4f20aed9e34d8ce4d995.avif?1755541062"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 2
+lore = 1
+classifications = ["Dreamborn", "Villain"]
+text = "NOW GET GOING During your turn, this character gains Evasive. (They can challenge characters with Evasive.)"

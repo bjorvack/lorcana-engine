@@ -1,0 +1,7 @@
+name = "Robin's Bow"
+type = "Item"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1784510055ec43e49b13b2837192c1d1.avif?1709690747"
+max_copies = 4
+text = "FOREST'S GIFT {E} — Deal 1 damage to chosen damaged character or location.\nA BIT OF A LARK Whenever a character of yours named Robin Hood quests, you may ready this item."

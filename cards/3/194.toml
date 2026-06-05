@@ -1,0 +1,12 @@
+name = "Thaddeus E. Klang - Metallic Leader"
+type = "Character"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_810ae6612d094f8a89c5db907d193cf5.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Villain"]
+text = "MY TEETH ARE SHARPER Whenever this character quests while at a location, you may deal 1 damage to chosen character."

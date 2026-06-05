@@ -1,0 +1,8 @@
+name = "Malicious, Mean, and Scary"
+type = "Song"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7039c6bce8754b01894d3d1e7868b6b2.avif?1761752397"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 3 or more can {E} to sing this song for free.)\nPut 1 damage counter on each opposing character."

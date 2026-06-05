@@ -1,0 +1,12 @@
+name = "Lawrence - Jealous Manservant"
+type = "Character"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_40708d21822d4d2cb668603a1dda664f.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 0
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "PAYBACK While this character has no damage, he gets +4 {S}."

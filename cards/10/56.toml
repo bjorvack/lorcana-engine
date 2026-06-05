@@ -1,0 +1,12 @@
+name = "Hades - Looking for a Deal"
+type = "Character"
+cost = 5
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d4514592d27b40cca5821f510aea2db2.avif?1761752189"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Villain", "Deity"]
+text = "WHAT D'YA SAY? When you play this character, you may choose an opposing character. If you do, draw 2 cards unless that character's player puts that card on the bottom of their deck."

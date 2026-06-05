@@ -1,0 +1,13 @@
+name = "Darkwing Duck - Darkwarrior"
+type = "Character"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a74daac05bd643ce8913eec4fcbf2bdc.avif?1770260042"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Super", "Detective"]
+keywords = ["Challenger 2"]
+text = "Challenger +2 (While challenging, this character gets +2 {S}.)\nINSTA-ARMOR During your turn, whenever an item is banished, this character gains Resist +1 until the start of your next turn. (Damage dealt to them is reduced by 1.)"

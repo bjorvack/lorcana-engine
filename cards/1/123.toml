@@ -1,0 +1,12 @@
+name = "Scar - Shameless Firebrand"
+type = "Character"
+cost = 8
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5ad957ef62844bcaba344b0af0a5ff24.avif?1709690747"
+max_copies = 4
+strength = 6
+willpower = 6
+lore = 1
+classifications = ["Floodborn", "Villain", "King"]
+keywords = ["Shift 6"]
+text = "Shift 6 (You may pay 6 {I} to play this on top of one of your characters named Scar.)\nROUSING SPEECH When you play this character, ready your characters with cost 3 or less. They can't quest for the rest of this turn."

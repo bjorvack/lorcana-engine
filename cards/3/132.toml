@@ -1,0 +1,8 @@
+name = "Maui's Fish Hook"
+type = "Item"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2ad6131751ce45c681919a185cbe640a.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "IT'S MAUI TIME! If you have a character named Maui in play, you may use this item's Shapeshift ability for free.\nSHAPESHIFT {E}, 2 {I} — Choose one:\n• Chosen character gains Evasive until the start of your next turn. (Only characters with Evasive can challenge them.)\n• Chosen character gets +3 {S} this turn."

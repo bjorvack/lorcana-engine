@@ -1,0 +1,12 @@
+name = "Launchpad - Exceptional Pilot"
+type = "Character"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5380e792419f4668ad25176094c6e667.avif?1761752340"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "OFF THE MAP When you play this character, you may banish chosen location."

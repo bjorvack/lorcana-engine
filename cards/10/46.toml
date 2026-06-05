@@ -1,0 +1,11 @@
+name = "Mushu - Braggin' Dragon"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_27a72e72f78d4fb6812740625edf9f79.avif?1761752145"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Ally", "Dragon"]

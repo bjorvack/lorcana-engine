@@ -1,0 +1,12 @@
+name = "Baloo - von Bruinwald XIII"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2867c1fd1a954efabc42975882f5be8c.avif?1709690747"
+max_copies = 4
+strength = 0
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Hero"]
+keywords = ["Bodyguard"]
+text = "Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)\nLET'S MAKE LIKE A TREE When this character is banished, gain 2 lore."

@@ -1,0 +1,12 @@
+name = "Prince Phillip - Swordsman of the Realm"
+type = "Character"
+cost = 7
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ab1aec84c58d45afb0773657b0990323.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 9
+lore = 3
+classifications = ["Storyborn", "Hero", "Prince"]
+text = "SLAYER OF DRAGONS When you play this character, banish chosen opposing Dragon character.\nPRESSING THE ADVANTAGE Whenever he challenges a damaged character, ready this character after the challenge."

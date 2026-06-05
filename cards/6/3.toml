@@ -1,0 +1,12 @@
+name = "Winnie the Pooh - Hunny Pirate"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_59aa66bcac7b43528a3c9c01f4bc1124.avif?1730901319"
+max_copies = 4
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Hero", "Pirate"]
+keywords = ["Support"]
+text = "Support (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)\n\nWE'RE PIRATES, YOU SEE Whenever this character quests, you pay 1 {I} less for the next Pirate character you play this turn."

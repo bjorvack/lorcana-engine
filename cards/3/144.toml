@@ -1,0 +1,12 @@
+name = "Gyro Gearloose - Gadget Whiz"
+type = "Character"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_921f3a8bbf1c486490121d18a6d45752.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally", "Inventor"]
+text = "NOW TRY TO KEEP UP {E} — Put an item card from your discard on the top of your deck."

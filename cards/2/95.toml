@@ -1,0 +1,11 @@
+name = "Virana - Fang Chief"
+type = "Character"
+cost = 5
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_703facdf13c34886a976ad5a31f955ff.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Villain", "Queen"]

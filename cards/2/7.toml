@@ -1,0 +1,11 @@
+name = "Eudora - Accomplished Seamstress"
+type = "Character"
+cost = 5
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1c8429d7ddbe4e4895be3442a801c039.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 9
+lore = 2
+classifications = ["Storyborn", "Ally"]

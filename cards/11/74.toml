@@ -1,0 +1,11 @@
+name = "Chien-Po - Snow Warrior"
+type = "Character"
+cost = 7
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9ea59b497df74d759d70cf087e044b16.avif?1770259532"
+max_copies = 4
+inkwell = true
+strength = 7
+willpower = 7
+lore = 3
+classifications = ["Storyborn", "Ally"]

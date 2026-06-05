@@ -1,0 +1,12 @@
+name = "Cogsworth - Climbing Clock"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7e99e5b9bd2747d29e6393aff2685158.avif?1740589621"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "STILL USEFUL While you have an item card in your discard, this character gets +2 {S}."

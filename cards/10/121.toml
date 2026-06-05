@@ -1,0 +1,11 @@
+name = "Donald Duck - Ruby Champion"
+type = "Character"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a9118586fa7c492bbe23ad34b60dcc57.avif?1761763656"
+max_copies = 4
+strength = 4
+willpower = 4
+lore = 1
+classifications = ["Dreamborn", "Hero"]
+text = "HIGH ENERGY Your other Ruby characters get +1 {S}.\nPOWERFUL REWARD Your other Ruby characters with 7 {S} or more get +1 {L}."

@@ -1,0 +1,12 @@
+name = "The White Rose - Jewel of the Garden"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6fbd9103624b4b8d95fec133326385c7.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Storyborn"]
+text = "THE BEAUTY OF THE WORLD When you play this character, gain 1 lore."

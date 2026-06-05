@@ -1,0 +1,8 @@
+name = "Training Staff"
+type = "Item"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_58e5277d1e554fd28d2b56ce65317d81.avif?1740590282"
+max_copies = 4
+inkwell = true
+text = "PRECISION STRIKE {E}, 1 {I} — Chosen character gains Challenger +2 this turn. (They get +2 {S} while challenging.)"

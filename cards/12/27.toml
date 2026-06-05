@@ -1,0 +1,12 @@
+name = "Chip - Team Player"
+type = "Character"
+cost = 6
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_81be5ee0001a4e908712f662cccff814.avif?1777687239"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 7
+lore = 2
+classifications = ["Dreamborn", "Hero"]
+text = "RANGER RESOURCEFULNESS When you play this character, if you have another character with 4 {W} or more in play, you may draw a card."

@@ -1,0 +1,11 @@
+name = "Wreck-It Ralph - Ham Hands"
+type = "Character"
+cost = 6
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6c49377313ce45b683987dbd03936467.avif?1730901319"
+max_copies = 4
+strength = 4
+willpower = 4
+lore = 3
+classifications = ["Dreamborn", "Hero"]
+text = "I WRECK THINGS Whenever this character quests, you may banish chosen item or location to gain 2 lore."

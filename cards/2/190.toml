@@ -1,0 +1,11 @@
+name = "Pacha - Village Leader"
+type = "Character"
+cost = 6
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4baaef6e190c46e4b03966728f10034a.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 8
+lore = 2
+classifications = ["Storyborn", "Hero"]

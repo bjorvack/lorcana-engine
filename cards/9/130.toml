@@ -1,0 +1,9 @@
+name = "I2I"
+type = "Song"
+cost = 9
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_aab461b250e4450ba96ddc1baff4bdea.avif?1755540962"
+max_copies = 4
+inkwell = true
+keywords = ["Sing Together 9"]
+text = "Sing Together 9 (Any number of your or your teammates' characters with total cost 9 or more may {E} to sing this song for free.)\nEach player draws 2 cards and gains 2 lore. If 2 or more characters sang this song, ready them. They can't quest for the rest of this turn."

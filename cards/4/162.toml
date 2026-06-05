@@ -1,0 +1,8 @@
+name = "Dig a Little Deeper"
+type = "Song"
+cost = 8
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_01a9a94d42824240b555d065d5f5f715.avif?1716052430"
+max_copies = 4
+keywords = ["Sing Together 8"]
+text = "Sing Together 8 (Any number of your or your teammates' characters with total cost 8 or more may {E} to sing this song for free.)\nLook at the top 7 cards of your deck. Put 2 into your hand. Put the rest on the bottom of your deck in any order."

@@ -1,0 +1,10 @@
+name = "Flotilla - Coconut Armada"
+type = "Location"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5b57ee130c204b778df487c9826834c1.avif?1730901319"
+max_copies = 4
+move_cost = 2
+willpower = 6
+lore = 0
+text = "TINY THIEVES At the start of your turn, if you have a character here, all opponents lose 1 lore and you gain lore equal to the lore lost this way."

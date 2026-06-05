@@ -1,0 +1,12 @@
+name = "Cruella De Vil - Judgmental Traveler"
+type = "Character"
+cost = 6
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f8c2be32fbd44519b24aba773718210a.avif?1777687522"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 4
+classifications = ["Dreamborn", "Villain"]
+text = "YOU'RE OUT OF FASHION Whenever this character quests, if you played another character this turn, you may banish chosen damaged character."

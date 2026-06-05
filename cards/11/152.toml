@@ -1,0 +1,13 @@
+name = "Scrooge McDuck - Reformed Ebenezer"
+type = "Character"
+cost = 6
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8ce2b4cc2aff4ed9b3bc3fe2b1d78b18.avif?1770259885"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 6
+lore = 2
+classifications = ["Floodborn", "Hero"]
+keywords = ["Shift 4"]
+text = "Shift 4 {I} (You may pay 4 {I} to play this on top of one of your characters named Scrooge McDuck.)\nSPREADING JOY When you play this character, you may put a card from the top of your deck facedown under each of your other characters. If you do, those characters gain Ward until the start of your next turn. (Opponents can't choose them except to challenge.)"

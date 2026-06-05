@@ -1,0 +1,11 @@
+name = "Sisu - Divine Water Dragon"
+type = "Character"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_79a0419883024bdbb3b8127318829daa.avif?1709690747"
+max_copies = 4
+strength = 2
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Hero", "Deity", "Dragon"]
+text = "I TRUST YOU Whenever this character quests, look at the top 2 cards of your deck. You may put one into your hand. Put the rest on the bottom of your deck in any order."

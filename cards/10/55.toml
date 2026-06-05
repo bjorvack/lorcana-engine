@@ -1,0 +1,12 @@
+name = "Demona - Scourge of the Wyvern Clan"
+type = "Character"
+cost = 6
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a6116dcba33643b9a31897960a2267f1.avif?1761752185"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 6
+lore = 2
+classifications = ["Storyborn", "Villain", "Gargoyle", "Sorcerer"]
+text = "AD SAXUM COMMUTATE When you play this character, exert all opposing characters. Then, each player with fewer than 3 cards in their hand draws until they have 3.\nSTONE BY DAY If you have 3 or more cards in your hand, this character can't ready."

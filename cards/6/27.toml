@@ -1,0 +1,8 @@
+name = "Good Job!"
+type = "Action"
+cost = 1
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a9d39ce276fd4f1b9435d1bb1d09559c.avif?1730901319"
+max_copies = 4
+inkwell = true
+text = "Chosen character gets +1 {L} this turn."

@@ -1,0 +1,8 @@
+name = "Plunger Crossbow"
+type = "Item"
+cost = 1
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3d1982b9cb5d4ed0bae53c2db2c92fd8.avif?1777687933"
+max_copies = 4
+inkwell = true
+text = "SUCTION TECHNOLOGY {E}, 2 {I} — Draw a card, then choose and discard a card."

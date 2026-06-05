@@ -1,0 +1,10 @@
+name = "Sugar Rush Speedway - Finish Line"
+type = "Location"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c9365d1b256c4d0fa0600686f72b6f3b.avif?1730901319"
+max_copies = 4
+move_cost = 6
+willpower = 7
+lore = 0
+text = "BRING IT HOME, LITTLE ONE! When you move a character here from another location, you may banish this location to gain 3 lore and draw 3 cards."

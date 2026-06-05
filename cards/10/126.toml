@@ -1,0 +1,12 @@
+name = "Mulan - Standing Her Ground"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_775c04f987c24e39bcd8cda88d20d2ab.avif?1761763710"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Hero", "Princess"]
+text = "FLOWING BLADE During your turn, if you've put a card under one of your characters or locations this turn, this character takes no damage from challenges."

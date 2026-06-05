@@ -1,0 +1,12 @@
+name = "Maid Marian - Badminton Ace"
+type = "Character"
+cost = 4
+ink = ["Sapphire", "Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1a7dadb10b334375b5b5b4eca2cce42c.avif?1740589804"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 2
+classifications = ["Dreamborn", "Hero", "Princess"]
+text = "GOOD SHOT During an opponent's turn, whenever one of your Ally characters is damaged, deal 1 damage to chosen opposing character.\nFAIR PLAY Your characters named Lady Kluck gain Resist +1. (Damage dealt to them is reduced by 1.)"

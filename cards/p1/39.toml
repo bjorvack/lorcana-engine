@@ -1,0 +1,12 @@
+name = "Scrooge Mcduck - Uncle Moneybags"
+type = "Character"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c77d5fd7b519414d848dc5e73124f5ce.avif?1728609660"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Hero"]
+text = "TREASURE FINDER Whenever this character quests, you pay 1 {I} less for the next item you play this turn."

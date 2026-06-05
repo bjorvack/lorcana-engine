@@ -1,0 +1,12 @@
+name = "Marie - Favored Kitten"
+type = "Character"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4022fcc6593a41dfb1f50cc003acd15c.avif?1740589765"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 2
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "I'LL SHOW YOU Whenever this character quests, you may give chosen character -2 {S} this turn."

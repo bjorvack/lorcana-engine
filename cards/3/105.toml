@@ -1,0 +1,12 @@
+name = "Captain Hook - Master Swordsman"
+type = "Character"
+cost = 5
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_cded72e2cdf242d490be6e3e32c3e17b.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 4
+lore = 1
+classifications = ["Dreamborn", "Villain", "Pirate", "Captain"]
+text = "NEMESIS During your turn, whenever this character banishes another character in a challenge, ready this character. He can't quest for the rest of this turn.\nMAN-TO-MAN Characters named Peter Pan lose Evasive and can't gain Evasive."

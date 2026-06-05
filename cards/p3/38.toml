@@ -1,0 +1,12 @@
+name = "Mulan - Disguised Soldier"
+type = "Character"
+cost = 1
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_51c56768845241c9b79c30510bf3af72.avif?1773508909"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Hero", "Princess"]
+text = "WHERE DO I SIGN IN? When you play this character, you may draw a card, then choose and discard a card."

@@ -1,0 +1,8 @@
+name = "Rose Lantern"
+type = "Item"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0294484e638d4f389732639af2b5d5e8.avif?1755540524"
+max_copies = 4
+inkwell = true
+text = "MYSTICAL PETALS {E}, 2 {I} — Move 1 damage counter from chosen character to chosen opposing character."

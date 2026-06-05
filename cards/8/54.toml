@@ -1,0 +1,12 @@
+name = "Megara - Part of the Plan"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_60f9c25e26a148c6bae493b7c7792a0f.avif?1747508526"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 5
+lore = 1
+classifications = ["Dreamborn", "Ally"]
+text = "CONTENTIOUS ALLIANCE While you have a character named Hades in play, this character gains Challenger +2. (They get +2 {S} while challenging.)"

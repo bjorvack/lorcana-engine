@@ -1,0 +1,12 @@
+name = "Bruno Madrigal - Oasis Oracle"
+type = "Character"
+cost = 5
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_da0f9560eccf4967bb614cd049667f83.avif?1777687761"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 5
+lore = 1
+classifications = ["Dreamborn", "Ally", "Madrigal"]
+text = "FIND THAT VISION Once during your turn, whenever you remove damage from one of your characters, you may look at the top 2 cards of your deck. Put one into your hand and the other on the bottom of your deck.\nYOU'LL BE OKAY Whenever this character quests, you may remove all damage from chosen character."

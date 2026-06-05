@@ -1,0 +1,7 @@
+name = "Part of Your World"
+type = "Song"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_df53bbf046f542d19202f4e11bbe9d5b.avif?1709690747"
+max_copies = 4
+text = "(A character with cost 3 or more can {E} to sing this song for free.)\nReturn a character card from your discard to your hand."

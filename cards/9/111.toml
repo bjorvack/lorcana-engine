@@ -1,0 +1,13 @@
+name = "Mickey Mouse - Brave Little Prince"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8c2b197768734180bf5a4ec7bf1b4e37.avif?1755540826"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Floodborn", "Hero", "Prince"]
+keywords = ["Evasive", "Shift 5"]
+text = "Shift 5 {I} (You may pay 5 {I} to play this on top of one of your characters named Mickey Mouse.)\nEvasive (Only characters with Evasive can challenge this character.)\nCROWNING ACHIEVEMENT While this character has a card under him, he gets +3 {S}, +3 {W}, and +3 {L}."

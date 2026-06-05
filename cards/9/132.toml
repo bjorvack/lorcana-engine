@@ -1,0 +1,9 @@
+name = "A Pirate's Life"
+type = "Song"
+cost = 6
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_480463cc9e3f4f7b9cb1c96a83d69544.avif?1755540978"
+max_copies = 4
+inkwell = true
+keywords = ["Sing Together 6"]
+text = "Sing Together 6 (Any number of your or your teammates' characters with total cost 6 or more may to sing this song for free.)\nEach opponent loses 2 lore. You gain 2 lore."

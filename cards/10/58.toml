@@ -1,0 +1,11 @@
+name = "Merlin - Completing His Research"
+type = "Character"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7e7bbc5fda91421c9950368d5fee65ad.avif?1761752198"
+max_copies = 4
+strength = 0
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Mentor", "Sorcerer", "Whisper"]
+text = "Boost 2 {I} (Once during your turn, you may pay 2 {I} to put the top card of your deck facedown under this character.)\nLEGACY OF LEARNING When this character is banished in a challenge, if he had a card under him, draw 2 cards."

@@ -1,0 +1,12 @@
+name = "Dr. Sara Bellum - Head of Research"
+type = "Character"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_51c67ec5aa334b43a036c79e0bceb3b7.avif?1777687753"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally", "Inventor"]
+text = "SCIENTIFIC SCRUTINY When you play this character, look at the top card of your deck. Put it on either the top or the bottom of your deck."

@@ -1,0 +1,8 @@
+name = "Four Dozen Eggs"
+type = "Song"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_afa9023a2aeb4569bad0116e638821fa.avif?1755541201"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 4 or more can {E} to sing this song for free.)\nYour characters gain Resist +2 until the start of your next turn. (Damage dealt to them is reduced by 2.)"

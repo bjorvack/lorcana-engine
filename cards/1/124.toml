@@ -1,0 +1,11 @@
+name = "Sergeant Tibbs - Courageous Cat"
+type = "Character"
+cost = 1
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1666aca597bf414e87a2cc320b7b2111.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally"]

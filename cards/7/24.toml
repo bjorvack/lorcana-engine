@@ -1,0 +1,11 @@
+name = "The Prince - Vigilant Suitor"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a661b0191f2d40ef8622c751bee7c0c5.avif?1740589194"
+max_copies = 4
+strength = 0
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Hero", "Prince"]
+text = "Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)"

@@ -1,0 +1,13 @@
+name = "Beast - Snowfield Troublemaker"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_cde01953c3aa414290991fddcffe4651.avif?1770259730"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Hero", "Prince"]
+keywords = ["Rush"]
+text = "Rush (This character can challenge the turn they're played.)\nDYNAMIC MANEUVER Whenever this character challenges, if he's at a location, he takes no damage from the challenge."

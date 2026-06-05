@@ -1,0 +1,13 @@
+name = "Maudie - Exasperated Nursemaid"
+type = "Character"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a70c450d25964e54b6aa7d03e0c08618.avif?1777687889"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 5
+lore = 1
+classifications = ["Storyborn"]
+keywords = ["Resist 1"]
+text = "Resist +1 (Damage dealt to this character is reduced by 1.)"

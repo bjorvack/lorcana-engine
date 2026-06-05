@@ -1,0 +1,8 @@
+name = "Naveen's Ukulele"
+type = "Item"
+cost = 1
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d4d40d9e539442f592da01b640e440a7.avif?1730901319"
+max_copies = 4
+inkwell = true
+text = "MAKE IT SING 1 {I}, Banish this item - Chosen character counts as having +3 cost to sing songs this turn."

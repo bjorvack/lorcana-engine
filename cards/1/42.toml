@@ -1,0 +1,12 @@
+name = "Elsa - Spirit of Winter"
+type = "Character"
+cost = 8
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_04bca46a8e2d4e9ba0fbdbfc6c99e51e.avif?1709690747"
+max_copies = 4
+strength = 4
+willpower = 6
+lore = 3
+classifications = ["Floodborn", "Hero", "Queen", "Sorcerer"]
+keywords = ["Shift 6"]
+text = "Shift 6 (You may pay 6 {I} to play this on top of one of your characters named Elsa.)\nDEEP FREEZE When you play this character, exert up to 2 chosen characters. They can't ready at the start of their next turn."

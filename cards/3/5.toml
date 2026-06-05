@@ -1,0 +1,13 @@
+name = "Joshua Sweet - The Doctor"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3ff14fbe696348d281fb1974bdcd8e5f.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Ally"]
+keywords = ["Bodyguard"]
+text = "Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)"

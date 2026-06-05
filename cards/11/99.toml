@@ -1,0 +1,7 @@
+name = "Rafiki's Bakora Staff"
+type = "Item"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b33671b3938940708ac2a4f7d00d942b.avif?1770259645"
+max_copies = 4
+text = "READ THE OMENS {E}, 1 {I} — Draw a card, then choose and discard a card.\nBONK! 1 {I} , Banish this item — Deal 1 damage to chosen character."

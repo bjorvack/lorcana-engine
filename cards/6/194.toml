@@ -1,0 +1,13 @@
+name = "John Silver - Stern Captain"
+type = "Character"
+cost = 8
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_10eefc9e8b2943c0a29f6e19a1c114a0.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 6
+lore = 2
+classifications = ["Floodborn", "Villain", "Alien", "Pirate", "Captain"]
+keywords = ["Resist 2", "Shift 5"]
+text = "Shift 5 (You may pay 5 {I} to play this on top of one of your characters named John Silver.)\nResist +2 (Damage dealt to this character is reduced by 2.)\nDON'T JUST SIT THERE! At the start of your turn, deal 1 damage to each opposing ready character."

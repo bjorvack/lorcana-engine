@@ -1,0 +1,8 @@
+name = "Smash"
+type = "Action"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_108a4980fc8d4e3f84faf7b7ffc18cc0.avif?1755541413"
+max_copies = 4
+inkwell = true
+text = "Deal 3 damage to chosen character."

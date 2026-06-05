@@ -1,0 +1,8 @@
+name = "Sumerian Talisman"
+type = "Item"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_890de7a0c3e34c8da80430d86a27365c.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "SOURCE OF MAGIC During your turn, whenever one of your characters is banished in a challenge, you may draw a card."

@@ -1,0 +1,8 @@
+name = "Wake Up, Alice!"
+type = "Action"
+cost = 1
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_688f773c54e34dbf8f96096b19c1c2b9.avif?1740589565"
+max_copies = 4
+inkwell = true
+text = "Return chosen damaged character to their player's hand."

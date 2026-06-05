@@ -1,0 +1,12 @@
+name = "Duckworth - Ghost Butler"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8fc9a082fe1d49d0a81867c9665b00b2.avif?1761752149"
+max_copies = 4
+strength = 3
+willpower = 1
+lore = 2
+classifications = ["Storyborn", "Ally", "Ghost"]
+keywords = ["Rush"]
+text = "Rush (This character can challenge the turn they're played.)\nFINAL ACT During your turn, when this character is banished, you may put the top card of your deck facedown under one of your characters or locations with Boost."

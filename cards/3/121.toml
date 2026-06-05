@@ -1,0 +1,11 @@
+name = "Prince Eric - Expert Helmsman"
+type = "Character"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4d0b6d09ae6c423ea874fbb6c659355e.avif?1709690747"
+max_copies = 4
+strength = 2
+willpower = 2
+lore = 2
+classifications = ["Dreamborn", "Hero", "Prince"]
+text = "SURPRISE MANEUVER When this character is banished, you may banish chosen character."

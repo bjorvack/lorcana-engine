@@ -1,0 +1,12 @@
+name = "Captain Hook - Thinking a Happy Thought"
+type = "Character"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_217eb0feed8b46fea1b5dc6c0b2b9e12.avif?1709690747"
+max_copies = 4
+strength = 2
+willpower = 5
+lore = 1
+classifications = ["Floodborn", "Villain", "Pirate", "Captain"]
+keywords = ["Challenger 3", "Shift 3"]
+text = "Shift 3 (You may pay 3 {I} to play this on top of one of your characters named Captain Hook.)\nChallenger +3 (While challenging, this character gets +3 {S}.)\nSTOLEN DUST Characters with cost 3 or less can't challenge this character."

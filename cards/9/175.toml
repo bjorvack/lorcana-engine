@@ -1,0 +1,11 @@
+name = "Scar - Finally King"
+type = "Character"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e05358d63cb44d8a9915ccd81c77458c.avif?1755822829"
+max_copies = 4
+strength = 5
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Villain", "King"]
+text = "BE GRATEFUL Your Ally characters get +1 {S}.\nSTICK WITH ME At the end of your turn, if this character is exerted, you may draw cards equal to the {S} of chosen Ally character of yours. If you do, choose and discard 2 cards and banish that character."

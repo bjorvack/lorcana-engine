@@ -1,0 +1,8 @@
+name = "Second Star to the Right"
+type = "Song"
+cost = 10
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_07d43fd911d2476caa9c4aa982d29405.avif?1755540491"
+max_copies = 4
+keywords = ["Sing Together 10"]
+text = "Sing Together 10 (Any number of your or your teammates' characters with total cost 10 or more may {E} to sing this song for free.)\nChosen player draws 5 cards."

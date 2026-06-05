@@ -1,0 +1,7 @@
+name = "Last-Ditch Effort"
+type = "Action"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1b909f18bf5e43948a2f59d32a9dbaa7.avif?1755540502"
+max_copies = 4
+text = "Exert chosen opposing character. Chosen character of yours gains Challenger +2 this turn. (They get +2 {S} while challenging.)"

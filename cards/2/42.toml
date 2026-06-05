@@ -1,0 +1,12 @@
+name = "Fairy Godmother - Pure Heart"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c35b1525a65d4eb28169ad5d88a0bc27.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally", "Fairy"]
+text = "JUST LEAVE IT TO ME Whenever you play a character named Cinderella, you may exert chosen character."

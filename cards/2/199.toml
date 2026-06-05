@@ -1,0 +1,7 @@
+name = "Let the Storm Rage On"
+type = "Song"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ce1ec049b9994d6fae071a0f74886cb3.avif?1709690747"
+max_copies = 4
+text = "(A character with cost 3 or more can {E} to sing this song for free.)\nDeal 2 damage to chosen character. Draw a card."

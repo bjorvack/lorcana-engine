@@ -1,0 +1,11 @@
+name = "Castle Wyvern - Above the Clouds"
+type = "Location"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8212061efed6498f87b6df190c10c4fa.avif?1761765037"
+max_copies = 4
+inkwell = true
+move_cost = 1
+willpower = 5
+lore = 1
+text = "PROTECT THIS CASTLE Characters gain Challenger +1 and Resist +1 while here. (They get +1 {S} while challenging. Damage dealt to them is reduced by 1.)"

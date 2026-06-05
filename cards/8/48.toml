@@ -1,0 +1,11 @@
+name = "Hades - Ruthless Tyrant"
+type = "Character"
+cost = 7
+ink = ["Amethyst", "Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4c3204fa9fa14ff9a13a41cadc4259aa.avif?1747507393"
+max_copies = 4
+strength = 3
+willpower = 6
+lore = 2
+classifications = ["Dreamborn", "Villain", "Deity"]
+text = "SHORT ON PATIENCE When you play this character and whenever he quests, you may deal 2 damage to another chosen character of yours to draw 2 cards."

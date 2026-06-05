@@ -1,0 +1,11 @@
+name = "Genie - Investigative Mind"
+type = "Character"
+cost = 5
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_cd2b67f12f9f42beab11392540a24c2e.avif?1761764436"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 7
+lore = 2
+classifications = ["Storyborn", "Ally", "Detective"]

@@ -1,0 +1,13 @@
+name = "Ariel - Sonic Warrior"
+type = "Character"
+cost = 6
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_fd34f98e6230426fb411e1fd8528a7dc.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 8
+lore = 2
+classifications = ["Floodborn", "Hero", "Princess"]
+keywords = ["Shift 4"]
+text = "Shift 4 (You may pay 4 {I} to play this on top of one of your characters named Ariel.)\nAMPLIFIED VOICE Whenever you play a song, you may pay 2 {I} to deal 3 damage to chosen character."

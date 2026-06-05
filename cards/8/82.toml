@@ -1,0 +1,8 @@
+name = "Everybody's Got a Weakness"
+type = "Action"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_af2675aaffe94ff2bf54e5635e2657d8.avif?1747508891"
+max_copies = 4
+inkwell = true
+text = "Move 1 damage counter from each damaged character you have in play to chosen opposing character. Draw a card for each damage counter moved this way."

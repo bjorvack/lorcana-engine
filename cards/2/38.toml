@@ -1,0 +1,13 @@
+name = "Dr. Facilier - Savvy Opportunist"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_bb645060d48e4242b0003701c6b27400.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Villain", "Sorcerer"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)"

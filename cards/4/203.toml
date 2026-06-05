@@ -1,0 +1,11 @@
+name = "The Wall - Border Fortress"
+type = "Location"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a8ad84833e7f41d5bf65fe1787c65fe3.avif?1716052430"
+max_copies = 4
+inkwell = true
+move_cost = 2
+willpower = 8
+lore = 0
+text = "PROTECT THE REALM While you have an exerted character here, your other locations can't be challenged."

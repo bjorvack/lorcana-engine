@@ -1,0 +1,11 @@
+name = "Pocahontas - Following the Wind"
+type = "Character"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_044b499eebfa487ea9fb1a43e8d5fcdb.avif?1770259389"
+max_copies = 4
+strength = 3
+willpower = 2
+lore = 1
+classifications = ["Dreamborn", "Hero", "Princess"]
+text = "WHAT IS MY PATH? Whenever this character quests, gain lore equal to another chosen exerted character's {L}."

@@ -1,0 +1,11 @@
+name = "King Louie - Bandleader"
+type = "Character"
+cost = 7
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_fc70bb26c18544679b91bca3a7ad025c.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 7
+willpower = 7
+lore = 3
+classifications = ["Storyborn", "Ally", "King"]

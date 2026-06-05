@@ -1,0 +1,12 @@
+name = "Mickey Mouse - Musketeer Captain"
+type = "Character"
+cost = 7
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a8b84c38955448fc8e9851870f2829de.avif?1716052430"
+max_copies = 4
+strength = 3
+willpower = 6
+lore = 2
+classifications = ["Floodborn", "Hero", "Musketeer", "Captain"]
+keywords = ["Bodyguard", "Shift 5"]
+text = "Shift 5 (You may pay 5 {I} to play this on top of one of your characters named Mickey Mouse.)\nBodyguard, Support\nMUSKETEERS UNITED When you play this character, if you used Shift to play him, you may draw a card for each character with Bodyguard you have in play."

@@ -1,0 +1,13 @@
+name = "Diablo - Spiteful Raven"
+type = "Character"
+cost = 2
+ink = ["Amethyst", "Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f13e08ae1efd4ae4be493361797a3497.avif?1740589360"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)\nChallenger +2 (While challenging, this character gets +2 {S})"

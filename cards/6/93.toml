@@ -1,0 +1,7 @@
+name = "Bend to My Will"
+type = "Action"
+cost = 7
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5406218b8d7a41a68bdf0be3029acf05.avif?1730901319"
+max_copies = 4
+text = "Each opponent discards all cards in their hand."

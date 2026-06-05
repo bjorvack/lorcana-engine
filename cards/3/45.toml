@@ -1,0 +1,12 @@
+name = "Magic Broom - Swift Cleaner"
+type = "Character"
+cost = 5
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9b1e3b67709f41c58130599854495ff5.avif?1709690747"
+max_copies = 4
+strength = 4
+willpower = 4
+lore = 2
+classifications = ["Dreamborn", "Broom"]
+keywords = ["Rush"]
+text = "Rush (This character can challenge the turn they're played.)\nCLEAN THIS, CLEAN THAT When you play this character, you may shuffle all Broom cards from your discard into your deck."

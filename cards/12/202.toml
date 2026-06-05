@@ -1,0 +1,8 @@
+name = "Club Door"
+type = "Item"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b0a88627594c4886893325e28443db63.avif?1777687941"
+max_copies = 4
+inkwell = true
+text = "WELCOME BACK, SIR If you have a character named Fat Cat in play, you may play this card for free.\nCOOL CATS ONLY Your locations can't be challenged by characters with cost 2 or less."

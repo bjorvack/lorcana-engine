@@ -1,0 +1,8 @@
+name = "Don't Be Nervous"
+type = "Action"
+cost = 5
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2718faa7b40f4af8b29f6d467dbc81bc.avif?1777687414"
+max_copies = 4
+inkwell = true
+text = "Search your deck for a Princess character card, reveal that card to all players, and put it into your hand. Then, shuffle your deck. If you have 2 or more Seven Dwarfs characters in play, draw 2 cards and gain 2 lore."

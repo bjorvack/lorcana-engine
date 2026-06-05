@@ -1,0 +1,13 @@
+name = "Tick-Tock - Ever-Present Pursuer"
+type = "Character"
+cost = 6
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_cefa62e7a0f246dd81c4c7628c3c054c.avif?1755540406"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 7
+lore = 1
+classifications = ["Storyborn", "Ally"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)"

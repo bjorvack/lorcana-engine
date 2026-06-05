@@ -1,0 +1,12 @@
+name = "Jasmine - Heir of Agrabah"
+type = "Character"
+cost = 1
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_76abbf408f4940dea3dc5daf5afdd314.avif?1755541131"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Hero", "Princess"]
+text = "I'M A FAST LEARNER When you play this character, remove up to 1 damage from chosen character of yours."

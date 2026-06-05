@@ -1,0 +1,12 @@
+name = "Hand-in-the-Box - Sid's Toy"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_309b96e0cc0f4a40a3a7b381b2823e0d.avif?1777687607"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally", "Toy"]
+text = "SPRING-LOADED You may put a Toy character card from your discard on the bottom of your deck to play this character for free."

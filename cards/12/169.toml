@@ -1,0 +1,7 @@
+name = "Shepherd's Journal"
+type = "Item"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5459a4d694d44a97bf71319a8ab35a32.avif?1777687821"
+max_copies = 4
+text = "MARGIN NOTES When you play this item, you may look at the top card of your deck. Put it on either the top of your deck or into your discard.\nKEY TO THE PUZZLE 1 {I}, Banish this item — Return another item card from your discard to your hand."

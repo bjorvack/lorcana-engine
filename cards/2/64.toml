@@ -1,0 +1,8 @@
+name = "Legend of the Sword in the Stone"
+type = "Song"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d4eaff075b2b41659976e71933d2c3e4.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 2 or more can {E} to sing this song for free.)\nChosen character gains Challenger +3 this turn. (They get +3 {S} while challenging.)"

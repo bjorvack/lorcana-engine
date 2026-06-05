@@ -1,0 +1,8 @@
+name = "I've Got a Dream"
+type = "Song"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_980a374d3ce34527868e0f78b48f63c6.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 2 or more can {E} to sing this song for free.)\nReady chosen character of yours at a location. They can't quest for the rest of this turn. Gain lore equal to that location's {L}."

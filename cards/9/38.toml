@@ -1,0 +1,12 @@
+name = "Jafar - Keeper of Secrets"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2f69538767394390bc91d25fd5948a5b.avif?1755540324"
+max_copies = 4
+inkwell = true
+strength = 0
+willpower = 5
+lore = 2
+classifications = ["Dreamborn", "Villain", "Sorcerer"]
+text = "HIDDEN WONDERS This character gets +1 {S} for each card in your hand."

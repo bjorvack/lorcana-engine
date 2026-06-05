@@ -1,0 +1,12 @@
+name = "Namaari - Single-Minded Rival"
+type = "Character"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_444715c10be04c9f875a24424adb9fb4.avif?1747509516"
+max_copies = 4
+inkwell = true
+strength = 0
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Villain", "Princess"]
+text = "STRATEGIC EDGE When you play this character and at the start of your turn, you may draw a card, then choose and discard a card.\nEXTREME FOCUS This character gets +1 {S} for each card in your discard."

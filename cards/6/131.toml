@@ -1,0 +1,7 @@
+name = "Energy Blast"
+type = "Action"
+cost = 7
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d65c18ee25cd417bbb2c14e01f2a69a5.avif?1730901319"
+max_copies = 4
+text = "Banish chosen character. Draw a card."

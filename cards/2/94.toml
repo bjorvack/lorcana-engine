@@ -1,0 +1,11 @@
+name = "Tiana - True Princess"
+type = "Character"
+cost = 5
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5403ff921bce4bbc90468b0f860dc23c.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 3
+lore = 3
+classifications = ["Storyborn", "Hero", "Princess"]

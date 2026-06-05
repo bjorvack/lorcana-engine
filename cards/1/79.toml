@@ -1,0 +1,11 @@
+name = "Horace - No-Good Scoundrel"
+type = "Character"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_449f6f94972b4bce9a87460460204cd8.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally"]

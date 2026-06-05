@@ -1,0 +1,11 @@
+name = "Scrooge's Counting House - Ebenezer's Office"
+type = "Location"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_889f6b26a5a746d6a6cbe4139412855a.avif?1770259803"
+max_copies = 4
+inkwell = true
+move_cost = 1
+willpower = 4
+lore = 1
+text = "Boost 2 {I} (Once during your turn, you may pay 2 {I} to put the top card of your deck facedown under this location.)\nGood Business This location gets +1 {W} and +1 {L} for each card under it."

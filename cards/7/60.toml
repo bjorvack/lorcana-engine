@@ -1,0 +1,12 @@
+name = "Bucky - Nutty Rascal"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e8ae850c18614645b9458dbca01b1f14.avif?1740589337"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 2
+lore = 1
+classifications = ["Dreamborn", "Ally"]
+text = "POP! When this character is banished in a challenge, you may draw a card."

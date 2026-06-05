@@ -1,0 +1,8 @@
+name = "Sabotage"
+type = "Action"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_07d93727337b490faacc8c389b60e22d.avif?1777687538"
+max_copies = 4
+inkwell = true
+text = "Banish chosen item or location and all other items or locations with the same name."

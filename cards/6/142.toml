@@ -1,0 +1,11 @@
+name = "Oswald - The Lucky Rabbit"
+type = "Character"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5fe66ed6c5c842ac9e0ea2eba5ca3a4f.avif?1730901319"
+max_copies = 4
+strength = 2
+willpower = 1
+lore = 2
+classifications = ["Storyborn", "Hero"]
+text = "FAVORABLE CHANCE During your turn, whenever a card is put into your inkwell, you may reveal the top card of your deck. If it's an item card, you may play that item for free and it enters play exerted. Otherwise, put it on the bottom of your deck."

@@ -1,0 +1,11 @@
+name = "Gus - Champion of Cheese"
+type = "Character"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_773d33f2fd1e4f54b3a47363b31ebce1.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally"]

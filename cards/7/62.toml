@@ -1,0 +1,12 @@
+name = "Rajah - Ghostly Tiger"
+type = "Character"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_85bc31bc75a34ebcbcfc164e701ae6ef.avif?1740589344"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Ally", "Illusion"]
+text = "Vanish (When an opponent chooses this character for an action, banish them.)"

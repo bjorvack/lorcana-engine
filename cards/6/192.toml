@@ -1,0 +1,12 @@
+name = "Captain Amelia - Commander of the Legacy"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3594674864b745f3830c15e72a221bf5.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Ally", "Alien", "Captain"]
+text = "DRIVELING GALOOTS This character can't be challenged by Pirate characters.\nEVERYTHING SHIPSHAPE While being challenged, your other characters gain Resist +1. (Damage dealt to them is reduced by 1.)"

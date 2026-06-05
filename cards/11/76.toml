@@ -1,0 +1,12 @@
+name = "Boomer - Has the Beak"
+type = "Character"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_db6ccc6d3dde4e4890ff8a1fd391e905.avif?1770259541"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "SPOTTED HIM! When you play this character, you may exert chosen damaged character."

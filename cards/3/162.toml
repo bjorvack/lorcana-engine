@@ -1,0 +1,8 @@
+name = "Repair"
+type = "Action"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e2433a86940b43e8ac63f6eeddedf085.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "Remove up to 3 damage from one of your locations or characters."

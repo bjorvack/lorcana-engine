@@ -1,0 +1,7 @@
+name = "The Islands I Pulled from the Sea"
+type = "Song"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d388e59bbe7d4da98d3779993a350b4c.avif?1730901319"
+max_copies = 4
+text = "(A character with cost 3 or more can {E} to sing this song for free.)\nSearch your deck for a location card, reveal that card to all players, and put it into your hand. Then, shuffle your deck."

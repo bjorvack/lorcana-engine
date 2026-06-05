@@ -1,0 +1,8 @@
+name = "Sunglasses"
+type = "Item"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2ae2d2f7e846489a802db83587a26fc3.avif?1730901319"
+max_copies = 4
+inkwell = true
+text = "SPYCRAFT {E} - Draw a card, then choose and discard a card."

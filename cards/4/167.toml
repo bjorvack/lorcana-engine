@@ -1,0 +1,8 @@
+name = "Great Stone Dragon"
+type = "Item"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_11587e02677148c28e30eeaa164a2569.avif?1716052430"
+max_copies = 4
+inkwell = true
+text = "ASLEEP This item enters play exerted.\nAWAKEN {E} — Put a character card from your discard into your inkwell facedown and exerted."

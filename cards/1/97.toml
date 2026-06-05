@@ -1,0 +1,7 @@
+name = "Steal from the Rich"
+type = "Action"
+cost = 5
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_cc2d13ea26124968b44151ab66a7a343.avif?1709690747"
+max_copies = 4
+text = "Whenever one of your characters quests this turn, each opponent loses 1 lore."

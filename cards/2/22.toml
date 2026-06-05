@@ -1,0 +1,12 @@
+name = "Sneezy - Very Allergic"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e7b04611dd234fc7a07b0e48c2811fd2.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally", "Seven Dwarfs"]
+text = "AH-CHOO! Whenever you play this character or another Seven Dwarfs character, you may give chosen character -1 {S} this turn."

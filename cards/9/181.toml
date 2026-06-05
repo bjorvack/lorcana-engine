@@ -1,0 +1,12 @@
+name = "Jafar - Royal Vizier"
+type = "Character"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7d0510c02fca4d878ec8a11ed836ae80.avif?1755541299"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Villain", "Sorcerer"]
+text = "I DON'T TRUST HIM, SIRE During your turn, this character gains Evasive. (They can challenge characters with Evasive.)"

@@ -1,0 +1,7 @@
+name = "Heart of Atlantis"
+type = "Item"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_925579c341974d16b613c348efe8df5e.avif?1709690747"
+max_copies = 4
+text = "LIFE GIVER {E} — You pay 2 {I} less for the next character you play this turn."

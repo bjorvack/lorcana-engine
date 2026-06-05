@@ -1,0 +1,11 @@
+name = "Ariel's Grotto - A Secret Place"
+type = "Location"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e993888b82a845c698effa4248c9a980.avif?1716052430"
+max_copies = 4
+inkwell = true
+move_cost = 2
+willpower = 7
+lore = 0
+text = "TREASURE TROVE While you have 3 or more items in play, this location gets +2 {L}."

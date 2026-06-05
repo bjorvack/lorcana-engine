@@ -1,0 +1,12 @@
+name = "Fa Zhou - Honorable Warrior"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e10790e2f76f46f4aeb38d35164934b1.avif?1770259694"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Mentor"]
+text = "BATTLE WOUND This character enters play with 2 damage."

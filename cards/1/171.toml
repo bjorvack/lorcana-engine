@@ -1,0 +1,11 @@
+name = "Aladdin - Cornered Swordsman"
+type = "Character"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_cabcdb68fdc14360a495869d3e7fc281.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 1
+lore = 2
+classifications = ["Storyborn", "Hero"]

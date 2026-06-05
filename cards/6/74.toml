@@ -1,0 +1,12 @@
+name = "Honey Lemon - Chemical Genius"
+type = "Character"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f20b9f97af684d8e84eb6b017eabd8d5.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 1
+lore = 2
+classifications = ["Storyborn", "Hero", "Inventor"]
+text = "HERE'S THE BEST PART When you play this character, you may pay 2 {I} to have each opponent choose and discard a card."

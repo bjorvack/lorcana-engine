@@ -1,0 +1,12 @@
+name = "Incrediboy - Buddy Pine"
+type = "Character"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6a9d1a4cd8c74378a3e6081adf6c0797.avif?1777687851"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Inventor"]
+text = "NERDING OUT When you play this character, if a Hero character is in play, gain 1 lore.\nSPOILER ALERT This character also counts as being named Syndrome for Shift."

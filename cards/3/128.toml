@@ -1,0 +1,8 @@
+name = "Divebomb"
+type = "Action"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a4bd827fb4c6497fba686f38a21448ee.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "Banish one of your characters with Reckless to banish chosen character with less {S} than that character."

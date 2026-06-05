@@ -1,0 +1,12 @@
+name = "Kakamora - Band of Pirates"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e97a6df3786a4f2489911d0b9201a127.avif?1740590237"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 6
+lore = 1
+classifications = ["Storyborn", "Pirate"]
+text = "SHOWBOATING While you have another Pirate character in play, this character gains Challenger +3. (While challenging, this character gets +3 {S}.)"

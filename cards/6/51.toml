@@ -1,0 +1,11 @@
+name = "Magic Carpet - Amazing Flier"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_00d0840f303c41b1868ce427b9aaf837.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 3
+classifications = ["Storyborn", "Ally"]

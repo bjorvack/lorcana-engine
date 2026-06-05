@@ -1,0 +1,12 @@
+name = "Violet Parr - At Wits' End"
+type = "Character"
+cost = 1
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_92fe9e279ebd46b5922826303ea92d27.avif?1777687854"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Super", "Hero"]
+text = "Alert (This character can challenge as if they had Evasive.)"

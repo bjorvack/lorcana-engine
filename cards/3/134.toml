@@ -1,0 +1,10 @@
+name = "Agrabah - Marketplace"
+type = "Location"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_993b13d7185d4c83a00718ee79e6ef00.avif?1709690747"
+max_copies = 4
+inkwell = true
+move_cost = 1
+willpower = 5
+lore = 2

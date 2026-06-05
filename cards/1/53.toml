@@ -1,0 +1,12 @@
+name = "Pascal - Rapunzel's Companion"
+type = "Character"
+cost = 1
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_52d47bf453634824858ebdd26f42d5f6.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "CAMOUFLAGE While you have another character in play, this character gains Evasive. (Only characters with Evasive can challenge them.)"

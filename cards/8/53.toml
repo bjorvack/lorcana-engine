@@ -1,0 +1,12 @@
+name = "Kuzco - Bored Royal"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5508d787ca204fdcbba52a26d7258301.avif?1747508521"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "King"]
+text = "LLAMA BREATH When you play this character, you may return chosen character, item, or location with cost 2 or less to their player's hand."

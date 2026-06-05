@@ -1,0 +1,13 @@
+name = "Wasabi - Always Prepared"
+type = "Character"
+cost = 5
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d23689ec2d064f2c957ff6751e0a3c38.avif?1747509355"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Hero", "Inventor"]
+keywords = ["Support"]
+text = "Support (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)"

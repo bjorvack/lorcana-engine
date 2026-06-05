@@ -1,0 +1,8 @@
+name = "You Have Forgotten Me"
+type = "Action"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c91b8810b881450faa5942daf03e03ef.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "Each opponent chooses and discards 2 cards."

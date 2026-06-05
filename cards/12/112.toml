@@ -1,0 +1,12 @@
+name = "Wind-Up Frog - Sid's Toy"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3e84541a769645c7a2689b9f165e73e5.avif?1777687599"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 1
+lore = 2
+classifications = ["Storyborn", "Ally", "Toy"]
+text = "ADDED TRACTION If one of your Toy characters was banished this turn, you pay 2 {I} less to play this character."

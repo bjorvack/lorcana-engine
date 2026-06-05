@@ -1,0 +1,12 @@
+name = "The Nokk - Mythical Spirit"
+type = "Character"
+cost = 6
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_fdc463d617dd4b938a2991c4f1e1f542.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "TURNING TIDES When you play this character, you may move up to 2 damage counters from chosen character to chosen opposing character."

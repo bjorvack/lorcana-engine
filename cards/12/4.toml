@@ -1,0 +1,12 @@
+name = "Dale - Excited Friend"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_06e1e4bd136e4a5b8cd9c93e478f2c4f.avif?1777687121"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 6
+lore = 1
+classifications = ["Storyborn", "Hero"]
+text = "LOOK WHAT I FOUND While you have a character named Chip in play, this character gets +1 {L}."

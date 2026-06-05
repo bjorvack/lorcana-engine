@@ -1,0 +1,12 @@
+name = "Sisu - Emboldened Warrior"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_03cbb7961ddc4db7b724f1a934e1114b.avif?1755540869"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Hero", "Deity", "Dragon"]
+text = "SURGE OF POWER This character gets +1 {S} for each card in opponents' hands."

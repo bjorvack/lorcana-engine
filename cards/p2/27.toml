@@ -1,0 +1,12 @@
+name = "Pluto - Tried and True"
+type = "Character"
+cost = 6
+ink = ["Amber", "Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e174489fd1b04e4787deeec4ca430910.avif?1755564030"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 7
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "HAPPY HELPER While this character has no damage, he gets +2 {S} and gains Support. (Whenever they quest, you may add their {S} to another chosen character's {S} this turn.)"

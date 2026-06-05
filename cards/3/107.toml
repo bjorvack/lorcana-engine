@@ -1,0 +1,12 @@
+name = "HeiHei - Accidental Explorer"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_27a77344b85748bd9d7d45de2969c918.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "MINDLESS WANDERING Once per turn, when this character moves to a location, each opponent loses 1 lore."

@@ -1,0 +1,13 @@
+name = "Merida - Defiant Daughter"
+type = "Character"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_63708f32e69544309aa60156ce8603fa.avif?1777687430"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero", "Princess"]
+keywords = ["Ward"]
+text = "Ward (Opponents can't choose this character except to challenge.)"

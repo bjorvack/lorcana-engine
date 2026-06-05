@@ -1,0 +1,13 @@
+name = "Captain Hook - The Pirate King"
+type = "Character"
+cost = 5
+ink = ["Emerald", "Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_70bf0783fba940a594f5f2cbac285f58.avif?1747509075"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 5
+lore = 2
+classifications = ["Floodborn", "Villain", "King", "Pirate", "Captain"]
+keywords = ["Shift 3"]
+text = "Shift 3 (You may pay 3 {I} to play this on top of one of your characters named Captain Hook.)\nGIVE 'EM ALL YOU GOT! Once during your turn, whenever an opposing character is damaged, your Pirate characters get +2 {S} and gain Resist +2 this turn. (Damage dealt to them is reduced by 2.)"

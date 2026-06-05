@@ -1,0 +1,12 @@
+name = "Simba - Rightful King"
+type = "Character"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1985d10b104a4176a621275358537fa9.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 6
+lore = 1
+classifications = ["Storyborn", "Hero", "King"]
+text = "TRIUMPHANT STANCE During your turn, whenever this character banishes another character in a challenge, chosen opposing character can't challenge during their next turn."

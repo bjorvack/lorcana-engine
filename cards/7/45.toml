@@ -1,0 +1,11 @@
+name = "Kuzco - Temporary Whale"
+type = "Character"
+cost = 5
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_78e4e2811167449d9b2d7a3fa7c0908b.avif?1740589279"
+max_copies = 4
+strength = 1
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "King"]
+text = "DON'T YOU SAY A WORD Once during your turn, whenever a card is put into your inkwell, you may return chosen character, item, or location with cost 2 or less to their player's hand, then that player draws a card."

@@ -1,0 +1,12 @@
+name = "Yen Sid - Powerful Sorcerer"
+type = "Character"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_09c5139c68724642b9f7e54f50264473.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero", "Sorcerer"]
+text = "TIMELY INTERVENTION When you play this character, if you have a character named Magic Broom in play, you may draw a card.\nARCANE STUDY While you have 2 or more Broom characters in play, this character gets +2 {L}."

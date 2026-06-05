@@ -1,0 +1,13 @@
+name = "Yokai - Scientific Supervillain"
+type = "Character"
+cost = 9
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c2ee125c29104a138b2a26608d6849c1.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 10
+lore = 2
+classifications = ["Floodborn", "Villain", "Inventor"]
+keywords = ["Shift 6"]
+text = "Shift 6 (You may pay 6 {I} to play this on top of one of your characters named Yokai.)\nNEUROTRANSMITTER You may play items named Microbots for free.\nTECHNICAL GAIN Whenever this character quests, draw a card for each opposing character with {S}."

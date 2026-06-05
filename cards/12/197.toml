@@ -1,0 +1,8 @@
+name = "Three Arrows"
+type = "Action"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_73a90e236ed74b42b304d4f2342467ca.avif?1777687922"
+max_copies = 4
+inkwell = true
+text = "Deal 2 damage to chosen character. Then, you may deal 1 damage to another chosen character."

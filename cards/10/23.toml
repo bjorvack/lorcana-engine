@@ -1,0 +1,12 @@
+name = "Mickey Mouse - Amber Champion"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_46402c967ba24a1ca2ea62cb69f3b243.avif?1761752035"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 5
+lore = 1
+classifications = ["Dreamborn", "Hero"]
+text = "LEADING THE WAY Your other Amber characters get +2 {W}.\nFRIENDLY CHORUS While you have 2 or more other Amber characters in play, this character gains Singer 8. (They count as cost 8 to sing songs.)"

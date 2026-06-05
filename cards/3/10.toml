@@ -1,0 +1,13 @@
+name = "Miss Bianca - Rescue Aid Society Agent"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a2bdf443390f4009bed7f162badd841c.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Hero"]
+keywords = ["Singer 4"]
+text = "Singer 4 (This character counts as cost 4 to sing songs.)"

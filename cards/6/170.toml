@@ -1,0 +1,11 @@
+name = "Institute of Technology - Prestigious University"
+type = "Location"
+cost = 1
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b499c66fd5104b3a994c3a6bd51ba692.avif?1730901319"
+max_copies = 4
+inkwell = true
+move_cost = 1
+willpower = 5
+lore = 0
+text = "WELCOME TO THE LAB Inventor characters get +1 {W} while here.\nPUSH THE BOUNDARIES At the start of your turn, if you have a character here, gain 1 lore."

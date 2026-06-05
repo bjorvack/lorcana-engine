@@ -1,0 +1,13 @@
+name = "Tinker Bell - Temperamental Fairy"
+type = "Character"
+cost = 5
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0a3d4d70ca5f45bfa3642a425a4943f9.avif?1761763631"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 3
+lore = 1
+classifications = ["Floodborn", "Ally", "Fairy"]
+keywords = ["Shift 3"]
+text = "Shift 3 {I} (You may pay 3 {I} to play this on top of one of your characters named Tinker Bell.)\nHARMLESS DIVERSION When you play this character, exert chosen opposing character with 2 {S} or less."

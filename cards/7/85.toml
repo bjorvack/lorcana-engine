@@ -1,0 +1,11 @@
+name = "Drizella - Spoiled Stepsister"
+type = "Character"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_40f1a53c285d48ca863b57072d362b48.avif?1740589434"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally"]

@@ -1,0 +1,11 @@
+name = "Bruno Madrigal - Out of the Shadows"
+type = "Character"
+cost = 5
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_140b4894a53d4884a4ec1e15dab9319a.avif?1716052430"
+max_copies = 4
+strength = 4
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Ally", "Madrigal"]
+text = "IT WAS YOUR VISION When you play this character, chosen character gains “When this character is banished in a challenge, you may return this card to your hand” this turn."

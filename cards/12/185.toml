@@ -1,0 +1,12 @@
+name = "Mr. Incredible - Taking Out the Trash"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_78bb9b0a1716482995a63d5cd9a0d042.avif?1777687879"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Super", "Hero"]
+text = "KA-POW! When you play this character, you may deal 2 damage to chosen opposing Robot or Villain character."

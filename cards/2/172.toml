@@ -1,0 +1,12 @@
+name = "Beast - Selfless Protector"
+type = "Character"
+cost = 6
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_966bd91d331f46b3af9f199a2e03515d.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 8
+lore = 1
+classifications = ["Storyborn", "Hero", "Prince"]
+text = "SHIELD ANOTHER Whenever one of your other characters would be dealt damage, put that many damage counters on this character instead."

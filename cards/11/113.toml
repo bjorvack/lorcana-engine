@@ -1,0 +1,12 @@
+name = "Iduna - Alarmed Queen"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d79f18fa0da949079077eb5ecaad8426.avif?1770259707"
+max_copies = 4
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Mentor", "Queen"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)"

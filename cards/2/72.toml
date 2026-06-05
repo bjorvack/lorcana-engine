@@ -1,0 +1,12 @@
+name = "Belle - Hidden Archer"
+type = "Character"
+cost = 5
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_db68b32c197d4f808a46afc957338877.avif?1709690747"
+max_copies = 4
+strength = 3
+willpower = 3
+lore = 3
+classifications = ["Floodborn", "Hero", "Princess"]
+keywords = ["Shift 3"]
+text = "Shift 3 (You may pay 3 {I} to play this on top of one of your characters named Belle.)\nTHORNY ARROWS Whenever this character is challenged, the challenging character's player discards all cards in their hand."

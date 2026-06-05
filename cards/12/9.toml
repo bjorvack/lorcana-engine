@@ -1,0 +1,12 @@
+name = "Dolores Madrigal - Hears Everything"
+type = "Character"
+cost = 5
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_01acad281686403cabf7d98f5026bc7a.avif?1777687145"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Ally", "Madrigal"]
+text = "NO SECRETS When you play this character, look at chosen opponent's hand."

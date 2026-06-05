@@ -1,0 +1,12 @@
+name = "Meeko - Skittish Scrounger"
+type = "Character"
+cost = 1
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5be7a45f5453485dbebcd37b436210d9.avif?1770259407"
+max_copies = 4
+strength = 1
+willpower = 1
+lore = 2
+classifications = ["Storyborn", "Ally"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)\nBOTTOMLESS PIT At the end of your turn, if this character is exerted, choose and discard a card or banish him."

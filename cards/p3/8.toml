@@ -1,0 +1,8 @@
+name = "Strength of a Raging Fire"
+type = "Song"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3036fc62622b43fda13f6021ab5401a5.avif?1773508732"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 3 or more can {E} to sing this song for free.)\nDeal damage to chosen character equal to the number of characters you have in play."

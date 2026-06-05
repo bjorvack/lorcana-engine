@@ -1,0 +1,11 @@
+name = "Daisy Duck - Multitalented Pirate"
+type = "Character"
+cost = 8
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ea132f418f484b7fa0514107132a8b54.avif?1740589533"
+max_copies = 4
+strength = 6
+willpower = 5
+lore = 3
+classifications = ["Dreamborn", "Hero", "Pirate", "Captain"]
+text = "FOWL PLAY Once during your turn, whenever a card is put into your inkwell, chosen opponent chooses one of their characters and returns that card to their hand."

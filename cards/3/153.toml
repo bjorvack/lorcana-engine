@@ -1,0 +1,12 @@
+name = "Rufus - Orphanage Cat"
+type = "Character"
+cost = 5
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c914737245874c918af51cac073d6d36.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 5
+lore = 1
+classifications = ["Dreamborn", "Ally"]
+text = "TOO OLD TO BE CHASING MICE When this character is banished, you may put this card into your inkwell facedown and exerted."

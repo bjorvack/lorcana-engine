@@ -1,0 +1,8 @@
+name = "Cleansing Rainwater"
+type = "Item"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_46df24a1b90a460d8572440c007f0af5.avif?1712966201"
+max_copies = 4
+inkwell = true
+text = "ANCIENT POWER Banish this item — Remove up to 2 damage from each of your characters."

@@ -1,0 +1,8 @@
+name = "White Rabbit's Pocket Watch"
+type = "Item"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5e059b9ed96e4fb68bb54b1086394797.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "I'M LATE! {E}, 1 {I} — Chosen character gains Rush this turn. (They can challenge the turn they're played.)"

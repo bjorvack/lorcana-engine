@@ -1,0 +1,8 @@
+name = "Maurice's Machine"
+type = "Item"
+cost = 3
+ink = ["Ruby", "Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_86f1f9b1aee3486ca626ba64f1a8edb5.avif?1740589704"
+max_copies = 4
+inkwell = true
+text = "BREAK DOWN When this item is banished, you may return an item card with cost 2 or less from your discard to your hand."

@@ -1,0 +1,8 @@
+name = "The Sword of Shan-Yu"
+type = "Item"
+cost = 1
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3f12c1e7975a4ed5bab75266fe3cfd4a.avif?1747509320"
+max_copies = 4
+inkwell = true
+text = "WORTHY WEAPON {E}, {E} one of your characters — Ready chosen character. They can't quest for the rest of this turn."

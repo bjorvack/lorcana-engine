@@ -1,0 +1,12 @@
+name = "Anna - True-Hearted"
+type = "Character"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a0dbcc4e038e43ee90773445e70c170c.avif?1755541014"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 4
+lore = 2
+classifications = ["Dreamborn", "Hero", "Queen", "Knight"]
+text = "LET ME HELP YOU Whenever this character quests, your other Hero characters get +1 {L} this turn."

@@ -1,0 +1,12 @@
+name = "Mickey Mouse - Stalwart Explorer"
+type = "Character"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6910c7f861604c41b2921961ebf886d1.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Hero"]
+text = "LET'S TAKE A LOOK This character gets +1 {S} for each location you have in play."

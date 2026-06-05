@@ -1,0 +1,12 @@
+name = "Mr. Snoops - Betrayed Partner"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8010db6668ab482899edbda27487eaae.avif?1747509258"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "DOUBLE-CROSSING CROOK! During your turn, when this character is banished, you may draw a card."

@@ -1,0 +1,12 @@
+name = "Dr. Facilier - Remarkable Gentleman"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7c6dbcfcfb90484c9e7d5f28cee46687.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Villain", "Sorcerer"]
+text = "DREAMS MADE REAL Whenever you play a song, you may look at the top 2 cards of your deck. Put one on the top of your deck and the other on the bottom."

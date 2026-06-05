@@ -1,0 +1,8 @@
+name = "Amber Coil"
+type = "Item"
+cost = 1
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_928bd23c4cdb4440898accbb73aba3bf.avif?1740589263"
+max_copies = 4
+inkwell = true
+text = "HEALING AURA During your turn, whenever a card is put into your inkwell, you may remove up to 2 damage from chosen character."

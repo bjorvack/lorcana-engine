@@ -1,0 +1,8 @@
+name = "Ghostly Tale"
+type = "Action"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7724545f54ee47aaadb5ea5aee9cd92e.avif?1761763894"
+max_copies = 4
+inkwell = true
+text = "Exert all opposing characters with 2 {S} or less."

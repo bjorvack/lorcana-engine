@@ -1,0 +1,12 @@
+name = "Anna - Braving the Storm"
+type = "Character"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_323c71c954624f77820944871a8100bd.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 4
+lore = 1
+classifications = ["Dreamborn", "Hero", "Queen"]
+text = "I WAS BORN READY If you have another Hero character in play, this character gets +1 {L}."

@@ -1,0 +1,8 @@
+name = "Retro Evolution Device"
+type = "Item"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a7afac820f8249d9896e3cc693fe0094.avif?1770259649"
+max_copies = 4
+inkwell = true
+text = "TURN INTO DINOSAUR {E}, 1 {I}, Banish chosen character of yours — Play a character with cost up to 2 more than the banished character for free."

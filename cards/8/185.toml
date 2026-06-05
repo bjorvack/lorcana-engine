@@ -1,0 +1,11 @@
+name = "Dumptruck - Karnage's Second Mate"
+type = "Character"
+cost = 1
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_43f09ed39a77426a8a351ed3446d180a.avif?1747509466"
+max_copies = 4
+strength = 0
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Ally", "Pirate"]
+text = "LET ME AT 'EM When you play this character, you may deal 1 damage to chosen character."

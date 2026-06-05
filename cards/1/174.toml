@@ -1,0 +1,13 @@
+name = "Captain Hook - Forceful Duelist"
+type = "Character"
+cost = 1
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0b0cf12160764765a874a7fdee924d25.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 2
+lore = 1
+classifications = ["Dreamborn", "Villain", "Pirate", "Captain"]
+keywords = ["Challenger 2"]
+text = "Challenger +2 (While challenging, this character gets +2 {S}.)"

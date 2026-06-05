@@ -1,0 +1,11 @@
+name = "Mystical Tree - Mama Odie's Home"
+type = "Location"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9119b44cfe67444288a32f23009541e8.avif?1730901319"
+max_copies = 4
+inkwell = true
+move_cost = 1
+willpower = 7
+lore = 0
+text = "NOT BAD At the start of your turn, you may move 1 damage counter from chosen character here to chosen opposing character.\n\nHARD-EARNED WISDOM At the start of your turn, if you have a character named Mama Odie here, gain 1 lore."

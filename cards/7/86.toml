@@ -1,0 +1,12 @@
+name = "Grewnge - Cannon Expert"
+type = "Character"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_95d2688246294e40900308cbc135856b.avif?1740589439"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally", "Pirate"]
+text = "RAPID FIRE Whenever this character quests, you pay 1 {I} less for the next action you play this turn."

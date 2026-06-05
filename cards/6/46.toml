@@ -1,0 +1,11 @@
+name = "The Walrus - Greedy Gourmand"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_65425d8d8a8447d98f4571b7e42c8782.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 6
+lore = 1
+classifications = ["Storyborn"]

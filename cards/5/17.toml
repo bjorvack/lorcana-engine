@@ -1,0 +1,12 @@
+name = "Fix-It Felix, Jr. - Delighted Sightseer"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3a3a926925af4b4ca1cd8567c7a300ae.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero"]
+text = "OH, MY LAND! When you play this character, if you have a location in play, draw a card."

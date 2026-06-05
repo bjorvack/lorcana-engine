@@ -1,0 +1,7 @@
+name = "The Most Diabolical Scheme"
+type = "Song"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_07082198195e40d6b940142d1383c881.avif?1709690747"
+max_copies = 4
+text = "(A character with cost 3 or more can {E} to sing this song for free.)\nBanish chosen Villain of yours to banish chosen character."

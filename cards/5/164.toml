@@ -1,0 +1,8 @@
+name = "All Funned Out"
+type = "Action"
+cost = 1
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_22015e39f7a8462688822b423e11f891.avif?1723917209"
+max_copies = 4
+inkwell = true
+text = "Put chosen character of yours into your inkwell facedown and exerted."

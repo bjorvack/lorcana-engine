@@ -1,0 +1,11 @@
+name = "Kohut - Trusted Marine"
+type = "Character"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3071dce7efaf4e139b192b2e026b2999.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally"]

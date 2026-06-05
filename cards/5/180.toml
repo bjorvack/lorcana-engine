@@ -1,0 +1,12 @@
+name = "Sneezy - Noisy Knight"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ea122d22ac8a430389070f2f090c05e0.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Dreamborn", "Ally", "Knight", "Seven Dwarfs"]
+text = "HEADWIND When you play this character, chosen Knight character gains Challenger +2 this turn. (They get +2 {S} while challenging.)"

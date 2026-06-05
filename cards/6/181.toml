@@ -1,0 +1,12 @@
+name = "John Silver - Ship's Cook"
+type = "Character"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_fef968cf2e0d47fbb8f241fa7d91fd27.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Villain", "Alien", "Pirate", "Captain"]
+text = "HUNK OF HARDWARE When you play this character, chosen character can't challenge during their next turn."

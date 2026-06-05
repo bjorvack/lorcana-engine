@@ -1,0 +1,11 @@
+name = "Casa Madrigal - Courtyard"
+type = "Location"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_69c16dd8004b4fbf8051c91ac50bc6cb.avif?1777687825"
+max_copies = 4
+inkwell = true
+move_cost = 1
+willpower = 7
+lore = 2
+text = "HEALING HOME Whenever a character quests while here, you may remove up to 2 damage from them. Then, you may remove up to 2 damage from this location."

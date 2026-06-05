@@ -1,0 +1,11 @@
+name = "Mr. Smee - Efficient Captain"
+type = "Character"
+cost = 3
+ink = ["Emerald", "Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0cea7c1e74014adeb7fc3a59ddce500f.avif?1740589528"
+max_copies = 4
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Villain", "Pirate", "Captain"]
+text = "PIPE UP THE CREW Whenever you play an action that isn't a song, you may ready chosen Pirate character."

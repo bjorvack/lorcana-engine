@@ -1,0 +1,12 @@
+name = "Ratigan - Nefarious Criminal"
+type = "Character"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3b1ed1a8c9694de19eb207ce5f1357e9.avif?1740589673"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Villain"]
+text = "A MARVELOUS PERFORMANCE Whenever you play an action while this character is exerted, gain 1 lore."

@@ -1,0 +1,11 @@
+name = "Royal Guard - Bovine Protector"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_905b7c293d554cbebda90ca9782af3bf.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 7
+lore = 1
+classifications = ["Storyborn"]

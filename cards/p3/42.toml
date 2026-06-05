@@ -1,0 +1,12 @@
+name = "Stitch - Carefree Snowboarder"
+type = "Character"
+cost = 5
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_25ef24f3f0214af5b8f944d2b5555ba8.avif?1773508937"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Hero", "Alien"]
+text = "BRING YOUR FRIENDS Whenever this character quests, if you have 2 or more other characters in play, you may draw a card."

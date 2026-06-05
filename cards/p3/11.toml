@@ -1,0 +1,13 @@
+name = "Tinker Bell - Giant Fairy"
+type = "Character"
+cost = 6
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_895798f185da459bab814e8d6241da52.avif?1773508749"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 5
+lore = 2
+classifications = ["Floodborn", "Ally", "Fairy"]
+keywords = ["Shift 4"]
+text = "Shift 4 {I} (You may pay 4 {I} to play this on top of one of your characters named Tinker Bell.)\nROCK THE BOAT When you play this character, deal 1 damage to each opposing character.\nPUN PIRATE! During your turn, whenever this character banishes another character in a challenge, you may deal 2 damage to chosen opposing character."

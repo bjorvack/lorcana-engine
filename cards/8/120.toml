@@ -1,0 +1,8 @@
+name = "Jeweled Collar"
+type = "Item"
+cost = 2
+ink = ["Emerald", "Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ee5ef7def0ca4c6a9ed3fac74fb1d1b4.avif?1747509134"
+max_copies = 4
+inkwell = true
+text = "WELCOME EXTRAVAGANCE Whenever one of your characters is challenged, you may put the top card of your deck into your inkwell facedown and exerted."

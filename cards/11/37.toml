@@ -1,0 +1,12 @@
+name = "Tigger - Bouncing All the Way"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e690df88c3ab46c1ace417ff7f2681c9.avif?1770259367"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Tigger"]
+text = "SPLENDERIFFIC BOUNCE When you play this character, you may return chosen character, item, or location with cost 2 or less to their player's hand."

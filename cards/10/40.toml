@@ -1,0 +1,13 @@
+name = "Demona - Betrayer of the Clan"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_35f7836ceed84e21ba7cfdde813d73bc.avif?1761752117"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 6
+lore = 1
+classifications = ["Storyborn", "Villain", "Gargoyle", "Sorcerer"]
+keywords = ["Challenger 2"]
+text = "Challenger +2 (While challenging, this character gets +2 {S}.)\nSTONE BY DAY If you have 3 or more cards in your hand, this character can't ready."

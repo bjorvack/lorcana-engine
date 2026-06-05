@@ -1,0 +1,12 @@
+name = "March Hare - Hare-Brained Eccentric"
+type = "Character"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_03fb917c4b444c35a0f174f40655e419.avif?1747508958"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Storyborn"]
+text = "LIGHT THE CANDLES When you play this character, you may deal 2 damage to chosen damaged character."

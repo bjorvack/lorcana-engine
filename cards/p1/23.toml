@@ -1,0 +1,11 @@
+name = "Maui - Demigod"
+type = "Character"
+cost = 8
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_23bbbd44361b4dcf9942bd281212a613.avif?1728609660"
+max_copies = 4
+inkwell = true
+strength = 8
+willpower = 8
+lore = 3
+classifications = ["Storyborn", "Hero", "Deity"]

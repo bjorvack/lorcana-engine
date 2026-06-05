@@ -1,0 +1,13 @@
+name = "Pluto - Determined Defender"
+type = "Character"
+cost = 7
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_02f6ca615a304f47848ac36590cb7b94.avif?1715694252"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 8
+lore = 2
+classifications = ["Floodborn", "Ally"]
+keywords = ["Bodyguard", "Shift 5"]
+text = "Shift 5 (You may pay 5 {I} to play this on top of one of your characters named Pluto.)\nBodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)\nGUARD DOG At the start of your turn, remove up to 3 damage from this character."

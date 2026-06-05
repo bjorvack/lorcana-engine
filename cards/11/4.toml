@@ -1,0 +1,11 @@
+name = "Pumbaa - Winter Warthog"
+type = "Character"
+cost = 6
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3538927a26154cb78ef3e9cfd6899035.avif?1770259215"
+max_copies = 4
+strength = 5
+willpower = 6
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "SHAKE THINGS UP When you play this character, each opponent chooses and discards a card."

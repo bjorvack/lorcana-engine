@@ -1,0 +1,8 @@
+name = "Improvise"
+type = "Action"
+cost = 1
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5fb3a3421c9c4fd9a83a6d235b268b2d.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "Chosen character gets +1 {S} this turn. Draw a card."

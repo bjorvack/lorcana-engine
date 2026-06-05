@@ -1,0 +1,12 @@
+name = "Gramma Tala - Storyteller"
+type = "Character"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2556ec8a10224e6bb75f2bd54e7a612f.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Mentor"]
+text = "I WILL BE WITH YOU When this character is banished, you may put this card into your inkwell facedown and exerted."

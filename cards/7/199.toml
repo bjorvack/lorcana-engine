@@ -1,0 +1,11 @@
+name = "Gantu - Experienced Enforcer"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9cc5e63998164343909390b767c6d3ae.avif?1740590264"
+max_copies = 4
+strength = 2
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Alien", "Captain"]
+text = "CLOSE ALL CHANNELS When you play this character, characters can't exert to sing songs until the start of your next turn.\nDON'T GET ANY IDEAS Each player pays 2 {I} more to play actions or items. (This doesn't apply to singing songs.)"

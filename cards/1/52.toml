@@ -1,0 +1,11 @@
+name = "Olaf - Friendly Snowman"
+type = "Character"
+cost = 1
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2ceed4bdc2b3437c82a41d83d9fe8aee.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally"]

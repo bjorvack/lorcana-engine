@@ -1,0 +1,12 @@
+name = "The Queen - Wicked and Vain"
+type = "Character"
+cost = 5
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_03be711c05fe4b8ebd081c3578f37444.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Villain", "Queen"]
+text = "I SUMMON THEE {E} — Draw a card."

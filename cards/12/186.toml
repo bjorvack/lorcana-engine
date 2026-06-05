@@ -1,0 +1,12 @@
+name = "Lord Dingwall - Bullheaded"
+type = "Character"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9ef9a2258e3e4f7686f71bd39f88d777.avif?1777687882"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 6
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "FIGHTIN' TALK This character may enter play exerted to give chosen character Challenger +3 this turn. (They get +3 {S} while challenging.)"

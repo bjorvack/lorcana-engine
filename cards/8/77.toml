@@ -1,0 +1,8 @@
+name = "Forest Duel"
+type = "Action"
+cost = 5
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_79eeecfdd20849aaade7d29646fed146.avif?1747508858"
+max_copies = 4
+inkwell = true
+text = "Your characters gain Challenger +2 and \"When this character is banished in a challenge, return this card to your hand\" this turn. (They get +2 {S} while challenging.)"

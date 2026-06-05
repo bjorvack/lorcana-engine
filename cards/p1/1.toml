@@ -1,0 +1,13 @@
+name = "Mickey Mouse - Brave Little Tailor"
+type = "Character"
+cost = 8
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a9407e39c2ee47869d7a634aa46a7f04.avif?1728609660"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 5
+lore = 4
+classifications = ["Dreamborn", "Hero"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)"

@@ -1,0 +1,12 @@
+name = "Gantu - Hamsterviel's Accomplice"
+type = "Character"
+cost = 1
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e58426a12e4840d1a58c49c2a147f6b4.avif?1770259992"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Alien", "Captain"]
+text = "EASY TARGET When you play this character, choose and discard a card."

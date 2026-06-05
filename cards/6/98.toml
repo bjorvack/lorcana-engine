@@ -1,0 +1,7 @@
+name = "MegaBot"
+type = "Item"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1ed3d03ca8724920aa9dccede9e08900.avif?1730901319"
+max_copies = 4
+text = "HAPPY FACE This item enters play exerted.\nDESTROY! {E}, Banish this item - Choose one:\n* Banish chosen item.\n* Banish chosen damaged character."

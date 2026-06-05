@@ -1,0 +1,8 @@
+name = "Junior Woodchuck Guidebook"
+type = "Item"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_531cdf5a74f047b29e6129e583b12aa3.avif?1761752270"
+max_copies = 4
+inkwell = true
+text = "THE BOOK KNOWS EVERYTHING {E}, 1 {I}, Banish this item — Draw 2 cards."

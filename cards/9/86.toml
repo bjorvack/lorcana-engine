@@ -1,0 +1,11 @@
+name = "HeiHei - Bumbling Rooster"
+type = "Character"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_fe534ba2bc92411385d7176097db4f43.avif?1755823408"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Ally"]

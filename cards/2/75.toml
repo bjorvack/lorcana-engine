@@ -1,0 +1,13 @@
+name = "Cheshire Cat - From the Shadows"
+type = "Character"
+cost = 8
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7212b4d89eff4f039568f65cc8fd9855.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 6
+lore = 2
+classifications = ["Floodborn"]
+keywords = ["Evasive", "Shift 5"]
+text = "Shift 5 (You may pay 5 {I} to play this on top of one of your characters named Cheshire Cat.)\nEvasive (Only characters with Evasive can challenge this character.)\nWICKED SMILE {E} — Banish chosen damaged character."

@@ -1,0 +1,11 @@
+name = "Jumba Jookiba - Renegade Scientist"
+type = "Character"
+cost = 5
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a1887fe9f3f74f7183a0a9bc44f57582.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 5
+lore = 2
+classifications = ["Dreamborn", "Alien", "Inventor"]

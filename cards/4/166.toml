@@ -1,0 +1,8 @@
+name = "Field of Ice"
+type = "Item"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e8595996603e4e3ab8d772a573e75f5b.avif?1716052430"
+max_copies = 4
+inkwell = true
+text = "ICY DEFENSE Whenever you play a character, they gain Resist +1 until the start of your next turn. (Damage dealt to them is reduced by 1.)"

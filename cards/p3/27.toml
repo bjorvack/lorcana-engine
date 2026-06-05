@@ -1,0 +1,8 @@
+name = "Putting It All Together"
+type = "Action"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a5f4037f0c50462380ba6db7a516cd7a.avif?1773508842"
+max_copies = 4
+inkwell = true
+text = "Chosen opposing character can't challenge during their next turn. Draw a card."

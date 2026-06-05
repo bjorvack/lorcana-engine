@@ -1,0 +1,12 @@
+name = "Roquefort - Lock Expert"
+type = "Character"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d2291465ec4640f585a653be4290e2ac.avif?1747509412"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "SAFEKEEPING Whenever this character quests, you may put chosen item into its player's inkwell facedown and exerted."

@@ -1,0 +1,12 @@
+name = "Stegmutt - Clumsy Dinosaur"
+type = "Character"
+cost = 8
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5864156730e6408181fd43e5a59dbe05.avif?1770259554"
+max_copies = 4
+inkwell = true
+strength = 7
+willpower = 7
+lore = 2
+classifications = ["Storyborn", "Ally", "Dinosaur"]
+text = "WAKE OF DESTRUCTION For each item card in your discard, you pay 1 {I} less to play this character.\nCOLLATERAL DAMAGE When you play this character, you may put 3 item cards from your discard on the bottom of your deck in any order. If you do, deal 3 damage to chosen character."

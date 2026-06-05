@@ -1,0 +1,12 @@
+name = "Wreck-It Ralph - Back Seat Driver"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9eeb0424b962449d8a91e3ff5487e96c.avif?1747509208"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Hero", "Racer"]
+text = "CHARGED UP When you play this character, chosen Racer character gets +4 {S} this turn."

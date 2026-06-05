@@ -1,0 +1,13 @@
+name = "Markowski - Space Trooper"
+type = "Character"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_df8f4f463d6e4b7483db0bfccd609059.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 2
+lore = 2
+classifications = ["Storyborn", "Ally"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)"

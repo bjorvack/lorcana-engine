@@ -1,0 +1,11 @@
+name = "Fangmeyer - Icy Officer"
+type = "Character"
+cost = 5
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f3392db6475445bbb5ad6f608dc86c4b.avif?1770259243"
+max_copies = 4
+strength = 4
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Ally", "Detective"]
+text = "REQUEST REINFORCEMENTS When you play this character, you may return a Detective character card from your discard to your hand."

@@ -1,0 +1,12 @@
+name = "Queen of Hearts - Capricious Monarch"
+type = "Character"
+cost = 7
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e2f72bebe6594283a1d71d93ba4e72bc.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 6
+lore = 1
+classifications = ["Storyborn", "Villain", "Queen"]
+text = "OFF WITH THEIR HEADS! Whenever an opposing character is banished, you may ready this character."

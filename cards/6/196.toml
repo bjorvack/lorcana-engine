@@ -1,0 +1,8 @@
+name = "I'm Still Here"
+type = "Song"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_139b6ae1e1c04ea0aef5ef864e8ed14b.avif?1730901319"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 3 or more can {E} to sing this song for free.)\nChosen character gains Resist +2 until the start of your next turn. Draw a card. (Damage dealt to them is reduced by 2.)"

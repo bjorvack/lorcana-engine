@@ -1,0 +1,12 @@
+name = "Mirabel Madrigal - Resourceful Daughter"
+type = "Character"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f939abcb55234e9b9507d5d34cac867c.avif?1777687714"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 6
+lore = 1
+classifications = ["Storyborn", "Hero", "Madrigal"]
+text = "THIS WILL HELP When you play this character, remove up to 2 damage from chosen character."

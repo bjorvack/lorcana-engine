@@ -1,0 +1,12 @@
+name = "Magica De Spell - Thieving Sorceress"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_177102be31464591b1637a5b9b2b5aca.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Villain", "Sorcerer"]
+text = "TELEKINESIS {E} — Return chosen item with cost equal to or less than this character's {S} to its player's hand."

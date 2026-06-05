@@ -1,0 +1,13 @@
+name = "Lumpy - Playful Heffalump"
+type = "Character"
+cost = 6
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_89bb9007e02e4003911ada97cfbe4009.avif?1770259452"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Ally"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)"

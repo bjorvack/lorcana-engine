@@ -1,0 +1,12 @@
+name = "Maleficent - Imperious Traveler"
+type = "Character"
+cost = 5
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c4ee636a797148549fed0c816122a35d.avif?1773508950"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 5
+lore = 2
+classifications = ["Dreamborn", "Villain", "Sorcerer"]
+text = "HEED MY WORDS Whenever this character quests, if you played another character this turn, you may exert chosen opposing character."

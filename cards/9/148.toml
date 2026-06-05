@@ -1,0 +1,12 @@
+name = "Hans - Noble Scoundrel"
+type = "Character"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_34956960ca9c4048b6d2887bb9ca7446.avif?1755541081"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 2
+lore = 2
+classifications = ["Storyborn", "Villain", "Prince"]
+text = "ROYAL SCHEMES When you play this character, if a Princess or Queen character is in play, gain 1 lore."

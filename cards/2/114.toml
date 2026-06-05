@@ -1,0 +1,13 @@
+name = "Minnie Mouse - Wide-Eyed Diver"
+type = "Character"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a79cd84bf7444d0f847f6ceb36c93f24.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Floodborn", "Hero"]
+keywords = ["Evasive", "Shift 2"]
+text = "Shift 2 (You may pay 2 {I} to play this on top of one of your characters named Minnie Mouse.)\nEvasive (Only characters with Evasive can challenge this character.)\nUNDERSEA ADVENTURE Whenever you play a second action in a turn, this character gets +2 {L} this turn."

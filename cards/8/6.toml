@@ -1,0 +1,13 @@
+name = "Minnie Mouse - Daring Defender"
+type = "Character"
+cost = 4
+ink = ["Amber", "Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_693ec0809a974a8ba6ce2a5b3a29f209.avif?1747506677"
+max_copies = 4
+inkwell = true
+strength = 0
+willpower = 8
+lore = 1
+classifications = ["Dreamborn", "Hero"]
+keywords = ["Bodyguard"]
+text = "Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)\nTRUE VALOR This character gets +1 {S} for each 1 damage on her."

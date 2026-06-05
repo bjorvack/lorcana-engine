@@ -1,0 +1,11 @@
+name = "Bambi - Little Prince"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_963903245af941b6a3d3d5203854a403.avif?1747508682"
+max_copies = 4
+strength = 1
+willpower = 1
+lore = 3
+classifications = ["Storyborn", "Hero", "Prince"]
+text = "SAY HELLO When you play this character, gain 1 lore.\nKIND OF BASHFUL When an opponent plays a character, return this character to your hand."

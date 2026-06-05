@@ -1,0 +1,11 @@
+name = "Hundred Acre Island - Pooh's Home"
+type = "Location"
+cost = 1
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2fd6877d711c45f68ad61690d224306a.avif?1730901319"
+max_copies = 4
+inkwell = true
+move_cost = 1
+willpower = 5
+lore = 0
+text = "FRIENDS FOREVER During an opponent's turn, whenever a character is banished here, gain 1 lore."

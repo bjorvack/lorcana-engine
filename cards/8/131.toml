@@ -1,0 +1,12 @@
+name = "Cri-Kee - Part of the Team"
+type = "Character"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_084eb569ca02425791bf38993a74f23f.avif?1747509184"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "AT HER SIDE While you have 2 or more other exerted characters in play, this character gets +2 {L}."

@@ -1,0 +1,12 @@
+name = "Stabbington Brother - Without a Patch"
+type = "Character"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_bb6b464db7a64c6081cdb443267749e4.avif?1740589601"
+max_copies = 4
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally"]
+keywords = ["Rush"]
+text = "Rush (This character can challenge the turn they're played.) GET 'EM! Your other characters named Stabbington Brother gain Rush."

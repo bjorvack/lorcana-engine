@@ -1,0 +1,12 @@
+name = "Cinderella - Resourceful Traveler"
+type = "Character"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f4e355fa31614d7885933e92a5d0c821.avif?1777687765"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 4
+lore = 2
+classifications = ["Dreamborn", "Hero", "Princess"]
+text = "THIS AND THAT Whenever this character quests, if you played another character this turn, you may put the top card of your deck into your inkwell facedown and exerted."

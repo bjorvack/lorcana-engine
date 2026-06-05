@@ -1,0 +1,11 @@
+name = "Space Cows - Unexpected Allies"
+type = "Character"
+cost = 7
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9ac4f4fb26084e66aae3bc5a7beea167.avif?1770259443"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 8
+lore = 3
+classifications = ["Storyborn", "Ally", "Alien"]

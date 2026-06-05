@@ -1,0 +1,11 @@
+name = "Rapunzel's Tower - Secluded Prison"
+type = "Location"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f27b7d5ae80b49c4a1a6019138a14ace.avif?1723917209"
+max_copies = 4
+inkwell = true
+move_cost = 1
+willpower = 8
+lore = 0
+text = "SAFE AND SOUND Characters get +3 {W} while here."

@@ -1,0 +1,11 @@
+name = "Beast's Castle - Winter Gardens"
+type = "Location"
+cost = 1
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5f6b06befa5143649062b5ac4414d7ba.avif?1770259812"
+max_copies = 4
+inkwell = true
+move_cost = 1
+willpower = 6
+lore = 0
+text = "SNOWBALL STANDOFF Whenever a character here challenges another character, gain 1 lore."

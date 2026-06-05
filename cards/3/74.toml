@@ -1,0 +1,12 @@
+name = "Helga Sinclair - Femme Fatale"
+type = "Character"
+cost = 5
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_bd43b98b4db44fc49f0aea4790ad393a.avif?1709690747"
+max_copies = 4
+strength = 4
+willpower = 4
+lore = 2
+classifications = ["Floodborn", "Villain"]
+keywords = ["Shift 3"]
+text = "Shift 3 (You may pay 3 {I} to play this on top of one of your characters named Helga Sinclair.)\nTHIS CHANGES EVERYTHING Whenever this character quests, you may deal 3 damage to chosen damaged character."

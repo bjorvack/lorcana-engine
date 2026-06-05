@@ -1,0 +1,11 @@
+name = "Stitch - Team Underdog"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ce83f9ff395c46bebaee07439d10b43a.avif?1723917209"
+max_copies = 4
+strength = 1
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Hero", "Alien"]
+text = "HEAVE HO! When you play this character, you may deal 2 damage to chosen character."

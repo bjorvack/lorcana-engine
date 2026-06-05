@@ -1,0 +1,12 @@
+name = "Lyle Tiberius Rourke - Adventurer for Hire"
+type = "Character"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9008a5fe3cdb46d9861b2b4477b81280.avif?1777687500"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Villain"]
+text = "EYE FOR VALUE When you play this character, you may draw a card, then choose and discard a card.\nDIRTY TRICKS At the end of your turn, if 2 or more cards were put into your discard this turn, each opponent loses 1 lore."

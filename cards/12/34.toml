@@ -1,0 +1,11 @@
+name = "Andy's Room - Home Base"
+type = "Location"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ce7d516d02e247edb80360f39baa9dcb.avif?1777687273"
+max_copies = 4
+inkwell = true
+move_cost = 2
+willpower = 8
+lore = 1
+text = "ANDY'S FAVORITE While you have only 1 character here, they get +2 {W} and +1 {L}."

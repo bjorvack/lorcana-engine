@@ -1,0 +1,13 @@
+name = "Jebidiah Farnsworth - Cookie"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3a23919b34154ff4b95eed8eb15dbfa4.avif?1777687618"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 0
+classifications = ["Dreamborn", "Ally"]
+keywords = ["Evasive", "Reckless"]
+text = "Evasive (Only characters with Evasive can challenge this character.)\nReckless (This character can't quest and must challenge each turn if able.)"

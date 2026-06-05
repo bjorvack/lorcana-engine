@@ -1,0 +1,11 @@
+name = "Creeper - Loyal Lackey"
+type = "Character"
+cost = 6
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_872fb0e1ed4740b3bac30565ba52e9a2.avif?1761752162"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 4
+lore = 4
+classifications = ["Storyborn", "Ally"]

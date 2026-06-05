@@ -1,0 +1,11 @@
+name = "Abu - Mischievous Monkey"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e080b948d1bd4c87b40c050f56b2d50f.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 2
+lore = 2
+classifications = ["Storyborn", "Ally"]

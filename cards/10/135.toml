@@ -1,0 +1,11 @@
+name = "The Bitterwood - Underground Forest"
+type = "Location"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d694639a68614bcc8d3a482c1f5c5da1.avif?1761763903"
+max_copies = 4
+inkwell = true
+move_cost = 2
+willpower = 7
+lore = 1
+text = "GATHER RESOURCES Once during your turn, whenever you move a character with 5 {S} or more here, you may draw a card."

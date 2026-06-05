@@ -1,0 +1,8 @@
+name = "Nearly Indestructible"
+type = "Action"
+cost = 1
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_60d34f2b1b38499e8f7a5915a0a7e59c.avif?1770260094"
+max_copies = 4
+inkwell = true
+text = "Chosen character of yours gains Resist +2 until the start of your next turn. (Damage dealt to them is reduced by 2.)"

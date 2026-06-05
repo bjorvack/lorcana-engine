@@ -1,0 +1,8 @@
+name = "The Thunderquack"
+type = "Item"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_997f90baa0e94ea6bf9babc7ded3bc8a.avif?1770260104"
+max_copies = 4
+inkwell = true
+text = "VIGILANTE JUSTICE All opposing characters gain the Villain classification.\nLAY OF THE LAND {E} — If a character was banished in a challenge this turn, gain 1 lore."

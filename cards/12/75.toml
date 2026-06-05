@@ -1,0 +1,12 @@
+name = "The Queen - Evil Ruler"
+type = "Character"
+cost = 1
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5f3231b198754189915b51adbdda3f7c.avif?1777687453"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Villain", "Queen", "Sorcerer"]
+text = "UNEQUALED CRUELTY While an opposing damaged character is in play, this character gets +2 {S}."

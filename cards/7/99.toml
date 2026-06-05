@@ -1,0 +1,11 @@
+name = "Berlioz - Mischievous Kitten"
+type = "Character"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8a7ba766a9614ec2b66cd1cb1dc10a3e.avif?1740589496"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Ally"]

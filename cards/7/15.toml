@@ -1,0 +1,12 @@
+name = "Cinderella - The Right One"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7c8e2317de8840ecaa50bffbff20c87d.avif?1740589158"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Hero", "Princess"]
+text = "IF THE SLIPPER FITS When you play this character, you may put an item card named The Glass Slipper from your discard on the bottom of your deck to gain 3 lore."

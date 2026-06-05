@@ -1,0 +1,12 @@
+name = "Megara - Pulling the Strings"
+type = "Character"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_769e68c4d309489fa1a27c2d237a7b2e.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 1
+lore = 1
+classifications = ["Dreamborn", "Ally"]
+text = "WONDER BOY When you play this character, chosen character gets +2 {S} this turn."

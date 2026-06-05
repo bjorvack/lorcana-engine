@@ -1,0 +1,11 @@
+name = "Babyhead - Leader of Sid's Toys"
+type = "Character"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e8e7a7e2380f456887bb6b8f01f991b1.avif?1777687625"
+max_copies = 4
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally", "Toy"]
+text = "TIGHTEN THE BOLTS Whenever you pay 2 {I} or less to play a card, chosen character gets +2 {S} this turn.\nREPLACEMENT PARTS During your turn, whenever one of your other characters is banished, draw a card."

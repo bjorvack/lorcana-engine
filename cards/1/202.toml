@@ -1,0 +1,8 @@
+name = "Frying Pan"
+type = "Item"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_aa294faf68c14f559c22e0e79a6c101e.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "CLANG! Banish this item — Chosen character can't challenge during their next turn."

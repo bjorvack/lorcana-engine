@@ -1,0 +1,13 @@
+name = "Donald Duck - Strutting His Stuff"
+type = "Character"
+cost = 5
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8d5ff9b706fd4f59b44e0ca52638a257.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 3
+lore = 2
+classifications = ["Dreamborn", "Hero", "Inventor"]
+keywords = ["Ward"]
+text = "Ward (Opponents can't choose this character except to challenge.)"

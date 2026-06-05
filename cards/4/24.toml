@@ -1,0 +1,11 @@
+name = "Ursula - Eric's Bride"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_982da8b7486a480fac3fd751a353a4eb.avif?1716052430"
+max_copies = 4
+strength = 2
+willpower = 4
+lore = 2
+classifications = ["Floodborn", "Villain", "Princess", "Sorcerer"]
+text = "Shift: Discard a song card (You may discard a song card to play this on top of one of your characters named Ursula.)\nVANESSA'S DESIGN Whenever this character quests, chosen opponent reveals their hand and discards a non-character card of your choice."

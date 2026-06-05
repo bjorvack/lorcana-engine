@@ -1,0 +1,11 @@
+name = "Duchess - Elegant Feline"
+type = "Character"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_03494b6689ad4bbb9d4e5afac6db733d.avif?1740589549"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Hero"]

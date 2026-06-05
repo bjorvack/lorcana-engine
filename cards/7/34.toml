@@ -1,0 +1,11 @@
+name = "Koda - Smallish Bear"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2b6ec7f6dfed481bbc57c510928c657b.avif?1740589234"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 3
+classifications = ["Storyborn", "Ally"]

@@ -1,0 +1,11 @@
+name = "Prince John - Fraidy-Cat"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e55251bd10c24f90a388f5dc18a2867f.avif?1747509288"
+max_copies = 4
+strength = 5
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Villain", "Prince"]
+text = "HELP! HELP! Whenever an opponent plays a character, deal 1 damage to this character."

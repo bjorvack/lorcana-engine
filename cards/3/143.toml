@@ -1,0 +1,13 @@
+name = "Gramma Tala - Spirit of the Ocean"
+type = "Character"
+cost = 7
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_db1756b0f3fb4f77b212b8d264b73f84.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 8
+lore = 2
+classifications = ["Floodborn", "Mentor"]
+keywords = ["Shift 5"]
+text = "Shift 5 (You may pay 5 {I} to play this on top of one of your characters named Gramma Tala.)\nDO YOU KNOW WHO YOU ARE? Whenever a card is put into your inkwell, gain 1 lore."

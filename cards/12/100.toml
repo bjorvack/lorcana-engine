@@ -1,0 +1,7 @@
+name = "Gyro-Evac"
+type = "Item"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_50ad67bd180c4d4a95abcf5ab4eb42bc.avif?1777687553"
+max_copies = 4
+text = "TAKE HER UP {E}, 1 {I} — Chosen character of yours gains Evasive until the start of your next turn. (Only characters with Evasive can challenge them.)\nCRASH LANDING {E}, Banish this item — Each player loses 2 lore."

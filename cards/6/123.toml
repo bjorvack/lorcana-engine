@@ -1,0 +1,12 @@
+name = "Goofy - Flying Goof"
+type = "Character"
+cost = 6
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_bb6785f344ac4b43812ed03ffe3793af.avif?1730901319"
+max_copies = 4
+strength = 5
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Hero"]
+keywords = ["Evasive", "Rush"]
+text = "Rush (This character can challenge the turn they're played.)\nEvasive (Only characters with Evasive can challenge this character.)"

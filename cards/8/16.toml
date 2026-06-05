@@ -1,0 +1,12 @@
+name = "Darling Dear - Beloved Wife"
+type = "Character"
+cost = 5
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_135ceb6f79ed43aa90077b344b26ea10.avif?1747506721"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "HOW SWEET When you play this character, chosen character gets +2 {L} this turn."

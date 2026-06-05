@@ -1,0 +1,8 @@
+name = "Colors of the Wind"
+type = "Song"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0e8280a06c6a482caa3cb51b207fe284.avif?1770259487"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 4 or more can {E} to sing this song for free.)\nEach player reveals the top card of their deck. Draw a card for each different ink type of cards revealed this way."

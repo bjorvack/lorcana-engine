@@ -1,0 +1,7 @@
+name = "Revive"
+type = "Action"
+cost = 5
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0eaf4bdb418a4e63a69851152b8bb057.avif?1723917209"
+max_copies = 4
+text = "Play a character card with cost 5 or less from your discard for free."

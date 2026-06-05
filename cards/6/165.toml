@@ -1,0 +1,8 @@
+name = "Prepare Your Bot"
+type = "Action"
+cost = 1
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_21d32224cf9f452ab94f70d9a2b40d79.avif?1730901319"
+max_copies = 4
+inkwell = true
+text = "Choose one:\n* Ready chosen item.\n* Ready chosen Robot character. They can't quest for the rest of this turn."

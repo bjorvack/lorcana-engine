@@ -1,0 +1,13 @@
+name = "Agustin Madrigal - Exceptionally Kind"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_06b56190f0d84ae58f902fdf86cea771.avif?1777687130"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 6
+lore = 1
+classifications = ["Dreamborn", "Mentor", "Madrigal"]
+keywords = ["Support"]
+text = "Support (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)"

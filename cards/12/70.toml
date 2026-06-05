@@ -1,0 +1,13 @@
+name = "Hamish, Hubert & Harris - Troublemaking Triplets"
+type = "Character"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0035be6616d844e58e6b42d1d804ac0b.avif?1777687433"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally", "Prince"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)"

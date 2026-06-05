@@ -1,0 +1,12 @@
+name = "Angus - Mighty Horse"
+type = "Character"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4b01090937874d888d3f0f475bc1b671.avif?1777687840"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "DAUNTLESS When you play this character, chosen character gains Alert this turn. (They can challenge as if they had Evasive.)"

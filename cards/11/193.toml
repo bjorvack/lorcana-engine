@@ -1,0 +1,12 @@
+name = "John Smith - Undaunted Protector"
+type = "Character"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_26b1e9d58acf429aa2d77f89f6534c16.avif?1770260064"
+max_copies = 4
+strength = 3
+willpower = 6
+lore = 2
+classifications = ["Dreamborn", "Hero"]
+keywords = ["Bodyguard"]
+text = "Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)\nDO YOUR WORST Opponents must choose this character for actions and abilities if able."

@@ -1,0 +1,8 @@
+name = "The Beast is Mine!"
+type = "Action"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7c0b98be9394466198db3610a9b64953.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "Chosen character gains Reckless during their next turn. (They can't quest and must challenge if able.)"

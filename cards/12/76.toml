@@ -1,0 +1,11 @@
+name = "Buzz Lightyear - Space Ranger"
+type = "Character"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7a1dc3b9b23041a78c7e1b46ff4a2f2c.avif?1777687457"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero", "Toy", "Captain"]

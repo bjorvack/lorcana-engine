@@ -1,0 +1,11 @@
+name = "Yao - Snow Warrior"
+type = "Character"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_85ee925c4b1c4c1bbf2d6320a9aeaf7d.avif?1770259527"
+max_copies = 4
+strength = 4
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "OOH, I'M SCARED During opponents' turns, this character gains Resist +2. (Damage dealt to them is reduced by 2.)"

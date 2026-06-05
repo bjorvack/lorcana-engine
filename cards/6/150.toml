@@ -1,0 +1,13 @@
+name = "Nick Wilde - Sly Fox"
+type = "Character"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_48304fa82c024098bf755ea123884358.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Floodborn", "Ally"]
+keywords = ["Shift 1"]
+text = "Shift 1 (You may pay 1 {I} to play this on top of one of your characters named Nick Wilde.)\nCAN'T TOUCH ME While you have an item in play, this character can't be challenged."

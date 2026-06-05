@@ -1,0 +1,11 @@
+name = "The Bayou - Mysterious Swamp"
+type = "Location"
+cost = 1
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_65119a74cb394cec89eab4175ad228bf.avif?1709690747"
+max_copies = 4
+inkwell = true
+move_cost = 1
+willpower = 3
+lore = 1
+text = "SHOW ME THE WAY Whenever a character quests while here, you may draw a card, then choose and discard a card."

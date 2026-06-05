@@ -1,0 +1,8 @@
+name = "But I'm Much Faster"
+type = "Song"
+cost = 1
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_194c57c22f0c46a5a7ec456ac28c7bfa.avif?1761764928"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 1 or more can {E} to sing this song for free.)\nChosen character gains Alert and Challenger +2 this turn. (They can challenge as if they had Evasive. They get +2 {S} while challenging.)"

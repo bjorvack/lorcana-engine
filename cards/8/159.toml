@@ -1,0 +1,12 @@
+name = "Go Go Tomago - Mechanical Engineer"
+type = "Character"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_bc3a96f6dcf64d1d87da6c83288a8146.avif?1747509360"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero", "Inventor"]
+text = "NEED THIS! When you play a Floodborn character on this card, you may put the top card of your deck into your inkwell facedown and exerted."

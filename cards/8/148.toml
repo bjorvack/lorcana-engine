@@ -1,0 +1,7 @@
+name = "Get Out!"
+type = "Action"
+cost = 6
+ink = ["Ruby", "Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f0f2c6f11556497abc5ada3ae5fabe5c.avif?1747509301"
+max_copies = 4
+text = "Banish chosen character, then return an item card from your discard to your hand."

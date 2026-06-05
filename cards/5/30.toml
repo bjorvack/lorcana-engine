@@ -1,0 +1,8 @@
+name = "Healing Decanter"
+type = "Item"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_af887c9fbbbf4e12bf91a9d221681e71.avif?1723917209"
+max_copies = 4
+inkwell = true
+text = "RENEWING ESSENCE {E} — Remove up to 2 damage from chosen character."

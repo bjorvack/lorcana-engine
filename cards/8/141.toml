@@ -1,0 +1,12 @@
+name = "Mulan - Charging Ahead"
+type = "Character"
+cost = 4
+ink = ["Ruby", "Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_460e1f2d54244710902cf898533beaa8.avif?1747509245"
+max_copies = 4
+strength = 3
+willpower = 3
+lore = 0
+classifications = ["Storyborn", "Hero", "Princess"]
+keywords = ["Reckless"]
+text = "Reckless (This character can't quest and must challenge each turn if able.)\nBURST OF SPEED During your turn, this character gains Evasive. (They can challenge characters with Evasive.)\nLONG RANGE This character can challenge ready characters."

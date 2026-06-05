@@ -1,0 +1,7 @@
+name = "Bruno's Return"
+type = "Action"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_abc3f1da50d04f768b1181878b17f8da.avif?1755540269"
+max_copies = 4
+text = "Return a character card from your discard to your hand. You may remove up to 2 damage from chosen character."

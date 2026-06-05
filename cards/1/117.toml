@@ -1,0 +1,12 @@
+name = "Moana - Chosen by the Ocean"
+type = "Character"
+cost = 5
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_49b96ca319434f588d5d36b30597c832.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 6
+lore = 2
+classifications = ["Storyborn", "Hero", "Princess"]
+text = "THIS IS NOT WHO YOU ARE When you play this character, you may banish chosen character named Te Kā."

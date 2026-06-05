@@ -1,0 +1,10 @@
+name = "Nottingham - Prince John's Castle"
+type = "Location"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_398194a72dfd4e41be4b6939e4e13ee3.avif?1709690747"
+max_copies = 4
+inkwell = true
+move_cost = 1
+willpower = 6
+lore = 1

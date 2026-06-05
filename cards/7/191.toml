@@ -1,0 +1,12 @@
+name = "Tick-Tock - Relentless Crocodile"
+type = "Character"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_64885a846c394abfa482aa6aa4a3711e.avif?1740590233"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 6
+lore = 1
+classifications = ["Storyborn"]
+text = "LOOKING FOR LUNCH During your turn, this character gains Evasive while a Pirate character is in play. (They can challenge characters with Evasive.)"

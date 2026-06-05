@@ -1,0 +1,13 @@
+name = "Hercules - Divine Hero"
+type = "Character"
+cost = 6
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_025c5e1c614940ee94c0d2e1d96ebbf1.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 3
+lore = 2
+classifications = ["Floodborn", "Hero", "Prince", "Deity"]
+keywords = ["Resist 2", "Shift 4"]
+text = "Shift 4 (You may pay 4 {I} to play this on top of one of your characters named Hercules.)\nResist +2 (Damage dealt to this character is reduced by 2.)"

@@ -1,0 +1,7 @@
+name = "Croquet Mallet"
+type = "Item"
+cost = 1
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2f8f2276cb254195b2abf5cffd2b8193.avif?1709690747"
+max_copies = 4
+text = "HURTLING HEDGEHOG Banish this item — Chosen character gains Rush this turn. (They can challenge the turn they're played.)"

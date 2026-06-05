@@ -1,0 +1,8 @@
+name = "Vault Door"
+type = "Item"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d4897bfa5fb047a894e6f69c3feebc1f.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "SEALED AWAY Your locations and characters at locations gain Resist +1. (Damage dealt to them is reduced by 1.)"

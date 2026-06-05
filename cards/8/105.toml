@@ -1,0 +1,12 @@
+name = "Queen of Hearts - Haughty Monarch"
+type = "Character"
+cost = 4
+ink = ["Emerald", "Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f941ecb827224dc5ae1054314c084d0f.avif?1747509055"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 3
+classifications = ["Storyborn", "Villain", "Queen"]
+text = "COUNT OFF! While there are 5 or more characters with damage in play, this character gets +3 {L}."

@@ -1,0 +1,7 @@
+name = "Escape Plan"
+type = "Action"
+cost = 5
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_85de0815b3344000a8f380b6ceefc07e.avif?1777687801"
+max_copies = 4
+text = "You can't play this action unless 2 or more cards were put into your discard this turn.\nEach player chooses 2 of their characters and puts them into their inkwell facedown and exerted."

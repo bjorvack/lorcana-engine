@@ -1,0 +1,8 @@
+name = "Ranger Team-Up"
+type = "Action"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ebf33c2b155d45cbbbcf8ecb24ebea14.avif?1777687244"
+max_copies = 4
+inkwell = true
+text = "Chosen character gets +{S} equal to their {W} this turn."

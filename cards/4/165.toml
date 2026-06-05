@@ -1,0 +1,8 @@
+name = "Treasures Untold"
+type = "Song"
+cost = 6
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e0862c1712b84e8eafa76836362c9870.avif?1716052430"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 6 or more can {E} to sing this song for free.)\nReturn up to 2 item cards from your discard into your hand."

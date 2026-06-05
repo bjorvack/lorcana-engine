@@ -1,0 +1,12 @@
+name = "Vanellope von Schweetz - Candy Mechanic"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_48fb46a8fbdd4615a2c9ab99f304a0f2.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Dreamborn", "Hero", "Princess", "Racer"]
+text = "YOU'VE GOT TO PAY TO PLAY Whenever this character quests, chosen opposing character gets -1 {S} until the start of your next turn."

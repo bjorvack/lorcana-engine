@@ -1,0 +1,12 @@
+name = "Bashful - Adoring Knight"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f2e3f60f19eb409eaccc1a8dc10f8ebd.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Dreamborn", "Ally", "Knight", "Seven Dwarfs"]
+text = "IMPRESS THE PRINCESS While you have a character named Snow White in play, this character gains Bodyguard. (An opposing character who challenges one of your characters must choose one with Bodyguard if able.)"

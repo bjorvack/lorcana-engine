@@ -1,0 +1,12 @@
+name = "Dr. Facilier - Agent Provocateur"
+type = "Character"
+cost = 7
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a23c8618b0aa41f9b41b9f0603495380.avif?1709690747"
+max_copies = 4
+strength = 4
+willpower = 5
+lore = 3
+classifications = ["Floodborn", "Villain", "Sorcerer"]
+keywords = ["Shift 5"]
+text = "Shift 5 (You may pay 5 {I} to play this on top of one of your characters named Dr. Facilier.)\nINTO THE SHADOWS Whenever one of your other characters is banished in a challenge, you may return that card to your hand."

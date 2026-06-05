@@ -1,0 +1,8 @@
+name = "Out of Order"
+type = "Action"
+cost = 7
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0b939927deb64ca8a8ddde773f6cc340.avif?1740589693"
+max_copies = 4
+inkwell = true
+text = "Banish chosen character."

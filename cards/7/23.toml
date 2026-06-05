@@ -1,0 +1,13 @@
+name = "Thunderbolt - Wonder Dog"
+type = "Character"
+cost = 5
+ink = ["Amber", "Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5a0a0d8b44824cf3b19fd61fc940df4a.avif?1740589191"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 7
+lore = 2
+classifications = ["Floodborn", "Hero"]
+keywords = ["Bodyguard"]
+text = "Puppy Shift 3 (You may pay 3 {I} to play this on top of one of your Puppy characters.)\nBodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)"

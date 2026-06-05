@@ -1,0 +1,11 @@
+name = "Lyle Tiberius Rourke - Looking for His Moment"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e5e0a6407d4a4d948c19bcc79209857c.avif?1777687572"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Villain"]

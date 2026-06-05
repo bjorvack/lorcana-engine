@@ -1,0 +1,10 @@
+name = "Simba - Scrappy Cub"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_49d30b3074984f9288f650908b3d0654.avif?1755540796"
+max_copies = 4
+strength = 1
+willpower = 1
+lore = 3
+classifications = ["Storyborn", "Hero", "Prince"]

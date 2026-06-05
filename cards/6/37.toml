@@ -1,0 +1,13 @@
+name = "Madam Mim - Tiny Adversary"
+type = "Character"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_cb73a29ef0e94fdb80188902527c5d86.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 0
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Villain", "Sorcerer"]
+keywords = ["Challenger 1"]
+text = "Challenger +1 (While challenging, this character gets +1 {S}.)\nZIM ZABBERIM ZIM Your other characters gain Challenger +1."

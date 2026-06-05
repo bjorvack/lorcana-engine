@@ -1,0 +1,8 @@
+name = "Dangerous Plan"
+type = "Action"
+cost = 1
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6627e7f006944e7a80d5e0ac3dfa3506.avif?1777687679"
+max_copies = 4
+inkwell = true
+text = "Draw 2 cards. Then, discard a card at random."

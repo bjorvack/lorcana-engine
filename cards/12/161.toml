@@ -1,0 +1,12 @@
+name = "Ursula - Deal Maker"
+type = "Character"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1a2311c3639d464d9eb638a08d535276.avif?1777687789"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 4
+lore = 1
+classifications = ["Dreamborn", "Villain", "Sorcerer"]
+text = "QUITE THE BARGAIN When you play this character and whenever she quests, another chosen character gets +1 {L} this turn.\nBY THE WAY At the end of your turn, if this character is exerted, put chosen character of yours into your inkwell facedown and exerted."

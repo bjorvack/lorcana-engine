@@ -1,0 +1,11 @@
+name = "Khan - Beloved Steed"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_de5bf1478737423d8469d662e40a89d0.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally"]

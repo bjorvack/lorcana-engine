@@ -1,0 +1,8 @@
+name = "The Family Madrigal"
+type = "Song"
+cost = 5
+ink = ["Amber", "Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c6cad61cbf8445be93e29134eb073af6.avif?1740589259"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 5 or more can {E} to sing this song for free.)\nLook at the top 5 cards of your deck. You may reveal up to 1 Madrigal character card and up to 1 song card and put them into your hand. Put the rest on the top of your deck in any order."

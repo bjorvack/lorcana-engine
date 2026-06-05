@@ -1,0 +1,13 @@
+name = "Lythos - Rock Titan"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_03d2c58be83e4132a95c060de2b00cbe.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Titan"]
+keywords = ["Resist 2"]
+text = "Resist +2 (Damage dealt to this character is reduced by 2.)\nSTONE SKIN {E} — Chosen character gains Resist +2 this turn."

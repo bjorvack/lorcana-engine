@@ -1,0 +1,12 @@
+name = "Bernard - Brand-New Agent"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b00e336742ab4743850d9927c06c7c6e.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Hero"]
+text = "I'LL CHECK IT OUT At the end of your turn, if this character is exerted, you may ready another chosen character of yours."

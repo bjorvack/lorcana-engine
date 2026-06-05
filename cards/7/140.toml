@@ -1,0 +1,12 @@
+name = "Lyle Tiberius Rourke - Crystallized Mercenary"
+type = "Character"
+cost = 8
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4ba6dbe9f2674bb880ec26795a4663c6.avif?1740589661"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 4
+lore = 3
+classifications = ["Storyborn", "Villain"]
+text = "EXPLOSIVE Once during your turn, whenever a card is put into your inkwell, deal 2 damage to each character in play."

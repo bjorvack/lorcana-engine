@@ -1,0 +1,13 @@
+name = "The Nokk - Water Spirit"
+type = "Character"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_780972e5c4f84315bcd27496ef5184a3.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 3
+lore = 1
+classifications = ["Storyborn"]
+keywords = ["Ward"]
+text = "Ward (Opponents can't choose this character except to challenge.)"

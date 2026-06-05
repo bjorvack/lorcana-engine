@@ -1,0 +1,13 @@
+name = "Tinker Bell - Queen of the Azurite Fairies"
+type = "Character"
+cost = 7
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_99ced91e0cc94c6cb0be7bf655372dfd.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 6
+lore = 2
+classifications = ["Floodborn", "Ally", "Queen", "Fairy", "Captain"]
+keywords = ["Evasive", "Shift 5"]
+text = "Shift 5 (You may pay 5 {I} to play this on top of one of your characters named Tinker Bell.)\nEvasive (Only characters with Evasive can challenge this character.)\nSHINING EXAMPLE Whenever this character quests, your other Fairy characters get +1 {L} this turn."

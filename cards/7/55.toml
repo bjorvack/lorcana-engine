@@ -1,0 +1,12 @@
+name = "Elsa - Trusted Sister"
+type = "Character"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6e04382533a045eda3c48e76e9dda411.avif?1740589318"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero", "Queen", "Sorcerer"]
+text = "WHAT DO WE DO NOW? Whenever this character quests, if you have a character named Anna in play, gain 1 lore."

@@ -1,0 +1,13 @@
+name = "Aladdin - Barreling Through"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6c9828a835ab4902adfb20bd744bf3a6.avif?1761763664"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 0
+classifications = ["Storyborn", "Hero", "Whisper"]
+keywords = ["Reckless"]
+text = "Boost 1 {I} (Once during your turn, you may pay 1 {I} to put the top card of your deck facedown under this character.)\nReckless (This character can't quest and must challenge each turn if able.)\nONLY THE BOLD While there's a card under this character, your characters with Reckless gain \"{E} — Gain 1 lore.\""

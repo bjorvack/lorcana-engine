@@ -1,0 +1,12 @@
+name = "Monsieur D'Arque - Despicable Proprietor"
+type = "Character"
+cost = 1
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_986ba61b527b4e5f822c0c8e2d675b7d.avif?1740589729"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Villain"]
+text = "I'VE COME TO COLLECT Whenever this character quests, you may banish chosen item of yours to draw a card."

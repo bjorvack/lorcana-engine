@@ -1,0 +1,12 @@
+name = "Elsa - Ice Surfer"
+type = "Character"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4dff89f588a5466097978e9889eef559.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Dreamborn", "Hero", "Queen", "Sorcerer"]
+text = "THAT'S NO BLIZZARD Whenever you play a character named Anna, ready this character. This character can't quest for the rest of this turn."

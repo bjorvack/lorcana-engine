@@ -1,0 +1,12 @@
+name = "Cubby - Mighty Lost Boy"
+type = "Character"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1406e73a81ad4687ad3e502447d21287.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "THE BEAR Whenever this character moves to a location, he gets +3 {S} this turn."

@@ -1,0 +1,8 @@
+name = "Vision Slab"
+type = "Item"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_58f8144b0f884b70a2a6b946ba8377cd.avif?1716052430"
+max_copies = 4
+inkwell = true
+text = "DANGER REVEALED At the start of your turn, if an opposing character has damage, gain 1 lore.\nTRAPPED! Damage counters can't be removed."

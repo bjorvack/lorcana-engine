@@ -1,0 +1,7 @@
+name = "Captain Hook's Rapier"
+type = "Item"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3c6f007d30714e5183dc6d9da8b200ae.avif?1709690747"
+max_copies = 4
+text = "GET THOSE SCURVY BRATS! During your turn, whenever one of your characters banishes another character in a challenge, you may pay 1 {I} to draw a card.\nLET'S HAVE AT IT! Your characters named Captain Hook gain Challenger +1. (They get +1 {S} while challenging.)"

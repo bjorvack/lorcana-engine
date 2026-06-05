@@ -1,0 +1,13 @@
+name = "Darkwing Duck - Drake Mallard"
+type = "Character"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_39abc3bfefc14489beca55a40a48153c.avif?1770259853"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Super", "Hero", "Detective"]
+keywords = ["Ward"]
+text = "Ward (Opponents can't choose this character except to challenge.)"

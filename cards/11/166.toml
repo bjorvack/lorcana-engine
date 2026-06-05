@@ -1,0 +1,7 @@
+name = "Blue Smoke"
+type = "Item"
+cost = 1
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9d937b1e551d47c18d97a54494378368.avif?1770259948"
+max_copies = 4
+text = "THEATRICAL ENTRANCE If you have a character named Darkwing Duck in play, you pay 1 {I} less to play this item.\nCLOUD OF MYSTERY {E}, 1 {I}, Banish this item – Chosen character gains Ward until the start of your next turn. (Opponents can't choose them except to challenge.)"

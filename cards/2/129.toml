@@ -1,0 +1,8 @@
+name = "Go the Distance"
+type = "Song"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2d25ebdcc8874b25b749753468ba5956.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 2 or more can {E} to sing this song for free.)\nReady chosen damaged character of yours. They can't quest for the rest of this turn. Draw a card."

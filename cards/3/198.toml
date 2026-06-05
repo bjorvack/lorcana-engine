@@ -1,0 +1,8 @@
+name = "Rise of the Titans"
+type = "Action"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d36e3111ff2a40f4916b08b01de3cbeb.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "Banish chosen location or item."

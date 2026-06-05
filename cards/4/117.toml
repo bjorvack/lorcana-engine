@@ -1,0 +1,11 @@
+name = "Namaari - Heir of Fang"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5c2aaf063d1f46c89b17dae93940f47c.avif?1716052430"
+max_copies = 4
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Villain", "Princess"]
+text = "TWO-WEAPON FIGHTING During your turn, whenever this character deals damage to another character in a challenge, you may deal the same amount of damage to another chosen character."

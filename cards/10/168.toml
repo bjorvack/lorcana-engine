@@ -1,0 +1,8 @@
+name = "Fairy Godmother's Wand"
+type = "Item"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ddf2f3b6243d46b693fa4c08113e8930.avif?1761764685"
+max_copies = 4
+inkwell = true
+text = "ONLY TILL MIDNIGHT During your turn, whenever you put a card into your inkwell, chosen Princess character of yours gains Ward until the start of your next turn. (Opponents can't choose them except to challenge.)"

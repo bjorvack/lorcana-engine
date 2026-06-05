@@ -1,0 +1,12 @@
+name = "Milo Thatch - Undaunted Scholar"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_afc3f865b594418e86f60e638df7351b.avif?1740589681"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Hero"]
+text = "I'M YOUR GUY Whenever you play an action, you may give chosen character +2 {S} this turn."

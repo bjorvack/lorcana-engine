@@ -1,0 +1,8 @@
+name = "Hidden Trap"
+type = "Item"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7e0852ee050446dd96742b3986444917.avif?1770259965"
+max_copies = 4
+inkwell = true
+text = "ALMOST READY This item enters play exerted.\nSNAP! {E}, Banish this item — Choose one:\n* Banish chosen item.\n* Chosen opposing character gets -2 {S} this turn."

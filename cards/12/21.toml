@@ -1,0 +1,12 @@
+name = "Woody - Leader of the Toys"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_752b3ac3ef5a4ce6833d0dbe46f1f671.avif?1777687209"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Hero", "Toy"]
+text = "LET'S GO HOME When you play this character, look at the top 4 cards of your deck. You may reveal a Toy character card or a location card named Andy's Room and put it into your hand. Put the rest on the bottom of your deck in any order."

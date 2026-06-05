@@ -1,0 +1,12 @@
+name = "Della Duck - Returning Mother"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_93548601e4fd42fcb0d385947c09fc8e.avif?1761752029"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "HERE TO HELP When you play this character, you may ready chosen character with Boost. If you do, they can't quest or challenge for the rest of this turn."

@@ -1,0 +1,7 @@
+name = "Raging Storm"
+type = "Action"
+cost = 8
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_46ccfcbf96124424a2467f7f13a2f0c5.avif?1770259325"
+max_copies = 4
+text = "Banish all characters."

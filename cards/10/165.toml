@@ -1,0 +1,7 @@
+name = "Spooky Sight"
+type = "Action"
+cost = 6
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d959afe5ddf24d399c5c9ec7ad449d6c.avif?1761764629"
+max_copies = 4
+text = "Put all characters with cost 3 or less into their players' inkwells facedown and exerted."

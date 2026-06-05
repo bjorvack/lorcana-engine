@@ -1,0 +1,11 @@
+name = "Jasmine - Desert Warrior"
+type = "Character"
+cost = 5
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_762ed07f53ea4ca6a4cf7ae20ed53535.avif?1716052430"
+max_copies = 4
+strength = 3
+willpower = 3
+lore = 2
+classifications = ["Dreamborn", "Hero", "Princess"]
+text = "CUNNING MANEUVER When you play this character and whenever she's challenged, each opponent chooses and discards a card."

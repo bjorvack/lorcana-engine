@@ -1,0 +1,12 @@
+name = "Tinker Bell - Peter Pan's Ally"
+type = "Character"
+cost = 5
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3ac122b5a08e42ac986aa536da6c1000.avif?1709690747"
+max_copies = 4
+strength = 3
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Ally", "Fairy"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)\nLOYAL AND DEVOTED Your characters named Peter Pan gain Challenger +1. (They get +1 {S} while challenging.)"

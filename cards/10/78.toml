@@ -1,0 +1,11 @@
+name = "Hook Hand - Unexpectedly Friendly"
+type = "Character"
+cost = 5
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0c447e6056964c328c30b4ddb32d8148.avif?1761752319"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Ally"]

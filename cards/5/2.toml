@@ -1,0 +1,11 @@
+name = "Nala - Mischievous Cub"
+type = "Character"
+cost = 1
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7cfdb563e48a4998ae06726dd5feda7d.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 0
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally"]

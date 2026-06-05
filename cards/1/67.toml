@@ -1,0 +1,7 @@
+name = "Ursula's Cauldron"
+type = "Item"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9548bea5e69544d5b3e488e97d33065c.avif?1709690747"
+max_copies = 4
+text = "PEER INTO THE DEPTHS {E} — Look at the top 2 cards of your deck. Put one on the top of your deck and the other on the bottom."

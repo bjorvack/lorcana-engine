@@ -1,0 +1,12 @@
+name = "Hiro Hamada - Intuitive Thinker"
+type = "Character"
+cost = 2
+ink = ["Emerald", "Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6153926b4f794e639c0b628501b8fc1a.avif?1747509062"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero", "Inventor"]
+text = "LOOK FOR A NEW ANGLE {E} — Ready chosen Floodborn character."

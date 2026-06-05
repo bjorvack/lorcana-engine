@@ -1,0 +1,7 @@
+name = "Water Has Memory"
+type = "Action"
+cost = 1
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_63c20a20927a4cb1b67736648b2867c8.avif?1740589808"
+max_copies = 4
+text = "Look at the top 4 cards of chosen player's deck. Put one on the top of their deck and the rest on the bottom of their deck in any order."

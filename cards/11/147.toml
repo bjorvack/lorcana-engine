@@ -1,0 +1,13 @@
+name = "Piglet - Cocoa Maker"
+type = "Character"
+cost = 5
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_be96288326484fd880acd268246cc300.avif?1770259862"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 5
+lore = 2
+classifications = ["Floodborn", "Ally"]
+keywords = ["Shift 3"]
+text = "Shift 3 {I} (You may pay 3 {I} to play this on top of one of your characters named Piglet.)\nSPECIAL RECIPE At the end of your turn, remove up to 2 damage from each of your characters."

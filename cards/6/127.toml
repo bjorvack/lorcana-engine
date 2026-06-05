@@ -1,0 +1,11 @@
+name = "Scar - Heartless Hunter"
+type = "Character"
+cost = 5
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_eea9acebbeb6449a8cc03786f5bca24d.avif?1730901319"
+max_copies = 4
+strength = 4
+willpower = 2
+lore = 3
+classifications = ["Storyborn", "Villain"]
+text = "BARED TEETH When you play this character, deal 2 damage to chosen character of yours to deal 2 damage to chosen character."

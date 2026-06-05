@@ -1,0 +1,13 @@
+name = "Baloo - Friend and Guardian"
+type = "Character"
+cost = 6
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9149ad820976479daad901fbd5bb1679.avif?1761751899"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 8
+lore = 2
+classifications = ["Storyborn", "Ally"]
+keywords = ["Bodyguard", "Support"]
+text = "Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)\nSupport (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)"

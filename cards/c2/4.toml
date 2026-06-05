@@ -1,0 +1,12 @@
+name = "Simba - Pride Protector"
+type = "Character"
+cost = 5
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_57f0cec68b0a49d7879d72637f8cb9e5.avif?1776533247"
+max_copies = 4
+strength = 4
+willpower = 4
+lore = 2
+classifications = ["Floodborn", "Hero", "Prince"]
+keywords = ["Shift 3"]
+text = "Shift 3 {I} (You may pay 3 {I} to play this on top of one of your characters named Simba.)\nUNDERSTAND THE BALANCE At the end of your turn, if this character is exerted, you may ready your other characters."

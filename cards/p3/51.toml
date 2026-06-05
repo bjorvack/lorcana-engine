@@ -1,0 +1,12 @@
+name = "Will o' the Wisp - Forest Spirit"
+type = "Character"
+cost = 1
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d176f80b989b4f0fb574dea2ce4fe98f.avif?1777662304"
+max_copies = 4
+inkwell = true
+strength = 0
+willpower = 3
+lore = 1
+classifications = ["Storyborn"]
+text = "COME ON OUT When this character is banished in a challenge, you may return this card to your hand."

@@ -1,0 +1,12 @@
+name = "Alan-a-Dale - Rockin' Rooster"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d46b1371e56d486786fb471a1c043d3a.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "FAN FAVORITE Whenever you play a song, gain 1 lore."

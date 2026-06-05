@@ -1,0 +1,8 @@
+name = "All Is Found"
+type = "Song"
+cost = 5
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a3eb0593f33d4ff78e6fd4dccc9257a2.avif?1740589812"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 5 or more can {E} to sing this song for free.)\nPut up to 2 cards from your discard into your inkwell, facedown and exerted."

@@ -1,0 +1,11 @@
+name = "Norton Nimnul - Misanthropic Genius"
+type = "Character"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_740fc865fdcd40ab8b5391cfdc96509d.avif?1777687730"
+max_copies = 4
+strength = 3
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Villain", "Inventor"]
+text = "DEVITALIZER RAY Once during your turn, whenever you play an item, chosen opposing character gets -2 {S} this turn."

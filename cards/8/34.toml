@@ -1,0 +1,12 @@
+name = "Alma Madrigal - Accepting Grandmother"
+type = "Character"
+cost = 6
+ink = ["Amber", "Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_387766e68940442bb6c5b7e29d18626f.avif?1747507335"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Mentor", "Madrigal"]
+text = "THE MIRACLE IS YOU Once during your turn, whenever one or more of your characters sings a song, you may ready those characters."

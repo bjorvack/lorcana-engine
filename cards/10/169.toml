@@ -1,0 +1,8 @@
+name = "Inkrunner"
+type = "Item"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2e63442a36994d4fa8266285fe63addd.avif?1761764690"
+max_copies = 4
+inkwell = true
+text = "PREFLIGHT CHECK When you play this item, draw a card.\nREADY TO RIDE {E}, 1 {I} - Chosen character gains Alert this turn. (They can challenge as if they had Evasive.)"

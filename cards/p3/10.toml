@@ -1,0 +1,11 @@
+name = "Mickey Mouse - True Friend"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_407481b12c5a4448a9c837d024bfbb55.avif?1773508744"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Hero"]

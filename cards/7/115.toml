@@ -1,0 +1,11 @@
+name = "Lady Tremaine - Bitterly Jealous"
+type = "Character"
+cost = 6
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9cb99a5eecf64cd9a96cbc780861205c.avif?1740589561"
+max_copies = 4
+strength = 3
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Villain"]
+text = "THAT'S QUITE ENOUGH {E} — Return chosen damaged character to their player's hand. Then, each opponent discards a card at random."

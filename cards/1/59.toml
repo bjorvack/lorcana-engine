@@ -1,0 +1,11 @@
+name = "Ursula - Power Hungry"
+type = "Character"
+cost = 7
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2700ee961f214ad48e6284b2a8e864dc.avif?1709690747"
+max_copies = 4
+strength = 2
+willpower = 8
+lore = 3
+classifications = ["Storyborn", "Villain", "Sorcerer"]
+text = "IT'S TOO EASY! When you play this character, each opponent loses 1 lore. You may draw a card for each 1 lore lost this way."

@@ -1,0 +1,12 @@
+name = "Mulan - Ready for Battle"
+type = "Character"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_96a789fd5e1943adbb12361ff791aec9.avif?1770259685"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Hero", "Princess"]
+text = "NOBLE SPIRIT If you have a character in play with damage, you pay 1 {I} less to play this character.\nFIGHTING SPIRIT If you have a character in play with 5 or more, you pay 1 {I} less to play this character."

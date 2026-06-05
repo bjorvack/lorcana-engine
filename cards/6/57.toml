@@ -1,0 +1,11 @@
+name = "Mama Odie - Solitary Sage"
+type = "Character"
+cost = 5
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c6f28ec2e7a94ce0901675915ba9ff7c.avif?1730901319"
+max_copies = 4
+strength = 4
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Ally", "Sorcerer"]
+text = "I HAVE TO DO EVERYTHING AROUND HERE Whenever you play a song, you may move up to 2 damage counters from chosen character to chosen opposing character."

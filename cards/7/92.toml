@@ -1,0 +1,11 @@
+name = "Shere Khan - Infamous Tiger"
+type = "Character"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7a9520920a6d4267a8bcd80653a43c60.avif?1740589464"
+max_copies = 4
+strength = 4
+willpower = 4
+lore = 4
+classifications = ["Storyborn", "Villain"]
+text = "WHAT A PITY When you play this character, discard your hand."

@@ -1,0 +1,12 @@
+name = "Ariel - Curious Traveler"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4a3d97e5bcff49c2883e5764be3fd43b.avif?1773508943"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 2
+classifications = ["Dreamborn", "Hero", "Princess"]
+text = "FAMILIAR GROUND Whenever this character quests, if you played another character this turn, chosen opposing character can't challenge and must quest during their next turn if able."

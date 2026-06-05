@@ -1,0 +1,13 @@
+name = "Lena Sabrewing - Rebellious Teenager"
+type = "Character"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d8f0d093ffa743e48801e90e1b98cf14.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero", "Sorcerer"]
+keywords = ["Rush"]
+text = "Rush (This character can challenge the turn they're played.)"

@@ -1,0 +1,13 @@
+name = "Elsa - Gloves Off"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2dcbea7036c54b9688bba4a478e03294.avif?1728609660"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Hero", "Queen", "Sorcerer"]
+keywords = ["Challenger 3"]
+text = "Challenger +3 (While challenging, this character gets +3 {S}.)"

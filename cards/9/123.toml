@@ -1,0 +1,13 @@
+name = "Queen of Hearts - Impulsive Ruler"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2eb6be8b7b7a4bd6b131eacfee97dbc0.avif?1755737979"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Villain", "Queen"]
+keywords = ["Rush"]
+text = "Rush (This character can challenge the turn they're played.)"

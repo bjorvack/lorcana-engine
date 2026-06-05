@@ -1,0 +1,8 @@
+name = "Grimorum Arcanorum"
+type = "Item"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_026c97ceb5a740ad879cc16ffc0d6116.avif?1761752274"
+max_copies = 4
+inkwell = true
+text = "DOCTRINA ADDUCERE During your turn, whenever an opposing character becomes exerted, gain 1 lore.\nCELERITAS Your characters named Demona gain Rush. (They can challenge the turn they're played.)"

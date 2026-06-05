@@ -1,0 +1,8 @@
+name = "Night Howler Rage"
+type = "Action"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4fc312f6a56240dba9cb3c6fc6efecde.avif?1723917209"
+max_copies = 4
+inkwell = true
+text = "Draw a card. Chosen character gains Reckless during their next turn. (They can't quest and must challenge if able.)"

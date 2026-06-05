@@ -1,0 +1,13 @@
+name = "Fred - Giant-Sized"
+type = "Character"
+cost = 7
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c4073b6ba72a428e9e213027b112d48f.avif?1747509003"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 6
+lore = 3
+classifications = ["Floodborn", "Hero"]
+keywords = ["Shift 5"]
+text = "Shift 5 (You may pay 5 {I} to play this on top of one of your characters named Fred.)\nI LIKE WHERE THIS IS HEADING Whenever this character quests, reveal cards from the top of your deck until you reveal a Floodborn character card. Put that card into your hand and shuffle the rest into your deck."

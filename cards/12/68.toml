@@ -1,0 +1,11 @@
+name = "Ring of Stones - Place of Legends"
+type = "Location"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7a5bbd2bed1b4b109511ea5bcd384252.avif?1777687426"
+max_copies = 4
+inkwell = true
+move_cost = 3
+willpower = 7
+lore = 1
+text = "FOLLOW YOUR FATE Your exerted characters can move here for free.\nPART THE VEIL Once during your turn, whenever a character moves here, gain 1 lore."

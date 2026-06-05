@@ -1,0 +1,8 @@
+name = "Evil Comes Prepared"
+type = "Action"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_07fed6332fd14403b062bc4f1aed3e63.avif?1723917209"
+max_copies = 4
+inkwell = true
+text = "Ready chosen character of yours. They can't quest for the rest of this turn. If a Villain character is chosen, gain 1 lore."

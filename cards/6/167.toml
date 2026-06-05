@@ -1,0 +1,8 @@
+name = "Microbots"
+type = "Item"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_bb181c94e74a4e6e8983a33275b59f55.avif?1730901319"
+max_copies = 4
+inkwell = true
+text = "LIMITLESS APPLICATIONS You may have any number of cards named Microbots in your deck.\nINSPIRED TECH When you play this item, chosen character gets -1 {S} this turn for each item named Microbots you have in play."

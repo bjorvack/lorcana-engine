@@ -1,0 +1,13 @@
+name = "Vincenzo Santorini - On the Run"
+type = "Character"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_acfc5c2bdabb45ebbc852642fb30bab7.avif?1777687645"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 2
+lore = 2
+classifications = ["Dreamborn", "Ally"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)\nNEUTRALIZE Opposing items can't ready at the start of their players' turns."

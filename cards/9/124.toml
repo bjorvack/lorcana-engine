@@ -1,0 +1,11 @@
+name = "Rapunzel - Letting Down Her Hair"
+type = "Character"
+cost = 6
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_cdba0ed02d3a4361afb0aaa7689ee1de.avif?1755737981"
+max_copies = 4
+strength = 5
+willpower = 4
+lore = 2
+classifications = ["Dreamborn", "Hero", "Princess"]
+text = "TANGLE When you play this character, each opponent loses 1 lore."

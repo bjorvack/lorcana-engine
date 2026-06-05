@@ -1,0 +1,12 @@
+name = "Beast - Forbidding Recluse"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_eb28d5bab74d4784a6a59b2c5cfae6bc.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Dreamborn", "Hero", "Prince"]
+text = "YOU'RE NOT WELCOME HERE When you play this character, you may deal 1 damage to chosen character."

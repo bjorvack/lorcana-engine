@@ -1,0 +1,12 @@
+name = "Rama - Vigilant Father"
+type = "Character"
+cost = 6
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_869c25119c0747c7a1de1cdbfff70eb0.avif?1761763606"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 6
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "PROTECTION OF THE PACK Whenever you play another character with 5 {S} or more, you may ready this character. If you do, he can't quest for the rest of this turn."

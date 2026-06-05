@@ -1,0 +1,7 @@
+name = "Desperate Plan"
+type = "Action"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c7ad283c2e514045abdd3680133717a3.avif?1747509528"
+max_copies = 4
+text = "If you have no cards in your hand, draw until you have 3 cards in your hand. Otherwise, choose and discard any number of cards, then draw that many cards."

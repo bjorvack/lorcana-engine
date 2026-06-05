@@ -1,0 +1,8 @@
+name = "Keep the Ancient Ways"
+type = "Song"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_491b1cb4aadf4bf999230048abf2cf0b.avif?1770260077"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 2 or more can {E} to sing this song for free.)\nOpponents can't play actions or items until the start of your next turn."

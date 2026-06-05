@@ -1,0 +1,13 @@
+name = "Alice - Clumsy as Can Be"
+type = "Character"
+cost = 6
+ink = ["Emerald", "Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2de38611ab924e2da249c2ceeb1eb89d.avif?1747509050"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 6
+lore = 2
+classifications = ["Floodborn", "Hero"]
+keywords = ["Shift 3"]
+text = "Shift 3 (You may pay 3 {I} to play this on top of one of your characters named Alice.)\nACCIDENT PRONE Whenever this character quests, put 1 damage counter on each other character."

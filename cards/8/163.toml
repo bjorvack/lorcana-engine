@@ -1,0 +1,12 @@
+name = "Little Sister - Responsible Rabbit"
+type = "Character"
+cost = 1
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_fe47a07a0f14415284cb6ad8cbdd190e.avif?1747509377"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "LET ME HELP When you play this character, you may remove up to 1 damage from chosen character."

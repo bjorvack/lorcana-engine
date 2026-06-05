@@ -1,0 +1,12 @@
+name = "Rajah - Royal Protector"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_dbc5f2c9f1cc41ebb7b6ba6c9133a942.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "STEADY GAZE While you have no cards in your hand, characters with cost 4 or less can't challenge this character."

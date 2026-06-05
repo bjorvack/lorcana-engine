@@ -1,0 +1,7 @@
+name = "How Far I'll Go"
+type = "Song"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1dace5aa2ed9488e88a16feb02561049.avif?1728609660"
+max_copies = 4
+text = "(A character with cost 4 or more can {E} to sing this song for free.)\nLook at the top 2 cards of your deck. Put one into your hand and the other into your inkwell facedown and exerted."

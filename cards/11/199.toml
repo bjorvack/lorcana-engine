@@ -1,0 +1,8 @@
+name = "Winterspell"
+type = "Action"
+cost = 1
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6e3ec107e64e498ca64d1a4de4e6abb9.avif?1770260090"
+max_copies = 4
+inkwell = true
+text = "Chosen location of yours can't be challenged until the start of your next turn. Draw a card."

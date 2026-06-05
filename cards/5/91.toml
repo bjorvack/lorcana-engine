@@ -1,0 +1,12 @@
+name = "Shenzi - Head Hyena"
+type = "Character"
+cost = 5
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a4bc1bcb3ca54062af8854d9ee7a920f.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 6
+lore = 1
+classifications = ["Storyborn", "Ally", "Hyena"]
+text = "STICK AROUND FOR DINNER This character gets +1 {S} for each other Hyena character you have in play.\nWHAT HAVE WE GOT HERE? Whenever one of your Hyena characters challenges a damaged character, gain 2 lore."

@@ -1,0 +1,8 @@
+name = "Ruby Chromicon"
+type = "Item"
+cost = 1
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_414acca972834b90bd464855d69b79cf.avif?1723917209"
+max_copies = 4
+inkwell = true
+text = "RUBY LIGHT {E} — Chosen character gets +1 {S} this turn."

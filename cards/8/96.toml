@@ -1,0 +1,11 @@
+name = "Napoleon - Clever Bloodhound"
+type = "Character"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7c16b96741d041d9875c2cb270ab5fc2.avif?1747508981"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 6
+lore = 1
+classifications = ["Storyborn"]

@@ -1,0 +1,7 @@
+name = "Be Prepared"
+type = "Song"
+cost = 7
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a7c6d3aa2de6462f8d205d70a8fcc54f.avif?1709690747"
+max_copies = 4
+text = "(A character with cost 7 or more can {E} to sing this song for free.)\nBanish all characters."

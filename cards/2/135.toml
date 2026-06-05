@@ -1,0 +1,7 @@
+name = "Peter Pan's Dagger"
+type = "Item"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d6f21fdca571497883e46666abc022bc.avif?1709690747"
+max_copies = 4
+text = "Your characters with Evasive get +1 {S}."

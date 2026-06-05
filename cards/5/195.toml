@@ -1,0 +1,12 @@
+name = "Pete - Games Referee"
+type = "Character"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d82108b67c434df495ba7ce11b811e79.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Villain"]
+text = "BLOW THE WHISTLE When you play this character, opponents can't play actions until the start of your next turn."

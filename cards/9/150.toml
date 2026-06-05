@@ -1,0 +1,11 @@
+name = "Grand Pabbie - Oldest and Wisest"
+type = "Character"
+cost = 7
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_fded826f4af24bb7aac039d15848173e.avif?1755541093"
+max_copies = 4
+strength = 3
+willpower = 6
+lore = 3
+classifications = ["Storyborn", "Mentor"]
+text = "ANCIENT INSIGHT Whenever you remove 1 or more damage from one of your characters, gain 2 lore."

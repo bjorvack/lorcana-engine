@@ -1,0 +1,12 @@
+name = "Goofy - Ghost Hunter"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0615d3c29a3f4d5bb9c23c6f87a052dc.avif?1761752025"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 5
+lore = 1
+classifications = ["Dreamborn", "Hero", "Detective"]
+text = "PERFECT TRAP When you play this character, chosen opposing character gets -1 {S} until the start of your next turn."

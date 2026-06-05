@@ -1,0 +1,11 @@
+name = "Rabbit - Reluctant Host"
+type = "Character"
+cost = 5
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3d0ac2e2f0bb4f7bbb4831522a6cbd8b.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 6
+lore = 2
+classifications = ["Storyborn", "Ally"]

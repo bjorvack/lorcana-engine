@@ -1,0 +1,12 @@
+name = "Baymax - Low Battery"
+type = "Character"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_adb8a67a679f4e2199a7dc7a9c7a98a1.avif?1740589443"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 2
+lore = 2
+classifications = ["Storyborn", "Hero", "Robot"]
+text = "SHHHHH This character enters play exerted."

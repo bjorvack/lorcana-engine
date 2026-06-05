@@ -1,0 +1,11 @@
+name = "The Queen - Hateful Rival"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8af5e037a64f41e58380427a86148bb5.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Villain", "Queen", "Sorcerer"]

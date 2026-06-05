@@ -1,0 +1,10 @@
+name = "Mayor Winddancer - Actor-Turned-Politician"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_af858595efd7455b8c37dd000fe6d136.avif?1761764868"
+max_copies = 4
+strength = 5
+willpower = 7
+lore = 1
+classifications = ["Storyborn"]

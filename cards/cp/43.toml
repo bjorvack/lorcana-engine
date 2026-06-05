@@ -1,0 +1,12 @@
+name = "Rapunzel - Gifted with Healing"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ea580b2aaa374dff847750dee360b51b.avif?1709909350"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Hero", "Princess"]
+text = "GLEAM AND GLOW When you play this character, remove up to 3 damage from one of your characters. Draw a card for each 1 damage removed this way."

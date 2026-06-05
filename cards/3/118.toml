@@ -1,0 +1,11 @@
+name = "Nutsy - Vulture Henchman"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d9f88c1c25a1490f9cac1cef82b51219.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally"]

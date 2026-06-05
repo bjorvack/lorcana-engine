@@ -1,0 +1,8 @@
+name = "Potion of Might"
+type = "Item"
+cost = 1
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_96709c5ceb00448ab2b8e4b039319183.avif?1723917209"
+max_copies = 4
+inkwell = true
+text = "VILE CONCOCTION 1 {I}, Banish this item — Chosen character gets +3 {S} this turn. If a Villain character is chosen, they get +4 {S} instead."

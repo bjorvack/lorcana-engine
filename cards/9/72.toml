@@ -1,0 +1,11 @@
+name = "Prince Phillip - Warden of the Woods"
+type = "Character"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_330073fee4914065839565db68acf025.avif?1755540570"
+max_copies = 4
+strength = 3
+willpower = 4
+lore = 2
+classifications = ["Dreamborn", "Hero", "Prince"]
+text = "SHINING BEACON Your other Hero characters gain Ward. (Opponents can't choose them except to challenge.)"

@@ -1,0 +1,8 @@
+name = "Fang Crossbow"
+type = "Item"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8944266c591440ad9bcb0a6723cf0645.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "CAREFUL AIM {E}, 2 {I} — Chosen character gets -2 {S} this turn.\nSTAY BACK! {E}, Banish this item — Banish chosen Dragon character."

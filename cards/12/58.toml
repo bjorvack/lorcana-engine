@@ -1,0 +1,13 @@
+name = "Alma Madrigal - Keeper of the Flame"
+type = "Character"
+cost = 5
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c464c4847629458e811da161a49a3aaf.avif?1777687388"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 6
+lore = 2
+classifications = ["Floodborn", "Mentor", "Madrigal"]
+keywords = ["Shift 3"]
+text = "Shift 3 {I} (You may pay 3 {I} to play this on top of one of your characters named Alma Madrigal.)\nTHAT'S ENOUGH Whenever you remove 1 or more damage from one of your characters, you may exert chosen opposing character."

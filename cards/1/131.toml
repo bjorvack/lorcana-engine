@@ -1,0 +1,8 @@
+name = "Fan the Flames"
+type = "Action"
+cost = 1
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0df4378c1d3d40409014b2502a9926b1.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "Ready chosen character. They can't quest for the rest of this turn."

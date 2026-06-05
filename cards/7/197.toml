@@ -1,0 +1,11 @@
+name = "Aladdin - Research Assistant"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_cf7a354247654f8f914b04e101558f6f.avif?1740590256"
+max_copies = 4
+strength = 2
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Hero"]
+text = "HELPING HAND Whenever this character quests, you may play an Ally character with cost 3 or less for free.\nPUT IN THE EFFORT While this character is exerted, your Ally characters get +1 {S}."

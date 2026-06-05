@@ -1,0 +1,12 @@
+name = "Turbo - Royal Hack"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c53a525669114b578666906f5adff421.avif?1723917209"
+max_copies = 4
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Villain", "Racer"]
+keywords = ["Rush"]
+text = "Rush (This character can challenge the turn they're played.)\nGAME JUMP This character also counts as being named King Candy for Shift."

@@ -1,0 +1,8 @@
+name = "Hakuna Matata"
+type = "Song"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2894c74113e7436abf095fe35dde6ea8.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 4 or more can {E} to sing this song for free.)\nRemove up to 3 damage from each of your characters."

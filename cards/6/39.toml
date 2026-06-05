@@ -1,0 +1,13 @@
+name = "Sisu - In Her Element"
+type = "Character"
+cost = 5
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c695077508c44d728ac42c65ac8c97ab.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 6
+lore = 2
+classifications = ["Storyborn", "Hero", "Deity", "Dragon"]
+keywords = ["Challenger 2"]
+text = "Challenger +2 (While challenging, this character gets +2 {S})."

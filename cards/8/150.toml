@@ -1,0 +1,8 @@
+name = "Twitterpated"
+type = "Action"
+cost = 1
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5bdb76e9410847a48c43a4a8b0f2ef81.avif?1747509311"
+max_copies = 4
+inkwell = true
+text = "Chosen character gains Evasive until the start of your next turn. (Only characters with Evasive can challenge them.)"

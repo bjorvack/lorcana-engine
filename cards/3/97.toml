@@ -1,0 +1,8 @@
+name = "Airfoil"
+type = "Item"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_bb11d0da1233459c84ade5157719208f.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "I GOT TO BE GOING {E} — If you've played 2 or more actions this turn, draw a card."

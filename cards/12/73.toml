@@ -1,0 +1,12 @@
+name = "Helga Sinclair - No Backup Needed"
+type = "Character"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e740021277ed4be3848dadea5db10bb6.avif?1777687445"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Villain"]
+text = "CRISIS MANAGEMENT If 2 or more cards were put into your discard this turn, you pay 2 {I} less to play this character."

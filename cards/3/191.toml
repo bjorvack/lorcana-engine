@@ -1,0 +1,11 @@
+name = "Sheriff of Nottingham - Corrupt Official"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_989b5642c80e4a999f54f75e02a2fb13.avif?1709690747"
+max_copies = 4
+strength = 2
+willpower = 4
+lore = 1
+classifications = ["Dreamborn", "Villain"]
+text = "TAXES SHOULD HURT Whenever you discard a card, you may deal 1 damage to chosen opposing character."

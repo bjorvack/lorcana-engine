@@ -1,0 +1,12 @@
+name = "Diablo - Devoted Herald"
+type = "Character"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_af531020efc14cb38f4ffeb159eb8eff.avif?1716052430"
+max_copies = 4
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Floodborn", "Ally"]
+keywords = ["Evasive"]
+text = "Shift: Discard an action card (You may discard an action card to play this on top of one of your characters named Diablo.)\nEvasive (Only characters with Evasive can challenge this character.)\nCIRCLE FAR AND WIDE During each opponent's turn, whenever they draw a card while this character is exerted, you may draw a card."

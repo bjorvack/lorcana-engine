@@ -1,0 +1,13 @@
+name = "Gwythaint - Savage Hunter"
+type = "Character"
+cost = 5
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_69ea9fcabac1418eae3f2dc3a51254bf.avif?1761752103"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Ally", "Dragon"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)\nSWOOPING STRIKE Whenever this character quests, each opponent chooses and exerts one of their ready characters."

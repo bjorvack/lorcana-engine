@@ -1,0 +1,11 @@
+name = "Magica De Spell - Ambitious Witch"
+type = "Character"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1613e74208754e64b862c2a8b28add19.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Villain", "Sorcerer"]

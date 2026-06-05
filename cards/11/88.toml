@@ -1,0 +1,13 @@
+name = "Minnie Mouse - Mrs. Cratchit"
+type = "Character"
+cost = 5
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_192bf6789d194f1c8f7985dee2353891.avif?1770259594"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Ally"]
+keywords = ["Ward"]
+text = "Ward (Opponents can't choose this character except to challenge.)\nA MOTHER'S LOVE When you play this character, you may put the top card of your deck facedown under one of your characters or locations with Boost. If you do, draw a card."

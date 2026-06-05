@@ -1,0 +1,11 @@
+name = "Anna - Eager Acolyte"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_63be1159dcec47dba6234bf124f86c75.avif?1723917209"
+max_copies = 4
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Hero", "Queen"]
+text = "GROWING POWERS When you play this character, each opponent chooses and exerts one of their ready characters."

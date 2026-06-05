@@ -1,0 +1,11 @@
+name = "Baloo - Fun-Loving Bear"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8f2b1625f47a4b4ea1d5f90b61985827.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally"]

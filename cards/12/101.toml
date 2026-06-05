@@ -1,0 +1,7 @@
+name = "Merida's Bow"
+type = "Item"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_46e904b0b1d54c4f89dff2256895bf26.avif?1777687557"
+max_copies = 4
+text = "EASY SHOT When you play this item, deal 1 damage to chosen character.\nFINAL ARROW 1 {I}, Banish this item — Deal 1 damage to chosen character."

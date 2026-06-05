@@ -1,0 +1,8 @@
+name = "Strange Things"
+type = "Song"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ae857d482ec44b298970ad55a6431753.avif?1777687533"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 4 or more can {E} to sing this song for free.) \nUp to 2 chosen characters can't quest until the start of your next turn. Draw a card."

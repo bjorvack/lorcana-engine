@@ -1,0 +1,13 @@
+name = "Elsa - The Fifth Spirit"
+type = "Character"
+cost = 5
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_db64e740e8ef4c22b87c89fa48093cee.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 5
+lore = 1
+classifications = ["Dreamborn", "Hero", "Queen", "Sorcerer"]
+keywords = ["Evasive", "Rush"]
+text = "Rush (This character can challenge the turn they're played.)\nEvasive (Only characters with Evasive can challenge this character.)\nCRYSTALLIZE When you play this character, exert chosen opposing character."

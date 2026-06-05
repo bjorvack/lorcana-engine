@@ -1,0 +1,7 @@
+name = "Grab Your Sword"
+type = "Song"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_48cd856a0632489c916bc354a3090cb2.avif?1709690747"
+max_copies = 4
+text = "(A character with cost 5 or more can {E} to sing this song for free.)\nDeal 2 damage to each opposing character."

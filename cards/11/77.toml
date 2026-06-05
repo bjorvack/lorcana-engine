@@ -1,0 +1,11 @@
+name = "Chernabog - Unnatural Force"
+type = "Character"
+cost = 5
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_10d405a5074a498592c40bed3888538a.avif?1770259545"
+max_copies = 4
+strength = 5
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Villain"]
+text = "DARK DANCE When you play this character, you may shuffle chosen opposing character into their player's deck. If you do, that player may play a character from their discard for free."

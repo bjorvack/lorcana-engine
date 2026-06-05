@@ -1,0 +1,12 @@
+name = "Tadashi Hamada - Baymax Inventor"
+type = "Character"
+cost = 6
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3a009848a04944aba8e7402d221c897c.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 3
+classifications = ["Storyborn", "Mentor", "Inventor"]
+text = "LET'S GET BACK TO WORK This character gets +1 {S} and +1 {W} for each item you have in play."

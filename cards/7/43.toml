@@ -1,0 +1,8 @@
+name = "Kanine Krunchies"
+type = "Item"
+cost = 1
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f5583cd014c542abbfcdf83fb1d2feb6.avif?1740589271"
+max_copies = 4
+inkwell = true
+text = "YOU CAN BE A CHAMPION, TOO Your Puppy characters get +1 {W}."

@@ -1,0 +1,12 @@
+name = "Shere Khan - Fearsome Tiger"
+type = "Character"
+cost = 6
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3a25fa761fb34e3d96aacc65d82eb2af.avif?1761752360"
+max_copies = 4
+strength = 5
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Villain"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)\nON THE HUNT Whenever this character quests, banish chosen opposing damaged character. Then, you may put 1 damage counter on another chosen character."

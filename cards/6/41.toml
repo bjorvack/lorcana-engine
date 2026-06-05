@@ -1,0 +1,12 @@
+name = "Juju - Mama Odie's Companion"
+type = "Character"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_617dc5c42bf6460da3d61a1f330186bf.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "BEES' KNEES When you play this character, move 1 damage counter from chosen character to chosen opposing character."

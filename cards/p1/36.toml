@@ -1,0 +1,7 @@
+name = "Hidden Inkcaster"
+type = "Item"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c961ff4c701b45da8cc477d7a5192b6e.avif?1728609660"
+max_copies = 4
+text = "FRESH INK When you play this item, draw a card.\nUNEXPECTED TREASURE All cards in your hand count as having {IW}."

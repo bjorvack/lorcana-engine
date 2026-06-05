@@ -1,0 +1,12 @@
+name = "Panic - High-Strung Imp"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4c46bfa161ae4e4d886ddabef7ad8d57.avif?1740589396"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "STARTLED SHRIEK When you play this character, you may move up to 2 damage counters from chosen character to chosen opposing character."

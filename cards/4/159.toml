@@ -1,0 +1,11 @@
+name = "Triton - Discerning King"
+type = "Character"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a2ef85d2f5774b6d910349770f5db42e.avif?1716052430"
+max_copies = 4
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "King"]
+text = "CONSIGN TO THE DEPTHS {E}, Banish one of your items — Gain 3 lore."

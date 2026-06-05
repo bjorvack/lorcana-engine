@@ -1,0 +1,11 @@
+name = "The Firebird - Force of Destruction"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_67c15e1a10e04510a5f6c78cf9119e22.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 2
+lore = 1
+classifications = ["Dreamborn", "Villain"]

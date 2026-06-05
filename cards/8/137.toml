@@ -1,0 +1,12 @@
+name = "Lilo - Causing an Uproar"
+type = "Character"
+cost = 5
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_47c2da8209984454827c9278f078f1dc.avif?1747509216"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 2
+classifications = ["Dreamborn", "Hero"]
+text = "STOMPIN' TIME! During your turn, if you've played 3 or more actions this turn, you may play this character for free.\nRAAAWR! When you play this character, ready chosen character. They can't quest for the rest of this turn."

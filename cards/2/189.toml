@@ -1,0 +1,12 @@
+name = "Namaari - Morning Mist"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f032f51e8af64d8db27c87e1f6db56a7.avif?1709690747"
+max_copies = 4
+strength = 2
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Villain", "Princess"]
+keywords = ["Bodyguard"]
+text = "Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)\nBLADES This character can challenge ready characters."

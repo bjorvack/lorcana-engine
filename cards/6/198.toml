@@ -1,0 +1,7 @@
+name = "Ambush!"
+type = "Action"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_35df29e6893942a38a14f775719ce522.avif?1730901319"
+max_copies = 4
+text = "{E} one of your characters to deal damage equal to their {S} to chosen character."

@@ -1,0 +1,11 @@
+name = "Stitch - New Dog"
+type = "Character"
+cost = 1
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a46be9bd3971477695ee84d0f25ff88d.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Hero", "Alien"]

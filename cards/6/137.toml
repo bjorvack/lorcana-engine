@@ -1,0 +1,13 @@
+name = "B.E.N. - Eccentric Robot"
+type = "Character"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7dd1be4d36094e6a9429298fb6a2d7df.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Ally", "Robot", "Pirate"]
+keywords = ["Support"]
+text = "Support (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)"

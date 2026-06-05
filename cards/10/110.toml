@@ -1,0 +1,12 @@
+name = "Mother Gothel - Underhanded Schemer"
+type = "Character"
+cost = 1
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3450ebee9acb4c258e0d161ca6c77010.avif?1761763610"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Villain", "Sorcerer"]
+text = "SOMEBODY'S GOT TO USE IT If a character was banished this turn, this character gets +2 {S}."

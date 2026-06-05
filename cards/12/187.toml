@@ -1,0 +1,12 @@
+name = "Fat Cat - Criminal Businessman"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c013142af45943e4b43314298fc1a043.avif?1777687885"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 2
+classifications = ["Dreamborn", "Villain"]
+text = "WORTHY INVESTMENT Your locations gain Resist +1. (Damage dealt to them is reduced by 1.)"

@@ -1,0 +1,12 @@
+name = "Mowgli - Man Cub"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8cb497be95844e9ba41be7ed0e6aa2e2.avif?1761752015"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Hero"]
+text = "HAVE A BETTER LOOK When you play this character, chosen opponent reveals their hand and discards a non-character card of their choice."

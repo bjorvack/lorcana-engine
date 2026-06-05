@@ -1,0 +1,13 @@
+name = "Raya - Leader of Heart"
+type = "Character"
+cost = 6
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5b613c1368aa4c94a43c012f9a73394e.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 3
+lore = 2
+classifications = ["Floodborn", "Hero", "Princess"]
+keywords = ["Shift 4"]
+text = "Shift 4 (You may pay 4 {I} to play this on top of one of your characters named Raya.)\nCHAMPION OF KUMANDRA Whenever this character challenges a damaged character, she takes no damage from the challenge."

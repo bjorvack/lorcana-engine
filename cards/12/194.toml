@@ -1,0 +1,12 @@
+name = "Fergus - Outpost Builder"
+type = "Character"
+cost = 6
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e9a024091f294cfab0aebe2882414fdc.avif?1777687910"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 6
+lore = 2
+classifications = ["Dreamborn", "Mentor", "King"]
+text = "JUST THE SPOT During your turn, whenever this character becomes exerted, you may play a location from your hand or discard with cost 4 or less for free.\nHOLD FAST While this character is at a location, whenever a location is challenged and banished, you may deal 4 damage to chosen character."

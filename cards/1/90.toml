@@ -1,0 +1,12 @@
+name = "Mother Gothel - Selfish Manipulator"
+type = "Character"
+cost = 6
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b9b75a9f9ec8475b836925a711e88d8d.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 6
+lore = 2
+classifications = ["Storyborn", "Villain"]
+text = "SKIP THE DRAMA, STAY WITH MAMA While this character is exerted, opposing characters can't quest."

@@ -1,0 +1,12 @@
+name = "Belle - Apprentice Inventor"
+type = "Character"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_13859ddeec154d23a532a94835179144.avif?1740589736"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero", "Princess", "Inventor"]
+text = "WHAT A MESS During your turn, you may banish chosen item of yours to play this character for free."

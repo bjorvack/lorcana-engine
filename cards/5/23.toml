@@ -1,0 +1,12 @@
+name = "Sven - Reindeer Steed"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a35ce7543f7e4af49eb325083776e061.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "REINDEER GAMES When you play this character, you may ready chosen character. They can't quest or challenge for the rest of this turn."

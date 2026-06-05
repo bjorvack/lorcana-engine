@@ -1,0 +1,11 @@
+name = "Tod - All Alone"
+type = "Character"
+cost = 1
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_fdbc7b03d5194e2cb2c407273f96e01a.avif?1770259590"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Hero"]

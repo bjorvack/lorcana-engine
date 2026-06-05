@@ -1,0 +1,12 @@
+name = "Minnie Mouse - Ghost Hunter"
+type = "Character"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1066153275e3477fb6486d5975196c5f.avif?1761764816"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Hero", "Detective"]
+text = "SEARCH THE SHADOWS When you play this character, chosen Detective character gains Alert this turn. (They can challenge as if they had Evasive.)"

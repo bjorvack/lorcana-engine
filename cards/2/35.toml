@@ -1,0 +1,11 @@
+name = "Arthur - Wizard's Apprentice"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c64093c102d445409f2386f06e43b3c0.avif?1709690747"
+max_copies = 4
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Hero", "Sorcerer"]
+text = "STUDENT Whenever this character quests, you may return another chosen character of yours to your hand to gain 2 lore."

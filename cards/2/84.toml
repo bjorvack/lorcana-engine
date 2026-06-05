@@ -1,0 +1,11 @@
+name = "Little John - Loyal Friend"
+type = "Character"
+cost = 6
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_dd74aaf06b6e48c59d8b8e4aea1dcad4.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 6
+lore = 2
+classifications = ["Storyborn", "Ally"]

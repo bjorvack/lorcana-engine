@@ -1,0 +1,10 @@
+name = "Moana - Determined Explorer"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_da584233ea5149dd814bd6b372e015d5.avif?1723917209"
+max_copies = 4
+strength = 3
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Hero", "Princess"]

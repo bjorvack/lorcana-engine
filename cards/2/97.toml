@@ -1,0 +1,7 @@
+name = "Bounce"
+type = "Action"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_af02f016a89c4174baa02ff8a5355f4e.avif?1709690747"
+max_copies = 4
+text = "Return chosen character of yours to your hand to return another chosen character to their player's hand."

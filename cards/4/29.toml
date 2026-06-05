@@ -1,0 +1,8 @@
+name = "Lost in the Woods"
+type = "Song"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_29586917a2974607a3961531ff425f4f.avif?1716052430"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 4 or more can {E} to sing this song for free.)\nAll opposing characters get -2 {S} until the start of your next turn."

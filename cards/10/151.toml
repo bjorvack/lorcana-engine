@@ -1,0 +1,10 @@
+name = "The Sultan - Playful Monarch"
+type = "Character"
+cost = 1
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_cf7781eb1d414b07bdc36ec8ee7acfcf.avif?1761764489"
+max_copies = 4
+strength = 1
+willpower = 1
+lore = 2
+classifications = ["Storyborn", "Ally", "King"]

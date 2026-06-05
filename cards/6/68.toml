@@ -1,0 +1,10 @@
+name = "Fairy Ship - Royal Vessel"
+type = "Location"
+cost = 1
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_107f43772b78405f8a4fb587e8279d14.avif?1730901319"
+max_copies = 4
+inkwell = true
+move_cost = 1
+willpower = 4
+lore = 1

@@ -1,0 +1,12 @@
+name = "Bolt - Down but Not Out"
+type = "Character"
+cost = 3
+ink = ["Amber", "Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2571eeb8c4914f82863610ee7c92535a.avif?1747507314"
+max_copies = 4
+inkwell = true
+strength = 0
+willpower = 4
+lore = 4
+classifications = ["Storyborn", "Hero"]
+text = "NONE OF YOUR POWERS ARE WORKING This character enters play exerted."

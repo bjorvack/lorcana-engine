@@ -1,0 +1,13 @@
+name = "Mufasa - Among the Stars"
+type = "Character"
+cost = 7
+ink = ["Amethyst", "Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5118e8478d8b437693d1b7ff7c09d7fd.avif?1740589411"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 7
+lore = 2
+classifications = ["Floodborn", "Mentor", "King"]
+keywords = ["Shift 5"]
+text = "Shift 5 (You may pay 5 {I} to play this on top of one of your characters named Mufasa.)\nEvasive (Only characters with Evasive can challenge this character.)\nResist +1 (Damage dealt to this character is reduced by 1.)"

@@ -1,0 +1,12 @@
+name = "Cogsworth - Talking Clock"
+type = "Character"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6ae3b063360244f19a8aa03334b16078.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "WAIT A MINUTE Your characters with Reckless gain “{E} — Gain 1 lore.”"

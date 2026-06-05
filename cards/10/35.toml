@@ -1,0 +1,12 @@
+name = "Minnie Mouse - Amethyst Champion"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7667c79b34784802930a659a5c904ccf.avif?1761752092"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 2
+classifications = ["Dreamborn", "Hero"]
+text = "MYSTICAL BALANCE Whenever one of your other Amethyst characters is banished in a challenge, you may draw a card."

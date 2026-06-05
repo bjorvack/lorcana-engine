@@ -1,0 +1,11 @@
+name = "Stitch - Alien Dancer"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8f1fc76631484555b4722899212d5625.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero", "Alien"]

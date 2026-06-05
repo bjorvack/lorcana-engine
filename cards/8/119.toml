@@ -1,0 +1,8 @@
+name = "Chem Purse"
+type = "Item"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_537258cef9b5410fafafa47026feedf6.avif?1747509130"
+max_copies = 4
+inkwell = true
+text = "HERE'S THE BEST PART Whenever you play a character, if you used Shift to play them, they get +4 {S} this turn."

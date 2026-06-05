@@ -1,0 +1,12 @@
+name = "Joey - Blue Pigeon"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8667edc82b784cbb96e48962ef4583a9.avif?1747507344"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Storyborn"]
+text = "I'VE GOT JUST THE THING Whenever this character quests, you may remove up to 1 damage from each of your characters with Bodyguard."

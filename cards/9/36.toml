@@ -1,0 +1,13 @@
+name = "Rafiki - Mystical Fighter"
+type = "Character"
+cost = 1
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f0b125bab638401e834b91dc4577a894.avif?1755540310"
+max_copies = 4
+inkwell = true
+strength = 0
+willpower = 2
+lore = 1
+classifications = ["Dreamborn", "Mentor", "Sorcerer"]
+keywords = ["Challenger 3"]
+text = "Challenger +3 (While challenging, this character gets +3 {S}.)\nANCIENT SKILLS Whenever he challenges a Hyena character, this character takes no damage from the challenge."

@@ -1,0 +1,13 @@
+name = "Judy Hopps - Lead Detective"
+type = "Character"
+cost = 6
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8b5e1f11dda44f6890e67ab6f2d065b5.avif?1761764484"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 4
+lore = 2
+classifications = ["Floodborn", "Hero", "Detective"]
+keywords = ["Shift 4"]
+text = "Shift 4 {I} (You may pay 4 {I} to play this on top of one of your characters named Judy Hopps.)\nLATERAL THINKING During your turn, your Detective characters gain Alert and Resist +2. (They can challenge as if they had Evasive. Damage dealt to them is reduced by 2.)"

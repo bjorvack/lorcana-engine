@@ -1,0 +1,12 @@
+name = "Mulan - Enemy of Entanglement"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ac797e7b8dc043fa8cc160ee82f94713.avif?1728609660"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero", "Princess"]
+text = "TIME TO SHINE Whenever you play an action, this character gets +2 {S} this turn."

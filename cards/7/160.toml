@@ -1,0 +1,11 @@
+name = "Lucky - Runt of the Litter"
+type = "Character"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6f2802da6557456c8a34693d3650784f.avif?1740589740"
+max_copies = 4
+strength = 1
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Puppy"]
+text = "FOLLOW MY VOICE Whenever this character quests, look at the top 2 cards of your deck. You may reveal any number of Puppy character cards and put them in your hand. Put the rest on the bottom of your deck in any order."

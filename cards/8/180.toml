@@ -1,0 +1,8 @@
+name = "Atlantean Crystal"
+type = "Item"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a6c7778d84d249c8be2863e3fb67678b.avif?1747509446"
+max_copies = 4
+inkwell = true
+text = "SHIELDING LIGHT {E}, 2 {I} — Chosen character gains Resist +2 and Support until the start of your next turn. (Damage dealt to them is reduced by 2. Whenever they quest, you may add their {S} to another chosen character's {S} this turn.)"

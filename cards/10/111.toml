@@ -1,0 +1,11 @@
+name = "Katrina Van Tassel - Rosy-Cheeked Lass"
+type = "Character"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9c86af4392a04099982e5f11127d8c6c.avif?1761763614"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 4
+lore = 1
+classifications = ["Storyborn"]

@@ -1,0 +1,12 @@
+name = "Bruno Madrigal - Singing Seer"
+type = "Character"
+cost = 7
+ink = ["Amber", "Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5620f9d7486543ea90d2b6a4499c7ae4.avif?1747506737"
+max_copies = 4
+strength = 3
+willpower = 7
+lore = 2
+classifications = ["Floodborn", "Ally", "Madrigal"]
+keywords = ["Shift 5"]
+text = "Shift 5 (You may pay 5 {I} to play this on top of one of your characters named Bruno Madrigal.)\nBRIGHT FUTURE Whenever this character sings a song, you may draw a card for each character you have in play."

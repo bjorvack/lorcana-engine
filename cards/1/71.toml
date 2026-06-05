@@ -1,0 +1,12 @@
+name = "Cheshire Cat - Not All There"
+type = "Character"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e49c0deba37f453f8f27da810c8bfe39.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 0
+willpower = 3
+lore = 2
+classifications = ["Storyborn"]
+text = "LOSE SOMETHING? When this character is challenged and banished, banish the challenging character."

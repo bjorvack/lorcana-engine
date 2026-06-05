@@ -1,0 +1,13 @@
+name = "Archimedes - Electrified Owl"
+type = "Character"
+cost = 5
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_14a6c9cb57b54a889bad8a3e1f62e8ba.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 4
+lore = 2
+classifications = ["Floodborn", "Ally"]
+keywords = ["Challenger 3", "Evasive", "Shift 3"]
+text = "Shift 3 (You may pay 3 {I} to play this on top of one of your characters named Archimedes.)\nEvasive (Only characters with Evasive can challenge this character.)\nChallenger +3 (While challenging, this character gets +3 {S}.)"

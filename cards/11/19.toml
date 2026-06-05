@@ -1,0 +1,12 @@
+name = "Jumba Jookiba - Prolific Inventor"
+type = "Character"
+cost = 8
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_aa9fd9e677e946f0ab5f0148b0874568.avif?1770259283"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Ally", "Alien", "Inventor"]
+text = "WELCOMING CROWD For each character you have in play, you pay 1 {I} less to play this character.\nI AM HELPING Whenever this character quests, you may remove all damage from chosen character."

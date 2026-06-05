@@ -1,0 +1,13 @@
+name = "Lady Kluck - Protective Confidant"
+type = "Character"
+cost = 5
+ink = ["Sapphire", "Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e8dd905ba7294b62a44a49ab52a3860a.avif?1740589787"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 7
+lore = 1
+classifications = ["Storyborn", "Ally"]
+keywords = ["Bodyguard"]
+text = "Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)\nWard (Opponents can't choose this character except to challenge.)"

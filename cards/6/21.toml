@@ -1,0 +1,11 @@
+name = "Kanga - Nurturing Mother"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4557d5bc41de40728df0ebbbdce4787f.avif?1730901319"
+max_copies = 4
+strength = 2
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "SAFE AND SOUND Whenever this character quests, choose a character of yours and that character can't be challenged until the start of your next turn."

@@ -1,0 +1,8 @@
+name = "I Will Find My Way"
+type = "Song"
+cost = 1
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_699c0e28637945e0a2ad8698e9695bb0.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 1 or more can {E} to sing this song for free.)\nChosen character of yours gets +2 {S} this turn. They may move to a location for free."

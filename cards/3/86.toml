@@ -1,0 +1,13 @@
+name = "Sir Hiss - Aggravating Asp"
+type = "Character"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8ab16485ed264e15b2e70a3ff7d97ce0.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 1
+lore = 1
+classifications = ["Dreamborn", "Ally"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)"

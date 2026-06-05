@@ -1,0 +1,8 @@
+name = "He Who Steals and Runs Away"
+type = "Action"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b575a1f23d864e64841909db44f25221.avif?1747509103"
+max_copies = 4
+inkwell = true
+text = "Banish chosen item. Draw a card."

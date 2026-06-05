@@ -1,0 +1,8 @@
+name = "Poor Unfortunate Souls"
+type = "Song"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_06c998317b6d45d0abc056cea429ad13.avif?1755540496"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 2 or more can {E} to sing this song for free.)\nReturn chosen character, item, or location with cost 2 or less to their player's hand."

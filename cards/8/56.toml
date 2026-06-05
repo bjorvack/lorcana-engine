@@ -1,0 +1,13 @@
+name = "Ryder - Fleet-Footed Infiltrator"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_83ba8c925b1d471d8f3833bdf059d6ad.avif?1747508533"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)"

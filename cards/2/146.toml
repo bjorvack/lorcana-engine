@@ -1,0 +1,13 @@
+name = "Duke Weaselton - Small-Time Crook"
+type = "Character"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_302ea1ce0fe94e5c97360498d05eee9d.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 2
+lore = 2
+classifications = ["Storyborn"]
+keywords = ["Ward"]
+text = "Ward (Opponents can't choose this character except to challenge.)"

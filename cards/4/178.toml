@@ -1,0 +1,13 @@
+name = "Chien-Po - Imperial Soldier"
+type = "Character"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_dd040ced1dd34dab9d822a6584cdc41d.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 7
+lore = 1
+classifications = ["Storyborn", "Ally"]
+keywords = ["Bodyguard"]
+text = "Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)"

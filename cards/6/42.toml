@@ -1,0 +1,11 @@
+name = "Rafiki - Shaman of the Savanna"
+type = "Character"
+cost = 1
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2f12cdedeefb448eb412128fb4a80fc7.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Mentor", "Sorcerer"]

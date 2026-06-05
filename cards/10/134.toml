@@ -1,0 +1,8 @@
+name = "Mushu's Rocket"
+type = "Item"
+cost = 1
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_26b89746756b40979ee1a9885c8e3f5b.avif?1761763899"
+max_copies = 4
+inkwell = true
+text = "I NEED FIREPOWER When you play this item, chosen character gains Rush this turn. (They can challenge the turn they're played.)\nHITCH A RIDE 2 {I}, Banish this item — Chosen character gains Rush this turn."

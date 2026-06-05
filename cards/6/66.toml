@@ -1,0 +1,8 @@
+name = "Mad Hatter's Teapot"
+type = "Item"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_075482312a124f6585f77be3a693f63f.avif?1730901319"
+max_copies = 4
+inkwell = true
+text = "NO ROOM, NO ROOM {E}, 1 {I} - Each opponent puts the top card of their deck into their discard."

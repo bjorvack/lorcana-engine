@@ -1,0 +1,12 @@
+name = "Daisy Duck - Sapphire Champion"
+type = "Character"
+cost = 5
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a41add9515e547cb8273ba6973b125b4.avif?1761764560"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 6
+lore = 1
+classifications = ["Dreamborn", "Hero"]
+text = "STAND FAST Your other Sapphire characters gain Resist +1. (Damage dealt to them is reduced by 1.)\nLOOK AHEAD Whenever one of your other Sapphire characters quests, you may look at the top card of your deck. Put it on either the top or the bottom of your deck."

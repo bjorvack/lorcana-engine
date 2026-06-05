@@ -1,0 +1,12 @@
+name = "Madame Medusa - Diamond Lover"
+type = "Character"
+cost = 4
+ink = ["Amethyst", "Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2f6408a754bf40a7a71655da8edc5223.avif?1740589309"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Villain"]
+text = "SEARCH THE SWAMP Whenever this character quests, you may deal 2 damage to another chosen character of yours to put the top 3 cards of chosen player's deck into their discard."

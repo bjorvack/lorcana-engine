@@ -1,0 +1,8 @@
+name = "I'm Stuck!"
+type = "Action"
+cost = 1
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3ef790bdb3a2494783a80d778429c034.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "Chosen exerted character can't ready at the start of their next turn."

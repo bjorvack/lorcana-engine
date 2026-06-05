@@ -1,0 +1,13 @@
+name = "Kronk - Unlicensed Investigator"
+type = "Character"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_bb7c0120d4b14622b11e2a06f9352a3c.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 4
+lore = 1
+classifications = ["Dreamborn", "Ally"]
+keywords = ["Challenger 1"]
+text = "Challenger +1 (While challenging, this character gets +1 {S}.)"

@@ -1,0 +1,12 @@
+name = "Mr. Litwak - Arcade Owner"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_19217586b3924276aa8996d318f83139.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Storyborn"]
+text = "THE GANG'S ALL HERE Once during your turn, whenever you play another character, you may ready this character. He can't quest or challenge for the rest of this turn."

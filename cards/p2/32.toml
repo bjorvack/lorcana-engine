@@ -1,0 +1,11 @@
+name = "Jafar - High Sultan of Lorcana"
+type = "Character"
+cost = 5
+ink = ["Amethyst", "Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_428073a3a65f4e2984ad22ecd1af4ee4.avif?1755564068"
+max_copies = 4
+strength = 4
+willpower = 4
+lore = 3
+classifications = ["Dreamborn", "Villain", "King", "Sorcerer"]
+text = "DARK POWER Whenever this character quests, you may draw a card, then choose and discard a card. If an Illusion character card is discarded this way, you may play that character for free."

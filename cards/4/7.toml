@@ -1,0 +1,12 @@
+name = "Daisy Duck - Musketeer Spy"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c0153fff146d4250aff6c03e0e1744aa.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Hero", "Musketeer"]
+text = "INFILTRATION When you play this character, each opponent chooses and discards a card."

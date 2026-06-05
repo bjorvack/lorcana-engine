@@ -1,0 +1,7 @@
+name = "99 Puppies"
+type = "Action"
+cost = 5
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_56003cfee81148e9a2ceebe4136e4e06.avif?1709690747"
+max_copies = 4
+text = "Whenever one of your characters quests this turn, gain 1 lore."

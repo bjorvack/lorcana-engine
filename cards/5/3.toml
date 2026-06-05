@@ -1,0 +1,12 @@
+name = "Prince Naveen - Ukulele Player"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e9dd2025da3b4ef7adf3f2b9cd67f421.avif?1723917209"
+max_copies = 4
+strength = 3
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Hero", "Prince"]
+keywords = ["Singer 6"]
+text = "Singer 6 (This character counts as cost 6 to sing songs.)\nIT'S BEAUTIFUL, NO? When you play this character, you may play a song with cost 6 or less for free."

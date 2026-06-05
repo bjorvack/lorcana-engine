@@ -1,0 +1,12 @@
+name = "Koda - Talkative Cub"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7202d58f49f84525b3a9364c319772f3.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 1
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "TELL EVERYBODY During opponents' turns, you can't lose lore."

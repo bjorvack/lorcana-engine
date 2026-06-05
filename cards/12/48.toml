@@ -1,0 +1,13 @@
+name = "Violet Parr - Learning New Powers"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_20da43997f8642f6b33d1fa04865209d.avif?1777687342"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Super", "Hero"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)\nDEFLECT When you play this character, you may move 1 damage from chosen character to chosen opposing character."

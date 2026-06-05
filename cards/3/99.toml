@@ -1,0 +1,7 @@
+name = "Starlight Vial"
+type = "Item"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c6b673289f9a4d2680a50dc6be9605dc.avif?1709690747"
+max_copies = 4
+text = "EFFICIENT ENERGY {E} — You pay 2 {I} less for the next action you play this turn.\nTRAP 2 {I}, Banish this item — Draw 2 cards, then choose and discard a card."

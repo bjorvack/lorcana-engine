@@ -1,0 +1,8 @@
+name = "John Smith's Compass"
+type = "Item"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_09f9741601234011a2ea8ad45c845099.avif?1770259348"
+max_copies = 4
+inkwell = true
+text = "SPINNING ARROW At the end of your turn, if a character of yours challenged this turn, banish this item.\nYOUR PATH At the end of your turn, if none of your characters challenged this turn, reveal the top card of your deck. If it's a character card with cost 3 or less or named Pocahontas, you may put it into your hand. Otherwise, put it on the bottom of your deck."

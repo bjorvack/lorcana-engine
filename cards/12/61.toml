@@ -1,0 +1,12 @@
+name = "Dash Parr - Lava Runner"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_cdc217218de441d8b92b3ea9c8041cab.avif?1777687399"
+max_copies = 4
+strength = 3
+willpower = 2
+lore = 2
+classifications = ["Storyborn", "Super", "Hero"]
+keywords = ["Rush"]
+text = "Rush (This character can challenge the turn they're played.)\nRECORD TIME This character can quest the turn he's played."

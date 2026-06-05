@@ -1,0 +1,12 @@
+name = "Agnarr - King of Arendelle"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9315eb79ba14485fa0ecc0b6dcabd054.avif?1770259712"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Mentor", "King"]
+text = "PROTECTIVE INSTINCT While you have a Queen character in play, this character gets +2 {S}."

@@ -1,0 +1,11 @@
+name = "Tiana - Restaurant Owner"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c01f3a4124be48dbb77aaa45281e74ba.avif?1730901319"
+max_copies = 4
+strength = 1
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Hero", "Princess"]
+text = "SPECIAL RESERVATION Whenever a character of yours is challenged while this character is exerted, the challenging character gets -3 {S} this turn unless their player pays 3 {I}."

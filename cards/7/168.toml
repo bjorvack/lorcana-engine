@@ -1,0 +1,12 @@
+name = "Freckles - Good Boy"
+type = "Character"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_150d93e25ca744b69a232651dcd2caa3.avif?1740589772"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Puppy"]
+text = "JUST SO CUTE! When you play this character, chosen opposing character gets -1 {S} this turn."

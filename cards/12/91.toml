@@ -1,0 +1,12 @@
+name = "Buzz Lightyear - Jungle Ranger"
+type = "Character"
+cost = 7
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3aa82fb3fcf848a2aaefcce88f0383db.avif?1777687517"
+max_copies = 4
+strength = 7
+willpower = 5
+lore = 2
+classifications = ["Floodborn", "Hero", "Toy", "Captain"]
+keywords = ["Shift 5"]
+text = "Shift 5 {I} (You may pay 5 {I} to play this on top of one of your characters named Buzz Lightyear.)\nTAKE CHARGE When you play this character, you may return an action card with cost 7 or less from your discard to your hand.\nADVANCED TRAINING Whenever you play an action, chosen character gets +1 {L} this turn."

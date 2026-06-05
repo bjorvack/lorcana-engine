@@ -1,0 +1,12 @@
+name = "Mad Hatter - Gracious Host"
+type = "Character"
+cost = 5
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6f4d7a28b34b4520a7456a89f3d72a15.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 4
+lore = 3
+classifications = ["Storyborn"]
+text = "TEA PARTY Whenever this character is challenged, you may draw a card."

@@ -1,0 +1,12 @@
+name = "Antonio Madrigal - Friend to All"
+type = "Character"
+cost = 4
+ink = ["Amber", "Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2564aee724494e5f99b9688aad48753f.avif?1747506672"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 2
+classifications = ["Storyborn", "Ally", "Madrigal"]
+text = "OF COURSE THEY CAN COME Once during your turn, whenever one of your characters sings a song, you may search your deck for a character card with cost 3 or less and reveal that card to all players. Put that card into your hand and shuffle your deck."

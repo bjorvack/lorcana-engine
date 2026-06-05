@@ -1,0 +1,13 @@
+name = "Belle - Mechanic Extraordinaire"
+type = "Character"
+cost = 9
+ink = ["Ruby", "Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2b0915e50c1b41d1aea0dce6be43a6d9.avif?1740589605"
+max_copies = 4
+inkwell = true
+strength = 7
+willpower = 7
+lore = 3
+classifications = ["Floodborn", "Hero", "Princess", "Inventor"]
+keywords = ["Shift 7"]
+text = "Shift 7\nSALVAGE For each item card in your discard, you pay 1 {I} less to play this character using her Shift ability.\nREPURPOSE Whenever this character quests, you may put up to 3 item cards from your discard on the bottom of your deck to gain 1 lore for each item card moved this way."

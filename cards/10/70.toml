@@ -1,0 +1,11 @@
+name = "Big Nose - Lovesick Poet"
+type = "Character"
+cost = 1
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_204b70ea506f41b6b6c01bc04ea2b4b0.avif?1761752287"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally"]

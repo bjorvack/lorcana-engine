@@ -1,0 +1,13 @@
+name = "Genie - Wonderful Trickster"
+type = "Character"
+cost = 7
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5cbbabaf0d9f4ad58c942174904a1d8f.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 7
+lore = 2
+classifications = ["Floodborn", "Ally"]
+keywords = ["Shift 5"]
+text = "Shift 5 (You may pay 5 {I} to play this on top of one of your characters named Genie.)\nYOUR REWARD AWAITS Whenever you play a card, draw a card.\nFORBIDDEN TREASURE At the end of your turn, put all the cards in your hand on the bottom of your deck in any order."

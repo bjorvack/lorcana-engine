@@ -1,0 +1,12 @@
+name = "Doc - Leader of the Seven Dwarfs"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2fec41cf370c44e4a11f2024d8375c4c.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Ally", "Seven Dwarfs"]
+text = "SHARE AND SHARE ALIKE Whenever this character quests, you pay 1 {I} less for the next character you play this turn."

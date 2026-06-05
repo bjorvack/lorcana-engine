@@ -1,0 +1,8 @@
+name = "DunBroch Family Tapestry"
+type = "Item"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0ae670e678624f89bb7b32b275ab04cb.avif?1777687422"
+max_copies = 4
+inkwell = true
+text = "TORN APART This item enters play exerted.\nMEND THE BOND {E}, Banish this item — Each player shuffles all character cards from their discard into their deck."

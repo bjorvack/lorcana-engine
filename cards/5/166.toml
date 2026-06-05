@@ -1,0 +1,8 @@
+name = "Basil's Magnifying Glass"
+type = "Item"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6e39ed3b74964c12a79afd63898cf58a.avif?1723917209"
+max_copies = 4
+inkwell = true
+text = "FIND WHAT'S HIDDEN {E}, 2 {I} — Look at the top 3 cards of your deck. You may reveal an item card and put it into your hand. Put the rest on the bottom of your deck in any order."

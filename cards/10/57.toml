@@ -1,0 +1,12 @@
+name = "Olaf - Helping Hand"
+type = "Character"
+cost = 1
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e9f12c944cfb48bb98fc1a02e87bb6db.avif?1761752194"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "SECOND CHANCE When this character leaves play, you may return chosen character of yours to your hand."

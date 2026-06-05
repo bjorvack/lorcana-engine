@@ -1,0 +1,11 @@
+name = "Pepa Madrigal - Calm Before the Storm"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c86ece1b256b431cbc0591173b5fe042.avif?1777687380"
+max_copies = 4
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Dreamborn", "Ally", "Madrigal"]
+text = "STORMY WEATHER When you play this character, deal 1 damage to each of your other characters.\nSILVER LINING Once during your turn, whenever you remove 1 or more damage from one of your characters, draw a card."

@@ -1,0 +1,13 @@
+name = "Kit Cloudkicker - Spunky Bear Cub"
+type = "Character"
+cost = 1
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9a81433a0c2c4944a0af1b1724213f40.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 0
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Ally"]
+keywords = ["Ward"]
+text = "Ward (Opponents can't choose this character except to challenge.)"

@@ -1,0 +1,8 @@
+name = "Performance Review"
+type = "Action"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_222374c54b4848939d442c144758404e.avif?1761752265"
+max_copies = 4
+inkwell = true
+text = "{E} chosen ready character of yours to draw cards equal to that character's {L}."

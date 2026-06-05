@@ -1,0 +1,11 @@
+name = "Minnie Mouse - Beloved Princess"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e40a35d966914476b267935d79337667.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Princess"]

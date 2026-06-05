@@ -1,0 +1,10 @@
+name = "Tiana's Palace - Jazz Restaurant"
+type = "Location"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ed1ca708595f44a49f40680e20635ff5.avif?1709690747"
+max_copies = 4
+move_cost = 2
+willpower = 8
+lore = 1
+text = "NIGHT OUT Characters can't be challenged while here."

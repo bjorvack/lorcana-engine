@@ -1,0 +1,11 @@
+name = "Elinor - Renowned Diplomat"
+type = "Character"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5d81f75d900f4ec4b6868519fc9c557e.avif?1777687496"
+max_copies = 4
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Mentor", "Queen"]
+text = "COORDINATED EFFORTS At the end of your turn, if you have 3 or more exerted characters in play, deal 1 damage to chosen opposing character, gain 1 lore, and draw a card."

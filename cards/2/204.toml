@@ -1,0 +1,8 @@
+name = "Weight Set"
+type = "Item"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c3f4b42a04de464a8f93814fd4e1884b.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "TRAINING Whenever you play a character with 4 {S} or more, you may pay 1 {I} to draw a card."

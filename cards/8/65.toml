@@ -1,0 +1,11 @@
+name = "Nero - Fearsome Crocodile"
+type = "Character"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6a09318455784c9aba8bafeb65d28d62.avif?1747508717"
+max_copies = 4
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "AND MEAN {E} — Move 1 damage counter from this character to chosen opposing character."

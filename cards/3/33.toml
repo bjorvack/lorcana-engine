@@ -1,0 +1,10 @@
+name = "Pride Lands - Pride Rock"
+type = "Location"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c73b3306eee042a0a17938812b0a564a.avif?1709690747"
+max_copies = 4
+move_cost = 2
+willpower = 7
+lore = 1
+text = "WE ARE ALL CONNECTED Characters get +2 {W} while here.\nLION HOME If you have a Prince or King character here, you pay 1 {I} less to play characters."

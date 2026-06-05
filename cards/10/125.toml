@@ -1,0 +1,11 @@
+name = "The Headless Horseman - Terror of Sleepy Hollow"
+type = "Character"
+cost = 5
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e50f2393108947e785165163324df9e2.avif?1761763709"
+max_copies = 4
+strength = 4
+willpower = 2
+lore = 2
+classifications = ["Storyborn", "Villain"]
+text = "LEAVES NO TRACE When you play this character, banish chosen opposing character with 2 {S} or less.\nGATHERING STRENGTH During your turn, whenever an opposing character is banished, each of your characters gets +1 {S} this turn."

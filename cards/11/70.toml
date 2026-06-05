@@ -1,0 +1,12 @@
+name = "Stitch - Naughty Experiment"
+type = "Character"
+cost = 1
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_38185e538f0e444bbffd676c96efd9c9.avif?1770259514"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Hero", "Alien"]
+text = "I DARE YOU! {E} — Chosen opposing character gains Reckless until the start of your next turn. (They can't quest and must challenge if able.)"

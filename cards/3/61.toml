@@ -1,0 +1,8 @@
+name = "It Calls Me"
+type = "Song"
+cost = 1
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7a47845bdb01452e9faae9028fb22eeb.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 1 or more can {E} to sing this song for free.)\nDraw a card. Then, choose up to 3 cards from chosen opponent's discard and shuffle them into their deck."

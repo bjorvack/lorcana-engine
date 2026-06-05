@@ -1,0 +1,13 @@
+name = "Goofy - Expert Shipwright"
+type = "Character"
+cost = 5
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_45321c3501974bd39455f3cc7346f535.avif?1773508768"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 4
+lore = 3
+classifications = ["Dreamborn", "Hero", "Inventor"]
+keywords = ["Ward"]
+text = "Ward (Opponents can't choose this character except to challenge.)\nCLEVER DESIGN Whenever this character quests, chosen character gains Ward until the start of your next turn."

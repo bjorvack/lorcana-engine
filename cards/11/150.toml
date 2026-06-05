@@ -1,0 +1,11 @@
+name = "Darkwing Duck - Dashing Gadgeteer"
+type = "Character"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_79e8c2e58ef1439ba301da0ec23f1f08.avif?1770259876"
+max_copies = 4
+strength = 3
+willpower = 5
+lore = 1
+classifications = ["Dreamborn", "Super", "Hero", "Detective"]
+text = "MODERN MARVEL Whenever this character quests, you may put an item card from your discard on the bottom of your deck. If you do, you may play an item with cost 5 or less from your discard for free."

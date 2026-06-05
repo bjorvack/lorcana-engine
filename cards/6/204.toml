@@ -1,0 +1,11 @@
+name = "Galactic Council Chamber - Courtroom"
+type = "Location"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_25d8f80f68574d38869b7853d737e8e2.avif?1730901319"
+max_copies = 4
+inkwell = true
+move_cost = 1
+willpower = 7
+lore = 1
+text = "FEDERATION DECREE While you have an Alien or Robot character here, this location can't be challenged."

@@ -1,0 +1,7 @@
+name = "Do You Want to Build A Snowman?"
+type = "Song"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_adb608b3667f4c769a3bab709840dad1.avif?1770259473"
+max_copies = 4
+text = "(A character with cost 3 or more can {E} to sing this song for free.)\nChosen opponent chooses YES! or NO!:\n* YES! You gain 3 lore.\n* NO! They choose a character of theirs and put that card on the bottom of their deck."

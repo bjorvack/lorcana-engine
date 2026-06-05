@@ -1,0 +1,11 @@
+name = "Mufasa - Respected King"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0f26db7d01c74453b49bf5bc316cfea9.avif?1740590252"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Mentor", "King"]

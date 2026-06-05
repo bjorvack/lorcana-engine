@@ -1,0 +1,12 @@
+name = "Kenai - Protective Brother"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_11827c57989a4d9c961b1c5b08c42945.avif?1740589219"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Hero"]
+text = "HE NEEDS ME At the end of your turn, if this character is exerted, you may ready another chosen character of yours and remove all damage from them."

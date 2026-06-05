@@ -1,0 +1,12 @@
+name = "Chief Bogo - Calling the Shots"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_49b1333917404a9fa4e855f4c2da3487.avif?1761764860"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 1
+lore = 1
+classifications = ["Storyborn"]
+text = "MY JURISDICTION During your turn, this character can't be dealt damage.\nDEPUTIZE Your other characters gain the Detective classification."

@@ -1,0 +1,8 @@
+name = "Maleficent's Staff"
+type = "Item"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2a6593b0affd4fbb8860ab6b3b131a50.avif?1730901319"
+max_copies = 4
+inkwell = true
+text = "BACK, FOOLS! Whenever one of your opponents' characters, items, or locations is returned to their hand from play, gain 1 lore."

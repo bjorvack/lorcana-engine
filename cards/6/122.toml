@@ -1,0 +1,11 @@
+name = "Pete - Freebooter"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a545a0ceb41d4f2583bdc22226df0e31.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 2
+lore = 1
+classifications = ["Dreamborn", "Villain", "Pirate"]

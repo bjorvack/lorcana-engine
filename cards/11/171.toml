@@ -1,0 +1,12 @@
+name = "Rapunzel - Ethereal Protector"
+type = "Character"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1416db548e594c8baff2fab420ae3c59.avif?1770259969"
+max_copies = 4
+strength = 3
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Hero", "Princess", "Whisper"]
+keywords = ["Boost 2"]
+text = "Boost 2 {I} (Once during your turn, you may pay 2 {I} to put the top card of your deck facedown under this character.)\nCLONK! Whenever this character quests, if there's a card under her, chosen opposing character can't challenge until the start of your next turn."

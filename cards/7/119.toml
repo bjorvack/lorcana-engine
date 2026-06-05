@@ -1,0 +1,7 @@
+name = "Ink Geyser"
+type = "Action"
+cost = 3
+ink = ["Emerald", "Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1043af1f4d454d8d83c4a85a75e1ad05.avif?1740589576"
+max_copies = 4
+text = "Each player exerts all the cards in their inkwell. Then each player with more than 3 cards in their inkwell returns cards at random from their inkwell to their hand until they have 3 cards in their inkwell."

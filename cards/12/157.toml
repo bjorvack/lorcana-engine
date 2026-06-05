@@ -1,0 +1,12 @@
+name = "Kida - Discovering the Unknown"
+type = "Character"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_37f859395b1f4878a5826f20394fe58e.avif?1777687774"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Hero", "Princess"]
+text = "READ THE RUNES Whenever this character quests, if 2 or more cards were put into your discard this turn, you may put the top card of your deck into your inkwell facedown and exerted."

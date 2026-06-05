@@ -1,0 +1,12 @@
+name = "Cri-Kee - Good Luck Charm"
+type = "Character"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7b35f4aed143419a821f8426d17be7bf.avif?1761764372"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "Alert (This character can challenge as if they had Evasive.)"

@@ -1,0 +1,11 @@
+name = "Captain - Colonel's Lieutenant"
+type = "Character"
+cost = 5
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6b4e0c325cbb46698922c45438b4f1a7.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Ally", "Captain"]

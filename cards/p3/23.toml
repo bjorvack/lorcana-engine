@@ -1,0 +1,13 @@
+name = "Daisy Duck - Paranormal Investigator"
+type = "Character"
+cost = 6
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_816875e5e3f54de7bd57f8a94ed6718e.avif?1773508819"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 6
+lore = 2
+classifications = ["Floodborn", "Hero", "Detective"]
+keywords = ["Shift 4", "Support"]
+text = "Shift 4 {I} (You may pay 4 {I} to play this on top of one of your characters named Daisy Duck.)\nSupport (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)\nSTRANGE HAPPENINGS While this character is exerted, cards enter opponents' inkwells exerted."

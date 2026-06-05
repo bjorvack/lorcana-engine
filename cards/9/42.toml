@@ -1,0 +1,12 @@
+name = "Peter Pan's Shadow - Not Sewn On"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_929d3fa7c5324a1dbc9ebc1d93bbee6d.avif?1755741239"
+max_copies = 4
+strength = 2
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Ally"]
+keywords = ["Evasive", "Rush"]
+text = "Rush (This character can challenge the turn they're played.)\nEvasive (Only characters with Evasive can challenge this character.)\nTIPTOE Your other characters with Rush gain Evasive."

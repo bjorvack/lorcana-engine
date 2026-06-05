@@ -1,0 +1,12 @@
+name = "Goliath - Guardian of Castle Wyvern"
+type = "Character"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5cf26c9115a64c96a22f5151714cbc61.avif?1761763647"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Hero", "Gargoyle"]
+text = "BE CAREFUL, ALL OF YOU Whenever one of your Gargoyle characters challenges another character, gain 1 lore.\nSTONE BY DAY If you have 3 or more cards in your hand, this character can't ready."

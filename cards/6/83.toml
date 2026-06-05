@@ -1,0 +1,13 @@
+name = "Prince Phillip - Royal Explorer"
+type = "Character"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_11902901f7364369970762d49a1a760d.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 2
+lore = 2
+classifications = ["Storyborn", "Hero", "Prince"]
+keywords = ["Ward"]
+text = "Ward (Opponents can't choose this character except to challenge.)"

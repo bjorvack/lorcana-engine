@@ -1,0 +1,12 @@
+name = "Vladimir - Ceramic Unicorn Fan"
+type = "Character"
+cost = 6
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_86a728449c4a46b7862052f531d3cea4.avif?1761752307"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 6
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "HIGH STANDARDS Whenever this character quests, you may banish chosen item."

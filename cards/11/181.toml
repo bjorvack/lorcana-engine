@@ -1,0 +1,13 @@
+name = "McHorn - Ice-Cold Officer"
+type = "Character"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a878e31ab9a94c4ba48079ebff6b155e.avif?1770260013"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 5
+lore = 1
+classifications = ["Dreamborn", "Ally", "Detective"]
+keywords = ["Bodyguard"]
+text = "Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)"

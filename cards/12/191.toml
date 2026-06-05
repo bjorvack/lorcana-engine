@@ -1,0 +1,11 @@
+name = "Merida - Formidable Archer"
+type = "Character"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9a930ad30367469f8e497f561beee663.avif?1777687900"
+max_copies = 4
+strength = 3
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Hero", "Princess"]
+text = "FULL QUIVER When you play this character, you may return an action card named Three Arrows from your discard to your hand.\nSTEADY AIM Whenever one of your actions deals damage to an opposing character, deal 2 damage to that character."

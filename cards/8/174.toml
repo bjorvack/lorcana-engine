@@ -1,0 +1,12 @@
+name = "Geppetto - Skilled Craftsman"
+type = "Character"
+cost = 5
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f19b9d58f8d44e60b66d72d64c16ab09.avif?1747509420"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Ally", "Inventor"]
+text = "SEEKING INSPIRATION Whenever this character quests, you may choose and discard any number of item cards to gain 1 lore for each item card discarded this way."

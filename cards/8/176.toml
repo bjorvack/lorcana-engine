@@ -1,0 +1,8 @@
+name = "Pouncing Practice"
+type = "Action"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_80199d9b642b481ba9a0b3435f1756de.avif?1747509429"
+max_copies = 4
+inkwell = true
+text = "Chosen character gets -2 {S} this turn. Chosen character of yours gains Evasive this turn. (They can challenge characters with Evasive.)"

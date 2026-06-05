@@ -1,0 +1,12 @@
+name = "Luisa Madrigal - No Pressure"
+type = "Character"
+cost = 7
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_bf1a00bfa25345b8abe1f0d008935e39.avif?1777687749"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 7
+lore = 2
+classifications = ["Dreamborn", "Ally", "Madrigal"]
+text = "SHOULDER THE BURDEN Whenever this character quests, you may move up to 3 damage from chosen character to this character."

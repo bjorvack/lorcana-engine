@@ -1,0 +1,12 @@
+name = "Chip 'n' Dale - Recovery Rangers"
+type = "Character"
+cost = 8
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b0c8c37c12834fa1b2b7d831b172ff0c.avif?1730901319"
+max_copies = 4
+strength = 6
+willpower = 6
+lore = 3
+classifications = ["Floodborn", "Hero"]
+keywords = ["Shift 5"]
+text = "Shift 5 (You may pay 5 {I} to play this on top of one of your characters named Chip or Dale.)\n(This character counts as being named both Chip and Dale.)\nSEARCH AND RESCUE During your turn, whenever a card is put into your inkwell, you may return a character card from your discard to your hand."

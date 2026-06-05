@@ -1,0 +1,11 @@
+name = "Remote Inklands - Desert Ruins"
+type = "Location"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_89c1af2f0ec443728e91c461511190f1.avif?1777687687"
+max_copies = 4
+inkwell = true
+move_cost = 2
+willpower = 6
+lore = 1
+text = "ERODING WINDS At the start of your turn, put the top card of your deck into your discard.\nSUCCESSFUL EXPEDITION Characters get +2 {S} while here."

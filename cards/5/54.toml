@@ -1,0 +1,11 @@
+name = "Maleficent - Vengeful Sorceress"
+type = "Character"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9fce790e0b1c4e0788899b6eb0d6aad0.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 2
+classifications = ["Storyborn", "Villain", "Sorcerer"]

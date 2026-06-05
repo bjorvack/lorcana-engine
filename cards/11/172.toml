@@ -1,0 +1,12 @@
+name = "Launchpad - Hideout Defender"
+type = "Character"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_31c0320e66744254b1a8a70f108427aa.avif?1770259973"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 5
+lore = 1
+classifications = ["Dreamborn", "Ally"]
+text = "STAND GUARD Your locations gain Resist +1. (Damage dealt to them is reduced by 1.)"

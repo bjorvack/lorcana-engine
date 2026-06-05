@@ -1,0 +1,12 @@
+name = "Dr. Calico - Green-Eyed Man"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f985e42477e649a5af573894d9b0ac74.avif?1740589824"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Villain"]
+text = "YOU'RE BEGINNING TO IRK ME While this character has no damage, he gains Resist +2. (Damage dealt to them is reduced by 2.)"

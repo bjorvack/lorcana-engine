@@ -1,0 +1,7 @@
+name = "Freeze"
+type = "Action"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7ea36567dec64789a714995b1f459a47.avif?1709690747"
+max_copies = 4
+text = "Exert chosen opposing character."

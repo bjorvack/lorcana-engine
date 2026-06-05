@@ -1,0 +1,8 @@
+name = "Unconventional Tool"
+type = "Item"
+cost = 1
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_99bcca2953964e4180ad6d27bea2d14d.avif?1740589700"
+max_copies = 4
+inkwell = true
+text = "FIXED IN NO TIME When this item is banished, you pay 2 {I} less for the next item you play this turn."

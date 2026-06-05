@@ -1,0 +1,7 @@
+name = "Do It Again!"
+type = "Action"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c6e59761b01b488b9a46b1dbfb30707e.avif?1709690747"
+max_copies = 4
+text = "Return an action card from your discard to your hand."

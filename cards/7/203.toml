@@ -1,0 +1,7 @@
+name = "Steel Coil"
+type = "Item"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9733c3ea959643178de845a528ff915c.avif?1740590278"
+max_copies = 4
+text = "METALLIC FLOW During your turn, whenever a card is put into your inkwell, you may draw a card, then choose and discard a card."

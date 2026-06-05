@@ -1,0 +1,8 @@
+name = "Education or Elimination"
+type = "Song"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_69c74f5a7fcb431290622e2321e786fe.avif?1770259636"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 4 or more can {E} to sing this song for free.)\nChoose one:\n* Draw a card. Chosen character of yours gets +1 {L} and gains Evasive until the start of your next turn. (Only characters with Evasive can challenge them.)\n* Banish chosen damaged character."

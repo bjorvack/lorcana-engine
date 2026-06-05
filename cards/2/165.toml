@@ -1,0 +1,8 @@
+name = "Nothing to Hide"
+type = "Action"
+cost = 1
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e295d49c71554b108a26b197046ca47c.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "Each opponent reveals their hand. Draw a card."

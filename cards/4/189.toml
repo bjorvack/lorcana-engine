@@ -1,0 +1,11 @@
+name = "Mulan - Armored Fighter"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_029ec16d7f294ef0a9e2b924ae6819ce.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 6
+lore = 1
+classifications = ["Storyborn", "Hero", "Princess"]

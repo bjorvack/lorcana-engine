@@ -1,0 +1,12 @@
+name = "Mickey Mouse - Giant Mouse"
+type = "Character"
+cost = 10
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_475efa3afb754da4bba8e1d7104ebdf1.avif?1747509520"
+max_copies = 4
+strength = 10
+willpower = 10
+lore = 5
+classifications = ["Dreamborn", "Hero"]
+keywords = ["Bodyguard"]
+text = "Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)\nTHE BIGGEST STAR EVER When this character is banished, deal 5 damage to each opposing character."

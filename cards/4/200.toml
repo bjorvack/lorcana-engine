@@ -1,0 +1,8 @@
+name = "Fortisphere"
+type = "Item"
+cost = 1
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5359fd5a9e4f43568d3419a2cd737640.avif?1716052430"
+max_copies = 4
+inkwell = true
+text = "RESOURCEFUL When you play this item, you may draw a card.\nEXTRACT OF STEEL 1 {I}, Banish this item — Chosen character of yours gains Bodyguard until the start of your next turn. (An opposing character who challenges one of your characters must choose one with Bodyguard if able.)"

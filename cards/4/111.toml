@@ -1,0 +1,11 @@
+name = "Li Shang - General's Son"
+type = "Character"
+cost = 1
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_bbec90ced5704bd6b427c55fcfc0e3bf.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Hero"]

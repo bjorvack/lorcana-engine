@@ -1,0 +1,12 @@
+name = "Olaf - Snowman of Action"
+type = "Character"
+cost = 9
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_22e26220f81745b394485c0cb6ef2c2d.avif?1770259748"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "ABOUT TIME! For each action card in your discard, you pay 1 {I} less to play this character.\nCHAOTIC COLLISION When you play this character, each opponent loses 2 lore."

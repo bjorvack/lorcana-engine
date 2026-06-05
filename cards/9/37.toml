@@ -1,0 +1,11 @@
+name = "Ursula - Sea Witch"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ddb06ba3c9da4b9c88542204d02eeb6d.avif?1755540312"
+max_copies = 4
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Villain", "Sorcerer"]
+text = "YOU'RE TOO LATE Whenever this character quests, chosen opposing character can't ready at the start of their next turn."

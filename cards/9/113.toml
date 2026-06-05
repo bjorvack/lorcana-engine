@@ -1,0 +1,12 @@
+name = "Roxanne - Powerline Fan"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1d1f302d846749939eb57dbe5013d807.avif?1755695706"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "CONCERT LOVER While you have a character with Singer in play, this character gets +1 {S} and +1 {L}."

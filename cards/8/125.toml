@@ -1,0 +1,12 @@
+name = "Brutus - Fearsome Crocodile"
+type = "Character"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c58dd411430545cf8347b0993cd685f7.avif?1747509156"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "SPITEFUL During your turn, when this character is banished, if one of your characters was damaged this turn, gain 2 lore."

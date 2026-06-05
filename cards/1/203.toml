@@ -1,0 +1,7 @@
+name = "Musketeer Tabard"
+type = "Item"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_540aa5414bc94516a563bab640ced601.avif?1709690747"
+max_copies = 4
+text = "ALL FOR ONE AND ONE FOR ALL Whenever one of your characters with Bodyguard is banished, you may draw a card."

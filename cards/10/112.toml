@@ -1,0 +1,13 @@
+name = "Hermes - Harried Messenger"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_54dc293b739a4ed0afb598fa0484eaf6.avif?1761763618"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Deity"]
+keywords = ["Rush"]
+text = "Rush (This character can challenge the turn they're played.)"

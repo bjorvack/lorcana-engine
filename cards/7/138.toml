@@ -1,0 +1,12 @@
+name = "Maurice - Unconventional Inventor"
+type = "Character"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a02f616f960243249461ac40a8beb36c.avif?1740589653"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Mentor", "Inventor"]
+text = "HOW ON EARTH DID THAT HAPPEN? When you play this character, you may banish chosen item of yours to draw a card. If the banished item is named Maurice's Machine, you may also banish chosen character with 2 {S} or less."

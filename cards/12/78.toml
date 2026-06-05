@@ -1,0 +1,11 @@
+name = "Lord MacGuffin - Clever Swordsman"
+type = "Character"
+cost = 5
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_71d961ae91de4bd1970b32e561d1f3af.avif?1777687465"
+max_copies = 4
+strength = 6
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "WAIT FOR IT... This character may enter play exerted to deal 3 damage to chosen damaged character."

@@ -1,0 +1,7 @@
+name = "We've Got Company!"
+type = "Action"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_696163f5674e45ddb49ab917a6d91180.avif?1740589689"
+max_copies = 4
+text = "Ready all your characters. They gain Reckless this turn. (They can't quest and must challenge if able.)"

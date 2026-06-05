@@ -1,0 +1,12 @@
+name = "Simba - Future King"
+type = "Character"
+cost = 1
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9f35462bf6cc430f89c193d85507ea73.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Hero", "Prince"]
+text = "GUESS WHAT? When you play this character, you may draw a card, then choose and discard a card."

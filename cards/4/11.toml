@@ -1,0 +1,12 @@
+name = "Golden Harp - Enchanter of the Land"
+type = "Character"
+cost = 1
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4047afdc24734dc081571f81815febd8.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "STOLEN AWAY At the end of your turn, if you didn't play a song this turn, banish this character."

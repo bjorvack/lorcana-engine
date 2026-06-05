@@ -1,0 +1,12 @@
+name = "Genie - Powers Unleashed"
+type = "Character"
+cost = 8
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_976b70e13c194a6f8b955d7ea5307bbc.avif?1709690747"
+max_copies = 4
+strength = 3
+willpower = 5
+lore = 3
+classifications = ["Floodborn", "Hero"]
+keywords = ["Evasive", "Shift 6"]
+text = "Shift 6 (You may pay 6 {I} to play this on top of one of your characters named Genie.)\nEvasive (Only characters with Evasive can challenge this character.)\nPHENOMENAL COSMIC POWER! Whenever this character quests, you may play an action with cost 5 or less for free."

@@ -1,0 +1,11 @@
+name = "Chernabog - Evildoer"
+type = "Character"
+cost = 10
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_58705a75ce1c4f19aabe741129079750.avif?1709690747"
+max_copies = 4
+strength = 9
+willpower = 9
+lore = 3
+classifications = ["Storyborn", "Villain"]
+text = "THE POWER OF EVIL For each character card in your discard, you pay 1 {I} less to play this character.\nSUMMON THE SPIRITS When you play this character, shuffle all character cards from your discard into your deck."

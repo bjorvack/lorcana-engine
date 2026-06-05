@@ -1,0 +1,8 @@
+name = "The Horseman Strikes!"
+type = "Action"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_47696b283a634a63be19e785284804a6.avif?1761752063"
+max_copies = 4
+inkwell = true
+text = "Draw a card. You may banish chosen character with Evasive."

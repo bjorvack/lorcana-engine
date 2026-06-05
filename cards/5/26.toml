@@ -1,0 +1,8 @@
+name = "Healing Touch"
+type = "Action"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_10b23643a0b146bcb95389cfb37c6133.avif?1723917209"
+max_copies = 4
+inkwell = true
+text = "Remove up to 4 damage from chosen character. Draw a card."

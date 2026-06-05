@@ -1,0 +1,13 @@
+name = "Kaa - Secretive Snake"
+type = "Character"
+cost = 7
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_69900a654e7d428186915334266a7e8c.avif?1761752323"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 7
+lore = 3
+classifications = ["Storyborn", "Villain"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)"

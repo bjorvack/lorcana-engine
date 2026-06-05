@@ -1,0 +1,12 @@
+name = "Captain Hook - Underhanded"
+type = "Character"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_44fceab89d3a4b40bd343c2c84a5cca3.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Villain", "Pirate", "Captain"]
+text = "INSPIRES DREAD While this character is exerted, opposing Pirate characters can't quest.\nUPPER HAND Whenever this character is challenged, draw a card."

@@ -1,0 +1,12 @@
+name = "Dalmatian Puppy - Tail Wagger"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_97f8be5e176144378d58823c6f9c29c7.avif?1709690747"
+max_copies = 99
+inkwell = true
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Puppy"]
+text = "WHERE DID THEY ALL COME FROM? You may have up to 99 copies of Dalmatian Puppy - Tail Wagger in your deck."

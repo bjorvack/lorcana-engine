@@ -1,0 +1,12 @@
+name = "Stabbington Brother - With a Patch"
+type = "Character"
+cost = 5
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2e6d017b97da415fb97b8d42bb129e98.avif?1740589613"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "CRIME OF OPPORTUNITY When you play this character, chosen opponent loses 1 lore."

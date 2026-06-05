@@ -1,0 +1,8 @@
+name = "Heal What Has Been Hurt"
+type = "Song"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d3bdbbdbd842435fa3fa0ac7ec4eb28d.avif?1755540249"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 3 or more can {E} to sing this song for free.)\nRemove up to 3 damage from chosen character. Draw a card."

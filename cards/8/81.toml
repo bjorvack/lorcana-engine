@@ -1,0 +1,8 @@
+name = "Into the Unknown"
+type = "Song"
+cost = 3
+ink = ["Amethyst", "Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4f93311edfdb4958a45cc7d70490891f.avif?1747508886"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 3 or more can {E} to sing this song for free.)\nPut chosen exerted character into their player's inkwell facedown and exerted."

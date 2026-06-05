@@ -1,0 +1,11 @@
+name = "Goofy - Determined Traveler"
+type = "Character"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_72faf592ef64418b856f80140e0ac6be.avif?1777687892"
+max_copies = 4
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Dreamborn", "Hero"]
+text = "FALLING ROCKS Whenever this character quests, if you played another character this turn, you may deal 1 damage to chosen character or location."

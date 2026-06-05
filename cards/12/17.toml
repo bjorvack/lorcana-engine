@@ -1,0 +1,12 @@
+name = "Bullseye - Loyal Horse"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_029d768f40084d1ca1f66a01a5e6981e.avif?1777687180"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally", "Toy"]
+text = "LET'S RIDE If you have a character named Woody or Jessie in play, you pay 1 {I} less to play this character."

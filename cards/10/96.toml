@@ -1,0 +1,8 @@
+name = "Chomp!"
+type = "Action"
+cost = 1
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1b74cd74b69f4a369ce0a8af4cb21e10.avif?1761752393"
+max_copies = 4
+inkwell = true
+text = "Deal 2 damage to chosen damaged character."

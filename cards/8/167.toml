@@ -1,0 +1,13 @@
+name = "Ratigan - Greedy Genius"
+type = "Character"
+cost = 8
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6119229219f04cdaa2650c87645a1bf4.avif?1747509393"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 7
+lore = 4
+classifications = ["Storyborn", "Villain"]
+keywords = ["Ward"]
+text = "Ward (Opponents can't choose this character except to challenge.)\nTIME RUNS OUT At the end of your turn, if you didn't put any cards into your inkwell this turn, banish this character."

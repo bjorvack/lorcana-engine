@@ -1,0 +1,12 @@
+name = "David - Impressive Surfer"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4e3967f948654fc9a2d9595743e1709f.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "SHOWING OFF While you have a character named Nani in play, this character gets +2 {L}."

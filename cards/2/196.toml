@@ -1,0 +1,12 @@
+name = "Tiana - Celebrating Princess"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5879c143b9484d898408440f80e8531e.avif?1709690747"
+max_copies = 4
+strength = 1
+willpower = 4
+lore = 2
+classifications = ["Dreamborn", "Hero", "Princess"]
+keywords = ["Resist 2"]
+text = "Resist +2 (Damage dealt to this character is reduced by 2.)\nWHAT YOU GIVE IS WHAT YOU GET While this character is exerted and you have no cards in your hand, opponents can't play actions."

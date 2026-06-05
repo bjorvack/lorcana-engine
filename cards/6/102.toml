@@ -1,0 +1,10 @@
+name = "Owl Island - Secluded Entrance"
+type = "Location"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2f052175c77d4035b1e261bf1675aee8.avif?1730901319"
+max_copies = 4
+move_cost = 1
+willpower = 6
+lore = 0
+text = "TEAMWORK For each character you have here, you pay 1 {I} less for the first action you play each turn.\nLOTS TO LEARN Whenever you play a second action in a turn, gain 3 lore."

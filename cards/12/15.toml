@@ -1,0 +1,12 @@
+name = "Woody - Jungle Guide"
+type = "Character"
+cost = 5
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_23f90c492e514c569e969d30089ba8cf.avif?1777687169"
+max_copies = 4
+strength = 1
+willpower = 5
+lore = 2
+classifications = ["Floodborn", "Hero", "Toy"]
+keywords = ["Shift 3"]
+text = "Shift 3 {I} (You may pay 3 {I} to play this on top of one of your characters named Woody.)\nLET'S GET MOVIN' Whenever this character quests, draw a card. Then, you may play a character with cost 2 or less for free.\nEVERYONE GATHER 'ROUND Your other Toy characters get +1 {W}."

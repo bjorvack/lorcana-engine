@@ -1,0 +1,12 @@
+name = "Hades - Hotheaded Ruler"
+type = "Character"
+cost = 6
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_380dc3639d7349c28a244b65ed675fcb.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Villain", "Deity"]
+text = "CALL THE TITANS {E} — Ready your Titan characters."

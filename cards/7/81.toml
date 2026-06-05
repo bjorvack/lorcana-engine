@@ -1,0 +1,7 @@
+name = "This Is My Family"
+type = "Song"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_703029977ead4c46bf7f4991b6fd1736.avif?1740589419"
+max_copies = 4
+text = "(A character with cost 2 or more can {E} to sing this song for free.)\nGain 1 lore. Draw a card."

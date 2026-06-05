@@ -1,0 +1,11 @@
+name = "Dr. Delbert Doppler - Fussy Astronomer"
+type = "Character"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6e0ebfc57c174717baae1a0ec2a16830.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally", "Alien"]

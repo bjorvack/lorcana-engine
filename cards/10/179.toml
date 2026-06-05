@@ -1,0 +1,12 @@
+name = "Basil - Tenacious Mouse"
+type = "Character"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5047361d5e154f1099d8996c8904fb2d.avif?1761764808"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 2
+lore = 2
+classifications = ["Dreamborn", "Hero", "Detective"]
+text = "HOLD YOUR GROUND Whenever you play another Detective character, this character gains Resist +1 until the start of your next turn. (Damage dealt to them is reduced by 1.)"

@@ -1,0 +1,12 @@
+name = "Kashekim - Wise King"
+type = "Character"
+cost = 5
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8950c4a97e2f4ccc8c5008b82356aec4.avif?1777687778"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 6
+lore = 2
+classifications = ["Storyborn", "King"]
+text = "STRENGTH IN MEMORY At the end of your turn, if 2 or more cards were put into your discard this turn, you may put the top card of your deck into your inkwell facedown."

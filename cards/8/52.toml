@@ -1,0 +1,12 @@
+name = "Royal Guard - Octopus Soldier"
+type = "Character"
+cost = 1
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5251999627264dabb73043f14e7b7b25.avif?1747508516"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 2
+lore = 1
+classifications = ["Storyborn"]
+text = "HEAVILY ARMED Whenever you draw a card, this character gains Challenger +1 this turn. (They get +1 {S} while challenging.)"

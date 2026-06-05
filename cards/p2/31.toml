@@ -1,0 +1,8 @@
+name = "Pull the Lever!"
+type = "Action"
+cost = 3
+ink = ["Amethyst", "Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a1cba5a32c2641fc8f1efc4fbeb89cfa.avif?1755564059"
+max_copies = 4
+inkwell = true
+text = "Choose one:\n- Draw 2 cards.\n- Each opponent chooses and discards a card."

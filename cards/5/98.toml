@@ -1,0 +1,8 @@
+name = "Prince John's Mirror"
+type = "Item"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e37301dbd08d47fcbd95accf72aa2a3c.avif?1723917209"
+max_copies = 4
+inkwell = true
+text = "YOU LOOK REGAL If you have a character named Prince John in play, you pay 1 {I} less to play this item.\nA FEELING OF POWER At the end of each opponent's turn, if they have more than 3 cards in their hand, they discard until they have 3 cards in their hand."

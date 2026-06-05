@@ -1,0 +1,8 @@
+name = "Brawl"
+type = "Action"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_be06b6df39cd46c2a192ae1be15fb42c.avif?1716052430"
+max_copies = 4
+inkwell = true
+text = "Banish chosen character with 2 {S} or less."

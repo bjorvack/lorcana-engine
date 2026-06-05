@@ -1,0 +1,8 @@
+name = "Obscurosphere"
+type = "Item"
+cost = 1
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_20513d1b0b8947e7b18e967292e9fb23.avif?1723917209"
+max_copies = 4
+inkwell = true
+text = "EXTRACT OF EMERALD 2 {I}, Banish this item — Your characters gain Ward until the start of your next turn. (Opponents can't choose them except to challenge.)"

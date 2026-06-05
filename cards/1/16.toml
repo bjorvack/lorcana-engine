@@ -1,0 +1,11 @@
+name = "Prince Phillip - Dragonslayer"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f1e67c29942c408daaa683520972e1ea.avif?1709690747"
+max_copies = 4
+strength = 3
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Hero", "Prince"]
+text = "HEROISM When this character challenges and is banished, you may banish the challenged character."

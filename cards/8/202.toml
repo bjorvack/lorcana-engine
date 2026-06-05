@@ -1,0 +1,8 @@
+name = "Beyond the Horizon"
+type = "Song"
+cost = 7
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b653851369d8432198a23d09e7642dbd.avif?1747509532"
+max_copies = 4
+keywords = ["Sing Together 7"]
+text = "Sing Together 7 (Any number of your or your teammates' characters with total cost 7 or more may {E} to sing this song for free.)\nChoose any number of players. They discard their hands and draw 3 cards each."

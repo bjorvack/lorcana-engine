@@ -1,0 +1,12 @@
+name = "Webby Vanderquack - Mystery Enthusiast"
+type = "Character"
+cost = 1
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0b5b8900e91c47b482e5032c1490dccf.avif?1761752299"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "CONTAGIOUS ENERGY When you play this character, chosen character gets +1 {S} this turn."

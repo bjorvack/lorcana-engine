@@ -1,0 +1,12 @@
+name = "Rabbit - Indignant Pirate"
+type = "Character"
+cost = 1
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6656edfc61dd4cc0846fee37f6c8e7b9.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 2
+lore = 1
+classifications = ["Dreamborn", "Ally", "Pirate"]
+text = "BE MORE CAREFUL When you play this character, you may remove up to 1 damage from chosen character."

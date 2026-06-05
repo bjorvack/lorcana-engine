@@ -1,0 +1,8 @@
+name = "Wipe Out!"
+type = "Action"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0d28e0cfc9ea44d4a568fa034fc67dbd.avif?1770259944"
+max_copies = 4
+inkwell = true
+text = "Put chosen character with Bodyguard or item into their player's inkwell facedown and exerted."

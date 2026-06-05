@@ -1,0 +1,8 @@
+name = "Friend Like Me"
+type = "Song"
+cost = 5
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_dda178292c7746de913c4dacee008ac9.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 5 or more can {E} to sing this song for free.)\nEach player puts the top 3 cards of their deck into their inkwell facedown and exerted."

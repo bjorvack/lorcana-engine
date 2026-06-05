@@ -1,0 +1,12 @@
+name = "Iduna - Caring Mother"
+type = "Character"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_162d0aec8da44e1d88e84982dd524156.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Mentor", "Queen"]
+text = "ENDURING LOVE When this character is banished, you may put this card into your inkwell facedown and exerted."

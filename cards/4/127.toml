@@ -1,0 +1,13 @@
+name = "Tuk Tuk - Lively Partner"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b90a24aba39e4054897969f472657dc9.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)\nON A ROLL When you play this character, you may move him and one of your other characters to the same location for free. The other character gets +2 {S} this turn."

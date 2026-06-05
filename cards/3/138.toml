@@ -1,0 +1,12 @@
+name = "Captain Amelia - First in Command"
+type = "Character"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9ada4799889b49d69ae388f141a0c52c.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Alien", "Captain"]
+text = "DISCIPLINE During your turn, this character gains Evasive. (They can challenge characters with Evasive.)"

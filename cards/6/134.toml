@@ -1,0 +1,8 @@
+name = "Card Soldier's Spear"
+type = "Item"
+cost = 1
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b9c345526a994ae88d5832aac9f083b9.avif?1730901319"
+max_copies = 4
+inkwell = true
+text = "A SUITABLE WEAPON Your damaged characters get +1 {S}."

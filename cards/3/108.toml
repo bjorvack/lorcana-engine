@@ -1,0 +1,11 @@
+name = "Hydra - Deadly Serpent"
+type = "Character"
+cost = 6
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f9025821a35c4cea9fd04182f7db5896.avif?1709690747"
+max_copies = 4
+strength = 6
+willpower = 5
+lore = 2
+classifications = ["Storyborn"]
+text = "WATCH THE TEETH Whenever this character is dealt damage, deal that much damage to chosen opposing character."

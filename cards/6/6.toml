@@ -1,0 +1,12 @@
+name = "Chip - Friend Indeed"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a3462450711a4425947830aa8a6039bf.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero"]
+text = "DALE'S PARTNER When you play this character, chosen character gets +1 {L} this turn."

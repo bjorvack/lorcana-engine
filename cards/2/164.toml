@@ -1,0 +1,7 @@
+name = "Launch"
+type = "Action"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_93883c73ea3d4c269ed099da7f77414b.avif?1709690747"
+max_copies = 4
+text = "Banish chosen item of yours to deal 5 damage to chosen character."

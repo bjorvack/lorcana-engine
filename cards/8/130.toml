@@ -1,0 +1,12 @@
+name = "Mushu - Fast-Talking Dragon"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ea0d142942ae47fb8d5840fedf77bd08.avif?1747509178"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally", "Dragon"]
+text = "LET'S GET THIS SHOW ON THE ROAD {E} — Chosen character gains Rush this turn. (They can challenge the turn they're played.)"

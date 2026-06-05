@@ -1,0 +1,12 @@
+name = "Preston Whitmore - Expedition Financier"
+type = "Character"
+cost = 5
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1e431099236d41a1ac9a34d9923f76eb.avif?1777687591"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 6
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "PRICE OF PROGRESS When you play this character, you may put the top 2 cards of your deck into your discard."

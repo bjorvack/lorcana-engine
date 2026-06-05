@@ -1,0 +1,12 @@
+name = "Rafiki - Shaman Duelist"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1f76ed2f61db4a9cb5a5647c43e1ebfc.avif?1723917209"
+max_copies = 4
+strength = 1
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Mentor", "Sorcerer"]
+keywords = ["Rush"]
+text = "Rush (This character can challenge the turn they're played.)\nSURPRISING SKILL When you play this character, he gains Challenger +4 this turn. (They get +4 {S} while challenging.)"

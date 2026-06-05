@@ -1,0 +1,8 @@
+name = "Thievery"
+type = "Action"
+cost = 1
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_abdee4f2746b40b48c29ea5f3da815b2.avif?1730901319"
+max_copies = 4
+inkwell = true
+text = "Chosen opponent loses 1 lore. Gain 1 lore."

@@ -1,0 +1,8 @@
+name = "The Terror That Flaps in the Night"
+type = "Action"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e615766ea0d647aba10803d596d3adb7.avif?1770260081"
+max_copies = 4
+inkwell = true
+text = "Deal 2 damage to chosen opposing character. If you have a character named Darkwing Duck in play, deal 3 damage instead."

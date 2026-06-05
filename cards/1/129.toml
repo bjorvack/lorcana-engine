@@ -1,0 +1,8 @@
+name = "Cut to the Chase"
+type = "Action"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_df33509235464d18becdd63bd8ce91eb.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "Chosen character gains Rush this turn. (They can challenge the turn they're played.)"

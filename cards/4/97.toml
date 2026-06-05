@@ -1,0 +1,8 @@
+name = "We Don't Talk About Bruno"
+type = "Song"
+cost = 5
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_57e2c4722d1b4d5c96a196415c1ca434.avif?1716052430"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 5 or more can {E} to sing this song for free.)\nReturn chosen character to their player's hand, then that player discards a card at random."

@@ -1,0 +1,13 @@
+name = "Ariel - Adventurous Collector"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_341f45661be2402b86ec54dd9e402bd3.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Hero", "Princess"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)\nINSPIRING VOICE Whenever you play a song, chosen character of yours gains Evasive until the start of your next turn."

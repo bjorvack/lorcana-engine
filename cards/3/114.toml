@@ -1,0 +1,12 @@
+name = "Maui - Whale"
+type = "Character"
+cost = 7
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a7d5d3768a9d4c3db389429ccc654146.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 8
+willpower = 8
+lore = 1
+classifications = ["Storyborn", "Hero", "Deity"]
+text = "THIS MISSION IS CURSED This character can't ready at the start of your turn.\nI GOT YOUR BACK 2 {I} — Ready this character. He can't quest for the rest of this turn."

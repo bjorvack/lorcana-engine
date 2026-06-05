@@ -1,0 +1,12 @@
+name = "Tigger - One of a Kind"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a3aef995690e4b4995241341af5f31e3.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Tigger"]
+text = "ENERGETIC Whenever you play an action, this character gets +2 {S} this turn."

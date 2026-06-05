@@ -1,0 +1,12 @@
+name = "Mrs. Incredible - Super Stretchy"
+type = "Character"
+cost = 5
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a7974610679d43d190ee370d23d6e0b3.avif?1777687347"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 6
+lore = 1
+classifications = ["Storyborn", "Super", "Hero"]
+text = "FLEXIBLE THINKING At the start of your turn, you may choose one:\n• This character gains Evasive until the start of your next turn. (Only characters with Evasive can challenge them.)\n• This character gets +1 {L} this turn."

@@ -1,0 +1,11 @@
+name = "James - Role Model"
+type = "Character"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_648eda5b1ace49e1abf842cce776399d.avif?1709690747"
+max_copies = 4
+strength = 3
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Mentor"]
+text = "NEVER, EVER LOSE SIGHT When this character is banished, you may put this card into your inkwell facedown and exerted."

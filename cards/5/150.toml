@@ -1,0 +1,11 @@
+name = "Mufasa - Ruler of Pride Rock"
+type = "Character"
+cost = 8
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c82e5a2740d24cf68ca04688f54a0b50.avif?1723917209"
+max_copies = 4
+strength = 4
+willpower = 9
+lore = 4
+classifications = ["Storyborn", "Mentor", "King"]
+text = "A DELICATE BALANCE When you play this character, exert all cards in your inkwell, then return 2 cards at random from your inkwell to your hand.\nEVERYTHING THE LIGHT TOUCHES Whenever this character quests, ready all cards in your inkwell."

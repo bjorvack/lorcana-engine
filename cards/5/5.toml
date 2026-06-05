@@ -1,0 +1,12 @@
+name = "Kenai - Big Brother"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_85a886f78a71416aa253879cbe81d8dd.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Hero"]
+text = "BROTHERS FOREVER While this character is exerted, your characters named Koda can't be challenged."

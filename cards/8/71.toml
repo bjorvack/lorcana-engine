@@ -1,0 +1,13 @@
+name = "Blue Fairy - Guiding Light"
+type = "Character"
+cost = 2
+ink = ["Amethyst", "Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b36358ea2e404178ab14c1815fce6bb5.avif?1747508811"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally", "Fairy"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)\nSupport (Whenever this character quests, you may add their {S} to another chosen character's {S} this turn.)"

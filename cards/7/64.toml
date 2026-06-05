@@ -1,0 +1,12 @@
+name = "Mother Gothel - Vain Sorceress"
+type = "Character"
+cost = 3
+ink = ["Amethyst", "Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3c674103cf444a0b948e0b8be6a0e0e4.avif?1740589352"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Villain", "Sorcerer"]
+text = "NOW YOU'VE UPSET ME Whenever one of your characters challenges, you may move 1 damage counter from chosen character to chosen opposing character."

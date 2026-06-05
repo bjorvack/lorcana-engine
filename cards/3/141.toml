@@ -1,0 +1,11 @@
+name = "Genie - Cramped in the Lamp"
+type = "Character"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c978412b40d24029866de7fb2c2218ee.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 2
+classifications = ["Storyborn", "Ally"]

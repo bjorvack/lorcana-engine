@@ -1,0 +1,13 @@
+name = "Ariel - Singing Mermaid"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4b656001901d4c34829cfe124d5c166b.avif?1755540161"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Hero", "Princess"]
+keywords = ["Singer 7"]
+text = "Singer 7 (This character counts as cost 7 to sing songs.)"

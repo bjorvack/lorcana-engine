@@ -1,0 +1,8 @@
+name = "Mystical Rose"
+type = "Item"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1f22214638bd46d089a6751e57dfd829.avif?1716052430"
+max_copies = 4
+inkwell = true
+text = "DISPEL THE ENTANGLEMENT Banish this item — Chosen character named Beast gets +2 {L} this turn. If you have a character named Belle in play, move up to 3 damage counters from chosen character to chosen opposing character."

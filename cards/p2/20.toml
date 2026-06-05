@@ -1,0 +1,12 @@
+name = "Kronk - Laid Back"
+type = "Character"
+cost = 5
+ink = ["Amethyst", "Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ceb61ba69c8a4aa9b7c96baab913d3a5.avif?1745500432"
+max_copies = 4
+strength = 4
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Ally"]
+keywords = ["Ward"]
+text = "Ward (Opponents can't choose this character except to challenge.) I'M LOVIN' THIS If an effect would cause you to discard one or more cards, you don't discard."

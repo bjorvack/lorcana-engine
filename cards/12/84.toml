@@ -1,0 +1,12 @@
+name = "Donald Duck - Distracted Traveler"
+type = "Character"
+cost = 5
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8ca111f27f65418b8cc535a74f90d921.avif?1777687488"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 6
+lore = 2
+classifications = ["Dreamborn", "Ally"]
+text = "BURNING CURIOSITY Whenever this character quests, if you played another character this turn, each opponent chooses and discards a card."

@@ -1,0 +1,12 @@
+name = "Kakamora - Boarding Party"
+type = "Character"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c71e324054e14edfa3df845b31689f31.avif?1730901319"
+max_copies = 4
+strength = 5
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Pirate"]
+keywords = ["Rush"]
+text = "Rush (This character can challenge the turn they're played.)"

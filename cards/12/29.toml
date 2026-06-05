@@ -1,0 +1,8 @@
+name = "This Growing Pressure"
+type = "Song"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_aef0af5d54a84b1dadfd6351fbec3a01.avif?1777687249"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 3 or more can {E} to sing this song for free.) \nChosen opposing character can't challenge and must quest during their next turn if able. Draw a card."

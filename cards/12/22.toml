@@ -1,0 +1,12 @@
+name = "Dale - Ready for His Shot"
+type = "Character"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_66a5c1d3ac3e4e2c894c5a8604c10cc2.avif?1777687217"
+max_copies = 4
+inkwell = true
+strength = 0
+willpower = 4
+lore = 2
+classifications = ["Dreamborn", "Hero"]
+text = "SPIKE SUIT During challenges, your characters deal damage with their {W} instead of their {S}."

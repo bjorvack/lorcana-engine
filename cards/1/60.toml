@@ -1,0 +1,12 @@
+name = "Yzma - Alchemist"
+type = "Character"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_fd1e38170964420294911187ef450c55.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Dreamborn", "Villain", "Sorcerer"]
+text = "YOU'RE EXCUSED Whenever this character quests, look at the top card of your deck. Put it on either the top or the bottom of your deck."

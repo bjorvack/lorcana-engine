@@ -1,0 +1,7 @@
+name = "The Plank"
+type = "Item"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_20286eaca8e44e0c8527a00bf07be1c7.avif?1716052430"
+max_copies = 4
+text = "WALK! 2 {I}, Banish this item – Choose one:\n• Banish chosen Hero character.\n• Ready chosen Villain character. They can't quest for the rest of this turn."

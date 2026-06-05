@@ -1,0 +1,12 @@
+name = "Goofy - Marley's Clumsy Spirit"
+type = "Character"
+cost = 5
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_aeb75ac2ab524eb690b3b96aeddc80cc.avif?1770259739"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Ally", "Ghost"]
+text = "PREPARE YOURSELF When you play this character, you may ready chosen character. If you do, they can't quest for the rest of this turn."

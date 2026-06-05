@@ -1,0 +1,13 @@
+name = "Madam Mim - Purple Dragon"
+type = "Character"
+cost = 7
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1a19968d0ca94ea484efbacfb804c206.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 7
+lore = 4
+classifications = ["Storyborn", "Villain", "Sorcerer", "Dragon"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)\nI WIN, I WIN! When you play this character, banish her or return another 2 chosen characters of yours to your hand."

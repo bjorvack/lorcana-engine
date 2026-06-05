@@ -1,0 +1,13 @@
+name = "Gyro Gearloose - Eccentric Inventor"
+type = "Character"
+cost = 3
+ink = ["Ruby", "Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3e2e03e343f64fa9ad398cb733b154bd.avif?1747509148"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally", "Inventor"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)\nI'LL SHOW YOU! When you play this character, chosen opposing character gets -3 {S} this turn."

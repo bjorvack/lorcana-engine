@@ -1,0 +1,12 @@
+name = "Bobby Zimuruski - Spray Cheese Kid"
+type = "Character"
+cost = 1
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_912d9241d6084800bd0168df05d52bc3.avif?1755540599"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "SO CHEESY When you play this character, you may draw a card, then choose and discard a card."

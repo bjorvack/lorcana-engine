@@ -1,0 +1,11 @@
+name = "Simba - Adventurous Successor"
+type = "Character"
+cost = 1
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_655a6cb32b86442e8bfc1538371dcded.avif?1723917209"
+max_copies = 4
+strength = 2
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Hero", "Prince"]
+text = "I LAUGH IN THE FACE OF DANGER When you play this character, chosen character gets +2 {S} this turn."

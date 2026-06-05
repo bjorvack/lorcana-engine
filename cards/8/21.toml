@@ -1,0 +1,11 @@
+name = "Kaa - Hypnotizing Python"
+type = "Character"
+cost = 4
+ink = ["Amber", "Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c71a707f446d4f01b5c4e66bdde91643.avif?1747506741"
+max_copies = 4
+strength = 3
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Villain"]
+text = "LOOK ME IN THE EYE Whenever this character quests, chosen opposing character gets -2 {S} and gains Reckless until the start of your next turn. (They can't quest and must challenge if able.)"

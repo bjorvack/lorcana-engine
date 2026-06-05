@@ -1,0 +1,7 @@
+name = "Ursula's Plan"
+type = "Action"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d06befe89918438384a8d38e7acea2bd.avif?1716052430"
+max_copies = 4
+text = "Each opponent chooses and exerts one of their characters. Those characters can't ready at the start of their next turn."

@@ -1,0 +1,7 @@
+name = "The Cold Never Bothered Me"
+type = "Song"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a3e135574f3142caabee6f51a9171a40.avif?1770259785"
+max_copies = 4
+text = "(A character with cost 3 or more can {E} to sing this song for free.)\nLook at the top 4 cards of your deck. You may reveal a location card and put it into your hand. Put the rest into your discard. You pay 3 {I} less for the next location you play this turn."

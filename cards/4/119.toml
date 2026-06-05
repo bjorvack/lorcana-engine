@@ -1,0 +1,12 @@
+name = "Noi - Acrobatic Baby"
+type = "Character"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_eb12e8151688469f9b259778c64812ca.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "FANCY FOOTWORK Whenever you play an action, this character takes no damage from challenges this turn."

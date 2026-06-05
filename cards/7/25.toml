@@ -1,0 +1,11 @@
+name = "Isabela Madrigal - In the Moment"
+type = "Character"
+cost = 5
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b5348c3b5e494988a10e2adbfd366f50.avif?1740589198"
+max_copies = 4
+strength = 3
+willpower = 3
+lore = 4
+classifications = ["Storyborn", "Ally", "Madrigal"]
+text = "I'M TIRED OF PERFECT Whenever one of your characters sings a song, this character can't be challenged until the start of your next turn."

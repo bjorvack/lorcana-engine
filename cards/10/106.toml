@@ -1,0 +1,11 @@
+name = "Tinker Bell - Fancy Footwork"
+type = "Character"
+cost = 1
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ce9fa671bcbf4f63a3c79ab1f117d098.avif?1761763594"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Ally", "Fairy"]

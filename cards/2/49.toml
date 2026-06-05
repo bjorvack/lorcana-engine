@@ -1,0 +1,12 @@
+name = "Madam Mim - Snake"
+type = "Character"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_1718e93b703240a8a8be4fd0ab13b4e6.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Villain", "Sorcerer"]
+text = "JUST YOU WAIT When you play this character, banish her or return another chosen character of yours to your hand."

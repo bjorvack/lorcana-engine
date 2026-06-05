@@ -1,0 +1,12 @@
+name = "Transformed Chef - Castle Stove"
+type = "Character"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a5ecfd31d79b4556ab6bf7233081349c.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "A CULINARY MASTERPIECE When you play this character, remove up to 2 damage from chosen character."

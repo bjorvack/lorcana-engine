@@ -1,0 +1,13 @@
+name = "Tramp - Dapper Rascal"
+type = "Character"
+cost = 6
+ink = ["Amber", "Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_85f71d1d81a54038b066e3efe226a8f9.avif?1747506745"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 8
+lore = 2
+classifications = ["Floodborn", "Hero"]
+keywords = ["Shift 4"]
+text = "Shift 4 (You may pay 4 {I} to play this on top of one of your characters named Tramp.)\nPLAY IT COOL During an opponent's turn, whenever one of your characters is banished, you may draw a card."

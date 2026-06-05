@@ -1,0 +1,7 @@
+name = "The Nephews' Piggy Bank"
+type = "Item"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_69db4cb0362b4673aeee6d9dea53f23f.avif?1747507377"
+max_copies = 4
+text = "INSIDE JOB If you have a character named Donald Duck in play, you pay 1 {I} less to play this item.\nPAYOFF {E} – Chosen character gets -1 {S} until the start of your next turn."

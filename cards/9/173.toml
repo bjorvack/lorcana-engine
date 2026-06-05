@@ -1,0 +1,11 @@
+name = "Nala - Undaunted Lioness"
+type = "Character"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_11287d0d009b455ba9cde545d4f98c5b.avif?1755541264"
+max_copies = 4
+strength = 0
+willpower = 2
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "DETERMINED DIVERSION While this character has no damage, she gets +1 {L} and gains Resist +1. (Damage dealt to them is reduced by 1.)"

@@ -1,0 +1,12 @@
+name = "Goofy - Ghost of Jacob Marley"
+type = "Character"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6a38f391cffc44ce8c818845eec37f01.avif?1770259573"
+max_copies = 4
+strength = 4
+willpower = 4
+lore = 2
+classifications = ["Storyborn", "Ally", "Ghost"]
+keywords = ["Boost 2"]
+text = "Boost 2 {I} (Once during your turn, you may pay 2 {I} to put the top card of your deck facedown under this character.)\nGRAVE OUTCOME When this character is banished, each opponent chooses and discards a card for each card that was under him."

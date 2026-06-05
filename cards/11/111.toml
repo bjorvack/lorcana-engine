@@ -1,0 +1,13 @@
+name = "Liquidator - Iced Over"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_109b0bfb7a374953b896f3d6d051c099.avif?1770259698"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 2
+lore = 0
+classifications = ["Storyborn", "Super", "Villain"]
+keywords = ["Reckless"]
+text = "UNDERDOG If this is your first turn and you're not the first player, you pay 1 {I} less to play this character.\nReckless (This character can't quest and must challenge each turn if able.)"

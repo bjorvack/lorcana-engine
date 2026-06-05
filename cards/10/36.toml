@@ -1,0 +1,13 @@
+name = "The Horned King - Wicked Ruler"
+type = "Character"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a639524bb8704134a25060ad9d7799b4.avif?1761752097"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 2
+classifications = ["Floodborn", "Villain", "King", "Sorcerer"]
+keywords = ["Shift 2"]
+text = "Shift 2 {I} (You may pay 2 {I} to play this on top of one of your characters named The Horned King.)\nARISE! Whenever one of your other characters is banished in a challenge, you may return that card to your hand, then choose and discard a card."

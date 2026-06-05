@@ -1,0 +1,7 @@
+name = "Belle's Favorite Book"
+type = "Item"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_af0770252d004096b01a2056b3fe10e1.avif?1747509442"
+max_copies = 4
+text = "CHAPTER THREE {E}, Banish one of your other items — Put the top card of your deck into your inkwell facedown and exerted."

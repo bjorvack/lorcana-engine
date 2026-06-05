@@ -1,0 +1,12 @@
+name = "Gaston - Pure Paragon"
+type = "Character"
+cost = 9
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_63f4432a95d84d9dab23728cf715f31f.avif?1723917209"
+max_copies = 4
+strength = 10
+willpower = 6
+lore = 2
+classifications = ["Dreamborn", "Villain"]
+keywords = ["Rush"]
+text = "A MAN AMONG MEN! For each damaged character you have in play, you pay 2 {I} less to play this character.\nRush (This character can challenge the turn they're played.)"

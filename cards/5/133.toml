@@ -1,0 +1,7 @@
+name = "The Sword Released"
+type = "Item"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_22989be17783417ea635d11b83b71252.avif?1723917209"
+max_copies = 4
+text = "POWER APPOINTED At the start of your turn, if you have a character in play with more {S} than each opposing character in play, each opponent loses 1 lore and you gain lore equal to the lore lost."

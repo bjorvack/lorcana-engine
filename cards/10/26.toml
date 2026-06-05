@@ -1,0 +1,8 @@
+name = "Search for Clues"
+type = "Action"
+cost = 4
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3945ef0eb7ba41b8b1c9382bf3380579.avif?1761752049"
+max_copies = 4
+inkwell = true
+text = "The player or players with the most cards in their hands choose and discard 2 cards. If you have a Detective character in play, gain 1 lore."

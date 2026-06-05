@@ -1,0 +1,12 @@
+name = "Candlehead - Dedicated Racer"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_71551dd2d3334d509ce2f72fb84bd5fe.avif?1740589165"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally", "Racer"]
+text = "WINNING ISN'T EVERYTHING When this character is banished, you may remove up to 2 damage from chosen character."

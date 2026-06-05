@@ -1,0 +1,11 @@
+name = "HeiHei - Persistent Presence"
+type = "Character"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_122d3f9ccb034f7d9e59245d311a7004.avif?1770259460"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 1
+lore = 1
+classifications = ["Dreamborn", "Ally"]

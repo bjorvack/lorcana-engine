@@ -1,0 +1,8 @@
+name = "You're Welcome"
+type = "Song"
+cost = 4
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c16e96de6fd24d58969aa7429dcbbdcc.avif?1723917209"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 4 or more can {E} to sing this song for free.)\nShuffle chosen character, item, or location into their player's deck. That player draws 2 cards."

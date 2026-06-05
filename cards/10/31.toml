@@ -1,0 +1,8 @@
+name = "Webby's Diary"
+type = "Item"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_553961389abc4bd4b49cc302ee271ba8.avif?1761752072"
+max_copies = 4
+inkwell = true
+text = "LATEST ENTRY Whenever you put a card under one of your characters or locations, you may pay 1 {I} to draw a card."

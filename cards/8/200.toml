@@ -1,0 +1,12 @@
+name = "Stitch - Alien Troublemaker"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e402670f5e814601b3995fd962e79a7e.avif?1747509524"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Hero", "Alien"]
+text = "I WIN! During your turn, whenever this character banishes another character in a challenge, you may draw a card and gain 1 lore."

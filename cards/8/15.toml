@@ -1,0 +1,12 @@
+name = "Rhino - One-Sixteenth Wolf"
+type = "Character"
+cost = 1
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2a18b29a3b7a4034b98a6207ec515377.avif?1747506717"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 2
+lore = 1
+classifications = ["Dreamborn", "Ally"]
+text = "TINY HOWL When you play this character, chosen opposing character gets -1 {S} until the start of your next turn."

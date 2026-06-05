@@ -1,0 +1,11 @@
+name = "Fairy Godmother - Magical Benefactor"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_96d8b0484c8441f0a214eee856f60f35.avif?1761764884"
+max_copies = 4
+strength = 3
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Ally", "Fairy", "Sorcerer", "Whisper"]
+text = "Boost 3 {I} (Once during your turn, you may pay 3 {I} to put the top card of your deck facedown under this character.)\nSTUNNING TRANSFORMATION Whenever you put a card under this character, you may banish chosen opposing character. If you do, their player may reveal the top card of their deck. If that card is a character or item card, they may play it for free. Otherwise, they put it on the bottom of their deck."

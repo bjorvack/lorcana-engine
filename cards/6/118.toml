@@ -1,0 +1,11 @@
+name = "John Darling - Sophisticated Swordsman"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_97ffca1bcf534de0ae272cbe065245f8.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally", "Pirate"]

@@ -1,0 +1,13 @@
+name = "Aladdin - Vigilant Guard"
+type = "Character"
+cost = 6
+ink = ["Sapphire", "Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_809fee72df7a4e4e837973d452e858f6.avif?1747509404"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 9
+lore = 1
+classifications = ["Dreamborn", "Hero", "Prince"]
+keywords = ["Bodyguard"]
+text = "Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)\nSAFE PASSAGE Whenever one of your Ally characters quests, you may remove up to 2 damage from this character."

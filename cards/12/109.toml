@@ -1,0 +1,12 @@
+name = "Zeus - Defiant God"
+type = "Character"
+cost = 5
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f573b1954fec4594b089d2897386dc69.avif?1777687587"
+max_copies = 4
+inkwell = true
+strength = 5
+willpower = 5
+lore = 3
+classifications = ["Storyborn", "King", "Deity"]
+text = "IMMORTAL WOUND This character enters play with 4 damage."

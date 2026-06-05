@@ -1,0 +1,12 @@
+name = "Nani - Stage Manager"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_20232422b3314d02b054a923d610d81d.avif?1770259288"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Hero"]
+text = "THAT'S YOUR CUE When you play this character, look at the top 4 cards of your deck. You may reveal a character card with cost 2 or less and put it into your hand. Put the rest on the bottom of your deck in any order."

@@ -1,0 +1,11 @@
+name = "Chip the Teacup - Gentle Soul"
+type = "Character"
+cost = 1
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a385d4bd2e5543609f40f170f17a6a55.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally"]

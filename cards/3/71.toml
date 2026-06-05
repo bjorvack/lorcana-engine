@@ -1,0 +1,13 @@
+name = "Don Karnage - Prince of Pirates"
+type = "Character"
+cost = 5
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_566472b873bc4f0caf367e8bc583e92e.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 2
+classifications = ["Dreamborn", "Villain", "Prince", "Pirate"]
+keywords = ["Evasive"]
+text = "Evasive (Only characters with Evasive can challenge this character.)"

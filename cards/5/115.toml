@@ -1,0 +1,10 @@
+name = "Denahi - Avenging Brother"
+type = "Character"
+cost = 5
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9c1f10eec0c84bd8bae7c5403a6221a7.avif?1723917209"
+max_copies = 4
+strength = 7
+willpower = 5
+lore = 2
+classifications = ["Storyborn"]

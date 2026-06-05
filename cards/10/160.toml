@@ -1,0 +1,11 @@
+name = "Mickey Mouse - Detective"
+type = "Character"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9b6f273381924929ba2d6f6d3e990f66.avif?1761764569"
+max_copies = 4
+strength = 1
+willpower = 3
+lore = 1
+classifications = ["Dreamborn", "Hero", "Detective"]
+text = "GET A CLUE When you play this character, you may put the top card of your deck into your inkwell facedown and exerted."

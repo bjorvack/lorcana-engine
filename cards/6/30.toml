@@ -1,0 +1,7 @@
+name = "Safe and Sound"
+type = "Action"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_cf72db3ded534d7086fb4ead70250f95.avif?1730901319"
+max_copies = 4
+text = "Chosen character of yours can't be challenged until the start of your next turn."

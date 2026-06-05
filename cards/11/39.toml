@@ -1,0 +1,12 @@
+name = "Flit - Reflective Hummingbird"
+type = "Character"
+cost = 1
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_fcdeeb8639c74831b6c234d81ad2f476.avif?1770259375"
+max_copies = 4
+inkwell = true
+strength = 0
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "LOOK OUT! When you play this character, move up to 1 damage from chosen character to chosen opposing character."

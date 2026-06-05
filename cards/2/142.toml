@@ -1,0 +1,13 @@
+name = "Cogsworth - Grandfather Clock"
+type = "Character"
+cost = 5
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d98a2d4cddac4630b7e3364443381093.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 5
+lore = 2
+classifications = ["Floodborn", "Ally"]
+keywords = ["Shift 3", "Ward"]
+text = "Shift 3 (You may pay 3 {I} to play this on top of one of your characters named Cogsworth.)\nWard (Opponents can't choose this character except to challenge.)\nUNWIND Your other characters gain Resist +1 (Damage dealt to them is reduced by 1.)"

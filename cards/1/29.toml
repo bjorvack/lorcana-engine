@@ -1,0 +1,7 @@
+name = "Just in Time"
+type = "Action"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4d9c8fd7ab2241d9893ca3ad6a31daed.avif?1709690747"
+max_copies = 4
+text = "You may play a character with cost 5 or less for free."

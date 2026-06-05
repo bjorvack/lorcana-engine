@@ -1,0 +1,11 @@
+name = "Little John - Impermanent Outlaw"
+type = "Character"
+cost = 6
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b3668f2df08949359912fa775c750a52.avif?1761752377"
+max_copies = 4
+strength = 4
+willpower = 5
+lore = 3
+classifications = ["Storyborn", "Ally", "Whisper"]
+text = "Boost 3 {I} (Once during your turn, you may pay 3 {I} to put the top card of your deck facedown under this character.)\nREADY TO RASSLE Whenever you put a card under this character, ready him."

@@ -1,0 +1,7 @@
+name = "Most Everyone's Mad Here"
+type = "Action"
+cost = 7
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_bc307680b7a247268c3e25f80be90450.avif?1747509316"
+max_copies = 4
+text = "Gain lore equal to the damage on chosen character, then banish them."

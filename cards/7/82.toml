@@ -1,0 +1,7 @@
+name = "Show Me More!"
+type = "Action"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f51427b0966d49e0a683cb6eee1b4e2e.avif?1740589423"
+max_copies = 4
+text = "Each player draws 3 cards."

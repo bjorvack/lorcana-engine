@@ -1,0 +1,8 @@
+name = "Ink Amplifier"
+type = "Item"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_999386b36e224d6b9c1693142b62a20c.avif?1761764680"
+max_copies = 4
+inkwell = true
+text = "ENERGY CAPTURE Whenever an opponent draws a card during their turn, if it's the second card they've drawn this turn, you may put the top card of your deck into your inkwell facedown and exerted."

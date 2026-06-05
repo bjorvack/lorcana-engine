@@ -1,0 +1,11 @@
+name = "Prince Eric - Noble Swordsman"
+type = "Character"
+cost = 5
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_fec8fc6f1b9745078b63c897c32c95c5.avif?1777687140"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 7
+lore = 1
+classifications = ["Dreamborn", "Hero", "Prince"]

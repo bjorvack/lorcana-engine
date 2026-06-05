@@ -1,0 +1,12 @@
+name = "Grandmother Fa - Spirited Elder"
+type = "Character"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_466c1ad68e6040a0973b922ee491924d.avif?1740589585"
+max_copies = 4
+inkwell = true
+strength = 1
+willpower = 1
+lore = 2
+classifications = ["Storyborn", "Ally"]
+text = "I'VE GOT ALL THE LUCK WE'LL NEED Whenever this character quests, you may give chosen character of yours +2 {S} this turn."

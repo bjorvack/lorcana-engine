@@ -1,34 +1,32 @@
 #!/usr/bin/env python3
-"""Generate per-set engine card TOML from a Lorcast JSON research dump.
+"""Generate the per-card engine TOML from a Lorcast JSON research dump.
 
 Usage:
     python3 cards/scripts/from_lorcast.py /path/to/all_cards.json
 
-The Lorcast JSON itself is an *external research datasource* and is never
-committed; this script (and its committed TOML output under ``cards/sets/``) is
-what makes the generation reproducible.
+Writes one file per card to ``cards/<set>/<collector_number>.toml`` (the set
+directory is the lowercased Lorcast set code). The Lorcast JSON itself is an
+*external research datasource* and is never committed; this script + its
+committed output is what makes generation reproducible.
 
-Only the *structured* characteristics + supported keywords are emitted. A card's
-text-based triggered / activated / static abilities are authored later by hand
-via the effect DSL, so no ``[[card.abilities]]`` / ``activated`` / ``statics``
-tables are produced here.
-
-The engine TOML loader (``src/domain/cards/loader.rs``) is the source of truth
-for field names, validation, and the set of supported keywords.
+Only the *structured* characteristics + supported keywords + printed ``text`` are
+emitted. A card's text-based triggered / activated / static abilities are authored
+later (an AI pass) via the effect DSL, so no ``[[abilities]]`` / ``activated`` /
+``statics`` tables are produced here. Emission is shared with
+``combine_sets.py`` via ``card_io``.
 """
 
 from __future__ import annotations
 
-import collections
 import json
 import os
 import re
 import sys
 
-# Repo paths.
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = os.path.dirname(os.path.dirname(SCRIPT_DIR))
-OUT_DIR = os.path.join(REPO_ROOT, "cards", "sets")
+sys.path.insert(0, SCRIPT_DIR)
+import card_io  # noqa: E402
 
 # Keywords the loader supports (see `keyword_from` in loader.rs).
 VALUELESS = {
@@ -58,35 +56,6 @@ VALUED = {
 # Case-insensitive lookup of canonical keyword names (the data has stray
 # lowercase entries like "shift" / "bodyguard").
 _CANON = {k.lower(): k for k in list(VALUELESS) + list(VALUED)}
-
-
-def toml_escape(value: str) -> str:
-    """Escape a string for a TOML basic string (double-quoted)."""
-    out = []
-    for ch in value:
-        if ch == "\\":
-            out.append("\\\\")
-        elif ch == '"':
-            out.append('\\"')
-        elif ch == "\n":
-            out.append("\\n")
-        elif ch == "\t":
-            out.append("\\t")
-        elif ch == "\r":
-            out.append("\\r")
-        elif ord(ch) < 0x20:
-            out.append(f"\\u{ord(ch):04X}")
-        else:
-            out.append(ch)
-    return '"' + "".join(out) + '"'
-
-
-def toml_str(value: str) -> str:
-    return toml_escape(value)
-
-
-def toml_str_array(values) -> str:
-    return "[" + ", ".join(toml_escape(v) for v in values) + "]"
 
 
 def map_type(types):
@@ -139,8 +108,9 @@ def normalize_name(value: str) -> str:
     return value.replace("\u2019", "'").replace("\u2018", "'").replace("\u00a0", " ")
 
 
-def card_to_toml(card, skipped):
-    """Render one card as a ``[[card]]`` table, or None if it must be skipped."""
+def card_to_dict(card, skipped):
+    """Project a Lorcast card onto our structured fields (or None to skip). DSL
+    abilities are not emitted — they are authored later by an AI pass."""
     name = card.get("name")
     version = card.get("version")
     full_name = normalize_name(f"{name} - {version}" if version else name)
@@ -157,45 +127,39 @@ def card_to_toml(card, skipped):
     willpower = card.get("willpower")
     lore = card.get("lore")
     move_cost = card.get("move_cost")
-
-    # Required-stat validation mirroring the loader.
     if kind == "Character" and (strength is None or willpower is None or lore is None):
         skipped.append((full_name, "Character missing strength/willpower/lore"))
         return None
     if kind == "Location" and (willpower is None or move_cost is None):
         skipped.append((full_name, "Location missing willpower/move_cost"))
         return None
-    # Locations need not print a lore value; treat a missing one as 0.
     if kind == "Location" and lore is None:
         lore = 0
 
-    lines = ["[[card]]"]
-    lines.append(f"name = {toml_str(full_name)}")
-    lines.append(f"type = {toml_str(kind)}")
-    lines.append(f"cost = {int(cost)}")
-    if card.get("inkwell"):
-        lines.append("inkwell = true")
-    if kind == "Character":
-        lines.append(f"strength = {int(strength)}")
-        lines.append(f"willpower = {int(willpower)}")
-        lines.append(f"lore = {int(lore)}")
-    elif kind == "Location":
-        lines.append(f"move_cost = {int(move_cost)}")
-        lines.append(f"willpower = {int(willpower)}")
-        lines.append(f"lore = {int(lore)}")
-    classifications = card.get("classifications") or []
-    if classifications:
-        lines.append(f"classifications = {toml_str_array(classifications)}")
-    keywords = map_keywords(card)
-    if keywords:
-        lines.append(f"keywords = {toml_str_array(keywords)}")
-    # The printed rules text, as a comment, to author the effect DSL from later.
+    image = (card.get("image_uris") or {}).get("digital") or {}
+    image = image.get("large") or image.get("normal") or image.get("small")
+    inks = list(card["inks"]) if card.get("inks") else ([card["ink"]] if card.get("ink") else [])
     text = (card.get("text") or "").strip()
-    if text:
-        lines.append("# text:")
-        for text_line in text.split("\n"):
-            lines.append(f"#   {text_line}")
-    return "\n".join(lines)
+    out = {
+        "name": full_name,
+        "type": kind,
+        "cost": int(cost),
+        "ink": inks,
+        "image": image,
+        "inkwell": bool(card.get("inkwell")),
+        "classifications": card.get("classifications") or [],
+        "keywords": map_keywords(card),
+        "text": text,
+        "collector_number": str(card.get("collector_number")),
+    }
+    if kind == "Character":
+        out.update(strength=int(strength), willpower=int(willpower), lore=int(lore))
+    elif kind == "Location":
+        out.update(move_cost=int(move_cost), willpower=int(willpower), lore=int(lore))
+    m = re.search(r"(?:up to|only have) (\d+) copies of .* in your deck", re.sub(r"\s+", " ", text), re.I)
+    if m:
+        out["max_copies"] = int(m.group(1))
+    return out
 
 
 def main(argv):
@@ -205,41 +169,24 @@ def main(argv):
     with open(argv[1], "r", encoding="utf-8") as fh:
         cards = json.load(fh)
 
-    by_set = collections.OrderedDict()
+    skipped = []
+    total = 0
     for card in cards:
         code = card.get("set", {}).get("code")
-        if code is None:
+        number = card.get("collector_number")
+        if code is None or number is None:
             continue
-        by_set.setdefault(code, []).append(card)
-
-    os.makedirs(OUT_DIR, exist_ok=True)
-    skipped = []
-    total_written = 0
-    files = 0
-    for code, group in by_set.items():
-        blocks = []
-        for card in group:
-            block = card_to_toml(card, skipped)
-            if block is not None:
-                blocks.append(block)
-        if not blocks:
+        rec = card_to_dict(card, skipped)
+        if rec is None:
             continue
-        path = os.path.join(OUT_DIR, f"{code.lower()}.toml")
-        header = (
-            f"# Cards for Lorcana set {code}, in the engine's own TOML format.\n"
-            f"# Generated by cards/scripts/from_lorcast.py from a Lorcast research\n"
-            f"# dump (the external dataset itself is not committed). Structured\n"
-            f"# fields + supported keywords only; text-based abilities are authored\n"
-            f"# by hand via the effect DSL.\n\n"
-        )
-        with open(path, "w", encoding="utf-8") as fh:
-            fh.write(header)
-            fh.write("\n\n".join(blocks))
-            fh.write("\n")
-        files += 1
-        total_written += len(blocks)
+        out_dir = os.path.join(REPO_ROOT, "cards", code.lower())
+        os.makedirs(out_dir, exist_ok=True)
+        body = card_io.emit_card(rec, top_level=True)
+        with open(os.path.join(out_dir, f"{number}.toml"), "w", encoding="utf-8") as fh:
+            fh.write(body + "\n")
+        total += 1
 
-    print(f"wrote {files} files, {total_written} cards")
+    print(f"wrote {total} per-card files under cards/<set>/")
     print(f"skipped {len(skipped)} cards")
     for name, reason in skipped:
         print(f"  - {name}: {reason}")

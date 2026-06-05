@@ -1,0 +1,13 @@
+name = "White Rabbit - Late Again"
+type = "Character"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d3f28891b837451c8ae29c450dc77b26.avif?1773508858"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Ally"]
+keywords = ["Evasive"]
+text = "UNDERDOG If this is your first turn and you're not the first player, you pay 1 {I} less to play this character.\nEvasive (Only characters with Evasive can challenge this character.)"

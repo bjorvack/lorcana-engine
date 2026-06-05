@@ -1,0 +1,10 @@
+name = "Hiram Flaversham - Intrigued Inventor"
+type = "Character"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ac870f32bf614f27a7b0c0bdf88837fe.avif?1730901319"
+max_copies = 4
+strength = 0
+willpower = 2
+lore = 3
+classifications = ["Storyborn", "Ally", "Inventor"]

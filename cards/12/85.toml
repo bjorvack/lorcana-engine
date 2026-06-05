@@ -1,0 +1,12 @@
+name = "Buzz Lightyear - On the Way"
+type = "Character"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e2c38bf30c48489f914581f55acd67fb.avif?1777687492"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Hero", "Toy", "Captain"]
+text = "SECRET MISSION Whenever you pay 2 {I} or less to play a non-character, draw a card, then choose and discard a card.\nWORLD'S GREATEST TOY Whenever you pay 2 {I} or less to play a character, deal 1 damage to chosen opposing damaged character."

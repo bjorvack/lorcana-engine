@@ -1,0 +1,12 @@
+name = "Pleakley - Scientific Expert"
+type = "Character"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b513512cb8c04917ae7d0cbe7e1aa355.avif?1730901319"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 4
+lore = 1
+classifications = ["Storyborn", "Ally", "Alien"]
+text = "REPORTING FOR DUTY When you play this character, put chosen character of yours into your inkwell facedown and exerted."

@@ -1,0 +1,7 @@
+name = "Maurice's Workshop"
+type = "Item"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3c5cc621f8c2419aa3e82f1189fb74b0.avif?1709690747"
+max_copies = 4
+text = "LOOKING FOR THIS? Whenever you play another item, you may pay 1 {I} to draw a card."

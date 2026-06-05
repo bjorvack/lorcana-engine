@@ -1,0 +1,12 @@
+name = "John Smith - Snow Tracker"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b1c578429eb547b3b5908a637c491c3e.avif?1770259265"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero"]
+text = "FOLLOW THE TRACKS At the end of your turn, if this character is exerted and none of your characters challenged this turn, gain 1 lore."

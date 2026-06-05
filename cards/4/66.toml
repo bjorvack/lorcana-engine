@@ -1,0 +1,8 @@
+name = "Triton's Trident"
+type = "Item"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_57067560f7f0499da43dd94731e85552.avif?1716052430"
+max_copies = 4
+inkwell = true
+text = "SYMBOL OF POWER Banish this item — Chosen character gets +1 {S} this turn for each card in your hand."

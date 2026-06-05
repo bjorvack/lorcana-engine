@@ -1,0 +1,8 @@
+name = "Let It Go"
+type = "Song"
+cost = 5
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7e294ae586f24eddae3b7d1263c73ee7.avif?1770259936"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 5 or more can {E} to sing this song for free.)\nPut chosen character into their player's inkwell facedown and exerted."

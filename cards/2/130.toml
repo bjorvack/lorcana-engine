@@ -1,0 +1,8 @@
+name = "Teeth and Ambitions"
+type = "Song"
+cost = 2
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5fede8ed6d6845b7be83496ccb0fb2f8.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 2 or more can {E} to sing this song for free.)\nDeal 2 damage to chosen character of yours to deal 2 damage to another chosen character."

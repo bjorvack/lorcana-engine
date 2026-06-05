@@ -1,0 +1,11 @@
+name = "Daisy Duck - Isabel"
+type = "Character"
+cost = 3
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_44777bc0e3f44e018e9fad2f10644de8.avif?1770259849"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 2
+lore = 3
+classifications = ["Storyborn", "Ally"]

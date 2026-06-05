@@ -1,0 +1,8 @@
+name = "Gadget's Goggles"
+type = "Item"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c73f177d87004136ab148a91b23a1308.avif?1777687817"
+max_copies = 4
+inkwell = true
+text = "ENHANCED VISION {E}, 1 {I} — Look at the top 2 cards of your deck. Put one on the top of your deck and the other on the bottom."

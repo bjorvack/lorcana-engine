@@ -1,0 +1,11 @@
+name = "Ed - Laughing Hyena"
+type = "Character"
+cost = 3
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_83352cb5f0a94843857df13731c502be.avif?1723917209"
+max_copies = 4
+strength = 2
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Ally", "Hyena"]
+text = "CAUSE A PANIC When you play this character, you may deal 2 damage to chosen damaged character."

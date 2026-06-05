@@ -1,0 +1,12 @@
+name = "Calhoun - Marine Sergeant"
+type = "Character"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f6c83c36dbe04bdcb19ee7bd9d0479cd.avif?1730901319"
+max_copies = 4
+strength = 3
+willpower = 2
+lore = 1
+classifications = ["Storyborn", "Hero"]
+keywords = ["Resist 1"]
+text = "Resist +1 (Damage dealt to this character is reduced by 1.)\nLEVEL UP During your turn, whenever this character banishes another character in a challenge, gain 2 lore."

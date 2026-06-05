@@ -1,0 +1,12 @@
+name = "Alice - Tea Alchemist"
+type = "Character"
+cost = 6
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_df136840866d426db031332e34942735.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 4
+lore = 2
+classifications = ["Dreamborn", "Hero", "Sorcerer"]
+text = "CURIOUSER AND CURIOUSER {E} — Exert chosen opposing character and all other opposing characters with the same name."

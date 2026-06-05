@@ -1,0 +1,8 @@
+name = "Pawpsicle"
+type = "Item"
+cost = 1
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_60f1bf0ac9ac46ca92e290a11ac334e5.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "JUMBO POP When you play this item, you may draw a card.\nTHAT'S REDWOOD Banish this item — Remove up to 2 damage from chosen character."

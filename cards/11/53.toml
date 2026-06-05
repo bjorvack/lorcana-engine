@@ -1,0 +1,11 @@
+name = "Marshmallow - Cranky Climber"
+type = "Character"
+cost = 5
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_f000a1651ff54227806f5da0c5d89c42.avif?1770259438"
+max_copies = 4
+strength = 5
+willpower = 5
+lore = 2
+classifications = ["Dreamborn", "Ally"]
+text = "ICY BLAST Whenever this character quests, each opponent can't ready more than 1 of their characters at the start of their next turn."

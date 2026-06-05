@@ -1,0 +1,12 @@
+name = "Sleepy - Nodding Off"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_02c9d135c9774d4ca1cd3a70c62cd9f1.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 3
+lore = 2
+classifications = ["Storyborn", "Ally", "Seven Dwarfs"]
+text = "YAWN! This character enters play exerted."

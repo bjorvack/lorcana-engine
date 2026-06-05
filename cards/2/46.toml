@@ -1,0 +1,13 @@
+name = "Madam Mim - Fox"
+type = "Character"
+cost = 3
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3c23dd0191ce4f80897a8f50d75bc7bc.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Villain", "Sorcerer"]
+keywords = ["Rush"]
+text = "CHASING THE RABBIT When you play this character, banish her or return another chosen character of yours to your hand.\nRush (This character can challenge the turn they're played.)"

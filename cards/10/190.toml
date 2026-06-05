@@ -1,0 +1,13 @@
+name = "Broadway - Sturdy and Strong"
+type = "Character"
+cost = 5
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_63132ee7ba1f4847a88e67273e1714fa.avif?1761764876"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 6
+lore = 2
+classifications = ["Storyborn", "Ally", "Gargoyle"]
+keywords = ["Bodyguard"]
+text = "Bodyguard (This character may enter play exerted. An opposing character who challenges one of your characters must choose one with Bodyguard if able.)\nSTONE BY DAY If you have 3 or more cards in your hand, this character can't ready."

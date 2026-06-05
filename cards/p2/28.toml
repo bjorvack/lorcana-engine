@@ -1,0 +1,12 @@
+name = "Lady - Decisive Dog"
+type = "Character"
+cost = 1
+ink = ["Amber", "Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_4c2232fe7f4e4d418b157cda6f1cb6c6.avif?1755564040"
+max_copies = 4
+inkwell = true
+strength = 0
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Hero"]
+text = "PACK OF HER OWN Whenever you play a character, this character gets +1 {S} this turn.\nTAKE THE LEAD While this character has 3 {S} or more, she gets +2 {L}."

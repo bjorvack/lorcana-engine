@@ -1,0 +1,12 @@
+name = "Beast - Relentless"
+type = "Character"
+cost = 6
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c7a3740622334580a1f011a55e286bc8.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 5
+lore = 2
+classifications = ["Storyborn", "Hero", "Prince"]
+text = "SECOND WIND Whenever an opposing character is damaged, you may ready this character."

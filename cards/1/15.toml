@@ -1,0 +1,11 @@
+name = "Mr. Smee - Loyal First Mate"
+type = "Character"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ef759d382c954423b841d6cbac94dfbc.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 5
+lore = 1
+classifications = ["Dreamborn", "Ally", "Pirate"]

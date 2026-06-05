@@ -1,0 +1,7 @@
+name = "Hamster Ball"
+type = "Item"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_38ec8cb24ad14a0cb16620ec01a89b88.avif?1747509540"
+max_copies = 4
+text = "ROLL WITH THE PUNCHES {E}, 1 {I} — Chosen character with no damage gains Resist +2 until the start of your next turn. (Damage dealt to them is reduced by 2.)"

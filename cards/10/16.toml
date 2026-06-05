@@ -1,0 +1,10 @@
+name = "Sebastian - Loyal Crab"
+type = "Character"
+cost = 2
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8318e877bb544f51831367a559189e22.avif?1761752000"
+max_copies = 4
+strength = 1
+willpower = 1
+lore = 3
+classifications = ["Storyborn", "Ally"]

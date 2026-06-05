@@ -1,0 +1,13 @@
+name = "Prince Phillip - Vanquisher of Foes"
+type = "Character"
+cost = 9
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_c7b6cf4db56e43acae3ec918308dc672.avif?1716052430"
+max_copies = 4
+inkwell = true
+strength = 6
+willpower = 6
+lore = 3
+classifications = ["Floodborn", "Hero", "Prince"]
+keywords = ["Evasive", "Shift 6"]
+text = "Shift 6 (You may pay 6 {I} to play this on top of one of your characters named Prince Phillip.)\nEvasive (Only characters with Evasive can challenge this character.)\nSWIFT AND SURE When you play this character, banish all opposing damaged characters."

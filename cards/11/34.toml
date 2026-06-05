@@ -1,0 +1,10 @@
+name = "Zootopia - Tundratown"
+type = "Location"
+cost = 1
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_7a26dcac46ba4e0291bf8bedaec4923d.avif?1770259353"
+max_copies = 4
+inkwell = true
+move_cost = 1
+willpower = 5
+lore = 1

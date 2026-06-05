@@ -1,0 +1,8 @@
+name = "Marching Off to Battle"
+type = "Song"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_ec2f9a5da94841b68ac5f69bfed3c1bd.avif?1770259780"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 4 or more can {E} to sing this song for free.)\nIf a character was banished this turn, draw 2 cards."

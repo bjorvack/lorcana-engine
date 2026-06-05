@@ -1,0 +1,10 @@
+name = "RLS Legacy - Solar Galleon"
+type = "Location"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_9f8f3cf328fe451e9be15353026085ee.avif?1709690747"
+max_copies = 4
+move_cost = 3
+willpower = 8
+lore = 2
+text = "THIS IS OUR SHIP Characters gain Evasive while here. (Only characters with Evasive can challenge them.)\nHEAVE TOGETHER NOW If you have a character here, you pay 2 {I} less to move a character of yours here."

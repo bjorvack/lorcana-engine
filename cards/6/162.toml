@@ -1,0 +1,8 @@
+name = "We Could Be Immortals"
+type = "Song"
+cost = 4
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_a9c9c9ba97d94ac48f2a141e17b96230.avif?1730901319"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 4 or more can {E} to sing this song for free.)\nYour Inventor characters gain Resist +6 this turn. Then, put this card into your inkwell facedown and exerted. (Damage dealt to them is reduced by 6.)"

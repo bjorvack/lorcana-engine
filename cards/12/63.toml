@@ -1,0 +1,8 @@
+name = "Super Relocation Program"
+type = "Action"
+cost = 4
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e2aa8e208e934f27a81fb6cb5ce26d6b.avif?1777687407"
+max_copies = 4
+inkwell = true
+text = "Return chosen character of yours to your hand. If you returned a Hero character this way, draw 2 cards."

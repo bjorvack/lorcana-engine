@@ -1,0 +1,11 @@
+name = "Mr. Big - Shrewd Tycoon"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_0b5dcdce945a404395b6c65a894ecf6d.avif?1730901319"
+max_copies = 4
+strength = 1
+willpower = 1
+lore = 3
+classifications = ["Storyborn"]
+text = "REPUTATION This character can't be challenged by characters with 2 {S} or more."

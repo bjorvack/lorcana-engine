@@ -1,0 +1,12 @@
+name = "P.J. Pete - Caught Up in the Music"
+type = "Character"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6ce1cd22f2bb44b18d3c31ffb9c8251c.avif?1755695707"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 5
+lore = 1
+classifications = ["Storyborn", "Ally"]
+text = "SHOUT OUT LOUD! Whenever you play a song, this character gets +2 {S} this turn."

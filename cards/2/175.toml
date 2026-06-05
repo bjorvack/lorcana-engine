@@ -1,0 +1,11 @@
+name = "Chief Bogo - Respected Officer"
+type = "Character"
+cost = 4
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_2f24650e05da4e108e8988b03fb64a01.avif?1709690747"
+max_copies = 4
+strength = 2
+willpower = 4
+lore = 2
+classifications = ["Dreamborn"]
+text = "INSUBORDINATION! Whenever you play a Floodborn character, deal 1 damage to each opposing character."

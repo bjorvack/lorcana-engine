@@ -1,0 +1,12 @@
+name = "Magica De Spell - The Midas Touch"
+type = "Character"
+cost = 7
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_fc52c08c7f254d8cb1e54150de516407.avif?1709690747"
+max_copies = 4
+strength = 4
+willpower = 6
+lore = 0
+classifications = ["Floodborn", "Villain", "Sorcerer"]
+keywords = ["Shift 5"]
+text = "Shift 5 (You may pay 5 {I} to play this on top of one of your characters named Magica De Spell.)\nALL MINE Whenever this character quests, gain lore equal to the cost of one of your items in play."

@@ -1,0 +1,8 @@
+name = "Scepter of Arendelle"
+type = "Item"
+cost = 1
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_e6bc27d53eb341549fc31d79de6ddb7f.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "COMMAND {E} — Chosen character gains Support this turn. (Whenever they quest, you may add their {S} to another chosen character's {S} this turn.)"

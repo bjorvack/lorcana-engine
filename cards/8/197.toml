@@ -1,0 +1,12 @@
+name = "Vincenzo Santorini - The Explosives Expert"
+type = "Character"
+cost = 7
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_bf626cba6fd7425793d1cbfb0ee6aa2b.avif?1747509512"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 8
+lore = 3
+classifications = ["Storyborn", "Ally"]
+text = "I JUST LIKE TO BLOW THINGS UP When you play this character, you may deal 3 damage to chosen character."

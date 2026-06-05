@@ -1,0 +1,12 @@
+name = "Duke Weaselton - Surly Crook"
+type = "Character"
+cost = 3
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d7aa2aa9bd12495096d00d33c6f09821.avif?1770260017"
+max_copies = 4
+inkwell = true
+strength = 3
+willpower = 3
+lore = 1
+classifications = ["Storyborn"]
+text = "APPREHENDED When this character is banished, you may play a character with cost 2 or less for free."

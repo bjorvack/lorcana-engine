@@ -1,0 +1,12 @@
+name = "Helga Sinclair - Vengeful Partner"
+type = "Character"
+cost = 2
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_43db4d680b1c4ea7a375334266b28294.avif?1709690747"
+max_copies = 4
+inkwell = true
+strength = 2
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Villain"]
+text = "NOTHING PERSONAL When this character is challenged and banished, banish the challenging character."

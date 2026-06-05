@@ -1,0 +1,11 @@
+name = "Ichabod Crane - Scared Out of His Mind"
+type = "Character"
+cost = 2
+ink = ["Sapphire"]
+image = "https://cards.lorcast.io/card/digital/large/crd_295ea334c82b494ca1954f544117bf8a.avif?1761764537"
+max_copies = 4
+strength = 0
+willpower = 2
+lore = 2
+classifications = ["Storyborn", "Hero"]
+text = "CHILLING TALE When this character is banished, you may put this card into your inkwell facedown and exerted."

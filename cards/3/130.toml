@@ -1,0 +1,7 @@
+name = "On Your Feet! Now!"
+type = "Action"
+cost = 4
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d42f3cca7b9c46a988d81347b0a4ba8b.avif?1709690747"
+max_copies = 4
+text = "Ready all your characters and deal 1 damage to each of them. They can't quest for the rest of this turn."

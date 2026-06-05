@@ -1,0 +1,8 @@
+name = "Ba-Boom!"
+type = "Action"
+cost = 2
+ink = ["Steel"]
+image = "https://cards.lorcast.io/card/digital/large/crd_8355f42d81564fc288c8e67b0f04628c.avif?1709690747"
+max_copies = 4
+inkwell = true
+text = "Deal 2 damage to chosen character or location."

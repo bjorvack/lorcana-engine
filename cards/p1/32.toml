@@ -1,0 +1,11 @@
+name = "Pinocchio - Talkative Puppet"
+type = "Character"
+cost = 2
+ink = ["Amethyst"]
+image = "https://cards.lorcast.io/card/digital/large/crd_31457772bf37423d9723625203754abd.avif?1728609660"
+max_copies = 4
+strength = 1
+willpower = 1
+lore = 1
+classifications = ["Storyborn", "Hero"]
+text = "TELLING LIES When you play this character, you may exert chosen opposing character."

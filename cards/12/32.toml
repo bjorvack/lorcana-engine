@@ -1,0 +1,8 @@
+name = "When You Need Help, Just Call"
+type = "Song"
+cost = 3
+ink = ["Amber"]
+image = "https://cards.lorcast.io/card/digital/large/crd_b12d63a99baa4fa1b94f257cb6530acc.avif?1777687265"
+max_copies = 4
+inkwell = true
+text = "(A character with cost 3 or more can {E} to sing this song for free.) \nIf an opponent has more characters in play than you, you may play a character with cost 4 or less for free."

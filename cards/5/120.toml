@@ -1,0 +1,11 @@
+name = "Pete - Pastry Chomper"
+type = "Character"
+cost = 3
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_6351c1cb10e841e09ce43d107309796b.avif?1723917209"
+max_copies = 4
+inkwell = true
+strength = 4
+willpower = 3
+lore = 1
+classifications = ["Storyborn", "Villain"]

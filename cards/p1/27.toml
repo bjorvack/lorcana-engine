@@ -1,0 +1,10 @@
+name = "Jolly Roger - Hook's Ship"
+type = "Location"
+cost = 1
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_3fde5b7a72b24201b728abd6c7f1797a.avif?1728698220"
+max_copies = 4
+move_cost = 2
+willpower = 5
+lore = 0
+text = "LOOK ALIVE, YOU SWABS! Characters gain Rush while here. (They can challenge the turn they're played.)\nALL HANDS ON DECK! Your Pirate characters may move here for free."

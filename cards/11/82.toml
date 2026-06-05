@@ -1,0 +1,11 @@
+name = "Mushu - Sneaky Dragon"
+type = "Character"
+cost = 5
+ink = ["Emerald"]
+image = "https://cards.lorcast.io/card/digital/large/crd_5830e796ad074e8c83d2757dfa318992.avif?1770259568"
+max_copies = 4
+strength = 3
+willpower = 2
+lore = 3
+classifications = ["Storyborn", "Ally", "Dragon"]
+text = "SNOWY SURPRISE When you play this character, deal 2 damage to chosen character."

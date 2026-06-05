@@ -1,0 +1,8 @@
+name = "Inner Strength"
+type = "Action"
+cost = 1
+ink = ["Ruby"]
+image = "https://cards.lorcast.io/card/digital/large/crd_d664fec9b6454d22b3ab0ffd04634295.avif?1777687664"
+max_copies = 4
+inkwell = true
+text = "Chosen character gets +1 {S} this turn. Draw a card."
